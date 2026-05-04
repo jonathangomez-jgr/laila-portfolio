@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Laila Portfolio",
   description:
     "Personal-professional portfolio for Laila, demos, customer presentations and solution storytelling.",
+  icons: {
+    icon: "/laila-favicon.png",
+  },
 };
 
 export default function RootLayout({
