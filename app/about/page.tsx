@@ -35,13 +35,13 @@ export default function AboutPage() {
           <p className="eyebrow mb-4">About Me</p>
 
           <h1 className="section-title max-w-4xl text-5xl font-semibold tracking-tight text-gray-950">
-            Who I am, how I think, and how I build.
+            Mindset drives results
           </h1>
 
           <p className="mt-5 max-w-3xl text-lg leading-8 text-gray-600">
             Esta página presenta una visión más personal-profesional sobre mí:
             mi enfoque, mi experiencia, mi forma de trabajar y el tipo de valor
-            que busco construir a través de soluciones, demos y narrativas.
+            que busco construir a través de soluciones y narrativas.
           </p>
         </div>
 
@@ -50,7 +50,7 @@ export default function AboutPage() {
             <p className="eyebrow mb-4">My Approach</p>
 
             <h2 className="text-4xl font-semibold leading-tight text-gray-950">
-              I connect business context, technology and storytelling.
+              I connect business goals & desires, technology and storytelling.
             </h2>
 
             <p className="mt-6 text-lg leading-8 text-gray-600">
@@ -60,9 +60,7 @@ export default function AboutPage() {
             </p>
 
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Mi trabajo suele vivir en la intersección entre diseño de
-              soluciones, narrativa ejecutiva, experiencia digital, Salesforce,
-              AI y prototipado rápido.
+              Mi trabajo suele vivir en la intersección entre diseño de soluciones, narrativa ejecutiva, experiencia digital, AI y todo dentro de Salesforce.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -116,8 +114,7 @@ export default function AboutPage() {
                     Principal Solution Engineer
                   </p>
                   <p className="mt-1 text-sm text-white/75">
-                    Building demos, solution narratives and AI-powered
-                    experiences.
+                    Crafting stories of business transformation through AI-powered experiences — designed to captivate, inspire, and make possibilities feel real.
                   </p>
                 </div>
               </div>

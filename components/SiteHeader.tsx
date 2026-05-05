@@ -9,7 +9,6 @@ const navItems = [
   { label: "Laila", href: "/laila" },
   { label: "General Demos", href: "/general-demos" },
   { label: "Customer's Demos", href: "/customer-demos" },
-  { label: "Contact", href: "/contact" },
 ];
 
 export default function SiteHeader() {
@@ -27,7 +26,7 @@ export default function SiteHeader() {
       <div
         className={
           isHome
-            ? "mx-auto flex w-full max-w-[1120px] items-center justify-between rounded-full border border-white/60 bg-white/45 px-5 py-3 shadow-[0_20px_60px_rgba(99,102,241,0.18)] backdrop-blur-2xl backdrop-saturate-150 md:px-6"
+            ? "mx-auto flex w-full max-w-[1220px] items-center justify-between rounded-full border border-white/60 bg-white/45 px-5 py-3 shadow-[0_20px_60px_rgba(99,102,241,0.18)] backdrop-blur-2xl backdrop-saturate-150 md:px-6"
             : "mx-auto flex w-full max-w-7xl items-center justify-between rounded-full border border-white/70 bg-white/80 px-5 py-3 shadow-[0_14px_35px_rgba(99,102,241,0.10)] backdrop-blur-xl md:px-6"
         }
       >
