@@ -96,13 +96,13 @@ export default function AboutPage() {
                 Profile Snapshot
               </p>
 
-              <div className="mt-6 flex flex-col gap-5 sm:flex-row sm:items-center">
-                <div className="relative aspect-square h-32 shrink-0 overflow-hidden rounded-full border-4 border-white/30 bg-white/15 shadow-lg">
+              <div className="mt-6 flex flex-col items-center gap-5 text-center sm:flex-row sm:text-left">
+                <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-full border-4 border-white/30 bg-white/15 shadow-lg sm:h-32 sm:w-32">
   <Image
     src="/jonathan-profile.jpg"
     alt="Jonathan Gomez"
     fill
-    sizes="128px"
+    sizes="(max-width: 640px) 160px, 128px"
     className="rounded-full object-cover object-center"
     priority
   />
