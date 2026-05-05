@@ -21,7 +21,7 @@ const featuredCards = [
 
 export default function Home() {
   return (
-    <main className="px-6 pb-10 pt-8 md:px-8">
+    <main className="px-6 pb-10 pt-36 md:px-8">
       <section className="grid gap-6 lg:grid-cols-[1.25fr_0.95fr]">
         <div className="glass-card p-8 md:p-12">
           <p className="eyebrow mb-4">Hello ✨</p>

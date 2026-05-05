@@ -65,7 +65,7 @@ export default function CustomerDemoDetailPage() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   return (
-    <main className="px-6 pb-16 md:px-8">
+    <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
       <section className="mx-auto max-w-6xl">
         <div className="mb-8">
           <p className="eyebrow mb-4">Customer Demo</p>
@@ -104,7 +104,7 @@ export default function CustomerDemoDetailPage() {
           </div>
 
           <div className="mt-4 grid gap-6 lg:grid-cols-[280px_1fr]">
-            <aside className="soft-card p-5">
+            <aside className="soft-card hidden p-5 lg:block">
               <p className="eyebrow mb-4">Demo structure</p>
 
               <div className="space-y-3">

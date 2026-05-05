@@ -22,9 +22,9 @@ export default function RootLayout({
       <body>
         <div className="site-shell">
   <SiteHeader />
-  <div className="pt-28">
+  
     {children}
-  </div>
+  
   <SiteFooter />
 </div>
       </body>

@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -6,12 +9,28 @@ const navItems = [
   { label: "Laila", href: "/laila" },
   { label: "General Demos", href: "/general-demos" },
   { label: "Customer's Demos", href: "/customer-demos" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function SiteHeader() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
   return (
-    <header className="fixed left-0 right-0 top-8 z-50 px-8 md:px-12 lg:px-20">
-      <div className="mx-auto flex w-full max-w-[1240px] items-center justify-between rounded-full border border-white/60 bg-white/55 px-5 py-3 shadow-[0_20px_60px_rgba(99,102,241,0.18)] backdrop-blur-2xl backdrop-saturate-150 md:px-6">
+    <header
+      className={
+        isHome
+          ? "fixed left-0 right-0 top-8 z-50 px-8 md:px-12 lg:px-20"
+          : "relative z-40 px-6 pt-6 md:px-8"
+      }
+    >
+      <div
+        className={
+          isHome
+            ? "mx-auto flex w-full max-w-[1120px] items-center justify-between rounded-full border border-white/60 bg-white/45 px-5 py-3 shadow-[0_20px_60px_rgba(99,102,241,0.18)] backdrop-blur-2xl backdrop-saturate-150 md:px-6"
+            : "mx-auto flex w-full max-w-7xl items-center justify-between rounded-full border border-white/70 bg-white/80 px-5 py-3 shadow-[0_14px_35px_rgba(99,102,241,0.10)] backdrop-blur-xl md:px-6"
+        }
+      >
         <a href="/" className="flex items-center gap-3">
           <Image
             src="/laila-logo.png"
@@ -31,15 +50,26 @@ export default function SiteHeader() {
         </a>
 
         <nav className="hidden items-center gap-6 lg:flex">
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-gray-700 transition hover:text-gray-950"
-            >
-              {item.label}
-            </a>
-          ))}
+          {navItems.map((item) => {
+            const isActive =
+              item.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.href);
+
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                className={`text-sm font-medium transition ${
+                  isActive
+                    ? "text-indigo-600"
+                    : "text-gray-700 hover:text-gray-950"
+                }`}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
 
         <a
