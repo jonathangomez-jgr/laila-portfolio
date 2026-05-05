@@ -1,134 +1,155 @@
+const featuredCards = [
+  {
+    title: "Laila",
+    description:
+      "Visión, experiencia, arquitectura y evolución del núcleo conceptual del portafolio.",
+    href: "/laila",
+  },
+  {
+    title: "General Demos",
+    description:
+      "Assets reutilizables para distintas industrias, soluciones y conversaciones.",
+    href: "/general-demos",
+  },
+  {
+    title: "Customer's Demos",
+    description:
+      "Casos específicos para conversaciones con clientes y presentaciones dirigidas.",
+    href: "/customer-demos",
+  },
+];
+
 export default function Home() {
   return (
-    <main>
-      <section className="relative overflow-hidden border-b border-gray-200 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
-        <div className="mx-auto grid min-h-[680px] max-w-7xl items-center gap-12 px-8 py-20 lg:grid-cols-2">
-          <div>
-            <p className="mb-5 text-sm font-semibold uppercase tracking-[0.35em] text-gray-400">
-              Jonathan Gomez | Laila - Portfolio
-            </p>
+    <main className="px-6 pb-10 pt-8 md:px-8">
+      <section className="grid gap-6 lg:grid-cols-[1.25fr_0.95fr]">
+        <div className="glass-card p-8 md:p-12">
+          <p className="eyebrow mb-4">Hello ✨</p>
 
-            <h1 className="max-w-4xl text-5xl font-bold tracking-tight text-white md:text-7xl">
-              Reliable AI Business Solutions
-            </h1>
+          <h1 className="section-title max-w-4xl text-5xl font-semibold leading-tight text-gray-900 md:text-6xl">
+            Reliable AI
+            <br />
+            Business Solutions.
+            <br />
+            <span className="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">
+              powered by Laila.
+            </span>
+          </h1>
 
-            <p className="mt-6 max-w-2xl text-xl leading-8 text-gray-300">
-              Un portafolio personal-profesional para mostrar cómo el uso de la IA de forma creativa y en su sentido más humano puede transformar la manera de alcanzar los objetivos más aspiracionales de los clientes.
-            </p>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-600">
+            Un espacio para mostrar cómo el uso de la IA de forma creativa y en su sentido más humano puede transformar la manera de alcanzar los objetivos más aspiracionales de los clientes.
+          </p>
 
-            <div className="mt-10 flex flex-wrap gap-4">
-              <a
-                href="/laila"
-                className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-gray-950 transition hover:bg-gray-200"
-              >
-                Explorar Laila
-              </a>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <a
+              href="/laila"
+              className="primary-button px-6 py-3 text-sm font-semibold"
+            >
+              Explore Laila
+            </a>
 
-              <a
-                href="/customer-demos"
-                className="rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-              >
-                Ver customer demos
-              </a>
-            </div>
+            <a
+              href="/general-demos"
+              className="secondary-button px-6 py-3 text-sm font-semibold"
+            >
+              View demos
+            </a>
           </div>
+        </div>
+ 
+        <div className="grid gap-6">
+          <div className="relative min-h-[260px] overflow-hidden rounded-[32px] border border-indigo-200/50 bg-gradient-to-br from-indigo-500 via-blue-500 to-sky-400 p-8 text-white shadow-[0_24px_70px_rgba(79,70,229,0.25)]">
+  <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/20 blur-3xl" />
+  <div className="absolute -bottom-16 -left-10 h-44 w-44 rounded-full bg-blue-200/25 blur-3xl" />
 
-          <div className="relative">
-            <div className="rounded-3xl border border-white/10 bg-white/10 p-6 shadow-2xl backdrop-blur">
-              <div className="mb-6 flex items-center gap-2">
-                <span className="h-3 w-3 rounded-full bg-red-400" />
-                <span className="h-3 w-3 rounded-full bg-yellow-400" />
-                <span className="h-3 w-3 rounded-full bg-green-400" />
-              </div>
+  <div className="relative z-10">
+    <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/75">
+      Featured Focus
+    </p>
 
-              <div className="space-y-4">
-                <div className="rounded-2xl bg-white p-5">
-                  <p className="text-sm font-semibold text-gray-500">
-                    Demo Strategy
-                  </p>
-                  <h2 className="mt-2 text-2xl font-bold text-gray-950">
-                    From idea to executive-ready story
-                  </h2>
-                  <p className="mt-3 text-gray-600">
-                    Laila ayuda a convertir contexto, problemas de negocio y
-                    capacidades tecnológicas en narrativas demostrables.
-                  </p>
-                </div>
+    <h2 className="mt-5 max-w-lg text-3xl font-semibold leading-tight text-white">
+      From business context to executive-ready demos.
+    </h2>
 
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="rounded-2xl bg-white/90 p-5">
-                    <p className="text-sm font-semibold text-gray-500">
-                      General Demos
-                    </p>
-                    <p className="mt-2 text-3xl font-bold text-gray-950">12+</p>
-                    <p className="mt-1 text-sm text-gray-600">
-                      Assets reutilizables
-                    </p>
-                  </div>
+    <p className="mt-5 max-w-md text-base leading-7 text-white/85">
+      Laila ayuda a estructurar ideas, convertirlas en solución y expresarlas
+      en activos visuales, narrativos y demostrables.
+    </p>
 
-                  <div className="rounded-2xl bg-white/90 p-5">
-                    <p className="text-sm font-semibold text-gray-500">
-                      Customer Demos
-                    </p>
-                    <p className="mt-2 text-3xl font-bold text-gray-950">6+</p>
-                    <p className="mt-1 text-sm text-gray-600">
-                      Diferentes de Industria
-                    </p>
-                  </div>
-                </div>
+    <div className="mt-8 flex flex-wrap gap-3">
+      <span className="rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+        AI Strategy
+      </span>
+      <span className="rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+        Demo Design
+      </span>
+      <span className="rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+        Storytelling
+      </span>
+    </div>
+  </div>
+</div>
 
-                <div className="rounded-2xl border border-white/10 bg-gray-950 p-5 text-white">
-                  <p className="text-sm text-gray-400">Core focus</p>
-                  <p className="mt-2 text-lg font-semibold">
-                    AI + Data + Storytelling + Solution Design
-                  </p>
-                </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="soft-card p-6">
+              <p className="text-sm font-medium text-gray-500">Core Areas</p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <span className="soft-pill px-4 py-2 text-sm text-gray-700">
+                  AI
+                </span>
+                <span className="soft-pill px-4 py-2 text-sm text-gray-700">
+                  Salesforce
+                </span>
+                <span className="soft-pill px-4 py-2 text-sm text-gray-700">
+                  Agentforce
+                </span>
+                <span className="soft-pill px-4 py-2 text-sm text-gray-700">
+                  Data Cloud
+                </span>
               </div>
             </div>
 
-            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
-            <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-blue-400/20 blur-3xl" />
+            <div className="soft-card p-6">
+              <p className="text-sm font-medium text-gray-500">Approach</p>
+              <h3 className="mt-3 text-xl font-semibold text-gray-900">
+                Strategy + Storytelling + Solution Design
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-gray-600">
+                Una combinación entre narrativa comercial, criterio técnico y
+                prototipado rápido.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-8 py-16">
-        <h2 className="mb-8 text-3xl font-bold text-gray-950">
-          Áreas principales
-        </h2>
-
-        <div className="grid gap-6 md:grid-cols-3">
+      <section className="mt-8 grid gap-6 md:grid-cols-3">
+        {featuredCards.map((card) => (
           <a
-            href="/laila"
-            className="rounded-2xl border border-gray-200 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+            key={card.href}
+            href={card.href}
+            className="soft-card p-7 transition hover:-translate-y-1 hover:shadow-xl"
           >
-            <h3 className="mb-3 text-xl font-semibold">Laila</h3>
-            <p className="leading-7 text-gray-600">
-              El proyecto central: visión, experiencia, arquitectura, roadmap y
-              demos internas.
-            </p>
+            <p className="eyebrow mb-3">Section</p>
+            <h3 className="text-2xl font-semibold text-gray-900">
+              {card.title}
+            </h3>
+            <p className="mt-4 leading-7 text-gray-600">{card.description}</p>
           </a>
+        ))}
+      </section>
 
-          <a
-            href="/general-demos"
-            className="rounded-2xl border border-gray-200 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-          >
-            <h3 className="mb-3 text-xl font-semibold">General Demos</h3>
-            <p className="leading-7 text-gray-600">
-              Demos reutilizables no asociadas a un cliente específico.
-            </p>
-          </a>
-
-          <a
-            href="/customer-demos"
-            className="rounded-2xl border border-gray-200 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-          >
-            <h3 className="mb-3 text-xl font-semibold">Customer&apos;s Demos</h3>
-            <p className="leading-7 text-gray-600">
-              Casos y presentaciones construidas para conversaciones específicas
-              con clientes.
-            </p>
-          </a>
+      <section className="mt-8">
+        <div className="soft-card p-8 md:p-10">
+          <p className="eyebrow mb-4">Why this portfolio</p>
+          <h2 className="section-title text-3xl font-semibold text-gray-900 md:text-4xl">
+            A more visual and structured way to present what I build.
+          </h2>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-gray-600">
+            Este sitio no es solo una biografía. Es un hub para documentar
+            soluciones, explicar cómo pienso, mostrar demos y convertir trabajo
+            complejo en una experiencia clara y confiable.
+          </p>
         </div>
       </section>
     </main>
