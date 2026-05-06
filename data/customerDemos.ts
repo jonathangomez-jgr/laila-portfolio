@@ -122,19 +122,19 @@ export type CustomerDemo = {
 export const customerDemos: CustomerDemo[] = [
   {
     slug: "vivalux",
-    title: "VivaLux AI-Powered Luxury Experience Demo",
-    customerName: "VivaLux",
-    industry: "Omnichannel Retail (Fashion + Home Goods)",
+    title: "Transformación Inteligente del Customer Experience con Agentforce",
+    customerName: "VivaLux Retail Group",
+    industry: "Retail Omnicanal — Moda y Artículos para el Hogar",
     description:
-      "Demo conceptual orientada a mostrar cómo una marca premium puede transformar la relación con sus clientes mediante experiencias hiperpersonalizadas, datos unificados, agentes inteligentes y journeys aspiracionales impulsados por IA.",
+      "Plan de cuenta estratégico para transformar la experiencia post-compra de VivaLux mediante Salesforce Agentforce, Service Cloud y Data Cloud — revirtiendo una caída de 21 puntos en NPS y desbloqueando $180M+ en valor combinado de ahorro operativo, retención y uplift de revenue.",
     logo: "/Customers/vivalux-logo.png",
     passcode: "vivalux2026",
     tags: [
-      "Luxury",
-      "Customer 360",
-      "Data Cloud",
       "Agentforce",
-      "Personalization",
+      "Service Cloud",
+      "Data Cloud",
+      "MuleSoft",
+      "Retail LATAM",
     ],
     tabs: [
       {
@@ -142,56 +142,362 @@ export const customerDemos: CustomerDemo[] = [
         label: "Overview",
         title: "Resumen ejecutivo",
         content:
-          "VivaLux representa una experiencia premium donde cada interacción con el cliente se siente personal, elegante y profundamente contextual. La demo muestra cómo una marca de lujo puede usar datos, IA y automatización para anticipar deseos, personalizar momentos y convertir cada contacto en una experiencia memorable.",
+          "VivaLux Retail Group enfrenta una paradoja peligrosa: su crecimiento comercial está siendo erosionado por una experiencia post-compra que no escala. En 18 meses, el NPS cayó de 62 a 41 — una señal crítica que representa decenas de millones en revenue en riesgo. Este plan propone una hoja de ruta ejecutable en 3 fases con ROI proyectado del 340% en el primer año.",
+        overviewData: {
+          stats: [
+            { value: "$1.2B", label: "Revenue anual" },
+            { value: "8,000", label: "Empleados" },
+            { value: "62 → 41", label: "Caída NPS en 18 meses" },
+            { value: "340%", label: "ROI proyectado año 1" },
+            { value: "$180M+", label: "Valor potencial combinado" },
+            { value: "3", label: "Fases de implementación" },
+          ],
+        },
       },
       {
         id: "customer",
         label: "Cliente / industria",
         title: "Cliente e industria",
         content:
-          "VivaLux es una marca conceptual de lujo enfocada en experiencias exclusivas, hospitalidad premium y servicios personalizados para clientes de alto valor. Su diferenciador no está únicamente en el producto o servicio, sino en la capacidad de crear momentos cuidadosamente diseñados alrededor de cada cliente.",
+          "Retailer omnicanal de moda y artículos para el hogar con presencia multi-país en América Latina. Modelo de negocio que combina tiendas físicas, e-commerce, WhatsApp y redes sociales. Su ambición estratégica es la expansión agresiva en 3 años — nuevos mercados, más tiendas y canales digitales.",
+        customerProfile: {
+          stats: [
+            { label: "Sede", value: "América Latina (multi-país)" },
+            { label: "Segmento", value: "B2C — medio-alto y premium" },
+            { label: "Empleados", value: "~8,000" },
+            { label: "Revenue", value: "$1.2B USD/año" },
+            { label: "NPS actual", value: "41 (en declive)" },
+            { label: "Estrategia", value: "Expansión agresiva 3 años" },
+          ],
+          segments: [
+            {
+              name: "Fashion (Moda)",
+              description:
+                "Tiendas físicas premium + e-commerce + WhatsApp + redes sociales. Clientes B2C de segmentos medio-alto en LATAM con alta expectativa de experiencia personalizada y servicio omnicanal fluido.",
+            },
+            {
+              name: "Home Goods (Artículos para el Hogar)",
+              description:
+                "Línea de artículos del hogar con operación multi-país. Asociados de tienda sin herramientas de clienteling en tiempo real, generando interacciones genéricas que frustran al cliente VIP.",
+            },
+          ],
+          techStack: [
+            { category: "ERP", tool: "SAP" },
+            { category: "CRM", tool: "Salesforce Sales Cloud (básico)" },
+            { category: "Mensajería", tool: "WhatsApp (manual)" },
+            { category: "Contact Center", tool: "On-prem legacy" },
+          ],
+        },
       },
       {
         id: "context",
         label: "Contexto",
         title: "Contexto del reto",
         content:
-          "Las marcas premium enfrentan el reto de mantener una relación cercana, relevante y consistente con clientes que esperan atención excepcional. La información suele vivir dispersa entre canales, interacciones, preferencias, historial de compra, eventos y señales de intención, dificultando una experiencia verdaderamente personalizada.",
+          "Cinco dolores críticos con impacto financiero cuantificable. Este diagnóstico no es solo técnico — es la base del caso de negocio para el Directorio.",
+        contextData: {
+          groups: [
+            {
+              name: "Experiencia del Cliente y NPS",
+              findings: [
+                "NPS cayó de 62 a 41 en 18 meses (-21 pts) — $72-180M en revenue en riesgo por churn",
+                "WhatsApp manual: 1 agente = ~80 chats/día vs 5,000-8,000 mensajes diarios recibidos",
+                "Tiempo de respuesta en WhatsApp: horas/días vs benchmark líderes de <5 minutos",
+                "Mayoría de clientes en categoría 'pasivo' según Net Promoter System",
+                "Escalaciones perdidas en silos y pedidos sin estatus claro para el cliente",
+              ],
+            },
+            {
+              name: "Operaciones y Deuda Técnica",
+              findings: [
+                "Asociados de tienda sin historial online, pedidos activos ni valor del cliente al momento del servicio",
+                "Contact center on-prem: $3.5-5M/año sin IA, sin integración CRM nativa, inescalable",
+                "Tasa de automatización de servicio <10% vs 35% benchmark y 75-80% de líderes del mercado",
+                "Sin modelo predictivo de churn — equipo de CX reacciona en lugar de prevenir pérdidas",
+                "Churn estimado 18-22% en base activa — impacto anual superior a $20M en valor perdido",
+              ],
+            },
+          ],
+        },
       },
       {
         id: "objective",
         label: "Objetivo",
-        title: "Objetivo de la presentación",
+        title: "Reconvertir cada punto de contacto en una experiencia inteligente y proactiva.",
         content:
-          "Demostrar cómo VivaLux puede convertir datos fragmentados en experiencias inteligentes, permitiendo que equipos comerciales, agentes de servicio y canales digitales conozcan mejor al cliente, anticipen necesidades y recomienden acciones elegantes, oportunas y altamente personalizadas.",
+          "Tres hipótesis de valor. Una plataforma. Resultados medibles en 90 días.",
+        objective: {
+          headline:
+            "Construir el Customer Intelligence Agent Ecosystem que transforma cómo VivaLux entiende, anticipa y sirve a sus clientes — antes de que la brecha entre crecimiento comercial y experiencia post-compra erosione su liderazgo en LATAM.",
+          okrs: [
+            {
+              label: "Recuperar NPS",
+              description:
+                "Agent proactivo de fidelización con análisis predictivo de churn. Identificar clientes en riesgo antes de que se vayan.",
+              enabler: "Agentforce + Data Cloud + Einstein AI",
+              color: "indigo",
+            },
+            {
+              label: "Escalar WhatsApp",
+              description:
+                "Agentforce maneja +3,000 conversaciones simultáneas 24/7 — liberando al equipo para casos de alta complejidad.",
+              enabler: "Agentforce Service Agent + WhatsApp Business API",
+              color: "violet",
+            },
+            {
+              label: "Habilitar Clienteling",
+              description:
+                "Mobile app con Customer 360 en tiempo real para asociados de tienda — historial, preferencias y riesgo de churn en un clic.",
+              enabler: "Field Service Mobile + MuleSoft SAP",
+              color: "sky",
+            },
+          ],
+        },
       },
       {
         id: "solution",
         label: "Solución",
-        title: "Solución propuesta",
+        title: "Customer Intelligence Agent Ecosystem",
         content:
-          "La solución conecta perfiles unificados de cliente, preferencias, historial de interacción, señales de comportamiento y agentes inteligentes para orquestar experiencias premium. A través de Data Cloud, Agentforce y automatización de journeys, VivaLux puede generar recomendaciones, mensajes y acciones personalizadas en cada punto de contacto.",
+          "Cuatro agentes inteligentes construidos sobre tres pilares: datos unificados (Data Cloud), integración robusta (MuleSoft) e inteligencia agéntica (Agentforce). Cada agente actúa de forma autónoma dentro de guardrails definidos y colabora con los demás de forma fluida.",
+        solution: [
+          {
+            product: "Agentforce + Service Cloud",
+            focus: "LuxServe & LuxEscalation — Servicio Digital 24/7",
+            color: "indigo",
+            items: [
+              "LuxServe Agent: resuelve order status, devoluciones y FAQ de forma autónoma",
+              "+3,000 conversaciones simultáneas vs ~80 por agente humano",
+              "Tiempo de respuesta: de horas/días a <5 minutos en WhatsApp",
+              "LuxEscalation Agent: detecta sentimiento negativo y escala con contexto completo",
+              "Handoff inteligente con resumen IA al agente humano — cero pérdida de contexto",
+              "Einstein Sentiment + Omni-Channel routing nativo",
+              "Reducción 75% costo operativo Tier-1 = $8.2M/año ahorrado",
+              "Einstein Trust Layer: gobernanza total de datos de clientes",
+            ],
+          },
+          {
+            product: "Field Service Mobile + MuleSoft SAP",
+            focus: "LuxAssist — Clienteling en Tienda",
+            color: "violet",
+            items: [
+              "Mobile Clienteling App con Customer 360 en tiempo real para asociados",
+              "Historial de compras online, pedidos pendientes y devoluciones activas",
+              "Loyalty Risk Score visible antes de iniciar la interacción presencial",
+              "Integración SAP via MuleSoft — API-Led Connectivity con zero-copy architecture",
+              "Preferencias, historial de tickets y segmento del cliente en un clic",
+              "Product Affinity Graph: recomendaciones personalizadas en tiempo real",
+              "Aumento 23% ticket promedio en tienda = $27M uplift anual",
+              "Piloto en 5 tiendas campeón — NPS +8 pts en 60 días",
+            ],
+          },
+          {
+            product: "Data Cloud + Einstein AI + Marketing Cloud",
+            focus: "LuxInsight — Retención Predictiva",
+            color: "sky",
+            items: [
+              "Unified Customer Profile: SAP + CRM + WhatsApp + visitas en tienda unificados",
+              "Loyalty Risk Score 0-100 calculado semanalmente por Einstein AI",
+              "Identifica top 500 clientes en riesgo cada semana con señales de alerta temprana",
+              "Dispara campañas preventivas de retención via Marketing Cloud automáticamente",
+              "Service Interaction Timeline: historial cronológico de todas las interacciones",
+              "Dashboards ejecutivos de NPS, churn risk y revenue en riesgo para el Directorio",
+              "Salvar 15% clientes en riesgo = $18M revenue retenido anualmente",
+              "Data residency LATAM — cumplimiento LGPD Brasil y leyes locales de datos",
+            ],
+          },
+        ],
       },
       {
         id: "storytelling",
         label: "Narrativa",
         title: "Narrativa de valor",
         content:
-          "La historia sigue a un cliente de alto valor que deja de recibir comunicaciones genéricas y comienza a vivir una relación diseñada a su medida. Cada interacción —desde una invitación exclusiva hasta una recomendación personalizada— refleja que la marca entiende su estilo, sus preferencias y su momento de vida.",
+          "No es una venta de licencias. Es una reconfiguración fundamental de cómo VivaLux entiende, anticipa y sirve a sus clientes.",
+        narrativeData: {
+          quote:
+            "El cliente que VivaLux pierde hoy no es solo una transacción perdida — es un embajador de marca que se convierte en detractor. Agentforce no es solo una inversión en tecnología; es una inversión en la promesa de marca que VivaLux hace a sus clientes cada día.",
+          pillars: [
+            {
+              title: "El cliente contacta, el agente ya lo conoce",
+              description:
+                "Cuando el cliente escribe por WhatsApp, LuxServe Agent tiene su historial completo, pedidos activos y riesgo de churn. No hay preguntas redundantes. No hay fricciones. La respuesta llega en segundos, no en horas.",
+            },
+            {
+              title: "El asociado vende más porque conoce más",
+              description:
+                "LuxAssist entrega Customer 360 al asociado antes de que el cliente abra la boca. Saber que 'María compró online hace 3 días y su pedido llegó con defecto' transforma completamente la calidad del servicio presencial.",
+            },
+            {
+              title: "VivaLux actúa antes de que el cliente se vaya",
+              description:
+                "LuxInsight identifica cada semana qué clientes están en riesgo de abandonar la marca. Las campañas preventivas llegan en el momento justo, con el mensaje correcto, antes de que sea demasiado tarde.",
+            },
+          ],
+          closing:
+            "En el ecosistema retail latinoamericano, la adopción de IA agéntica está en sus primeras etapas. Ser el primer retailer de moda y hogar en desplegar Customer Intelligence Agents a escala nacional es la ventaja competitiva que los competidores tardarán 2-3 años en replicar.",
+        },
       },
       {
         id: "outcomes",
         label: "Resultados",
         title: "Resultados esperados",
         content:
-          "Los resultados esperados incluyen mayor lealtad, incremento en conversión de ofertas premium, mejor retención de clientes de alto valor, reducción de fricción en la atención y una experiencia de marca más consistente, aspiracional y diferenciada.",
+          "Los KPIs de éxito se organizan en tres dimensiones: experiencia del cliente, eficiencia operativa y revenue uplift. Cada métrica tiene línea base documentada, meta a 6 meses y meta a 12 meses — diseñadas para demostrar valor financiero cuantificable ante el Directorio en cada fase.",
+        kpis: [
+          {
+            group: "Experiencia del Cliente — NPS y Retención",
+            items: [
+              {
+                name: "NPS Score",
+                baseline: "41 pts (en declive)",
+                goal6m: "+8 pts → 49",
+                goal12m: "+15 pts → 56",
+              },
+              {
+                name: "Tasa de churn estimada",
+                baseline: "18-22% base activa",
+                goal6m: "Reducción 8%",
+                goal12m: "Reducción 15% = $18M retenidos",
+              },
+              {
+                name: "Clientes en riesgo identificados/semana",
+                baseline: "0 (sin modelo predictivo)",
+                goal6m: "Top 500 identificados",
+                goal12m: "Top 1,000 + campañas activas",
+              },
+              {
+                name: "Tiempo de respuesta WhatsApp",
+                baseline: "Horas / días",
+                goal6m: "<15 minutos",
+                goal12m: "<5 minutos (IA 24/7)",
+              },
+              {
+                name: "Retención clientes VIP",
+                baseline: "Sin datos unificados",
+                goal6m: "Línea base establecida",
+                goal12m: "+12% retención",
+              },
+            ],
+          },
+          {
+            group: "Eficiencia Operativa — Tier-1 y Contact Center",
+            items: [
+              {
+                name: "Tasa automatización Tier-1 WhatsApp",
+                baseline: "<10% (casi manual)",
+                goal6m: "45%+",
+                goal12m: "75%+",
+              },
+              {
+                name: "Conversaciones simultáneas",
+                baseline: "~80/agente/día",
+                goal6m: "+1,500 simultáneas (IA)",
+                goal12m: "+3,000 simultáneas 24/7",
+              },
+              {
+                name: "Costo operativo Tier-1 anual",
+                baseline: ">$1.5M/año",
+                goal6m: "Reducción 40%",
+                goal12m: "Reducción 75% = $8.2M ahorrado",
+              },
+              {
+                name: "Resolución en primer contacto",
+                baseline: "Est. 40-45%",
+                goal6m: "65%+",
+                goal12m: "80%+ (benchmark líderes)",
+              },
+              {
+                name: "Contact center on-prem (Año 3)",
+                baseline: "$4.5M/año en infraestructura",
+                goal6m: "Migración iniciada (Fase 3)",
+                goal12m: "Descomisionado — $4.5M ahorrado",
+              },
+            ],
+          },
+          {
+            group: "Revenue Uplift — Clienteling e InStore",
+            items: [
+              {
+                name: "Ticket promedio en tienda",
+                baseline: "Sin herramienta de clienteling",
+                goal6m: "+10% piloto 5 tiendas",
+                goal12m: "+23% = $27M uplift anual",
+              },
+              {
+                name: "Conversión in-store con clienteling",
+                baseline: "Sin benchmark (sin herramienta)",
+                goal6m: "1.8x vs sin herramienta",
+                goal12m: "2.5x vs sin herramienta",
+              },
+              {
+                name: "Tiendas con LuxAssist activo",
+                baseline: "0 tiendas",
+                goal6m: "5 tiendas piloto",
+                goal12m: "100% tiendas (rollout nacional)",
+              },
+              {
+                name: "Adopción mobile app por asociados",
+                baseline: "0%",
+                goal6m: "70%+ en tiendas piloto",
+                goal12m: "90%+ nacional",
+              },
+              {
+                name: "ROI documentado sobre inversión total",
+                baseline: "Inversión Fase 1: $180K",
+                goal6m: "ROI ≥150% (Fases 1+2)",
+                goal12m: "7,846% ROI neto Año 1",
+              },
+            ],
+          },
+        ],
       },
       {
         id: "assets",
         label: "Assets",
         title: "Assets de la demo",
         content:
-          "Aquí se podrán incluir el guion de la demo, screenshots de journeys personalizados, arquitectura conceptual, ejemplos de prompts de agentes, mockups de experiencia, presentación ejecutiva y video demo.",
+          "Materiales disponibles y por desarrollar para soportar la conversación con VivaLux Retail Group.",
+        assetsData: {
+          items: [
+            {
+              name: "Plan de Cuenta Estratégico",
+              description:
+                "Documento completo con análisis de 5 dolores críticos, arquitectura del Customer Intelligence Agent Ecosystem, business case ROI 340% y roadmap 18 meses.",
+              available: true,
+              type: "doc",
+              url: "https://drive.google.com/file/d/1HxSmUuCN0MU2h3eDAVvRRRNnRQGM_VJO/view?usp=sharing",
+            },
+            {
+              name: "Deck Ejecutivo Board VivaLux",
+              description:
+                "Presentación de 20 min para el Directorio: problema, solución, ROI por fase y próximos pasos — co-presentada con IT Director como co-sponsor técnico.",
+              available: false,
+              type: "deck",
+            },
+            {
+              name: "Demo en Vivo LuxServe en WhatsApp",
+              description:
+                "Demo live de Agentforce resolviendo un caso real de VivaLux (order status en WhatsApp simulado con datos ficticios de muestra).",
+              available: false,
+              type: "video",
+            },
+            {
+              name: "Arquitectura Customer Intelligence Ecosystem",
+              description:
+                "Diagrama técnico de los 4 agentes (LuxServe, LuxEscalation, LuxAssist, LuxInsight) con integración SAP-MuleSoft-Agentforce y modelo de datos unificado.",
+              available: false,
+              type: "arch",
+            },
+            {
+              name: "Mockup LuxAssist Mobile Clienteling App",
+              description:
+                "Vista del Customer 360 en mobile para asociados de tienda: historial online, Loyalty Risk Score, pedidos activos y recomendaciones personalizadas.",
+              available: false,
+              type: "mockup",
+            },
+          ],
+        },
       },
     ],
   },
