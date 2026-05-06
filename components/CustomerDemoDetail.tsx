@@ -2,6 +2,14 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import AssetsGrid from "./AssetsGrid";
+import ContextFindings from "./ContextFindings";
+import CustomerProfile from "./CustomerProfile";
+import KpiGrid from "./KpiGrid";
+import NarrativeDisplay from "./NarrativeDisplay";
+import ObjectiveInfographic from "./ObjectiveInfographic";
+import OverviewStats from "./OverviewStats";
+import SolutionLayers from "./SolutionLayers";
 import type { CustomerDemo } from "../data/customerDemos";
 
 type CustomerDemoDetailProps = {
@@ -42,37 +50,22 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-[28px] border border-indigo-100 bg-gradient-to-br from-white via-indigo-50/70 to-blue-50 p-6 shadow-[0_18px_50px_rgba(99,102,241,0.10)]">
-            <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-indigo-200/30 blur-2xl" />
-
-            <div className="relative flex min-h-[130px] items-center justify-center rounded-2xl">
+          <div className="flex items-center justify-center py-4">
   {demo.logo ? (
     <Image
       src={demo.logo}
       alt={`${demo.customerName} logo`}
       width={280}
-      height={120}
-      className="h-auto max-h-24 w-auto object-contain"
+      height={140}
+      className="h-auto max-h-36 w-auto object-contain"
       priority
     />
   ) : (
-    <div className="text-center rounded-2xl bg-white/60 p-6">
-      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo-400">
-        Client Logo
-      </p>
-
-      <p className="mt-3 text-sm font-semibold text-gray-700">
-        VivaLux logo placeholder
-      </p>
-
-      <p className="mt-1 text-xs text-gray-500">
-        PNG / SVG preferred
-      </p>
-    </div>
+    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo-400">
+      Client Logo
+    </p>
   )}
 </div>
-
-          </div>
         </div>
 
         <div className="glass-card overflow-hidden p-3 md:p-4">
@@ -142,21 +135,69 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 {activeTab.title}
               </h2>
 
+              {activeTab.banner && (
+                <div className="mt-6 h-56 w-full overflow-hidden rounded-2xl">
+                  <img
+                    src={activeTab.banner}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              )}
+
               <p className="mt-6 max-w-3xl text-lg leading-8 text-gray-600">
                 {activeTab.content}
               </p>
 
-              <div className="mt-10 rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-6">
-                <p className="text-sm font-semibold text-indigo-700">
-                  Espacio editable
-                </p>
+              {activeTab.overviewData && (
+                <OverviewStats data={activeTab.overviewData} />
+              )}
 
-                <p className="mt-2 leading-7 text-gray-600">
-                  Aquí después podemos reemplazar este placeholder por contenido
-                  real de VivaLux: imágenes, bullets, métricas, diagramas,
-                  scripts, links, videos o assets de presentación.
-                </p>
-              </div>
+              {activeTab.customerProfile && (
+                <CustomerProfile data={activeTab.customerProfile} />
+              )}
+
+              {activeTab.contextData && (
+                <ContextFindings data={activeTab.contextData} />
+              )}
+
+              {activeTab.objective && (
+                <ObjectiveInfographic data={activeTab.objective} />
+              )}
+
+              {activeTab.solution && (
+                <SolutionLayers layers={activeTab.solution} />
+              )}
+
+              {activeTab.narrativeData && (
+                <NarrativeDisplay data={activeTab.narrativeData} />
+              )}
+
+              {activeTab.kpis && <KpiGrid groups={activeTab.kpis} />}
+
+              {activeTab.assetsData && (
+                <AssetsGrid data={activeTab.assetsData} />
+              )}
+
+              {!activeTab.overviewData &&
+                !activeTab.customerProfile &&
+                !activeTab.contextData &&
+                !activeTab.objective &&
+                !activeTab.solution &&
+                !activeTab.narrativeData &&
+                !activeTab.kpis &&
+                !activeTab.assetsData && (
+                  <div className="mt-10 rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-6">
+                    <p className="text-sm font-semibold text-indigo-700">
+                      Espacio editable
+                    </p>
+                    <p className="mt-2 leading-7 text-gray-600">
+                      Aquí después podemos reemplazar este placeholder por contenido
+                      real: imágenes, bullets, métricas, diagramas, scripts, links,
+                      videos o assets de presentación.
+                    </p>
+                  </div>
+                )}
             </section>
           </div>
         </div>

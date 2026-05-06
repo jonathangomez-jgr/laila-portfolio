@@ -29,6 +29,11 @@ export default function CustomerDemosPage() {
             privadas de cada demo para evitar exponer información sensible de
             clientes.
           </p>
+
+          <p className="mt-2 leading-7 text-gray-700">
+            <b>Para las versiones privadas, se te pedirá por una única ocasión un código de visualización.</b>
+          </p>
+
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -47,14 +52,14 @@ export default function CustomerDemosPage() {
       </h2>
     </div>
 
-    <div className="flex h-20 w-36 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-white via-indigo-50/60 to-blue-50 p-4 shadow-[0_12px_30px_rgba(99,102,241,0.08)]">
+    <div className="shrink-0">
       {demo.logo ? (
         <Image
           src={demo.logo}
           alt={`${demo.customerName} logo`}
           width={160}
           height={80}
-          className="h-auto max-h-12 w-auto object-contain"
+          className="h-auto max-h-16 w-auto object-contain"
         />
       ) : (
         <span className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-300">

@@ -1,4 +1,6 @@
+import { cookies } from "next/headers";
 import CustomerDemoDetail from "../../../components/CustomerDemoDetail";
+import DemoAccessGate from "../../../components/DemoAccessGate";
 import { customerDemos } from "../../../data/customerDemos";
 
 type CustomerDemoPageProps = {
@@ -30,6 +32,20 @@ export default async function CustomerDemoPage({
           </p>
         </section>
       </main>
+    );
+  }
+
+  const cookieStore = await cookies();
+  const hasAccess =
+    cookieStore.get(`demo-access-${slug}`)?.value === "granted";
+
+  if (!hasAccess) {
+    return (
+      <DemoAccessGate
+        slug={slug}
+        customerName={demo.customerName}
+        logo={demo.logo}
+      />
     );
   }
 
