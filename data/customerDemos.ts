@@ -127,7 +127,7 @@ export const customerDemos: CustomerDemo[] = [
     industry: "Omnichannel Retail (Fashion + Home Goods)",
     description:
       "Demo conceptual orientada a mostrar cómo una marca premium puede transformar la relación con sus clientes mediante experiencias hiperpersonalizadas, datos unificados, agentes inteligentes y journeys aspiracionales impulsados por IA.",
-    logo: "/customers/vivalux-logo.png",
+    logo: "/Customers/vivalux-logo.png",
     passcode: "vivalux2026",
     tags: [
       "Luxury",
