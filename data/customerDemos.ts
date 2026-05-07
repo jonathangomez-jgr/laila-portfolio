@@ -128,6 +128,7 @@ export type CustomerDemo = {
   industry: string;
   description: string;
   logo?: string;
+  qrCode?: string;
   tags: string[];
   tabs: CustomerDemoTab[];
   passcode: string;
@@ -142,6 +143,7 @@ export const customerDemos: CustomerDemo[] = [
     description:
       "Plan de cuenta estratégico para transformar la experiencia post-compra de VivaLux mediante Salesforce Agentforce, Service Cloud y Data Cloud — revirtiendo una caída de 21 puntos en NPS y desbloqueando $180M+ en valor combinado de ahorro operativo, retención y uplift de revenue.",
     logo: "/Customers/vivalux-logo.png",
+    qrCode: "/vivalux-code.png",
     passcode: "vivalux2026",
     tags: [
       "Agentforce",

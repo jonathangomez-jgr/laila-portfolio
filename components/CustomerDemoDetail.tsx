@@ -19,6 +19,7 @@ type CustomerDemoDetailProps = {
 
 export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
   const [activeTab, setActiveTab] = useState(demo.tabs[0]);
+  const [qrOpen, setQrOpen] = useState(false);
 
   return (
     <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
@@ -51,22 +52,31 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
             </div>
           </div>
 
-          <div className="flex items-center justify-center py-4">
-  {demo.logo ? (
-    <Image
-      src={demo.logo}
-      alt={`${demo.customerName} logo`}
-      width={280}
-      height={140}
-      className="h-auto max-h-36 w-auto object-contain"
-      priority
-    />
-  ) : (
-    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo-400">
-      Client Logo
-    </p>
-  )}
-</div>
+          <div className="flex flex-col items-center gap-3 py-4">
+            {demo.logo ? (
+              <Image
+                src={demo.logo}
+                alt={`${demo.customerName} logo`}
+                width={280}
+                height={140}
+                className="h-auto max-h-36 w-auto object-contain"
+                priority
+              />
+            ) : (
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo-400">
+                Client Logo
+              </p>
+            )}
+            {demo.qrCode && (
+              <button
+                type="button"
+                onClick={() => setQrOpen(true)}
+                className="rounded-full border border-indigo-200 bg-white/70 px-4 py-1.5 text-xs font-semibold text-indigo-600 shadow-sm backdrop-blur transition hover:bg-indigo-50 hover:shadow-md"
+              >
+                QR Code
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="glass-card overflow-hidden p-3 md:p-4">
@@ -208,6 +218,34 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
           </div>
         </div>
       </section>
+
+      {qrOpen && demo.qrCode && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          onClick={() => setQrOpen(false)}
+        >
+          <div
+            className="relative rounded-3xl bg-white p-6 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setQrOpen(false)}
+              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition hover:bg-gray-200 hover:text-gray-800"
+              aria-label="Cerrar"
+            >
+              ✕
+            </button>
+            <Image
+              src={demo.qrCode}
+              alt="QR Code"
+              width={300}
+              height={300}
+              className="rounded-xl"
+            />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
