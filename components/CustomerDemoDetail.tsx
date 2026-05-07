@@ -132,7 +132,7 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
               <p className="eyebrow mb-4">{activeTab.label}</p>
 
               <h2 className="section-title text-4xl font-semibold text-gray-950">
-                {activeTab.title}
+                {activeTab.id === "customer" ? demo.customerName : activeTab.title}
               </h2>
 
               {activeTab.banner && (

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { NarrativeData } from "../data/customerDemos";
 
 const pillarColors = [
@@ -30,15 +31,28 @@ export default function NarrativeDisplay({ data }: { data: NarrativeData }) {
           return (
             <div
               key={pillar.title}
-              className={`rounded-2xl border bg-white p-5 ring-1 ${c.ring} shadow-sm`}
+              className={`rounded-2xl border bg-white ring-1 ${c.ring} shadow-sm overflow-hidden`}
             >
-              <div className="mb-3 flex items-center gap-3">
-                <span className={`flex h-7 w-7 shrink-0 aspect-square items-center justify-center rounded-full text-xs font-bold text-white ${c.num}`}>
-                  {i + 1}
-                </span>
-                <p className={`text-sm font-bold ${c.label}`}>{pillar.title}</p>
+              {pillar.image && (
+                <div className="flex items-center justify-center px-4 pt-5">
+                  <Image
+                    src={pillar.image}
+                    alt={pillar.title}
+                    width={400}
+                    height={300}
+                    className="w-4/5 h-auto object-contain"
+                  />
+                </div>
+              )}
+              <div className="p-5">
+                <div className="mb-3 flex items-center gap-3">
+                  <span className={`flex h-7 w-7 shrink-0 aspect-square items-center justify-center rounded-full text-xs font-bold text-white ${c.num}`}>
+                    {i + 1}
+                  </span>
+                  <p className={`text-sm font-bold ${c.label}`}>{pillar.title}</p>
+                </div>
+                <p className="text-sm leading-6 text-gray-600">{pillar.description}</p>
               </div>
-              <p className="text-sm leading-6 text-gray-600">{pillar.description}</p>
             </div>
           );
         })}

@@ -64,6 +64,7 @@ export type ContextData = {
 export type NarrativePillar = {
   title: string;
   description: string;
+  image?: string;
 };
 
 export type NarrativeData = {
@@ -322,16 +323,19 @@ export const customerDemos: CustomerDemo[] = [
               title: "El cliente contacta, el agente ya lo conoce",
               description:
                 "Cuando el cliente escribe por WhatsApp, LuxServe Agent tiene su historial completo, pedidos activos y riesgo de churn. No hay preguntas redundantes. No hay fricciones. La respuesta llega en segundos, no en horas.",
+              image: "/Customers/lux-serve.png",
             },
             {
               title: "El asociado vende más porque conoce más",
               description:
                 "LuxAssist entrega Customer 360 al asociado antes de que el cliente abra la boca. Saber que 'María compró online hace 3 días y su pedido llegó con defecto' transforma completamente la calidad del servicio presencial.",
+              image: "/Customers/lux-assist.png",
             },
             {
               title: "VivaLux actúa antes de que el cliente se vaya",
               description:
                 "LuxInsight identifica cada semana qué clientes están en riesgo de abandonar la marca. Las campañas preventivas llegan en el momento justo, con el mensaje correcto, antes de que sea demasiado tarde.",
+              image: "/Customers/lux-insight.png",
             },
           ],
           closing:
