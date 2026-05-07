@@ -7,6 +7,7 @@ import ContextFindings from "./ContextFindings";
 import CustomerProfile from "./CustomerProfile";
 import KpiGrid from "./KpiGrid";
 import NarrativeDisplay from "./NarrativeDisplay";
+import StoryTimeline from "./StoryTimeline";
 import ObjectiveInfographic from "./ObjectiveInfographic";
 import OverviewStats from "./OverviewStats";
 import SolutionLayers from "./SolutionLayers";
@@ -173,6 +174,10 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 <NarrativeDisplay data={activeTab.narrativeData} />
               )}
 
+              {activeTab.storyData && (
+                <StoryTimeline data={activeTab.storyData} />
+              )}
+
               {activeTab.kpis && <KpiGrid groups={activeTab.kpis} />}
 
               {activeTab.assetsData && (
@@ -185,6 +190,7 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 !activeTab.objective &&
                 !activeTab.solution &&
                 !activeTab.narrativeData &&
+                !activeTab.storyData &&
                 !activeTab.kpis &&
                 !activeTab.assetsData && (
                   <div className="mt-10 rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-6">

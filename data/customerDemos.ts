@@ -73,6 +73,18 @@ export type NarrativeData = {
   closing: string;
 };
 
+export type StoryScene = {
+  number: number;
+  title: string;
+  description: string;
+  channel: string;
+  image: string;
+};
+
+export type StoryData = {
+  scenes: StoryScene[];
+};
+
 export type AssetItem = {
   name: string;
   description: string;
@@ -105,6 +117,7 @@ export type CustomerDemoTab = {
   customerProfile?: CustomerProfileData;
   contextData?: ContextData;
   narrativeData?: NarrativeData;
+  storyData?: StoryData;
   assetsData?: AssetsData;
 };
 
@@ -340,6 +353,161 @@ export const customerDemos: CustomerDemo[] = [
           ],
           closing:
             "En el ecosistema retail latinoamericano, la adopción de IA agéntica está en sus primeras etapas. Ser el primer retailer de moda y hogar en desplegar Customer Intelligence Agents a escala nacional es la ventaja competitiva que los competidores tardarán 2-3 años en replicar.",
+        },
+      },
+      {
+        id: "historia",
+        label: "Historia",
+        title: "Historia del Cliente",
+        content:
+          "El viaje completo de María Clara: desde la compra online hasta ver la final del Mundial con su familia, gracias a la coordinación entre LuxServe y LuxAssist.",
+        storyData: {
+          scenes: [
+            {
+              number: 1,
+              title: "La final se acerca",
+              description:
+                "María Clara compró en línea un proyector de alta luminosidad de más de 4,000 lúmenes en VivaLux. Lo eligió porque quería ver la final del Mundial México vs. Portugal con toda su familia, incluso con la sala iluminada, sin tener que cerrar cortinas ni apagar todas las luces. La familia llegará de visita al día siguiente y el proyector es el centro del plan.",
+              channel: "Hogar de María Clara / Sitio web de VivaLux",
+              image: "/Customers/vivalux/vl-1.png",
+            },
+            {
+              number: 2,
+              title: "El pedido no llega",
+              description:
+                "A un día de la final, María Clara revisa el estado del pedido y ve que aún no ha llegado. Preocupada, escribe por WhatsApp a VivaLux para preguntar por la entrega. LuxServe le informa que el pedido ya fue enviado desde el centro logístico y que la fecha programada de entrega es el domingo, el mismo día del partido. El problema es que no puede garantizarse si llegará antes o después del inicio de la final.",
+              channel: "WhatsApp / LuxServe",
+              image: "/Customers/vivalux/vl-2.png",
+            },
+            {
+              number: 3,
+              title: "El miedo al país paralizado",
+              description:
+                "María Clara imagina el peor escenario: todo México paralizado por la final, repartidores viendo el partido, calles cerradas por festejos y su proyector llegando después de que termine el juego. Si México gana, piensa exageradamente que el país celebrará durante semanas y que el proyector llegará hasta el mes siguiente.",
+              channel: "Imaginación de María Clara",
+              image: "/Customers/vivalux/vl-3.png",
+            },
+            {
+              number: 4,
+              title: "La primera solución de LuxServe",
+              description:
+                "María Clara pregunta si puede cancelar el pedido y comprar el proyector directamente en tienda. LuxServe revisa el estado logístico y detecta que el pedido ya fue procesado, pero aún no ha salido a ruta de última milla. Por eso, puede pausarse preventivamente la entrega a domicilio mientras María Clara busca una alternativa en tienda.",
+              channel: "WhatsApp / LuxServe / Sistema de órdenes VivaLux",
+              image: "/Customers/vivalux/vl-4.png",
+            },
+            {
+              number: 5,
+              title: "Disponibilidad en Plaza Olimpo",
+              description:
+                "María Clara pregunta si el mismo proyector está disponible en la tienda VivaLux de Plaza Olimpo. LuxServe consulta inventario y confirma que aparece una unidad disponible. María Clara decide ir de inmediato a la tienda para comprarlo personalmente y asegurarse de tenerlo antes del partido.",
+              channel: "WhatsApp / LuxServe / Tienda VivaLux Plaza Olimpo",
+              image: "/Customers/vivalux/vl-5.png",
+            },
+            {
+              number: 6,
+              title: "La última unidad desaparece",
+              description:
+                "María Clara llega corriendo a Plaza Olimpo. Al entrar, casi choca con una señora que lleva una caja del mismo proyector. Cuando pregunta a una vendedora, la dependiente revisa con LuxAssist y confirma que esa era la última unidad disponible. La unidad aparecía en inventario, pero otra clienta la tomó mientras María Clara iba en camino.",
+              channel: "Tienda VivaLux Plaza Olimpo / LuxAssist",
+              image: "/Customers/vivalux/vl-6.png",
+            },
+            {
+              number: 7,
+              title: "Alternativas que no convencen",
+              description:
+                "LuxAssist recomienda productos similares disponibles en Plaza Olimpo. La vendedora le muestra otras opciones, pero María Clara explica que eligió ese modelo porque tenía más de 4,000 lúmenes y podía usarse en una sala iluminada. Los otros proyectores no cumplen del todo con esa necesidad.",
+              channel: "Tienda VivaLux Plaza Olimpo / LuxAssist",
+              image: "/Customers/vivalux/vl-7.png",
+            },
+            {
+              number: 8,
+              title: "Una tentación muy poco mundialista",
+              description:
+                "Por un segundo, María Clara mira con demasiada intensidad la caja que lleva la otra clienta. La presión del partido y la visita familiar la hacen imaginar una escena absurda en la que arrebata el proyector y sale corriendo. Pero respira profundo y decide preguntar si hay disponibilidad en otra sucursal.",
+              channel: "Tienda VivaLux Plaza Olimpo",
+              image: "/Customers/vivalux/vl-8.png",
+            },
+            {
+              number: 9,
+              title: "El último proyector en Los Montes",
+              description:
+                "La dependiente consulta nuevamente con LuxAssist. El sistema encuentra una última unidad disponible en la sucursal VivaLux Los Montes. Es una pieza de exhibición, pero está en buen estado y puede venderse. María Clara acepta. La vendedora solicita apartarla inmediatamente.",
+              channel: "Tienda VivaLux Plaza Olimpo / LuxAssist / Inventario intersucursal",
+              image: "/Customers/vivalux/vl-9.png",
+            },
+            {
+              number: 10,
+              title: "Apartado confirmado",
+              description:
+                "LuxAssist genera el apartado del proyector en Los Montes. Automáticamente se envía una notificación al equipo de esa sucursal por Slack para que localicen el producto, lo retiren de exhibición, lo marquen como apartado y lo resguarden hasta que María Clara llegue. Al mismo tiempo, María Clara recibe por WhatsApp una confirmación del apartado con el tiempo de reserva.",
+              channel: "LuxAssist / Slack interno / WhatsApp / Tienda VivaLux Los Montes",
+              image: "/Customers/vivalux/vl-10.png",
+            },
+            {
+              number: 11,
+              title: "La carrera contra el tráfico",
+              description:
+                "María Clara sale hacia Los Montes. El tráfico está pesado porque toda la ciudad se prepara para la final. Después de dos horas, llega a la sucursal. El equipo ya la estaba esperando gracias a la notificación de LuxAssist y le entrega el proyector apartado.",
+              channel: "Trayecto a Los Montes / Tienda VivaLux Los Montes",
+              image: "/Customers/vivalux/vl-11.png",
+            },
+            {
+              number: 12,
+              title: "Compra confirmada, entrega cancelada",
+              description:
+                "Cuando María Clara confirma la compra y recibe el proyector en la sucursal Los Montes, LuxAssist actualiza el estado del caso. El sistema cancela definitivamente la entrega a domicilio del pedido original, evitando duplicidad, errores logísticos y una mala experiencia posterior.",
+              channel: "Tienda VivaLux Los Montes / LuxAssist / Sistema de órdenes VivaLux",
+              image: "/Customers/vivalux/vl-12.png",
+            },
+            {
+              number: 13,
+              title: "El proyector no funciona",
+              description:
+                "María Clara llega a casa, conecta el proyector y trata de probarlo antes de que llegue la familia. Pero la imagen no aparece. Se frustra y piensa que fue un error comprar una pieza de exhibición. Con el tiempo encima, llama por teléfono a VivaLux.",
+              channel: "Hogar de María Clara / Teléfono / LuxServe",
+              image: "/Customers/vivalux/vl-13.png",
+            },
+            {
+              number: 14,
+              title: "LuxServe reconoce el contexto",
+              description:
+                "Al llamar, LuxServe identifica a María Clara por su número telefónico. El sistema reconoce su última compra en la sucursal Los Montes y anticipa el motivo probable de la llamada. El agente le pregunta si necesita ayuda con la configuración de su proyector.",
+              channel: "Teléfono / LuxServe / CRM VivaLux",
+              image: "/Customers/vivalux/vl-14.png",
+            },
+            {
+              number: 15,
+              title: "La configuración correcta",
+              description:
+                "María Clara explica que el proyector \"no sirve\". LuxServe la guía paso a paso: revisar la fuente de entrada, activar el modo de alto brillo, quitar el protector del lente y confirmar la conexión HDMI. El problema no era una falla del producto, sino una configuración inicial incompleta. El proyector enciende correctamente y la imagen se ve clara incluso con la sala iluminada.",
+              channel: "Hogar de María Clara / Teléfono / LuxServe",
+              image: "/Customers/vivalux/vl-15.png",
+            },
+            {
+              number: 16,
+              title: "La final en familia",
+              description:
+                "La familia llega a casa de María Clara. Todos se acomodan frente a la proyección, con comida, camisetas y banderas. Gracias a la atención coordinada entre LuxServe y LuxAssist, María Clara puede disfrutar la final sin preocuparse por la entrega ni por la configuración del producto.",
+              channel: "Hogar de María Clara / Experiencia del cliente",
+              image: "/Customers/vivalux/vl-16.png",
+            },
+            {
+              number: 17,
+              title: "La visión ejecutiva de Don Raúl",
+              description:
+                "Mientras María Clara disfruta el partido, Don Raúl revisa en LuxInsight el desempeño de una campaña creada para mitigar abandono de clientes. La campaña estaba dirigida a miembros del programa de lealtad con intereses en tecnología y fútbol. Los datos muestran que la campaña fue altamente efectiva: aumentó la conversión, redujo cancelaciones y provocó sold out de proyectores de más de 4,000 lúmenes.",
+              channel: "Oficinas de VivaLux / LuxInsight / Dashboard ejecutivo",
+              image: "/Customers/vivalux/vl-17.png",
+            },
+            {
+              number: 18,
+              title: "De una urgencia individual a una estrategia ganadora",
+              description:
+                "LuxInsight conecta los puntos: clientes con interés en fútbol, alta intención de compra, riesgo de abandono por entregas inciertas, búsqueda de disponibilidad en tienda y preferencia por proyectores de alta luminosidad. El caso de María Clara deja de ser solo una atención aislada y se convierte en evidencia de una estrategia omnicanal exitosa para VivaLux.",
+              channel: "LuxInsight / Omnichannel Command Center / Estrategia VivaLux",
+              image: "/Customers/vivalux/vl-18.png",
+            },
+          ],
         },
       },
       {
