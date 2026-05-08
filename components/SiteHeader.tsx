@@ -8,7 +8,7 @@ const navItems = [
   { label: "About Me", href: "/about" },
   { label: "Laila", href: "/laila" },
   { label: "General Demos", href: "/general-demos" },
-  { label: "Customer's Demos", href: "/customer-demos" },
+  { label: "Customer's Solutions", href: "/customer-demos" },
 ];
 
 export default function SiteHeader() {

@@ -10,6 +10,7 @@ import KpiGrid from "./KpiGrid";
 import KpiSummaryTable from "./KpiSummaryTable";
 import NarrativeDisplay from "./NarrativeDisplay";
 import StoryTimeline from "./StoryTimeline";
+import JourneyTimeline from "./JourneyTimeline";
 import ObjectiveInfographic from "./ObjectiveInfographic";
 import OverviewStats from "./OverviewStats";
 import SolutionLayers from "./SolutionLayers";
@@ -190,6 +191,10 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 <StoryTimeline data={activeTab.storyData} />
               )}
 
+              {activeTab.journeyData && (
+                <JourneyTimeline data={activeTab.journeyData} />
+              )}
+
               {activeTab.archData && (
                 <ArchDiagram data={activeTab.archData} />
               )}
@@ -212,6 +217,7 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 !activeTab.archData &&
                 !activeTab.narrativeData &&
                 !activeTab.storyData &&
+                !activeTab.journeyData &&
                 !activeTab.kpiSummary &&
                 !activeTab.kpis &&
                 !activeTab.assetsData && (

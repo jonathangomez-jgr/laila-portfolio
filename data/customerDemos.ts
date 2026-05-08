@@ -93,6 +93,30 @@ export type StoryData = {
   scenes: StoryScene[];
 };
 
+export type JourneyTouchpoint = {
+  number: number;
+  phaseId: string;
+  icon: string;
+  title: string;
+  subtitle: string;
+  before: string;
+  transformation: string;
+  value: string;
+  products: string[];
+};
+
+export type JourneyPhase = {
+  id: string;
+  label: string;
+  span: number;
+  color: "indigo" | "violet" | "sky" | "emerald";
+};
+
+export type JourneyData = {
+  phases: JourneyPhase[];
+  touchpoints: JourneyTouchpoint[];
+};
+
 export type AssetItem = {
   name: string;
   description: string;
@@ -159,6 +183,7 @@ export type CustomerDemoTab = {
   contextData?: ContextData;
   narrativeData?: NarrativeData;
   storyData?: StoryData;
+  journeyData?: JourneyData;
   assetsData?: AssetsData;
 };
 
@@ -1177,6 +1202,149 @@ export const customerDemos: CustomerDemo[] = [
             ],
           },
         ],
+      },
+      {
+        id: "historia",
+        label: "Historia",
+        title: "El Journey Comercial de Argos",
+        content:
+          "De prospectos dispersos a clientes fidelizados: el journey completo que transforma cómo Argos captura, gestiona y hace crecer cada relación comercial.",
+        journeyData: {
+          phases: [
+            { id: "acquire", label: "Captura y Calificación", span: 2, color: "indigo" },
+            { id: "convert", label: "Conversión y Venta", span: 2, color: "violet" },
+            { id: "serve", label: "Servicio y Fidelización", span: 3, color: "sky" },
+            { id: "optimize", label: "Inteligencia y Optimización", span: 2, color: "emerald" },
+          ],
+          touchpoints: [
+            {
+              number: 1,
+              phaseId: "acquire",
+              icon: "🔍",
+              title: "Lead Management",
+              subtitle: "De prospectos dispersos a oportunidades accionables",
+              before:
+                "La oportunidad quedaba dispersa en conversaciones, fuentes externas o en el conocimiento individual del asesor. Sin captura sistemática, muchas señales de crecimiento se perdían antes de llegar al CRM.",
+              transformation:
+                "Con Salesforce, Agentforce y Sales Cloud, la oportunidad se captura automáticamente desde Galería Inmobiliaria, Licitacion.info u otras fuentes, se enriquece con contexto del cliente y se asigna al equipo comercial correcto en minutos.",
+              value:
+                "Menos oportunidades perdidas, mayor velocidad de respuesta y mejor control del funnel desde el primer contacto.",
+              products: ["Sales Cloud", "Agentforce SDR", "Einstein AI"],
+            },
+            {
+              number: 2,
+              phaseId: "acquire",
+              icon: "📊",
+              title: "Grow Pipeline",
+              subtitle: "Un pipeline más inteligente y mejor priorizado",
+              before:
+                "El asesor priorizaba por intuición o por urgencia del cliente. Sin criterios objetivos, las cuentas de alto potencial podían esperar mientras se atendían las más ruidosas.",
+              transformation:
+                "Salesforce analiza zona, tipo de cliente, volumen potencial, historial, riesgo competitivo y probabilidad de conversión para entregar al asesor una lista priorizada de cuentas y oportunidades accionables.",
+              value:
+                "Mayor productividad comercial, mejor enfoque del equipo y más oportunidades relevantes avanzando en el pipeline.",
+              products: ["Sales Cloud", "Einstein AI", "Tableau"],
+            },
+            {
+              number: 3,
+              phaseId: "convert",
+              icon: "🎯",
+              title: "Grow Deals",
+              subtitle: "Del seguimiento manual a la ejecución comercial guiada",
+              before:
+                "El seguimiento de oportunidades dependía de la disciplina individual del asesor: llamadas sin contexto, cotizaciones sin flujo post-creación y alertas de seguimiento que no existían.",
+              transformation:
+                "Salesforce guía al asesor con recomendaciones concretas: siguiente mejor acción, productos sugeridos, historial de interacción, cotización recomendada y alertas automáticas de seguimiento para cada oportunidad.",
+              value:
+                "Mejor conversión de oportunidades, ciclos de venta más cortos y mayor disciplina comercial en todo el equipo.",
+              products: ["Sales Cloud", "Agentforce", "Einstein Next Best Action"],
+            },
+            {
+              number: 4,
+              phaseId: "convert",
+              icon: "💰",
+              title: "Grow Revenue",
+              subtitle: "Más ventas con pedido sugerido, cross-sell y e-commerce",
+              before:
+                "El asesor no tenía visibilidad del historial de compras completo, frecuencia, cartera o productos complementarios al momento de la visita. Las oportunidades de venta cruzada se perdían por falta de contexto.",
+              transformation:
+                "Salesforce conecta información comercial con inteligencia de negocio: historial de compras, frecuencia, volumen, productos complementarios y pedido sugerido por Einstein AI. La experiencia se extiende a Argos ONE para compras digitales personalizadas.",
+              value:
+                "Incremento del ticket promedio, mayor recompra, más ventas cruzadas y mejor adopción de canales digitales.",
+              products: ["Sales Cloud", "Einstein AI", "Argos ONE", "Commerce Cloud"],
+            },
+            {
+              number: 5,
+              phaseId: "serve",
+              icon: "🎧",
+              title: "Improve Service",
+              subtitle: "Servicio omnicanal con contexto completo",
+              before:
+                "El cliente contactaba por WhatsApp, Contact Center o web y cada canal manejaba conversaciones aisladas. Sin contexto compartido, los agentes pedían la misma información múltiples veces y la resolución tardaba días.",
+              transformation:
+                "Service Cloud centraliza cada interacción en una sola vista omnicanal. Agentforce clasifica solicitudes, responde casos simples, enruta PQRs y escala al agente humano con el contexto completo del cliente.",
+              value:
+                "Menor tiempo de respuesta, reducción de carga operativa, mejor experiencia de cliente y aumento del NPS.",
+              products: ["Service Cloud", "Agentforce Service", "WhatsApp Business API", "Konecta"],
+            },
+            {
+              number: 6,
+              phaseId: "serve",
+              icon: "🔭",
+              title: "Vista 360°",
+              subtitle: "Conocer mejor a cada cliente para crecer con él",
+              before:
+                "Argos veía a sus clientes solo como cuentas o pedidos. Sin integración de datos, el historial de compras, comportamiento digital, riesgo de fuga y potencial de crecimiento vivían en sistemas separados o en Excel.",
+              transformation:
+                "Con Data Cloud, Sales Cloud y Analytics, Argos consolida una visión integral por cliente: historial de compras, comportamiento digital, riesgo de fuga, potencial de crecimiento, participación de cartera, casos abiertos, campañas recibidas y preferencias de canal.",
+              value:
+                "Mejor segmentación, mayor retención, conversaciones más relevantes y decisiones comerciales basadas en datos.",
+              products: ["Data Cloud", "Sales Cloud", "Tableau", "Einstein AI"],
+            },
+            {
+              number: 7,
+              phaseId: "serve",
+              icon: "📣",
+              title: "Campaign Effectiveness",
+              subtitle: "Campañas más precisas, no comunicaciones masivas",
+              before:
+                "Marketing enviaba comunicaciones genéricas a toda la base de clientes. Sin segmentación por comportamiento o potencial, las campañas generaban ruido en lugar de conversiones.",
+              transformation:
+                "Marketing Cloud permite activar journeys personalizados agrupando clientes por comportamiento, potencial, riesgo, zona o etapa del ciclo comercial. Argos puede reactivar inactivos, retener clientes con caída de volumen o impulsar cross-sell a distribuidores de alto potencial.",
+              value:
+                "Mayor efectividad comercial, mejor conversión de campañas y activación inteligente de clientes.",
+              products: ["Marketing Cloud", "Data Cloud", "Agentforce Marketing", "Argos Amigos"],
+            },
+            {
+              number: 8,
+              phaseId: "optimize",
+              icon: "🔗",
+              title: "Seamless Experience",
+              subtitle: "Una experiencia conectada entre ventas, servicio y marketing",
+              before:
+                "Ventas, servicio y marketing operaban en silos. Un asesor no sabía si el cliente tenía una PQR abierta. Marketing no era alertado del riesgo de fuga detectado por ventas. Los pedidos digitales no eran visibles para el equipo comercial.",
+              transformation:
+                "Salesforce conecta ventas, servicio, marketing, e-commerce, contact center y analítica sobre el mismo contexto del cliente. Si hay PQR abierta, el asesor lo sabe. Si hay riesgo de fuga, marketing activa una campaña. Si el pedido llegó por WhatsApp, ventas lo ve en la Vista 360.",
+              value:
+                "Experiencia consistente, menor fricción operativa y equipos internos mejor coordinados.",
+              products: ["Sales Cloud", "Service Cloud", "Marketing Cloud", "Slack", "MuleSoft"],
+            },
+            {
+              number: 9,
+              phaseId: "optimize",
+              icon: "📈",
+              title: "Measure & Optimize",
+              subtitle: "Medir lo que importa y optimizar continuamente",
+              before:
+                "Los líderes de Argos dependían de reportes manuales en Excel con rezago de 24 horas o más. El Admin CRM construía todos los reportes a mano. La visibilidad del pipeline, NPS o efectividad de campañas llegaba tarde para actuar.",
+              transformation:
+                "Los líderes visualizan en tiempo real el avance del pipeline, cobertura de visitas, ventas por zona, clientes en riesgo, efectividad de campañas, PQRs, SLAs, NPS y adopción comercial. Cada iniciativa se conecta con los OKRs estratégicos de Argos.",
+              value:
+                "Mejores decisiones, mayor visibilidad ejecutiva y capacidad de optimizar la operación comercial en tiempo real.",
+              products: ["Tableau", "Einstein Analytics", "Data Cloud", "Salesforce Dashboards"],
+            },
+          ],
+        },
       },
       {
         id: "assets",
