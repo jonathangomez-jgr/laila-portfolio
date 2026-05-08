@@ -20,7 +20,7 @@ export default function SkillsPage() {
         description="Una vista estructurada de las áreas donde construyo, diseño y comunico soluciones."
       />
 
-      <section className="mx-auto max-w-7xl px-8 py-8">
+      <section className="mx-auto max-w-[1360px] px-8 py-8">
         <div className="grid gap-4 md:grid-cols-2">
           {skills.map((skill) => (
             <div key={skill} className="rounded-2xl border border-gray-200 p-5">

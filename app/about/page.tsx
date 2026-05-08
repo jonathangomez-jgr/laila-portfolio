@@ -30,7 +30,7 @@ const highlights = [
 export default function AboutPage() {
   return (
     <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
-      <section className="mx-auto max-w-6xl">
+      <section className="mx-auto max-w-7xl">
         <div className="mb-8">
           <p className="eyebrow mb-4">About Me</p>
 

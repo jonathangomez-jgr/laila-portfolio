@@ -20,7 +20,7 @@ export default async function CustomerDemoPage({
     return (
       <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
         <section className="mx-auto max-w-4xl">
-          <p className="eyebrow mb-4">Customer Demo</p>
+          <p className="eyebrow mb-4">Customer Solution</p>
 
           <h1 className="section-title text-5xl font-semibold tracking-tight text-gray-950">
             Demo not found

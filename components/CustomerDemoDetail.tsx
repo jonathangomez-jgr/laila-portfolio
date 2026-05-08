@@ -5,7 +5,9 @@ import { useState } from "react";
 import AssetsGrid from "./AssetsGrid";
 import ContextFindings from "./ContextFindings";
 import CustomerProfile from "./CustomerProfile";
+import ArchDiagram from "./ArchDiagram";
 import KpiGrid from "./KpiGrid";
+import KpiSummaryTable from "./KpiSummaryTable";
 import NarrativeDisplay from "./NarrativeDisplay";
 import StoryTimeline from "./StoryTimeline";
 import ObjectiveInfographic from "./ObjectiveInfographic";
@@ -23,10 +25,10 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
 
   return (
     <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
-      <section className="mx-auto max-w-6xl">
+      <section className="mx-auto max-w-7xl">
         <div className="mb-10 grid gap-6 lg:grid-cols-[1fr_280px] lg:items-start">
           <div>
-            <p className="eyebrow mb-4">Customer Demo</p>
+            <p className="eyebrow mb-4">Customer Solution</p>
 
             <h1 className="section-title max-w-4xl text-5xl font-semibold tracking-tight text-gray-950">
               {demo.customerName}
@@ -188,6 +190,14 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 <StoryTimeline data={activeTab.storyData} />
               )}
 
+              {activeTab.archData && (
+                <ArchDiagram data={activeTab.archData} />
+              )}
+
+              {activeTab.kpiSummary && (
+                <KpiSummaryTable rows={activeTab.kpiSummary} />
+              )}
+
               {activeTab.kpis && <KpiGrid groups={activeTab.kpis} />}
 
               {activeTab.assetsData && (
@@ -199,8 +209,10 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 !activeTab.contextData &&
                 !activeTab.objective &&
                 !activeTab.solution &&
+                !activeTab.archData &&
                 !activeTab.narrativeData &&
                 !activeTab.storyData &&
+                !activeTab.kpiSummary &&
                 !activeTab.kpis &&
                 !activeTab.assetsData && (
                   <div className="mt-10 rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-6">

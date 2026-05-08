@@ -4,7 +4,7 @@ import { customerDemos } from "../../data/customerDemos";
 export default function CustomerDemosPage() {
   return (
     <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
-      <section className="mx-auto max-w-6xl">
+      <section className="mx-auto max-w-7xl">
         <div className="mb-10">
           <p className="eyebrow mb-4">Customer&apos;s Demos</p>
 

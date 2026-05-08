@@ -55,9 +55,17 @@ export default function AssetsGrid({ data }: { data: AssetsData }) {
   return (
     <div className="mt-8 space-y-6">
       {available.length > 0 && (
-        <div>
-          <p className="eyebrow mb-3">Disponibles</p>
-          <div className="grid gap-3 sm:grid-cols-2">
+        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 shadow-[0_24px_60px_rgba(30,27,75,0.32)] ring-1 ring-white/10">
+          <div className="flex items-center gap-2.5 border-b border-white/8 px-5 py-3.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+              Disponibles
+            </p>
+            <span className="ml-auto rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-bold text-emerald-400">
+              {available.length}
+            </span>
+          </div>
+          <div className="grid gap-px bg-white/[0.04] sm:grid-cols-2">
             {available.map((item) => {
               const cfg = typeConfig[item.type];
               const Wrapper = item.url ? "a" : "div";
@@ -68,24 +76,24 @@ export default function AssetsGrid({ data }: { data: AssetsData }) {
                 <Wrapper
                   key={item.name}
                   {...wrapperProps}
-                  className={`flex gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm ${item.url ? "transition hover:-translate-y-0.5 hover:shadow-md" : ""}`}
+                  className={`group flex gap-4 bg-slate-900/60 p-5 transition-colors ${item.url ? "hover:bg-indigo-500/10" : ""}`}
                 >
-                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${cfg.color}`}>
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl opacity-90 ${cfg.color}`}>
                     {cfg.icon}
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-gray-950">{item.name}</p>
-                      <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-600">
+                      <p className="text-sm font-semibold text-white">{item.name}</p>
+                      <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-semibold text-emerald-400">
                         Listo
                       </span>
                       {item.url && (
-                        <svg className="ml-auto h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <svg className="ml-auto h-4 w-4 shrink-0 text-slate-500 transition group-hover:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                       )}
                     </div>
-                    <p className="mt-0.5 text-xs leading-5 text-gray-500">{item.description}</p>
+                    <p className="mt-1 text-xs leading-5 text-slate-400">{item.description}</p>
                   </div>
                 </Wrapper>
               );

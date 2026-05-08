@@ -28,7 +28,7 @@ body {
 }
 
 .site-shell {
-  max-width: 1280px;
+  max-width: 1440px;
   margin: 32px auto;
   border: 1px solid var(--border-soft);
   background: rgba(255, 255, 255, 0.68);

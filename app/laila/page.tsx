@@ -33,7 +33,7 @@ const lailaSections = [
 
 export default function LailaPage() {
   return (
-    <main className="mx-auto max-w-7xl px-8 py-16">
+    <main className="mx-auto max-w-[1360px] px-8 py-16">
       <div className="mb-12 h-52 w-full overflow-hidden rounded-2xl">
         <img
           src="/laila-back.jpg"

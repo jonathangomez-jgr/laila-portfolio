@@ -37,7 +37,7 @@ export default function GeneralDemosPage() {
         description="Esta sección contiene demos que no pertenecen a un cliente específico, pero que pueden adaptarse rápidamente a diferentes escenarios comerciales."
       />
 
-      <section className="mx-auto max-w-7xl px-8 py-8">
+      <section className="mx-auto max-w-[1360px] px-8 py-8">
         <div className="mb-8 rounded-2xl border border-gray-200 p-6">
           <h2 className="mb-3 text-xl font-semibold">Filtros futuros</h2>
           <p className="text-gray-600">

@@ -10,6 +10,14 @@ export type KpiGroup = {
   items: KpiItem[];
 };
 
+export type KpiSummaryRow = {
+  dimension: string;
+  kpiName: string;
+  value6m: string;
+  value12m: string;
+  color: "indigo" | "violet" | "sky";
+};
+
 export type ObjectiveOkr = {
   label: string;
   description: string;
@@ -104,6 +112,37 @@ export type SolutionLayer = {
   items: string[];
 };
 
+export type ArchNode = {
+  name: string;
+  items: string[];
+};
+
+export type ArchZone = {
+  id: string;
+  label: string;
+  color: "slate" | "indigo" | "violet" | "sky" | "emerald" | "amber";
+  nodes: ArchNode[];
+};
+
+export type ArchBridge = {
+  label: string;
+  sublabel: string;
+  items: string[];
+};
+
+export type ArchFoundation = {
+  label: string;
+  items: string[];
+};
+
+export type ArchData = {
+  title: string;
+  svgUrl?: string;
+  zones: ArchZone[];
+  bridge: ArchBridge;
+  foundation: ArchFoundation;
+};
+
 export type CustomerDemoTab = {
   id: string;
   label: string;
@@ -111,7 +150,9 @@ export type CustomerDemoTab = {
   content: string;
   banner?: string;
   kpis?: KpiGroup[];
+  kpiSummary?: KpiSummaryRow[];
   solution?: SolutionLayer[];
+  archData?: ArchData;
   objective?: ObjectiveData;
   overviewData?: OverviewData;
   customerProfile?: CustomerProfileData;
@@ -518,6 +559,29 @@ export const customerDemos: CustomerDemo[] = [
         title: "Resultados esperados",
         content:
           "Los KPIs de éxito se organizan en tres dimensiones: experiencia del cliente, eficiencia operativa y revenue uplift. Cada métrica tiene línea base documentada, meta a 6 meses y meta a 12 meses — diseñadas para demostrar valor financiero cuantificable ante el Directorio en cada fase.",
+        kpiSummary: [
+          {
+            dimension: "Experiencia al Cliente",
+            kpiName: "NPS Score",
+            value6m: "+8 pts → 49",
+            value12m: "+15 pts → 56",
+            color: "indigo",
+          },
+          {
+            dimension: "Eficiencia Operativa",
+            kpiName: "Costo operativo Tier-1 anual",
+            value6m: "Reducción 40%",
+            value12m: "Reducción 75% = $8.2M ahorrado",
+            color: "violet",
+          },
+          {
+            dimension: "Revenue Uplift",
+            kpiName: "Ticket promedio en tienda",
+            value6m: "+10% piloto 5 tiendas",
+            value12m: "+23% = $27M uplift anual",
+            color: "sky",
+          },
+        ],
         kpis: [
           {
             group: "Experiencia del Cliente — NPS y Retención",
@@ -627,9 +691,104 @@ export const customerDemos: CustomerDemo[] = [
         ],
       },
       {
+        id: "arquitectura",
+        label: "Arquitectura",
+        title: "System Landscape — VivaLux",
+        content:
+          "Vista completa del ecosistema tecnológico de VivaLux: sistemas externos, capa de integración MuleSoft, productos Salesforce y el foundation de Einstein Trust Layer.",
+        archData: {
+          title: "VivaLux System Landscape",
+          svgUrl: "/vivalux-landscape.svg",
+          zones: [
+            {
+              id: "external",
+              label: "Sistemas Externos",
+              color: "slate",
+              nodes: [
+                {
+                  name: "SAP (ERP)",
+                  items: ["Finanzas", "Proveedores", "Inventario"],
+                },
+                {
+                  name: "NCR (POS)",
+                  items: ["Caja", "Pagos", "Inventario en tienda", "Cambios", "Devoluciones", "Promociones"],
+                },
+                {
+                  name: "Manhattan (Warehouse)",
+                  items: ["Recepción", "Picking", "Packing", "Inventario", "Despacho"],
+                },
+                {
+                  name: "Manhattan (OMS)",
+                  items: ["Pedidos", "Entregas", "Sourcing", "Shipments", "Cambios", "Devoluciones", "Reembolsos"],
+                },
+              ],
+            },
+            {
+              id: "salesforce",
+              label: "Salesforce Customer 360",
+              color: "indigo",
+              nodes: [
+                {
+                  name: "Sales",
+                  items: ["Account Management", "Contact Management", "Partner mgmt", "Forecast", "Territories"],
+                },
+                {
+                  name: "Service",
+                  items: ["Case management", "SLAs", "Escalations", "Contact Center", "Omni-channel", "Field Service"],
+                },
+                {
+                  name: "Marketing",
+                  items: ["Marketing Cloud Engagement", "Personalization", "Loyalty"],
+                },
+                {
+                  name: "Commerce",
+                  items: ["Storefront", "Order Management", "Product Catalogs", "Campaigns & Promos"],
+                },
+                {
+                  name: "Industries",
+                  items: ["Retail Execution"],
+                },
+                {
+                  name: "Slack",
+                  items: ["Slackbot", "Collaboration", "Integration", "3rd party apps", "Agents"],
+                },
+                {
+                  name: "Tableau",
+                  items: ["Tableau Cloud", "Tableau Pulse", "Tableau Agent"],
+                },
+                {
+                  name: "Data Cloud",
+                  items: ["Harmonization", "Identity resolution", "Segmentation", "Data Graphs", "Calculated Insights", "Unstructured Data / Retrievers"],
+                },
+              ],
+            },
+            {
+              id: "zerocopy",
+              label: "Zero Copy Partner Network",
+              color: "sky",
+              nodes: [
+                {
+                  name: "Snowflake (Zero Copy)",
+                  items: ["customer_master", "sales_transactions", "order_history"],
+                },
+              ],
+            },
+          ],
+          bridge: {
+            label: "MuleSoft Integration",
+            sublabel: "API-Led Connectivity",
+            items: ["Anypoint Platform", "Anypoint Design Center", "Anypoint Monitoring", "API Manager"],
+          },
+          foundation: {
+            label: "Einstein Trust Layer — Core Metadata Platform",
+            items: ["Built-in AI", "Copilot", "Agentforce"],
+          },
+        },
+      },
+      {
         id: "assets",
         label: "Assets",
-        title: "Assets de la demo",
+        title: "Assets de la solución",
         content:
           "Materiales disponibles y por desarrollar para soportar la conversación con VivaLux Retail Group.",
         assetsData: {
@@ -640,7 +799,7 @@ export const customerDemos: CustomerDemo[] = [
                 "Documento completo con análisis de 5 dolores críticos, arquitectura del Customer Intelligence Agent Ecosystem, business case ROI 340% y roadmap 18 meses.",
               available: true,
               type: "doc",
-              url: "https://drive.google.com/file/d/1HxSmUuCN0MU2h3eDAVvRRRNnRQGM_VJO/view?usp=sharing",
+              url: "/plan_cuenta_vivalux.docx.pdf",
             },
             {
               name: "Deck Ejecutivo Board VivaLux",
@@ -657,11 +816,12 @@ export const customerDemos: CustomerDemo[] = [
               type: "video",
             },
             {
-              name: "Arquitectura Customer Intelligence Ecosystem",
+              name: "Arquitectura de Referencia",
               description:
-                "Diagrama técnico de los 4 agentes (LuxServe, LuxEscalation, LuxAssist, LuxInsight) con integración SAP-MuleSoft-Agentforce y modelo de datos unificado.",
-              available: false,
+                "Diagrama de la arquitectura de solución completa: capas de datos, integración y agentes inteligentes del Customer Intelligence Ecosystem sobre Salesforce Platform.",
+              available: true,
               type: "arch",
+              url: "/[JGR]VivaLux-System-landscape.pdf",
             },
             {
               name: "Mockup LuxAssist Mobile Clienteling App",
@@ -1021,7 +1181,7 @@ export const customerDemos: CustomerDemo[] = [
       {
         id: "assets",
         label: "Assets",
-        title: "Assets de la demo",
+        title: "Assets de la solución",
         content: "Materiales disponibles y por desarrollar para soportar la conversación con Cementos Argos.",
         assetsData: {
           items: [

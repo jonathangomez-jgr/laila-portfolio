@@ -6,7 +6,7 @@ type PageHeroProps = {
 
 export default function PageHero({ eyebrow, title, description }: PageHeroProps) {
   return (
-    <section className="mx-auto max-w-7xl px-8 py-16">
+    <section className="mx-auto max-w-[1360px] px-8 py-16">
       {eyebrow && (
         <p className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-gray-500">
           {eyebrow}
