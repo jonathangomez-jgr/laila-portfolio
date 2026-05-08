@@ -6,6 +6,7 @@ import AssetsGrid from "./AssetsGrid";
 import ContextFindings from "./ContextFindings";
 import CustomerProfile from "./CustomerProfile";
 import ArchDiagram from "./ArchDiagram";
+import AgentforceLandscape from "./AgentforceLandscape";
 import KpiGrid from "./KpiGrid";
 import KpiSummaryTable from "./KpiSummaryTable";
 import NarrativeDisplay from "./NarrativeDisplay";
@@ -199,6 +200,10 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 <ArchDiagram data={activeTab.archData} />
               )}
 
+              {activeTab.agentforceLandscapeData && (
+                <AgentforceLandscape data={activeTab.agentforceLandscapeData} />
+              )}
+
               {activeTab.kpiSummary && (
                 <KpiSummaryTable rows={activeTab.kpiSummary} />
               )}
@@ -215,6 +220,7 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 !activeTab.objective &&
                 !activeTab.solution &&
                 !activeTab.archData &&
+                !activeTab.agentforceLandscapeData &&
                 !activeTab.narrativeData &&
                 !activeTab.storyData &&
                 !activeTab.journeyData &&

@@ -117,6 +117,41 @@ export type JourneyData = {
   touchpoints: JourneyTouchpoint[];
 };
 
+export type AgentforceAgent = {
+  name: string;
+  capabilities: string[];
+};
+
+export type AgentforceStackLayer = {
+  name: string;
+  items: string[];
+};
+
+export type AgentforceChannel = {
+  name: string;
+  items: string[];
+};
+
+export type AgentforceApp = {
+  name: string;
+  items: string[];
+};
+
+export type AgentforceDataNode = {
+  name: string;
+  items: string[];
+};
+
+export type AgentforceLandscapeData = {
+  title: string;
+  svgUrl?: string;
+  agents: AgentforceAgent[];
+  customer360: AgentforceApp[];
+  aiStack: AgentforceStackLayer[];
+  channels: AgentforceChannel[];
+  dataCloud: AgentforceDataNode[];
+};
+
 export type AssetItem = {
   name: string;
   description: string;
@@ -185,6 +220,7 @@ export type CustomerDemoTab = {
   storyData?: StoryData;
   journeyData?: JourneyData;
   assetsData?: AssetsData;
+  agentforceLandscapeData?: AgentforceLandscapeData;
 };
 
 export type CustomerDemo = {
@@ -811,6 +847,133 @@ export const customerDemos: CustomerDemo[] = [
         },
       },
       {
+        id: "agentforce-landscape",
+        label: "Agentforce Landscape",
+        title: "Agentforce Landscape — VivaLux",
+        content:
+          "Mapa del ecosistema de Agentforce para VivaLux: agentes inteligentes, AI Stack, canales de interacción, Customer 360 y Data Cloud.",
+        agentforceLandscapeData: {
+          title: "VivaLux Agentforce Landscape",
+          svgUrl: "/vivalux-agentforce-landscape.svg",
+          agents: [
+            {
+              name: "LuxServe (Service)",
+              capabilities: [
+                "Order Tracking",
+                "Warranty",
+                "Troubleshooting",
+                "FAQs",
+                "Case Management",
+              ],
+            },
+            {
+              name: "LuxAssist (In-Store)",
+              capabilities: [
+                "Order Management",
+                "Recommendations",
+                "Multi-Store Collab",
+                "Customer Insights",
+              ],
+            },
+            {
+              name: "LuxInsights (Marketing)",
+              capabilities: [
+                "Churn Risk",
+                "Product Trends",
+                "Promotions & Campaigns Insights",
+                "Proactive Insights",
+              ],
+            },
+          ],
+          customer360: [
+            {
+              name: "Sales",
+              items: ["Account Mgmt", "Contact Mgmt", "Forecast", "Territories"],
+            },
+            {
+              name: "Service",
+              items: ["Case Mgmt", "SLAs", "Omni-channel", "Contact Center"],
+            },
+            {
+              name: "Marketing",
+              items: ["Engagement", "Personalization", "Loyalty"],
+            },
+            {
+              name: "Commerce",
+              items: ["Storefront", "Order Mgmt", "Catalogs", "Promos"],
+            },
+          ],
+          aiStack: [
+            {
+              name: "Generative Services & Apps",
+              items: [
+                "Agentforce Studio",
+                "Prompt Template",
+                "Analytics",
+                "Optimization",
+              ],
+            },
+            {
+              name: "Foundational Services",
+              items: [
+                "Generative AI Gateway",
+                "Content Moderation",
+                "Masking & Demasking",
+                "Inference Engine & Domain Adaptation",
+              ],
+            },
+            {
+              name: "Foundational Models",
+              items: [
+                "Internal Models by Salesforce",
+                "Salesforce-Hosted Models",
+                "OpenAI",
+                "Anthropic",
+                "Vertex AI",
+                "AWS Sagemaker",
+                "Cohere",
+              ],
+            },
+            {
+              name: "Human in the Loop",
+              items: ["Content Review", "Feedback"],
+            },
+          ],
+          channels: [
+            {
+              name: "Messaging",
+              items: ["WhatsApp", "SMS", "Web Chat", "Email"],
+            },
+            {
+              name: "Slack",
+              items: ["Slackbot", "Internal Collab", "Agent Notifications"],
+            },
+            {
+              name: "Tableau",
+              items: ["Tableau Cloud", "Tableau Pulse", "Tableau Agent"],
+            },
+          ],
+          dataCloud: [
+            {
+              name: "AI Ready Data",
+              items: ["DMO Retriever", "File Retriever", "Web Retriever", "Data Libraries"],
+            },
+            {
+              name: "Unificación",
+              items: ["Harmonization", "Identity Resolution", "Segmentation"],
+            },
+            {
+              name: "Insights",
+              items: ["Data Graphs", "Calculated Insights"],
+            },
+            {
+              name: "Unstructured",
+              items: ["Unstructured Data", "Retrievers"],
+            },
+          ],
+        },
+      },
+      {
         id: "assets",
         label: "Assets",
         title: "Assets de la solución",
@@ -847,6 +1010,14 @@ export const customerDemos: CustomerDemo[] = [
               available: true,
               type: "arch",
               url: "/[JGR]VivaLux-System-landscape.pdf",
+            },
+            {
+              name: "Agentforce Landscape",
+              description:
+                "Mapa completo del ecosistema de Agentforce para VivaLux: agentes, capacidades y puntos de integración dentro de la plataforma Salesforce.",
+              available: true,
+              type: "arch",
+              url: "/[JGR]VivaLux-Agentforce-landscape.pdf",
             },
             {
               name: "Mockup LuxAssist Mobile Clienteling App",
