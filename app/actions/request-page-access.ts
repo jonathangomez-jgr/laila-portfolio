@@ -34,7 +34,8 @@ export async function requestPageAccess(
   try {
     await createPageAccessRecord(normalizedEmail, normalizedPath);
     return { success: true };
-  } catch {
+  } catch (error) {
+    console.error("[requestPageAccess] Salesforce error:", error);
     return {
       success: false,
       message:

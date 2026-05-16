@@ -68,9 +68,12 @@ export default function AssetsGrid({ data }: { data: AssetsData }) {
           <div className="grid gap-px bg-white/[0.04] sm:grid-cols-2">
             {available.map((item) => {
               const cfg = typeConfig[item.type];
+              const isInternal = item.url?.startsWith("/");
               const Wrapper = item.url ? "a" : "div";
               const wrapperProps = item.url
-                ? { href: item.url, target: "_blank", rel: "noopener noreferrer" }
+                ? isInternal
+                  ? { href: item.url }
+                  : { href: item.url, target: "_blank", rel: "noopener noreferrer" }
                 : {};
               return (
                 <Wrapper

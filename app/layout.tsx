@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import SiteHeader from "../components/SiteHeader";
-import SiteFooter from "../components/SiteFooter";
+import SiteChrome from "../components/SiteChrome";
 
 export const metadata: Metadata = {
   title: "JGR - Laila",
@@ -20,13 +19,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        <div className="site-shell">
-  <SiteHeader />
-  
-    {children}
-  
-  <SiteFooter />
-</div>
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

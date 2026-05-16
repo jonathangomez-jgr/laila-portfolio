@@ -15,7 +15,9 @@ import JourneyTimeline from "./JourneyTimeline";
 import ObjectiveInfographic from "./ObjectiveInfographic";
 import OverviewStats from "./OverviewStats";
 import SolutionLayers from "./SolutionLayers";
+import Link from "next/link";
 import type { CustomerDemo } from "../data/customerDemos";
+import { hasExecutiveDeck } from "../data/executiveDecks";
 
 type CustomerDemoDetailProps = {
   demo: CustomerDemo;
@@ -44,7 +46,29 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
               {demo.description}
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              {hasExecutiveDeck(demo.slug) && (
+                <Link
+                  href={`/customer-demos/${demo.slug}/deck/executive`}
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(95,111,255,0.28)] transition hover:opacity-90"
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
+                    />
+                  </svg>
+                  Presentación ejecutiva
+                </Link>
+              )}
               {demo.tags.map((tag) => (
                 <span
                   key={tag}

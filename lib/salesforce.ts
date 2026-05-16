@@ -41,7 +41,10 @@ async function getAccessToken(): Promise<TokenResponse> {
   });
 
   if (!response.ok) {
-    throw new Error(`Salesforce token request failed (${response.status}).`);
+    const details = await response.text();
+    throw new Error(
+      `Salesforce token request failed (${response.status}): ${details}`,
+    );
   }
 
   const data = (await response.json()) as TokenResponse;
@@ -74,6 +77,9 @@ export async function createPageAccessRecord(email: string, path: string) {
   );
 
   if (!response.ok) {
-    throw new Error(`Salesforce record creation failed (${response.status}).`);
+    const details = await response.text();
+    throw new Error(
+      `Salesforce record creation failed (${response.status}): ${details}`,
+    );
   }
 }

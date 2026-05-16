@@ -993,8 +993,9 @@ export const customerDemos: CustomerDemo[] = [
               name: "Deck Ejecutivo Board VivaLux",
               description:
                 "Presentación de 20 min para el Directorio: problema, solución, ROI por fase y próximos pasos — co-presentada con IT Director como co-sponsor técnico.",
-              available: false,
+              available: true,
               type: "deck",
+              url: "/customer-demos/vivalux/deck/executive",
             },
             {
               name: "Demo en Vivo LuxServe en WhatsApp",
@@ -1534,8 +1535,9 @@ export const customerDemos: CustomerDemo[] = [
             {
               name: "Deck Ejecutivo",
               description: "Presentación para sesión de Executive Briefing con Dirección Comercial y Tecnología de Argos.",
-              available: false,
+              available: true,
               type: "deck",
+              url: "/customer-demos/grupo-argos/deck/executive",
             },
             {
               name: "Mockup Vista 360",
