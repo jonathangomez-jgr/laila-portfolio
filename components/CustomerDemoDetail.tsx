@@ -34,7 +34,7 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
           <div>
             <p className="eyebrow mb-4">Customer Solution</p>
 
-            <h1 className="section-title max-w-4xl text-5xl font-semibold tracking-tight text-gray-950">
+            <h1 className="section-title max-w-4xl text-3xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
               {demo.customerName}
             </h1>
 
@@ -167,15 +167,15 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
               </div>
             </aside>
 
-            <section className="soft-card min-h-[420px] p-8 md:p-10">
+            <section className="soft-card min-h-[280px] p-5 sm:min-h-[420px] sm:p-8 md:p-10">
               <p className="eyebrow mb-4">{activeTab.label}</p>
 
-              <h2 className="section-title text-4xl font-semibold text-gray-950">
+              <h2 className="section-title text-2xl font-semibold text-gray-950 sm:text-4xl">
                 {activeTab.id === "customer" ? demo.customerName : activeTab.title}
               </h2>
 
               {activeTab.banner && (
-                <div className="mt-6 h-56 w-full overflow-hidden rounded-2xl">
+                <div className="mt-6 h-36 w-full overflow-hidden rounded-2xl sm:h-56">
                   <img
                     src={activeTab.banner}
                     alt=""
@@ -184,7 +184,7 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 </div>
               )}
 
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-gray-600">
+              <p className="mt-6 max-w-3xl text-base leading-8 text-gray-600 sm:text-lg">
                 {activeTab.content}
               </p>
 

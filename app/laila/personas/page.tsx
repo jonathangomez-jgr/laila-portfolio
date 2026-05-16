@@ -70,8 +70,8 @@ export default function PersonasPage() {
         description="Cada una representa una dimensión distinta: la creadora, la ejecutora y la exploradora. Juntas, definen cómo Laila se imagina, se construye y se experimenta."
       />
 
-      <section className="mx-auto max-w-[1360px] px-8 pb-20">
-        <div className="grid gap-8 md:grid-cols-3">
+      <section className="mx-auto max-w-[1360px] px-5 pb-16 sm:px-8 sm:pb-20">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {personas.map((persona) => {
             const a = accentStyles[persona.accent];
             return (

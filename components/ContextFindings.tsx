@@ -19,7 +19,7 @@ const groupColors = [
 
 export default function ContextFindings({ data }: { data: ContextData }) {
   return (
-    <div className="mt-8 grid gap-5 sm:grid-cols-2">
+    <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
       {data.groups.map((group, i) => {
         const c = groupColors[i % groupColors.length];
         return (

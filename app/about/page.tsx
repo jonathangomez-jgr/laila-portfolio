@@ -34,7 +34,7 @@ export default function AboutPage() {
         <div className="mb-8">
           <p className="eyebrow mb-4">About Me</p>
 
-          <h1 className="section-title max-w-4xl text-5xl font-semibold tracking-tight text-gray-950">
+          <h1 className="section-title max-w-4xl text-3xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
             Mindset drives results
           </h1>
 
@@ -45,11 +45,11 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] grid-cols-1">
           <div className="soft-card p-8 md:p-10">
             <p className="eyebrow mb-4">My Approach</p>
 
-            <h2 className="text-4xl font-semibold leading-tight text-gray-950">
+            <h2 className="text-2xl font-semibold leading-tight text-gray-950 sm:text-4xl">
               I connect business goals & desires, technology and storytelling.
             </h2>
 
@@ -138,7 +138,7 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <section className="mt-8 grid gap-6 md:grid-cols-3">
+        <section className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
           <div className="soft-card p-7">
             <p className="eyebrow mb-3">What I enjoy</p>
             <h3 className="text-2xl font-semibold text-gray-950">

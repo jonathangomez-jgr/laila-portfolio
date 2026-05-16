@@ -11,7 +11,7 @@ export default function NarrativeDisplay({ data }: { data: NarrativeData }) {
   return (
     <div className="mt-8 space-y-6">
       {/* quote */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 to-blue-600 p-8 text-white shadow-lg">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 to-blue-600 p-5 text-white shadow-lg sm:p-8">
         <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
         <div className="absolute bottom-0 left-0 h-24 w-48 rounded-full bg-indigo-400/20 blur-3xl" />
         <svg
@@ -25,7 +25,7 @@ export default function NarrativeDisplay({ data }: { data: NarrativeData }) {
       </div>
 
       {/* pilares */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {data.pillars.map((pillar, i) => {
           const c = pillarColors[i % pillarColors.length];
           return (

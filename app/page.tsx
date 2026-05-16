@@ -21,12 +21,12 @@ const featuredCards = [
 
 export default function Home() {
   return (
-    <main className="px-6 pb-10 pt-36 md:px-8">
+    <main className="px-5 pb-10 pt-28 sm:px-6 sm:pt-36 md:px-8">
       <section className="grid gap-6 lg:grid-cols-[1.25fr_0.95fr]">
-        <div className="glass-card p-8 md:p-12">
+        <div className="glass-card p-6 sm:p-8 md:p-12">
           <p className="eyebrow mb-4">Hello ✨</p>
 
-          <h1 className="section-title max-w-4xl text-5xl font-semibold leading-tight text-gray-900 md:text-6xl">
+          <h1 className="section-title max-w-4xl text-4xl font-semibold leading-tight text-gray-900 sm:text-5xl md:text-6xl">
             Reliable AI
             <br />
             Business Solutions.
@@ -58,7 +58,7 @@ export default function Home() {
         </div>
  
         <div className="grid gap-6">
-          <div className="relative min-h-[260px] overflow-hidden rounded-[32px] border border-indigo-200/50 bg-gradient-to-br from-indigo-500 via-blue-500 to-sky-400 p-8 text-white shadow-[0_24px_70px_rgba(79,70,229,0.25)]">
+          <div className="relative overflow-hidden rounded-[32px] border border-indigo-200/50 bg-gradient-to-br from-indigo-500 via-blue-500 to-sky-400 p-6 text-white shadow-[0_24px_70px_rgba(79,70,229,0.25)] sm:min-h-[260px] sm:p-8">
   <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/20 blur-3xl" />
   <div className="absolute -bottom-16 -left-10 h-44 w-44 rounded-full bg-blue-200/25 blur-3xl" />
 
@@ -90,7 +90,7 @@ export default function Home() {
   </div>
 </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div className="soft-card p-6">
               <p className="text-sm font-medium text-gray-500">Core Areas</p>
               <div className="mt-4 flex flex-wrap gap-3">
@@ -123,7 +123,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mt-8 grid gap-6 md:grid-cols-3">
+      <section className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
         {featuredCards.map((card) => (
           <a
             key={card.href}

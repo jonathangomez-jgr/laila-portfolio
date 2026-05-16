@@ -8,7 +8,7 @@ export default function CustomerDemosPage() {
         <div className="mb-10">
           <p className="eyebrow mb-4">Customer&apos;s Demos</p>
 
-          <h1 className="section-title max-w-4xl text-5xl font-semibold tracking-tight text-gray-950">
+          <h1 className="section-title max-w-4xl text-3xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
             Demos y casos preparados para conversaciones específicas con clientes.
           </h1>
 
@@ -36,14 +36,14 @@ export default function CustomerDemosPage() {
 
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {customerDemos.map((demo) => (
             <a
   key={demo.slug}
   href={`/customer-demos/${demo.slug}`}
   className="soft-card group overflow-hidden p-7 transition hover:-translate-y-1 hover:shadow-xl"
 >
-  <div className="mb-6 flex items-start justify-between gap-6">
+  <div className="mb-6 flex items-start justify-between gap-4">
     <div>
       <p className="eyebrow mb-3">{demo.industry}</p>
 

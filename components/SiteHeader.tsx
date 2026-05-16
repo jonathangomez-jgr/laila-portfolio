@@ -134,7 +134,7 @@ export default function SiteHeader() {
 
         {/* Drawer */}
         <nav
-          className={`absolute right-4 top-24 w-72 overflow-hidden rounded-3xl border border-white/70 bg-white/95 shadow-[0_24px_60px_rgba(99,102,241,0.22)] backdrop-blur-2xl transition-all duration-300 ${
+          className={`absolute right-4 top-24 w-[calc(100vw-2rem)] max-w-xs overflow-hidden rounded-3xl border border-white/70 bg-white/95 shadow-[0_24px_60px_rgba(99,102,241,0.22)] backdrop-blur-2xl transition-all duration-300 sm:w-72 ${
             menuOpen ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
           }`}
         >
