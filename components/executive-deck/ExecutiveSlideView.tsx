@@ -144,6 +144,18 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
         </div>
       );
 
+    /* ── Thanks (dark) ───────────────────────────────────────────────── */
+    case "thanks":
+      return (
+        <div className="deck-slide-inner deck-slide-section">
+          {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
+          <h1 className="deck-thanks-title">{slide.title}</h1>
+          {slide.subtitle && (
+            <p className="deck-hero-subtitle mt-6 max-w-3xl">{slide.subtitle}</p>
+          )}
+        </div>
+      );
+
     /* ── Closing (dark) ───────────────────────────────────────────────── */
     case "closing":
       return (

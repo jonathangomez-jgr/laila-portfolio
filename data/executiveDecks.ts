@@ -70,6 +70,12 @@ export type ExecutiveSlide =
         goal12m: string;
         accent?: SlideAccent;
       }[];
+    }
+  | {
+      layout: "thanks";
+      eyebrow?: string;
+      title: string;
+      subtitle?: string;
     };
 
 export type ExecutiveDeck = {
@@ -384,6 +390,14 @@ export const executiveDecks: ExecutiveDeck[] = [
         ],
         cta: "¿Avanzamos con el piloto en las 5 tiendas campeón?",
       },
+
+      // ── SLIDE 17 · Gracias ────────────────────────────────────────────
+      {
+        layout: "thanks",
+        eyebrow: "Salesforce · VivaLux Retail Group",
+        title: "Gracias",
+        subtitle: "Juntos, construimos la experiencia que los clientes de VivaLux merecen.",
+      },
     ],
   },
   {
@@ -665,6 +679,14 @@ export const executiveDecks: ExecutiveDeck[] = [
           "Workshop técnico de arquitectura con Quantics (integrador CRM actual)",
         ],
         cta: "¿Agendamos la sesión de validación con los stakeholders clave esta semana?",
+      },
+
+      // ── SLIDE 15 · Gracias ────────────────────────────────────────────
+      {
+        layout: "thanks",
+        eyebrow: "Salesforce · Grupo Argos",
+        title: "Gracias",
+        subtitle: "Juntos, construimos el motor comercial que Argos necesita para el siguiente capítulo.",
       },
     ],
   },

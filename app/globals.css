@@ -360,6 +360,15 @@ body.deck-mode {
   font-weight: 400;
 }
 
+.deck-thanks-title {
+  font-family: 'Century Gothic', 'Trebuchet MS', system-ui, sans-serif;
+  font-size: clamp(4rem, 14vw, 11rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #ffffff;
+}
+
 /* ── Section titles ─────────────────────────────────────────────────────── */
 .deck-title {
   font-family: 'Century Gothic', 'Trebuchet MS', system-ui, sans-serif;
@@ -974,6 +983,9 @@ body.deck-mode {
 
   /* Ocultar primer divider en mobile cuando no hay meta */
   .deck-topbar-left .deck-topbar-divider:last-of-type { display: none; }
+
+  /* Thanks title */
+  .deck-thanks-title { font-size: clamp(3rem, 18vw, 6rem); }
 
   /* Hero title: más compacto */
   .deck-hero-title {

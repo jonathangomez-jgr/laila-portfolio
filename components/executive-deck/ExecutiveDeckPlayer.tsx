@@ -73,7 +73,7 @@ export default function ExecutiveDeckPlayer({
   }, [goTo, next, prev, total]);
 
   const slide = deck.slides[index];
-  const darkLayouts = new Set(["title", "section", "closing", "quote"]);
+  const darkLayouts = new Set(["title", "section", "closing", "quote", "thanks"]);
   const isDark = darkLayouts.has(slide.layout);
 
   return (
