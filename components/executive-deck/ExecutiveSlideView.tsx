@@ -1,4 +1,5 @@
 import type { ExecutiveSlide, SlideAccent } from "../../data/executiveDecks";
+import DeckQRCode from "./DeckQRCode";
 
 /* Maps the data accent token → SFDC 2026 brand palette classes */
 const pillarAccent: Record<
@@ -38,12 +39,15 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
           {slide.subtitle && (
             <p className="deck-hero-subtitle mt-6 max-w-4xl">{slide.subtitle}</p>
           )}
-          {slide.footnote && (
-            <p className="mt-12 text-sm font-medium tracking-widest uppercase"
-               style={{ color: "rgba(255,255,255,0.35)" }}>
-              {slide.footnote}
-            </p>
-          )}
+          <div className="mt-10 flex flex-col items-start gap-4">
+            <DeckQRCode />
+            {slide.footnote && (
+              <p className="text-sm font-medium tracking-widest uppercase"
+                 style={{ color: "rgba(255,255,255,0.35)" }}>
+                {slide.footnote}
+              </p>
+            )}
+          </div>
         </div>
       );
 

@@ -342,6 +342,28 @@ body.deck-mode {
 /* On dark slides — eyebrow is Cloud Blue 68 */
 .executive-deck.deck-dark .deck-eyebrow { color: #00b3ff; }
 
+/* ── QR Code ────────────────────────────────────────────────────────────── */
+.deck-qr-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
+.deck-qr-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
 /* ── Hero (title slide) ─────────────────────────────────────────────────── */
 .deck-hero-title {
   font-family: 'Century Gothic', 'Trebuchet MS', system-ui, sans-serif;
@@ -986,6 +1008,9 @@ body.deck-mode {
 
   /* Thanks title */
   .deck-thanks-title { font-size: clamp(3rem, 18vw, 6rem); }
+
+  /* QR: ocultar en mobile */
+  .deck-qr-wrapper { display: none; }
 
   /* Hero title: más compacto */
   .deck-hero-title {
