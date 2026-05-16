@@ -1,5 +1,11 @@
 const lailaSections = [
   {
+    title: "👤 Personas",
+    description:
+      "Las personas que dan vida al universo Laila: la creadora, la ejecutora y la exploradora.",
+    href: "/laila/personas",
+  },
+  {
     title: "🎯 Product Vision",
     description:
       "Propósito, usuarios, visión, principios de diseño y valor que Laila busca generar.",

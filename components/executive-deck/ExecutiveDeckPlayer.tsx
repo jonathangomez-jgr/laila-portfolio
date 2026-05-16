@@ -73,20 +73,22 @@ export default function ExecutiveDeckPlayer({
   }, [goTo, next, prev, total]);
 
   const slide = deck.slides[index];
+  const darkLayouts = new Set(["title", "section", "closing", "quote"]);
+  const isDark = darkLayouts.has(slide.layout);
 
   return (
-    <div className="executive-deck">
+    <div className={`executive-deck${isDark ? " deck-dark" : ""}`}>
       <div className="deck-ambient deck-ambient-a" aria-hidden />
       <div className="deck-ambient deck-ambient-b" aria-hidden />
 
       <header className="deck-topbar">
         <div className="deck-topbar-left">
           <Image
-            src="/sfdc-logos/corporate-logo-horiz-allw.svg"
+            src="/sfdc-logos/corporate-logo-horiz.svg"
             alt="Salesforce"
             width={110}
             height={36}
-            className="h-[1.35rem] w-auto object-contain opacity-80"
+            className="h-[1.35rem] w-auto object-contain"
           />
           <span className="deck-topbar-divider" />
           {logo ? (
@@ -95,7 +97,7 @@ export default function ExecutiveDeckPlayer({
               alt={`${customerName} logo`}
               width={120}
               height={48}
-              className="h-8 w-auto object-contain brightness-0 invert opacity-90"
+              className="h-8 w-auto object-contain"
             />
           ) : (
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
