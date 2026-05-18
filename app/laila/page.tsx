@@ -62,24 +62,24 @@ export default function LailaPage() {
             </a>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 sm:gap-6">
-            <div className="rounded-2xl border border-violet-100 bg-violet-50 px-5 py-4 text-center">
+          <div className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:gap-6">
+            <div className="flex items-center gap-4 rounded-2xl border border-violet-100 bg-violet-50 px-5 py-4 sm:flex-col sm:items-center sm:text-center">
               <p className="text-3xl font-bold tabular-nums text-violet-600 sm:text-4xl">17</p>
-              <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-violet-500">
+              <p className="text-xs font-semibold uppercase tracking-wider text-violet-500 sm:mt-1.5">
                 Agentforce Agents
               </p>
             </div>
 
-            <div className="rounded-2xl border border-indigo-100 bg-indigo-50 px-5 py-4 text-center">
+            <div className="flex items-center gap-4 rounded-2xl border border-indigo-100 bg-indigo-50 px-5 py-4 sm:flex-col sm:items-center sm:text-center">
               <p className="text-3xl font-bold tabular-nums text-indigo-600 sm:text-4xl">31</p>
-              <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-indigo-500">
+              <p className="text-xs font-semibold uppercase tracking-wider text-indigo-500 sm:mt-1.5">
                 Objetos con Registros
               </p>
             </div>
 
-            <div className="rounded-2xl border border-sky-100 bg-sky-50 px-5 py-4 text-center">
+            <div className="flex items-center gap-4 rounded-2xl border border-sky-100 bg-sky-50 px-5 py-4 sm:flex-col sm:items-center sm:text-center">
               <p className="text-3xl font-bold tabular-nums text-sky-600 sm:text-4xl">17.1K</p>
-              <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-sky-500">
+              <p className="text-xs font-semibold uppercase tracking-wider text-sky-500 sm:mt-1.5">
                 Registros Creados
               </p>
             </div>
