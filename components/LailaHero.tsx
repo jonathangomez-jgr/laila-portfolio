@@ -10,89 +10,92 @@ const accounts = [
 ];
 
 export default function LailaHero() {
-  const [hovered, setHovered] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="relative mb-12 h-64 w-full overflow-visible rounded-3xl sm:h-80 md:h-96">
-      {/* Background image */}
+    <div className="relative mb-12 w-full overflow-hidden rounded-3xl" style={{ minHeight: "300px" }}>
+      {/* Background */}
       <Image
         src="/laila-back.jpg"
         alt="Laila hero"
         fill
-        className="rounded-3xl object-cover"
+        className="object-cover"
         priority
       />
 
-      {/* Dark gradient overlay */}
-      <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-gray-950/85 via-gray-950/60 to-gray-950/30" />
+      {/* Base overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-gray-950/88 via-gray-950/65 to-gray-950/35" />
 
-      {/* Content */}
-      <div className="absolute inset-0 flex flex-col justify-between p-7 sm:p-10">
-        {/* Top: vacío para empujar contenido abajo */}
+      {/* Accounts overlay — aparece al hover/tap */}
+      <div
+        className={`absolute inset-0 flex flex-col items-center justify-center gap-5 bg-gray-950/88 p-8 backdrop-blur-sm transition-all duration-300 ${
+          open ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      >
+        <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-indigo-400">
+          Cuentas donde ha participado Laila
+        </p>
+        <div className="flex flex-wrap justify-center gap-2">
+          {accounts.map((name) => (
+            <span
+              key={name}
+              className="rounded-full border border-white/10 bg-white/8 px-3 py-1.5 text-sm font-medium text-white/85"
+            >
+              {name}
+            </span>
+          ))}
+          <span className="rounded-full border border-indigo-400/30 bg-indigo-500/20 px-3 py-1.5 text-sm font-semibold text-indigo-300">
+            y más...
+          </span>
+        </div>
+        <p className="text-[11px] text-white/35">Toca fuera o mueve el cursor para cerrar</p>
+      </div>
+
+      {/* Main content */}
+      <div
+        className="relative flex min-h-[300px] flex-col justify-between p-6 sm:min-h-[380px] sm:p-10 md:min-h-[420px]"
+        onClick={() => open && setOpen(false)}
+      >
+        {/* Spacer top */}
         <div />
 
-        {/* Bottom: title + stat */}
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-          <div>
+        {/* Bottom row: title left, stat right */}
+        <div className="flex items-end justify-between gap-4">
+          {/* Left: logo + title */}
+          <div className="min-w-0">
             <img
               src="/laila-logo-full.png"
               alt="Laila logo"
-              className="mb-3 h-10 w-auto object-contain sm:h-14"
+              className="mb-3 h-9 w-auto object-contain sm:h-14"
               style={{ filter: "brightness(0) invert(1)" }}
             />
-            <h1 className="max-w-lg text-2xl font-bold leading-tight text-white sm:text-3xl md:text-4xl">
+            <h1 className="text-2xl font-bold leading-tight text-white sm:text-3xl md:text-4xl">
               Built once.
               <br />
               <span className="bg-gradient-to-r from-indigo-300 to-sky-300 bg-clip-text text-transparent">
                 Delivered everywhere.
               </span>
             </h1>
-            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.3em] text-white/55">
+            <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/50 sm:text-xs">
               All About Laila
             </p>
           </div>
 
-          {/* 20+ stat with hover tooltip */}
-          <div className="relative shrink-0 self-end sm:self-auto">
-            <div
-              className="group cursor-default"
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
-            >
-              <div className="flex flex-col items-center rounded-2xl border border-white/15 bg-white/10 px-6 py-4 backdrop-blur-sm transition-colors group-hover:border-indigo-300/40 group-hover:bg-indigo-500/20">
-                <span className="text-6xl font-bold tabular-nums text-white sm:text-7xl">
-                  20<span className="text-indigo-300">+</span>
-                </span>
-                <span className="mt-1 text-center text-xs font-semibold uppercase tracking-wider text-white/60">
-                  Cuentas con Laila
-                </span>
-              </div>
-            </div>
-
-            {/* Tooltip */}
-            <div
-              className={`absolute bottom-full right-0 z-50 mb-3 w-56 rounded-2xl border border-white/10 bg-gray-950/95 p-4 shadow-2xl backdrop-blur-md transition-all duration-200 ${
-                hovered ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-1 opacity-0"
-              }`}
-            >
-              <p className="mb-2.5 text-[10px] font-bold uppercase tracking-wider text-indigo-400">
-                Cuentas donde ha participado
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {accounts.map((name) => (
-                  <span
-                    key={name}
-                    className="rounded-full bg-white/8 px-2.5 py-1 text-xs font-medium text-white/80"
-                  >
-                    {name}
-                  </span>
-                ))}
-                <span className="rounded-full bg-indigo-500/20 px-2.5 py-1 text-xs font-semibold text-indigo-300">
-                  y más...
-                </span>
-              </div>
-            </div>
-          </div>
+          {/* Right: 20+ stat */}
+          <button
+            type="button"
+            className="group shrink-0 cursor-pointer rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm transition-colors hover:border-indigo-300/40 hover:bg-indigo-500/20 sm:px-6 sm:py-4"
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+            onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
+          >
+            <span className="block text-center text-5xl font-bold tabular-nums text-white sm:text-6xl md:text-7xl">
+              20<span className="text-indigo-300">+</span>
+            </span>
+            <span className="mt-1 block text-center text-[10px] font-semibold uppercase tracking-wider text-white/60 sm:text-xs">
+              Cuentas con Laila
+            </span>
+          </button>
         </div>
       </div>
     </div>
