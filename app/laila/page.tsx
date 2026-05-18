@@ -44,6 +44,22 @@ export default function LailaPage() {
     <main className="mx-auto max-w-[1360px] px-5 py-10 sm:px-8 sm:py-16">
       <LailaHero />
 
+      {/* ── Manifiesto ── */}
+      <section className="mb-10">
+        <blockquote className="relative px-1 py-2 sm:px-4">
+          <div className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-[#066afe]/40 via-[#730394]/30 to-transparent" />
+          <p className="pl-6 text-sm font-light leading-8 tracking-wide text-gray-500 sm:text-base sm:leading-9">
+            Laila es el arte de{" "}
+            <span className="font-medium text-gray-700">convertir la inteligencia en impacto</span>
+            {" "}—con humanidad, dedicación y belleza funcional—{" "}
+            y, a la vez, una fuente que inspira,{" "}
+            <span className="font-medium text-gray-700">nos reúne para colaborar</span>{" "}
+            y nos invita a{" "}
+            <span className="font-medium text-gray-700">compartir el conocimiento</span>.
+          </p>
+        </blockquote>
+      </section>
+
       {/* ── Mini dashboard ── */}
       <section className="mb-10">
         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">

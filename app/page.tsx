@@ -146,10 +146,26 @@ export default function Home() {
             A more visual and structured way to present what I build.
           </h2>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-gray-600">
-            Este sitio no es solo una biografía. Es un hub para documentar
-            soluciones, explicar cómo pienso, mostrar demos y convertir trabajo
-            complejo en una experiencia clara y confiable.
+            Un espacio colaborativo para centralizar ideas, soluciones y aprendizajes que permitan acelerar la creación de valor con IA. Laila busca convertir el conocimiento compartido en herramientas reutilizables, rutas claras y experiencias que ayuden a los clientes a alcanzar sus objetivos más ambiciosos.
           </p>
+
+          <div className="relative mt-8 border-t border-gray-100 px-1 pt-8">
+            <div className="absolute left-1 top-8 h-[calc(100%-2rem)] w-px bg-gradient-to-b from-[#066afe]/40 via-[#730394]/30 to-transparent" />
+            <p className="eyebrow mb-4 pl-6">Agradecimientos</p>
+            <p className="max-w-3xl pl-6 text-sm font-light leading-8 tracking-wide text-gray-500 sm:text-base sm:leading-9">
+              Laila no nació sola — y eso la hace más real.{" "}
+              <span className="font-medium text-gray-700">Larissa</span> le dio alma creativa.{" "}
+              <span className="font-medium text-gray-700">Gabo</span> y{" "}
+              <span className="font-medium text-gray-700">Caro</span> creyeron desde el principio.{" "}
+              <span className="font-medium text-gray-700">Aura</span>,{" "}
+              <span className="font-medium text-gray-700">Juanes</span>,{" "}
+              <span className="font-medium text-gray-700">Cami</span>,{" "}
+              <span className="font-medium text-gray-700">Juli</span> y{" "}
+              <span className="font-medium text-gray-700">Luisfa</span>{" "}
+              confiaron en ella y cada reto que trajeron la hizo crecer.
+              Y a todos quienes han aportado una idea, una opinión, o simplemente se han dejado sorprender por lo que Laila puede hacer — esto también es de ustedes.
+            </p>
+          </div>
         </div>
       </section>
     </main>

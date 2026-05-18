@@ -173,6 +173,35 @@ export default function AboutPage() {
             </p>
           </div>
         </section>
+
+        {/* ── CTA Banner ── */}
+        <div className="relative mt-8 overflow-hidden rounded-3xl p-8 text-white sm:p-12"
+             style={{ background: "linear-gradient(150deg,#066afe 0%,#022ac0 45%,#001e5b 100%)" }}>
+          <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#00b3ff]/20 blur-3xl" />
+          <div className="absolute -bottom-16 -left-10 h-48 w-48 rounded-full bg-[#066afe]/30 blur-3xl" />
+
+          <div className="relative z-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.28em] text-[#90d0fe]">
+                Let&apos;s Connect
+              </p>
+              <h2 className="text-2xl font-bold leading-tight text-white sm:text-3xl">
+                Ready to build something together?
+              </h2>
+              <p className="mt-3 max-w-xl text-base leading-7 text-white/70">
+                Si tienes un reto, una oportunidad o simplemente quieres explorar cómo la IA puede transformar tu negocio — hablemos.
+              </p>
+            </div>
+
+            <a
+              href="/contact"
+              className="shrink-0 rounded-2xl border border-white/20 bg-white/10 px-7 py-3.5 text-sm font-bold text-white backdrop-blur-sm transition hover:border-[#00b3ff]/60 hover:bg-[#00b3ff]/20"
+            >
+              Get in touch →
+            </a>
+          </div>
+        </div>
+
       </section>
     </main>
   );
