@@ -1,3 +1,5 @@
+import LailaHero from "@/components/LailaHero";
+
 const lailaSections = [
   {
     title: "👤 Personas",
@@ -40,35 +42,49 @@ const lailaSections = [
 export default function LailaPage() {
   return (
     <main className="mx-auto max-w-[1360px] px-5 py-10 sm:px-8 sm:py-16">
-      <div className="mb-12 h-40 w-full overflow-hidden rounded-2xl sm:h-52">
-        <img
-          src="/laila-back.jpg"
-          alt="Laila banner"
-          className="h-full w-full object-cover"
-        />
-      </div>
+      <LailaHero />
 
-      <section className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
-        <div>
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-gray-500">
-            All About Laila
-          </p>
+      {/* ── Mini dashboard ── */}
+      <section className="mb-10">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+          <div className="mb-6 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-gray-500">
+                Laila · Live Org
+              </p>
+              <h2 className="text-xl font-semibold text-gray-950">Laila en Números</h2>
+            </div>
+            <a
+              href="/laila/architecture"
+              className="text-sm font-semibold text-indigo-600 transition-colors hover:text-indigo-800"
+            >
+              Ver arquitectura completa →
+            </a>
+          </div>
 
-          <h1 className="mb-6 max-w-4xl text-3xl font-bold tracking-tight text-gray-950 sm:text-5xl">
-            Laila es el núcleo del portafolio.
-          </h1>
+          <div className="grid grid-cols-3 gap-4 sm:gap-6">
+            <div className="rounded-2xl border border-violet-100 bg-violet-50 px-5 py-4 text-center">
+              <p className="text-3xl font-bold tabular-nums text-violet-600 sm:text-4xl">17</p>
+              <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-violet-500">
+                Agentforce Agents
+              </p>
+            </div>
 
-          <p className="max-w-3xl text-base leading-8 text-gray-600 sm:text-xl">
-            Una plataforma conceptual para acelerar soluciones, demos, narrativas
-            y activos reutilizables con inteligencia artificial.
-          </p>
+            <div className="rounded-2xl border border-indigo-100 bg-indigo-50 px-5 py-4 text-center">
+              <p className="text-3xl font-bold tabular-nums text-indigo-600 sm:text-4xl">31</p>
+              <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-indigo-500">
+                Objetos con Registros
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-sky-100 bg-sky-50 px-5 py-4 text-center">
+              <p className="text-3xl font-bold tabular-nums text-sky-600 sm:text-4xl">17.1K</p>
+              <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-sky-500">
+                Registros Creados
+              </p>
+            </div>
+          </div>
         </div>
-
-        <img
-          src="/laila-logo-full.png"
-          alt="Laila logo"
-          className="h-20 w-auto flex-shrink-0 object-contain sm:h-32"
-        />
       </section>
 
       <section>
