@@ -208,6 +208,7 @@ export type CustomerDemoTab = {
   title: string;
   content: string;
   banner?: string;
+  videoUrl?: string;
   kpis?: KpiGroup[];
   kpiSummary?: KpiSummaryRow[];
   solution?: SolutionLayer[];

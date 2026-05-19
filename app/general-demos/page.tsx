@@ -1,32 +1,6 @@
 import PageHero from "@/components/PageHero";
 import DemoCard from "@/components/DemoCard";
-
-const demos = [
-  {
-    title: "Consumer Goods Mobile Execution",
-    description:
-      "Demo genérica para mostrar ejecución comercial, visitas, cuentas, pedidos y operación móvil.",
-    industry: "Consumer Goods",
-    product: "CG Cloud",
-    href: "/general-demos/consumer-goods-mobile-execution",
-  },
-  {
-    title: "Data Cloud & Loyalty Activation",
-    description:
-      "Demo para explicar unificación de perfiles, asistencia a eventos, segmentación y activación.",
-    industry: "Sports & Entertainment",
-    product: "Data Cloud",
-    href: "/general-demos/data-cloud-loyalty-activation",
-  },
-  {
-    title: "Field Service Quotes",
-    description:
-      "Demo sobre generación de cotizaciones desde una experiencia de servicio en campo.",
-    industry: "Field Service",
-    product: "Salesforce Field Service",
-    href: "/general-demos/field-service-quotes",
-  },
-];
+import { generalDemos } from "@/data/generalDemos";
 
 export default function GeneralDemosPage() {
   return (
@@ -47,8 +21,15 @@ export default function GeneralDemosPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {demos.map((demo) => (
-            <DemoCard key={demo.href} {...demo} />
+          {generalDemos.map((demo) => (
+            <DemoCard
+              key={demo.slug}
+              title={demo.title}
+              description={demo.description}
+              industries={demo.industries}
+              solutions={demo.solutions}
+              href={`/general-demos/${demo.slug}`}
+            />
           ))}
         </div>
       </section>
