@@ -1,3 +1,5 @@
+import SiteQRModal from "@/components/SiteQRModal";
+
 const featuredCards = [
   {
     title: "Laila",
@@ -54,6 +56,8 @@ export default function Home() {
             >
               View demos
             </a>
+
+            <SiteQRModal />
           </div>
         </div>
  
