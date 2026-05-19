@@ -21,7 +21,7 @@ export default function GeneralDemosPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {generalDemos.map((demo) => (
+          {generalDemos.filter((d) => !d.hidden).map((demo) => (
             <DemoCard
               key={demo.slug}
               title={demo.title}

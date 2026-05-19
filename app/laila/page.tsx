@@ -14,12 +14,6 @@ const lailaSections = [
     href: "/laila/product-vision",
   },
   {
-    title: "🎨 Experience Design",
-    description:
-      "Flujos, experiencia de usuario, pantallas, tono, interacciones y momentos clave.",
-    href: "/laila/experience-design",
-  },
-  {
     title: "🎬 Demo",
     description:
       "Espacio para mostrar videos, capturas, recorridos o prototipos de Laila.",
@@ -30,12 +24,6 @@ const lailaSections = [
     description:
       "Vista conceptual de módulos, agentes, datos, integraciones, prompts y outputs.",
     href: "/laila/architecture",
-  },
-  {
-    title: "🗺️ Roadmap",
-    description:
-      "Fases futuras, backlog, evolución y oportunidades de crecimiento de Laila.",
-    href: "/laila/roadmap",
   },
 ];
 

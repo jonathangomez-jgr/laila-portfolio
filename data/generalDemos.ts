@@ -5,6 +5,7 @@ export type GeneralDemo = {
   industries: string[];
   solutions: string[];
   videoUrl?: string;
+  hidden?: boolean;
 };
 
 export const generalDemos: GeneralDemo[] = [
@@ -24,6 +25,7 @@ export const generalDemos: GeneralDemo[] = [
       "Demo genérica para mostrar ejecución comercial, visitas, cuentas, pedidos y operación móvil.",
     industries: ["Consumer Goods"],
     solutions: ["CG Cloud"],
+    hidden: true,
   },
   {
     slug: "data-cloud-loyalty-activation",
@@ -32,6 +34,7 @@ export const generalDemos: GeneralDemo[] = [
       "Demo para explicar unificación de perfiles, asistencia a eventos, segmentación y activación.",
     industries: ["Sports & Entertainment"],
     solutions: ["Data Cloud"],
+    hidden: true,
   },
   {
     slug: "field-service-quotes",
@@ -40,5 +43,6 @@ export const generalDemos: GeneralDemo[] = [
       "Demo sobre generación de cotizaciones desde una experiencia de servicio en campo.",
     industries: ["Field Service"],
     solutions: ["Salesforce Field Service"],
+    hidden: true,
   },
 ];
