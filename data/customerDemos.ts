@@ -84,12 +84,21 @@ export type NarrativeData = {
 export type StoryScene = {
   number: number;
   title: string;
+  subtitle?: string;
   description: string;
   channel: string;
   image: string;
+  icon?: string;
+  pilar?: string;
+  pilarColor?: "indigo" | "violet" | "sky" | "emerald" | "amber";
+  products?: string[];
+  insight?: string;
 };
 
 export type StoryData = {
+  protagonist?: string;
+  protagonistRole?: string;
+  intro?: string;
   scenes: StoryScene[];
 };
 
@@ -1393,142 +1402,104 @@ export const customerDemos: CustomerDemo[] = [
       {
         id: "historia",
         label: "Historia",
-        title: "El Journey Comercial de Argos",
+        title: "La ferretería de Don Hernán y el equipo que nunca duerme",
         content:
-          "De prospectos dispersos a clientes fidelizados: el journey completo que transforma cómo Argos captura, gestiona y hace crecer cada relación comercial.",
-        journeyData: {
-          phases: [
-            { id: "acquire", label: "Captura y Calificación", span: 2, color: "indigo" },
-            { id: "convert", label: "Conversión y Venta", span: 2, color: "violet" },
-            { id: "serve", label: "Servicio y Fidelización", span: 3, color: "sky" },
-            { id: "optimize", label: "Inteligencia y Optimización", span: 2, color: "emerald" },
-          ],
-          touchpoints: [
+          "Hernán Ríos lleva años al frente de Ferretería El Paisa en Itagüí, Antioquia. Un cliente masivo clase B que compraba entre 12 y 15 toneladas de cemento al mes — hasta que dejó de hacerlo. Esta es la historia de cómo Salesforce convirtió un cliente en riesgo de fuga en el distribuidor más activo del trimestre.",
+        storyData: {
+          protagonist: "Hernán Ríos",
+          protagonistRole: "Propietario · Ferretería El Paisa · Itagüí, Antioquia",
+          intro: "Hernán Ríos y Ferretería El Paisa son personajes compuestos que representan fielmente el perfil del cliente masivo clase B del canal ferreterías. La historia ilustra el futuro posible habilitado por Salesforce Agentforce — basada en hallazgos reales del proceso de discovery con el equipo de Cementos Argos.",
+          scenes: [
             {
               number: 1,
-              phaseId: "acquire",
-              icon: "🔍",
-              title: "Lead Management",
-              subtitle: "De prospectos dispersos a oportunidades accionables",
-              before:
-                "La oportunidad quedaba dispersa en conversaciones, fuentes externas o en el conocimiento individual del asesor. Sin captura sistemática, muchas señales de crecimiento se perdían antes de llegar al CRM.",
-              transformation:
-                "Con Salesforce, Agentforce y Sales Cloud, la oportunidad se captura automáticamente desde Galería Inmobiliaria, Licitacion.info u otras fuentes, se enriquece con contexto del cliente y se asigna al equipo comercial correcto en minutos.",
-              value:
-                "Menos oportunidades perdidas, mayor velocidad de respuesta y mejor control del funnel desde el primer contacto.",
-              products: ["Sales Cloud", "Agentforce SDR", "Einstein AI"],
+              title: "El RADAR no miente",
+              subtitle: "Lunes · 06:47 a.m. · Salesforce CRM · Zona Antioquia",
+              icon: "📡",
+              description: "Antes de que Carlos Alzate, asesor de Cementos Argos para el canal masivo de Medellín, tome su primer café, Agentforce ya leyó el RADAR nocturno. El modelo predictivo integrado en Sales Cloud procesó las compras de los últimos 60 días de todos sus clientes. Un nombre aparece marcado en rojo: Ferretería El Paisa — Hernán Ríos. Hace tres trimestres compraba entre 12 y 15 toneladas al mes. En agosto compró 9. En septiembre, 6. En las últimas tres semanas: nada. La alerta llega al celular de Carlos a las 7:02 a.m. — con índice de riesgo 89/100, acción sugerida y contexto completo. No tuvo que pedirle a Sandra que armara un Excel. El sistema lo buscó a él.",
+              channel: "Sales Cloud · Agentforce · Einstein AI",
+              image: "/Customers/argos/story-v2/Escena-01.png",
+              pilar: "P1 · Market Share · P3 · Integración",
+              pilarColor: "indigo",
+              products: ["Sales Cloud", "Agentforce SDR", "Einstein AI", "RADAR"],
+              insight: "Antes, el RADAR existía en Tableau como un informe descargado una vez por semana. Para cuando Carlos lo veía, Don Hernán ya podría haber firmado con la competencia. Ahora la alerta llega en tiempo real con acción sugerida.",
             },
             {
               number: 2,
-              phaseId: "acquire",
-              icon: "📊",
-              title: "Grow Pipeline",
-              subtitle: "Un pipeline más inteligente y mejor priorizado",
-              before:
-                "El asesor priorizaba por intuición o por urgencia del cliente. Sin criterios objetivos, las cuentas de alto potencial podían esperar mientras se atendían las más ruidosas.",
-              transformation:
-                "Salesforce analiza zona, tipo de cliente, volumen potencial, historial, riesgo competitivo y probabilidad de conversión para entregar al asesor una lista priorizada de cuentas y oportunidades accionables.",
-              value:
-                "Mayor productividad comercial, mejor enfoque del equipo y más oportunidades relevantes avanzando en el pipeline.",
-              products: ["Sales Cloud", "Einstein AI", "Tableau"],
+              title: "La Vista 360 — todo en una pantalla",
+              subtitle: "Lunes · 07:15 a.m. · Salesforce Mobile · Camino a Itagüí",
+              icon: "📱",
+              description: "Carlos abre el perfil de Don Hernán en Salesforce desde el carro. Antes de tocar la puerta, ya sabe todo: compra últimos 90 días (6.1 ton vs. 14.3 ton el año anterior), pedido sugerido por Einstein (12 ton Argos 50 + 2 ton Cemento Gris), estado de cartera al día, cupo disponible $8.2M COP. Pero hay algo más: Don Hernán sí entró a Argos ONE hace cinco días y cotizó 8 toneladas, pero no terminó el pedido. Esa información antes era invisible. Hoy, gracias a la integración de Argos ONE con Salesforce vía MuleSoft, ese dato llega al perfil del cliente en tiempo real. Don Hernán no se fue. Está dudando. Carlos sabe exactamente cómo entrar a esa conversación.",
+              channel: "Salesforce Mobile · MuleSoft · SAP · Argos ONE",
+              image: "/Customers/argos/story-v2/Escena-02.png",
+              pilar: "P1 · Pedido sugerido · P3 · Visión 360",
+              pilarColor: "indigo",
+              products: ["Sales Cloud Mobile", "MuleSoft", "Argos ONE", "SAP"],
+              insight: "La integración de Argos ONE con Salesforce vía MuleSoft convierte la actividad digital del cliente — cotizaciones sin finalizar, últimas visitas, historial de navegación — en inteligencia comercial accionable en tiempo real.",
             },
             {
               number: 3,
-              phaseId: "convert",
-              icon: "🎯",
-              title: "Grow Deals",
-              subtitle: "Del seguimiento manual a la ejecución comercial guiada",
-              before:
-                "El seguimiento de oportunidades dependía de la disciplina individual del asesor: llamadas sin contexto, cotizaciones sin flujo post-creación y alertas de seguimiento que no existían.",
-              transformation:
-                "Salesforce guía al asesor con recomendaciones concretas: siguiente mejor acción, productos sugeridos, historial de interacción, cotización recomendada y alertas automáticas de seguimiento para cada oportunidad.",
-              value:
-                "Mejor conversión de oportunidades, ciclos de venta más cortos y mayor disciplina comercial en todo el equipo.",
-              products: ["Sales Cloud", "Agentforce", "Einstein Next Best Action"],
+              title: "La visita que sí importa",
+              subtitle: "Lunes · 09:30 a.m. · Ferretería El Paisa · Itagüí",
+              icon: "🤝",
+              description: "Carlos llega puntual. Salesforce Maps optimizó su ruta desde la mañana: El Paisa es la primera parada del ciclo porque tiene el índice de riesgo más alto. Don Hernán lo recibe con cara de pocos amigos: 'Parcero, es que el otro man me está dejando el cemento más barato.' Carlos no se pone a la defensiva. Abre su celular y muestra algo que no es un descuento genérico — es una oferta personalizada generada esta mañana por el agente de Marketing Cloud: 12 toneladas Cemento Argos 50 con 200 puntos Argos Amigos adicionales + ingreso al programa Dependientes Argos para los 3 vendedores de la ferretería. Generada automáticamente para ferreterías Clase B en Antioquia con más de 36 meses de antigüedad y volumen en riesgo. Esta oferta no existía ayer. Don Hernán mira los puntos. Sonríe. '¿Y para mis vendedores también?' Carlos confirma.",
+              channel: "Salesforce Maps · Marketing Cloud · Data Cloud",
+              image: "/Customers/argos/story-v2/Escena-03.png",
+              pilar: "P2 · Microsegmentación + Oferta personalizada",
+              pilarColor: "violet",
+              products: ["Salesforce Maps", "Marketing Cloud", "Data Cloud", "Argos Amigos"],
+              insight: "Antes, las campañas de fidelización eran iguales para todos — un email masivo con la misma oferta para Don Hernán que para un distribuidor mayorista de Bogotá. Hoy, la microsegmentación de Data Cloud crea ofertas que Don Hernán siente que fueron diseñadas para él. Porque lo fueron.",
             },
             {
               number: 4,
-              phaseId: "convert",
-              icon: "💰",
-              title: "Grow Revenue",
-              subtitle: "Más ventas con pedido sugerido, cross-sell y e-commerce",
-              before:
-                "El asesor no tenía visibilidad del historial de compras completo, frecuencia, cartera o productos complementarios al momento de la visita. Las oportunidades de venta cruzada se perdían por falta de contexto.",
-              transformation:
-                "Salesforce conecta información comercial con inteligencia de negocio: historial de compras, frecuencia, volumen, productos complementarios y pedido sugerido por Einstein AI. La experiencia se extiende a Argos ONE para compras digitales personalizadas.",
-              value:
-                "Incremento del ticket promedio, mayor recompra, más ventas cruzadas y mejor adopción de canales digitales.",
-              products: ["Sales Cloud", "Einstein AI", "Argos ONE", "Commerce Cloud"],
+              title: "El pedido que se hace solo",
+              subtitle: "Lunes · 10:55 a.m. · WhatsApp Business · Ferretería El Paisa",
+              icon: "💬",
+              description: "Don Hernán acepta. Carlos registra la visita en Salesforce Mobile en 30 segundos con geoetiquetado. Luego le dice: 'Don Hernán, puede hacer el pedido ahora mismo por WhatsApp.' Don Hernán escribe al número único de Cementos Argos. Lo que responde no es un humano: confirma la dirección, consulta inventario en SAP en tiempo real, verifica el cupo de crédito ($8.2M disponibles), confirma entrega para el miércoles y genera el pedido #ARG-2026-048312 en dos minutos, sin intervención humana. Los 200 puntos Argos Amigos quedan aplicados automáticamente. El pedido se registra en Salesforce vinculado al cliente, a la visita de Carlos y a la campaña de reactivación que lo disparó. Antes, este proceso tomaba horas con fotos de consignación por WhatsApp y llamadas. Hoy tomó dos minutos.",
+              channel: "WhatsApp Business API · Agentforce · SAP · Service Cloud",
+              image: "/Customers/argos/story-v2/Escena-04.png",
+              pilar: "P3 · Agente autónomo + SAP tiempo real",
+              pilarColor: "sky",
+              products: ["WhatsApp Business API", "Agentforce Service", "MuleSoft SAP", "Service Cloud"],
+              insight: "La integración cierra el ciclo completo: el pedido de WhatsApp se convierte en una orden en SAP, un caso cerrado en Service Cloud, un registro de actividad en el perfil del cliente en Sales Cloud, y un punto acumulado en Gluki — todo en tiempo real.",
             },
             {
               number: 5,
-              phaseId: "serve",
-              icon: "🎧",
-              title: "Improve Service",
-              subtitle: "Servicio omnicanal con contexto completo",
-              before:
-                "El cliente contactaba por WhatsApp, Contact Center o web y cada canal manejaba conversaciones aisladas. Sin contexto compartido, los agentes pedían la misma información múltiples veces y la resolución tardaba días.",
-              transformation:
-                "Service Cloud centraliza cada interacción en una sola vista omnicanal. Agentforce clasifica solicitudes, responde casos simples, enruta PQRs y escala al agente humano con el contexto completo del cliente.",
-              value:
-                "Menor tiempo de respuesta, reducción de carga operativa, mejor experiencia de cliente y aumento del NPS.",
-              products: ["Service Cloud", "Agentforce Service", "WhatsApp Business API", "Konecta"],
+              title: "El Machine Seller que nunca para",
+              subtitle: "Jueves · 08:15 a.m. · Marketing Cloud · Automatización",
+              icon: "🤖",
+              description: "Tres días después del pedido, el sistema detecta algo nuevo. Las ferreterías Clase B de Antioquia que compraron cemento en septiembre también compraron mortero seco en octubre — con una correlación del 78%. Einstein lo sabe. Sin que nadie en el laboratorio digital tenga que hacer nada, Agentforce genera y dispara una campaña de venta cruzada personalizada para Don Hernán. A las 9:02 a.m., Don Hernán responde: 'Si man, ese producto siempre se mueve. Mandame el precio.' A las 9:06 a.m., el pedido de 80 bolsas de mortero ($1.48M COP) está confirmado. Intervención humana requerida: ninguna. Antes, el laboratorio digital gestionaba estas campañas manualmente — detectar el patrón, armar la base, cargar Brevo, enviar, medir. Cada ciclo tomaba días. Hoy ocurre en horas, de forma autónoma.",
+              channel: "Marketing Cloud · Agentforce · Einstein AI · WhatsApp",
+              image: "/Customers/argos/story-v2/Escena-05.png",
+              pilar: "P2 · Machine Sellers automatizado",
+              pilarColor: "violet",
+              products: ["Marketing Cloud", "Agentforce Marketing", "Data Cloud", "Einstein AI"],
+              insight: "El equipo de marketing puede ver en tiempo real cuántos pedidos generó esta campaña, cuánto ingreso produjo y cuál fue el ROI exacto versus el costo del incentivo. Ya no hay que esperar fin de mes para saber si la campaña funcionó.",
             },
             {
               number: 6,
-              phaseId: "serve",
-              icon: "🔭",
-              title: "Vista 360°",
-              subtitle: "Conocer mejor a cada cliente para crecer con él",
-              before:
-                "Argos veía a sus clientes solo como cuentas o pedidos. Sin integración de datos, el historial de compras, comportamiento digital, riesgo de fuga y potencial de crecimiento vivían en sistemas separados o en Excel.",
-              transformation:
-                "Con Data Cloud, Sales Cloud y Analytics, Argos consolida una visión integral por cliente: historial de compras, comportamiento digital, riesgo de fuga, potencial de crecimiento, participación de cartera, casos abiertos, campañas recibidas y preferencias de canal.",
-              value:
-                "Mejor segmentación, mayor retención, conversaciones más relevantes y decisiones comerciales basadas en datos.",
-              products: ["Data Cloud", "Sales Cloud", "Tableau", "Einstein AI"],
+              title: "Lo que ve el Director de Zona",
+              subtitle: "Viernes · 16:00 p.m. · CRM Analytics · Dashboard Gerencial",
+              icon: "📊",
+              description: "El director de zona de Antioquia abre su dashboard en Salesforce. Antes, este momento significaba esperar el Excel que Sandra construía los viernes — un reporte con 24 horas de rezago y dos horas de consolidación. Hoy el dashboard está vivo: 847 toneladas en la semana (+12% vs. anterior), 8 clientes reactivados (incluye Ferretería El Paisa), 63 de 70 visitas del plan (90% cumplimiento), 3 clientes en riesgo (bajó de 11). Agentforce genera el resumen ejecutivo automáticamente a las 15:58: '$6.3M COP en ventas cruzadas sin intervención humana'. El director no tuvo que pedirle el reporte a nadie. Sandra no tuvo que construirlo. Carlos no tuvo que enviarlo. Los tres pilares funcionaron como un sistema integrado esta semana.",
+              channel: "CRM Analytics · Agentforce · Salesforce Dashboards",
+              image: "/Customers/argos/story-v2/Escena-06.png",
+              pilar: "P1 · P2 · P3 — Vista ejecutiva integrada",
+              pilarColor: "sky",
+              products: ["CRM Analytics", "Agentforce", "Einstein AI", "Salesforce Dashboards"],
+              insight: "El RADAR detectó a Don Hernán (P1+P3), la microsegmentación generó la oferta correcta (P2), la integración SAP + Argos ONE permitió que el pedido fluyera sin fricción (P3), y el dashboard consolidó todo sin esfuerzo manual. Así se ve cuando los tres pilares funcionan juntos.",
             },
             {
               number: 7,
-              phaseId: "serve",
-              icon: "📣",
-              title: "Campaign Effectiveness",
-              subtitle: "Campañas más precisas, no comunicaciones masivas",
-              before:
-                "Marketing enviaba comunicaciones genéricas a toda la base de clientes. Sin segmentación por comportamiento o potencial, las campañas generaban ruido en lugar de conversiones.",
-              transformation:
-                "Marketing Cloud permite activar journeys personalizados agrupando clientes por comportamiento, potencial, riesgo, zona o etapa del ciclo comercial. Argos puede reactivar inactivos, retener clientes con caída de volumen o impulsar cross-sell a distribuidores de alto potencial.",
-              value:
-                "Mayor efectividad comercial, mejor conversión de campañas y activación inteligente de clientes.",
-              products: ["Marketing Cloud", "Data Cloud", "Agentforce Marketing", "Argos Amigos"],
-            },
-            {
-              number: 8,
-              phaseId: "optimize",
-              icon: "🔗",
-              title: "Seamless Experience",
-              subtitle: "Una experiencia conectada entre ventas, servicio y marketing",
-              before:
-                "Ventas, servicio y marketing operaban en silos. Un asesor no sabía si el cliente tenía una PQR abierta. Marketing no era alertado del riesgo de fuga detectado por ventas. Los pedidos digitales no eran visibles para el equipo comercial.",
-              transformation:
-                "Salesforce conecta ventas, servicio, marketing, e-commerce, contact center y analítica sobre el mismo contexto del cliente. Si hay PQR abierta, el asesor lo sabe. Si hay riesgo de fuga, marketing activa una campaña. Si el pedido llegó por WhatsApp, ventas lo ve en la Vista 360.",
-              value:
-                "Experiencia consistente, menor fricción operativa y equipos internos mejor coordinados.",
-              products: ["Sales Cloud", "Service Cloud", "Marketing Cloud", "Slack", "MuleSoft"],
-            },
-            {
-              number: 9,
-              phaseId: "optimize",
-              icon: "📈",
-              title: "Measure & Optimize",
-              subtitle: "Medir lo que importa y optimizar continuamente",
-              before:
-                "Los líderes de Argos dependían de reportes manuales en Excel con rezago de 24 horas o más. El Admin CRM construía todos los reportes a mano. La visibilidad del pipeline, NPS o efectividad de campañas llegaba tarde para actuar.",
-              transformation:
-                "Los líderes visualizan en tiempo real el avance del pipeline, cobertura de visitas, ventas por zona, clientes en riesgo, efectividad de campañas, PQRs, SLAs, NPS y adopción comercial. Cada iniciativa se conecta con los OKRs estratégicos de Argos.",
-              value:
-                "Mejores decisiones, mayor visibilidad ejecutiva y capacidad de optimizar la operación comercial en tiempo real.",
-              products: ["Tableau", "Einstein Analytics", "Data Cloud", "Salesforce Dashboards"],
+              title: "Lo que cambió para Don Hernán — y para Argos",
+              subtitle: "Epílogo · El futuro posible habilitado por Salesforce",
+              icon: "✨",
+              description: "Hernán Ríos no se fue a la competencia. No porque Argos le diera el mejor precio, sino porque Argos llegó en el momento justo, con la oferta correcta, y le hizo más fácil comprar que no hacerlo. Eso no es suerte. +58% de recuperación de volumen vs. mínimo del trimestre. $7.8M COP en ventas adicionales generadas sin intervención humana en la semana. 0 minutos que tardó Sandra en construir el reporte del viernes. Eso es lo que pasa cuando los tres pilares funcionan juntos: Market Share porque hay mercado resiliente que capturar con mejores herramientas. Segmentación porque la comunicación genérica desperdicia recursos. Integración porque la experiencia del cliente no puede ser excelente cuando los sistemas que la soportan no se hablan.",
+              channel: "Sales Cloud · Marketing Cloud · Service Cloud · MuleSoft · Agentforce",
+              image: "/Customers/argos/story-v2/Escena-EP.png",
+              pilar: "Los 3 Pilares — visión completa",
+              pilarColor: "emerald",
+              products: ["Agentforce", "Sales Cloud", "Marketing Cloud", "Service Cloud", "MuleSoft", "Data Cloud"],
+              insight: "Market Share. Segmentación. Integración. Tres pilares, una plataforma, un socio.",
             },
           ],
         },

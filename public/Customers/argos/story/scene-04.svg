@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="offBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <linearGradient id="screenGlow4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1b2a"/>
+      <stop offset="100%" stop-color="#1b2838"/>
+    </linearGradient>
+    <linearGradient id="loyaltyCard" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="50%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="neonGlow">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="cardGlow4">
+      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#7c3aed" flood-opacity="0.4"/>
+    </filter>
+    <filter id="softDrop4">
+      <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Dark background -->
+  <rect width="800" height="500" fill="url(#offBg)"/>
+
+  <!-- Subtle circuit / data lines pattern -->
+  <g stroke="#ffffff" opacity="0.04" stroke-width="1">
+    <line x1="0" y1="80" x2="800" y2="80"/><line x1="0" y1="160" x2="800" y2="160"/>
+    <line x1="0" y1="240" x2="800" y2="240"/><line x1="0" y1="320" x2="800" y2="320"/>
+    <line x1="0" y1="400" x2="800" y2="400"/>
+    <line x1="100" y1="0" x2="100" y2="500"/><line x1="250" y1="0" x2="250" y2="500"/>
+    <line x1="400" y1="0" x2="400" y2="500"/><line x1="550" y1="0" x2="550" y2="500"/>
+    <line x1="700" y1="0" x2="700" y2="500"/>
+  </g>
+
+  <!-- Hero: Loyalty Card - Argos Amigos -->
+  <g transform="translate(250, 100)">
+    <rect width="300" height="175" rx="20" fill="url(#loyaltyCard)" filter="url(#cardGlow4)"/>
+    <!-- Card shine -->
+    <ellipse cx="80" cy="50" rx="100" ry="60" fill="white" opacity="0.07" transform="rotate(-20, 80, 50)"/>
+    <!-- Argos Amigos branding -->
+    <text x="24" y="42" fill="white" font-family="Arial" font-size="10" letter-spacing="3" opacity="0.7">CEMENTOS ARGOS</text>
+    <text x="24" y="70" fill="white" font-family="Arial" font-size="22" font-weight="900" letter-spacing="1">Argos Amigos</text>
+    <!-- Gold star badge -->
+    <circle cx="258" cy="35" r="24" fill="url(#goldGrad)" filter="url(#neonGlow)"/>
+    <text x="258" y="30" text-anchor="middle" fill="white" font-family="Arial" font-size="13">★</text>
+    <text x="258" y="48" text-anchor="middle" fill="white" font-family="Arial" font-size="9" font-weight="bold">ORO</text>
+    <!-- Points bar -->
+    <text x="24" y="100" fill="rgba(255,255,255,0.6)" font-family="Arial" font-size="9" letter-spacing="1">PUNTOS ACUMULADOS</text>
+    <rect x="24" y="108" width="255" height="10" rx="5" fill="rgba(255,255,255,0.15)"/>
+    <rect x="24" y="108" width="198" height="10" rx="5" fill="url(#goldGrad)"/>
+    <text x="232" y="118" fill="#fde68a" font-family="Arial" font-size="9" font-weight="bold">8,400 / 10K</text>
+    <!-- Card number -->
+    <text x="24" y="142" fill="rgba(255,255,255,0.5)" font-family="Arial" font-size="12" letter-spacing="4">4782  9021  ····  8814</text>
+    <!-- Member name -->
+    <text x="24" y="165" fill="white" font-family="Arial" font-size="13" font-weight="bold">CARLOS A. — FERRETERÍA EL MAESTRO</text>
+  </g>
+
+  <!-- WhatsApp message chain - left -->
+  <rect x="30" y="60" width="205" height="390" fill="url(#screenGlow4)" rx="16" filter="url(#softDrop4)"/>
+  <!-- Chat header -->
+  <rect x="30" y="60" width="205" height="44" fill="#075e54" rx="16"/>
+  <rect x="30" y="88" width="205" height="16" fill="#075e54"/>
+  <circle cx="58" cy="82" r="14" fill="#128c7e"/>
+  <text x="58" y="87" text-anchor="middle" fill="white" font-family="Arial" font-size="10" font-weight="bold">A</text>
+  <text x="80" y="77" fill="white" font-family="Arial" font-size="11" font-weight="bold">Argos Amigos</text>
+  <text x="80" y="90" fill="#a7f3d0" font-family="Arial" font-size="9">● en línea</text>
+
+  <!-- Incoming messages (agent automated) -->
+  <rect x="42" y="115" width="155" height="52" fill="#1f2937" rx="10" rx="10"/>
+  <text x="55" y="130" fill="#9ca3af" font-family="Arial" font-size="8">Hola Carlos 👋</text>
+  <text x="55" y="143" fill="#e5e7eb" font-family="Arial" font-size="9">Tienes 8,400 puntos</text>
+  <text x="55" y="156" fill="#fbbf24" font-family="Arial" font-size="9" font-weight="bold">¡Solo 1,600 para nivel Platino!</text>
+  <text x="175" y="165" fill="#6b7280" font-family="Arial" font-size="7">9:14 ✓✓</text>
+
+  <!-- Outgoing message -->
+  <rect x="60" y="175" width="155" height="35" fill="#054c3f" rx="10"/>
+  <text x="72" y="190" fill="#d1fae5" font-family="Arial" font-size="9">¿Cómo canjeo los puntos?</text>
+  <text x="188" y="205" fill="#6b7280" font-family="Arial" font-size="7">9:15 ✓✓</text>
+
+  <!-- Agent response -->
+  <rect x="42" y="218" width="175" height="75" fill="#1f2937" rx="10"/>
+  <text x="55" y="233" fill="#9ca3af" font-family="Arial" font-size="8">Tienes 3 opciones:</text>
+  <text x="55" y="247" fill="#e5e7eb" font-family="Arial" font-size="8.5">🎁 Descuento 8% próximo pedido</text>
+  <text x="55" y="260" fill="#e5e7eb" font-family="Arial" font-size="8.5">🔧 Kit herramientas Argos Pro</text>
+  <text x="55" y="273" fill="#e5e7eb" font-family="Arial" font-size="8.5">🎓 Capacitación obra gratis</text>
+  <text x="175" y="288" fill="#6b7280" font-family="Arial" font-size="7">9:15 ✓✓</text>
+
+  <!-- Outgoing choice -->
+  <rect x="60" y="302" width="155" height="26" fill="#054c3f" rx="10"/>
+  <text x="72" y="319" fill="#d1fae5" font-family="Arial" font-size="9">🎁 Quiero el descuento</text>
+  <text x="188" y="324" fill="#6b7280" font-family="Arial" font-size="7">9:16 ✓✓</text>
+
+  <!-- Confirmation message -->
+  <rect x="42" y="336" width="175" height="65" fill="#064e3b" rx="10" stroke="#10b981" stroke-width="1"/>
+  <text x="55" y="351" fill="#34d399" font-family="Arial" font-size="9" font-weight="bold">✅ Cupón activado!</text>
+  <text x="55" y="365" fill="#d1fae5" font-family="Arial" font-size="8.5">Código: AMIGOS-8PCT-2026</text>
+  <text x="55" y="379" fill="#6ee7b7" font-family="Arial" font-size="8.5">Válido 15 días · Aplica en</text>
+  <text x="55" y="392" fill="#6ee7b7" font-family="Arial" font-size="8.5">Argos ONE o pedido directo</text>
+  <text x="175" y="397" fill="#6b7280" font-family="Arial" font-size="7">9:16 ✓✓</text>
+
+  <!-- Right panel: Data Cloud segmentation -->
+  <rect x="590" y="60" width="190" height="380" fill="#0f172a" rx="16" filter="url(#softDrop4)" stroke="#312e81" stroke-width="1.5"/>
+  <rect x="590" y="60" width="190" height="36" fill="#4f46e5" rx="16"/>
+  <rect x="590" y="80" width="190" height="16" fill="#4f46e5"/>
+  <text x="685" y="82" text-anchor="middle" fill="white" font-family="Arial" font-size="10" font-weight="bold">Data Cloud · Segmentos</text>
+
+  <!-- Segments visual -->
+  <text x="605" y="118" fill="#818cf8" font-family="Arial" font-size="9" font-weight="bold" letter-spacing="1">MICROSEGMENTACIÓN ACTIVA</text>
+
+  <!-- Segment A - Carlos's segment highlighted -->
+  <rect x="600" y="126" width="170" height="48" fill="#1e1b4b" rx="10" stroke="#6366f1" stroke-width="2"/>
+  <rect x="600" y="126" width="5" height="48" fill="#6366f1" rx="2"/>
+  <text x="614" y="140" fill="#c7d2fe" font-family="Arial" font-size="9" font-weight="bold">Segmento A · Ferreterías ORO</text>
+  <text x="614" y="153" fill="#a5b4fc" font-family="Arial" font-size="8">Vol &gt; 40t/mes · Fideliz. alta</text>
+  <text x="614" y="164" fill="#818cf8" font-family="Arial" font-size="8">48 clientes · Carlos incluido ✓</text>
+  <!-- Active indicator -->
+  <circle cx="755" cy="150" r="6" fill="#22c55e" filter="url(#neonGlow)"/>
+
+  <rect x="600" y="182" width="170" height="44" fill="#1e293b" rx="10"/>
+  <rect x="600" y="182" width="5" height="44" fill="#f59e0b" rx="2"/>
+  <text x="614" y="196" fill="#fef3c7" font-family="Arial" font-size="9" font-weight="bold">Segmento B · Ferreterías PLATA</text>
+  <text x="614" y="209" fill="#fde68a" font-family="Arial" font-size="8">Vol 20-40t/mes · Crecimiento</text>
+  <text x="614" y="220" fill="#fbbf24" font-family="Arial" font-size="8">112 clientes</text>
+
+  <rect x="600" y="234" width="170" height="44" fill="#1e293b" rx="10"/>
+  <rect x="600" y="234" width="5" height="44" fill="#94a3b8" rx="2"/>
+  <text x="614" y="248" fill="#e2e8f0" font-family="Arial" font-size="9" font-weight="bold">Segmento C · Ferreterías BASE</text>
+  <text x="614" y="261" fill="#cbd5e1" font-family="Arial" font-size="8">Vol &lt; 20t/mes · Activación</text>
+  <text x="614" y="272" fill="#94a3b8" font-family="Arial" font-size="8">200+ clientes</text>
+
+  <!-- Journey automation visual -->
+  <text x="605" y="300" fill="#818cf8" font-family="Arial" font-size="9" font-weight="bold" letter-spacing="1">JOURNEY AUTOMÁTICO</text>
+  <rect x="600" y="308" width="170" height="115" fill="#1e1b4b" rx="10"/>
+
+  <!-- Journey steps -->
+  <circle cx="620" cy="326" r="8" fill="#4f46e5"/>
+  <text x="620" y="330" text-anchor="middle" fill="white" font-family="Arial" font-size="8">1</text>
+  <text x="636" y="330" fill="#c7d2fe" font-family="Arial" font-size="8.5">Perfil unificado (Data Cloud)</text>
+
+  <line x1="620" y1="334" x2="620" y2="348" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+  <circle cx="620" cy="356" r="8" fill="#7c3aed"/>
+  <text x="620" y="360" text-anchor="middle" fill="white" font-family="Arial" font-size="8">2</text>
+  <text x="636" y="360" fill="#c7d2fe" font-family="Arial" font-size="8.5">Score Einstein → Segmento A</text>
+
+  <line x1="620" y1="364" x2="620" y2="378" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+  <circle cx="620" cy="386" r="8" fill="#25D366"/>
+  <text x="620" y="390" text-anchor="middle" fill="white" font-family="Arial" font-size="8">3</text>
+  <text x="636" y="390" fill="#c7d2fe" font-family="Arial" font-size="8.5">WhatsApp Journey disparado</text>
+
+  <line x1="620" y1="394" x2="620" y2="408" stroke="#25D366" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+  <circle cx="620" cy="414" r="8" fill="#22c55e"/>
+  <text x="620" y="418" text-anchor="middle" fill="white" font-family="Arial" font-size="8">✓</text>
+  <text x="636" y="418" fill="#86efac" font-family="Arial" font-size="8.5" font-weight="bold">Cupón canjeado → Venta</text>
+
+  <!-- Center connection dots -->
+  <line x1="235" y1="270" x2="250" y2="270" stroke="#7c3aed" stroke-width="2" stroke-dasharray="4,3"/>
+  <line x1="250" y1="270" x2="590" y2="270" stroke="#7c3aed" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>
+  <text x="400" y="260" text-anchor="middle" fill="#7c3aed" font-family="Arial" font-size="9" font-weight="bold">Gluki + Brevo → Data Cloud → CRM</text>
+
+  <!-- Label -->
+  <rect x="0" y="462" width="800" height="38" fill="#1a1a2e" opacity="0.95"/>
+  <text x="30" y="484" fill="#818cf8" font-family="Arial" font-size="11" font-weight="bold" letter-spacing="2">ESCENA 4</text>
+  <text x="120" y="484" fill="#c7d2fe" font-family="Arial" font-size="11">·  Argos Amigos activo: Journey personalizado por segmento, trazable desde Data Cloud.</text>
+  <text x="610" y="484" fill="#fbbf24" font-family="Arial" font-size="10" font-weight="bold">PILAR 2 · Segmentación</text>
+</svg>

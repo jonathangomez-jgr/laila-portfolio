@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="warmBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff7ed"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+    <linearGradient id="counterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+    <linearGradient id="tabletBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+    <filter id="warmGlow">
+      <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="cardShadow6">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Warm store interior background -->
+  <rect width="800" height="500" fill="url(#warmBg)"/>
+
+  <!-- Wall -->
+  <rect x="0" y="0" width="800" height="300" fill="#fef3c7" opacity="0.6"/>
+  <!-- Floor -->
+  <rect x="0" y="380" width="800" height="120" fill="#f59e0b" opacity="0.08"/>
+  <rect x="0" y="380" width="800" height="3" fill="#d97706" opacity="0.3"/>
+
+  <!-- Shelves with cement bags (back wall) -->
+  <rect x="0" y="80" width="800" height="16" fill="#92400e" opacity="0.6" rx="2"/>
+  <rect x="0" y="160" width="800" height="14" fill="#92400e" opacity="0.6" rx="2"/>
+  <!-- Cement bag rows on shelves -->
+  <g fill="#d1d5db">
+    <rect x="30" y="90" width="30" height="70" rx="3"/>
+    <rect x="65" y="90" width="30" height="70" rx="3"/>
+    <rect x="100" y="90" width="30" height="70" rx="3"/>
+    <rect x="135" y="90" width="30" height="70" rx="3"/>
+    <rect x="170" y="90" width="30" height="70" rx="3"/>
+  </g>
+  <g fill="#9ca3af">
+    <rect x="32" y="92" width="26" height="66" rx="2" opacity="0.5"/>
+    <rect x="67" y="92" width="26" height="66" rx="2" opacity="0.5"/>
+    <rect x="102" y="92" width="26" height="66" rx="2" opacity="0.5"/>
+    <rect x="137" y="92" width="26" height="66" rx="2" opacity="0.5"/>
+    <rect x="172" y="92" width="26" height="66" rx="2" opacity="0.5"/>
+  </g>
+  <g fill="#dc2626" opacity="0.8">
+    <text x="42" y="130" text-anchor="middle" fill="#e2e8f0" font-family="Arial" font-size="7" font-weight="bold">ARGOS</text>
+    <text x="77" y="130" text-anchor="middle" fill="#e2e8f0" font-family="Arial" font-size="7" font-weight="bold">ARGOS</text>
+    <text x="112" y="130" text-anchor="middle" fill="#e2e8f0" font-family="Arial" font-size="7" font-weight="bold">ARGOS</text>
+    <text x="147" y="130" text-anchor="middle" fill="#e2e8f0" font-family="Arial" font-size="7" font-weight="bold">ARGOS</text>
+    <text x="182" y="130" text-anchor="middle" fill="#e2e8f0" font-family="Arial" font-size="7" font-weight="bold">ARGOS</text>
+  </g>
+  <!-- Second shelf bags -->
+  <g fill="#e5e7eb">
+    <rect x="30" y="168" width="28" height="60" rx="3"/>
+    <rect x="63" y="168" width="28" height="60" rx="3"/>
+    <rect x="96" y="168" width="28" height="60" rx="3"/>
+    <rect x="129" y="168" width="28" height="60" rx="3"/>
+    <rect x="162" y="168" width="28" height="60" rx="3"/>
+    <rect x="195" y="168" width="28" height="60" rx="3"/>
+  </g>
+
+  <!-- Counter / desk -->
+  <rect x="300" y="310" width="500" height="95" fill="url(#counterGrad)" rx="8"/>
+  <rect x="300" y="308" width="500" height="12" fill="#a16207" rx="4"/>
+  <!-- Counter items: tablet stand -->
+  <rect x="490" y="270" width="80" height="50" fill="#d97706" rx="4"/>
+  <rect x="495" y="275" width="70" height="38" fill="#92400e" rx="3"/>
+
+  <!-- Main tablet/POS screen -->
+  <rect x="450" y="150" width="200" height="155" fill="#0f172a" rx="14" filter="url(#cardShadow6)"/>
+  <rect x="456" y="157" width="188" height="142" rx="10" fill="url(#tabletBg)"/>
+  <!-- Tablet screen content -->
+  <!-- Order ready notification -->
+  <rect x="462" y="163" width="176" height="130" rx="8" fill="#0f172a"/>
+  <!-- Header -->
+  <rect x="462" y="163" width="176" height="28" fill="#1e40af" rx="8"/>
+  <rect x="462" y="179" width="176" height="12" fill="#1e40af"/>
+  <text x="550" y="180" text-anchor="middle" fill="white" font-family="Arial" font-size="10" font-weight="bold">Service Cloud · POS</text>
+
+  <!-- Order card -->
+  <rect x="468" y="197" width="164" height="90" fill="#1e293b" rx="8"/>
+  <text x="478" y="212" fill="#93c5fd" font-family="Arial" font-size="8" font-weight="bold">PEDIDO ENTREGADO</text>
+  <text x="478" y="225" fill="white" font-family="Arial" font-size="8.5">Carlos · Ferretería El Maestro</text>
+  <text x="478" y="238" fill="#cbd5e1" font-family="Arial" font-size="8">Cemento Gris 50kg × 40 unid.</text>
+  <!-- Check + payment confirmed -->
+  <rect x="478" y="245" width="145" height="22" fill="#064e3b" rx="6"/>
+  <circle cx="492" cy="256" r="7" fill="#22c55e"/>
+  <text x="492" y="260" text-anchor="middle" fill="white" font-family="Arial" font-size="9" font-weight="bold">✓</text>
+  <text x="507" y="260" fill="#4ade80" font-family="Arial" font-size="8.5" font-weight="bold">Pago verificado · sin foto WA</text>
+  <!-- Rating prompt -->
+  <text x="478" y="278" fill="#fbbf24" font-family="Arial" font-size="8.5">¿Cómo fue la experiencia? ★★★★★</text>
+
+  <!-- Carlos at counter (figure) -->
+  <g transform="translate(395, 255)">
+    <!-- Head -->
+    <circle cx="0" cy="0" r="22" fill="#fcd34d"/>
+    <!-- Hard hat -->
+    <ellipse cx="0" cy="-15" rx="26" ry="12" fill="#f59e0b"/>
+    <rect x="-26" y="-15" width="52" height="8" fill="#f59e0b" rx="2"/>
+    <!-- Face: happy expression -->
+    <circle cx="-7" cy="-2" r="3" fill="#92400e"/>
+    <circle cx="7" cy="-2" r="3" fill="#92400e"/>
+    <path d="M-8 8 Q0 15 8 8" stroke="#92400e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- Body -->
+    <rect x="-18" y="22" width="36" height="50" fill="#dc2626" rx="6"/>
+    <!-- Left arm -->
+    <line x1="-18" y1="30" x2="-40" y2="50" stroke="#fcd34d" stroke-width="7" stroke-linecap="round"/>
+    <!-- Right arm (holding bag) -->
+    <line x1="18" y1="30" x2="38" y2="48" stroke="#fcd34d" stroke-width="7" stroke-linecap="round"/>
+    <!-- Argos bag in hand -->
+    <rect x="28" y="40" width="22" height="28" fill="#94a3b8" rx="3"/>
+    <text x="39" y="55" text-anchor="middle" fill="#1e293b" font-family="Arial" font-size="7" font-weight="bold">ARGOS</text>
+    <!-- Legs -->
+    <rect x="-16" y="68" width="12" height="32" fill="#1e40af" rx="4"/>
+    <rect x="5" y="68" width="12" height="32" fill="#1e40af" rx="4"/>
+    <!-- Shoes -->
+    <rect x="-18" y="96" width="16" height="8" fill="#1e293b" rx="3"/>
+    <rect x="3" y="96" width="16" height="8" fill="#1e293b" rx="3"/>
+  </g>
+
+  <!-- Staff figure -->
+  <g transform="translate(580, 270)">
+    <!-- Head -->
+    <circle cx="0" cy="0" r="18" fill="#fed7aa"/>
+    <!-- Hair -->
+    <ellipse cx="0" cy="-12" rx="20" ry="10" fill="#7c2d12"/>
+    <!-- Argos polo (dark blue) -->
+    <rect x="-15" y="18" width="30" height="42" fill="#1e40af" rx="5"/>
+    <!-- Argos logo on polo -->
+    <rect x="-8" y="22" width="16" height="10" fill="#dc2626" rx="2"/>
+    <text x="0" y="30" text-anchor="middle" fill="white" font-family="Arial" font-size="7" font-weight="bold">ARGOS</text>
+    <!-- Arms: one pointing at tablet -->
+    <line x1="-15" y1="26" x2="-40" y2="15" stroke="#fed7aa" stroke-width="6" stroke-linecap="round"/>
+    <line x1="15" y1="26" x2="30" y2="38" stroke="#fed7aa" stroke-width="6" stroke-linecap="round"/>
+    <!-- Legs -->
+    <rect x="-13" y="56" width="10" height="28" fill="#374151" rx="4"/>
+    <rect x="4" y="56" width="10" height="28" fill="#374151" rx="4"/>
+    <!-- Smile -->
+    <path d="M-6 8 Q0 13 6 8" stroke="#92400e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- Speech bubble -->
+    <rect x="-75" y="-60" width="150" height="52" fill="#22c55e" rx="12" filter="url(#cardShadow6)"/>
+    <polygon points="0,-8 -8,-18 8,-18" fill="#22c55e" transform="translate(10,-8)"/>
+    <text x="0" y="-42" text-anchor="middle" fill="white" font-family="Arial" font-size="9" font-weight="bold">Su pedido ya está listo.</text>
+    <text x="0" y="-28" text-anchor="middle" fill="#dcfce7" font-family="Arial" font-size="8.5">Pago verificado en sistema.</text>
+    <text x="0" y="-14" text-anchor="middle" fill="#bbf7d0" font-family="Arial" font-size="8">Sin foto, sin llamada. ✓</text>
+  </g>
+
+  <!-- NPS Survey popup -->
+  <rect x="30" y="270" width="230" height="155" fill="white" rx="16" filter="url(#cardShadow6)" stroke="#fde68a" stroke-width="2"/>
+  <rect x="30" y="270" width="230" height="38" fill="#f59e0b" rx="16"/>
+  <rect x="30" y="292" width="230" height="16" fill="#f59e0b"/>
+  <text x="145" y="294" text-anchor="middle" fill="white" font-family="Arial" font-size="11" font-weight="bold">NPS Survey · Post-entrega</text>
+  <!-- Question -->
+  <text x="50" y="326" fill="#1e293b" font-family="Arial" font-size="9" font-weight="bold">¿Qué tan probable es que</text>
+  <text x="50" y="339" fill="#1e293b" font-family="Arial" font-size="9" font-weight="bold">recomiendes Argos?</text>
+  <!-- Star rating -->
+  <text x="60" y="362" fill="#f59e0b" font-family="Arial" font-size="22">★★★★★</text>
+  <text x="145" y="378" text-anchor="middle" fill="#15803d" font-family="Arial" font-size="9" font-weight="bold">9 / 10 — Promotor ✓</text>
+  <!-- Comment -->
+  <rect x="45" y="385" width="200" height="28" fill="#f1f5f9" rx="8"/>
+  <text x="55" y="397" fill="#64748b" font-family="Arial" font-size="8">"El pedido llegó a tiempo y me</text>
+  <text x="55" y="408" fill="#64748b" font-family="Arial" font-size="8">avisaron por WhatsApp. 10/10"</text>
+
+  <!-- Data flow arrows -->
+  <line x1="260" y1="360" x2="300" y2="360" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <polygon points="298,357 304,360 298,363" fill="#f59e0b"/>
+  <text x="275" y="354" fill="#b45309" font-family="Arial" font-size="8" font-weight="bold">NPS → CRM</text>
+
+  <!-- Label -->
+  <rect x="0" y="462" width="800" height="38" fill="#78350f" opacity="0.9"/>
+  <text x="30" y="484" fill="#fbbf24" font-family="Arial" font-size="11" font-weight="bold" letter-spacing="2">ESCENA 6</text>
+  <text x="120" y="484" fill="#fef3c7" font-family="Arial" font-size="11">·  Entrega confirmada, pago digitalizado, NPS capturado. Cero fricción para Carlos.</text>
+  <text x="600" y="484" fill="#34d399" font-family="Arial" font-size="10" font-weight="bold">PILAR 3 · Integración</text>
+</svg>
