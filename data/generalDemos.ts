@@ -13,7 +13,7 @@ export const generalDemos: GeneralDemo[] = [
     slug: "financial-services-digital-engagement",
     title: "Vivi, Agente Hipotecario",
     description:
-      "Demo para la industria financiera: cómo Salesforce Financial Services Cloud unificado con Digital Engagement y WhatsApp habilita una experiencia omnicanal para asesores y clientes, desde la apertura de productos hasta la atención postventa.",
+      "Ejemplo de cómo podemos tener un agente autónomo para dar seguimiento a las solicitudes de créditos hipotecarios, consultando la información del cliente para evitar pedir información repetida y así únicamente solicitar documentación faltante.",
     industries: ["Servicios Financieros"],
     solutions: ["Financial Services Cloud", "Digital Engagement", "WhatsApp"],
     videoUrl: "https://youtu.be/UMZ00Ayu2uo",
