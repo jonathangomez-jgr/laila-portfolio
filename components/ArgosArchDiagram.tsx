@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import ArgosArchFullscreen from "./ArgosArchFullscreen";
 
 /* ─── Salesforce brand palette (from Corporate Template 2026) ─── */
 const SF = {
@@ -511,36 +512,8 @@ export default function ArgosArchDiagram() {
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════════════════
-          SVG LIGHTBOX — same pattern as VivaLux ArchDiagram
-      ══════════════════════════════════════════════════════ */}
       {svgOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
-          onClick={() => setSvgOpen(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Diagrama de arquitectura técnica Salesforce — Cementos Argos"
-        >
-          <div
-            className="relative max-h-[90vh] w-full max-w-6xl overflow-auto rounded-2xl bg-white p-4 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => setSvgOpen(false)}
-              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition hover:bg-gray-200 focus:outline-none focus-visible:ring-2"
-              aria-label="Cerrar diagrama"
-            >
-              ✕
-            </button>
-            <img
-              src="/argos-arch.svg"
-              alt="Arquitectura técnica Salesforce — Cementos Argos: 4 capas (canales, Salesforce Platform, MuleSoft, sistemas externos), 9 productos, 5 conectores, brechas críticas P3 señaladas"
-              className="h-auto w-full"
-            />
-          </div>
-        </div>
+        <ArgosArchFullscreen onClose={() => setSvgOpen(false)} />
       )}
     </div>
   );

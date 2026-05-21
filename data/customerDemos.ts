@@ -1205,6 +1205,35 @@ export const customerDemos: CustomerDemo[] = [
         },
       },
       {
+        id: "storytelling",
+        label: "Narrativa",
+        title: "Narrativa de valor",
+        content: "Los tres pilares no son un framework inventado: son el diagnóstico honesto de las tres brechas que separan a Argos de su próximo nivel de desempeño.",
+        narrativeData: {
+          quote:
+            "El cemento construye estructuras. La tecnología construye relaciones. Juntos, construimos el futuro comercial de Argos.",
+          pillars: [
+            {
+              title: "Market share porque hay mercado",
+              description:
+                "El canal de ferreterías creció 11% en 2025 con las herramientas actuales. Con Salesforce Maps, Agentforce SDR y Vista 360, el potencial de crecimiento hacia el +15% es alcanzable.",
+            },
+            {
+              title: "Segmentación porque la genérica desperdicia",
+              description:
+                "Cada punto de participación de mercado vale miles de millones. La microsegmentación con Data Cloud sobre datos existentes tiene un costo marginal comparado con construir desde cero.",
+            },
+            {
+              title: "Integración porque los silos cuestan",
+              description:
+                "Argos ONE genera el 40%+ de las ventas. Cada día sin integración con Salesforce es un día donde el equipo de servicio opera a ciegas. MuleSoft tiene conectores nativos para SAP — no es desarrollo desde cero.",
+            },
+          ],
+          closing:
+            "2026 es el año ideal: SPRINT 4.0 exige márgenes EBITDA 24-26%, Agentforce for Manufacturing disponible con habilidades preconfiguradas, y la base de clientes ya existe en Salesforce. El time-to-value es significativamente menor que hace 12 meses.",
+        },
+      },
+      {
         id: "solution",
         label: "Solución",
         title: "Solución propuesta",
@@ -1265,35 +1294,6 @@ export const customerDemos: CustomerDemo[] = [
         content:
           "Vista completa de las 4 capas de la solución: canales de contacto, plataforma Salesforce (9 productos + Agentforce transversal), capa de integración MuleSoft (5 conectores bidireccionales en tiempo real) y sistemas externos del ecosistema Argos. Las brechas críticas de integración están marcadas con su estado y solución propuesta.",
         argosArch: true,
-      },
-      {
-        id: "storytelling",
-        label: "Narrativa",
-        title: "Narrativa de valor",
-        content: "Los tres pilares no son un framework inventado: son el diagnóstico honesto de las tres brechas que separan a Argos de su próximo nivel de desempeño.",
-        narrativeData: {
-          quote:
-            "El cemento construye estructuras. La tecnología construye relaciones. Juntos, construimos el futuro comercial de Argos.",
-          pillars: [
-            {
-              title: "Market share porque hay mercado",
-              description:
-                "El canal de ferreterías creció 11% en 2025 con las herramientas actuales. Con Salesforce Maps, Agentforce SDR y Vista 360, el potencial de crecimiento hacia el +15% es alcanzable.",
-            },
-            {
-              title: "Segmentación porque la genérica desperdicia",
-              description:
-                "Cada punto de participación de mercado vale miles de millones. La microsegmentación con Data Cloud sobre datos existentes tiene un costo marginal comparado con construir desde cero.",
-            },
-            {
-              title: "Integración porque los silos cuestan",
-              description:
-                "Argos ONE genera el 40%+ de las ventas. Cada día sin integración con Salesforce es un día donde el equipo de servicio opera a ciegas. MuleSoft tiene conectores nativos para SAP — no es desarrollo desde cero.",
-            },
-          ],
-          closing:
-            "2026 es el año ideal: SPRINT 4.0 exige márgenes EBITDA 24-26%, Agentforce for Manufacturing disponible con habilidades preconfiguradas, y la base de clientes ya existe en Salesforce. El time-to-value es significativamente menor que hace 12 meses.",
-        },
       },
       {
         id: "outcomes",
