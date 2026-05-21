@@ -6,6 +6,8 @@ import AssetsGrid from "./AssetsGrid";
 import ContextFindings from "./ContextFindings";
 import CustomerProfile from "./CustomerProfile";
 import ArchDiagram from "./ArchDiagram";
+import ArgosArchDiagram from "./ArgosArchDiagram";
+import ArgosKpiSummaryCard from "./ArgosKpiSummaryCard";
 import AgentforceLandscape from "./AgentforceLandscape";
 import KpiGrid from "./KpiGrid";
 import KpiSummaryTable from "./KpiSummaryTable";
@@ -213,7 +215,11 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
               )}
 
               {activeTab.storyData && (
-                <StoryTimeline data={activeTab.storyData} />
+                <StoryTimeline
+                  data={activeTab.storyData}
+                  customerLogo={demo.logo}
+                  customerName={demo.customerName}
+                />
               )}
 
               {activeTab.journeyData && (
@@ -224,6 +230,10 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 <ArchDiagram data={activeTab.archData} />
               )}
 
+              {activeTab.argosArch && (
+                <ArgosArchDiagram />
+              )}
+
               {activeTab.agentforceLandscapeData && (
                 <AgentforceLandscape data={activeTab.agentforceLandscapeData} />
               )}
@@ -231,6 +241,8 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
               {activeTab.kpiSummary && (
                 <KpiSummaryTable rows={activeTab.kpiSummary} />
               )}
+
+              {activeTab.argosKpiSummary && <ArgosKpiSummaryCard />}
 
               {activeTab.kpis && <KpiGrid groups={activeTab.kpis} />}
 
@@ -244,6 +256,8 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 !activeTab.objective &&
                 !activeTab.solution &&
                 !activeTab.archData &&
+                !activeTab.argosArch &&
+                !activeTab.argosKpiSummary &&
                 !activeTab.agentforceLandscapeData &&
                 !activeTab.narrativeData &&
                 !activeTab.storyData &&

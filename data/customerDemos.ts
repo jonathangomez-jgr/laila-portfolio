@@ -165,7 +165,7 @@ export type AssetItem = {
   name: string;
   description: string;
   available: boolean;
-  type: "doc" | "deck" | "mockup" | "arch" | "video";
+  type: "doc" | "deck" | "mockup" | "arch" | "video" | "story";
   url?: string;
 };
 
@@ -230,6 +230,8 @@ export type CustomerDemoTab = {
   storyData?: StoryData;
   journeyData?: JourneyData;
   assetsData?: AssetsData;
+  argosArch?: true;
+  argosKpiSummary?: true;
   agentforceLandscapeData?: AgentforceLandscapeData;
 };
 
@@ -1257,6 +1259,14 @@ export const customerDemos: CustomerDemo[] = [
         ],
       },
       {
+        id: "arquitectura",
+        label: "Arquitectura",
+        title: "Arquitectura Técnica — Cementos Argos",
+        content:
+          "Vista completa de las 4 capas de la solución: canales de contacto, plataforma Salesforce (9 productos + Agentforce transversal), capa de integración MuleSoft (5 conectores bidireccionales en tiempo real) y sistemas externos del ecosistema Argos. Las brechas críticas de integración están marcadas con su estado y solución propuesta.",
+        argosArch: true,
+      },
+      {
         id: "storytelling",
         label: "Narrativa",
         title: "Narrativa de valor",
@@ -1291,6 +1301,7 @@ export const customerDemos: CustomerDemo[] = [
         title: "Resultados esperados",
         content:
           "Los KPIs de éxito se organizan por pilar estratégico. Cada métrica tiene línea base documentada en sesiones de discovery, meta a 6 meses y meta a 12 meses.",
+        argosKpiSummary: true,
         kpis: [
           {
             group: "PILAR 1 — Market Share: KPIs Comerciales",
@@ -1524,6 +1535,13 @@ export const customerDemos: CustomerDemo[] = [
               available: true,
               type: "deck",
               url: "/customer-demos/grupo-argos/deck/executive",
+            },
+            {
+              name: "Historia de Cliente — Modo Inmersivo",
+              description: "La ferretería de Don Hernán: recorrido cinematográfico por las 7 escenas de la historia, con vista pantalla completa, navegación por teclado y ambientación por pilar estratégico.",
+              available: true,
+              type: "story",
+              url: "/customer-demos/grupo-argos#historia",
             },
             {
               name: "Mockup Vista 360",
