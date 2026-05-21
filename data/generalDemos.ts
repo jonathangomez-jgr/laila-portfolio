@@ -11,7 +11,7 @@ export type GeneralDemo = {
 export const generalDemos: GeneralDemo[] = [
   {
     slug: "financial-services-digital-engagement",
-    title: "Financial Services Cloud & Digital Engagement",
+    title: "Vivi, Agente Hipotecario",
     description:
       "Demo para la industria financiera: cómo Salesforce Financial Services Cloud unificado con Digital Engagement y WhatsApp habilita una experiencia omnicanal para asesores y clientes, desde la apertura de productos hasta la atención postventa.",
     industries: ["Servicios Financieros"],
