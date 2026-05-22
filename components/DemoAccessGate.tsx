@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { requestPageAccess } from "../app/actions/request-page-access";
-import { verifyPasscode } from "../app/customer-demos/[slug]/actions";
+import { verifyPasscode } from "../app/[lang]/customer-demos/[slug]/actions";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

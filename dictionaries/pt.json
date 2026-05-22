@@ -1,0 +1,252 @@
+{
+  "nav": {
+    "home": "Home",
+    "aboutMe": "Sobre Mim",
+    "laila": "Laila",
+    "generalDemos": "Demos Gerais",
+    "customerSolutions": "Soluções para Clientes",
+    "letsTalk": "Vamos Conversar",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu"
+  },
+  "footer": {
+    "text": "© 2026 Jonathan Gomez | Laila Portfolio | Personal-professional demo hub."
+  },
+  "langSwitcher": {
+    "label": "Idioma"
+  },
+  "home": {
+    "eyebrow": "Hello ✨",
+    "headline1": "Reliable AI",
+    "headline2": "Business Solutions.",
+    "headline3": "powered by Laila.",
+    "description": "Um espaço para mostrar como o uso da IA de forma criativa e em seu sentido mais humano pode transformar a maneira de alcançar os objetivos mais aspiracionais dos clientes.",
+    "exploreBtn": "Explorar Laila",
+    "viewDemosBtn": "Ver demos",
+    "viewQrBtn": "Ver QR",
+    "qrModalTitle": "laila-jgr.com",
+    "qrModalSub": "Escaneie para abrir o portfólio",
+    "featuredFocusEyebrow": "Destaque",
+    "featuredFocusTitle": "From business context to executive-ready demos.",
+    "featuredFocusDesc": "A Laila ajuda a estruturar ideias, transformá-las em soluções e expressá-las como ativos visuais, narrativos e demonstráveis.",
+    "tag1": "AI Strategy",
+    "tag2": "Demo Design",
+    "tag3": "Storytelling",
+    "coreAreasLabel": "Áreas Principais",
+    "approachLabel": "Abordagem",
+    "approachTitle": "Strategy + Storytelling + Solution Design",
+    "approachDesc": "Uma combinação de narrativa comercial, critério técnico e prototipagem rápida.",
+    "whyEyebrow": "Por que este portfólio",
+    "whyTitle": "A more visual and structured way to present what I build.",
+    "whyDesc": "Um espaço colaborativo para centralizar ideias, soluções e aprendizados que aceleram a criação de valor com IA. Laila busca transformar o conhecimento compartilhado em ferramentas reutilizáveis, caminhos claros e experiências que ajudem os clientes a alcançar seus objetivos mais ambiciosos.",
+    "thanksEyebrow": "Agradecimentos",
+    "thanksText": "Laila não nasceu sozinha — e isso a torna mais real. {larissa} deu alma criativa. {gabo} e {caro} acreditaram desde o começo. {aura}, {juanes}, {cami}, {juli} e {luisfa} confiaram nela e cada desafio que trouxeram a fez crescer. E a todos que contribuíram com uma ideia, uma opinião, ou simplesmente se deixaram surpreender pelo que Laila pode fazer — isso também é de vocês.",
+    "sectionEyebrow": "Seção",
+    "cards": [
+      {
+        "title": "Laila",
+        "description": "Visão, experiência, arquitetura e evolução do núcleo conceitual do portfólio.",
+        "href": "/laila"
+      },
+      {
+        "title": "Demos Gerais",
+        "description": "Ativos reutilizáveis para diferentes indústrias, soluções e conversas.",
+        "href": "/general-demos"
+      },
+      {
+        "title": "Demos de Clientes",
+        "description": "Casos específicos para conversas com clientes e apresentações direcionadas.",
+        "href": "/customer-demos"
+      }
+    ]
+  },
+  "about": {
+    "eyebrow": "Sobre Mim",
+    "title": "Mindset drives results",
+    "description": "Esta página apresenta uma visão mais pessoal-profissional sobre mim: minha abordagem, minha experiência, minha forma de trabalhar e o tipo de valor que busco construir por meio de soluções e narrativas.",
+    "approachEyebrow": "Minha Abordagem",
+    "approachTitle": "I connect business goals & desires, technology and storytelling.",
+    "approachDesc1": "Tenho interesse em construir soluções que não apenas funcionem, mas que também sejam compreendidas, inspirem confiança e ajudem a avançar conversas com clientes de forma clara e estratégica.",
+    "approachDesc2": "Meu trabalho geralmente vive na interseção entre design de soluções, narrativa executiva, experiência digital, IA e tudo dentro do Salesforce.",
+    "profileEyebrow": "Perfil",
+    "profileName": "Jonathan Gomez",
+    "profileRole": "Principal Solution Engineer",
+    "profileTagline": "Crafting stories of business transformation through AI-powered experiences — designed to captivate, inspire, and make possibilities feel real.",
+    "highlights": [
+      { "label": "Cargo Atual", "value": "Principal Solution Engineer" },
+      { "label": "Foco", "value": "AI, Agentforce, Data Cloud, Service Cloud" },
+      { "label": "Especialidade", "value": "Solution Design & Stunning Demos" },
+      { "label": "Projeto Principal", "value": "Laila" },
+      { "label": "Baseado em", "value": "México 🇲🇽" },
+      { "label": "Ponto Forte", "value": "Business + Technology Bridge" }
+    ],
+    "enjoyEyebrow": "O que gosto",
+    "enjoyTitle": "Turning complexity into clarity",
+    "enjoyDesc": "Gosto de traduzir problemas complexos em histórias, soluções e experiências fáceis de entender e apresentar.",
+    "howEyebrow": "Como trabalho",
+    "howTitle": "Strategic and hands-on",
+    "howDesc": "Combino pensamento estratégico com execução prática: estrutura, conteúdo, demo, narrativa e detalhe visual.",
+    "whyEyebrow": "Por que Laila importa",
+    "whyTitle": "A platform for what I build",
+    "whyDesc": "Laila resume meu interesse em conectar criatividade, negócio, tecnologia e experiência para construir algo reutilizável e com visão.",
+    "ctaEyebrow": "Vamos Conectar",
+    "ctaTitle": "Ready to build something together?",
+    "ctaDesc": "Se você tem um desafio, uma oportunidade ou simplesmente quer explorar como a IA pode transformar seu negócio — vamos conversar.",
+    "ctaBtn": "Entre em contato →"
+  },
+  "approach": {
+    "eyebrow": "Minha Abordagem",
+    "title": "Do problema de negócio à história demonstrável.",
+    "description": "Minha abordagem combina entendimento do cliente, design de narrativa, arquitetura de solução e construção rápida de ativos para visualizar valor.",
+    "body": "Trabalho conectando três níveis: o problema de negócio, a solução tecnológica e a história que permite ao cliente entender o valor. Meu objetivo não é apenas mostrar funcionalidades, mas construir uma conversa clara, crível e acionável."
+  },
+  "skills": {
+    "eyebrow": "Skills & Expertise",
+    "title": "Capacidades que combinam tecnologia, negócio e experiência.",
+    "description": "Uma visão estruturada das áreas onde construo, projeto e comunico soluções.",
+    "items": [
+      "Salesforce Solution Engineering",
+      "Agentforce & AI storytelling",
+      "Data Cloud & customer profile unification",
+      "Consumer Goods Cloud demos",
+      "Field Service solution design",
+      "Demo strategy and executive storytelling",
+      "Experience design",
+      "Rapid prototyping with AI"
+    ]
+  },
+  "timeline": {
+    "eyebrow": "Linha do Tempo",
+    "title": "Marcos profissionais e evolução da minha abordagem.",
+    "description": "Uma linha do tempo para mostrar experiência, aprendizados e momentos-chave.",
+    "currentStageLabel": "Fase atual",
+    "currentStageTitle": "IA, Agentforce, Data Cloud e Laila",
+    "currentStageDesc": "Construção de demos, narrativas e ativos reutilizáveis para conversas executivas."
+  },
+  "laila": {
+    "manifesto": "Laila é a arte de {bold1} — com humanidade, dedicação e beleza funcional — e, ao mesmo tempo, uma fonte que inspira, {bold2} e nos convida a {bold3}.",
+    "bold1": "transformar inteligência em impacto",
+    "bold2": "nos reúne para colaborar",
+    "bold3": "compartilhar conhecimento",
+    "dashboardEyebrow": "Laila · Live Org",
+    "dashboardTitle": "Laila em Números",
+    "dashboardLink": "Ver arquitetura completa →",
+    "agentsLabel": "Agentforce Agents",
+    "objectsLabel": "Objetos com Registros",
+    "recordsLabel": "Registros Criados",
+    "exploreTitle": "Explorar Laila",
+    "talkBtn": "Falar com Laila",
+    "heroAccountsEyebrow": "Contas onde Laila participou",
+    "heroCloseHint": "Toque fora ou mova o cursor para fechar",
+    "heroAccountsMore": "e mais...",
+    "heroAccountsLabel": "Contas com Laila",
+    "sections": [
+      { "title": "👤 Personas", "description": "As pessoas que dão vida ao universo Laila: a criadora, a executora e a exploradora.", "href": "/laila/personas" },
+      { "title": "🎯 Product Vision", "description": "Propósito, usuários, visão, princípios de design e valor que a Laila busca gerar.", "href": "/laila/product-vision" },
+      { "title": "🎬 Demo", "description": "Espaço para mostrar vídeos, capturas, percursos ou protótipos de Laila.", "href": "/laila/demo" },
+      { "title": "🏗️ Architecture", "description": "Visão conceitual de módulos, agentes, dados, integrações, prompts e outputs.", "href": "/laila/architecture" }
+    ]
+  },
+  "personas": {
+    "eyebrow": "Laila / Personas",
+    "title": "As pessoas que dão vida ao universo Laila.",
+    "description": "Cada uma representa uma dimensão distinta: a criadora, a executora e a exploradora. Juntas, definem como Laila é imaginada, construída e vivenciada.",
+    "items": [
+      {
+        "name": "Laila",
+        "role": "A centelha criativa",
+        "tagline": "A magia que conecta tudo.",
+        "description": "Laila é a representação viva de tudo que habita neste universo: criatividade, tecnologia, inclusão e possibilidade. Cria para compartilhar, imagina para inspirar e acredita profundamente que todas as indústrias, todas as ideias e todas as pessoas têm lugar na transformação."
+      },
+      {
+        "name": "Janine Service",
+        "role": "A executiva brilhante",
+        "tagline": "A que transforma serviço em experiência.",
+        "description": "Janine é estratégia, precisão e empatia em movimento. Sua especialidade é o atendimento ao cliente, mas seu talento vai muito além: entende o negócio, resolve com elegância e eleva cada interação. Com Laila, formam uma dupla imbatível: visão e execução, magia e método."
+      },
+      {
+        "name": "María Clara Giménez",
+        "role": "A cliente pioneira",
+        "tagline": "A primeira a acreditar, testar e transformar.",
+        "description": "María Clara não espera o futuro chegar: ela o testa antes de qualquer um. É curiosa, ativa e sempre pronta para descobrir novos produtos, gerar casos e testar as inovações da Laila. Mais do que uma cliente, é a centelha que confirma que cada ideia pode se tornar uma grande experiência."
+      }
+    ]
+  },
+  "productVision": {
+    "eyebrow": "Laila / Product Vision",
+    "title": "Uma visão para transformar conhecimento, contexto e criatividade em ativos acionáveis.",
+    "description": "Aqui documentamos o propósito da Laila, seus usuários, seus princípios de design e o valor que busca gerar.",
+    "body": "Laila nasce como uma forma de acelerar a construção de soluções, narrativas, demos e conteúdo profissional por meio do uso estruturado de IA.",
+    "liveOrgEyebrow": "Live Org",
+    "liveOrgTitle": "Explore Laila em ação.",
+    "liveOrgDesc": "Navegue pela org de demonstração da Laila diretamente no Salesforce e descubra como está construída por dentro.",
+    "liveOrgBtn": "Navegar na Org da Laila →"
+  },
+  "demo": {
+    "eyebrow": "Laila / Demo",
+    "title": "Demo da Laila.",
+    "description": "Espaço para mostrar vídeos, capturas, fluxos ou uma explicação interativa do que Laila permite construir.",
+    "qrEyebrow": "Escaneie e converse",
+    "qrTitle": "Falar com Laila",
+    "qrSub": "Escaneie o código com sua câmera para abrir o WhatsApp diretamente.",
+    "qrBtn": "Abrir no WhatsApp",
+    "comingSoonEyebrow": "Em breve",
+    "comingSoonTitle": "Vídeos, capturas e percursos interativos.",
+    "comingSoonDesc": "Esta seção irá incorporar demos em vídeo, fluxos narrados e protótipos que mostram Laila em ação em conversas reais com clientes."
+  },
+  "architecture": {
+    "eyebrow": "Laila / Architecture",
+    "title": "Arquitetura conceitual da Laila.",
+    "description": "Visão de componentes, agentes, dados, prompts, integrações, outputs e possíveis extensões técnicas.",
+    "metricsEyebrow": "Métricas da Org",
+    "metricsTitle": "Laila em Números",
+    "metricsDesc": "Indicadores reais da org do Salesforce que potencializa as demonstrações e narrativas da Laila.",
+    "infraEyebrow": "Infraestrutura",
+    "infraTitle": "System Landscape",
+    "infraDesc": "Visão arquitetônica das integrações, dados e componentes que compõem o ecossistema da Laila.",
+    "assetsEyebrow": "Recursos",
+    "assetsTitle": "Ativos",
+    "assetsDesc": "Arquivos para download e materiais de referência do sistema Laila.",
+    "landscapeAssetName": "Laila System Landscape",
+    "landscapeAssetDesc": "Diagrama completo · PDF"
+  },
+  "roadmap": {
+    "eyebrow": "Laila / Roadmap",
+    "title": "Roadmap de evolução.",
+    "description": "Fases futuras para transformar Laila em um sistema cada vez mais estruturado, reutilizável e demonstrável."
+  },
+  "experienceDesign": {
+    "eyebrow": "Laila / Experience Design",
+    "title": "A experiência da Laila deve parecer clara, assistida e orientada a resultados.",
+    "description": "Esta página descreve princípios de UX, fluxos, telas, interações e decisões de experiência."
+  },
+  "generalDemos": {
+    "eyebrow": "Demos Gerais",
+    "title": "Demos reutilizáveis para diferentes indústrias, produtos e conversas.",
+    "description": "Esta seção contém demos que não pertencem a um cliente específico, mas podem ser rapidamente adaptados a diferentes cenários comerciais.",
+    "filtersTitle": "Filtros futuros",
+    "filtersDesc": "Aqui poderemos adicionar filtros por indústria, produto, tipo de solução, nível de maturidade ou tecnologia utilizada.",
+    "videoLabel": "Demo em Vídeo"
+  },
+  "customerDemos": {
+    "eyebrow": "Demos de Clientes",
+    "title": "Demos e casos preparados para conversas específicas com clientes.",
+    "description": "Esta seção organiza os ativos construídos para clientes ou cenários concretos. Pode incluir contexto, problema, solução proposta, narrativa, resultados esperados e materiais associados.",
+    "confidentialityTitle": "Nota de confidencialidade",
+    "confidentialityText": "Esta seção pode gerenciar versões públicas, anonimizadas ou privadas de cada demo para evitar expor informações sensíveis dos clientes.",
+    "confidentialityNote": "Para as versões privadas, será solicitado um código de visualização por uma única vez."
+  },
+  "contact": {
+    "eyebrow": "Contato",
+    "title": "Vamos Conversar.",
+    "description": "Sobre tecnologia, Salesforce, inteligência artificial, design de soluções, o futuro dos negócios, ou sobre a vida, o tempo, e por que as corujas voam em completo silêncio.",
+    "whatsappTitle": "WhatsApp",
+    "whatsappSub": "Escaneie o QR ou toque para abrir o chat",
+    "whatsappBtn": "Abrir no WhatsApp",
+    "slackTitle": "Slack",
+    "slackChannel": "#jon-solution-lab",
+    "slackSub": "Escaneie o QR ou toque para abrir o canal",
+    "slackBtn": "Visitar meu canal →",
+    "findMeTitle": "Encontre-me em"
+  }
+}

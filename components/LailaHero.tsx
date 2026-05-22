@@ -9,7 +9,17 @@ const accounts = [
   "Atlético Nacional", "BBVA", "Sura", "Telecom",
 ];
 
-export default function LailaHero() {
+export default function LailaHero({
+  accountsEyebrow,
+  closeHint,
+  accountsMore,
+  accountsLabel,
+}: {
+  accountsEyebrow: string;
+  closeHint: string;
+  accountsMore: string;
+  accountsLabel: string;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -26,14 +36,14 @@ export default function LailaHero() {
       {/* Base overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-gray-950/88 via-gray-950/65 to-gray-950/35" />
 
-      {/* Accounts overlay — aparece al hover/tap */}
+      {/* Accounts overlay */}
       <div
         className={`absolute inset-0 flex flex-col items-center justify-center gap-5 bg-gray-950/88 p-8 backdrop-blur-sm transition-all duration-300 ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
         <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-indigo-400">
-          Cuentas donde ha participado Laila
+          {accountsEyebrow}
         </p>
         <div className="flex flex-wrap justify-center gap-2">
           {accounts.map((name) => (
@@ -45,10 +55,10 @@ export default function LailaHero() {
             </span>
           ))}
           <span className="rounded-full border border-indigo-400/30 bg-indigo-500/20 px-3 py-1.5 text-sm font-semibold text-indigo-300">
-            y más...
+            {accountsMore}
           </span>
         </div>
-        <p className="text-[11px] text-white/35">Toca fuera o mueve el cursor para cerrar</p>
+        <p className="text-[11px] text-white/35">{closeHint}</p>
       </div>
 
       {/* Main content */}
@@ -87,13 +97,16 @@ export default function LailaHero() {
             className="group shrink-0 cursor-pointer rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm transition-colors hover:border-indigo-300/40 hover:bg-indigo-500/20 sm:px-6 sm:py-4"
             onMouseEnter={() => setOpen(true)}
             onMouseLeave={() => setOpen(false)}
-            onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen((v) => !v);
+            }}
           >
             <span className="block text-center text-5xl font-bold tabular-nums text-white sm:text-6xl md:text-7xl">
               20<span className="text-indigo-300">+</span>
             </span>
             <span className="mt-1 block text-center text-[10px] font-semibold uppercase tracking-wider text-white/60 sm:text-xs">
-              Cuentas con Laila
+              {accountsLabel}
             </span>
           </button>
         </div>

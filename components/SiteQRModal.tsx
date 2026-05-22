@@ -5,7 +5,15 @@ import { QRCodeSVG } from "qrcode.react";
 
 const SITE_URL = "https://laila-jgr.com";
 
-export default function SiteQRModal() {
+export default function SiteQRModal({
+  btnLabel,
+  modalTitle,
+  modalSub,
+}: {
+  btnLabel: string;
+  modalTitle: string;
+  modalSub: string;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -14,7 +22,7 @@ export default function SiteQRModal() {
         onClick={() => setOpen(true)}
         className="secondary-button px-6 py-3 text-sm font-semibold"
       >
-        Ver QR
+        {btnLabel}
       </button>
 
       {open && (
@@ -31,8 +39,18 @@ export default function SiteQRModal() {
               className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition hover:bg-gray-200"
               aria-label="Cerrar"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
 
@@ -47,8 +65,10 @@ export default function SiteQRModal() {
             </div>
 
             <div className="text-center">
-              <p className="text-base font-semibold text-gray-950">laila-jgr.com</p>
-              <p className="mt-1 text-sm text-gray-500">Escanea para abrir el portafolio</p>
+              <p className="text-base font-semibold text-gray-950">
+                {modalTitle}
+              </p>
+              <p className="mt-1 text-sm text-gray-500">{modalSub}</p>
             </div>
           </div>
         </div>

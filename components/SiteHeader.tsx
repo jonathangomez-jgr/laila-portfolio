@@ -3,19 +3,66 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import type { Dictionary, Locale } from "@/lib/i18n";
 
-const navItems = [
-  { label: "Home", href: "/" },
-  { label: "About Me", href: "/about" },
-  { label: "Laila", href: "/laila" },
-  { label: "General Demos", href: "/general-demos" },
-  { label: "Customer's Solutions", href: "/customer-demos" },
-];
+const locales: Locale[] = ["es", "en", "pt"];
 
-export default function SiteHeader() {
+function buildLangUrl(currentPathname: string, targetLang: string): string {
+  const segments = currentPathname.split("/");
+  segments[1] = targetLang;
+  return segments.join("/") || "/";
+}
+
+function LanguageSwitcher({
+  lang,
+  dict,
+}: {
+  lang: string;
+  dict: Dictionary;
+}) {
   const pathname = usePathname();
-  const isHome = pathname === "/";
+
+  return (
+    <div className="flex items-center gap-1 rounded-full border border-white/60 bg-white/60 px-2 py-1.5 backdrop-blur-sm">
+      <span className="mr-1 text-xs font-medium text-gray-500 hidden sm:block">
+        {dict.langSwitcher.label}:
+      </span>
+      {locales.map((locale) => (
+        <a
+          key={locale}
+          href={buildLangUrl(pathname, locale)}
+          className={`rounded-full px-2.5 py-1 text-xs font-semibold uppercase tracking-wide transition ${
+            locale === lang
+              ? "bg-indigo-600 text-white shadow-sm"
+              : "text-gray-600 hover:bg-white/80 hover:text-gray-950"
+          }`}
+        >
+          {locale}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+export default function SiteHeader({
+  dict,
+  lang,
+}: {
+  dict: Dictionary;
+  lang: string;
+}) {
+  const pathname = usePathname();
+  // Determine isHome by checking if pathname is exactly /<lang>
+  const isHome = pathname === `/${lang}` || pathname === `/${lang}/`;
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const navItems = [
+    { label: dict.nav.home, href: `/${lang}` },
+    { label: dict.nav.aboutMe, href: `/${lang}/about` },
+    { label: dict.nav.laila, href: `/${lang}/laila` },
+    { label: dict.nav.generalDemos, href: `/${lang}/general-demos` },
+    { label: dict.nav.customerSolutions, href: `/${lang}/customer-demos` },
+  ];
 
   /* Close menu on route change */
   useEffect(() => {
@@ -25,7 +72,9 @@ export default function SiteHeader() {
   /* Prevent body scroll while menu is open */
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [menuOpen]);
 
   return (
@@ -44,7 +93,7 @@ export default function SiteHeader() {
               : "mx-auto flex w-full max-w-[1360px] items-center justify-between rounded-full border border-white/70 bg-white/80 px-5 py-3 shadow-[0_14px_35px_rgba(99,102,241,0.10)] backdrop-blur-xl md:px-6"
           }
         >
-          <a href="/" className="flex items-center gap-3">
+          <a href={`/${lang}`} className="flex items-center gap-3">
             <Image
               src="/laila-logo.png"
               alt="Laila Portfolio logo"
@@ -65,8 +114,8 @@ export default function SiteHeader() {
           <nav className="hidden items-center gap-6 lg:flex">
             {navItems.map((item) => {
               const isActive =
-                item.href === "/"
-                  ? pathname === "/"
+                item.href === `/${lang}` || item.href === `/${lang}/`
+                  ? pathname === `/${lang}` || pathname === `/${lang}/`
                   : pathname.startsWith(item.href);
               return (
                 <a
@@ -84,19 +133,21 @@ export default function SiteHeader() {
             })}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher lang={lang} dict={dict} />
+
             <a
-              href="/contact"
-              className="rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(95,111,255,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(95,111,255,0.42)]"
+              href={`/${lang}/contact`}
+              className="hidden rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(95,111,255,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(95,111,255,0.42)] lg:block"
             >
-              Let&apos;s Talk
+              {dict.nav.letsTalk}
             </a>
 
             {/* Hamburger — mobile only */}
             <button
               type="button"
               onClick={() => setMenuOpen((o) => !o)}
-              aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+              aria-label={menuOpen ? dict.nav.closeMenu : dict.nav.openMenu}
               aria-expanded={menuOpen}
               className="flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-full border border-white/60 bg-white/60 backdrop-blur-sm transition hover:bg-white/90 lg:hidden"
             >
@@ -123,7 +174,9 @@ export default function SiteHeader() {
       {/* Mobile menu overlay */}
       <div
         className={`fixed inset-0 z-40 transition-all duration-300 lg:hidden ${
-          menuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+          menuOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
         }`}
       >
         {/* Backdrop */}
@@ -142,8 +195,8 @@ export default function SiteHeader() {
           <ul className="px-3 py-3">
             {navItems.map((item) => {
               const isActive =
-                item.href === "/"
-                  ? pathname === "/"
+                item.href === `/${lang}` || item.href === `/${lang}/`
+                  ? pathname === `/${lang}` || pathname === `/${lang}/`
                   : pathname.startsWith(item.href);
               return (
                 <li key={item.href}>
@@ -168,10 +221,10 @@ export default function SiteHeader() {
           {/* Divider + CTA */}
           <div className="border-t border-gray-100 px-3 py-3">
             <a
-              href="/contact"
+              href={`/${lang}/contact`}
               className="block w-full rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-500 px-4 py-3.5 text-center text-sm font-semibold text-white shadow-[0_8px_20px_rgba(95,111,255,0.3)] transition hover:shadow-[0_12px_28px_rgba(95,111,255,0.4)]"
             >
-              Let&apos;s Talk
+              {dict.nav.letsTalk}
             </a>
           </div>
         </nav>

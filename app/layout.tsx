@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import SiteChrome from "../components/SiteChrome";
 
 export const metadata: Metadata = {
   title: "JGR - Laila",
@@ -15,9 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body>
-        <SiteChrome>{children}</SiteChrome>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

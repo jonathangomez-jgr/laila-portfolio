@@ -4,7 +4,15 @@ import { QRCodeSVG } from "qrcode.react";
 
 const SLACK_URL = "https://salesforce.enterprise.slack.com/archives/C098J4UH205";
 
-export default function SlackQRCard() {
+export default function SlackQRCard({
+  channel,
+  sub,
+  btn,
+}: {
+  channel: string;
+  sub: string;
+  btn: string;
+}) {
   return (
     <a
       href={SLACK_URL}
@@ -35,12 +43,12 @@ export default function SlackQRCard() {
           </svg>
           <h2 className="text-2xl font-semibold text-gray-950">Slack</h2>
         </div>
-        <p className="text-sm font-medium text-[#4A154B]">#jon-solution-lab</p>
-        <p className="text-xs text-gray-500">Escanea el QR o toca para abrir el canal</p>
+        <p className="text-sm font-medium text-[#4A154B]">{channel}</p>
+        <p className="text-xs text-gray-500">{sub}</p>
       </div>
 
       <span className="rounded-full bg-[#4A154B] px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(74,21,75,0.25)] transition group-hover:bg-[#611f69] group-hover:shadow-[0_12px_28px_rgba(74,21,75,0.35)]">
-        Visita mi canal →
+        {btn}
       </span>
     </a>
   );
