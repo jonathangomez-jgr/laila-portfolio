@@ -248,5 +248,33 @@
     "slackSub": "Scan the QR or tap to open the channel",
     "slackBtn": "Visit my channel →",
     "findMeTitle": "Find me on"
+  },
+  "demoAccess": {
+    "restricted": "Restricted access",
+    "privateDemo": "This demo is private. Enter the access code to continue.",
+    "passcodePlaceholder": "Access code",
+    "wrongCode": "Incorrect code. Please try again.",
+    "verifying": "Verifying...",
+    "enter": "Enter",
+    "noCode": "Don't have a code?",
+    "requestDesc": "To request a new code, enter your email address and we'll contact you with access.",
+    "emailPlaceholder": "Email address",
+    "requestSuccess": "Your access has been requested",
+    "requestLoading": "Sending...",
+    "requestBtn": "Request code",
+    "requestError": "Oops.. something didn't go as expected. Please try again later or send an email to jonathan.gomez@salesforce.com"
+  },
+  "customerDetail": {
+    "eyebrow": "Customer Solution",
+    "execDeckBtn": "Executive presentation",
+    "demoStructure": "Demo Structure",
+    "emptyTabTitle": "Editable space",
+    "emptyTabDesc": "Here we can later replace this placeholder with real content: images, bullets, metrics, diagrams, scripts, links, videos, or presentation assets.",
+    "demoNotFound": "Demo not found",
+    "demoNotFoundDesc": "No case is configured for this client. Check the slug or add the case in the data file.",
+    "deckNotFound": "Presentation not found",
+    "deckNotFoundDesc": "No deck is configured for this slug.",
+    "backToCustomerDemos": "Back to customer demos",
+    "backTo": "Back to"
   }
 }

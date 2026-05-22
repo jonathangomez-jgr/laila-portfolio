@@ -235,6 +235,13 @@ export type CustomerDemoTab = {
   agentforceLandscapeData?: AgentforceLandscapeData;
 };
 
+export type CustomerDemoI18n = {
+  title: string;
+  description: string;
+  industry: string;
+  tabs: { id: string; label: string; title: string; content: string }[];
+};
+
 export type CustomerDemo = {
   slug: string;
   title: string;
@@ -246,6 +253,7 @@ export type CustomerDemo = {
   tags: string[];
   tabs: CustomerDemoTab[];
   passcode: string;
+  translations?: { en?: CustomerDemoI18n; pt?: CustomerDemoI18n };
 };
 
 export const customerDemos: CustomerDemo[] = [
@@ -1043,6 +1051,44 @@ export const customerDemos: CustomerDemo[] = [
         },
       },
     ],
+    translations: {
+      en: {
+        title: "Intelligent Customer Experience Transformation with Agentforce",
+        description: "Strategic account plan to transform VivaLux's post-purchase experience through Salesforce Agentforce, Service Cloud, and Data Cloud — reversing a 21-point NPS drop and unlocking $180M+ in combined value from operational savings, retention, and revenue uplift.",
+        industry: "Omnichannel Retail — Fashion and Home Goods",
+        tabs: [
+          { id: "overview", label: "Overview", title: "Executive summary", content: "VivaLux Retail Group faces a dangerous paradox: its commercial growth is being eroded by a post-purchase experience that doesn't scale. In 18 months, NPS dropped from 62 to 41 — a critical signal representing tens of millions in at-risk revenue. This plan proposes an executable roadmap in 3 phases with a projected 340% ROI in the first year." },
+          { id: "customer", label: "Client / industry", title: "Client and industry", content: "Omnichannel fashion and home goods retailer with multi-country presence in Latin America. Business model combining physical stores, e-commerce, WhatsApp, and social media. Its strategic ambition is aggressive expansion in 3 years — new markets, more stores, and digital channels." },
+          { id: "context", label: "Context", title: "Challenge context", content: "Five critical pain points with quantifiable financial impact. This diagnosis is not just technical — it is the foundation of the business case for the Board." },
+          { id: "objective", label: "Objective", title: "Reconvert every touchpoint into an intelligent, proactive experience.", content: "Three value hypotheses. One platform. Measurable results in 90 days." },
+          { id: "solution", label: "Solution", title: "Customer Intelligence Agent Ecosystem", content: "Four intelligent agents built on three pillars: unified data (Data Cloud), robust integration (MuleSoft), and agentic intelligence (Agentforce). Each agent acts autonomously within defined guardrails and collaborates with the others seamlessly." },
+          { id: "storytelling", label: "Narrative", title: "Value narrative", content: "This is not a license sale. It is a fundamental reconfiguration of how VivaLux understands, anticipates, and serves its customers." },
+          { id: "historia", label: "Story", title: "Customer Story", content: "María Clara's complete journey: from online purchase to watching the World Cup final with her family, thanks to the coordinated effort between LuxServe and LuxAssist." },
+          { id: "outcomes", label: "Results", title: "Expected outcomes", content: "Success KPIs are organized across three dimensions: customer experience, operational efficiency, and revenue uplift. Each metric has a documented baseline, 6-month target, and 12-month target — designed to demonstrate quantifiable financial value to the Board at each phase." },
+          { id: "arquitectura", label: "Architecture", title: "System Landscape — VivaLux", content: "Full view of the VivaLux technology ecosystem: external systems, MuleSoft integration layer, Salesforce products, and the Einstein Trust Layer foundation." },
+          { id: "agentforce-landscape", label: "Agentforce Landscape", title: "Agentforce Landscape — VivaLux", content: "Map of the Agentforce ecosystem for VivaLux: intelligent agents, AI Stack, interaction channels, Customer 360, and Data Cloud." },
+          { id: "assets", label: "Assets", title: "Solution assets", content: "Available and to-be-developed materials to support the conversation with VivaLux Retail Group." },
+        ],
+      },
+      pt: {
+        title: "Transformação Inteligente da Experiência do Cliente com Agentforce",
+        description: "Plano de conta estratégico para transformar a experiência pós-compra da VivaLux por meio do Salesforce Agentforce, Service Cloud e Data Cloud — revertendo uma queda de 21 pontos no NPS e desbloqueando mais de $180M em valor combinado de economias operacionais, retenção e aumento de receita.",
+        industry: "Varejo Omnicanal — Moda e Artigos para Casa",
+        tabs: [
+          { id: "overview", label: "Overview", title: "Resumo executivo", content: "O VivaLux Retail Group enfrenta um paradoxo perigoso: seu crescimento comercial está sendo erodido por uma experiência pós-compra que não escala. Em 18 meses, o NPS caiu de 62 para 41 — um sinal crítico que representa dezenas de milhões em receita em risco. Este plano propõe um roadmap executável em 3 fases com ROI projetado de 340% no primeiro ano." },
+          { id: "customer", label: "Cliente / indústria", title: "Cliente e indústria", content: "Varejista omnicanal de moda e artigos para casa com presença em múltiplos países na América Latina. Modelo de negócio que combina lojas físicas, e-commerce, WhatsApp e redes sociais. Sua ambição estratégica é a expansão agressiva em 3 anos — novos mercados, mais lojas e canais digitais." },
+          { id: "context", label: "Contexto", title: "Contexto do desafio", content: "Cinco pontos de dor críticos com impacto financeiro quantificável. Este diagnóstico não é apenas técnico — é a base do caso de negócio para o Conselho." },
+          { id: "objective", label: "Objetivo", title: "Reconverter cada ponto de contato em uma experiência inteligente e proativa.", content: "Três hipóteses de valor. Uma plataforma. Resultados mensuráveis em 90 dias." },
+          { id: "solution", label: "Solução", title: "Customer Intelligence Agent Ecosystem", content: "Quatro agentes inteligentes construídos sobre três pilares: dados unificados (Data Cloud), integração robusta (MuleSoft) e inteligência agêntica (Agentforce). Cada agente age de forma autônoma dentro de guardrails definidos e colabora com os demais de forma fluida." },
+          { id: "storytelling", label: "Narrativa", title: "Narrativa de valor", content: "Não é uma venda de licenças. É uma reconfiguração fundamental de como a VivaLux entende, antecipa e serve seus clientes." },
+          { id: "historia", label: "História", title: "História do Cliente", content: "A jornada completa de María Clara: desde a compra online até assistir à final da Copa do Mundo com sua família, graças à coordenação entre LuxServe e LuxAssist." },
+          { id: "outcomes", label: "Resultados", title: "Resultados esperados", content: "Os KPIs de sucesso estão organizados em três dimensões: experiência do cliente, eficiência operacional e aumento de receita. Cada métrica tem uma linha de base documentada, meta de 6 meses e meta de 12 meses — projetadas para demonstrar valor financeiro quantificável ao Conselho em cada fase." },
+          { id: "arquitectura", label: "Arquitetura", title: "System Landscape — VivaLux", content: "Visão completa do ecossistema tecnológico da VivaLux: sistemas externos, camada de integração MuleSoft, produtos Salesforce e a fundação Einstein Trust Layer." },
+          { id: "agentforce-landscape", label: "Agentforce Landscape", title: "Agentforce Landscape — VivaLux", content: "Mapa do ecossistema Agentforce para VivaLux: agentes inteligentes, AI Stack, canais de interação, Customer 360 e Data Cloud." },
+          { id: "assets", label: "Ativos", title: "Ativos da solução", content: "Materiais disponíveis e a serem desenvolvidos para apoiar a conversa com o VivaLux Retail Group." },
+        ],
+      },
+    },
   },
   {
     slug: "grupo-argos",
@@ -1571,5 +1617,41 @@ export const customerDemos: CustomerDemo[] = [
         },
       },
     ],
+    translations: {
+      en: {
+        title: "Cementos Argos — Commercial Intelligence Platform with Agentforce",
+        description: "Strategic account plan articulated in three pillars: Market Share (+15%), High-resolution Segmentation, and Technology Integration. Argos already operates Salesforce — the conversation is about evolution and deepening toward an agentic platform with Agentforce.",
+        industry: "Construction Materials",
+        tabs: [
+          { id: "overview", label: "Overview", title: "Executive summary", content: "Cementos Argos already operates Salesforce — the conversation is about evolution and deepening. This plan articulates 20 initiatives across three strategic pillars: Market Share (+15%), High-resolution Segmentation, and Technology Integration to eliminate silos." },
+          { id: "customer", label: "Client / industry", title: "Client and industry", content: "Production and commercialization of cement, concrete, and aggregates. Headquartered in Medellín, Colombia. SPRINT 4.0 active: EBITDA margins 24-26%, growth and digitalization for 2026-2027." },
+          { id: "context", label: "Context", title: "Challenge context", content: "Discovery sessions revealed an active CRM ecosystem but with critical gaps in three dimensions. Each gap is mapped to one of the three strategic pillars of Cementos Argos." },
+          { id: "objective", label: "Objective", title: "Position Salesforce as the platform that enables Argos's three pillars.", content: "20 initiatives. 3 strategic pillars. One platform that connects technology with business results." },
+          { id: "storytelling", label: "Narrative", title: "Value narrative", content: "The three pillars are not an invented framework: they are the honest diagnosis of the three gaps separating Argos from its next level of performance." },
+          { id: "solution", label: "Solution", title: "Proposed solution", content: "The proposed architecture is a direct response to Argos's three strategic pillars. Each layer of the platform is aligned with at least one pillar, and the integration between layers closes the gaps identified during discovery." },
+          { id: "arquitectura", label: "Architecture", title: "Technical Architecture — Cementos Argos", content: "Full view of the 4-layer solution: contact channels, Salesforce platform (9 products + transversal Agentforce), MuleSoft integration layer (5 bidirectional real-time connectors), and Argos ecosystem external systems. Critical integration gaps are marked with their status and proposed solution." },
+          { id: "outcomes", label: "Results", title: "Expected outcomes", content: "Success KPIs are organized by strategic pillar. Each metric has a documented baseline from discovery sessions, a 6-month target, and a 12-month target." },
+          { id: "historia", label: "Story", title: "Don Hernán's Hardware Store and the Team That Never Sleeps", content: "Hernán Ríos has been running Ferretería El Paisa in Itagüí, Antioquia for years. A class B bulk customer who used to buy 12 to 15 tons of cement per month — until he stopped. This is the story of how Salesforce turned an at-risk customer into the most active distributor of the quarter." },
+          { id: "assets", label: "Assets", title: "Solution assets", content: "Available and to-be-developed materials to support the conversation with Cementos Argos." },
+        ],
+      },
+      pt: {
+        title: "Cementos Argos — Plataforma de Inteligência Comercial com Agentforce",
+        description: "Plano de conta estratégico articulado em três pilares: Market Share (+15%), Segmentação de alta resolução e Integração Tecnológica. A Argos já opera o Salesforce — a conversa é de evolução e aprofundamento em direção a uma plataforma agêntica com Agentforce.",
+        industry: "Materiais de Construção",
+        tabs: [
+          { id: "overview", label: "Overview", title: "Resumo executivo", content: "A Cementos Argos já opera o Salesforce — a conversa é de evolução e aprofundamento. Este plano articula 20 iniciativas em três pilares estratégicos: Market Share (+15%), Segmentação de alta resolução e Integração Tecnológica para eliminar silos." },
+          { id: "customer", label: "Cliente / indústria", title: "Cliente e indústria", content: "Produção e comercialização de cimento, concreto e agregados. Sede em Medellín, Colômbia. SPRINT 4.0 ativo: margens EBITDA 24-26%, crescimento e digitalização para 2026-2027." },
+          { id: "context", label: "Contexto", title: "Contexto do desafio", content: "As sessões de discovery revelaram um ecossistema CRM ativo, mas com lacunas críticas em três dimensões. Cada lacuna está mapeada a um dos três pilares estratégicos da Cementos Argos." },
+          { id: "objective", label: "Objetivo", title: "Posicionar o Salesforce como a plataforma que habilita os três pilares da Argos.", content: "20 iniciativas. 3 pilares estratégicos. Uma plataforma que conecta tecnologia com os resultados do negócio." },
+          { id: "storytelling", label: "Narrativa", title: "Narrativa de valor", content: "Os três pilares não são um framework inventado: são o diagnóstico honesto das três lacunas que separam a Argos do seu próximo nível de desempenho." },
+          { id: "solution", label: "Solução", title: "Solução proposta", content: "A arquitetura proposta é uma resposta direta aos três pilares estratégicos da Argos. Cada camada da plataforma está alinhada com pelo menos um pilar, e a integração entre camadas fecha as lacunas identificadas no processo de discovery." },
+          { id: "arquitectura", label: "Arquitetura", title: "Arquitetura Técnica — Cementos Argos", content: "Visão completa das 4 camadas da solução: canais de contato, plataforma Salesforce (9 produtos + Agentforce transversal), camada de integração MuleSoft (5 conectores bidirecionais em tempo real) e sistemas externos do ecossistema Argos. As lacunas críticas de integração estão marcadas com seu status e solução proposta." },
+          { id: "outcomes", label: "Resultados", title: "Resultados esperados", content: "Os KPIs de sucesso estão organizados por pilar estratégico. Cada métrica tem uma linha de base documentada nas sessões de discovery, uma meta de 6 meses e uma meta de 12 meses." },
+          { id: "historia", label: "História", title: "A Ferreteria do Don Hernán e a Equipe que Nunca Para", content: "Hernán Ríos está à frente da Ferreteria El Paisa em Itagüí, Antioquia há anos. Um cliente classe B que comprava entre 12 e 15 toneladas de cimento por mês — até que parou. Esta é a história de como o Salesforce transformou um cliente em risco de fuga no distribuidor mais ativo do trimestre." },
+          { id: "assets", label: "Ativos", title: "Ativos da solução", content: "Materiais disponíveis e a serem desenvolvidos para apoiar a conversa com a Cementos Argos." },
+        ],
+      },
+    },
   },
 ];

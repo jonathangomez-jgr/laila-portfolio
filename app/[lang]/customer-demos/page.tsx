@@ -41,7 +41,12 @@ export default async function CustomerDemosPage({
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {customerDemos.map((demo) => (
+          {customerDemos.map((demo) => {
+            const i18n = lang === "en" ? demo.translations?.en : lang === "pt" ? demo.translations?.pt : undefined;
+            const title = i18n?.title ?? demo.title;
+            const description = i18n?.description ?? demo.description;
+            const industry = i18n?.industry ?? demo.industry;
+            return (
             <a
               key={demo.slug}
               href={`/${lang}/customer-demos/${demo.slug}`}
@@ -49,7 +54,7 @@ export default async function CustomerDemosPage({
             >
               <div className="mb-6 flex items-start justify-between gap-4">
                 <div>
-                  <p className="eyebrow mb-3">{demo.industry}</p>
+                  <p className="eyebrow mb-3">{industry}</p>
 
                   <h2 className="text-2xl font-semibold text-gray-950">
                     {demo.customerName}
@@ -74,10 +79,10 @@ export default async function CustomerDemosPage({
               </div>
 
               <p className="text-sm font-semibold text-indigo-600">
-                {demo.title}
+                {title}
               </p>
 
-              <p className="mt-4 leading-7 text-gray-600">{demo.description}</p>
+              <p className="mt-4 leading-7 text-gray-600">{description}</p>
 
               <div className="mt-6 flex flex-wrap gap-2">
                 {demo.tags.map((tag) => (
@@ -90,7 +95,8 @@ export default async function CustomerDemosPage({
                 ))}
               </div>
             </a>
-          ))}
+            );
+          })}
         </div>
       </section>
     </main>

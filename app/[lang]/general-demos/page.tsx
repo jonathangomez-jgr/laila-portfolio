@@ -25,16 +25,30 @@ export default async function GeneralDemosPage({
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {generalDemos.filter((demo) => !demo.hidden).map((demo) => (
-            <DemoCard
-              key={demo.slug}
-              title={demo.title}
-              description={demo.description}
-              industries={demo.industries}
-              solutions={demo.solutions}
-              href={`/${lang}/general-demos/${demo.slug}`}
-            />
-          ))}
+          {generalDemos.filter((demo) => !demo.hidden).map((demo) => {
+            const title =
+              lang === "en"
+                ? demo.translations.en.title
+                : lang === "pt"
+                  ? demo.translations.pt.title
+                  : demo.title;
+            const description =
+              lang === "en"
+                ? demo.translations.en.description
+                : lang === "pt"
+                  ? demo.translations.pt.description
+                  : demo.description;
+            return (
+              <DemoCard
+                key={demo.slug}
+                title={title}
+                description={description}
+                industries={demo.industries}
+                solutions={demo.solutions}
+                href={`/${lang}/general-demos/${demo.slug}`}
+              />
+            );
+          })}
         </div>
       </section>
     </main>

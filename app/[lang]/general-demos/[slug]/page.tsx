@@ -26,6 +26,20 @@ export default async function GeneralDemoDetailPage({
   const demo = generalDemos.find((d) => d.slug === slug);
   if (!demo) notFound();
 
+  const title =
+    lang === "en"
+      ? demo.translations.en.title
+      : lang === "pt"
+        ? demo.translations.pt.title
+        : demo.title;
+
+  const description =
+    lang === "en"
+      ? demo.translations.en.description
+      : lang === "pt"
+        ? demo.translations.pt.description
+        : demo.description;
+
   return (
     <main className="mx-auto max-w-4xl px-5 py-12 sm:px-8 sm:py-16">
       <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-gray-500">
@@ -56,10 +70,10 @@ export default async function GeneralDemoDetailPage({
       </div>
 
       <h1 className="mb-6 text-3xl font-bold text-gray-950 sm:text-4xl">
-        {demo.title}
+        {title}
       </h1>
 
-      <p className="mb-10 text-lg leading-8 text-gray-600">{demo.description}</p>
+      <p className="mb-10 text-lg leading-8 text-gray-600">{description}</p>
 
       {demo.videoUrl && (
         <section className="mb-10">
@@ -70,7 +84,7 @@ export default async function GeneralDemoDetailPage({
             <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
               <iframe
                 src={youtubeEmbedUrl(demo.videoUrl)}
-                title={demo.title}
+                title={title}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="absolute inset-0 h-full w-full"

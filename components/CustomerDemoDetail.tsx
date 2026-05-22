@@ -20,13 +20,35 @@ import SolutionLayers from "./SolutionLayers";
 import Link from "next/link";
 import type { CustomerDemo } from "../data/customerDemos";
 import { hasExecutiveDeck } from "../data/executiveDecks";
+import type { Dictionary } from "@/lib/i18n";
 
 type CustomerDemoDetailProps = {
   demo: CustomerDemo;
+  lang: string;
+  dict: Dictionary;
 };
 
-export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
-  const [activeTab, setActiveTab] = useState(demo.tabs[0]);
+function getLocalizedTab(
+  tab: CustomerDemo["tabs"][0],
+  demo: CustomerDemo,
+  lang: string
+) {
+  const i18n = lang === "en" ? demo.translations?.en : lang === "pt" ? demo.translations?.pt : undefined;
+  if (!i18n) return tab;
+  const t = i18n.tabs.find((t) => t.id === tab.id);
+  if (!t) return tab;
+  return { ...tab, label: t.label, title: t.title, content: t.content };
+}
+
+export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDetailProps) {
+  const t = dict.customerDetail;
+
+  const i18n = lang === "en" ? demo.translations?.en : lang === "pt" ? demo.translations?.pt : undefined;
+  const demoTitle = i18n?.title ?? demo.title;
+  const demoDescription = i18n?.description ?? demo.description;
+
+  const localizedTabs = demo.tabs.map((tab) => getLocalizedTab(tab, demo, lang));
+  const [activeTab, setActiveTab] = useState(localizedTabs[0]);
   const [qrOpen, setQrOpen] = useState(false);
 
   return (
@@ -34,24 +56,24 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
       <section className="mx-auto max-w-7xl">
         <div className="mb-10 grid gap-6 lg:grid-cols-[1fr_280px] lg:items-start">
           <div>
-            <p className="eyebrow mb-4">Customer Solution</p>
+            <p className="eyebrow mb-4">{t.eyebrow}</p>
 
             <h1 className="section-title max-w-4xl text-3xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
               {demo.customerName}
             </h1>
 
             <p className="mt-3 text-lg font-semibold text-indigo-600">
-              {demo.title}
+              {demoTitle}
             </p>
 
             <p className="mt-5 max-w-3xl text-lg leading-8 text-gray-600">
-              {demo.description}
+              {demoDescription}
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
               {hasExecutiveDeck(demo.slug) && (
                 <Link
-                  href={`/customer-demos/${demo.slug}/deck/executive`}
+                  href={`/${lang}/customer-demos/${demo.slug}/deck/executive`}
                   className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(95,111,255,0.28)] transition hover:opacity-90"
                 >
                   <svg
@@ -68,7 +90,7 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                       d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
                     />
                   </svg>
-                  Presentación ejecutiva
+                  {t.execDeckBtn}
                 </Link>
               )}
               {demo.tags.map((tag) => (
@@ -111,7 +133,7 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
 
         <div className="glass-card overflow-hidden p-3 md:p-4">
           <div className="flex gap-2 overflow-x-auto rounded-full bg-white/60 p-2">
-            {demo.tabs.map((tab) => {
+            {localizedTabs.map((tab) => {
               const isActive = activeTab.id === tab.id;
 
               return (
@@ -133,10 +155,10 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
 
           <div className="mt-4 grid gap-6 lg:grid-cols-[280px_1fr]">
             <aside className="soft-card hidden p-5 lg:block">
-              <p className="eyebrow mb-4">Demo Structure</p>
+              <p className="eyebrow mb-4">{t.demoStructure}</p>
 
               <div className="space-y-3">
-                {demo.tabs.map((tab, index) => {
+                {localizedTabs.map((tab, index) => {
                   const isActive = activeTab.id === tab.id;
 
                   return (
@@ -267,12 +289,10 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
                 !activeTab.assetsData && (
                   <div className="mt-10 rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-6">
                     <p className="text-sm font-semibold text-indigo-700">
-                      Espacio editable
+                      {t.emptyTabTitle}
                     </p>
                     <p className="mt-2 leading-7 text-gray-600">
-                      Aquí después podemos reemplazar este placeholder por contenido
-                      real: imágenes, bullets, métricas, diagramas, scripts, links,
-                      videos o assets de presentación.
+                      {t.emptyTabDesc}
                     </p>
                   </div>
                 )}
@@ -294,7 +314,7 @@ export default function CustomerDemoDetail({ demo }: CustomerDemoDetailProps) {
               type="button"
               onClick={() => setQrOpen(false)}
               className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition hover:bg-gray-200 hover:text-gray-800"
-              aria-label="Cerrar"
+              aria-label="Close"
             >
               ✕
             </button>

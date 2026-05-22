@@ -4,23 +4,22 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { requestPageAccess } from "../app/actions/request-page-access";
 import { verifyPasscode } from "../app/[lang]/customer-demos/[slug]/actions";
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const ACCESS_REQUEST_ERROR_MESSAGE =
-  "Ups.. algo no salió como lo esperábamos. Vuelve a intentarlo más tarde o puedes mandar un correo a jonathan.gomez@salesforce.com";
+import type { Dictionary } from "@/lib/i18n";
 
 type DemoAccessGateProps = {
   slug: string;
   customerName: string;
   logo?: string;
+  dict: Dictionary;
 };
 
 export default function DemoAccessGate({
   slug,
   customerName,
   logo,
+  dict,
 }: DemoAccessGateProps) {
+  const t = dict.demoAccess;
   const pathname = usePathname();
   const [passcode, setPasscode] = useState("");
   const [email, setEmail] = useState("");
@@ -51,8 +50,9 @@ export default function DemoAccessGate({
     setRequestSuccess(false);
     setRequestError(null);
 
+    const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!EMAIL_PATTERN.test(email.trim())) {
-      setRequestError(ACCESS_REQUEST_ERROR_MESSAGE);
+      setRequestError(t.requestError);
       setRequestLoading(false);
       return;
     }
@@ -83,14 +83,14 @@ export default function DemoAccessGate({
             </div>
           )}
 
-          <p className="eyebrow mb-3 text-center">Acceso restringido</p>
+          <p className="eyebrow mb-3 text-center">{t.restricted}</p>
 
           <h1 className="mb-2 text-center text-2xl font-semibold text-gray-950">
             {customerName}
           </h1>
 
           <p className="mb-8 text-center text-sm leading-6 text-gray-500">
-            Esta demo es privada. Ingresa el código de acceso para continuar.
+            {t.privateDemo}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -98,14 +98,14 @@ export default function DemoAccessGate({
               type="password"
               value={passcode}
               onChange={(e) => setPasscode(e.target.value)}
-              placeholder="Código de acceso"
+              placeholder={t.passcodePlaceholder}
               className="w-full rounded-2xl border border-gray-200 bg-white px-5 py-3 text-sm text-gray-950 outline-none transition placeholder:text-gray-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
               autoFocus
             />
 
             {error && (
               <p className="text-center text-sm font-medium text-red-500">
-                Código incorrecto. Inténtalo de nuevo.
+                {t.wrongCode}
               </p>
             )}
 
@@ -114,7 +114,7 @@ export default function DemoAccessGate({
               disabled={loading || passcode.length === 0}
               className="w-full rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(95,111,255,0.28)] transition hover:opacity-90 disabled:opacity-50"
             >
-              {loading ? "Verificando..." : "Acceder"}
+              {loading ? t.verifying : t.enter}
             </button>
           </form>
 
@@ -123,11 +123,10 @@ export default function DemoAccessGate({
           <div className="space-y-4">
             <div>
               <h2 className="text-center text-lg font-semibold text-gray-950">
-                ¿No tienes código?
+                {t.noCode}
               </h2>
               <p className="mt-2 text-center text-sm leading-6 text-gray-500">
-                Para solicitar un código nuevo, ingresa tu correo electrónico y
-                te contactaremos con el acceso.
+                {t.requestDesc}
               </p>
             </div>
 
@@ -140,14 +139,14 @@ export default function DemoAccessGate({
                   setRequestSuccess(false);
                   setRequestError(null);
                 }}
-                placeholder="Correo electrónico"
+                placeholder={t.emailPlaceholder}
                 className="w-full rounded-2xl border border-gray-200 bg-white px-5 py-3 text-sm text-gray-950 outline-none transition placeholder:text-gray-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
                 autoComplete="email"
               />
 
               {requestSuccess && (
                 <p className="text-center text-sm font-medium text-emerald-600">
-                  Tu acceso ha sido solicitado
+                  {t.requestSuccess}
                 </p>
               )}
 
@@ -162,7 +161,7 @@ export default function DemoAccessGate({
                 disabled={requestLoading || email.trim().length === 0}
                 className="secondary-button w-full px-5 py-3 text-sm font-semibold disabled:opacity-50"
               >
-                {requestLoading ? "Enviando..." : "Solicitar código"}
+                {requestLoading ? t.requestLoading : t.requestBtn}
               </button>
             </form>
           </div>

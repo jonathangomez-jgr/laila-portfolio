@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { hasLocale } from "@/lib/i18n";
+import { hasLocale, getDictionary } from "@/lib/i18n";
 import DemoAccessGate from "@/components/DemoAccessGate";
 import ExecutiveDeckPlayer from "@/components/executive-deck/ExecutiveDeckPlayer";
 import { customerDemos } from "@/data/customerDemos";
@@ -22,6 +22,9 @@ export default async function ExecutiveDeckPage({
 
   if (!hasLocale(lang)) notFound();
 
+  const dict = await getDictionary(lang);
+  const t = dict.customerDetail;
+
   const demo = customerDemos.find((item) => item.slug === slug);
   const deck = getExecutiveDeck(slug, deckSlug);
 
@@ -29,12 +32,12 @@ export default async function ExecutiveDeckPage({
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-950 px-6 text-white">
         <div className="max-w-md text-center">
-          <h1 className="text-2xl font-semibold">Demo no encontrada</h1>
+          <h1 className="text-2xl font-semibold">{t.demoNotFound}</h1>
           <Link
             href={`/${lang}/customer-demos`}
             className="mt-6 inline-block text-indigo-400"
           >
-            Volver a customer demos
+            {t.backToCustomerDemos}
           </Link>
         </div>
       </main>
@@ -45,15 +48,15 @@ export default async function ExecutiveDeckPage({
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-950 px-6 text-white">
         <div className="max-w-md text-center">
-          <h1 className="text-2xl font-semibold">Presentación no encontrada</h1>
+          <h1 className="text-2xl font-semibold">{t.deckNotFound}</h1>
           <p className="mt-3 text-slate-400">
-            No existe un deck configurado para este slug.
+            {t.deckNotFoundDesc}
           </p>
           <Link
             href={`/${lang}/customer-demos/${slug}`}
             className="mt-6 inline-block text-indigo-400"
           >
-            Volver a {demo.customerName}
+            {t.backTo} {demo.customerName}
           </Link>
         </div>
       </main>
@@ -70,6 +73,7 @@ export default async function ExecutiveDeckPage({
         slug={slug}
         customerName={demo.customerName}
         logo={demo.logo}
+        dict={dict}
       />
     );
   }

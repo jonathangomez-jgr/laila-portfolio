@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { hasLocale } from "@/lib/i18n";
+import { hasLocale, getDictionary } from "@/lib/i18n";
 import CustomerDemoDetail from "@/components/CustomerDemoDetail";
 import DemoAccessGate from "@/components/DemoAccessGate";
 import { customerDemos } from "@/data/customerDemos";
@@ -19,21 +19,21 @@ export default async function CustomerDemoPage({
 
   if (!hasLocale(lang)) notFound();
 
+  const dict = await getDictionary(lang);
   const demo = customerDemos.find((item) => item.slug === slug);
 
   if (!demo) {
     return (
       <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
         <section className="mx-auto max-w-4xl">
-          <p className="eyebrow mb-4">Customer Solution</p>
+          <p className="eyebrow mb-4">{dict.customerDetail.eyebrow}</p>
 
           <h1 className="section-title text-5xl font-semibold tracking-tight text-gray-950">
-            Demo not found
+            {dict.customerDetail.demoNotFound}
           </h1>
 
           <p className="mt-5 text-lg leading-8 text-gray-600">
-            No existe un caso configurado para este cliente. Revisa el slug o
-            agrega el caso en el archivo de datos.
+            {dict.customerDetail.demoNotFoundDesc}
           </p>
         </section>
       </main>
@@ -50,9 +50,10 @@ export default async function CustomerDemoPage({
         slug={slug}
         customerName={demo.customerName}
         logo={demo.logo}
+        dict={dict}
       />
     );
   }
 
-  return <CustomerDemoDetail demo={demo} />;
+  return <CustomerDemoDetail demo={demo} lang={lang} dict={dict} />;
 }

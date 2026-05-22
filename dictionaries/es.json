@@ -248,5 +248,33 @@
     "slackSub": "Escanea el QR o toca para abrir el canal",
     "slackBtn": "Visita mi canal →",
     "findMeTitle": "Encuéntrame en"
+  },
+  "demoAccess": {
+    "restricted": "Acceso restringido",
+    "privateDemo": "Esta demo es privada. Ingresa el código de acceso para continuar.",
+    "passcodePlaceholder": "Código de acceso",
+    "wrongCode": "Código incorrecto. Inténtalo de nuevo.",
+    "verifying": "Verificando...",
+    "enter": "Acceder",
+    "noCode": "¿No tienes código?",
+    "requestDesc": "Para solicitar un código nuevo, ingresa tu correo electrónico y te contactaremos con el acceso.",
+    "emailPlaceholder": "Correo electrónico",
+    "requestSuccess": "Tu acceso ha sido solicitado",
+    "requestLoading": "Enviando...",
+    "requestBtn": "Solicitar código",
+    "requestError": "Ups.. algo no salió como lo esperábamos. Vuelve a intentarlo más tarde o puedes mandar un correo a jonathan.gomez@salesforce.com"
+  },
+  "customerDetail": {
+    "eyebrow": "Customer Solution",
+    "execDeckBtn": "Presentación ejecutiva",
+    "demoStructure": "Demo Structure",
+    "emptyTabTitle": "Espacio editable",
+    "emptyTabDesc": "Aquí después podemos reemplazar este placeholder por contenido real: imágenes, bullets, métricas, diagramas, scripts, links, videos o assets de presentación.",
+    "demoNotFound": "Demo no encontrada",
+    "demoNotFoundDesc": "No existe un caso configurado para este cliente. Revisa el slug o agrega el caso en el archivo de datos.",
+    "deckNotFound": "Presentación no encontrada",
+    "deckNotFoundDesc": "No existe un deck configurado para este slug.",
+    "backToCustomerDemos": "Volver a customer demos",
+    "backTo": "Volver a"
   }
 }
