@@ -337,12 +337,12 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
         {/* ── Main ── */}
         <main className="relative z-10 flex flex-1 overflow-hidden">
-          <div className={`${animClass} flex w-full flex-col lg:flex-row lg:items-stretch`}>
+          <div className={`${animClass} flex w-full flex-col overflow-y-auto lg:flex-row lg:items-start lg:overflow-hidden`}>
 
             {/* LEFT — WhatsApp phone frame */}
-            <div className="um-img-wrap flex shrink-0 items-center justify-center p-4 lg:w-[46%] lg:p-6">
+            <div className="um-img-wrap flex shrink-0 items-start justify-center p-4 lg:w-[46%] lg:self-stretch lg:overflow-y-auto lg:p-6">
               <div
-                className="relative flex h-full w-full max-w-[340px] flex-col overflow-hidden rounded-3xl shadow-2xl"
+                className="relative w-full max-w-[300px] overflow-hidden rounded-3xl shadow-2xl sm:max-w-[340px]"
                 style={{
                   background: WA_BG,
                   border: "8px solid #1a1a2e",
@@ -351,7 +351,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
               >
                 {/* WA top bar */}
                 <div
-                  className="flex shrink-0 items-center gap-3 px-3 py-2.5"
+                  className="sticky top-0 z-10 flex shrink-0 items-center gap-3 px-3 py-2.5"
                   style={{ background: `linear-gradient(90deg, ${WA_DARK} 0%, ${WA} 100%)` }}
                 >
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white">
@@ -363,15 +363,15 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                   </div>
                 </div>
 
-                {/* Screenshot */}
-                <div className="um-bubble relative flex-1 overflow-hidden">
+                {/* Screenshot — natural full height, no cropping */}
+                <div className="um-bubble w-full">
                   <Image
                     key={imgSrc}
                     src={imgSrc}
                     alt={`Escena ${scene.n}`}
-                    fill
-                    className="object-cover object-top"
-                    sizes="340px"
+                    width={340}
+                    height={680}
+                    className="h-auto w-full"
                     unoptimized
                     priority
                   />
@@ -392,7 +392,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
             {/* RIGHT — Story timeline */}
             <div
               ref={rightRef}
-              className="um-story flex flex-1 flex-col gap-6 overflow-y-auto px-5 py-4 lg:py-8 lg:pr-8"
+              className="um-story flex flex-1 flex-col gap-6 px-5 py-4 lg:self-stretch lg:overflow-y-auto lg:py-8 lg:pr-8"
             >
               {/* Chapter badge */}
               <div>
