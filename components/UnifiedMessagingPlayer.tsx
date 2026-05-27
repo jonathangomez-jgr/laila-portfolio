@@ -210,16 +210,13 @@ const SCENES = [
 const TOTAL = SCENES.length;
 
 const ANIM_CSS = `
-@keyframes um-slide-up   { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }
-@keyframes um-slide-down { from { opacity:0; transform:translateY(-28px) } to { opacity:1; transform:translateY(0) } }
-@keyframes um-bubble-in  { from { opacity:0; transform:scale(0.88) translateY(12px) } to { opacity:1; transform:scale(1) translateY(0) } }
+@keyframes um-slide-up   { from { opacity:0; transform:translateY(22px) } to { opacity:1; transform:translateY(0) } }
+@keyframes um-slide-down { from { opacity:0; transform:translateY(-22px) } to { opacity:1; transform:translateY(0) } }
 @keyframes um-fade-in    { from { opacity:0 } to { opacity:1 } }
-.um-next  .um-img-wrap { animation: um-slide-up   0.42s cubic-bezier(.22,1,.36,1) both }
-.um-prev  .um-img-wrap { animation: um-slide-down 0.42s cubic-bezier(.22,1,.36,1) both }
-.um-next  .um-story    { animation: um-slide-up   0.45s cubic-bezier(.22,1,.36,1) 0.06s both }
-.um-prev  .um-story    { animation: um-slide-down 0.45s cubic-bezier(.22,1,.36,1) 0.06s both }
-.um-bubble { animation: um-bubble-in 0.35s cubic-bezier(.22,1,.36,1) both }
-.um-solution-reveal { animation: um-fade-in 0.5s ease 0.2s both }
+.um-next .um-story { animation: um-slide-up   0.38s cubic-bezier(.22,1,.36,1) both }
+.um-prev .um-story { animation: um-slide-down 0.38s cubic-bezier(.22,1,.36,1) both }
+.um-solution-reveal { animation: um-fade-in 0.45s ease 0.15s both }
+.um-img-layer { transition: opacity 700ms ease }
 `;
 
 /* ── Groups for the chapter badges ── */
@@ -237,17 +234,30 @@ type Props = { onClose: () => void };
 
 export default function UnifiedMessagingPlayer({ onClose }: Props) {
   const [idx, setIdx] = useState(0);
+  const [prevIdx, setPrevIdx] = useState<number | null>(null);
+  const [imgVisible, setImgVisible] = useState(true);
   const [dir, setDir] = useState<"next" | "prev">("next");
   const rightRef = useRef<HTMLDivElement>(null);
+  const fadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const goTo = useCallback((next: number, d: "next" | "prev") => {
     if (next < 0 || next >= TOTAL) return;
     setDir(d);
-    setIdx(next);
-  }, []);
+    // Start crossfade: show previous image fading out, new image fading in
+    setPrevIdx(idx);
+    setImgVisible(false);
+    if (fadeTimer.current) clearTimeout(fadeTimer.current);
+    fadeTimer.current = setTimeout(() => {
+      setIdx(next);
+      setImgVisible(true);
+      setPrevIdx(null);
+    }, 80); // swap src after 80ms (mid-fade), then fade back in
+  }, [idx]);
 
   const next = useCallback(() => goTo(idx + 1, "next"), [goTo, idx]);
   const prev = useCallback(() => goTo(idx - 1, "prev"), [goTo, idx]);
+
+  useEffect(() => () => { if (fadeTimer.current) clearTimeout(fadeTimer.current); }, []);
 
   useEffect(() => {
     rightRef.current?.scrollTo({ top: 0, behavior: "smooth" });
@@ -281,6 +291,9 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
   const progress = ((idx + 1) / TOTAL) * 100;
   const imgSrc = `/Laila/laila-demos/unified-messaging/w-${String(scene.n).padStart(2, "0")}.PNG`;
   const animClass = `um-${dir}`;
+  // Preload adjacent images so crossfade is instant
+  const nextSrc = idx + 1 < TOTAL ? `/Laila/laila-demos/unified-messaging/w-${String(idx + 2).padStart(2, "0")}.PNG` : null;
+  const prevSrc = idx - 1 >= 0 ? `/Laila/laila-demos/unified-messaging/w-${String(idx).padStart(2, "0")}.PNG` : null;
 
   return (
     <>
@@ -337,59 +350,63 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
         {/* ── Main ── */}
         <main className="relative z-10 flex flex-1 overflow-hidden">
-          <div className={`${animClass} flex w-full flex-col overflow-y-auto lg:flex-row lg:items-start lg:overflow-hidden`}>
 
-            {/* LEFT — WhatsApp phone frame */}
-            <div className="um-img-wrap flex shrink-0 items-start justify-center p-4 lg:w-[46%] lg:self-stretch lg:overflow-y-auto lg:p-6">
+          {/* Hidden preload links for adjacent images */}
+          {nextSrc && <link rel="preload" as="image" href={nextSrc} />}
+          {prevSrc && <link rel="preload" as="image" href={prevSrc} />}
+
+          {/* LEFT — WhatsApp phone (static, never animates) */}
+          <div className="flex shrink-0 items-start justify-center p-4 lg:w-[46%] lg:self-stretch lg:overflow-y-auto lg:p-6">
+            <div
+              className="relative w-full max-w-[300px] overflow-hidden rounded-3xl shadow-2xl sm:max-w-[340px]"
+              style={{
+                background: WA_BG,
+                border: "8px solid #1a1a2e",
+                boxShadow: `0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)`,
+              }}
+            >
+              {/* WA top bar — always visible */}
               <div
-                className="relative w-full max-w-[300px] overflow-hidden rounded-3xl shadow-2xl sm:max-w-[340px]"
-                style={{
-                  background: WA_BG,
-                  border: "8px solid #1a1a2e",
-                  boxShadow: `0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)`,
-                }}
+                className="sticky top-0 z-10 flex shrink-0 items-center gap-3 px-3 py-2.5"
+                style={{ background: `linear-gradient(90deg, ${WA_DARK} 0%, ${WA} 100%)` }}
               >
-                {/* WA top bar */}
-                <div
-                  className="sticky top-0 z-10 flex shrink-0 items-center gap-3 px-3 py-2.5"
-                  style={{ background: `linear-gradient(90deg, ${WA_DARK} 0%, ${WA} 100%)` }}
-                >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white">
-                    SF
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-bold text-white leading-none">Salesforce</p>
-                    <p className="text-[9px] text-white/70 mt-0.5">en línea</p>
-                  </div>
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white">
+                  SF
                 </div>
-
-                {/* Screenshot — natural full height, no cropping */}
-                <div className="um-bubble w-full">
-                  <Image
-                    key={imgSrc}
-                    src={imgSrc}
-                    alt={`Escena ${scene.n}`}
-                    width={340}
-                    height={680}
-                    className="h-auto w-full"
-                    unoptimized
-                    priority
-                  />
-                </div>
-
-                {/* Scene badge */}
-                <div
-                  className="absolute left-3 top-[52px] flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-black text-white shadow-lg"
-                  style={{ background: group.color }}
-                >
-                  <span>{String(scene.n).padStart(2, "0")}</span>
-                  <span className="opacity-60">/</span>
-                  <span className="opacity-60">{TOTAL}</span>
+                <div>
+                  <p className="text-[11px] font-bold text-white leading-none">Salesforce</p>
+                  <p className="text-[9px] text-white/70 mt-0.5">en línea</p>
                 </div>
               </div>
-            </div>
 
-            {/* RIGHT — Story timeline */}
+              {/* Crossfade image layer — no key, only opacity changes */}
+              <div className="relative w-full">
+                <Image
+                  src={imgSrc}
+                  alt={`Escena ${scene.n}`}
+                  width={340}
+                  height={680}
+                  className="um-img-layer h-auto w-full"
+                  style={{ opacity: imgVisible ? 1 : 0 }}
+                  unoptimized
+                  priority
+                />
+              </div>
+
+              {/* Scene badge */}
+              <div
+                className="absolute left-3 top-[52px] flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-black text-white shadow-lg"
+                style={{ background: group.color, transition: "background 600ms ease" }}
+              >
+                <span>{String(scene.n).padStart(2, "0")}</span>
+                <span className="opacity-60">/</span>
+                <span className="opacity-60">{TOTAL}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT — Story (animates on scene change) */}
+          <div className={`${animClass} flex flex-1 flex-col overflow-y-auto lg:overflow-hidden`}>
             <div
               ref={rightRef}
               className="um-story flex flex-1 flex-col gap-6 px-5 py-4 lg:self-stretch lg:overflow-y-auto lg:py-8 lg:pr-8"
