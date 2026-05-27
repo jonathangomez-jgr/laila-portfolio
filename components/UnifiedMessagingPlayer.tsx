@@ -209,7 +209,40 @@ const SCENES = [
   },
 ];
 
-const TOTAL = SCENES.length;
+/* ── Unified slide model ── */
+type WhatsappSlide  = { type: "whatsapp";  n: number; historia: string; solucion: string; tags: string[] };
+type SectionSlide   = { type: "section";   title: string; subtitle: string };
+type WaSectionSlide = { type: "wasection" };
+type ScreenSlide    = { type: "screen";    n: number; src: string };
+type FullImageSlide = { type: "fullimage"; src: string; cover?: boolean };
+type Slide = WhatsappSlide | SectionSlide | WaSectionSlide | ScreenSlide | FullImageSlide;
+
+const BASE = "/Laila/laila-demos/unified-messaging";
+
+const SLIDES: Slide[] = [
+  // ── Intro presentation slides (pp-01 to pp-07) — cover full width
+  ...Array.from({ length: 7 }, (_, i) => ({
+    type: "fullimage" as const,
+    cover: true,
+    src: `${BASE}/pp-${String(i + 1).padStart(2, "0")}.png`,
+  })),
+  // ── WhatsApp story intro slide
+  { type: "wasection" as const },
+  // ── WhatsApp story (w-01 to w-27)
+  ...SCENES.map(s => ({ type: "whatsapp" as const, ...s })),
+  // ── Section divider
+  { type: "section" as const, title: "Under the Hood", subtitle: "Cómo jugar con los registros" },
+  // ── Flow Builder screens (fw-01 to fw-07)
+  ...Array.from({ length: 7 }, (_, i) => ({
+    type: "screen" as const,
+    n: i + 1,
+    src: `${BASE}/fw-${String(i + 1).padStart(2, "0")}.png`,
+  })),
+  // ── Closing slide
+  { type: "fullimage" as const, cover: true, src: `${BASE}/end-thank-you.png` },
+];
+
+const TOTAL = SLIDES.length; // 44
 
 const ANIM_CSS = `
 @keyframes um-slide-up   { from { opacity:0; transform:translateY(22px) } to { opacity:1; transform:translateY(0) } }
@@ -231,15 +264,18 @@ const ANIM_CSS = `
 }
 `;
 
-/* ── Groups for the chapter badges ── */
-const GROUPS: { label: string; from: number; to: number; color: string }[] = [
-  { label: "Actualización de pedido", from: 1, to: 9, color: WA_DARK },
-  { label: "Upgrade de entradas", from: 10, to: 18, color: SF_EB50 },
-  { label: "Búsqueda de loft", from: 19, to: 27, color: "#7C3AED" },
+/* ── Chapter groups — by 0-based slide index ── */
+// pp(0-6) | wasection(7) | wa(8-34) | section(35) | fw(36-42) | end(43)
+const GROUPS: { label: string; fromIdx: number; toIdx: number; color: string }[] = [
+  { label: "Introducción",            fromIdx: 0,  toIdx: 7,  color: SF_EB50  },
+  { label: "Actualización de pedido", fromIdx: 8,  toIdx: 16, color: WA_DARK  },
+  { label: "Upgrade de entradas",     fromIdx: 17, toIdx: 25, color: SF_EB50  },
+  { label: "Búsqueda de loft",        fromIdx: 26, toIdx: 34, color: "#7C3AED" },
+  { label: "Under the Hood",          fromIdx: 35, toIdx: 43, color: SF_CB68  },
 ];
 
-function groupFor(n: number) {
-  return GROUPS.find((g) => n >= g.from && n <= g.to)!;
+function groupForIdx(i: number) {
+  return GROUPS.find((g) => i >= g.fromIdx && i <= g.toIdx) ?? GROUPS[0];
 }
 
 type Props = { onClose: () => void };
@@ -298,14 +334,25 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [next, prev, onClose]);
 
-  const scene = SCENES[idx];
-  const group = groupFor(scene.n);
+  const slide    = SLIDES[idx];
+  const group    = groupForIdx(idx);
   const progress = ((idx + 1) / TOTAL) * 100;
-  const imgSrc = `/Laila/laila-demos/unified-messaging/w-${String(scene.n).padStart(2, "0")}.PNG`;
   const animClass = `um-${dir}`;
-  // Preload adjacent images so crossfade is instant
-  const nextSrc = idx + 1 < TOTAL ? `/Laila/laila-demos/unified-messaging/w-${String(idx + 2).padStart(2, "0")}.PNG` : null;
-  const prevSrc = idx - 1 >= 0 ? `/Laila/laila-demos/unified-messaging/w-${String(idx).padStart(2, "0")}.PNG` : null;
+
+  // For whatsapp slides: crossfade src
+  const waSlide = slide.type === "whatsapp" ? slide : null;
+  const imgSrc  = waSlide ? `${BASE}/w-${String(waSlide.n).padStart(2, "0")}.PNG` : "";
+  // Preload adjacent images
+  const nextSlide = idx + 1 < TOTAL ? SLIDES[idx + 1] : null;
+  const prevSlide = idx - 1 >= 0    ? SLIDES[idx - 1] : null;
+  const nextSrc = nextSlide?.type === "whatsapp"  ? `${BASE}/w-${String(nextSlide.n).padStart(2, "0")}.PNG`
+                : nextSlide?.type === "fullimage" ? nextSlide.src
+                : nextSlide?.type === "screen"    ? nextSlide.src
+                : null;
+  const prevSrc = prevSlide?.type === "whatsapp"  ? `${BASE}/w-${String(prevSlide.n).padStart(2, "0")}.PNG`
+                : prevSlide?.type === "fullimage" ? prevSlide.src
+                : prevSlide?.type === "screen"    ? prevSlide.src
+                : null;
 
   return (
     <>
@@ -366,202 +413,258 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
         {/* ── Main ── */}
         <main className="relative z-10 flex flex-1 overflow-hidden">
 
-          {/* Hidden preload links for adjacent images */}
           {nextSrc && <link rel="preload" as="image" href={nextSrc} />}
           {prevSrc && <link rel="preload" as="image" href={prevSrc} />}
 
-          {/* LEFT — WhatsApp phone (static, never animates) */}
-          <div className="flex shrink-0 items-start justify-center p-4 lg:w-[46%] lg:self-stretch lg:overflow-y-auto lg:p-6">
-            <div
-              className="relative w-full max-w-[300px] overflow-hidden rounded-3xl sm:max-w-[340px]"
-              style={{
-                background: WA_BG,
-                boxShadow: `0 24px 64px rgba(0,0,0,0.5)`,
-              }}
-            >
-              {/* WA top bar — always visible */}
-              <div
-                className="sticky top-0 z-10 flex shrink-0 items-center gap-3 px-3 py-2.5"
-                style={{ background: `linear-gradient(90deg, ${WA_DARK} 0%, ${WA} 100%)` }}
-              >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white">
-                  SF
-                </div>
-                <div>
-                  <p className="text-[11px] font-bold text-white leading-none">Salesforce</p>
-                  <p className="text-[9px] text-white/70 mt-0.5">en línea</p>
-                </div>
-              </div>
-
-              {/* Crossfade image layer — no key, only opacity changes */}
-              <div className="relative w-full">
-                <Image
-                  src={imgSrc}
-                  alt={`Escena ${scene.n}`}
-                  width={340}
-                  height={680}
-                  className="um-img-layer h-auto w-full"
-                  style={{ opacity: imgVisible ? 1 : 0 }}
-                  unoptimized
-                  priority
-                />
-              </div>
-
+          {/* ── FULLIMAGE slide — cover=true fills full width, default contains ── */}
+          {slide.type === "fullimage" && (
+            <div className={`${animClass} um-story relative flex w-full items-center justify-center overflow-hidden`}>
+              <Image
+                key={slide.src}
+                src={slide.src}
+                alt=""
+                fill
+                className={slide.cover ? "object-cover object-center" : "object-contain"}
+                unoptimized
+                priority
+              />
             </div>
-          </div>
+          )}
 
-          {/* RIGHT — Story (animates on scene change) */}
-          <div className={`${animClass} flex flex-1 flex-col overflow-y-auto lg:overflow-hidden`}>
-            <div
-              ref={rightRef}
-              className="um-story flex flex-1 flex-col gap-6 px-5 py-5 lg:self-stretch lg:overflow-y-auto lg:py-10 lg:pr-10"
-            >
-              {/* Chapter badge */}
-              <div>
-                <span
-                  className="rounded-full px-3.5 py-1.5 text-xs font-bold uppercase tracking-widest text-white"
-                  style={{ background: group.color }}
-                >
-                  {group.label}
-                </span>
+          {/* ── WASECTION slide — WhatsApp chapter intro ── */}
+          {slide.type === "wasection" && (
+            <div className={`${animClass} um-story flex w-full flex-col items-center justify-center gap-7 px-8 text-center`}>
+              {/* WhatsApp logo large */}
+              <div
+                className="flex h-24 w-24 items-center justify-center rounded-[28px] shadow-2xl"
+                style={{ background: `linear-gradient(135deg, ${WA_DARK} 0%, ${WA} 100%)`, boxShadow: `0 20px 60px ${WA}55` }}
+              >
+                <svg viewBox="0 0 24 24" fill="white" className="h-14 w-14" aria-hidden>
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
               </div>
 
-              {/* Scene heading */}
-              <div className="border-l-2 pl-4" style={{ borderColor: `${group.color}80` }}>
-                <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/40">
-                  Escena {String(scene.n).padStart(2, "0")} · {String(idx + 1).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}
-                </p>
-                <h2
-                  className="mt-2 font-black leading-snug text-white"
-                  style={{ fontSize: "clamp(1.3rem, 2.5vw, 1.9rem)" }}
-                >
-                  {scene.historia}
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/40">Salesforce · Unified Messaging</p>
+                <h2 className="mt-3 font-black text-white" style={{ fontSize: "clamp(3rem, 7.5vw, 5.8rem)", lineHeight: 1.0 }}>
+                  Soft Handoff
                 </h2>
               </div>
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
-                {scene.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="rounded-full px-3 py-1 text-xs font-semibold"
-                    style={{
-                      backgroundColor: "rgba(255,255,255,0.12)",
-                      color: "rgba(255,255,255,0.80)",
-                      border: "1px solid rgba(255,255,255,0.20)",
-                    }}
-                  >
-                    {t}
-                  </span>
-                ))}
+              {/* Subtitle with inline WA pill */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex items-center gap-2 rounded-full px-4 py-2" style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.18)" }}>
+                  <svg viewBox="0 0 24 24" fill={WA} className="h-4 w-4 shrink-0" aria-hidden>
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  <span className="text-base font-semibold text-white/80">WhatsApp</span>
+                </div>
+                <p className="text-lg font-semibold text-white/55">Cada participante como si fuera el único</p>
               </div>
 
-              {/* Timeline connector */}
-              <div className="flex items-stretch gap-4">
-                <div className="flex flex-col items-center">
-                  <div
-                    className="h-3.5 w-3.5 rounded-full shadow-md"
-                    style={{ backgroundColor: group.color, boxShadow: `0 0 10px ${group.color}80` }}
-                  />
-                  <div className="flex-1 w-px" style={{ background: `linear-gradient(to bottom, ${group.color}70, transparent)` }} />
-                </div>
-
-                <div className="flex-1 pb-4">
-                  <p className="text-xs font-bold uppercase tracking-widest mb-3 text-white/50">
-                    Qué ocurre
-                  </p>
-
-                  {/* Solution box */}
-                  {scene.solucion ? (
-                    <div
-                      className="um-solution-reveal rounded-2xl p-5"
-                      style={{
-                        background: "rgba(255,255,255,0.10)",
-                        backdropFilter: "blur(16px)",
-                        borderBottom: `3px solid ${group.color}`,
-                        border: "1px solid rgba(255,255,255,0.15)",
-                        borderBottomWidth: "3px",
-                        borderBottomColor: group.color,
-                      }}
-                    >
-                      <div className="flex items-start gap-4">
-                        <div
-                          className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                          style={{ backgroundColor: `${group.color}25`, border: `1px solid ${group.color}40` }}
-                        >
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke={group.color} strokeWidth={2} aria-hidden>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: group.color }}>
-                            Solución Técnica
-                          </p>
-                          <p className="text-[15px] font-medium leading-7 text-white/90">
-                            {scene.solucion}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div
-                      className="um-solution-reveal rounded-2xl p-5"
-                      style={{
-                        background: "rgba(255,255,255,0.05)",
-                        border: "1px solid rgba(255,255,255,0.10)",
-                      }}
-                    >
-                      <p className="text-sm italic text-white/30">
-                        Interacción del cliente — sin lógica adicional del sistema.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Timeline — mini scene list */}
-              <div
-                className="rounded-2xl p-5"
-                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.10)" }}
-              >
-                <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-white/30">
-                  Progreso de la historia
-                </p>
-                <div className="flex flex-col gap-2">
-                  {GROUPS.map((g) => {
-                    const active = scene.n >= g.from && scene.n <= g.to;
-                    const done = scene.n > g.to;
-                    const pct = active
-                      ? ((scene.n - g.from) / (g.to - g.from + 1)) * 100
-                      : done ? 100 : 0;
-                    return (
-                      <div key={g.label} className="flex items-center gap-2.5">
-                        <div
-                          className="h-2 w-2 rounded-full shrink-0"
-                          style={{ backgroundColor: active ? g.color : done ? `${g.color}80` : "rgba(255,255,255,0.18)" }}
-                        />
-                        <p
-                          className="w-36 shrink-0 text-[11px] font-semibold"
-                          style={{ color: active ? "rgba(255,255,255,0.90)" : done ? "rgba(255,255,255,0.40)" : "rgba(255,255,255,0.22)" }}
-                        >
-                          {g.label}
-                        </p>
-                        <div className="flex-1 rounded-full overflow-hidden" style={{ height: "3px", backgroundColor: "rgba(255,255,255,0.12)" }}>
-                          <div
-                            className="h-full rounded-full transition-all duration-500"
-                            style={{ width: `${pct}%`, backgroundColor: g.color }}
-                          />
-                        </div>
-                        <p className="text-[10px] tabular-nums text-white/25">{g.from}–{g.to}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="h-4 shrink-0" />
+              <p className="mt-2 text-[11px] text-white/22">← → Navegar · Esc Cerrar</p>
             </div>
-          </div>
+          )}
+
+          {/* ── SECTION slide ── */}
+          {slide.type === "section" && (
+            <div className={`${animClass} um-story flex w-full flex-col items-center justify-center gap-6 px-8 text-center`}>
+              <div
+                className="flex h-16 w-16 items-center justify-center rounded-2xl"
+                style={{ background: `linear-gradient(135deg, ${SF_CB68} 0%, ${SF_EB50} 100%)`, boxShadow: `0 12px 40px ${SF_EB50}55` }}
+              >
+                {/* code icon */}
+                <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+              </div>
+              <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/40">Salesforce · Unified Messaging</p>
+              <h2 className="font-black text-white" style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)", lineHeight: 1.05 }}>
+                {slide.title}
+              </h2>
+              <p className="text-lg font-semibold text-white/60 sm:text-xl">{slide.subtitle}</p>
+              <p className="mt-2 text-[11px] text-white/22">← → Navegar · Esc Cerrar</p>
+            </div>
+          )}
+
+          {/* ── SCREEN slide ── */}
+          {slide.type === "screen" && (
+            <div className={`${animClass} um-story flex w-full flex-col items-center justify-start overflow-y-auto p-4 lg:p-6`}>
+              {/* Monitor frame */}
+              <div className="w-full max-w-5xl">
+                {/* Browser chrome bar */}
+                <div
+                  className="flex items-center gap-2 rounded-t-xl px-4 py-2.5"
+                  style={{ background: "rgba(0,0,0,0.50)" }}
+                >
+                  <span className="h-3 w-3 rounded-full bg-red-500/80" />
+                  <span className="h-3 w-3 rounded-full bg-yellow-400/80" />
+                  <span className="h-3 w-3 rounded-full bg-green-400/80" />
+                  <div
+                    className="ml-3 flex flex-1 items-center rounded-md px-3 py-1 text-[11px] text-white/30"
+                    style={{ background: "rgba(255,255,255,0.07)" }}
+                  >
+                    salesforce.com · Flow Builder
+                  </div>
+                  <span className="text-[10px] font-semibold text-white/30">
+                    {String(slide.n).padStart(2, "0")} / 07
+                  </span>
+                </div>
+                {/* Screen content */}
+                <div
+                  className="overflow-hidden rounded-b-xl"
+                  style={{ boxShadow: "0 32px 80px rgba(0,0,0,0.55)" }}
+                >
+                  <Image
+                    key={slide.src}
+                    src={slide.src}
+                    alt={`Flow Builder ${slide.n}`}
+                    width={1280}
+                    height={800}
+                    className="h-auto w-full"
+                    unoptimized
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── WHATSAPP slide ── */}
+          {slide.type === "whatsapp" && (
+            <>
+              {/* LEFT — WhatsApp phone (static) */}
+              <div className="flex shrink-0 items-start justify-center p-4 lg:w-[46%] lg:self-stretch lg:overflow-y-auto lg:p-6">
+                <div
+                  className="relative w-full max-w-[300px] overflow-hidden rounded-3xl sm:max-w-[340px]"
+                  style={{ background: WA_BG, boxShadow: "0 24px 64px rgba(0,0,0,0.5)" }}
+                >
+                  <div
+                    className="sticky top-0 z-10 flex shrink-0 items-center gap-3 px-3 py-2.5"
+                    style={{ background: `linear-gradient(90deg, ${WA_DARK} 0%, ${WA} 100%)` }}
+                  >
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white">SF</div>
+                    <div>
+                      <p className="text-[11px] font-bold text-white leading-none">Salesforce</p>
+                      <p className="text-[9px] text-white/70 mt-0.5">en línea</p>
+                    </div>
+                  </div>
+                  <div className="relative w-full">
+                    <Image
+                      src={imgSrc}
+                      alt={`Escena ${slide.n}`}
+                      width={340}
+                      height={680}
+                      className="um-img-layer h-auto w-full"
+                      style={{ opacity: imgVisible ? 1 : 0 }}
+                      unoptimized
+                      priority
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* RIGHT — Story */}
+              <div className={`${animClass} flex flex-1 flex-col overflow-y-auto lg:overflow-hidden`}>
+                <div
+                  ref={rightRef}
+                  className="um-story flex flex-1 flex-col gap-6 px-5 py-5 lg:self-stretch lg:overflow-y-auto lg:py-10 lg:pr-10"
+                >
+                  <div>
+                    <span
+                      className="rounded-full px-3.5 py-1.5 text-xs font-bold uppercase tracking-widest text-white"
+                      style={{ background: group.color }}
+                    >
+                      {group.label}
+                    </span>
+                  </div>
+
+                  <div className="border-l-2 pl-4" style={{ borderColor: `${group.color}80` }}>
+                    <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/40">
+                      Escena {String(slide.n).padStart(2, "0")} · {String(idx + 1).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}
+                    </p>
+                    <h2 className="mt-2 font-black leading-snug text-white" style={{ fontSize: "clamp(1.3rem, 2.5vw, 1.9rem)" }}>
+                      {slide.historia}
+                    </h2>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {slide.tags.map((t) => (
+                      <span key={t} className="rounded-full px-3 py-1 text-xs font-semibold"
+                        style={{ backgroundColor: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.80)", border: "1px solid rgba(255,255,255,0.20)" }}>
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex items-stretch gap-4">
+                    <div className="flex flex-col items-center">
+                      <div className="h-3.5 w-3.5 rounded-full shadow-md"
+                        style={{ backgroundColor: group.color, boxShadow: `0 0 10px ${group.color}80` }} />
+                      <div className="flex-1 w-px" style={{ background: `linear-gradient(to bottom, ${group.color}70, transparent)` }} />
+                    </div>
+                    <div className="flex-1 pb-4">
+                      <p className="text-xs font-bold uppercase tracking-widest mb-3 text-white/50">Qué ocurre</p>
+                      {slide.solucion ? (
+                        <div className="um-solution-reveal rounded-2xl p-5"
+                          style={{
+                            background: "rgba(255,255,255,0.10)",
+                            backdropFilter: "blur(16px)",
+                            border: "1px solid rgba(255,255,255,0.15)",
+                            borderBottomWidth: "3px",
+                            borderBottomColor: group.color,
+                          }}>
+                          <div className="flex items-start gap-4">
+                            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                              style={{ backgroundColor: `${group.color}25`, border: `1px solid ${group.color}40` }}>
+                              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke={group.color} strokeWidth={2} aria-hidden>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: group.color }}>Solución Técnica</p>
+                              <p className="text-[15px] font-medium leading-7 text-white/90">{slide.solucion}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="um-solution-reveal rounded-2xl p-5"
+                          style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)" }}>
+                          <p className="text-sm italic text-white/30">Interacción del cliente — sin lógica adicional del sistema.</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.10)" }}>
+                    <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-white/30">Progreso</p>
+                    <div className="flex flex-col gap-2">
+                      {GROUPS.map((g) => {
+                        const active = idx >= g.fromIdx && idx <= g.toIdx;
+                        const done   = idx > g.toIdx;
+                        const pct    = active ? ((idx - g.fromIdx) / (g.toIdx - g.fromIdx + 1)) * 100 : done ? 100 : 0;
+                        return (
+                          <div key={g.label} className="flex items-center gap-2.5">
+                            <div className="h-2 w-2 rounded-full shrink-0"
+                              style={{ backgroundColor: active ? g.color : done ? `${g.color}80` : "rgba(255,255,255,0.18)" }} />
+                            <p className="w-36 shrink-0 text-[11px] font-semibold"
+                              style={{ color: active ? "rgba(255,255,255,0.90)" : done ? "rgba(255,255,255,0.40)" : "rgba(255,255,255,0.22)" }}>
+                              {g.label}
+                            </p>
+                            <div className="flex-1 rounded-full overflow-hidden" style={{ height: "3px", backgroundColor: "rgba(255,255,255,0.12)" }}>
+                              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, backgroundColor: g.color }} />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="h-4 shrink-0" />
+                </div>
+              </div>
+            </>
+          )}
         </main>
 
         {/* ── Footer ── */}
@@ -589,16 +692,16 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
               </div>
 
               {/* Dot nav — grouped */}
-              <div className="flex items-center gap-1" role="tablist" aria-label="Escenas">
-                {SCENES.map((s, i) => {
-                  const g = groupFor(s.n);
+              <div className="flex items-center gap-1" role="tablist" aria-label="Slides">
+                {SLIDES.map((_, i) => {
+                  const g = groupForIdx(i);
                   return (
                     <button
                       key={i}
                       type="button"
                       role="tab"
                       aria-selected={idx === i}
-                      aria-label={`Ir a escena ${i + 1}`}
+                      aria-label={`Ir a slide ${i + 1}`}
                       onClick={() => goTo(i, i > idx ? "next" : "prev")}
                       className="rounded-full transition-all duration-300 focus:outline-none"
                       style={{
