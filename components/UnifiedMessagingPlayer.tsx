@@ -393,15 +393,6 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                 />
               </div>
 
-              {/* Scene badge */}
-              <div
-                className="absolute left-3 top-[52px] flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-black text-white shadow-lg"
-                style={{ background: group.color, transition: "background 600ms ease" }}
-              >
-                <span>{String(scene.n).padStart(2, "0")}</span>
-                <span className="opacity-60">/</span>
-                <span className="opacity-60">{TOTAL}</span>
-              </div>
             </div>
           </div>
 
