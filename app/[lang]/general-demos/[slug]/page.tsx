@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "@/lib/i18n";
 import { generalDemos } from "@/data/generalDemos";
+import UnifiedMessagingStoryButton from "@/components/UnifiedMessagingStoryButton";
 
 function youtubeEmbedUrl(url: string): string {
   const match = url.match(/(?:youtu\.be\/|watch\?v=)([\w-]+)/);
@@ -74,6 +75,25 @@ export default async function GeneralDemoDetailPage({
       </h1>
 
       <p className="mb-10 text-lg leading-8 text-gray-600">{description}</p>
+
+      {slug === "soft-transitions-unified-messaging" && (
+        <section className="mb-10">
+          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-[#001E5B] to-[#0a1a40] p-8 shadow-lg sm:p-10">
+            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/40">Historia Interactiva</p>
+                <h2 className="mt-1.5 text-xl font-black text-white sm:text-2xl">
+                  Maria Clara &amp; Soft Transitions
+                </h2>
+                <p className="mt-1 text-sm text-white/55">
+                  27 escenas · 3 capítulos · Navegación con teclado
+                </p>
+              </div>
+              <UnifiedMessagingStoryButton />
+            </div>
+          </div>
+        </section>
+      )}
 
       {demo.videoUrl && (
         <section className="mb-10">
