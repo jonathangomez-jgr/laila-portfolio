@@ -8,8 +8,10 @@ const WA = "#25D366";
 const WA_DARK = "#128C7E";
 const WA_BG = "#ECE5DD";
 const SF_EB15 = "#001E5B";
+const SF_EB30 = "#022AC0";
 const SF_EB50 = "#066AFE";
 const SF_CB68 = "#00B3FF";
+const SF_CB90 = "#CFE9FE"; /* Cloud Blue 90 — light background */
 
 const SCENES = [
   {
@@ -217,6 +219,16 @@ const ANIM_CSS = `
 .um-prev .um-story { animation: um-slide-down 0.38s cubic-bezier(.22,1,.36,1) both }
 .um-solution-reveal { animation: um-fade-in 0.45s ease 0.15s both }
 .um-img-layer { transition: opacity 700ms ease }
+.um-blob-a {
+  position:absolute; border-radius:50%; pointer-events:none;
+  top:-10%; left:-8%; width:45%; height:45%;
+  background:rgba(0,179,255,0.22); filter:blur(90px);
+}
+.um-blob-b {
+  position:absolute; border-radius:50%; pointer-events:none;
+  bottom:-15%; right:-5%; width:35%; height:35%;
+  background:rgba(6,106,254,0.28); filter:blur(90px);
+}
 `;
 
 /* ── Groups for the chapter badges ── */
@@ -301,15 +313,19 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
       <div
         className="fixed inset-0 z-50 flex flex-col"
-        style={{ background: `linear-gradient(160deg, ${SF_EB15} 0%, #0a1a40 100%)` }}
+        style={{ background: `linear-gradient(150deg, ${SF_EB50} 0%, ${SF_EB30} 45%, ${SF_EB15} 100%)` }}
         role="dialog"
         aria-modal="true"
         aria-label="Historia: Soft Transitions with Unified Messaging"
       >
+        {/* Ambient globs */}
+        <div className="um-blob-a" aria-hidden />
+        <div className="um-blob-b" aria-hidden />
+
         {/* ── Top bar ── */}
         <header
           className="relative z-10 flex shrink-0 items-center justify-between px-5 py-2.5 sm:px-7"
-          style={{ borderBottom: "1px solid rgba(255,255,255,0.07)", backgroundColor: "rgba(0,0,0,0.18)" }}
+          style={{ borderBottom: "1px solid rgba(255,255,255,0.10)", backgroundColor: "rgba(0,0,0,0.15)" }}
         >
           <div className="flex items-center gap-3">
             <Image
@@ -332,8 +348,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
           </div>
 
           <span
-            className="hidden text-[11px] font-semibold sm:block"
-            style={{ color: "rgba(255,255,255,0.35)" }}
+            className="hidden text-[11px] font-semibold sm:block text-white/50"
           >
             {group.label}
           </span>
@@ -341,7 +356,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white/40 transition hover:text-white/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white/45 transition hover:text-white/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
             aria-label="Cerrar"
           >
             ✕
@@ -358,11 +373,10 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
           {/* LEFT — WhatsApp phone (static, never animates) */}
           <div className="flex shrink-0 items-start justify-center p-4 lg:w-[46%] lg:self-stretch lg:overflow-y-auto lg:p-6">
             <div
-              className="relative w-full max-w-[300px] overflow-hidden rounded-3xl shadow-2xl sm:max-w-[340px]"
+              className="relative w-full max-w-[300px] overflow-hidden rounded-3xl sm:max-w-[340px]"
               style={{
                 background: WA_BG,
-                border: "8px solid #1a1a2e",
-                boxShadow: `0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)`,
+                boxShadow: `0 24px 64px rgba(0,0,0,0.5)`,
               }}
             >
               {/* WA top bar — always visible */}
@@ -400,12 +414,12 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
           <div className={`${animClass} flex flex-1 flex-col overflow-y-auto lg:overflow-hidden`}>
             <div
               ref={rightRef}
-              className="um-story flex flex-1 flex-col gap-6 px-5 py-4 lg:self-stretch lg:overflow-y-auto lg:py-8 lg:pr-8"
+              className="um-story flex flex-1 flex-col gap-6 px-5 py-5 lg:self-stretch lg:overflow-y-auto lg:py-10 lg:pr-10"
             >
               {/* Chapter badge */}
               <div>
                 <span
-                  className="rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white"
+                  className="rounded-full px-3.5 py-1.5 text-xs font-bold uppercase tracking-widest text-white"
                   style={{ background: group.color }}
                 >
                   {group.label}
@@ -413,28 +427,28 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
               </div>
 
               {/* Scene heading */}
-              <div className="border-l-2 pl-4" style={{ borderColor: `${WA}60` }}>
-                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/35">
+              <div className="border-l-2 pl-4" style={{ borderColor: `${group.color}80` }}>
+                <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/40">
                   Escena {String(scene.n).padStart(2, "0")} · {String(idx + 1).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}
                 </p>
                 <h2
                   className="mt-2 font-black leading-snug text-white"
-                  style={{ fontSize: "clamp(1.15rem, 2.2vw, 1.6rem)" }}
+                  style={{ fontSize: "clamp(1.3rem, 2.5vw, 1.9rem)" }}
                 >
                   {scene.historia}
                 </h2>
               </div>
 
               {/* Tags */}
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {scene.tags.map((t) => (
                   <span
                     key={t}
-                    className="rounded-full px-2.5 py-1 text-[10px] font-semibold"
+                    className="rounded-full px-3 py-1 text-xs font-semibold"
                     style={{
-                      backgroundColor: `${SF_CB68}15`,
-                      color: SF_CB68,
-                      border: `1px solid ${SF_CB68}30`,
+                      backgroundColor: "rgba(255,255,255,0.12)",
+                      color: "rgba(255,255,255,0.80)",
+                      border: "1px solid rgba(255,255,255,0.20)",
                     }}
                   >
                     {t}
@@ -446,40 +460,44 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
               <div className="flex items-stretch gap-4">
                 <div className="flex flex-col items-center">
                   <div
-                    className="h-3 w-3 rounded-full shadow-md"
-                    style={{ backgroundColor: WA, boxShadow: `0 0 8px ${WA}80` }}
+                    className="h-3.5 w-3.5 rounded-full shadow-md"
+                    style={{ backgroundColor: group.color, boxShadow: `0 0 10px ${group.color}80` }}
                   />
-                  <div className="flex-1 w-px" style={{ background: `linear-gradient(to bottom, ${WA}50, transparent)` }} />
+                  <div className="flex-1 w-px" style={{ background: `linear-gradient(to bottom, ${group.color}70, transparent)` }} />
                 </div>
 
                 <div className="flex-1 pb-4">
-                  <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: WA }}>
+                  <p className="text-xs font-bold uppercase tracking-widest mb-3 text-white/50">
                     Qué ocurre
                   </p>
 
                   {/* Solution box */}
                   {scene.solucion ? (
                     <div
-                      className="um-solution-reveal rounded-2xl p-4"
+                      className="um-solution-reveal rounded-2xl p-5"
                       style={{
-                        background: `linear-gradient(135deg, rgba(37,211,102,0.08) 0%, rgba(6,106,254,0.06) 100%)`,
-                        border: `1px solid ${WA}30`,
+                        background: "rgba(255,255,255,0.10)",
+                        backdropFilter: "blur(16px)",
+                        borderBottom: `3px solid ${group.color}`,
+                        border: "1px solid rgba(255,255,255,0.15)",
+                        borderBottomWidth: "3px",
+                        borderBottomColor: group.color,
                       }}
                     >
-                      <div className="flex items-start gap-3">
+                      <div className="flex items-start gap-4">
                         <div
-                          className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg"
-                          style={{ backgroundColor: `${WA}25` }}
+                          className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                          style={{ backgroundColor: `${group.color}25`, border: `1px solid ${group.color}40` }}
                         >
-                          <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke={WA} strokeWidth={2.5} aria-hidden>
+                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke={group.color} strokeWidth={2} aria-hidden>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                           </svg>
                         </div>
                         <div>
-                          <p className="mb-1 text-[9px] font-bold uppercase tracking-widest" style={{ color: WA }}>
+                          <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: group.color }}>
                             Solución Técnica
                           </p>
-                          <p className="text-sm font-medium leading-6 text-white/80">
+                          <p className="text-[15px] font-medium leading-7 text-white/90">
                             {scene.solucion}
                           </p>
                         </div>
@@ -487,13 +505,13 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                     </div>
                   ) : (
                     <div
-                      className="um-solution-reveal rounded-2xl p-4"
+                      className="um-solution-reveal rounded-2xl p-5"
                       style={{
-                        background: "rgba(255,255,255,0.03)",
-                        border: "1px solid rgba(255,255,255,0.07)",
+                        background: "rgba(255,255,255,0.05)",
+                        border: "1px solid rgba(255,255,255,0.10)",
                       }}
                     >
-                      <p className="text-xs text-white/30 italic">
+                      <p className="text-sm italic text-white/30">
                         Interacción del cliente — sin lógica adicional del sistema.
                       </p>
                     </div>
@@ -503,13 +521,13 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
               {/* Timeline — mini scene list */}
               <div
-                className="rounded-2xl p-4"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
+                className="rounded-2xl p-5"
+                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.10)" }}
               >
-                <p className="mb-3 text-[9px] font-bold uppercase tracking-widest text-white/25">
+                <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-white/30">
                   Progreso de la historia
                 </p>
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-2">
                   {GROUPS.map((g) => {
                     const active = scene.n >= g.from && scene.n <= g.to;
                     const done = scene.n > g.to;
@@ -519,22 +537,22 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                     return (
                       <div key={g.label} className="flex items-center gap-2.5">
                         <div
-                          className="h-1.5 w-1.5 rounded-full shrink-0"
-                          style={{ backgroundColor: active ? g.color : done ? g.color : "rgba(255,255,255,0.12)" }}
+                          className="h-2 w-2 rounded-full shrink-0"
+                          style={{ backgroundColor: active ? g.color : done ? `${g.color}80` : "rgba(255,255,255,0.18)" }}
                         />
                         <p
-                          className="w-36 shrink-0 text-[10px] font-semibold"
-                          style={{ color: active ? "rgba(255,255,255,0.8)" : done ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.18)" }}
+                          className="w-36 shrink-0 text-[11px] font-semibold"
+                          style={{ color: active ? "rgba(255,255,255,0.90)" : done ? "rgba(255,255,255,0.40)" : "rgba(255,255,255,0.22)" }}
                         >
                           {g.label}
                         </p>
-                        <div className="flex-1 rounded-full overflow-hidden" style={{ height: "3px", backgroundColor: "rgba(255,255,255,0.08)" }}>
+                        <div className="flex-1 rounded-full overflow-hidden" style={{ height: "3px", backgroundColor: "rgba(255,255,255,0.12)" }}>
                           <div
                             className="h-full rounded-full transition-all duration-500"
                             style={{ width: `${pct}%`, backgroundColor: g.color }}
                           />
                         </div>
-                        <p className="text-[9px] text-white/20 tabular-nums">{g.from}–{g.to}</p>
+                        <p className="text-[10px] tabular-nums text-white/25">{g.from}–{g.to}</p>
                       </div>
                     );
                   })}
@@ -549,7 +567,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
         {/* ── Footer ── */}
         <footer
           className="relative z-10 shrink-0 px-4 py-3 sm:px-6"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.07)", backgroundColor: "rgba(0,0,0,0.22)" }}
+          style={{ borderTop: "1px solid rgba(255,255,255,0.10)", backgroundColor: "rgba(0,0,0,0.18)" }}
         >
           <div className="flex items-center gap-3 sm:gap-4">
             <button
@@ -557,16 +575,16 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
               onClick={prev}
               disabled={idx === 0}
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-bold text-white/60 transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
-              style={{ borderColor: "rgba(255,255,255,0.18)" }}
+              style={{ borderColor: "rgba(255,255,255,0.20)" }}
               aria-label="Escena anterior"
             >←</button>
 
             <div className="flex flex-1 flex-col items-center gap-2.5">
               {/* Progress bar */}
-              <div className="h-[3px] w-full overflow-hidden rounded-full bg-white/10">
+              <div className="h-[3px] w-full overflow-hidden rounded-full bg-white/12">
                 <div
                   className="h-full rounded-full transition-all duration-500"
-                  style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${WA} 0%, ${SF_EB50} 100%)` }}
+                  style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${group.color} 0%, ${SF_EB50} 100%)` }}
                 />
               </div>
 
@@ -586,7 +604,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                       style={{
                         width: idx === i ? "18px" : "5px",
                         height: "5px",
-                        backgroundColor: idx === i ? g.color : i < idx ? `${g.color}55` : "rgba(255,255,255,0.15)",
+                        backgroundColor: idx === i ? g.color : i < idx ? `${g.color}60` : "rgba(255,255,255,0.18)",
                       }}
                     />
                   );
@@ -603,12 +621,12 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
               onClick={next}
               disabled={idx === TOTAL - 1}
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-bold text-white/60 transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
-              style={{ borderColor: "rgba(255,255,255,0.18)" }}
+              style={{ borderColor: "rgba(255,255,255,0.20)" }}
               aria-label="Escena siguiente"
             >→</button>
           </div>
 
-          <p className="mt-1.5 text-center text-[10px] text-white/20">
+          <p className="mt-1.5 text-center text-[10px] text-white/22">
             ← → Navegar · Esc Cerrar · F Pantalla completa
           </p>
         </footer>
