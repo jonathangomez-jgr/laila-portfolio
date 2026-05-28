@@ -379,7 +379,10 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
       <div
         className="fixed inset-0 z-50 flex flex-col"
-        style={{ background: `linear-gradient(150deg, ${SF_EB50} 0%, ${SF_EB30} 45%, ${SF_EB15} 100%)` }}
+        style={{
+          background: `linear-gradient(150deg, ${SF_EB50} 0%, ${SF_EB30} 45%, ${SF_EB15} 100%)`,
+          touchAction: "pan-y",
+        }}
         role="dialog"
         aria-modal="true"
         aria-label="Historia: Soft Transitions with Unified Messaging"
@@ -430,20 +433,21 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
         </header>
 
         {/* ── Main ── */}
-        <main className="relative z-10 flex flex-1 overflow-hidden">
+        <main className="relative z-10 flex-1 overflow-hidden" style={{ position: "relative" }}>
 
           {nextSrc && <link rel="preload" as="image" href={nextSrc} />}
           {prevSrc && <link rel="preload" as="image" href={prevSrc} />}
 
-          {/* ── FULLIMAGE slide — cover=true fills full width, default contains ── */}
+          {/* ── FULLIMAGE slide — absolutely fills the main area ── */}
           {slide.type === "fullimage" && (
-            <div className={`${animClass} um-story relative flex w-full items-center justify-center overflow-hidden`}>
+            <div className={`${animClass} um-story absolute inset-0 overflow-hidden`}>
               <Image
                 key={slide.src}
                 src={slide.src}
                 alt=""
                 fill
                 className={slide.cover ? "object-cover object-center" : "object-contain"}
+                sizes="100vw"
                 unoptimized
                 priority
               />
@@ -452,7 +456,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
           {/* ── WASECTION slide — WhatsApp chapter intro ── */}
           {slide.type === "wasection" && (
-            <div className={`${animClass} um-story flex w-full flex-col items-center justify-center gap-5 px-8 text-center sm:gap-7`}>
+            <div className={`${animClass} um-story absolute inset-0 flex flex-col items-center justify-center gap-5 overflow-y-auto px-8 text-center sm:gap-7`}>
               {/* WhatsApp logo large */}
               <div
                 className="flex h-20 w-20 items-center justify-center rounded-[28px] shadow-2xl sm:h-24 sm:w-24"
@@ -488,7 +492,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
           {/* ── SECTION slide ── */}
           {slide.type === "section" && (
-            <div className={`${animClass} um-story flex w-full flex-col items-center justify-center gap-5 px-8 text-center sm:gap-6`}>
+            <div className={`${animClass} um-story absolute inset-0 flex flex-col items-center justify-center gap-5 overflow-y-auto px-8 text-center sm:gap-6`}>
               <div
                 className="flex h-14 w-14 items-center justify-center rounded-2xl sm:h-16 sm:w-16"
                 style={{ background: `linear-gradient(135deg, ${SF_CB68} 0%, ${SF_EB50} 100%)`, boxShadow: `0 12px 40px ${SF_EB50}55` }}
@@ -510,7 +514,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
           {/* ── SCREEN slide ── */}
           {slide.type === "screen" && (
-            <div className={`${animClass} um-story flex w-full flex-col items-center justify-start overflow-y-auto p-4 lg:p-6`}>
+            <div className={`${animClass} um-story absolute inset-0 flex flex-col items-center justify-start overflow-y-auto p-4 lg:p-6`}>
               {/* Monitor frame */}
               <div className="w-full max-w-5xl">
                 {/* Browser chrome bar */}
@@ -553,7 +557,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
           {/* ── WHATSAPP slide ── */}
           {slide.type === "whatsapp" && (
-            <div className="flex flex-1 flex-col overflow-hidden lg:flex-row">
+            <div className="absolute inset-0 flex flex-col overflow-hidden lg:flex-row">
 
               {/* Mobile tab bar — only visible below lg */}
               <div
