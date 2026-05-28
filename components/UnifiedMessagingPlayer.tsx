@@ -11,7 +11,6 @@ const SF_EB15 = "#001E5B";
 const SF_EB30 = "#022AC0";
 const SF_EB50 = "#066AFE";
 const SF_CB68 = "#00B3FF";
-const SF_CB90 = "#CFE9FE"; /* Cloud Blue 90 — light background */
 
 const SCENES = [
   {
@@ -285,13 +284,15 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
   const [prevIdx, setPrevIdx] = useState<number | null>(null);
   const [imgVisible, setImgVisible] = useState(true);
   const [dir, setDir] = useState<"next" | "prev">("next");
+  const [mobileTab, setMobileTab] = useState<"historia" | "pantalla">("historia");
   const rightRef = useRef<HTMLDivElement>(null);
   const fadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
 
   const goTo = useCallback((next: number, d: "next" | "prev") => {
     if (next < 0 || next >= TOTAL) return;
     setDir(d);
-    // Start crossfade: show previous image fading out, new image fading in
     setPrevIdx(idx);
     setImgVisible(false);
     if (fadeTimer.current) clearTimeout(fadeTimer.current);
@@ -299,16 +300,34 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
       setIdx(next);
       setImgVisible(true);
       setPrevIdx(null);
-    }, 80); // swap src after 80ms (mid-fade), then fade back in
+    }, 80);
   }, [idx]);
 
   const next = useCallback(() => goTo(idx + 1, "next"), [goTo, idx]);
   const prev = useCallback(() => goTo(idx - 1, "prev"), [goTo, idx]);
 
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    touchStartX.current = null;
+    touchStartY.current = null;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) next();
+      else prev();
+    }
+  }, [next, prev]);
+
   useEffect(() => () => { if (fadeTimer.current) clearTimeout(fadeTimer.current); }, []);
 
   useEffect(() => {
     rightRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+    setMobileTab("historia");
   }, [idx]);
 
   useEffect(() => {
@@ -364,6 +383,8 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
         role="dialog"
         aria-modal="true"
         aria-label="Historia: Soft Transitions with Unified Messaging"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         {/* Ambient globs */}
         <div className="um-blob-a" aria-hidden />
@@ -371,20 +392,20 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
         {/* ── Top bar ── */}
         <header
-          className="relative z-10 flex shrink-0 items-center justify-between px-5 py-2.5 sm:px-7"
+          className="relative z-10 flex shrink-0 items-center justify-between px-4 py-2.5 sm:px-7"
           style={{ borderBottom: "1px solid rgba(255,255,255,0.10)", backgroundColor: "rgba(0,0,0,0.15)" }}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Image
               src="/sfdc-logos/corporate-logo-horiz-allw.svg"
               alt="Salesforce"
               width={100}
               height={32}
-              className="h-5 w-auto object-contain"
+              className="h-4 w-auto object-contain sm:h-5"
             />
             <span className="h-4 w-px bg-white/20" />
             <div
-              className="flex items-center gap-1.5 rounded-full px-2.5 py-1"
+              className="flex items-center gap-1.5 rounded-full px-2 py-1 sm:px-2.5"
               style={{ backgroundColor: `${WA}22`, border: `1px solid ${WA}40` }}
             >
               <svg className="h-3 w-3" viewBox="0 0 24 24" fill={WA} aria-hidden>
@@ -394,9 +415,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
             </div>
           </div>
 
-          <span
-            className="hidden text-[11px] font-semibold sm:block text-white/50"
-          >
+          <span className="max-w-[120px] truncate text-center text-[10px] font-semibold text-white/50 sm:max-w-none sm:text-[11px]">
             {group.label}
           </span>
 
@@ -433,20 +452,20 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
           {/* ── WASECTION slide — WhatsApp chapter intro ── */}
           {slide.type === "wasection" && (
-            <div className={`${animClass} um-story flex w-full flex-col items-center justify-center gap-7 px-8 text-center`}>
+            <div className={`${animClass} um-story flex w-full flex-col items-center justify-center gap-5 px-8 text-center sm:gap-7`}>
               {/* WhatsApp logo large */}
               <div
-                className="flex h-24 w-24 items-center justify-center rounded-[28px] shadow-2xl"
+                className="flex h-20 w-20 items-center justify-center rounded-[28px] shadow-2xl sm:h-24 sm:w-24"
                 style={{ background: `linear-gradient(135deg, ${WA_DARK} 0%, ${WA} 100%)`, boxShadow: `0 20px 60px ${WA}55` }}
               >
-                <svg viewBox="0 0 24 24" fill="white" className="h-14 w-14" aria-hidden>
+                <svg viewBox="0 0 24 24" fill="white" className="h-12 w-12 sm:h-14 sm:w-14" aria-hidden>
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                 </svg>
               </div>
 
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/40">Salesforce · Unified Messaging</p>
-                <h2 className="mt-3 font-black text-white" style={{ fontSize: "clamp(3rem, 7.5vw, 5.8rem)", lineHeight: 1.0 }}>
+                <h2 className="mt-3 font-black text-white" style={{ fontSize: "clamp(2.4rem, 7.5vw, 5.8rem)", lineHeight: 1.0 }}>
                   Soft Handoff
                 </h2>
               </div>
@@ -459,31 +478,33 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                   </svg>
                   <span className="text-base font-semibold text-white/80">WhatsApp</span>
                 </div>
-                <p className="text-lg font-semibold text-white/55">Cada participante como si fuera el único</p>
+                <p className="text-base font-semibold text-white/55 sm:text-lg">Cada participante como si fuera el único</p>
               </div>
 
-              <p className="mt-2 text-[11px] text-white/22">← → Navegar · Esc Cerrar</p>
+              <p className="mt-2 text-[11px] text-white/22 hidden sm:block">← → Navegar · Esc Cerrar</p>
+              <p className="mt-2 text-[11px] text-white/22 sm:hidden">Desliza para navegar</p>
             </div>
           )}
 
           {/* ── SECTION slide ── */}
           {slide.type === "section" && (
-            <div className={`${animClass} um-story flex w-full flex-col items-center justify-center gap-6 px-8 text-center`}>
+            <div className={`${animClass} um-story flex w-full flex-col items-center justify-center gap-5 px-8 text-center sm:gap-6`}>
               <div
-                className="flex h-16 w-16 items-center justify-center rounded-2xl"
+                className="flex h-14 w-14 items-center justify-center rounded-2xl sm:h-16 sm:w-16"
                 style={{ background: `linear-gradient(135deg, ${SF_CB68} 0%, ${SF_EB50} 100%)`, boxShadow: `0 12px 40px ${SF_EB50}55` }}
               >
                 {/* code icon */}
-                <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                <svg className="h-7 w-7 text-white sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
               </div>
               <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/40">Salesforce · Unified Messaging</p>
-              <h2 className="font-black text-white" style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)", lineHeight: 1.05 }}>
+              <h2 className="font-black text-white" style={{ fontSize: "clamp(2.2rem, 7vw, 5.5rem)", lineHeight: 1.05 }}>
                 {slide.title}
               </h2>
-              <p className="text-lg font-semibold text-white/60 sm:text-xl">{slide.subtitle}</p>
-              <p className="mt-2 text-[11px] text-white/22">← → Navegar · Esc Cerrar</p>
+              <p className="text-base font-semibold text-white/60 sm:text-xl">{slide.subtitle}</p>
+              <p className="mt-2 text-[11px] text-white/22 hidden sm:block">← → Navegar · Esc Cerrar</p>
+              <p className="mt-2 text-[11px] text-white/22 sm:hidden">Desliza para navegar</p>
             </div>
           )}
 
@@ -532,11 +553,35 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
 
           {/* ── WHATSAPP slide ── */}
           {slide.type === "whatsapp" && (
-            <>
-              {/* LEFT — WhatsApp phone (static) */}
-              <div className="flex shrink-0 items-start justify-center p-4 lg:w-[46%] lg:self-stretch lg:overflow-y-auto lg:p-6">
+            <div className="flex flex-1 flex-col overflow-hidden lg:flex-row">
+
+              {/* Mobile tab bar — only visible below lg */}
+              <div
+                className="flex shrink-0 border-b border-white/10 lg:hidden"
+                style={{ backgroundColor: "rgba(0,0,0,0.25)" }}
+              >
+                {(["historia", "pantalla"] as const).map((tab) => (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => setMobileTab(tab)}
+                    className="flex-1 py-2.5 text-[11px] font-bold uppercase tracking-widest transition-colors focus:outline-none"
+                    style={{
+                      color: mobileTab === tab ? "white" : "rgba(255,255,255,0.38)",
+                      borderBottom: `2px solid ${mobileTab === tab ? group.color : "transparent"}`,
+                    }}
+                  >
+                    {tab === "historia" ? "Historia" : "Pantalla"}
+                  </button>
+                ))}
+              </div>
+
+              {/* LEFT — WhatsApp phone
+                  Mobile: visible only when pantalla tab is active
+                  Desktop: always visible as 46% column */}
+              <div className={`flex shrink-0 items-start justify-center p-4 ${mobileTab === "historia" ? "hidden lg:flex" : ""} lg:w-[46%] lg:self-stretch lg:overflow-y-auto lg:p-6`}>
                 <div
-                  className="relative w-full max-w-[300px] overflow-hidden rounded-3xl sm:max-w-[340px]"
+                  className="relative w-full max-w-[260px] overflow-hidden rounded-3xl sm:max-w-[340px]"
                   style={{ background: WA_BG, boxShadow: "0 24px 64px rgba(0,0,0,0.5)" }}
                 >
                   <div
@@ -564,11 +609,13 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                 </div>
               </div>
 
-              {/* RIGHT — Story */}
-              <div className={`${animClass} flex flex-1 flex-col overflow-y-auto lg:overflow-hidden`}>
+              {/* RIGHT — Story
+                  Mobile: visible only when historia tab is active
+                  Desktop: always visible as flex-1 column */}
+              <div className={`${animClass} flex flex-col overflow-y-auto ${mobileTab === "pantalla" ? "hidden lg:flex lg:flex-1 lg:overflow-hidden" : "flex-1"}`}>
                 <div
                   ref={rightRef}
-                  className="um-story flex flex-1 flex-col gap-6 px-5 py-5 lg:self-stretch lg:overflow-y-auto lg:py-10 lg:pr-10"
+                  className="um-story flex flex-1 flex-col gap-5 px-4 py-4 sm:gap-6 sm:px-5 sm:py-5 lg:self-stretch lg:overflow-y-auto lg:py-10 lg:pr-10"
                 >
                   <div>
                     <span
@@ -583,7 +630,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                     <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/40">
                       Escena {String(slide.n).padStart(2, "0")} · {String(idx + 1).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}
                     </p>
-                    <h2 className="mt-2 font-black leading-snug text-white" style={{ fontSize: "clamp(1.3rem, 2.5vw, 1.9rem)" }}>
+                    <h2 className="mt-2 font-black leading-snug text-white" style={{ fontSize: "clamp(1.15rem, 2.5vw, 1.9rem)" }}>
                       {slide.historia}
                     </h2>
                   </div>
@@ -606,7 +653,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                     <div className="flex-1 pb-4">
                       <p className="text-xs font-bold uppercase tracking-widest mb-3 text-white/50">Qué ocurre</p>
                       {slide.solucion ? (
-                        <div className="um-solution-reveal rounded-2xl p-5"
+                        <div className="um-solution-reveal rounded-2xl p-4 sm:p-5"
                           style={{
                             background: "rgba(255,255,255,0.10)",
                             backdropFilter: "blur(16px)",
@@ -614,21 +661,21 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                             borderBottomWidth: "3px",
                             borderBottomColor: group.color,
                           }}>
-                          <div className="flex items-start gap-4">
-                            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                          <div className="flex items-start gap-3 sm:gap-4">
+                            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:h-10 sm:w-10"
                               style={{ backgroundColor: `${group.color}25`, border: `1px solid ${group.color}40` }}>
-                              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke={group.color} strokeWidth={2} aria-hidden>
+                              <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke={group.color} strokeWidth={2} aria-hidden>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                               </svg>
                             </div>
                             <div>
                               <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: group.color }}>Solución Técnica</p>
-                              <p className="text-[15px] font-medium leading-7 text-white/90">{slide.solucion}</p>
+                              <p className="text-[14px] font-medium leading-7 text-white/90 sm:text-[15px]">{slide.solucion}</p>
                             </div>
                           </div>
                         </div>
                       ) : (
-                        <div className="um-solution-reveal rounded-2xl p-5"
+                        <div className="um-solution-reveal rounded-2xl p-4 sm:p-5"
                           style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)" }}>
                           <p className="text-sm italic text-white/30">Interacción del cliente — sin lógica adicional del sistema.</p>
                         </div>
@@ -636,7 +683,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.10)" }}>
+                  <div className="rounded-2xl p-4 sm:p-5" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.10)" }}>
                     <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-white/30">Progreso</p>
                     <div className="flex flex-col gap-2">
                       {GROUPS.map((g) => {
@@ -647,7 +694,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                           <div key={g.label} className="flex items-center gap-2.5">
                             <div className="h-2 w-2 rounded-full shrink-0"
                               style={{ backgroundColor: active ? g.color : done ? `${g.color}80` : "rgba(255,255,255,0.18)" }} />
-                            <p className="w-36 shrink-0 text-[11px] font-semibold"
+                            <p className="w-32 shrink-0 text-[11px] font-semibold sm:w-36"
                               style={{ color: active ? "rgba(255,255,255,0.90)" : done ? "rgba(255,255,255,0.40)" : "rgba(255,255,255,0.22)" }}>
                               {g.label}
                             </p>
@@ -663,16 +710,16 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                   <div className="h-4 shrink-0" />
                 </div>
               </div>
-            </>
+            </div>
           )}
         </main>
 
         {/* ── Footer ── */}
         <footer
-          className="relative z-10 shrink-0 px-4 py-3 sm:px-6"
+          className="relative z-10 shrink-0 px-3 py-2.5 sm:px-6 sm:py-3"
           style={{ borderTop: "1px solid rgba(255,255,255,0.10)", backgroundColor: "rgba(0,0,0,0.18)" }}
         >
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               type="button"
               onClick={prev}
@@ -682,7 +729,7 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
               aria-label="Escena anterior"
             >←</button>
 
-            <div className="flex flex-1 flex-col items-center gap-2.5">
+            <div className="flex flex-1 flex-col items-center gap-2">
               {/* Progress bar */}
               <div className="h-[3px] w-full overflow-hidden rounded-full bg-white/12">
                 <div
@@ -691,8 +738,29 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
                 />
               </div>
 
-              {/* Dot nav — grouped */}
-              <div className="flex items-center gap-1" role="tablist" aria-label="Slides">
+              {/* Mobile: 5 group segment dots */}
+              <div className="flex items-center gap-1.5 sm:hidden">
+                {GROUPS.map((g) => {
+                  const active = idx >= g.fromIdx && idx <= g.toIdx;
+                  const done   = idx > g.toIdx;
+                  return (
+                    <button
+                      key={g.label}
+                      type="button"
+                      onClick={() => goTo(g.fromIdx, g.fromIdx > idx ? "next" : "prev")}
+                      className="h-[5px] rounded-full transition-all duration-300 focus:outline-none"
+                      style={{
+                        width: active ? "28px" : "10px",
+                        backgroundColor: active ? g.color : done ? `${g.color}55` : "rgba(255,255,255,0.18)",
+                      }}
+                      aria-label={`Ir a ${g.label}`}
+                    />
+                  );
+                })}
+              </div>
+
+              {/* Desktop: full 44-dot nav */}
+              <div className="hidden sm:flex items-center gap-1" role="tablist" aria-label="Slides">
                 {SLIDES.map((_, i) => {
                   const g = groupForIdx(i);
                   return (
@@ -715,8 +783,8 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
               </div>
             </div>
 
-            <span className="hidden w-12 shrink-0 text-right text-xs font-semibold tabular-nums text-white/25 sm:block">
-              {String(idx + 1).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}
+            <span className="w-10 shrink-0 text-right text-[10px] font-semibold tabular-nums text-white/25 sm:w-12 sm:text-xs">
+              {String(idx + 1).padStart(2, "0")}/{String(TOTAL).padStart(2, "0")}
             </span>
 
             <button
@@ -729,8 +797,11 @@ export default function UnifiedMessagingPlayer({ onClose }: Props) {
             >→</button>
           </div>
 
-          <p className="mt-1.5 text-center text-[10px] text-white/22">
+          <p className="mt-1 text-center text-[10px] text-white/22 hidden sm:block">
             ← → Navegar · Esc Cerrar · F Pantalla completa
+          </p>
+          <p className="mt-1 text-center text-[10px] text-white/22 sm:hidden">
+            Desliza para navegar
           </p>
         </footer>
       </div>
