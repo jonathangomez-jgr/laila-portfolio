@@ -105,7 +105,6 @@ export default function SiteHeader({
 
   const navItems = [
     { label: dict.nav.home, href: `/${lang}` },
-    { label: dict.nav.aboutMe, href: `/${lang}/about` },
     { label: dict.nav.laila, href: `/${lang}/laila` },
     { label: dict.nav.generalDemos, href: `/${lang}/general-demos` },
     { label: dict.nav.customerSolutions, href: `/${lang}/customer-demos` },
@@ -182,13 +181,6 @@ export default function SiteHeader({
 
           <div className="flex items-center gap-2">
             <LanguageSwitcher lang={lang} />
-
-            <a
-              href={`/${lang}/contact`}
-              className="hidden rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(95,111,255,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(95,111,255,0.42)] lg:block"
-            >
-              {dict.nav.letsTalk}
-            </a>
 
             {/* Hamburger — mobile only */}
             <button
@@ -298,15 +290,6 @@ export default function SiteHeader({
             </ul>
           </div>
 
-          {/* Divider + CTA */}
-          <div className="border-t border-gray-100 px-3 py-3">
-            <a
-              href={`/${lang}/contact`}
-              className="block w-full rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-500 px-4 py-3.5 text-center text-sm font-semibold text-white shadow-[0_8px_20px_rgba(95,111,255,0.3)] transition hover:shadow-[0_12px_28px_rgba(95,111,255,0.4)]"
-            >
-              {dict.nav.letsTalk}
-            </a>
-          </div>
         </nav>
       </div>
     </>

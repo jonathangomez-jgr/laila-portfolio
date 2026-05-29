@@ -27,7 +27,7 @@ export default function SiteChrome({
     <div className="site-shell">
       <SiteHeader dict={dict} lang={lang} />
       {children}
-      <SiteFooter dict={dict} />
+      <SiteFooter dict={dict} lang={lang} />
     </div>
   );
 }

@@ -10,7 +10,11 @@
     "closeMenu": "Fechar menu"
   },
   "footer": {
-    "text": "© 2026 Jonathan Gomez | Laila Portfolio | Personal-professional demo hub."
+    "tagline": "Principal Solution Engineer na Salesforce. Projeto soluções, construo demos e desenvolvo narrativas que conectam tecnologia e negócio.",
+    "navTitle": "Navegação",
+    "connectTitle": "Conectar",
+    "contactPageLabel": "Ir para Contato",
+    "copyright": "© 2026 Jonathan Gomez · Laila Portfolio · Personal-professional demo hub."
   },
   "langSwitcher": {
     "label": "Idioma"
@@ -240,6 +244,10 @@
     "eyebrow": "Contato",
     "title": "Vamos Conversar.",
     "description": "Sobre tecnologia, Salesforce, inteligência artificial, design de soluções, o futuro dos negócios, ou sobre a vida, o tempo, e por que as corujas voam em completo silêncio.",
+    "aboutEyebrow": "Quem sou eu",
+    "aboutTitle": "Mindset drives results",
+    "aboutDesc": "Sou Jonathan Gomez, Principal Solution Engineer na Salesforce. Especializo-me em design de soluções, narrativa executiva e construção de demos que conectam negócio e tecnologia. Laila é o projeto onde consolido essa visão.",
+    "channelsEyebrow": "Canais de contato",
     "whatsappTitle": "WhatsApp",
     "whatsappSub": "Escaneie o QR ou toque para abrir o chat",
     "whatsappBtn": "Abrir no WhatsApp",
@@ -247,7 +255,8 @@
     "slackChannel": "#jon-solution-lab",
     "slackSub": "Escaneie o QR ou toque para abrir o canal",
     "slackBtn": "Visitar meu canal →",
-    "findMeTitle": "Encontre-me em"
+    "findMeTitle": "Encontre-me em",
+    "linksEyebrow": "Perfis e redes"
   },
   "demoAccess": {
     "restricted": "Acesso restrito",
