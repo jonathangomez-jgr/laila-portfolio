@@ -9,14 +9,17 @@ import ArchDiagram from "./ArchDiagram";
 import ArgosArchDiagram from "./ArgosArchDiagram";
 import ArgosKpiSummaryCard from "./ArgosKpiSummaryCard";
 import AgentforceLandscape from "./AgentforceLandscape";
+import BlueprintArchitecture from "./BlueprintArchitecture";
 import KpiGrid from "./KpiGrid";
 import KpiSummaryTable from "./KpiSummaryTable";
 import NarrativeDisplay from "./NarrativeDisplay";
+import RoadmapTimeline from "./RoadmapTimeline";
 import StoryTimeline from "./StoryTimeline";
 import JourneyTimeline from "./JourneyTimeline";
 import ObjectiveInfographic from "./ObjectiveInfographic";
 import OverviewStats from "./OverviewStats";
 import SolutionLayers from "./SolutionLayers";
+import WorkshopResult from "./WorkshopResult";
 import Link from "next/link";
 import type { CustomerDemo } from "../data/customerDemos";
 import { hasExecutiveDeck } from "../data/executiveDecks";
@@ -268,6 +271,18 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
 
               {activeTab.kpis && <KpiGrid groups={activeTab.kpis} />}
 
+              {activeTab.workshopData && (
+                <WorkshopResult data={activeTab.workshopData} />
+              )}
+
+              {activeTab.blueprintData && (
+                <BlueprintArchitecture data={activeTab.blueprintData} />
+              )}
+
+              {activeTab.roadmapData && (
+                <RoadmapTimeline data={activeTab.roadmapData} />
+              )}
+
               {activeTab.assetsData && (
                 <AssetsGrid data={activeTab.assetsData} />
               )}
@@ -286,6 +301,9 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 !activeTab.journeyData &&
                 !activeTab.kpiSummary &&
                 !activeTab.kpis &&
+                !activeTab.workshopData &&
+                !activeTab.blueprintData &&
+                !activeTab.roadmapData &&
                 !activeTab.assetsData && (
                   <div className="mt-10 rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-6">
                     <p className="text-sm font-semibold text-indigo-700">

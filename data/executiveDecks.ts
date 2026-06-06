@@ -768,18 +768,18 @@ export const executiveDecks: ExecutiveDeck[] = [
   {
     slug: "executive",
     customerSlug: "betterware",
-    title: "Deck Ejecutivo — Comité Directivo BeFra",
-    subtitle: "Mamá Virtual · Resolución en Primer Contacto · Staff con visión 360",
+    title: "Deck Ejecutivo — Aliada Digital",
+    subtitle: "Resolver · Acompañar · Hacer crecer — la nueva experiencia de la Distribuidora",
     duration: "18 min",
     slides: [
-      // ── SLIDE 1 · Portada ──────────────────────────────────────────────
+      // ── 1 · Portada ────────────────────────────────────────────────────
       {
         layout: "title",
         eyebrow: "Betterware de México · BeFra",
-        title: "Mamá Virtual.\nUna plataforma agéntica\npara las 1.24M.",
+        title: "Aliada\nDigital.",
         subtitle:
-          "Acompañamiento 24/7 a la Distribuidora — resolución en primer contacto, lenguaje tropicalizado y staff con visión 360. Plan de cuenta basado en el Antiexperience Workshop del 29 de mayo de 2026.",
-        footnote: "Sesión ejecutiva · Confidencial · Junio 2026",
+          "Un ecosistema agéntico que conoce, guía y hace crecer a cada Distribuidora Independiente — con Agentforce, Service Cloud, Data Cloud y Marketing Cloud.",
+        footnote: "Comité Directivo · Confidencial · Junio 2026",
         brand: {
           astro: { variant: "agent-astro-20-l", side: "right", bottom: "-30px", size: 360 },
           sparkles: [
@@ -790,7 +790,7 @@ export const executiveDecks: ExecutiveDeck[] = [
         },
       },
 
-      // ── SLIDE 2 · Betterware en números ───────────────────────────────
+      // ── 2 · Betterware en números ─────────────────────────────────────
       {
         layout: "metrics",
         eyebrow: "BeFra en números — FY 2024",
@@ -805,310 +805,60 @@ export const executiveDecks: ExecutiveDeck[] = [
         ],
       },
 
-      // ── SLIDE 3 · El reto del workshop ────────────────────────────────
-      {
-        layout: "comparison",
-        eyebrow: "Diagnóstico — Antiexperience Workshop · 29-may-2026",
-        title: "Lo que la propia organización dijo sobre la experiencia de la DS hoy",
-        before: {
-          heading: "Lo que duele a la DS hoy",
-          items: [
-            "Tiene que recurrir a alguien directo o a un directorio para resolver — sin fuente única",
-            "Pedido / recibo incompleto sin gestión clara — saldo prometido sin resolución",
-            "Respuestas tardadas · saturación en horas pico · información confusa y dispersa",
-            "Atención sin empatía — la DS siente que el staff no entiende su rol ni su perfil",
-            "Onboarding no adecuado · fricción explícita con Kitspay · procesos complejos",
-          ],
-        },
-        after: {
-          heading: "Con la plataforma agéntica activa",
-          items: [
-            "Una sola Mamá Virtual que la conoce, habla su lenguaje y resuelve en primer contacto",
-            "Resolución autónoma de pedidos, saldos y devoluciones · escalación inteligente con contexto",
-            "WhatsApp 24/7 · respuesta media <3 min · respuestas adaptativas, no cuadradas",
-            "Staff atiende con visión 360: perfil, segmento, comportamiento de consumo y comercial",
-            "Onboarding personalizado por cohorte · capacitación embebida en el flujo · Kitspay acompañado",
-          ],
-        },
-      },
-
-      // ── SLIDE 4 · La prioridad #1 ─────────────────────────────────────
-      {
-        layout: "bullets",
-        eyebrow: "La prioridad #1 confirmada por el taller",
-        title: "Resolver en Primer Contacto — 3 puntos rojos acumulados",
-        bullets: [
-          "Es la prioridad más alta real del workshop — más alta que la propia Mamá Virtual o segmentación",
-          "Implica tres cosas en paralelo: Asistente Operativo + base de conocimiento estructurada + escalación inteligente",
-          "Su impacto cruza dolor emocional (Área 3) y operativo (Áreas 1, 2 y 4) — resuelve cinco frentes a la vez",
-          "Los benchmarks confirman la viabilidad: Williams-Sonoma 'Olive' resuelve ~60% de chats; Safari365 62% de casos vía Agentforce",
-          "El time-to-value es corto: Agentforce con WhatsApp Business API se despliega en semanas, no en trimestres",
-        ],
-        highlight:
-          "Si Betterware solo activa la palanca #1 en 2026, ya recupera capacidad operativa equivalente a un equipo entero de contact center — y libera al staff actual para los casos que sí necesitan empatía humana.",
-        brand: {
-          sparkles: [
-            { variant: "yellow-main", side: "right", top: "10%", size: 36, rotate: 14 },
-          ],
-        },
-      },
-
-      // ── SLIDE 5 · Visión ──────────────────────────────────────────────
+      // ── 3 · La oportunidad ────────────────────────────────────────────
       {
         layout: "section",
-        eyebrow: "Visión estratégica",
-        title: "Convertir a la DS en el centro del ecosistema con un acompañamiento 24/7 inteligente.",
+        eyebrow: "La oportunidad",
+        title: "Pasar de un soporte reactivo y fragmentado a un acompañamiento inteligente, proactivo y personalizado.",
         subtitle:
-          "Tres palancas — Resolución Autónoma, Mamá Virtual y Staff 360 — sobre una sola plataforma agéntica con guardrails y trazabilidad.",
+          "La peor experiencia para una DS no es solo tener un problema operativo. Es no saber a quién acudir, recibir información confusa y sentir que la empresa no entiende su rol como emprendedora.",
         brand: {
           astro: { variant: "astro-7", side: "left", bottom: "-50px", size: 230 },
           sparkles: [
-            { variant: "yellow-main",     side: "right", top: "18%", size: 44, rotate: 12 },
+            { variant: "yellow-main",     side: "right", top: "16%", size: 44, rotate: 12 },
             { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
           ],
         },
       },
 
-      // ── SLIDE 6 · Tres palancas ───────────────────────────────────────
-      {
-        layout: "pillars",
-        eyebrow: "Los 3 OKRs estratégicos",
-        title: "Tres palancas de valor para el Comité Directivo",
-        pillars: [
-          {
-            title: "01 Resolución Autónoma",
-            body: "Asistente Operativo que entiende intención en lenguaje tropicalizado y resuelve pedidos, saldos y reglas comerciales sin intervención humana. Meta: >50% de incidencias resueltas en primer contacto al año 1.",
-            accent: "indigo",
-          },
-          {
-            title: "02 Mamá Virtual",
-            body: "Acompañamiento personalizado en los 6 meses críticos: pronósticos por DS, agenda compartida DS-OJ, alertas motivacionales y capacitación embebida en el flujo. Meta: -25% de churn en cohortes nuevas.",
-            accent: "violet",
-          },
-          {
-            title: "03 Staff con Visión 360",
-            body: "Habilitador interno con perfil completo de cada DS — comportamiento de consumo y comercial — y anticipación de churn vía Tableau Next. Meta: -45% en tiempo de resolución y -60% en escalaciones innecesarias.",
-            accent: "sky",
-          },
-        ],
-        products: ["Agentforce", "Data Cloud", "Marketing", "Tableau"],
-      },
-
-      // ── SLIDE 7 · Presentación del ecosistema ─────────────────────────
-      {
-        layout: "section",
-        eyebrow: "La solución",
-        title: "DS Intelligence Agent Ecosystem",
-        subtitle:
-          "5 agentes inteligentes — Mamá Virtual, Asistente Operativo, Asistente Personal, Agente DS 360 y Habilitador de Staff — sobre Agentforce, Data Cloud, Service Cloud, Marketing Cloud Advanced y Tableau Next.",
-        products: ["Agentforce", "Data Cloud", "Service", "Marketing", "Tableau"],
-        brand: {
-          astro: { variant: "agent-astro-10-r", side: "right", bottom: "-50px", size: 230 },
-          sparkles: [
-            { variant: "yellow-main",     side: "left", top: "14%", size: 44, rotate: 14 },
-            { variant: "yellow-inclined", side: "left", top: "72%", size: 28, rotate: -10 },
-          ],
-        },
-      },
-
-      // ── SLIDE 8 · Asistente Operativo ────────────────────────────────
-      {
-        layout: "split",
-        eyebrow: "Palanca 1 — Agentforce + Service Cloud + Data Cloud",
-        title: "Asistente Operativo — Resolución en Primer Contacto",
-        left: {
-          heading: "Capacidades del agente",
-          items: [
-            "Detección de intención en preguntas mal articuladas — la DS no necesita saber cómo explicarlas",
-            "Resuelve pedidos, devoluciones, saldos y reglas comerciales sin escalación",
-            "Respuestas adaptativas en lenguaje tropicalizado · 24/7 en WhatsApp",
-            "Escalación inteligente con resumen IA al humano cuando es estrictamente necesario",
-          ],
-        },
-        right: {
-          heading: "Impacto de negocio",
-          items: [
-            "FCR 30%+ a 6 meses · 50%+ a 12 meses (ref. Williams-Sonoma 'Olive' 60%)",
-            "Reducción 60% de tickets escalados al staff humano al año 1",
-            "Tiempo de respuesta <3 min · disponible 24/7 en horas pico y fin de semana",
-            "Liberación del contact center para casos de alto valor — no más saturación",
-          ],
-        },
-        products: ["Agentforce", "Service", "Data Cloud"],
-      },
-
-      // ── SLIDE 9 · Mamá Virtual ───────────────────────────────────────
-      {
-        layout: "split",
-        eyebrow: "Palanca 2 — Agentforce + Marketing Cloud Advanced + Data Cloud",
-        title: "Mamá Virtual — Acompañamiento Personalizado en 6 Meses",
-        left: {
-          heading: "Capacidades del agente",
-          items: [
-            "Pronósticos personalizados de venta por DS y evaluación de objetivos del ciclo",
-            "Agenda compartida DS-OJ visible en un solo lugar · alertas motivacionales en momento correcto",
-            "Onboarding paso a paso para DS no nativas digitales · capacitación embebida en el flujo",
-            "Reactivación proactiva de clientes inactivos con campañas Journey Builder por cohorte",
-          ],
-        },
-        right: {
-          heading: "Impacto de negocio",
-          items: [
-            "Reducción 25% de deserción en los primeros 6 meses críticos",
-            "75%+ adopción del agente entre DS activas · 90%+ entre DS nuevas",
-            "Top 60% de DS con plan personalizado activo a 12 meses (vs. baseline ~30%)",
-            "+15 puntos NPS DS · medición sistemática integrada al CRM",
-          ],
-        },
-        products: ["Agentforce", "Marketing", "Data Cloud"],
-      },
-
-      // ── SLIDE 10 · Staff 360 ─────────────────────────────────────────
-      {
-        layout: "split",
-        eyebrow: "Palanca 3 — Agentforce + Tableau Next + Data Cloud",
-        title: "Staff con Visión 360 — Atención Empática y Accionable",
-        left: {
-          heading: "Capacidades del staff",
-          items: [
-            "Perfil unificado de cada DS · comportamiento de consumo y comportamiento comercial",
-            "Anticipación de riesgo de churn con Tableau Next + Calculated Insights de Data Cloud",
-            "Comunicación proactiva ('DU on cía') · información clara antes de que surja la duda",
-            "Base de conocimiento siempre actualizada · sugerencia de solución por situación",
-          ],
-        },
-        right: {
-          heading: "Impacto de negocio",
-          items: [
-            "Tiempo promedio de resolución del staff: -45% al año 1",
-            "Escalaciones innecesarias: -60% · staff con contexto completo desde el primer contacto",
-            "Top 5,000 DS en riesgo identificadas cada mes con campañas preventivas activas",
-            "+34% productividad del equipo (ref. Agentforce customer base · TechHQ 2025)",
-          ],
-        },
-        products: ["Agentforce", "Tableau", "Data Cloud", "Slack"],
-      },
-
-      // ── SLIDE 11 · KPIs para el Directorio ───────────────────────────
-      {
-        layout: "kpi-table",
-        eyebrow: "KPIs para el Comité Directivo",
-        title: "Métricas de éxito — base documentada del workshop, metas por fase",
-        rows: [
-          {
-            label: "Resolución en primer contacto (FCR)",
-            baseline: "Bajo · sin medición sistemática",
-            goal6m: "30%+ tickets por agente",
-            goal12m: "50%+ · ref. Williams-Sonoma 60%",
-            accent: "indigo",
-          },
-          {
-            label: "Tickets escalados al staff humano",
-            baseline: "Alto · saturación horas pico",
-            goal6m: "−40% volumen escalado",
-            goal12m: "−60% · staff en alto valor",
-            accent: "indigo",
-          },
-          {
-            label: "Churn DS en primeros 6 meses",
-            baseline: "Alto · journey sin acompañamiento",
-            goal6m: "−10% deserción cohorte",
-            goal12m: "−25% · activación temprana",
-            accent: "violet",
-          },
-          {
-            label: "Adopción agente Mamá Virtual",
-            baseline: "0% — agente no existe",
-            goal6m: "40%+ DS activas",
-            goal12m: "75%+ DS · 90%+ DS nuevas",
-            accent: "violet",
-          },
-          {
-            label: "Tiempo promedio de resolución del staff",
-            baseline: "Alto · información dispersa",
-            goal6m: "−25% TPR",
-            goal12m: "−45% · vista 360 unificada",
-            accent: "sky",
-          },
-          {
-            label: "NPS de Distribuidora",
-            baseline: "Sin medición consolidada",
-            goal6m: "Línea base activa",
-            goal12m: "+15 pts NPS DS",
-            accent: "emerald",
-          },
-        ],
-      },
-
-      // ── SLIDE 12 · Métricas de impacto ───────────────────────────────
-      {
-        layout: "metrics",
-        eyebrow: "Impacto proyectado a 12 meses",
-        title: "Resultados que importan al negocio",
-        metrics: [
-          { value: "50%+", label: "FCR · resolución autónoma en primer contacto" },
-          { value: "−25%", label: "Churn de DS en los primeros 6 meses" },
-          { value: "75%+", label: "Adopción Mamá Virtual entre DS activas" },
-          { value: "−45%", label: "Tiempo de resolución del staff (visión 360)" },
-          { value: "+34%", label: "Productividad del equipo (Agentforce ref.)" },
-          { value: "+15 pts", label: "NPS de Distribuidora" },
-        ],
-      },
-
-      // ── SLIDE 13 · Por qué actuar en 2026 ────────────────────────────
-      {
-        layout: "bullets",
-        eyebrow: "Timing estratégico — Por qué los 3 OKRs son urgentes en 2026",
-        title: "El momento es estratégico — la base humana ya existe; falta la plataforma agéntica",
-        bullets: [
-          "OKR 1 — Cada quincena sin resolución autónoma son miles de DS con preguntas básicas saturando un contact center diseñado para la mitad del volumen actual.",
-          "OKR 2 — La cohorte de DS nuevas vive su journey crítico hoy. Cada cohorte que pasa sin Mamá Virtual es una oportunidad perdida de retención que no vuelve.",
-          "OKR 3 — JAFRA pasó de 0% de crecimiento durante 15 años a doblar utilidades en 3 años. La capacidad ejecutiva está demostrada — la siguiente palanca es agéntica.",
-          "Mercado — La venta directa en México es Ps. 88,574 M con +1.2% YoY (AMVD 2024) y headwinds de e-commerce. La diferenciación se construye con experiencia, no con catálogo.",
-          "Tecnología — Agentforce + WhatsApp Business API tiene time-to-value de semanas. Los benchmarks (Williams-Sonoma, Safari365, IRS) ya validaron la viabilidad operativa.",
-        ],
-        highlight:
-          "Betterware ya es líder en escala. La pregunta es qué tipo de relación quiere construir con su 1.24M antes que un competidor lance un acompañamiento que sí se sienta humano.",
-        brand: {
-          sparkles: [
-            { variant: "yellow-inclined", side: "right", top: "8%", size: 32, rotate: 10 },
-            { variant: "blue-main",       side: "left",  top: "82%", size: 30, rotate: -8 },
-          ],
-        },
-      },
-
-      // ── SLIDE 14 · El día de Lupita ──────────────────────────────────
+      // ── 4 · Hallazgo del workshop ─────────────────────────────────────
       {
         layout: "comparison",
-        eyebrow: "Antes y después — un día de Lupita en su Mes 4",
-        title: "Cuando los 3 OKRs trabajan juntos, la DS no se va — multiplica",
+        eyebrow: "Antiexperience Workshop · 29-may-2026",
+        title: "Lo que la propia organización dijo sobre la experiencia de la DS hoy",
         before: {
-          heading: "Lupita hoy",
+          heading: "5 problemas críticos identificados",
           items: [
-            "Saldo prometido pendiente desde hace 2 quincenas — sin canal claro de resolución",
-            "Pedido incompleto que la obliga a llamar al contact center y esperar 47 minutos",
-            "Sin pronóstico personalizado de su quincena — depende de la intuición y el calendario",
-            "Capacitación fuera del flujo · módulos del LMS no aplicables al caso de hoy",
+            "1 · Resolución operativa deficiente — la DS depende de personas y directorios para resolver",
+            "2 · Información confusa o no disponible — saturación, contradicciones, lenguaje complejo",
+            "3 · Experiencia emocional débil — atención sin empatía, sensación de desconexión",
+            "4 · Procesos complejos y sistemas desconectados — datos desactualizados, fricción con Kitspay",
+            "5 · Onboarding insuficiente — los 6 primeros meses sin acompañamiento adecuado",
           ],
         },
         after: {
-          heading: "Lupita con los 3 OKRs activos",
+          heading: "La prioridad #1 (3 puntos rojos)",
           items: [
-            "Saldo liberado en 5 minutos por la Mamá Virtual — visión 360 sin preguntas redundantes",
-            "Pedido incompleto resuelto con una foto del recibo · reenvío express auto-disparado",
-            "Pronóstico personalizado y mensaje listo para reactivar 3 clientas en bajo consumo",
-            "Microcápsula del LMS de 8 minutos justo cuando aplica · módulo Cierre de Venta",
+            "Resolver en Primer Contacto — eje del MVP de Agentforce",
+            "Ataca dolor emocional (Área 3) y operativo (Áreas 1, 2 y 4) al mismo tiempo",
+            "Reduce fricción visible para la DS y libera al staff para casos de alta complejidad",
+            "Genera métricas rápidas (8-12 semanas) y crea base técnica para evolucionar",
+            "Es lo que el propio equipo de Betterware votó como el cambio más urgente",
+          ],
+        },
+        brand: {
+          sparkles: [
+            { variant: "yellow-main", side: "right", top: "8%", size: 38, rotate: 12 },
           ],
         },
       },
 
-      // ── SLIDE 15 · Cita ejecutiva ────────────────────────────────────
+      // ── 5 · Principio rector ──────────────────────────────────────────
       {
         layout: "quote",
         quote:
-          "La DS no se va por el catálogo. Se va porque nadie la conoció a tiempo. Agentforce es la 'Mamá Virtual' que sí la conoce — desde el primer pedido y a las 11 de la noche cuando termina su turno y empieza su negocio.",
-        context:
-          "Antiexperience Workshop · Betterware · 29 de mayo de 2026 · Equipos 1 a 5",
+          "La Distribuidora no debería tener que saber qué sistema consultar, a quién escribirle o cómo formular técnicamente su problema. Debería poder expresar su necesidad en lenguaje natural y recibir una respuesta clara, confiable y accionable.",
+        context: "Principio rector · Aliada Digital · Betterware",
         brand: {
           astro: { variant: "agent-astro-12-r", side: "left", bottom: "-30px", size: 220 },
           sparkles: [
@@ -1118,28 +868,300 @@ export const executiveDecks: ExecutiveDeck[] = [
         },
       },
 
-      // ── SLIDE 16 · Cierre y próximos pasos ───────────────────────────
+      // ── 6 · Resolver, explicar, acompañar, escalar ────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "Las 4 capacidades fundamentales de Agentforce",
+        title: "Resolver primero · Explicar simple · Acompañar siempre · Escalar solo cuando sea necesario",
+        pillars: [
+          {
+            title: "1 · Entender intención real",
+            body: "Aunque la pregunta de la DS venga incompleta, mal redactada o expresada en lenguaje cotidiano. Sin formularios cuadrados ni jerga técnica.",
+            accent: "indigo",
+          },
+          {
+            title: "2 · Consultar información confiable",
+            body: "En tiempo real, desde las fuentes correctas: knowledge aprobado, datos transaccionales, reglas vigentes, Data Cloud, APIs oficiales.",
+            accent: "violet",
+          },
+          {
+            title: "3 · Ejecutar acciones permitidas",
+            body: "Mediante flujos, APIs e integraciones controladas — con límites explícitos y auditoría completa.",
+            accent: "sky",
+          },
+          {
+            title: "4 · Escalar con contexto completo",
+            body: "Cuando el caso requiera intervención humana, el agente humano recibe resumen, intención clasificada y siguiente acción recomendada.",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // ── 7 · Presentación del Blueprint ────────────────────────────────
+      {
+        layout: "section",
+        eyebrow: "La propuesta",
+        title: "Aliada Digital · 4 componentes que trabajan juntos",
+        subtitle:
+          "No es un chatbot. Es un sistema inteligente con cuatro piezas: Agente DS 360 + Copiloto Staff 360 + Capa de datos DS 360 + Orquestación proactiva de journeys.",
+        products: ["Agentforce", "Service", "Data Cloud", "Marketing", "Tableau"],
+        brand: {
+          astro: { variant: "agent-astro-10-r", side: "right", bottom: "-50px", size: 230 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left", top: "14%", size: 44, rotate: 14 },
+            { variant: "yellow-inclined", side: "left", top: "72%", size: 28, rotate: -10 },
+          ],
+        },
+      },
+
+      // ── 8 · Componente 01 · Agente DS 360 ─────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Componente 01 · Agente externo · Distribuidora",
+        title: "Agente DS 360 — Asistente Inteligente para Distribuidoras",
+        left: {
+          heading: "Capacidades principales",
+          items: [
+            "A · Resolución en primer contacto: pedido incompleto, saldo, devolución, cargo, regla",
+            "B · Consulta de pedidos, devoluciones y saldos en lenguaje claro",
+            "C · Acompañamiento de objetivos: avance, brecha, recomendaciones, alertas",
+            "D · Explicación simple de reglas comerciales con ejemplos aplicados a la DS",
+            "E · Onboarding guiado en los 6 meses críticos · F · Capacitación integrada al flujo",
+          ],
+        },
+        right: {
+          heading: "Disponibilidad",
+          items: [
+            "WhatsApp · canal prioritario del modelo de venta directa",
+            "Portal / App de Distribuidoras · Web chat autenticado",
+            "24/7 · sin horarios pico · sin saturación",
+            "Lenguaje natural — la DS habla como habla",
+            "Escalación inteligente con resumen automático al humano",
+          ],
+        },
+        products: ["Agentforce", "Service", "Data Cloud"],
+      },
+
+      // ── 9 · Componente 02 · Copiloto Staff 360 ────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Componente 02 · Copiloto interno · Staff",
+        title: "Copiloto Staff 360 — Asistente Interno para Atención y Operaciones",
+        left: {
+          heading: "Capacidades principales",
+          items: [
+            "A · Resumen DS 360: perfil, antigüedad, ventas, objetivos, pedidos, saldos, recurrencia",
+            "B · Asistencia en la atención: sugiere respuestas, explica contexto, recomienda acciones",
+            "C · Reducción de escalaciones: valida políticas, casos previos, knowledge antes de escalar",
+            "D · Empatía asistida: adapta tono y respuesta según historial de la DS",
+          ],
+        },
+        right: {
+          heading: "Impacto en operación",
+          items: [
+            "Calidad de atención más alta · staff con contexto completo desde el primer segundo",
+            "Reducción de tiempo promedio de resolución",
+            "Menos escalaciones innecesarias entre niveles",
+            "Reducción de reprocesos · mejora de satisfacción del staff",
+            "Disponible en Salesforce Console, Slack y Tableau Next",
+          ],
+        },
+        products: ["Agentforce", "Service", "Slack", "Tableau"],
+      },
+
+      // ── 10 · Componente 03 · Capa de datos DS 360 ─────────────────────
+      {
+        layout: "split",
+        eyebrow: "Componente 03 · Plataforma transversal",
+        title: "Capa de datos e inteligencia DS 360",
+        left: {
+          heading: "Entidades unificadas",
+          items: [
+            "Perfil DS — ID, región, antigüedad, clasificación, segmento, canal preferido, madurez digital",
+            "Actividad comercial — ventas, objetivo vigente, avance, brecha, ticket, tendencia",
+            "Pedidos y entregas — pedidos recientes, faltantes, devoluciones, incidencias",
+            "Saldos y transacciones — saldo actual, pagos, cargos, abonos, fechas de corte",
+            "Interacciones y casos — sentimiento, recurrencia, escalaciones, motivos de contacto",
+            "Capacitación y onboarding — etapa, contenidos completados, hitos, alertas de riesgo",
+          ],
+        },
+        right: {
+          heading: "Habilita",
+          items: [
+            "Personalización en cada respuesta del Agente DS 360",
+            "Segmentación accionable para Marketing y Customer Success",
+            "Priorización del Copiloto Staff cuando atiende casos",
+            "Comunicación proactiva basada en señales reales de comportamiento",
+            "Predicciones de churn y next best action (Fase 4)",
+          ],
+        },
+        products: ["Data Cloud", "Service", "Sales"],
+      },
+
+      // ── 11 · Componente 04 · Orquestación proactiva ───────────────────
+      {
+        layout: "split",
+        eyebrow: "Componente 04 · Orquestación proactiva",
+        title: "Marketing & Journeys — Acompañamiento antes de que el problema aparezca",
+        left: {
+          heading: "Activaciones",
+          items: [
+            "Onboarding journeys por etapa: 6 momentos clave en los primeros 6 meses",
+            "Recordatorios y alertas: fechas de corte, brecha de objetivo, capacitaciones pendientes",
+            "Comunicación segmentada por antigüedad, comportamiento y canal preferido",
+            "Prevención de abandono disparada por señales de Data Cloud",
+            "Reactivación de DS inactivas con mensajes contextualizados",
+          ],
+        },
+        right: {
+          heading: "Canales y resultado",
+          items: [
+            "WhatsApp · Email · SMS · Push — cada DS por su canal preferido",
+            "La DS recibe lo que necesita antes de tener que pedirlo",
+            "Reduce contactos reactivos · libera capacidad operativa",
+            "Mejora activación temprana y retención en el journey crítico",
+            "Engagement con contenidos de capacitación medible",
+          ],
+        },
+        products: ["Marketing", "Data Cloud", "Agentforce"],
+      },
+
+      // ── 12 · Tópicos del Agente DS 360 ────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Diseño Agentforce · Tópicos del Agente DS 360",
+        title: "6 tópicos con acciones permitidas y límites explícitos",
+        bullets: [
+          "Tópico 1 · Consulta de pedidos — buscar pedido, validar faltantes, crear caso. Límite: no prometer compensaciones sin validación.",
+          "Tópico 2 · Saldos y transacciones — consultar saldo, pagos, cargos, abonos. Límite: no modificar saldos directamente, no prometer ajustes.",
+          "Tópico 3 · Objetivos y crecimiento — calcular avance, explicar brecha, recomendar acciones. Límite: no inventar metas, no presentar proyecciones como garantía.",
+          "Tópico 4 · Reglas comerciales — buscar artículo, resumir regla, dar ejemplo aplicado. Límite: solo fuentes aprobadas, mostrar fecha de vigencia.",
+          "Tópico 5 · Onboarding y capacitación — identificar etapa, recomendar siguiente paso, enviar microcontenido. Límite: no saturar, adaptar al nivel digital.",
+          "Tópico 6 · Escalación inteligente — crear caso, clasificar motivo, resumir conversación. Límite: no transferir sin intentar resolver, no perder contexto.",
+        ],
+        highlight:
+          "Cada tópico está acotado con políticas explícitas. Esto es lo que diferencia a un sistema inteligente con guardrails de un chatbot que improvisa.",
+      },
+
+      // ── 13 · Confianza y gobernanza ───────────────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "Capa de confianza, seguridad y gobernanza",
+        title: "Cuatro controles explícitos para que Agentforce sea confiable en producción",
+        pillars: [
+          {
+            title: "🔐 Autenticación",
+            body: "Validación de identidad por canal seguro, número telefónico asociado, OTP cuando aplique, control de acceso por perfil y restricción de datos por DS ID.",
+            accent: "indigo",
+          },
+          {
+            title: "📚 Grounding",
+            body: "Respuestas solo desde knowledge aprobado, datos transaccionales, reglas vigentes y APIs oficiales. Nunca conocimiento genérico para políticas, saldos o compensaciones.",
+            accent: "violet",
+          },
+          {
+            title: "🤝 Human-in-the-loop",
+            body: "Reglas claras de escalación: discrepancia financiera, reclamo repetido, frustración alta, excepción comercial, riesgo reputacional.",
+            accent: "sky",
+          },
+          {
+            title: "📋 Auditoría",
+            body: "Cada interacción registra intención detectada, datos consultados, respuesta entregada, acción ejecutada, nivel de confianza y feedback de la DS.",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // ── 14 · MVP recomendado ──────────────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Recomendación · MVP de 8 a 12 semanas",
+        title: "MVP · Resolución en Primer Contacto para DS",
+        bullets: [
+          "INCLUYE — Consulta de pedido · Pedido incompleto · Consulta de saldo · Explicación de transacciones",
+          "INCLUYE — Consulta de objetivo · Explicación de reglas comerciales frecuentes",
+          "INCLUYE — Creación de caso con resumen automático · Escalación inteligente con contexto",
+          "EXCLUYE — Predicción avanzada de churn, recomendaciones comerciales complejas, modificación directa de saldos",
+          "EXCLUYE — Onboarding completo de 6 meses, optimización avanzada de cartera, automatización de procesos no documentados",
+        ],
+        highlight:
+          "Este MVP ataca directamente la prioridad máxima del taller, reduce fricción visible, genera métricas rápidas y crea la base técnica para evolucionar hacia DS 360, onboarding y comunicación proactiva.",
+      },
+
+      // ── 15 · Roadmap de 4 fases ───────────────────────────────────────
+      {
+        layout: "kpi-table",
+        eyebrow: "Roadmap evolutivo · 4 fases",
+        title: "De resolver problemas a anticiparlos y recomendar acciones de crecimiento",
+        rows: [
+          {
+            label: "Fase 1 · MVP — Resolver en Primer Contacto",
+            baseline: "8-12 semanas",
+            goal6m: "FCR medible · contención sin humano",
+            goal12m: "Base técnica DS 360 lista",
+            accent: "indigo",
+          },
+          {
+            label: "Fase 2 · DS 360 y Staff Copilot",
+            baseline: "Tras MVP",
+            goal6m: "Vista 360 staff · resúmenes auto",
+            goal12m: "Reducción TPR · escalaciones",
+            accent: "violet",
+          },
+          {
+            label: "Fase 3 · Onboarding inteligente y comunicación proactiva",
+            baseline: "Activación cohortes nuevas",
+            goal6m: "Journeys 6 meses activos",
+            goal12m: "Reducción deserción · mayor adopción",
+            accent: "sky",
+          },
+          {
+            label: "Fase 4 · Inteligencia predictiva y optimización comercial",
+            baseline: "Datos maduros",
+            goal6m: "Churn risk · NBA piloto",
+            goal12m: "Reducción churn · uplift ventas",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // ── 16 · KPIs ─────────────────────────────────────────────────────
+      {
+        layout: "metrics",
+        eyebrow: "KPIs recomendados",
+        title: "Cómo se mide el éxito",
+        metrics: [
+          { value: "FCR ↑", label: "% Resolución en primer contacto" },
+          { value: "TMR ↓", label: "Tiempo promedio de respuesta y resolución" },
+          { value: "Escal. ↓", label: "Reducción de escalaciones a humano" },
+          { value: "CSAT ↑", label: "Satisfacción de la DS por interacción" },
+          { value: "Churn ↓", label: "Reducción de deserción primeros 6 meses" },
+          { value: "Adopción ↑", label: "% DS autosuficientes · uso por canal" },
+        ],
+      },
+
+      // ── 17 · Cierre y próximos pasos ──────────────────────────────────
       {
         layout: "closing",
         title: "Próximos pasos recomendados",
         bullets: [
-          "Executive Briefing (Jun 2026) — alineación con Comité Directivo BeFra: presentación de los 3 OKRs y validación de roadmap.",
-          "Discovery OKR 1 (Jul 2026) — workshop con Operaciones y Cenapia: inventario de intents, base de conocimiento y reglas comerciales.",
-          "POC Asistente Operativo (Jul-Ago 2026) — piloto controlado en WhatsApp con cohorte de 5,000 DS y casos top-10 del workshop.",
-          "Discovery OKR 2 (Ago 2026) — workshop Marketing + Cenapia: cohortes 0-6m, contenidos LMS embebibles y agenda DS-OJ.",
-          "Business case por OKR (Sep 2026) — cuantificación de ROI por palanca con métricas reales del piloto OKR 1 para CFO/CEO.",
-          "Kick-off Fase 2 (Oct 2026) — Mamá Virtual en cohorte completa de DS nuevas + Habilitador de Staff en Cenapia.",
+          "Aprobación ejecutiva del programa Aliada Digital y del MVP de Resolución en Primer Contacto.",
+          "Discovery técnico (Jul 2026) — disponibilidad de datos, integraciones y reglas comerciales documentadas.",
+          "Workshop de tópicos y límites (Jul 2026) — con Operaciones, Atención y Cenapia para validar acciones permitidas.",
+          "Build del MVP (Ago-Oct 2026) — Agente DS 360 en canal prioritario con 6 tópicos y casos top.",
+          "Piloto controlado (Nov 2026) — cohorte de DS con métricas instrumentadas (FCR, contención, CSAT).",
+          "Plan de Fase 2 (Dic 2026) — DS 360 y Staff Copilot · base lista para acompañamiento proactivo.",
         ],
-        cta: "¿Avanzamos con el POC del Asistente Operativo en una cohorte de 5,000 DS?",
+        cta: "¿Avanzamos con el MVP de Resolución en Primer Contacto en una cohorte piloto de DS?",
       },
 
-      // ── SLIDE 17 · Gracias ───────────────────────────────────────────
+      // ── 18 · Cierre narrativa ─────────────────────────────────────────
       {
         layout: "thanks",
         eyebrow: "Salesforce · Betterware de México (BeFra)",
         title: "Gracias",
         subtitle:
-          "Resolución autónoma. Acompañamiento personalizado. Staff con visión 360. Tres palancas, una plataforma, 1.24M de razones.",
+          "La experiencia ideal no es que la DS contacte menos a Betterware porque se resignó. Es que contacte menos porque ahora sí puede resolver, entender y avanzar con autonomía.",
         brand: {
           astro: { variant: "astro-11", side: "right", bottom: "-50px", size: 240 },
           sparkles: [
