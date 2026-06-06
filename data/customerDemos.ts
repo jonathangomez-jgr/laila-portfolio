@@ -1654,4 +1654,720 @@ export const customerDemos: CustomerDemo[] = [
       },
     },
   },
+  {
+    slug: "betterware",
+    title: "Mamá Virtual — Acompañamiento 24/7 a la Distribuidora con Agentforce",
+    customerName: "Betterware de México (BeFra)",
+    industry: "Retail / Consumer Goods — Venta Directa",
+    description:
+      "Plan de cuenta para acompañar a las 1.24M de Distribuidoras y Asociadas de Betterware + JAFRA con un ecosistema agéntico — resolución en primer contacto, lenguaje tropicalizado y un equipo interno con visión 360 de cada DS para reducir churn en los primeros 6 meses críticos.",
+    logo: "/Customers/Betterware/images/Logo-betterware.png",
+    passcode: "better26",
+    tags: [
+      "Agentforce",
+      "Service Cloud",
+      "Data Cloud",
+      "Marketing Cloud Advanced",
+      "Tableau Next",
+      "Sales Cloud",
+      "Venta Directa LATAM",
+    ],
+    tabs: [
+      // ── 1. Overview ───────────────────────────────────────────────────
+      {
+        id: "overview",
+        label: "Overview",
+        title: "Resumen ejecutivo",
+        banner: "/Customers/Betterware/images/better.gif",
+        content:
+          "Betterware de México (NASDAQ: BWMX, ahora BeFra) opera el ecosistema de venta directa más grande del país: 1.24M de Asociadas y 63K Distribuidoras Independientes que llegan a 8M de hogares. El Antiexperience Workshop con la DS como persona central reveló que la prioridad #1 es resolver en primer contacto — y que la solución pasa por un agente que conozca su perfil, hable su lenguaje y la acompañe desde el primer día. Esta es la hoja de ruta para construir ese acompañamiento con Agentforce, Data Cloud y Service Cloud.",
+        overviewData: {
+          stats: [
+            { value: "$14.1B", label: "MXN ingresos consolidados FY 2024" },
+            { value: "1.24M", label: "Asociadas + Distribuidoras (BW + JAFRA)" },
+            { value: "8M", label: "Hogares mexicanos alcanzados" },
+            { value: "19.7%", label: "Margen Adj. EBITDA FY 2024" },
+            { value: "6 meses", label: "Journey crítico de la DS" },
+            { value: "3 🔴", label: "Resolver en primer contacto — prioridad #1 del taller" },
+          ],
+        },
+      },
+
+      // ── 2. Cliente / Industria ────────────────────────────────────────
+      {
+        id: "customer",
+        label: "Cliente / industria",
+        title: "Cliente e industria",
+        content:
+          "Betterware de México es la primera empresa mexicana con listado directo en NASDAQ (2020). Bajo la matriz BeFra opera dos marcas: Betterware (organización del hogar, cocina, baño, jardín) y JAFRA Cosmetics (fragancias, color, skincare), adquirida en 2022 por US$255M a Vorwerk. Su modelo de venta directa de dos niveles — Distribuidora (líder) + Asociada (vendedora) — es el motor del negocio: cada Asociada coloca pedidos por ~$2,158 MXN al mes (BW) o $2,439 MXN (JAFRA) en ciclos quincenales.",
+        customerProfile: {
+          stats: [
+            { label: "Razón social", value: "Betterware de México, S.A.P.I. de C.V. (BeFra)" },
+            { label: "Ticker", value: "NASDAQ: BWMX (cotización directa desde 2020)" },
+            { label: "Sede", value: "Guadalajara, Jalisco — México" },
+            { label: "Fundación", value: "1995 — 30 años de trayectoria en venta directa" },
+            { label: "Ingresos FY 2024", value: "Ps. 14,100.8 M (~USD $700M) · +8.4% YoY" },
+            { label: "Adj. EBITDA 2024", value: "Ps. 2,774.7 M · margen 19.7%" },
+            { label: "Hogares alcanzados", value: "~8M en México · ~4% market share household products" },
+            { label: "Sales force EOP 2024", value: "1,180,458 Asociadas + 63,339 Distribuidoras" },
+            { label: "Mercados", value: "México (core), USA (JAFRA), Guatemala, Ecuador (May 2025)" },
+            { label: "Modelo comercial", value: "Catálogo quincenal + 2 niveles (DS líder / Asociada)" },
+            { label: "Ticket promedio Asociada", value: "BW MX: $2,158 MXN · JAFRA MX: $2,439 MXN (Q4 2024)" },
+            { label: "Stack actual", value: "Shopify+ (e-comm), B+/J+ Apps, LMS de capacitación, contact center tradicional" },
+          ],
+          segments: [
+            {
+              name: "Betterware México — Hogar",
+              description:
+                "Catálogo de organización, cocina, baño, jardín y limpieza. 674K Asociadas y 42K Distribuidoras al cierre de 2024. Margen EBITDA 21.6% — el negocio más rentable del grupo. Crecimiento +4.6% YoY 2024 con foco en producto innovador y experiencia de la DS.",
+            },
+            {
+              name: "JAFRA México — Belleza y Cuidado Personal",
+              description:
+                "Fragancias, color, skincare y toiletries. 480K Asociadas y 19K Distribuidoras. Crecimiento +13.0% YoY 2024 — la marca pasó de 0% de crecimiento durante 15 años (bajo Vorwerk) a doblar utilidades en 3 años bajo BeFra. Margen EBITDA 13.0% (2021) → 20.7% (2024).",
+            },
+            {
+              name: "Distribuidora Independiente (DS) — Persona del Workshop",
+              description:
+                "Emprendedora que vende y distribuye en su comunidad. Puede ser nativa digital o no. Vive un journey crítico de 6 meses donde se define si crece o desiste. Necesita lenguaje tropicalizado, autonomía operativa y una sola fuente confiable que la conozca y la acompañe — no un directorio ni un escalamiento humano.",
+            },
+          ],
+          techStack: [
+            { category: "E-commerce DS", tool: "Shopify+ (B+/J+ Apps · catálogo digital · live shopping piloto)" },
+            { category: "ERP/Pedidos", tool: "Sistemas legacy de pedidos, saldos y liberación (manual)" },
+            { category: "Capacitación", tool: "LMS interno · Cenapia (centro nacional de capacitación)" },
+            { category: "Contact Center", tool: "Operación tradicional · saturación en horas pico, sin IA" },
+            { category: "Mensajería", tool: "WhatsApp / SMS / Email — múltiples líneas, sin agente unificado" },
+            { category: "Pagos", tool: "Kitspay (canal de pago — fricción reportada en taller)" },
+            { category: "BI", tool: "Reportes operativos (dispersos) — sin visión 360 de la DS" },
+          ],
+        },
+      },
+
+      // ── 3. Contexto ───────────────────────────────────────────────────
+      {
+        id: "context",
+        label: "Contexto",
+        title: "Contexto del reto — Antiexperience Workshop",
+        content:
+          "El Antiexperience Workshop (29 de mayo de 2026) reunió a 5 equipos en torno a la DS como persona central. Los dolores se mapearon en 5 áreas. La conclusión transversal: la DS depende excesivamente del soporte humano, recibe información confusa y siente atención sin empatía — justamente cuando vive su journey más crítico (los primeros 6 meses).",
+        contextData: {
+          groups: [
+            {
+              name: "Área 1 — Atención y resolución de problemas",
+              findings: [
+                "Tiene que recurrir a alguien directo o a un directorio para resolver — no hay una sola fuente confiable",
+                "Pedido incompleto / recibo incompleto que se queda sin gestión clara",
+                "No darle respuesta — el silencio operativo se convierte en motivo de churn",
+                "Saldos prometidos sin resolución — la confianza con la marca se erosiona",
+                "Prioridad #1 del taller — Resolver en Primer Contacto: 3 puntos rojos acumulados entre tableros",
+              ],
+            },
+            {
+              name: "Área 2 — Información y comunicación",
+              findings: [
+                "Respuestas tardadas — fuera de los tiempos del ciclo quincenal de venta",
+                "No tener información disponible cuando la DS la necesita (pedidos, saldos, reglas)",
+                "Saturación en horas pico — el contact center no escala a la base de 1.24M",
+                "Información confusa, dispersa entre sistemas y reportes desactualizados",
+                "Atención sin empatía — el dolor emocional pesa tanto como el operativo (Área 3)",
+              ],
+            },
+            {
+              name: "Áreas 3-5 — Experiencia, sistemas y comunicación empresa-DS",
+              findings: [
+                "DS no conectada emocionalmente con la marca — 'no estoy buscando, pero sí'",
+                "El staff no entiende el rol de la DS ni su perfil (segmentación, antigüedad, comportamiento)",
+                "Acceso complicado a información: errores, datos descontinuados, múltiples sistemas",
+                "El onboarding no es adecuado al rol — DS no entiende cómo ganar poco a poco con Betterware",
+                "Las DS no quieren salir a Kitspay — fricción explícita con el canal de pago actual",
+                "Comunicación desconectada entre SIA, empresa y Cenapia · procesos complejos o repetitivos",
+              ],
+            },
+          ],
+        },
+      },
+
+      // ── 4. Objetivo ───────────────────────────────────────────────────
+      {
+        id: "objective",
+        label: "Objetivo",
+        title: "Convertir a la DS en el centro del ecosistema con un acompañamiento 24/7 inteligente.",
+        content:
+          "Tres palancas. Una plataforma agéntica. Resolución en primer contacto como obsesión.",
+        objective: {
+          headline:
+            "Construir la 'Mamá Virtual' que conoce a cada Distribuidora — su perfil, su historial, sus objetivos y su lenguaje — y la acompaña desde el primer día con resolución autónoma, comunicación proactiva y el contexto completo que necesita el staff interno para atenderla con empatía real.",
+          okrs: [
+            {
+              label: "Resolver en Primer Contacto",
+              description:
+                "Asistente Operativo que clasifica intención en lenguaje natural tropicalizado, resuelve pedidos/saldos/reglas comerciales sin intervención humana y solo escala cuando es estrictamente necesario. Meta: pasar de soporte humano dependiente a >50% de incidencias resueltas por el agente.",
+              enabler: "Agentforce + Service Cloud + Data Cloud",
+              color: "indigo",
+            },
+            {
+              label: "Acompañamiento Personalizado en 6 Meses",
+              description:
+                "Mamá Virtual con pronósticos personalizados, agenda compartida DS-OJ, alertas motivacionales y capacitación embebida en el flujo. Reducir el churn en los primeros 6 meses críticos donde se define si la DS crece o desiste.",
+              enabler: "Agentforce + Marketing Cloud Advanced + Data Cloud",
+              color: "violet",
+            },
+            {
+              label: "Staff con Visión 360 de la DS",
+              description:
+                "Habilitador interno que entrega al equipo de operaciones y customer success el perfil completo, comportamiento de consumo y comportamiento comercial de cada DS — para atenderla con datos accionables y empatía real.",
+              enabler: "Agentforce + Tableau Next + Data Cloud",
+              color: "sky",
+            },
+          ],
+        },
+      },
+
+      // ── 5. Narrativa ──────────────────────────────────────────────────
+      {
+        id: "storytelling",
+        label: "Narrativa",
+        title: "Narrativa de valor",
+        content:
+          "Betterware no necesita más canales. Necesita un acompañamiento que se sienta humano cuando hay 1.24M de personas pidiendo respuestas a la vez.",
+        narrativeData: {
+          quote:
+            "La DS no se va por el catálogo. Se va porque nadie la conoció a tiempo. Agentforce es la 'Mamá Virtual' que sí la conoce — desde el primer pedido y a las 11 de la noche cuando termina su turno y empieza su negocio.",
+          pillars: [
+            {
+              title: "Empatía a escala — lenguaje tropicalizado, contexto completo",
+              description:
+                "Cada DS recibe atención que se siente personal, en su lenguaje, con su historial al frente. El agente reconoce si es una DS nueva en su mes 2 o una líder con 5 años de carrera. No hay preguntas redundantes ni respuestas cuadradas.",
+            },
+            {
+              title: "Autonomía como estrategia de prospección",
+              description:
+                "La DS más autónoma es la que más prospecta. Cuando puede resolver una incidencia operativa en 30 segundos por WhatsApp en lugar de esperar 4 horas a un humano, libera tiempo y energía para hacer lo que sí hace crecer su negocio: vender.",
+            },
+            {
+              title: "El staff atiende mejor cuando ve a la DS completa",
+              description:
+                "El equipo de Cenapia y customer success deja de operar a ciegas. Ve perfil, segmento, antigüedad, último pedido, comportamiento de consumo y agenda compartida con su OJ — todo en una pantalla. La empatía deja de ser intención y se vuelve dato accionable.",
+            },
+          ],
+          closing:
+            "El ecosistema de venta directa en LATAM representa $88,574M MXN al año (AMVD 2024). Betterware ya es líder. La pregunta es qué tipo de relación quiere construir con su 1.24M de distribuidoras antes que sus competidores se la lleven con un acompañamiento que sí se sienta humano.",
+        },
+      },
+
+      // ── 6. Solución ───────────────────────────────────────────────────
+      {
+        id: "solution",
+        label: "Solución",
+        title: "DS Intelligence Agent Ecosystem",
+        content:
+          "7 casos de uso priorizados desde el Antiexperience Workshop, agrupados en tres capas: agentes externos para la DS, habilitador interno para el staff y comunicación proactiva 360. Todos sobre la misma plataforma Salesforce con guardrails y trazabilidad completa.",
+        solution: [
+          {
+            product: "Agentforce + Service Cloud + Data Cloud",
+            focus: "Capa 1 — Resolución Autónoma para la DS (Externo)",
+            color: "indigo",
+            items: [
+              "Asistente Operativo: resolución en primer contacto de pedidos, devoluciones, saldos y reglas comerciales",
+              "Detección de intención en preguntas mal articuladas — la DS no necesita saber cómo explicarlo",
+              "Lenguaje natural tropicalizado · respuestas adaptativas, no cuadradas ni cerradas",
+              "Escalación inteligente solo cuando es necesario — con resumen IA y contexto completo al humano",
+              "Seguimiento de Pedidos y Gestión Financiera: visibilidad total saldos, transacciones y devoluciones",
+              "Notificaciones automáticas y proactivas — la DS deja de tener que perseguir información",
+              "Reducción >50% de tickets escalados a humanos · resolución medible en primer contacto",
+            ],
+          },
+          {
+            product: "Agentforce + Marketing Cloud Advanced + Data Cloud",
+            focus: "Capa 2 — Mamá Virtual y Acompañamiento Personalizado (Externo)",
+            color: "violet",
+            items: [
+              "Mamá Virtual: pronósticos personalizados de venta y evaluación de objetivos del ciclo",
+              "Análisis del perfil de la DS — el agente adapta lenguaje y tono (tropicalizado)",
+              "Seguimiento proactivo de avances · alertas motivacionales en el momento correcto",
+              "Agenda DS-OJ compartida — la DS y su Organizadora de Junta ven lo mismo, en un solo lugar",
+              "Asistente Personal de Negocio — '1 sola persona que pueda resolver' · guía a la autonomía",
+              "Onboarding Digital: journey paso a paso para DS no nativas digitales con lenguaje simple",
+              "Capacitación constante embebida en el flujo de trabajo · interfaz amigable",
+              "Reducción de deserción en los primeros 6 meses críticos del journey",
+            ],
+          },
+          {
+            product: "Agentforce + Tableau Next + Data Cloud",
+            focus: "Capa 3 — Staff con Visión 360 + Comunicación Proactiva (Interno / Híbrido)",
+            color: "sky",
+            items: [
+              "Habilitador de Información: acceso unificado al perfil y contexto completo de cada DS",
+              "Tracking de comportamiento de consumo y comportamiento comercial — el staff atiende con datos",
+              "Base de conocimiento siempre actualizada · sugerencia de solución adecuada por situación",
+              "Agente DS 360: segmentación por tiempo, antigüedad y clasificación de DS",
+              "Comunicación proactiva clara de procesos, objetivos y novedades antes de que surjan dudas",
+              "'DU on cía' — transmitir lo más relevante hoy de forma clara y digerible",
+              "Anticipación de riesgos de churn con Tableau Next + datos unificados en Data Cloud",
+              "Cumplimiento LFPDPPP México · datos en jurisdicción local · Einstein Trust Layer",
+            ],
+          },
+        ],
+      },
+
+      // ── 7. Arquitectura ───────────────────────────────────────────────
+      {
+        id: "arquitectura",
+        label: "Arquitectura",
+        title: "System Landscape — Betterware (BeFra)",
+        content:
+          "Vista del ecosistema tecnológico: sistemas externos del modelo de venta directa, capa de integración, productos Salesforce y foundation Einstein Trust Layer. La arquitectura responde directamente a las brechas del Antiexperience Workshop.",
+        archData: {
+          title: "Betterware System Landscape",
+          zones: [
+            {
+              id: "external",
+              label: "Sistemas Externos · Operación BW + JAFRA",
+              color: "slate",
+              nodes: [
+                {
+                  name: "ERP / Pedidos",
+                  items: ["Catálogo quincenal", "Liberación de pedidos", "Saldos y transacciones", "Reglas comerciales"],
+                },
+                {
+                  name: "Shopify+ (B+ / J+)",
+                  items: ["Storefront DS", "Catálogo digital", "Live shopping piloto"],
+                },
+                {
+                  name: "LMS · Cenapia",
+                  items: ["Capacitación", "Onboarding por rol", "Contenidos certificados"],
+                },
+                {
+                  name: "Kitspay",
+                  items: ["Pagos DS", "Cobros", "Conciliación"],
+                },
+                {
+                  name: "Mensajería",
+                  items: ["WhatsApp Business", "SMS", "Email transaccional"],
+                },
+              ],
+            },
+            {
+              id: "salesforce",
+              label: "Salesforce Customer 360 · DS Intelligence Platform",
+              color: "indigo",
+              nodes: [
+                {
+                  name: "Service Cloud",
+                  items: ["Casos DS", "SLAs", "Omni-Channel routing", "Knowledge", "Escalaciones inteligentes"],
+                },
+                {
+                  name: "Sales Cloud",
+                  items: ["Cuentas DS", "Pipeline de prospección", "Comportamiento comercial", "Segmentación"],
+                },
+                {
+                  name: "Marketing Cloud Advanced",
+                  items: ["Journey Builder por cohorte", "Comunicación proactiva", "Capacitación embebida", "Personalización"],
+                },
+                {
+                  name: "Data Cloud",
+                  items: ["Perfil unificado DS", "Identity Resolution", "Calculated Insights", "Churn risk score"],
+                },
+                {
+                  name: "Tableau Next",
+                  items: ["Dashboards staff", "Anticipación de churn", "Comportamiento de consumo", "Tableau Pulse"],
+                },
+                {
+                  name: "Slack",
+                  items: ["Colaboración interna", "Notificaciones a staff", "Agentes embebidos"],
+                },
+              ],
+            },
+            {
+              id: "agents",
+              label: "Agentforce · Capa Agéntica",
+              color: "violet",
+              nodes: [
+                {
+                  name: "Mamá Virtual",
+                  items: ["Acompañamiento", "Objetivos", "Lenguaje tropicalizado"],
+                },
+                {
+                  name: "Asistente Operativo",
+                  items: ["Resolución 1er contacto", "Pedidos / saldos", "Escalación inteligente"],
+                },
+                {
+                  name: "Asistente Personal",
+                  items: ["1 sola persona que resuelve", "Reglas comerciales", "Autonomía"],
+                },
+                {
+                  name: "Agente DS 360",
+                  items: ["Segmentación", "Comunicación proactiva", "Agenda DS-OJ"],
+                },
+                {
+                  name: "Habilitador Staff",
+                  items: ["Vista 360 DS", "Atención empática", "Datos accionables"],
+                },
+              ],
+            },
+          ],
+          bridge: {
+            label: "Capa de Integración",
+            sublabel: "API-Led Connectivity · Zero Copy donde aplique",
+            items: ["MuleSoft Anypoint", "API Manager", "Conectores ERP / Shopify+ / Kitspay / LMS"],
+          },
+          foundation: {
+            label: "Einstein Trust Layer · LFPDPPP MX · Auditoría y Gobernanza",
+            items: ["Datos en jurisdicción MX", "Masking dinámico", "Audit Trail", "Toxicity & Bias detection"],
+          },
+        },
+      },
+
+      // ── 8. Resultados ─────────────────────────────────────────────────
+      {
+        id: "outcomes",
+        label: "Resultados",
+        title: "Resultados esperados",
+        content:
+          "Los KPIs se organizan en tres dimensiones que reflejan los tres OKRs: resolución autónoma, acompañamiento y staff con visión 360. Línea base extraída del Antiexperience Workshop y de las métricas operativas reportadas por BeFra. Benchmarks de la industria usados como referencia.",
+        kpiSummary: [
+          {
+            dimension: "Resolución Autónoma · DS",
+            kpiName: "Resolución en primer contacto (FCR)",
+            value6m: "30%+ tickets resueltos por agente",
+            value12m: "50%+ tickets · benchmark Williams-Sonoma 60%",
+            color: "indigo",
+          },
+          {
+            dimension: "Acompañamiento · 6 Meses",
+            kpiName: "Reducción de churn DS nuevas",
+            value6m: "−10% deserción cohorte 0-6m",
+            value12m: "−25% · cohortes activadas tempranamente",
+            color: "violet",
+          },
+          {
+            dimension: "Staff · Visión 360",
+            kpiName: "Tiempo promedio de resolución staff",
+            value6m: "−25% TPR con vista 360",
+            value12m: "−45% TPR · NPS staff +12 pts",
+            color: "sky",
+          },
+        ],
+        kpis: [
+          {
+            group: "OKR 1 — Resolución Autónoma · Resolver en Primer Contacto (3 🔴 prioridad #1)",
+            items: [
+              {
+                name: "Resolución en primer contacto (FCR) — agente vs humano",
+                baseline: "Bajo · sin medición sistemática",
+                goal6m: "30%+ tickets resueltos por agente",
+                goal12m: "50%+ · ref. Williams-Sonoma Olive 60%",
+              },
+              {
+                name: "Tickets escalados al staff humano",
+                baseline: "Alto — saturación en horas pico",
+                goal6m: "−40% volumen escalado",
+                goal12m: "−60% · staff enfocado en alto valor",
+              },
+              {
+                name: "Tiempo de respuesta promedio (WhatsApp)",
+                baseline: "Horas / días en horas pico",
+                goal6m: "<10 min · 24/7",
+                goal12m: "<3 min · resolución autónoma",
+              },
+              {
+                name: "Cobertura de intención en lenguaje tropicalizado",
+                baseline: "0% — sin agente conversacional",
+                goal6m: "70%+ intents cubiertos",
+                goal12m: "90%+ · respuestas adaptativas",
+              },
+              {
+                name: "Tasa de éxito en gestión de saldos / devoluciones",
+                baseline: "Sin agente — gestión manual",
+                goal6m: "60%+ casos cerrados sin humano",
+                goal12m: "80%+ · benchmark Safari365 62%",
+              },
+            ],
+          },
+          {
+            group: "OKR 2 — Acompañamiento · Mamá Virtual (DS 6 meses críticos)",
+            items: [
+              {
+                name: "Churn DS en primeros 6 meses",
+                baseline: "Alto · journey crítico sin acompañamiento",
+                goal6m: "−10% deserción cohorte",
+                goal12m: "−25% · activación temprana",
+              },
+              {
+                name: "Cumplimiento de objetivos de venta DS",
+                baseline: "DS reportadamente sin objetivo claro",
+                goal6m: "Top 30% DS con plan activo",
+                goal12m: "Top 60% · pronósticos personalizados",
+              },
+              {
+                name: "Adopción agente Mamá Virtual",
+                baseline: "0% — agente no existe",
+                goal6m: "40%+ DS activas usándolo",
+                goal12m: "75%+ DS · 90%+ DS nuevas",
+              },
+              {
+                name: "Capacitación completada en flujo (LMS embebido)",
+                baseline: "Cursos fuera del flujo de trabajo",
+                goal6m: "+50% módulos completados",
+                goal12m: "+120% · capacitación en contexto",
+              },
+              {
+                name: "NPS de Distribuidora (medición sistemática)",
+                baseline: "Sin medición consolidada en CRM",
+                goal6m: "Línea base activa",
+                goal12m: "+15 pts NPS DS",
+              },
+            ],
+          },
+          {
+            group: "OKR 3 — Staff con Visión 360 · Atención Empática y Accionable",
+            items: [
+              {
+                name: "Tiempo promedio de resolución del staff",
+                baseline: "Alto · información dispersa entre sistemas",
+                goal6m: "−25% TPR",
+                goal12m: "−45% · vista 360 unificada",
+              },
+              {
+                name: "Escalaciones innecesarias (mismo nivel)",
+                baseline: "Frecuentes · falta de contexto",
+                goal6m: "−30%",
+                goal12m: "−60% · staff con perfil completo",
+              },
+              {
+                name: "DS clasificadas y segmentadas activamente",
+                baseline: "Segmentación básica",
+                goal6m: "5+ segmentos por tiempo / clasificación",
+                goal12m: "12+ segmentos con enriquecimiento IA",
+              },
+              {
+                name: "Anticipación de riesgo de churn (Tableau Next)",
+                baseline: "Reactivo · sin modelo predictivo",
+                goal6m: "Modelo activo top 1,000 DS riesgo",
+                goal12m: "Top 5,000/mes · campañas preventivas",
+              },
+              {
+                name: "Productividad del staff (benchmark Salesforce)",
+                baseline: "Sin línea base con IA generativa",
+                goal6m: "+15% productividad equipo",
+                goal12m: "+34% · ref. Agentforce customer base",
+              },
+            ],
+          },
+        ],
+      },
+
+      // ── 9. Historia ───────────────────────────────────────────────────
+      {
+        id: "historia",
+        label: "Historia",
+        title: "Lupita y la Mamá Virtual",
+        content:
+          "Lupita Hernández tiene 38 años, vive en Tlaquepaque y entró a Betterware hace 4 meses. Está en el corazón del journey crítico de 6 meses. Esta es la historia de cómo, en un solo día complicado, el ecosistema agéntico de Betterware la sostuvo — y la convirtió de una DS al borde de desistir en una líder en crecimiento.",
+        storyData: {
+          protagonist: "Lupita Hernández",
+          protagonistRole: "Distribuidora Independiente · Mes 4 · Tlaquepaque, Jalisco",
+          intro:
+            "Lupita es un personaje compuesto que representa fielmente el perfil de la DS en su journey crítico de 6 meses. La historia ilustra el futuro habilitado por Agentforce — basado en hallazgos reales del Antiexperience Workshop con el equipo de Betterware (29-may-2026).",
+          scenes: [
+            {
+              number: 1,
+              title: "El catálogo cierra mañana",
+              subtitle: "Lunes · 09:14 a.m. · Cocina de Lupita · Tlaquepaque",
+              description:
+                "Lupita está terminando de armar los pedidos de su grupo antes de que cierre el catálogo de la quincena. Tiene 11 clientas en lista y un saldo pendiente con Betterware que la tiene preocupada — le prometieron una bonificación hace dos quincenas y aún no la ve aplicada. En meses anteriores hubiera escrito al directorio, esperado horas y aceptado una respuesta vaga. Hoy abre WhatsApp y le escribe a Betterware en el lenguaje en que habla: 'Oye, ¿qué onda con mi saldo? Ya van dos quincenas.'",
+              channel: "WhatsApp · Mamá Virtual (Agentforce)",
+              image: "/Customers/Betterware/images/better.gif",
+              pilar: "OKR 1 · Resolución autónoma + lenguaje tropicalizado",
+              pilarColor: "indigo",
+              products: ["Agentforce", "Service Cloud", "Data Cloud"],
+              insight:
+                "El agente reconoce el tono coloquial sin tropezar. Antes el sistema esperaba un formato cuadrado; hoy entiende intención. La DS se siente escuchada desde la primera frase.",
+            },
+            {
+              number: 2,
+              title: "El agente ya la conoce",
+              subtitle: "Lunes · 09:14 a.m. · WhatsApp Business",
+              description:
+                "Antes de que Lupita termine de escribir, la Mamá Virtual ya tiene su contexto completo: DS desde febrero, ciclo 4, segmento 'Cohorte Nueva 6m', historial de pedidos, bonificación pendiente del concurso 'Marzo Imparable' por $640 MXN sin aplicar por una incidencia conocida en el sistema de saldos. El agente no le pide su número de DS ni le pregunta de qué bonificación habla. Le responde: 'Hola Lupita, ya vi tu bonificación de Marzo Imparable. Está pendiente por una incidencia de aplicación. Te la libero ahora mismo, en 5 minutos la ves reflejada en tu saldo.'",
+              channel: "Agentforce · Data Cloud (Perfil DS unificado)",
+              image: "/Customers/Betterware/images/better.gif",
+              pilar: "OKR 1 · FCR + Visión 360",
+              pilarColor: "indigo",
+              products: ["Agentforce", "Data Cloud", "Service Cloud"],
+              insight:
+                "El staff tradicional pide número de cliente, motivo, fecha. La Mamá Virtual ve a Lupita completa: identidad, comportamiento, saldo, segmento. Cero preguntas redundantes. Resolución en primer contacto.",
+            },
+            {
+              number: 3,
+              title: "Pedido incompleto — el dolor #2 del workshop",
+              subtitle: "Lunes · 11:42 a.m. · Sala de Lupita",
+              description:
+                "Llega su pedido de la quincena. Faltan dos productos: el set de organizadores que prometió a doña Carmen y un kit JAFRA que va a regalar su comadre el sábado. Antes esto era una llamada al contact center de 47 minutos en hora pico. Lupita le saca foto al recibo y le manda al agente: 'Mira, no me llegaron estos.' La Mamá Virtual reconoce el recibo, identifica los SKUs faltantes, abre un caso, dispara el reenvío express desde Cenapia y le confirma fecha de entrega: jueves antes de las 6 p.m.",
+              channel: "WhatsApp · Asistente Operativo · OMS",
+              image: "/Customers/Betterware/images/better.gif",
+              pilar: "OKR 1 · Resolución autónoma de pedidos",
+              pilarColor: "indigo",
+              products: ["Agentforce", "Service Cloud", "OMS"],
+              insight:
+                "Antes la DS hacía cosas que no son su responsabilidad primaria — buscar SKUs, escribir formularios, llamar varias veces. Hoy una foto del recibo es suficiente. La autonomía se vuelve estrategia de prospección.",
+            },
+            {
+              number: 4,
+              title: "La Mamá Virtual la cuida",
+              subtitle: "Lunes · 11:43 a.m. · Mensaje proactivo",
+              description:
+                "Antes de cerrar la conversación, la Mamá Virtual le manda un mensaje proactivo: 'Lupita, vi que en este ciclo te faltan $2,150 para llegar a tu objetivo de quincena. Tienes 3 clientas que compraron menos que el ciclo pasado: doña Cris, Jessi y Mary. ¿Te paso un mensaje listo para reactivarlas? También vi que aún no terminas el módulo de Cierre de Venta del LMS — te tomaría 8 minutos y aplica directo a este caso.' Lupita acepta los dos. Antes esto requería que un OJ humano la llamara. Hoy es la propia Mamá Virtual la que la guía.",
+              channel: "Mamá Virtual · Marketing Cloud Advanced · LMS embebido",
+              image: "/Customers/Betterware/images/better.gif",
+              pilar: "OKR 2 · Acompañamiento personalizado + capacitación en flujo",
+              pilarColor: "violet",
+              products: ["Agentforce", "Marketing Cloud Advanced", "Data Cloud"],
+              insight:
+                "El acompañamiento deja de ser intención y se vuelve momento. La capacitación deja de ser un curso fuera del flujo y se convierte en una microintervención de 8 minutos justo cuando aplica.",
+            },
+            {
+              number: 5,
+              title: "Doña Carmen quiere pagar con Kitspay (pero no quiere)",
+              subtitle: "Lunes · 14:08 p.m. · Doña Carmen llama a Lupita",
+              description:
+                "Doña Carmen quiere pagar pero le dice a Lupita que 'eso del Kitspay no me late, mejor te paso transferencia.' Es exactamente la fricción que el Área 5 del workshop identificó: 'Las DS no quieren salir a Kitspay.' Lupita le pregunta a la Mamá Virtual qué hacer. El agente le explica en lenguaje claro las dos opciones: cómo registrar la transferencia en el sistema y cómo, si Doña Carmen quiere, ayudarla con el primer Kitspay paso a paso. No es una respuesta cuadrada — es información contextualizada que se adapta a la situación.",
+              channel: "Mamá Virtual · Asistente Personal de Negocio",
+              image: "/Customers/Betterware/images/better.gif",
+              pilar: "OKR 2 · '1 sola persona que resuelve' · respuestas adaptativas",
+              pilarColor: "violet",
+              products: ["Agentforce", "Sales Cloud", "Data Cloud"],
+              insight:
+                "La fricción con Kitspay no se resuelve forzando — se resuelve acompañando. El agente da opciones, no respuestas únicas. La DS siente que tiene un asistente, no un chatbot.",
+            },
+            {
+              number: 6,
+              title: "El staff la ve completa",
+              subtitle: "Martes · 10:30 a.m. · Centro de Servicio Betterware · Guadalajara",
+              description:
+                "Marisol, del equipo de customer success de Cenapia, recibe una alerta del Habilitador de Información: 'Lupita Hernández — DS Mes 4 — score de churn riesgo medio creciente. Recomendación: llamada de acompañamiento esta semana.' Antes Marisol llamaba con un nombre y un número. Hoy abre el perfil 360 en Tableau Next: comportamiento de consumo de las clientas de Lupita, comportamiento comercial (cumplimiento, recencia, tipo de productos), historial de interacciones con la Mamá Virtual, módulos de capacitación completados, agenda DS-OJ. Llama con datos accionables y empatía real.",
+              channel: "Tableau Next · Habilitador de Información · Service Cloud",
+              image: "/Customers/Betterware/images/better.gif",
+              pilar: "OKR 3 · Staff con visión 360 + anticipación de churn",
+              pilarColor: "sky",
+              products: ["Tableau Next", "Data Cloud", "Agentforce", "Slack"],
+              insight:
+                "La empatía deja de ser intención y se vuelve dato accionable. El staff ya no atiende a ciegas — atiende con el contexto completo que el workshop pidió desde el primer dolor identificado.",
+            },
+            {
+              number: 7,
+              title: "Lupita en su mes 6 — la cohorte que sí se queda",
+              subtitle: "Epílogo · Dos meses después · Tlaquepaque",
+              description:
+                "Lupita cumple 6 meses como Distribuidora. Está en el percentil correcto de su cohorte: cumplió objetivo en 4 de los últimos 5 ciclos, completó 80% del LMS, recomendó a 2 nuevas Asociadas y no escaló ningún ticket al humano en las últimas 4 semanas. Cuando una compañera nueva le pregunta '¿qué hago si no me llega un pedido?', Lupita le responde: 'Le escribes a la Mamá. Te resuelve.' Eso es lo que cambió. No es la tecnología — es la sensación de tener a alguien que la conoce, que habla su idioma y que la acompaña a cualquier hora.",
+              channel: "Sales Cloud · Marketing Cloud · Data Cloud · Agentforce",
+              image: "/Customers/Betterware/images/better.gif",
+              pilar: "Los 3 OKRs · DS que sí se queda y crece",
+              pilarColor: "emerald",
+              products: ["Agentforce", "Sales Cloud", "Data Cloud", "Marketing Cloud Advanced", "Tableau Next"],
+              insight:
+                "Resolución autónoma. Acompañamiento personalizado. Staff con visión 360. Tres palancas, una plataforma, una DS que se queda — y multiplica.",
+            },
+          ],
+        },
+      },
+
+      // ── 10. Assets ────────────────────────────────────────────────────
+      {
+        id: "assets",
+        label: "Assets",
+        title: "Assets de la solución",
+        content:
+          "Materiales disponibles y por desarrollar para soportar la conversación con Betterware (BeFra).",
+        assetsData: {
+          items: [
+            {
+              name: "Antiexperience Workshop — Betterware (29-may-2026)",
+              description:
+                "Documento del taller con persona DS, 5 áreas de pain points, 7 casos de uso Agentforce, roadmap Now/Next/Future y métricas de la industria.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/Antiexperience Workshop — Betterware.pdf",
+            },
+            {
+              name: "Deck Ejecutivo — Comité Directivo",
+              description:
+                "Presentación de 18 minutos para el Comité Directivo de BeFra con los 3 OKRs, ROI por palanca y próximos pasos. Diseñada con los lineamientos visuales oficiales de Salesforce.",
+              available: true,
+              type: "deck",
+              url: "/customer-demos/betterware/deck/executive",
+            },
+            {
+              name: "Historia de la DS — Modo Inmersivo (Lupita)",
+              description:
+                "Recorrido por las 7 escenas del journey de Lupita en su Mes 4: del dolor del workshop a la cohorte que sí se queda, gracias a la Mamá Virtual.",
+              available: true,
+              type: "story",
+              url: "/customer-demos/betterware#historia",
+            },
+            {
+              name: "Demo Live — Mamá Virtual en WhatsApp",
+              description:
+                "Demo en vivo del agente conversacional con datos sintéticos de una DS de Tlaquepaque (saldo pendiente, pedido incompleto y reactivación).",
+              available: false,
+              type: "video",
+            },
+            {
+              name: "Mockup — Vista 360 del Staff (Cenapia)",
+              description:
+                "Pantalla del Habilitador de Información con perfil DS, comportamiento de consumo y comercial, agenda DS-OJ y score de churn (Tableau Next).",
+              available: false,
+              type: "mockup",
+            },
+            {
+              name: "Arquitectura de Referencia — DS Intelligence Platform",
+              description:
+                "Diagrama del System Landscape: ERP, Shopify+, LMS, Kitspay y mensajería integrados con Salesforce + Agentforce + Einstein Trust Layer.",
+              available: false,
+              type: "arch",
+            },
+          ],
+        },
+      },
+    ],
+    translations: {
+      en: {
+        title: "Virtual Mom — 24/7 AI Companion for Distributors with Agentforce",
+        description:
+          "Account plan to support Betterware + JAFRA's 1.24M Distributors and Associates with an agentic ecosystem — first-contact resolution, tropicalized language, and an internal team with full 360 visibility of every DS to reduce churn during the critical first 6 months.",
+        industry: "Retail / Consumer Goods — Direct Selling",
+        tabs: [
+          { id: "overview", label: "Overview", title: "Executive summary", content: "Betterware de México (NASDAQ: BWMX, now BeFra) operates Mexico's largest direct-selling ecosystem: 1.24M Associates and 63K Independent Distributors reaching 8M households. The Antiexperience Workshop, with the DS at the center, identified first-contact resolution as priority #1 — solved by an agent that knows her profile, speaks her language, and supports her from day one. This is the roadmap to build that companion with Agentforce, Data Cloud, and Service Cloud." },
+          { id: "customer", label: "Client / industry", title: "Client and industry", content: "Betterware de México is the first Mexican company directly listed on NASDAQ (2020). Under parent BeFra it runs two brands: Betterware (home organization, kitchen, bath, garden) and JAFRA Cosmetics (fragrance, color, skincare), acquired in 2022 from Vorwerk for US$255M. Its two-tier direct sales model — Distributor (leader) + Associate (seller) — is the engine: every Associate places ~$2,158 MXN/month (BW) or $2,439 MXN (JAFRA) on biweekly cycles." },
+          { id: "context", label: "Context", title: "Workshop diagnosis", content: "The Antiexperience Workshop (May 29, 2026) brought 5 teams together around the DS. Pain points were mapped across 5 areas. Cross-cutting conclusion: the DS is overly dependent on human support, gets confusing information, and feels attention without empathy — exactly when she's living her most critical journey (the first 6 months)." },
+          { id: "objective", label: "Objective", title: "Put the DS at the center with intelligent 24/7 support.", content: "Three levers. One agentic platform. First-contact resolution as obsession." },
+          { id: "storytelling", label: "Narrative", title: "Value narrative", content: "Betterware doesn't need more channels. It needs support that feels human when 1.24M people are asking for answers at the same time." },
+          { id: "solution", label: "Solution", title: "DS Intelligence Agent Ecosystem", content: "7 use cases prioritized from the Antiexperience Workshop, grouped into three layers: external agents for the DS, internal enablement for staff, and proactive 360 communication. All on the same Salesforce platform with full guardrails and traceability." },
+          { id: "arquitectura", label: "Architecture", title: "System Landscape — Betterware (BeFra)", content: "Tech ecosystem view: external direct-selling systems, integration layer, Salesforce products, and Einstein Trust Layer foundation. The architecture responds directly to the workshop gaps." },
+          { id: "outcomes", label: "Results", title: "Expected outcomes", content: "KPIs are organized in three dimensions reflecting the three OKRs: autonomous resolution, accompaniment, and 360 staff visibility. Baseline from the Antiexperience Workshop and BeFra reported metrics. Industry benchmarks used as reference." },
+          { id: "historia", label: "Story", title: "Lupita and the Virtual Mom", content: "Lupita Hernández is 38, lives in Tlaquepaque, and joined Betterware 4 months ago — at the heart of the critical 6-month journey. This is the story of how, in a single hectic day, Betterware's agentic ecosystem held her up — and turned a DS on the verge of giving up into a growing leader." },
+          { id: "assets", label: "Assets", title: "Solution assets", content: "Available and to-be-developed materials to support the conversation with Betterware (BeFra)." },
+        ],
+      },
+      pt: {
+        title: "Mamãe Virtual — Acompanhamento 24/7 da Distribuidora com Agentforce",
+        description:
+          "Plano de conta para acompanhar as 1,24M de Distribuidoras e Associadas da Betterware + JAFRA com um ecossistema agêntico — resolução em primeiro contato, linguagem tropicalizada e uma equipe interna com visão 360 de cada DS para reduzir churn nos 6 primeiros meses críticos.",
+        industry: "Varejo / Bens de Consumo — Venda Direta",
+        tabs: [
+          { id: "overview", label: "Overview", title: "Resumo executivo", content: "A Betterware de México (NASDAQ: BWMX, agora BeFra) opera o maior ecossistema de venda direta do país: 1,24M de Associadas e 63K de Distribuidoras Independentes que alcançam 8M de lares. O Antiexperience Workshop, com a DS no centro, mostrou que a prioridade nº1 é resolver em primeiro contato — e a solução passa por um agente que conhece seu perfil, fala sua linguagem e a acompanha desde o primeiro dia. Este é o roadmap para construir esse acompanhamento com Agentforce, Data Cloud e Service Cloud." },
+          { id: "customer", label: "Cliente / indústria", title: "Cliente e indústria", content: "A Betterware de México foi a primeira empresa mexicana com listagem direta na NASDAQ (2020). Sob a holding BeFra opera duas marcas: Betterware (organização do lar, cozinha, banho, jardim) e JAFRA Cosmetics (perfumaria, cor, skincare), adquirida em 2022 da Vorwerk por US$ 255M. Seu modelo de venda direta de dois níveis — Distribuidora (líder) + Associada (vendedora) — é o motor: cada Associada coloca ~$2.158 MXN/mês (BW) ou $2.439 MXN (JAFRA) em ciclos quinzenais." },
+          { id: "context", label: "Contexto", title: "Diagnóstico do workshop", content: "O Antiexperience Workshop (29-mai-2026) reuniu 5 times em torno da DS como persona central. Os pontos de dor foram mapeados em 5 áreas. Conclusão transversal: a DS depende excessivamente do suporte humano, recebe informação confusa e sente atendimento sem empatia — justamente quando vive sua jornada mais crítica (os primeiros 6 meses)." },
+          { id: "objective", label: "Objetivo", title: "Colocar a DS no centro com acompanhamento inteligente 24/7.", content: "Três alavancas. Uma plataforma agêntica. Resolução em primeiro contato como obsessão." },
+          { id: "storytelling", label: "Narrativa", title: "Narrativa de valor", content: "A Betterware não precisa de mais canais. Precisa de um acompanhamento que pareça humano quando 1,24M de pessoas pedem respostas ao mesmo tempo." },
+          { id: "solution", label: "Solução", title: "DS Intelligence Agent Ecosystem", content: "7 casos de uso priorizados a partir do Antiexperience Workshop, agrupados em três camadas: agentes externos para a DS, habilitador interno para a equipe e comunicação proativa 360. Tudo na mesma plataforma Salesforce com guardrails e rastreabilidade completa." },
+          { id: "arquitectura", label: "Arquitetura", title: "System Landscape — Betterware (BeFra)", content: "Visão do ecossistema tecnológico: sistemas externos do modelo de venda direta, camada de integração, produtos Salesforce e fundação Einstein Trust Layer. A arquitetura responde diretamente às lacunas do workshop." },
+          { id: "outcomes", label: "Resultados", title: "Resultados esperados", content: "Os KPIs estão organizados em três dimensões que refletem os três OKRs: resolução autônoma, acompanhamento e equipe com visão 360. Linha de base extraída do Antiexperience Workshop e das métricas reportadas pela BeFra. Benchmarks da indústria usados como referência." },
+          { id: "historia", label: "História", title: "Lupita e a Mamãe Virtual", content: "Lupita Hernández tem 38 anos, mora em Tlaquepaque e entrou na Betterware há 4 meses — no coração da jornada crítica de 6 meses. Esta é a história de como, em um único dia complicado, o ecossistema agêntico da Betterware a sustentou — e transformou uma DS prestes a desistir em uma líder em crescimento." },
+          { id: "assets", label: "Ativos", title: "Ativos da solução", content: "Materiais disponíveis e a desenvolver para apoiar a conversa com a Betterware (BeFra)." },
+        ],
+      },
+    },
+  },
 ];
