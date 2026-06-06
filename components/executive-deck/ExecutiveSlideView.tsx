@@ -1,4 +1,9 @@
-import type { ExecutiveSlide, SlideAccent } from "../../data/executiveDecks";
+import type {
+  DeckProductLogo,
+  ExecutiveSlide,
+  SlideAccent,
+} from "../../data/executiveDecks";
+import DeckBrandDecor, { DeckProductChips } from "./DeckBrandDecor";
 import DeckQRCode from "./DeckQRCode";
 
 /* Maps the data accent token → SFDC 2026 brand palette classes */
@@ -28,12 +33,19 @@ function SlideTitle({ children }: { children: string }) {
 }
 
 export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide }) {
+  const brandDecor = slide.brand ? <DeckBrandDecor brand={slide.brand} /> : null;
+  const productChips =
+    "products" in slide && slide.products && slide.products.length > 0 ? (
+      <DeckProductChips products={slide.products as DeckProductLogo[]} />
+    ) : null;
+
   switch (slide.layout) {
 
     /* ── Title (dark) ─────────────────────────────────────────────────── */
     case "title":
       return (
         <div className="deck-slide-inner deck-slide-title">
+          {brandDecor}
           {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
           <h1 className="deck-hero-title">{slide.title}</h1>
           {slide.subtitle && (
@@ -55,11 +67,13 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
     case "section":
       return (
         <div className="deck-slide-inner deck-slide-section">
+          {brandDecor}
           {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
           <h2 className="deck-section-title">{slide.title}</h2>
           {slide.subtitle && (
             <p className="deck-section-subtitle mt-6 max-w-3xl">{slide.subtitle}</p>
           )}
+          {productChips && <div className="mt-8">{productChips}</div>}
         </div>
       );
 
@@ -67,6 +81,7 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
     case "bullets":
       return (
         <div className="deck-slide-inner">
+          {brandDecor}
           {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
           <SlideTitle>{slide.title}</SlideTitle>
           <ul className="deck-bullet-list mt-9">
@@ -87,6 +102,7 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
     case "metrics":
       return (
         <div className="deck-slide-inner">
+          {brandDecor}
           {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
           <SlideTitle>{slide.title}</SlideTitle>
           <div className="deck-metrics-grid mt-10">
@@ -104,8 +120,10 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
     case "split":
       return (
         <div className="deck-slide-inner">
+          {brandDecor}
           {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
           <SlideTitle>{slide.title}</SlideTitle>
+          {productChips}
           <div className="deck-split-grid mt-9">
             {[slide.left, slide.right].map((column) => (
               <div key={column.heading} className="deck-split-panel">
@@ -128,8 +146,10 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
     case "pillars":
       return (
         <div className="deck-slide-inner">
+          {brandDecor}
           {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
           <SlideTitle>{slide.title}</SlideTitle>
+          {productChips}
           <div className="deck-pillars-grid mt-9">
             {slide.pillars.map((pillar) => {
               const a = pillarAccent[pillar.accent ?? "indigo"];
@@ -152,6 +172,7 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
     case "thanks":
       return (
         <div className="deck-slide-inner deck-slide-section">
+          {brandDecor}
           {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
           <h1 className="deck-thanks-title">{slide.title}</h1>
           {slide.subtitle && (
@@ -165,6 +186,7 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
       return (
         <div className="deck-slide-inner deck-slide-closing deck-slide-section"
              style={{ alignItems: "flex-start", textAlign: "left" }}>
+          {brandDecor}
           <h2 className="deck-section-title">{slide.title}</h2>
           {slide.bullets && (
             <ul className="deck-bullet-list mt-10 max-w-2xl">
@@ -184,6 +206,7 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
     case "quote":
       return (
         <div className="deck-slide-inner deck-slide-section">
+          {brandDecor}
           <div className="deck-quote-wrapper max-w-4xl">
             <span className="deck-quote-mark" aria-hidden>&#8220;</span>
             <blockquote className="deck-quote-text">{slide.quote}</blockquote>
@@ -202,6 +225,7 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
     case "comparison":
       return (
         <div className="deck-slide-inner">
+          {brandDecor}
           {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
           <SlideTitle>{slide.title}</SlideTitle>
           <div className="deck-comparison-grid mt-9">
@@ -240,6 +264,7 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
     case "kpi-table":
       return (
         <div className="deck-slide-inner">
+          {brandDecor}
           {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
           <SlideTitle>{slide.title}</SlideTitle>
           <div className="deck-kpi-table mt-9">

@@ -1,65 +1,122 @@
 export type SlideAccent = "indigo" | "violet" | "sky" | "emerald";
 
+export type DeckSparkleVariant =
+  | "yellow-main"
+  | "yellow-inclined"
+  | "blue-main"
+  | "blue-inclined"
+  | "darkblue-main"
+  | "darkblue-inclined";
+
+export type DeckAstroVariant =
+  | "astro"
+  | "astro-2"
+  | "astro-4"
+  | "astro-5"
+  | "astro-7"
+  | "astro-10"
+  | "astro-11"
+  | "agent-astro-4-l"
+  | "agent-astro-10-l"
+  | "agent-astro-10-r"
+  | "agent-astro-12-r"
+  | "agent-astro-20-l"
+  | "agent-astro-flip-009"
+  | "agent-astro-flip-020";
+
+export type DeckProductLogo =
+  | "Agentforce"
+  | "Service"
+  | "Sales"
+  | "Marketing"
+  | "Data Cloud"
+  | "Tableau"
+  | "Slack"
+  | "Commerce"
+  | "Industries"
+  | "Platform";
+
+export type DeckBrandDecor = {
+  sparkles?: {
+    variant: DeckSparkleVariant;
+    side: "left" | "right";
+    top: string;
+    size?: number;
+    rotate?: number;
+    opacity?: number;
+  }[];
+  astro?: {
+    variant: DeckAstroVariant;
+    side: "left" | "right";
+    bottom?: string;
+    top?: string;
+    size?: number;
+  };
+  cloudLogo?: "top-right" | "bottom-right";
+};
+
+type SlideBrand = { brand?: DeckBrandDecor; products?: DeckProductLogo[] };
+
 export type ExecutiveSlide =
-  | {
+  | ({
       layout: "title";
       eyebrow?: string;
       title: string;
       subtitle?: string;
       footnote?: string;
-    }
-  | {
+    } & SlideBrand)
+  | ({
       layout: "section";
       eyebrow?: string;
       title: string;
       subtitle?: string;
-    }
-  | {
+    } & SlideBrand)
+  | ({
       layout: "bullets";
       eyebrow?: string;
       title: string;
       bullets: string[];
       highlight?: string;
-    }
-  | {
+    } & SlideBrand)
+  | ({
       layout: "metrics";
       eyebrow?: string;
       title: string;
       metrics: { value: string; label: string }[];
-    }
-  | {
+    } & SlideBrand)
+  | ({
       layout: "split";
       eyebrow?: string;
       title: string;
       left: { heading: string; items: string[] };
       right: { heading: string; items: string[] };
-    }
-  | {
+    } & SlideBrand)
+  | ({
       layout: "pillars";
       eyebrow?: string;
       title: string;
       pillars: { title: string; body: string; accent?: SlideAccent }[];
-    }
-  | {
+    } & SlideBrand)
+  | ({
       layout: "closing";
       title: string;
       bullets?: string[];
       cta?: string;
-    }
-  | {
+    } & SlideBrand)
+  | ({
       layout: "quote";
       quote: string;
       author?: string;
       context?: string;
-    }
-  | {
+    } & SlideBrand)
+  | ({
       layout: "comparison";
       eyebrow?: string;
       title: string;
       before: { heading: string; items: string[] };
       after: { heading: string; items: string[] };
-    }
-  | {
+    } & SlideBrand)
+  | ({
       layout: "kpi-table";
       eyebrow?: string;
       title: string;
@@ -70,13 +127,13 @@ export type ExecutiveSlide =
         goal12m: string;
         accent?: SlideAccent;
       }[];
-    }
-  | {
+    } & SlideBrand)
+  | ({
       layout: "thanks";
       eyebrow?: string;
       title: string;
       subtitle?: string;
-    };
+    } & SlideBrand);
 
 export type ExecutiveDeck = {
   slug: string;
@@ -723,6 +780,14 @@ export const executiveDecks: ExecutiveDeck[] = [
         subtitle:
           "Acompañamiento 24/7 a la Distribuidora — resolución en primer contacto, lenguaje tropicalizado y staff con visión 360. Plan de cuenta basado en el Antiexperience Workshop del 29 de mayo de 2026.",
         footnote: "Sesión ejecutiva · Confidencial · Junio 2026",
+        brand: {
+          astro: { variant: "agent-astro-20-l", side: "right", bottom: "-30px", size: 360 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "6%",  size: 48, rotate: 12 },
+            { variant: "blue-inclined",   side: "left",  top: "92%", size: 30, rotate: -10 },
+            { variant: "yellow-inclined", side: "right", top: "4%",  size: 34, rotate: 22 },
+          ],
+        },
       },
 
       // ── SLIDE 2 · Betterware en números ───────────────────────────────
@@ -781,6 +846,11 @@ export const executiveDecks: ExecutiveDeck[] = [
         ],
         highlight:
           "Si Betterware solo activa la palanca #1 en 2026, ya recupera capacidad operativa equivalente a un equipo entero de contact center — y libera al staff actual para los casos que sí necesitan empatía humana.",
+        brand: {
+          sparkles: [
+            { variant: "yellow-main", side: "right", top: "10%", size: 36, rotate: 14 },
+          ],
+        },
       },
 
       // ── SLIDE 5 · Visión ──────────────────────────────────────────────
@@ -790,6 +860,13 @@ export const executiveDecks: ExecutiveDeck[] = [
         title: "Convertir a la DS en el centro del ecosistema con un acompañamiento 24/7 inteligente.",
         subtitle:
           "Tres palancas — Resolución Autónoma, Mamá Virtual y Staff 360 — sobre una sola plataforma agéntica con guardrails y trazabilidad.",
+        brand: {
+          astro: { variant: "astro-7", side: "left", bottom: "-50px", size: 230 },
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "18%", size: 44, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
+          ],
+        },
       },
 
       // ── SLIDE 6 · Tres palancas ───────────────────────────────────────
@@ -814,6 +891,7 @@ export const executiveDecks: ExecutiveDeck[] = [
             accent: "sky",
           },
         ],
+        products: ["Agentforce", "Data Cloud", "Marketing", "Tableau"],
       },
 
       // ── SLIDE 7 · Presentación del ecosistema ─────────────────────────
@@ -823,6 +901,14 @@ export const executiveDecks: ExecutiveDeck[] = [
         title: "DS Intelligence Agent Ecosystem",
         subtitle:
           "5 agentes inteligentes — Mamá Virtual, Asistente Operativo, Asistente Personal, Agente DS 360 y Habilitador de Staff — sobre Agentforce, Data Cloud, Service Cloud, Marketing Cloud Advanced y Tableau Next.",
+        products: ["Agentforce", "Data Cloud", "Service", "Marketing", "Tableau"],
+        brand: {
+          astro: { variant: "agent-astro-10-r", side: "right", bottom: "-50px", size: 230 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left", top: "14%", size: 44, rotate: 14 },
+            { variant: "yellow-inclined", side: "left", top: "72%", size: 28, rotate: -10 },
+          ],
+        },
       },
 
       // ── SLIDE 8 · Asistente Operativo ────────────────────────────────
@@ -848,6 +934,7 @@ export const executiveDecks: ExecutiveDeck[] = [
             "Liberación del contact center para casos de alto valor — no más saturación",
           ],
         },
+        products: ["Agentforce", "Service", "Data Cloud"],
       },
 
       // ── SLIDE 9 · Mamá Virtual ───────────────────────────────────────
@@ -873,6 +960,7 @@ export const executiveDecks: ExecutiveDeck[] = [
             "+15 puntos NPS DS · medición sistemática integrada al CRM",
           ],
         },
+        products: ["Agentforce", "Marketing", "Data Cloud"],
       },
 
       // ── SLIDE 10 · Staff 360 ─────────────────────────────────────────
@@ -898,6 +986,7 @@ export const executiveDecks: ExecutiveDeck[] = [
             "+34% productividad del equipo (ref. Agentforce customer base · TechHQ 2025)",
           ],
         },
+        products: ["Agentforce", "Tableau", "Data Cloud", "Slack"],
       },
 
       // ── SLIDE 11 · KPIs para el Directorio ───────────────────────────
@@ -980,6 +1069,12 @@ export const executiveDecks: ExecutiveDeck[] = [
         ],
         highlight:
           "Betterware ya es líder en escala. La pregunta es qué tipo de relación quiere construir con su 1.24M antes que un competidor lance un acompañamiento que sí se sienta humano.",
+        brand: {
+          sparkles: [
+            { variant: "yellow-inclined", side: "right", top: "8%", size: 32, rotate: 10 },
+            { variant: "blue-main",       side: "left",  top: "82%", size: 30, rotate: -8 },
+          ],
+        },
       },
 
       // ── SLIDE 14 · El día de Lupita ──────────────────────────────────
@@ -1014,6 +1109,13 @@ export const executiveDecks: ExecutiveDeck[] = [
           "La DS no se va por el catálogo. Se va porque nadie la conoció a tiempo. Agentforce es la 'Mamá Virtual' que sí la conoce — desde el primer pedido y a las 11 de la noche cuando termina su turno y empieza su negocio.",
         context:
           "Antiexperience Workshop · Betterware · 29 de mayo de 2026 · Equipos 1 a 5",
+        brand: {
+          astro: { variant: "agent-astro-12-r", side: "left", bottom: "-30px", size: 220 },
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "20%", size: 44, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
+          ],
+        },
       },
 
       // ── SLIDE 16 · Cierre y próximos pasos ───────────────────────────
@@ -1038,6 +1140,14 @@ export const executiveDecks: ExecutiveDeck[] = [
         title: "Gracias",
         subtitle:
           "Resolución autónoma. Acompañamiento personalizado. Staff con visión 360. Tres palancas, una plataforma, 1.24M de razones.",
+        brand: {
+          astro: { variant: "astro-11", side: "right", bottom: "-50px", size: 240 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "16%", size: 44, rotate: -10 },
+            { variant: "yellow-inclined", side: "left",  top: "70%", size: 28, rotate: 18 },
+            { variant: "blue-main",       side: "right", top: "20%", size: 32, rotate: 6 },
+          ],
+        },
       },
     ],
   },
