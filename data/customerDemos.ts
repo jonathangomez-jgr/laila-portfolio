@@ -2678,6 +2678,14 @@ export const customerDemos: CustomerDemo[] = [
               url: "/customer-demos/betterware#historia",
             },
             {
+              name: "Lupita y la Mamá Virtual — Historia (PDF)",
+              description:
+                "Documento descargable con la historia completa: persona central, las 7 escenas con canal, componente del Blueprint, productos involucrados e insight de cada escena. Listo para compartir con stakeholders fuera de la sesión ejecutiva.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/Lupita-Historia-del-Cliente.pdf",
+            },
+            {
               name: "Demo Live — Agente DS 360 en WhatsApp",
               description:
                 "Demo en vivo del Tópico 1 (Consulta de pedidos) y Tópico 2 (Saldos) con datos sintéticos de una DS de Tlaquepaque.",
