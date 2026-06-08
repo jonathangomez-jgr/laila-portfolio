@@ -2541,7 +2541,7 @@ export const customerDemos: CustomerDemo[] = [
               description:
                 "Lupita está terminando de armar los pedidos de su grupo antes de que cierre el catálogo. Tiene 11 clientas en lista y un saldo pendiente con Betterware que la tiene preocupada — le prometieron una bonificación hace dos quincenas y aún no la ve. En meses anteriores hubiera escrito al directorio, esperado horas y aceptado una respuesta vaga. Hoy abre WhatsApp y le escribe a Betterware en el lenguaje en que habla: 'Oye, ¿qué onda con mi saldo? Ya van dos quincenas.'",
               channel: "WhatsApp · Agente DS 360",
-              image: "/Customers/Betterware/images/story/escena00.png",
+              image: "/Customers/Betterware/images/story/escena01.png",
               pilar: "Tópico 2 · Saldos y transacciones · resolución autónoma",
               pilarColor: "indigo",
               products: ["Agentforce", "Service Cloud", "Data Cloud"],
@@ -2555,7 +2555,7 @@ export const customerDemos: CustomerDemo[] = [
               description:
                 "Antes de que Lupita termine de escribir, el Agente DS 360 ya tiene su contexto completo desde la Capa de datos: DS desde febrero, ciclo 4, segmento 'Cohorte Nueva 6m', historial de pedidos, bonificación pendiente del concurso 'Marzo Imparable' por $640 MXN sin aplicar. El agente no le pide su número de DS ni le pregunta de qué bonificación habla. Le responde: 'Hola Lupita, ya vi tu bonificación de Marzo Imparable. Está pendiente por una incidencia de aplicación. Te la libero ahora mismo, en 5 minutos la ves reflejada en tu saldo.'",
               channel: "Agente DS 360 · Capa de datos DS 360",
-              image: "/Customers/Betterware/images/story/escena01.png",
+              image: "/Customers/Betterware/images/story/escena02.png",
               pilar: "Resolución en primer contacto + Visión 360",
               pilarColor: "indigo",
               products: ["Agentforce", "Data Cloud", "Service Cloud"],
@@ -2569,7 +2569,7 @@ export const customerDemos: CustomerDemo[] = [
               description:
                 "Llega su pedido de la quincena. Faltan dos productos. Antes esto era una llamada al contact center de 47 minutos. Lupita le saca foto al recibo y le manda al agente: 'Mira, no me llegaron estos.' El Agente reconoce el recibo, identifica los SKUs faltantes, abre un caso vía Tópico 1 (Consulta de pedidos), dispara el reenvío express desde Cenapia y le confirma fecha de entrega: jueves antes de las 6 p.m.",
               channel: "WhatsApp · Tópico 1 · Service Cloud",
-              image: "/Customers/Betterware/images/story/escena02.png",
+              image: "/Customers/Betterware/images/story/escena03.png",
               pilar: "Tópico 1 · Consulta de pedidos · acción ejecutiva",
               pilarColor: "indigo",
               products: ["Agentforce", "Service Cloud", "OMS"],
@@ -2583,7 +2583,7 @@ export const customerDemos: CustomerDemo[] = [
               description:
                 "Antes de cerrar la conversación, el Agente DS 360 le manda un mensaje proactivo: 'Lupita, vi que en este ciclo te faltan $2,150 para llegar a tu objetivo. Tienes 3 clientas que compraron menos que el ciclo pasado: doña Cris, Jessi y Mary. ¿Te paso un mensaje listo para reactivarlas? También vi que aún no terminas el módulo de Cierre de Venta del LMS — te tomaría 8 minutos y aplica directo a este caso.' Lupita acepta los dos. Tópico 3 (Objetivos) + Tópico 5 (Onboarding) trabajando juntos.",
               channel: "Marketing Cloud · LMS embebido · Tópicos 3 y 5",
-              image: "/Customers/Betterware/images/story/escena03.png",
+              image: "/Customers/Betterware/images/story/escena04.png",
               pilar: "Orquestación proactiva · acompañamiento personalizado",
               pilarColor: "violet",
               products: ["Marketing Cloud", "Agentforce", "Data Cloud"],
@@ -2597,7 +2597,7 @@ export const customerDemos: CustomerDemo[] = [
               description:
                 "Doña Carmen quiere pagar pero le dice a Lupita: 'Eso del Kitspay no me late, mejor te paso transferencia.' Es exactamente la fricción que el Área 5 del workshop identificó. Lupita le pregunta al Agente qué hacer. El Tópico 4 (Reglas comerciales) le explica en lenguaje claro las dos opciones: cómo registrar la transferencia y cómo, si Doña Carmen quiere, ayudarla con el primer Kitspay paso a paso. No es respuesta cuadrada — es información contextualizada.",
               channel: "Agente DS 360 · Tópico 4 · Knowledge",
-              image: "/Customers/Betterware/images/story/escena04.png",
+              image: "/Customers/Betterware/images/story/escena05.png",
               pilar: "Tópico 4 · Explicación simple de reglas",
               pilarColor: "violet",
               products: ["Agentforce", "Knowledge", "Data Cloud"],
@@ -2611,7 +2611,7 @@ export const customerDemos: CustomerDemo[] = [
               description:
                 "Marisol, del equipo de customer success de Cenapia, recibe una alerta del Copiloto Staff 360: 'Lupita Hernández — DS Mes 4 — score de churn medio creciente. Recomendación: llamada de acompañamiento esta semana.' Antes Marisol llamaba con un nombre y un número. Hoy abre el perfil 360: comportamiento de consumo, comportamiento comercial, historial de interacciones con el Agente, módulos del LMS completados. Llama con datos accionables y empatía real.",
               channel: "Copiloto Staff 360 · Tableau Next · Capa DS 360",
-              image: "/Customers/Betterware/images/story/escena05.png",
+              image: "/Customers/Betterware/images/story/escena06.png",
               pilar: "Componente 02 · Staff con visión 360",
               pilarColor: "sky",
               products: ["Tableau Next", "Data Cloud", "Agentforce", "Slack"],
@@ -2625,7 +2625,7 @@ export const customerDemos: CustomerDemo[] = [
               description:
                 "Lupita cumple 6 meses como Distribuidora. Está en el percentil correcto de su cohorte: cumplió objetivo en 4 de los últimos 5 ciclos, completó 80% del LMS, recomendó a 2 nuevas Asociadas y no escaló ningún ticket al humano en las últimas 4 semanas. Cuando una compañera nueva le pregunta '¿qué hago si no me llega un pedido?', Lupita le responde: 'Le escribes al Agente. Te resuelve.' Eso es lo que cambió. No es la tecnología — es la sensación de tener a alguien que la conoce, que habla su idioma y que la acompaña a cualquier hora.",
               channel: "Sales Cloud · Marketing Cloud · Data Cloud · Agentforce",
-              image: "/Customers/Betterware/images/story/escena06.png",
+              image: "/Customers/Betterware/images/story/epilogo.png",
               pilar: "Los 4 componentes en sinergia · DS que se queda y crece",
               pilarColor: "emerald",
               products: ["Agentforce", "Sales Cloud", "Data Cloud", "Marketing Cloud", "Tableau Next"],
