@@ -2698,6 +2698,22 @@ export const customerDemos: CustomerDemo[] = [
               available: false,
               type: "arch",
             },
+            {
+              name: "Catálogo Digital Betterware — Junio",
+              description:
+                "Catálogo comercial vigente que las Distribuidoras consultan, comparten con sus clientas y usan como guía de venta. Es una de las fuentes oficiales sobre las que el Agente DS 360 hará grounding para explicar productos, precios y promociones.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/Cat Digital JUNIO_FINAL.pdf",
+            },
+            {
+              name: "Oportunidades y Premios — Programa de Incentivos",
+              description:
+                "Folleto oficial del programa de oportunidades y premios para Distribuidoras. Documento clave para entender las reglas comerciales, beneficios y mecánicas de incentivo que el Agente DS 360 traducirá a lenguaje claro en cada conversación.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/Oportunidaddes_Premios_01_26_17_MB_1.pdf",
+            },
           ],
         },
       },
