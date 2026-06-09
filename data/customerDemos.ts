@@ -211,6 +211,34 @@ export type ArchData = {
   foundation: ArchFoundation;
 };
 
+export type BefraArchZone = {
+  label: string;
+  tone: "channels" | "platform" | "data" | "integration" | "external" | "agentforce";
+  nodes: string[];
+};
+
+export type BefraArchHighlight = {
+  label: string;
+  body: string;
+  tone: "blue" | "amber" | "violet" | "teal" | "red";
+};
+
+export type BefraLandscape = {
+  id: "asis" | "tobe";
+  eyebrow: string;
+  title: string;
+  summary: string;
+  svgUrl: string;
+  pdfUrl?: string;
+  zones: BefraArchZone[];
+  highlights: BefraArchHighlight[];
+};
+
+export type BefraArchitectureData = {
+  asIs: BefraLandscape;
+  toBe: BefraLandscape;
+};
+
 export type WorkshopArea = {
   number: number;
   title: string;
@@ -289,6 +317,7 @@ export type CustomerDemoTab = {
   kpiSummary?: KpiSummaryRow[];
   solution?: SolutionLayer[];
   archData?: ArchData;
+  befraArchData?: BefraArchitectureData;
   objective?: ObjectiveData;
   overviewData?: OverviewData;
   customerProfile?: CustomerProfileData;
@@ -2303,98 +2332,182 @@ export const customerDemos: CustomerDemo[] = [
       {
         id: "arquitectura",
         label: "Arquitectura",
-        title: "System Landscape — Betterware (BeFra)",
+        title: "Arquitectura técnica Grupo BeFra — As Is → To Be",
         content:
-          "Vista del ecosistema tecnológico que soporta el Blueprint: sistemas externos del modelo de venta directa, capa de integración, productos Salesforce y foundation Einstein Trust Layer.",
-        archData: {
-          title: "Betterware System Landscape",
-          zones: [
-            {
-              id: "external",
-              label: "Sistemas Externos · Operación BW + JAFRA",
-              color: "slate",
-              nodes: [
-                {
-                  name: "ERP / Pedidos",
-                  items: ["Catálogo quincenal", "Liberación de pedidos", "Saldos y transacciones", "Reglas comerciales"],
-                },
-                {
-                  name: "Shopify+ (B+ / J+)",
-                  items: ["Storefront DS", "Catálogo digital", "Live shopping piloto"],
-                },
-                {
-                  name: "LMS · Cenapia",
-                  items: ["Capacitación", "Onboarding por rol", "Contenidos certificados"],
-                },
-                {
-                  name: "Kitspay",
-                  items: ["Pagos DS", "Cobros", "Conciliación"],
-                },
-                {
-                  name: "Mensajería",
-                  items: ["WhatsApp Business", "SMS", "Email transaccional"],
-                },
-              ],
-            },
-            {
-              id: "salesforce",
-              label: "Salesforce Customer 360 · DS Intelligence Platform",
-              color: "indigo",
-              nodes: [
-                {
-                  name: "Service Cloud",
-                  items: ["Casos DS", "SLAs", "Omni-Channel routing", "Knowledge", "Escalación inteligente"],
-                },
-                {
-                  name: "Sales Cloud",
-                  items: ["Cuentas DS", "Pipeline de prospección", "Comportamiento comercial", "Segmentación"],
-                },
-                {
-                  name: "Marketing Cloud",
-                  items: ["Journey Builder por cohorte", "Comunicación proactiva", "Capacitación embebida", "Personalización"],
-                },
-                {
-                  name: "Data Cloud",
-                  items: ["Perfil unificado DS", "Identity Resolution", "Calculated Insights", "Churn risk score"],
-                },
-                {
-                  name: "Tableau Next",
-                  items: ["Dashboards staff", "Anticipación de churn", "Comportamiento de consumo", "Tableau Pulse"],
-                },
-                {
-                  name: "Slack",
-                  items: ["Colaboración interna", "Notificaciones a staff", "Agentes embebidos"],
-                },
-              ],
-            },
-            {
-              id: "agents",
-              label: "Agentforce · Capa Agéntica",
-              color: "violet",
-              nodes: [
-                {
-                  name: "Agente DS 360",
-                  items: ["Externo · 24/7", "Resolución 1er contacto", "Onboarding · Objetivos · Reglas"],
-                },
-                {
-                  name: "Copiloto Staff 360",
-                  items: ["Interno", "Vista 360 DS", "Empatía asistida"],
-                },
-                {
-                  name: "Marketing Agent",
-                  items: ["Journeys proactivos", "Reactivación", "Prevención de churn"],
-                },
-              ],
-            },
-          ],
-          bridge: {
-            label: "Capa de Integración",
-            sublabel: "API-Led Connectivity · Zero Copy donde aplique",
-            items: ["MuleSoft Anypoint", "API Manager", "Conectores ERP / Shopify+ / Kitspay / LMS"],
+          "Dos vistas comparables del mismo ecosistema. Primero la fotografía actual (As Is) con sistemas dispersos, integraciones puntuales y datos atrapados en silos por marca. Después la arquitectura objetivo (To Be) sobre Salesforce Customer 360 + Data Cloud + Agentforce, con MuleSoft como columna de integración y Einstein Trust Layer como foundation.",
+        befraArchData: {
+          asIs: {
+            id: "asis",
+            eyebrow: "Estado actual",
+            title: "Arquitectura As Is — sistemas dispersos por marca",
+            summary:
+              "Hoy Grupo BeFra opera con dos organizaciones Salesforce separadas (Betterware y JAFRA), múltiples canales sin orquestar (WhatsApp, App Móvil, Web, Voice, Email, Excel, SharePoint), un ERP Odoo, motores legacy (DB AS400, Ax212, Dynamics, ServiceNow) y reportería en Power BI. La integración existe pero es puntual: MuleSoft conecta lo crítico, mientras que muchos procesos siguen dependiendo de archivos manuales y conexiones directas.",
+            svgUrl: "/Customers/Betterware/files/Befra%20(Betterware)%20Architecture%20VF%20-%20As%20Is.svg",
+            pdfUrl: "/Customers/Betterware/files/Befra%20(Betterware)%20Architecture%20VF%20-%20As%20Is.pdf",
+            highlights: [
+              {
+                label: "Dos orgs separadas",
+                tone: "red",
+                body: "Org Betterware y Org JAFRA viven en paralelo: cuentas, casos y comportamiento comercial duplicados, sin Data 360 unificada.",
+              },
+              {
+                label: "Canales sin orquestación",
+                tone: "amber",
+                body: "WhatsApp, App Móvil, Web, Voice, Email y Excel funcionan, pero no comparten contexto ni hand-off automatizado al staff.",
+              },
+              {
+                label: "Datos en silos",
+                tone: "violet",
+                body: "DB SQL, DB AS400 Legacy, SharePoint y procesos manuales generan reportes Power BI desfasados — sin perfil 360 de la DS.",
+              },
+            ],
+            zones: [
+              {
+                label: "Canales actuales",
+                tone: "channels",
+                nodes: ["WhatsApp", "App Móvil", "Web", "Voice", "Email", "Excel"],
+              },
+              {
+                label: "Salesforce — dos orgs",
+                tone: "platform",
+                nodes: [
+                  "Org Betterware",
+                  "Org JAFRA",
+                  "Service",
+                  "Marketing",
+                  "Data 360 (parcial)",
+                  "Agentforce (piloto)",
+                ],
+              },
+              {
+                label: "Sistemas back-office",
+                tone: "external",
+                nodes: [
+                  "Odoo ERP",
+                  "Ax212",
+                  "Dynamics",
+                  "ServiceNow",
+                  "DB SQL",
+                  "DB AS400 Legacy",
+                  "SharePoint",
+                  "Power BI",
+                ],
+              },
+              {
+                label: "Integración",
+                tone: "integration",
+                nodes: ["MuleSoft (selectivo)", "Conectores puntuales", "Procesos manuales"],
+              },
+            ],
           },
-          foundation: {
-            label: "Einstein Trust Layer · LFPDPPP MX · Auditoría y Gobernanza",
-            items: ["Datos en jurisdicción MX", "Masking dinámico", "Audit Trail", "Toxicity & Bias detection"],
+          toBe: {
+            id: "tobe",
+            eyebrow: "Estado objetivo",
+            title: "Arquitectura To Be — Customer 360 + Data Cloud + Agentforce",
+            summary:
+              "El target organiza el ecosistema en cinco capas: canales de engagement unificados, Salesforce Customer 360 (Service, Marketing, Platform, Field Service, Tableau, Agentforce) sobre una sola Data 360, MuleSoft como capa de integración API-Led, aplicaciones empresariales (Odoo, AS400, Dynamics, ServiceNow) detrás del bus, y datalakes (Databricks, GCP) accesibles vía Zero Copy. Una sola visión de la DS, agentes con grounding sobre Data 360, integración gobernada y orquestación nativa.",
+            svgUrl: "/Customers/Betterware/files/Befra%20(Betterware)%20Architecture%20VF%20-%20To%20Be%20V1.svg",
+            pdfUrl: "/Customers/Betterware/files/Befra%20(Betterware)%20Architecture%20VF%20-%20To%20Be%20V1.pdf",
+            highlights: [
+              {
+                label: "Customer 360 unificado",
+                tone: "blue",
+                body: "Service, Marketing Advanced, Platform, Field Service, Tableau y Agentforce sobre la misma plataforma — sin orgs duplicadas.",
+              },
+              {
+                label: "Data 360 con Zero Copy",
+                tone: "violet",
+                body: "Streaming + Batch Ingestion, Unified Customer Profile, Calculated Insights, Semantic Layer y grounding directo a Agentforce. Datalake Databricks y GCP via Zero Copy.",
+              },
+              {
+                label: "MuleSoft como columna",
+                tone: "amber",
+                body: "API Management, Anypoint Platform, Event-Driven Architecture y Security & Governance — todas las apps back-office detrás del bus.",
+              },
+              {
+                label: "Agentforce nativo",
+                tone: "teal",
+                body: "Agent Builder, Observability y Orchestration trabajando con Data 360 — ya no piloto aislado, sino capa transversal.",
+              },
+              {
+                label: "Engagement multicanal",
+                tone: "blue",
+                body: "WhatsApp, SMS, Push, Email, Landing Page y App Móvil orquestados desde Marketing Advanced + Personalization + Intelligence.",
+              },
+              {
+                label: "Back-office gobernado",
+                tone: "red",
+                body: "Odoo, AS400, Ax212, ServiceNow, Credilazo y Driving entran al modelo via integraciones API/ETL/EDI con políticas centralizadas.",
+              },
+            ],
+            zones: [
+              {
+                label: "Engagement Channels",
+                tone: "channels",
+                nodes: [
+                  "WhatsApp",
+                  "SMS",
+                  "Email",
+                  "Push Notification",
+                  "Landing Page",
+                  "App Móvil",
+                ],
+              },
+              {
+                label: "Salesforce Customer 360",
+                tone: "platform",
+                nodes: [
+                  "Service · Case Mgmt · Omnichannel",
+                  "Marketing Advanced · Engagement",
+                  "Platform · Flow · Apex",
+                  "Field Service",
+                  "Tableau · Reports · Intelligence",
+                ],
+              },
+              {
+                label: "Data 360 + Agentforce",
+                tone: "data",
+                nodes: [
+                  "Unified Customer Profile",
+                  "Calculated Insights",
+                  "Semantic Layer",
+                  "Grounding Agentforce",
+                  "Agent Builder",
+                  "Observability",
+                  "Orchestration",
+                ],
+              },
+              {
+                label: "Integración (API · ETL · P2P · EDI)",
+                tone: "integration",
+                nodes: [
+                  "MuleSoft Anypoint",
+                  "API Management",
+                  "Event-Driven Architecture",
+                  "Security & Governance",
+                ],
+              },
+              {
+                label: "Enterprise Applications",
+                tone: "external",
+                nodes: [
+                  "Odoo ERP",
+                  "Ax212",
+                  "Dynamics",
+                  "ServiceNow",
+                  "DB AS400 Legacy",
+                  "DB SQL",
+                  "SharePoint",
+                  "Org Credilazo",
+                  "Driving",
+                ],
+              },
+              {
+                label: "Datalake · Zero Copy",
+                tone: "agentforce",
+                nodes: ["Datalake Databricks", "Datalake GCP", "Zero Copy"],
+              },
+            ],
           },
         },
       },

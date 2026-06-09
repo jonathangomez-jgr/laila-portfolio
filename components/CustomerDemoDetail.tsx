@@ -7,6 +7,7 @@ import ContextFindings from "./ContextFindings";
 import CustomerProfile from "./CustomerProfile";
 import ArchDiagram from "./ArchDiagram";
 import ArgosArchDiagram from "./ArgosArchDiagram";
+import BefraArchitecture from "./BefraArchitecture";
 import ArgosKpiSummaryCard from "./ArgosKpiSummaryCard";
 import AgentforceLandscape from "./AgentforceLandscape";
 import BlueprintArchitecture from "./BlueprintArchitecture";
@@ -255,6 +256,10 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 <ArchDiagram data={activeTab.archData} />
               )}
 
+              {activeTab.befraArchData && (
+                <BefraArchitecture data={activeTab.befraArchData} />
+              )}
+
               {activeTab.argosArch && (
                 <ArgosArchDiagram />
               )}
@@ -293,6 +298,7 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 !activeTab.objective &&
                 !activeTab.solution &&
                 !activeTab.archData &&
+                !activeTab.befraArchData &&
                 !activeTab.argosArch &&
                 !activeTab.argosKpiSummary &&
                 !activeTab.agentforceLandscapeData &&
