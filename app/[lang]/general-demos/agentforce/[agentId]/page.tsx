@@ -62,7 +62,7 @@ export default async function AgentDetailPage({
 
       {/* Overview — collapsible */}
       {overview && (
-        <CollapsibleSection title="Overview" meta="Bot identity & defaults" defaultOpen>
+        <CollapsibleSection title="Overview" meta="Bot identity & defaults" defaultOpen={false}>
           <Markdown source={overview.body} rewriteLink={rewriter} />
         </CollapsibleSection>
       )}

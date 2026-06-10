@@ -1,10 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { hasLocale } from "@/lib/i18n";
-import { loadAgents, loadSubagent } from "@/lib/agentforce/catalog";
+import {
+  findAgentsUsingSubagent,
+  loadAgents,
+  loadSubagent,
+} from "@/lib/agentforce/catalog";
 import { rewriteFromSubagent } from "@/lib/agentforce/links";
 import Markdown from "@/components/Markdown";
 import AgentforceDocHeader from "@/components/AgentforceDocHeader";
+import UsedInAgents from "@/components/UsedInAgents";
 
 export async function generateStaticParams() {
   const agents = await loadAgents();
@@ -33,6 +38,7 @@ export default async function SubagentDetailPage({
   const { agent, subagent } = data;
   const base = `/${lang}/general-demos/agentforce/${agent.id}`;
   const rewriter = (href: string) => rewriteFromSubagent(href, { lang, agentId });
+  const agentsUsing = await findAgentsUsingSubagent(subagent.id);
 
   return (
     <main className="mx-auto max-w-5xl px-5 py-12 sm:px-8 sm:py-16">
@@ -53,6 +59,12 @@ export default async function SubagentDetailPage({
       <section>
         <Markdown source={subagent.markdown} rewriteLink={rewriter} />
       </section>
+
+      <UsedInAgents
+        agents={agentsUsing}
+        lang={lang}
+        reference={{ kind: "subagent", id: subagent.id }}
+      />
 
       {subagent.actions.length > 0 && (
         <section className="mt-12">

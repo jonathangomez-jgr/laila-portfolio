@@ -177,6 +177,18 @@ export async function loadAction(
   return { agent, action: act };
 }
 
+// Cross-agent lookup: which agents in the catalog reference this subagent (by id)?
+export async function findAgentsUsingSubagent(subagentId: string): Promise<Agent[]> {
+  const all = await loadAgents();
+  return all.filter((a) => a.subagents.some((s) => s.id === subagentId));
+}
+
+// Cross-agent lookup: which agents reference this action (by id)?
+export async function findAgentsUsingAction(actionId: string): Promise<Agent[]> {
+  const all = await loadAgents();
+  return all.filter((a) => a.actions.some((act) => act.id === actionId));
+}
+
 // Locate the actual file matching a slug (filenames are CamelCase / mixed).
 export async function findContentFile(
   agentId: string,
