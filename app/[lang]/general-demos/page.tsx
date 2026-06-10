@@ -19,6 +19,21 @@ export default async function GeneralDemosPage({
       <PageHero eyebrow={d.eyebrow} title={d.title} description={d.description} />
 
       <section className="mx-auto max-w-[1360px] px-5 py-8 sm:px-8">
+        <a
+          href={`/${lang}/general-demos/agentforce`}
+          className="mb-8 block rounded-2xl border border-[#5f6fff]/30 bg-gradient-to-r from-[#eef2ff] via-white to-[#eaf5fe] p-6 transition hover:-translate-y-0.5 hover:shadow-md"
+        >
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#5f6fff]">
+            New · Agentforce Catalog
+          </p>
+          <h2 className="mb-2 text-xl font-semibold text-gray-950">
+            Agentforce Agents, Subagents & Actions
+          </h2>
+          <p className="text-gray-600">
+            Documentación reutilizable de los agentes Agentforce desplegados — explora cada agente, sus topics y las acciones compartidas entre ellos.
+          </p>
+        </a>
+
         <div className="mb-8 rounded-2xl border border-gray-200 p-6">
           <h2 className="mb-3 text-xl font-semibold">{d.filtersTitle}</h2>
           <p className="text-gray-600">{d.filtersDesc}</p>
