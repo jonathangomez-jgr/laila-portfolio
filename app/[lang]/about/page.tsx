@@ -14,7 +14,7 @@ export default async function AboutPage({
 
   return (
     <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
-      <section className="mx-auto max-w-[1540px]">
+      <section className="mx-auto w-[min(90%,1600px)]">
         <div className="mb-8">
           <p className="eyebrow mb-4">{d.eyebrow}</p>
 

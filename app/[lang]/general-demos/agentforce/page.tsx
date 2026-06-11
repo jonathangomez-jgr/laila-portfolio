@@ -26,7 +26,7 @@ export default async function AgentforceCatalogPage({
         description="Documentación reutilizable de los agentes desplegados en la org de Laila — el agente, sus subagentes (topics) y las acciones que cada topic expone."
       />
 
-      <section className="mx-auto max-w-[1540px] px-5 py-8 sm:px-8">
+      <section className="mx-auto w-[min(90%,1600px)] py-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {agents.map((agent) => (
             <DemoCard

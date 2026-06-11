@@ -31,8 +31,11 @@ body {
    Rollback: restore the values commented as ORIGINAL below to bring back
    the framed shell with border, glass background, rounded corners and shadow. */
 .site-shell {
-  max-width: 1540px;
-  margin: 0 auto;             /* ORIGINAL: 32px auto */
+  /* Width control is delegated to each row (header, content, footer)
+     via w-[min(90%,1600px)]. Shell stays full-width so it doesn't
+     compound the constraint. */
+  width: 100%;
+  margin-inline: auto;        /* ORIGINAL: 32px auto */
   border: 0;                  /* ORIGINAL: 1px solid var(--border-soft); */
   background: transparent;    /* ORIGINAL: rgba(255, 255, 255, 0.68); */
   backdrop-filter: none;      /* ORIGINAL: blur(18px); */

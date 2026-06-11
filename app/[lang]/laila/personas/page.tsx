@@ -48,7 +48,7 @@ export default async function PersonasPage({
     <main>
       <PageHero eyebrow={d.eyebrow} title={d.title} description={d.description} />
 
-      <section className="mx-auto max-w-[1540px] px-5 pb-16 sm:px-8 sm:pb-20">
+      <section className="mx-auto w-[min(90%,1600px)] pb-16 sm:pb-20">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {d.items.map((persona, idx) => {
             const accent = personaAccents[idx];

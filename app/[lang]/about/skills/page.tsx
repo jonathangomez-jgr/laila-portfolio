@@ -20,7 +20,7 @@ export default async function SkillsPage({
         description={d.description}
       />
 
-      <section className="mx-auto max-w-[1540px] px-8 py-8">
+      <section className="mx-auto w-[min(90%,1600px)] py-8">
         <div className="grid gap-4 md:grid-cols-2">
           {d.items.map((skill) => (
             <div key={skill} className="rounded-2xl border border-gray-200 p-5">

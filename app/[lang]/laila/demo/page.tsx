@@ -17,7 +17,7 @@ export default async function LailaDemoPage({
     <main>
       <PageHero eyebrow={d.eyebrow} title={d.title} description={d.description} />
 
-      <section className="mx-auto max-w-[1540px] px-6 pb-16 md:px-8">
+      <section className="mx-auto w-[min(90%,1600px)] pb-16">
         <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:gap-16">
           {/* QR Card — client component for QRCodeSVG */}
           <LailaDemoQR

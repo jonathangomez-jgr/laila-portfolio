@@ -135,8 +135,8 @@ export default function SiteHeader({
         <div
           className={
             isHome
-              ? "mx-auto flex w-full max-w-[1540px] items-center justify-between rounded-full border border-white/60 bg-white/45 px-5 py-3 shadow-[0_20px_60px_rgba(99,102,241,0.18)] backdrop-blur-2xl backdrop-saturate-150 md:px-6"
-              : "mx-auto flex w-full max-w-[1540px] items-center justify-between rounded-full border border-white/70 bg-white/80 px-5 py-3 shadow-[0_14px_35px_rgba(99,102,241,0.10)] backdrop-blur-xl md:px-6"
+              ? "mx-auto flex w-[min(90%,1600px)] items-center justify-between rounded-full border border-white/60 bg-white/45 px-5 py-3 shadow-[0_20px_60px_rgba(99,102,241,0.18)] backdrop-blur-2xl backdrop-saturate-150 md:px-6"
+              : "mx-auto flex w-[min(90%,1600px)] items-center justify-between rounded-full border border-white/70 bg-white/80 px-5 py-3 shadow-[0_14px_35px_rgba(99,102,241,0.10)] backdrop-blur-xl md:px-6"
           }
         >
           <a href={`/${lang}`} className="flex items-center gap-3">
