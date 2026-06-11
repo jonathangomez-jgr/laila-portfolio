@@ -18,7 +18,7 @@ export default async function GeneralDemosPage({
     <main>
       <PageHero eyebrow={d.eyebrow} title={d.title} description={d.description} />
 
-      <section className="mx-auto max-w-[1360px] px-5 py-8 sm:px-8">
+      <section className="mx-auto max-w-[1540px] px-5 py-8 sm:px-8">
         <a
           href={`/${lang}/general-demos/agentforce`}
           className="mb-8 block rounded-2xl border border-[#5f6fff]/30 bg-gradient-to-r from-[#eef2ff] via-white to-[#eaf5fe] p-6 transition hover:-translate-y-0.5 hover:shadow-md"

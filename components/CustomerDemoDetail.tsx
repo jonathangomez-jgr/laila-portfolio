@@ -54,10 +54,11 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
   const localizedTabs = demo.tabs.map((tab) => getLocalizedTab(tab, demo, lang));
   const [activeTab, setActiveTab] = useState(localizedTabs[0]);
   const [qrOpen, setQrOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
     <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
-      <section className="mx-auto max-w-7xl">
+      <section className="mx-auto max-w-[1540px]">
         <div className="mb-10 grid gap-6 lg:grid-cols-[1fr_280px] lg:items-start">
           <div>
             <p className="eyebrow mb-4">{t.eyebrow}</p>
@@ -157,42 +158,103 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
             })}
           </div>
 
-          <div className="mt-4 grid gap-6 lg:grid-cols-[280px_1fr]">
-            <aside className="soft-card hidden p-5 lg:block">
-              <p className="eyebrow mb-4">{t.demoStructure}</p>
-
-              <div className="space-y-3">
-                {localizedTabs.map((tab, index) => {
-                  const isActive = activeTab.id === tab.id;
-
-                  return (
+          <div
+            className={`mt-4 grid gap-6 ${
+              sidebarCollapsed
+                ? "lg:grid-cols-[56px_1fr]"
+                : "lg:grid-cols-[280px_1fr]"
+            }`}
+          >
+            <aside
+              className={`soft-card hidden lg:block ${
+                sidebarCollapsed ? "p-2" : "p-5"
+              }`}
+            >
+              {sidebarCollapsed ? (
+                <button
+                  type="button"
+                  onClick={() => setSidebarCollapsed(false)}
+                  aria-label={t.expandSidebar}
+                  title={t.expandSidebar}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-500 shadow-sm transition hover:bg-indigo-50 hover:text-indigo-600"
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              ) : (
+                <>
+                  <div className="mb-4 flex items-center justify-between gap-2">
+                    <p className="eyebrow">{t.demoStructure}</p>
                     <button
-                      key={tab.id}
                       type="button"
-                      onClick={() => setActiveTab(tab)}
-                      className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition ${
-                        isActive
-                          ? "bg-indigo-50 text-indigo-700"
-                          : "text-gray-600 hover:bg-white"
-                      }`}
+                      onClick={() => setSidebarCollapsed(true)}
+                      aria-label={t.collapseSidebar}
+                      title={t.collapseSidebar}
+                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-gray-400 transition hover:bg-white hover:text-indigo-600"
                     >
-                      <span
-                        className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
-                          isActive
-                            ? "bg-indigo-500 text-white"
-                            : "bg-gray-100 text-gray-500"
-                        }`}
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        aria-hidden
                       >
-                        {index + 1}
-                      </span>
-
-                      <span className="text-sm font-semibold">
-                        {tab.label}
-                      </span>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
                     </button>
-                  );
-                })}
-              </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    {localizedTabs.map((tab, index) => {
+                      const isActive = activeTab.id === tab.id;
+
+                      return (
+                        <button
+                          key={tab.id}
+                          type="button"
+                          onClick={() => setActiveTab(tab)}
+                          className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition ${
+                            isActive
+                              ? "bg-indigo-50 text-indigo-700"
+                              : "text-gray-600 hover:bg-white"
+                          }`}
+                        >
+                          <span
+                            className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
+                              isActive
+                                ? "bg-indigo-500 text-white"
+                                : "bg-gray-100 text-gray-500"
+                            }`}
+                          >
+                            {index + 1}
+                          </span>
+
+                          <span className="text-sm font-semibold">
+                            {tab.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </aside>
 
             <section className="soft-card min-h-[280px] p-5 sm:min-h-[420px] sm:p-8 md:p-10">

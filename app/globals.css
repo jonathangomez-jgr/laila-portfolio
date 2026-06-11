@@ -27,15 +27,18 @@ body {
   min-height: 100vh;
 }
 
+/* ---- Outer site container (toggle test) ----
+   Rollback: restore the values commented as ORIGINAL below to bring back
+   the framed shell with border, glass background, rounded corners and shadow. */
 .site-shell {
-  max-width: 1440px;
-  margin: 32px auto;
-  border: 1px solid var(--border-soft);
-  background: rgba(255, 255, 255, 0.68);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-radius: 32px;
-  box-shadow: var(--shadow-soft);
+  max-width: 1540px;
+  margin: 0 auto;             /* ORIGINAL: 32px auto */
+  border: 0;                  /* ORIGINAL: 1px solid var(--border-soft); */
+  background: transparent;    /* ORIGINAL: rgba(255, 255, 255, 0.68); */
+  backdrop-filter: none;      /* ORIGINAL: blur(18px); */
+  -webkit-backdrop-filter: none; /* ORIGINAL: blur(18px); */
+  border-radius: 0;           /* ORIGINAL: 32px; */
+  box-shadow: none;           /* ORIGINAL: var(--shadow-soft); */
   overflow: visible;
   position: relative;
 }

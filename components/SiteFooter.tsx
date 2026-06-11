@@ -17,7 +17,7 @@ export default function SiteFooter({
 }) {
   return (
     <footer className="px-6 pb-8 pt-2 md:px-8">
-      <div className="mx-auto max-w-[1360px]">
+      <div className="mx-auto max-w-[1540px]">
         <div className="rounded-3xl border border-slate-200/60 bg-white/70 px-8 py-10 shadow-[0_8px_32px_rgba(99,102,241,0.07)] backdrop-blur-sm md:px-12 md:py-12">
           {/* Top grid */}
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">

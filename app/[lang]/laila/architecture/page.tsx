@@ -20,7 +20,7 @@ export default async function LailaArchitecturePage({
       <PageHero eyebrow={d.eyebrow} title={d.title} description={d.description} />
 
       {/* Laila en Números */}
-      <section className="mx-auto max-w-7xl px-6 py-12 md:px-8">
+      <section className="mx-auto max-w-[1540px] px-6 py-12 md:px-8">
         <div className="mb-10">
           <p className="eyebrow mb-4">{d.metricsEyebrow}</p>
           <h2 className="section-title text-3xl font-semibold text-gray-950 sm:text-4xl">
@@ -38,7 +38,7 @@ export default async function LailaArchitecturePage({
       </section>
 
       {/* System Landscape */}
-      <section className="mx-auto max-w-7xl px-6 pb-12 md:px-8">
+      <section className="mx-auto max-w-[1540px] px-6 pb-12 md:px-8">
         <div className="mb-8">
           <p className="eyebrow mb-4">{d.infraEyebrow}</p>
           <h2 className="section-title text-3xl font-semibold text-gray-950 sm:text-4xl">
@@ -53,7 +53,7 @@ export default async function LailaArchitecturePage({
       </section>
 
       {/* Assets */}
-      <section className="mx-auto max-w-7xl px-6 pb-16 md:px-8">
+      <section className="mx-auto max-w-[1540px] px-6 pb-16 md:px-8">
         <div className="mb-8">
           <p className="eyebrow mb-4">{d.assetsEyebrow}</p>
           <h2 className="section-title text-3xl font-semibold text-gray-950 sm:text-4xl">

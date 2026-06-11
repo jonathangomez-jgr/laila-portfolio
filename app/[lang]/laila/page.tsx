@@ -13,7 +13,7 @@ export default async function LailaPage({
   const d = dict.laila;
 
   return (
-    <main className="mx-auto max-w-[1360px] px-5 py-10 sm:px-8 sm:py-16">
+    <main className="mx-auto max-w-[1540px] px-5 py-10 sm:px-8 sm:py-16">
       <LailaHero
         accountsEyebrow={d.heroAccountsEyebrow}
         closeHint={d.heroCloseHint}

@@ -279,7 +279,9 @@
   "customerDetail": {
     "eyebrow": "Customer Solution",
     "execDeckBtn": "Apresentação executiva",
-    "demoStructure": "Estrutura do Demo",
+    "demoStructure": "Estrutura da Solução",
+    "collapseSidebar": "Recolher",
+    "expandSidebar": "Expandir estrutura",
     "emptyTabTitle": "Espaço editável",
     "emptyTabDesc": "Aqui podemos substituir este placeholder por conteúdo real: imagens, bullets, métricas, diagramas, scripts, links, vídeos ou ativos de apresentação.",
     "demoNotFound": "Demo não encontrada",
