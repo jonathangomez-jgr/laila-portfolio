@@ -2063,6 +2063,35 @@ export const customerDemos: CustomerDemo[] = [
           components: [
             {
               number: "01",
+              name: "Orquestación proactiva de journeys",
+              shortName: "Marketing & Journeys",
+              type: "orchestration",
+              purpose:
+                "Activaciones desde Marketing Cloud para onboarding, recordatorios, capacitación, objetivos, alertas, comunicación de procesos y prevención de abandono.",
+              user: "Marketing & Customer Success → DS",
+              channels: ["📲 WhatsApp", "📧 Email", "💬 SMS", "🔔 Push"],
+              capabilities: [
+                {
+                  title: "Journeys por etapa de onboarding",
+                  body: "6 momentos clave en los primeros 6 meses con contenidos progresivos por madurez digital de la DS.",
+                },
+                {
+                  title: "Recordatorios y alertas",
+                  body: "Fechas de corte, brecha de objetivo, pedidos pendientes, capacitaciones por completar — todo proactivo, no reactivo.",
+                },
+                {
+                  title: "Comunicación segmentada",
+                  body: "Por antigüedad, comportamiento, canal preferido y nivel de actividad — nunca un mensaje masivo cuadrado.",
+                },
+                {
+                  title: "Prevención de abandono",
+                  body: "Disparada por señales del Data Cloud: caída de actividad, recurrencia de quejas, falta de avance en objetivo.",
+                },
+              ],
+              products: ["Marketing Cloud", "Data Cloud", "Journey Builder"],
+            },
+            {
+              number: "02",
               name: "Agente DS 360 — Asistente Inteligente para Distribuidoras",
               shortName: "Agente DS 360",
               type: "external",
@@ -2099,7 +2128,7 @@ export const customerDemos: CustomerDemo[] = [
               products: ["Agentforce", "Service Cloud", "Knowledge"],
             },
             {
-              number: "02",
+              number: "03",
               name: "Copiloto Staff 360 — Asistente Interno para Atención y Operaciones",
               shortName: "Copiloto Staff 360",
               type: "internal",
@@ -2128,7 +2157,7 @@ export const customerDemos: CustomerDemo[] = [
               products: ["Agentforce", "Service Cloud", "Slack", "Tableau Next"],
             },
             {
-              number: "03",
+              number: "04",
               name: "Capa de datos e inteligencia DS 360",
               shortName: "Capa DS 360",
               type: "data",
@@ -2154,35 +2183,6 @@ export const customerDemos: CustomerDemo[] = [
                 },
               ],
               products: ["Data Cloud", "Service Cloud", "Einstein"],
-            },
-            {
-              number: "04",
-              name: "Orquestación proactiva de journeys",
-              shortName: "Marketing & Journeys",
-              type: "orchestration",
-              purpose:
-                "Activaciones desde Marketing Cloud para onboarding, recordatorios, capacitación, objetivos, alertas, comunicación de procesos y prevención de abandono.",
-              user: "Marketing & Customer Success → DS",
-              channels: ["📲 WhatsApp", "📧 Email", "💬 SMS", "🔔 Push"],
-              capabilities: [
-                {
-                  title: "Journeys por etapa de onboarding",
-                  body: "6 momentos clave en los primeros 6 meses con contenidos progresivos por madurez digital de la DS.",
-                },
-                {
-                  title: "Recordatorios y alertas",
-                  body: "Fechas de corte, brecha de objetivo, pedidos pendientes, capacitaciones por completar — todo proactivo, no reactivo.",
-                },
-                {
-                  title: "Comunicación segmentada",
-                  body: "Por antigüedad, comportamiento, canal preferido y nivel de actividad — nunca un mensaje masivo cuadrado.",
-                },
-                {
-                  title: "Prevención de abandono",
-                  body: "Disparada por señales del Data Cloud: caída de actividad, recurrencia de quejas, falta de avance en objetivo.",
-                },
-              ],
-              products: ["Marketing Cloud", "Data Cloud", "Journey Builder"],
             },
           ],
           topics: [
