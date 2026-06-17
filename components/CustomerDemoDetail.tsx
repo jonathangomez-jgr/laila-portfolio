@@ -17,6 +17,7 @@ import NarrativeDisplay from "./NarrativeDisplay";
 import RoadmapTimeline from "./RoadmapTimeline";
 import StoryTimeline from "./StoryTimeline";
 import JourneyTimeline from "./JourneyTimeline";
+import JtbdCanvas from "./JtbdCanvas";
 import ObjectiveInfographic from "./ObjectiveInfographic";
 import OverviewStats from "./OverviewStats";
 import SolutionLayers from "./SolutionLayers";
@@ -352,6 +353,17 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 <RoadmapTimeline data={activeTab.roadmapData} />
               )}
 
+              {activeTab.jtbdData && (
+                <JtbdCanvas
+                  data={activeTab.jtbdData}
+                  deckHref={
+                    hasExecutiveDeck(demo.slug, "jtbd")
+                      ? `/${lang}/customer-demos/${demo.slug}/deck/jtbd`
+                      : undefined
+                  }
+                />
+              )}
+
               {activeTab.assetsData && (
                 <AssetsGrid data={activeTab.assetsData} />
               )}
@@ -374,6 +386,7 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 !activeTab.workshopData &&
                 !activeTab.blueprintData &&
                 !activeTab.roadmapData &&
+                !activeTab.jtbdData &&
                 !activeTab.assetsData && (
                   <div className="mt-10 rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-6">
                     <p className="text-sm font-semibold text-indigo-700">

@@ -1173,6 +1173,355 @@ export const executiveDecks: ExecutiveDeck[] = [
       },
     ],
   },
+
+  // ───────────────────────────────────────────────────────────────────
+  // BETTERWARE · JTBD DECK · Jobs To Be Done
+  // ───────────────────────────────────────────────────────────────────
+  {
+    slug: "jtbd",
+    customerSlug: "betterware",
+    title: "Jobs To Be Done — Betterware DS",
+    subtitle: "Insights, Journey & Roadmap — sesión post-workshop + visita en calle",
+    duration: "14 min",
+    slides: [
+      // ── 1 · Portada ────────────────────────────────────────────────────
+      {
+        layout: "title",
+        eyebrow: "Betterware · Distribuidora Independiente",
+        title: "Jobs\nTo Be Done.",
+        subtitle:
+          "El segundo ejercicio de descubrimiento — workshop JTBD del 14-may-2026 + visita en calle a distribuidoras reales. Foco: la Distribuidora Nueva.",
+        footnote: "EA Lead · Rina Margarita Suarez · Junio 2026",
+        brand: {
+          astro: { variant: "agent-astro-10-l", side: "right", bottom: "-30px", size: 340 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "8%",  size: 48, rotate: 14 },
+            { variant: "blue-inclined",   side: "left",  top: "90%", size: 30, rotate: -10 },
+            { variant: "yellow-inclined", side: "right", top: "6%",  size: 34, rotate: 22 },
+          ],
+        },
+      },
+
+      // ── 2 · Por qué este ejercicio ────────────────────────────────────
+      {
+        layout: "section",
+        eyebrow: "Por qué este ejercicio",
+        title: "El workshop reveló los problemas. La calle reveló por qué siguen ahí.",
+        subtitle:
+          "El workshop nos dio los datos cuantitativos. La visita en calle nos mostró la mamá de linaje, el papel y lápiz, los tips de venta — todo lo que ningún sistema captura hoy.",
+        brand: {
+          astro: { variant: "astro-7", side: "left", bottom: "-50px", size: 230 },
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "16%", size: 44, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
+          ],
+        },
+      },
+
+      // ── 3 · Resumen de hallazgos en 6 frases bandera ─────────────────
+      {
+        layout: "metrics",
+        eyebrow: "Las cifras que definen el problema",
+        title: "Seis números que cambian la conversación",
+        metrics: [
+          { value: "40–48%", label: "DS no realizan su primer pedido" },
+          { value: "52–60%", label: "No logran primer pedido en 2 semanas" },
+          { value: "42%", label: "Completitud actual del formulario de alta" },
+          { value: "30%", label: "Asociadas que arman pedido en la app" },
+          { value: "25%", label: "Altas con problemas de documentación" },
+          { value: "0%", label: "Mamás de linaje visibles en el sistema hoy" },
+        ],
+      },
+
+      // ── 4 · Perfil de la DS Nueva ─────────────────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "Perfil de la Distribuidora Nueva",
+        title: "Quién es. Qué siente. Cómo usa la tecnología.",
+        pillars: [
+          {
+            title: "Quién es",
+            body: "Mujer (90%), mamá o ama de casa, sin experiencia formal en ventas. Su red social primaria son familia, vecinas y amigas. Su canal natural es WhatsApp.",
+            accent: "indigo",
+          },
+          {
+            title: "Qué siente al inicio",
+            body: "Entusiasmo mezclado con miedo. Confusión por la cantidad de información. Ansiedad por el pedido mínimo de $2,500 MXN. Pena para prospectar. Dependencia emocional de su mamá de linaje.",
+            accent: "violet",
+          },
+          {
+            title: "Su relación con la tecnología",
+            body: "WhatsApp intensivamente. La app de Better solo para hacer pedidos. Lleva el control de sus clientas en papel. No consulta métricas ni reportes.",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // ── 5 · Insights del Workshop ────────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Insights del Workshop · Equipo Betterware",
+        title: "Lo que el equipo reconoció en sesión",
+        bullets: [
+          "El mayor riesgo no es el alta, es la activación — 40-48% nunca hacen primer pedido",
+          "Motivación 80% emocional + incentivos, 20% económica — premios y reconocimiento ganan al ingreso",
+          "Alta manual: 10 personas, 3 turnos, 25% con problemas de documentación, solo 10% se recupera",
+          "La app no engancha — notificaciones \"casi no se abren\", carrito eliminado semanalmente",
+          "Staff sin trazabilidad — 90% del trabajo en campo, sin registro sistemático",
+          "Capacitación con consumo muy bajo — sin onboarding estandarizado ni automatizado",
+        ],
+        highlight: "Diagnóstico cuantitativo del propio equipo de Betterware (29-may-2026)",
+      },
+
+      // ── 6 · Insights de Visita en Calle ─────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Insights de Visita en Calle · Cualitativos",
+        title: "Lo que solo se ve caminando con una distribuidora",
+        bullets: [
+          "La mamá de linaje es el sistema nervioso de la red — y opera fuera de cualquier sistema de Better",
+          "WhatsApp es el canal real de la relación. La app es solo para pedidos",
+          "La logística de entrega es una barrera real — sin solución para asociadas lejos de casa",
+          "Reclutar es doloroso — pena, falta de pitch, desconfianza del prospecto al modelo",
+          "Los tips de venta son el contenido más valioso — un consejo práctico vence a un módulo de capacitación",
+          "El control de clientas es papel y lápiz — no consultan la app para esto",
+          "Las distribuidoras no saben que hay asesores, promotores, ni instalaciones que pueden visitar",
+          "Hay distribuidoras influencers creando contenido solas — un activo que Better no habilita ni potencia",
+        ],
+        highlight: "Activos invisibles para los datos. Decisivos para la retención.",
+      },
+
+      // ── 7 · Funnel de 6 etapas ───────────────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Funnel de la Distribuidora Nueva",
+        title: "6 etapas con dos perspectivas: la DS y Better",
+        left: {
+          heading: "Etapas (KPI crítico)",
+          items: [
+            "1 · Descubrimiento & Captación — 36–37% prospecto → formulario",
+            "2 · Inscripción & Alta — 42% completitud (meta >65%)",
+            "3 · Onboarding 2 semanas — 52–60% NO logra primer pedido",
+            "4 · Primera Venta & Primer Ingreso — venta + cobro en 4 semanas",
+            "5 · Consolidación — recurrencia semanal · retención 90 días",
+            "6 · Ascenso & Mamá de Linaje — crecimiento red 2° nivel",
+          ],
+        },
+        right: {
+          heading: "Lo que Better debe habilitar (transversal)",
+          items: [
+            "Onboarding inteligente vía WhatsApp con bienvenida, checklist y tips",
+            "Recuperación automática de formularios y validación con IA",
+            "Alertas a la mamá cuando la DS no avanza",
+            "Simulador de ganancias y notificación de incentivos en tiempo real",
+            "Dashboard de red personal y plan comercial digital (reemplazo de Excel)",
+            "Consola de linaje formal para la mamá con KPIs y alertas de churn",
+          ],
+        },
+      },
+
+      // ── 8 · AS-IS vs TO-BE ───────────────────────────────────────────
+      {
+        layout: "comparison",
+        eyebrow: "AS-IS vs. TO-BE",
+        title: "Cómo cambia la experiencia de la DS en 4 fases",
+        before: {
+          heading: "AS-IS · Hoy",
+          items: [
+            "Inscripción: confusión, abrumación, 10 validadores manuales en 3 turnos",
+            "Onboarding: nadie le explica cómo hacer el primer pedido — 40-48% nunca lo hace",
+            "Primera venta: miedo, inseguridad, \"no sé cómo vender\"",
+            "Consolidación: \"no tengo a quién me acompañe\" — papel y lápiz, sin staff con herramientas",
+          ],
+        },
+        after: {
+          heading: "TO-BE · Aliada Digital",
+          items: [
+            "Inscripción: claridad, validación con IA, recuperación de formularios abandonados",
+            "Onboarding: Agentforce 24/7 en WhatsApp + alerta a la mamá si no hay avance",
+            "Primera venta: emoción y confianza con recomendaciones basadas en datos",
+            "Consolidación: felicidad por crecer · staff con herramientas · linaje habilitado",
+          ],
+        },
+      },
+
+      // ── 9 · Gap Analysis · 10 Jobs ───────────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Gap Analysis · 10 Jobs to Be Done",
+        title: "Cinco jobs críticos. Cinco de prioridad alta.",
+        left: {
+          heading: "Críticos (rojo)",
+          items: [
+            "Ganar el primer ingreso rápido y sentir que valió la pena",
+            "Saber qué hacer cada día para avanzar",
+            "Tener a alguien de confianza que me ayude cuando tengo dudas",
+            "Reclutar sin sentir pena ni rechazo",
+            "Saber que Better me apoya institucionalmente",
+          ],
+        },
+        right: {
+          heading: "Prioridad alta (ámbar)",
+          items: [
+            "Entender cuánto gano y cómo crecer",
+            "Gestionar mi cartera de clientas y asociadas",
+            "Entregar pedidos sin complicaciones logísticas",
+            "Hacer contenido para atraer clientes y reclutas",
+            "Tener un plan de crecimiento claro con mi asesora",
+          ],
+        },
+      },
+
+      // ── 10 · Decisión estratégica de canales ─────────────────────────
+      {
+        layout: "quote",
+        quote:
+          "WhatsApp debe ser el canal primario de relación. La app debe ser el canal de transacción. No son competidores: son complementarios con roles distintos y claros.",
+        context: "Decisión estratégica · Rol de canales · JTBD Betterware",
+        brand: {
+          astro: { variant: "agent-astro-12-r", side: "left", bottom: "-30px", size: 220 },
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "20%", size: 44, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
+          ],
+        },
+      },
+
+      // ── 11 · Iniciativas Priorizadas ─────────────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "10 iniciativas priorizadas",
+        title: "Tres olas: fundacional, diferenciación, escalabilidad",
+        pillars: [
+          {
+            title: "P1 · Fundacional",
+            body: "(1) Agentforce DS vía WhatsApp · (2) Journey de Onboarding Inteligente · (3) Consola de Linaje para la Mamá. Lanzar en producción.",
+            accent: "indigo",
+          },
+          {
+            title: "P2 · Diferenciación",
+            body: "(4) Resumen Semanal Personalizado · (5) Kit de Prospección Digital · (6) Plan Comercial Digital (Staff + DS). Primeros 90 días post-producción.",
+            accent: "violet",
+          },
+          {
+            title: "P3 · Escalabilidad",
+            body: "(7) CRM Simple vía WhatsApp · (8) Mentoras Certificadas · (9) Hub de Contenido para Influencers · (10) Automatización del Alta. Siguiente ciclo de inversión.",
+            accent: "sky",
+          },
+        ],
+        products: ["Agentforce", "Service", "Marketing", "Data Cloud", "Tableau"],
+      },
+
+      // ── 12 · Roadmap por sprints ─────────────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Roadmap por Sprints · jun 2026 → feb 2027+",
+        title: "De fundación a inteligencia predictiva en 4 sprints",
+        left: {
+          heading: "Sprint 0 · Fundación y Piloto (jun → jul 2026)",
+          items: [
+            "Plataforma BEFRA en producción (Service + Marketing + Data Cloud)",
+            "Piloto Agentforce WhatsApp con 50–100 DS",
+            "Modelo de datos de linaje en Data Cloud",
+            "Primeras alertas de riesgo de abandono",
+            "Kick-off Consola de Linaje con UX research",
+          ],
+        },
+        right: {
+          heading: "Sprint 1 · Activación y Onboarding (ago → oct 2026)",
+          items: [
+            "Journey de Onboarding Inteligente en producción",
+            "Resumen semanal personalizado vía WhatsApp",
+            "Consola de Linaje v1 (alertas básicas)",
+            "Kit de Prospección Digital v1 (micro-tips)",
+            "Plan Comercial Digital con asesoras (sin Excel)",
+          ],
+        },
+      },
+
+      // ── 13 · KPIs de éxito ───────────────────────────────────────────
+      {
+        layout: "kpi-table",
+        eyebrow: "KPIs de éxito del programa",
+        title: "Lo que vamos a medir — y contra qué",
+        rows: [
+          {
+            label: "Conversión inscripción → primer pedido",
+            baseline: "52–60%",
+            goal6m: "65%",
+            goal12m: "75%",
+            accent: "indigo",
+          },
+          {
+            label: "Completitud del formulario de alta",
+            baseline: "42%",
+            goal6m: "60%",
+            goal12m: "70%",
+            accent: "indigo",
+          },
+          {
+            label: "Retención DS nuevas (8 semanas)",
+            baseline: "No medido",
+            goal6m: "Línea base establecida",
+            goal12m: "+15–20 pts",
+            accent: "violet",
+          },
+          {
+            label: "Tickets Contact Center (operativos)",
+            baseline: "Línea base actual",
+            goal6m: "−15%",
+            goal12m: "−30%",
+            accent: "violet",
+          },
+          {
+            label: "Apertura WhatsApp vs App push",
+            baseline: "App: \"casi no se abren\"",
+            goal6m: "WhatsApp >40%",
+            goal12m: "WhatsApp >60%",
+            accent: "sky",
+          },
+          {
+            label: "Mamás de linaje activas en sistema",
+            baseline: "0% (sin visibilidad)",
+            goal6m: "Piloto: 50–100 mamás",
+            goal12m: "20% de la red",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // ── 14 · Cierre y próximos pasos ─────────────────────────────────
+      {
+        layout: "closing",
+        title: "Próximos pasos recomendados",
+        bullets: [
+          "Validar con el equipo Betterware los hallazgos cualitativos de la visita en calle.",
+          "Aprobar el piloto Agentforce WhatsApp (Sprint 0) con cohorte de 50–100 distribuidoras.",
+          "Iniciar UX research con mamás de linaje reales para diseñar la Consola.",
+          "Instrumentar línea base de retención a 8 semanas — hoy no se mide sistemáticamente.",
+          "Definir el modelo de datos de linaje en Data Cloud junto con MuleSoft y Operaciones.",
+        ],
+        cta: "¿Avanzamos con el Sprint 0 — piloto Agentforce + Consola de Linaje + onboarding inteligente?",
+      },
+
+      // ── 15 · Cierre narrativa ────────────────────────────────────────
+      {
+        layout: "thanks",
+        eyebrow: "Salesforce · Betterware de México (BeFra)",
+        title: "Gracias",
+        subtitle:
+          "La DS Nueva no necesita más sistemas. Necesita que el sistema la conozca, le hable como ella habla y la sostenga cuando su mamá de linaje no puede.",
+        brand: {
+          astro: { variant: "agent-astro-flip-009", side: "right", bottom: "-50px", size: 240 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "16%", size: 44, rotate: -10 },
+            { variant: "yellow-inclined", side: "left",  top: "70%", size: 28, rotate: 18 },
+            { variant: "blue-main",       side: "right", top: "20%", size: 32, rotate: 6 },
+          ],
+        },
+      },
+    ],
+  },
 ];
 
 export function getExecutiveDeck(

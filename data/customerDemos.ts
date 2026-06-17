@@ -306,6 +306,92 @@ export type RoadmapData = {
   mvp: RoadmapMvp;
 };
 
+export type JtbdInsightGroup = {
+  name: string;
+  eyebrow: string;
+  tone: "indigo" | "violet" | "sky" | "amber";
+  insights: { title: string; body: string }[];
+};
+
+export type JtbdPersonaColumn = {
+  heading: string;
+  tone: "indigo" | "violet" | "sky";
+  items: string[];
+};
+
+export type JtbdFunnelStage = {
+  number: number;
+  name: string;
+  color: "indigo" | "violet" | "sky" | "emerald";
+  jobToBeDone: string;
+  betterEnables: string[];
+  kpi: string;
+  channel: string;
+};
+
+export type JtbdGapRow = {
+  job: string;
+  asIs: string;
+  toBe: string;
+  severity: "critico" | "alto";
+};
+
+export type JtbdChannel = {
+  name: string;
+  role: string;
+  tone: "emerald" | "indigo" | "amber" | "violet";
+  livesHere: string[];
+  notHere: string[];
+};
+
+export type JtbdInitiative = {
+  number: number;
+  name: string;
+  solves: string;
+  capability: string;
+  impact: string;
+};
+
+export type JtbdInitiativeBucket = {
+  label: string;
+  subtitle: string;
+  tone: "indigo" | "violet" | "sky";
+  items: JtbdInitiative[];
+};
+
+export type JtbdSprint = {
+  label: string;
+  dates: string;
+  tone: "indigo" | "violet" | "sky" | "emerald";
+  bullets: string[];
+};
+
+export type JtbdKpiRow = {
+  kpi: string;
+  baseline: string;
+  goal90d: string;
+  goal6m: string;
+};
+
+export type JtbdData = {
+  intro: string;
+  authoredBy: string;
+  workshopDate: string;
+  funnelStats: { value: string; label: string }[];
+  insightGroups: JtbdInsightGroup[];
+  persona: {
+    headline: string;
+    columns: JtbdPersonaColumn[];
+  };
+  funnel: JtbdFunnelStage[];
+  channelDecision: string;
+  channels: JtbdChannel[];
+  gaps: JtbdGapRow[];
+  initiatives: JtbdInitiativeBucket[];
+  sprints: JtbdSprint[];
+  kpis: JtbdKpiRow[];
+};
+
 export type CustomerDemoTab = {
   id: string;
   label: string;
@@ -332,6 +418,7 @@ export type CustomerDemoTab = {
   workshopData?: WorkshopData;
   blueprintData?: BlueprintData;
   roadmapData?: RoadmapData;
+  jtbdData?: JtbdData;
 };
 
 export type CustomerDemoI18n = {
@@ -1784,9 +1871,9 @@ export const customerDemos: CustomerDemo[] = [
             { value: "$14.1B", label: "MXN ingresos consolidados FY 2024" },
             { value: "1.24M", label: "Asociadas + Distribuidoras (BW + JAFRA)" },
             { value: "8M", label: "Hogares mexicanos alcanzados" },
+            { value: "40–48%", label: "DS que no realizan su primer pedido (JTBD)" },
             { value: "6 meses", label: "Journey crítico de la DS" },
             { value: "4", label: "Componentes del programa Aliada Digital" },
-            { value: "8-12 sem", label: "Time-to-value del MVP" },
           ],
         },
       },
@@ -2040,13 +2127,566 @@ export const customerDemos: CustomerDemo[] = [
         },
       },
 
-      // ── 6. Solución ────────────────────────────────────────────────────
+      // ── 6. Jobs To Be Done ────────────────────────────────────────────
+      {
+        id: "jtbd",
+        label: "Jobs To Be Done",
+        title: "Jobs To Be Done — Insights, Journey & Roadmap",
+        content:
+          "Segundo ejercicio de descubrimiento, complementario al Antiexperience Workshop. Combina la sesión JTBD del 14-may-2026 con visita en calle a Distribuidoras reales y el mapeo AS-IS / TO-BE del equipo Betterware. Su valor diferenciador: pone el foco en la Distribuidora Nueva — sus jobs, sus emociones, sus canales reales — y traduce los hallazgos a un funnel de 6 etapas, 10 jobs priorizados y 10 iniciativas con roadmap por sprints.",
+        jtbdData: {
+          intro:
+            "Construido a partir del workshop JTBD (14-may-2026), notas de campo de visita en calle y el mapeo AS-IS / TO-BE del equipo Betterware. EA Lead: Rina Margarita Suarez.",
+          authoredBy: "EA Lead · Rina Margarita Suarez",
+          workshopDate: "Junio 2026 · Post-Workshop JTBD + Visita en Calle",
+          funnelStats: [
+            { value: "40–48%", label: "DS no realizan su primer pedido" },
+            { value: "52–60%", label: "No logran primer pedido en 2 semanas" },
+            { value: "42%", label: "Completitud actual del formulario de alta" },
+            { value: "25%", label: "Altas con problemas de documentación" },
+            { value: "30%", label: "Asociadas que arman pedido en la app" },
+            { value: "0%", label: "Mamás de linaje visibles en el sistema hoy" },
+          ],
+          insightGroups: [
+            {
+              name: "Insights del Workshop",
+              eyebrow: "Equipo Betterware · Cuantitativo",
+              tone: "indigo",
+              insights: [
+                {
+                  title: "El mayor riesgo no es el alta, es la activación",
+                  body: "Entre 40–48% de las distribuidoras no realizan su primer pedido. El sistema no detecta ni interviene en señales de deserción temprana.",
+                },
+                {
+                  title: "La motivación es 80% emocional e incentivos, 20% económica",
+                  body: "Las distribuidoras responden más a premios, puntos y reconocimiento que al ingreso directo. Los programas de puntos son complejos y pocas los entienden completamente.",
+                },
+                {
+                  title: "El proceso de alta es manual y lento",
+                  body: "10 personas en 3 turnos validan solicitudes. El 25% de las altas tienen problemas de documentación; solo el 10% de esos casos se recupera.",
+                },
+                {
+                  title: "La app no genera engagement",
+                  body: "Las notificaciones \"casi no se abren\". Solo el 30% de las asociadas montan pedidos en la app. El carrito se elimina semanalmente sin acompañamiento inteligente.",
+                },
+                {
+                  title: "El staff opera sin trazabilidad",
+                  body: "No hay validación real de si las visitas ocurrieron. El 90% del trabajo de promotores es en campo pero sin registro ni seguimiento sistemático.",
+                },
+                {
+                  title: "La capacitación tiene consumo muy bajo",
+                  body: "Existe plataforma, contenido y reuniones, pero no hay un journey de onboarding estandarizado ni automatizado.",
+                },
+              ],
+            },
+            {
+              name: "Insights de Visita en Calle",
+              eyebrow: "Cualitativos · No visibles en datos",
+              tone: "violet",
+              insights: [
+                {
+                  title: "La mamá de linaje es el sistema nervioso de la red",
+                  body: "Es la fuente primaria de información, confianza y acompañamiento para la distribuidora nueva. Es la pieza más importante de retención y crecimiento — más que cualquier campaña de marketing. Hoy opera completamente fuera del sistema de Betterware.",
+                },
+                {
+                  title: "WhatsApp es el canal real, la app es solo para pedidos",
+                  body: "La distribuidora no percibe la app como fuente de conocimiento ni de valor agregado. WhatsApp es donde vive la relación con su mamá, con sus clientas y con Better.",
+                },
+                {
+                  title: "La logística de entrega es una barrera real",
+                  body: "Para distribuidoras con asociadas lejos de casa, entregar el pedido requiere transporte. Esto no está resuelto ni contemplado en el journey actual.",
+                },
+                {
+                  title: "Reclutar es doloroso",
+                  body: "A muchas les da pena abordar a prospectos. No saben el pitch. No tienen experiencia. El principal bloqueo es la desconfianza del prospecto hacia el modelo de negocio.",
+                },
+                {
+                  title: "Los tips de venta son el contenido más valioso",
+                  body: "Un consejo práctico y específico (como pedir el número del prospecto con el pretexto de \"enviarte promociones solo digitales\") tiene más impacto que un módulo de capacitación completo.",
+                },
+                {
+                  title: "El control de clientes es papel y lápiz",
+                  body: "Las distribuidoras llevan en libretas quién les compra, cuánto, con qué frecuencia, quién es su mejor clienta. No consultan la app para esto.",
+                },
+                {
+                  title: "No saben que Better las acompaña institucionalmente",
+                  body: "Desconocen que hay asesores, promotores y visitas disponibles. Tampoco saben que pueden visitar las instalaciones de Better.",
+                },
+                {
+                  title: "Los planes comerciales se hacen en Excel",
+                  body: "Las asesoras construyen planes de crecimiento con las distribuidoras fuera de cualquier sistema.",
+                },
+                {
+                  title: "Las distribuidoras usan sus puntos para premiar a su red",
+                  body: "Compran regalos para sus asociadas y distribuidoras que están debajo de ellas con sus puntos acumulados.",
+                },
+                {
+                  title: "Hay distribuidoras influencers",
+                  body: "Crean su propio contenido para atraer personas y clientes. Este activo no está habilitado ni potenciado por Better.",
+                },
+              ],
+            },
+          ],
+          persona: {
+            headline:
+              "Mujer (90%), mamá o ama de casa, sin experiencia formal en ventas. Su red social primaria es familia, vecinas y amigas. WhatsApp es su canal natural. Su motivación es 80% emocional + reconocimiento.",
+            columns: [
+              {
+                heading: "Quién es",
+                tone: "indigo",
+                items: [
+                  "Mujer (90% del total)",
+                  "Principalmente mamás y amas de casa",
+                  "Sin experiencia formal en ventas",
+                  "Red social primaria: familia, vecinas, amigas",
+                  "Canal preferido: WhatsApp",
+                  "Motivación: ingresos complementarios + premios + reconocimiento social",
+                ],
+              },
+              {
+                heading: "Qué siente al inicio",
+                tone: "violet",
+                items: [
+                  "Entusiasmo mezclado con miedo e incertidumbre",
+                  "Confusión frente a la cantidad de información inicial",
+                  "Ansiedad por el pedido mínimo ($2,500 MXN)",
+                  "Pena y falta de confianza para prospectar",
+                  "Dependencia emocional y práctica de su mamá de linaje",
+                ],
+              },
+              {
+                heading: "Su relación con la tecnología",
+                tone: "sky",
+                items: [
+                  "Usa WhatsApp intensivamente",
+                  "Usa la app de Better solo para hacer pedidos",
+                  "No ve la app como fuente de valor más allá del catálogo",
+                  "Lleva el control de sus clientes en papel",
+                  "No consulta métricas ni reportes digitales",
+                ],
+              },
+            ],
+          },
+          funnel: [
+            {
+              number: 1,
+              name: "Descubrimiento & Captación",
+              color: "indigo",
+              jobToBeDone:
+                "Escucha la propuesta de su mamá de linaje o ve contenido en redes · Evalúa si el negocio es real y confiable · Decide inscribirse",
+              betterEnables: [
+                "Contenido de captación auténtico (testimonios reales, distribuidoras influencers)",
+                "Material de apoyo para que la mamá haga el pitch",
+                "Landing page clara que resuelva la desconfianza",
+              ],
+              kpi: "Conversión prospecto → inicio de formulario · Hoy: 36–37%",
+              channel: "WhatsApp (boca a boca) · Redes sociales (influencers DS)",
+            },
+            {
+              number: 2,
+              name: "Inscripción & Alta",
+              color: "indigo",
+              jobToBeDone:
+                "Llena formulario · Entrega documentos · Espera validación crediticia y domiciliaria · Recibe activación en la app",
+              betterEnables: [
+                "Formulario guiado con pasos claros",
+                "Recuperación automática de formularios abandonados",
+                "Comunicación inmediata sobre estado de solicitud y rechazos",
+                "Validación automatizada con IA",
+              ],
+              kpi: "Completitud del formulario · Hoy: 42% → Meta: >65%",
+              channel: "App · WhatsApp (notificaciones de estado)",
+            },
+            {
+              number: 3,
+              name: "Onboarding (2 semanas)",
+              color: "violet",
+              jobToBeDone:
+                "Aprende cómo funciona la app y el catálogo · Entiende cuánto debe pedir para activarse · Construye su primer pedido · Recibe acompañamiento de su mamá",
+              betterEnables: [
+                "Bienvenida personalizada vía WhatsApp (Agentforce)",
+                "Checklist de primeros pasos simple y visual",
+                "Alerta inteligente a la mamá cuando la DS no ha avanzado",
+                "Recordatorio de carrito antes del cierre semanal",
+                "Tips de venta en micro-formato (60 segundos)",
+              ],
+              kpi: "Primer pedido en las primeras 2 semanas · Hoy: 52–60% NO lo logra",
+              channel: "WhatsApp (primario) · App (pedido)",
+            },
+            {
+              number: 4,
+              name: "Primera Venta & Primer Ingreso",
+              color: "violet",
+              jobToBeDone:
+                "Vende a sus clientas · Entrega pedidos · Cobra · Recibe su primer ingreso o incentivo",
+              betterEnables: [
+                "Contenido de ventas listo para compartir en WhatsApp",
+                "Tips de prospección y pitch para reclutar",
+                "Simulador de ganancias simple",
+                "Visita del asesor/promotor si no ha hecho primer pedido",
+                "Notificación de incentivos ganados en tiempo real",
+              ],
+              kpi: "% DS que completan venta y cobran en primeras 4 semanas",
+              channel: "WhatsApp · App (pedido y seguimiento)",
+            },
+            {
+              number: 5,
+              name: "Consolidación",
+              color: "sky",
+              jobToBeDone:
+                "Construye su cartera de clientas · Hace pedidos recurrentes · Recluta asociadas · Gestiona entregas · Sigue metas de incentivos",
+              betterEnables: [
+                "Dashboard de red personal vía WhatsApp/app",
+                "Plan comercial digital con la asesora (reemplazar Excel)",
+                "Alertas de asociadas inactivas",
+                "Herramientas de contenido para distribuidoras influencers",
+                "Visibilidad de progreso hacia metas de incentivos",
+              ],
+              kpi: "Recurrencia semanal de pedidos · Retención a 90 días",
+              channel: "WhatsApp (relacional) · App (operativo)",
+            },
+            {
+              number: 6,
+              name: "Ascenso & Mamá de Linaje",
+              color: "emerald",
+              jobToBeDone:
+                "Recluta nuevas distribuidoras · Las acompaña · Gestiona su red de linaje · Crece en categoría",
+              betterEnables: [
+                "Consola de linaje: vista de su red, alertas de riesgo de churn, progreso por DS",
+                "Notificación proactiva: \"tu distribuidora lleva 10 días sin pedido\"",
+                "Programa formal de Mentoras Certificadas",
+                "KPIs de linaje visibles",
+              ],
+              kpi: "Crecimiento de red de 2° nivel · % retención de su linaje",
+              channel: "WhatsApp (primario para la mamá) · App/consola (Salesforce)",
+            },
+          ],
+          channelDecision:
+            "Decisión estratégica clave — WhatsApp debe ser el canal primario de relación. La app debe ser el canal de transacción. No son competidores: son complementarios con roles distintos y claros.",
+          channels: [
+            {
+              name: "WhatsApp (Agentforce)",
+              role: "Canal de relación, acompañamiento e intervención inteligente",
+              tone: "emerald",
+              livesHere: [
+                "Bienvenida y onboarding",
+                "Tips de venta",
+                "Alertas de carrito",
+                "Resúmenes semanales",
+                "Consultas en lenguaje natural",
+                "Alertas a mamá de linaje",
+                "Comunicación de Better al staff",
+              ],
+              notHere: [
+                "Pedidos complejos",
+                "Catálogo completo",
+                "Gestión de crédito",
+              ],
+            },
+            {
+              name: "App Betterware",
+              role: "Canal de transacción y consulta de catálogo",
+              tone: "indigo",
+              livesHere: [
+                "Pedidos",
+                "Catálogo",
+                "Estado de entrega",
+                "Puntos e incentivos (simplificados)",
+              ],
+              notHere: [
+                "Capacitación larga",
+                "Comunicación relacional",
+                "Gestión de red de linaje",
+              ],
+            },
+            {
+              name: "Asesora / Promotora",
+              role: "Canal humano de alta intensidad en momentos críticos",
+              tone: "amber",
+              livesHere: [
+                "Primera visita",
+                "Activación de DS que no han pedido",
+                "Plan comercial",
+              ],
+              notHere: [
+                "Soporte operativo rutinario (lo cubre Agentforce)",
+              ],
+            },
+            {
+              name: "Mamá de Linaje",
+              role: "Canal humano de confianza y motivación",
+              tone: "violet",
+              livesHere: [
+                "Acompañamiento emocional",
+                "Reclutamiento",
+                "Motivación continua",
+              ],
+              notHere: [
+                "Soporte técnico de la app",
+                "Información operativa de Better",
+              ],
+            },
+          ],
+          gaps: [
+            {
+              job: "Ganar el primer ingreso rápido y sentir que valió la pena",
+              asIs: "Proceso de alta lento, sin acompañamiento post-registro",
+              toBe: "Journey de onboarding inteligente vía WhatsApp + Agentforce",
+              severity: "critico",
+            },
+            {
+              job: "Saber qué hacer cada día para avanzar",
+              asIs: "No hay checklist ni guía diaria; información abrumadora",
+              toBe: "Micro-contenido diario por WhatsApp + dashboard personal simple",
+              severity: "critico",
+            },
+            {
+              job: "Tener a alguien de confianza que me ayude cuando tengo dudas",
+              asIs: "La mamá cubre esto, pero sin herramientas ni datos del sistema",
+              toBe: "Consola de linaje + Agentforce que escala a la mamá en momentos clave",
+              severity: "critico",
+            },
+            {
+              job: "Reclutar sin sentir pena ni rechazo",
+              asIs: "Sin material de apoyo para el pitch · Sin entrenamiento en prospección",
+              toBe: "Kit de prospección digital vía WhatsApp + tips micro-formato",
+              severity: "critico",
+            },
+            {
+              job: "Saber que Better me apoya institucionalmente",
+              asIs: "No saben que hay asesores, promotores ni instalaciones",
+              toBe: "Comunicación proactiva del equipo de soporte + visibilidad del staff",
+              severity: "critico",
+            },
+            {
+              job: "Entender cuánto gano y cómo crecer",
+              asIs: "Programas de puntos complejos · Sin simulador de ganancias",
+              toBe: "Resumen semanal personalizado de avance y ganancias vía WhatsApp",
+              severity: "alto",
+            },
+            {
+              job: "Gestionar mi cartera de clientas y asociadas",
+              asIs: "Papel y lápiz · La app no lo facilita",
+              toBe: "CRM simple vía WhatsApp (consultas en lenguaje natural a Agentforce)",
+              severity: "alto",
+            },
+            {
+              job: "Entregar pedidos sin complicaciones logísticas",
+              asIs: "Sin solución para distribuidoras con asociadas lejos de casa",
+              toBe: "Mapa de entregas · Opciones de logística colaborativa",
+              severity: "alto",
+            },
+            {
+              job: "Hacer contenido para atraer clientes y reclutas",
+              asIs: "Algunas lo hacen solas como influencers, sin apoyo de Better",
+              toBe: "Templates de contenido · Profesionalización de comunicación en redes",
+              severity: "alto",
+            },
+            {
+              job: "Tener un plan de crecimiento claro con mi asesora",
+              asIs: "Se hace en Excel, fuera del sistema",
+              toBe: "Plan comercial digital integrado en Salesforce (Sales Cloud / Service Cloud)",
+              severity: "alto",
+            },
+          ],
+          initiatives: [
+            {
+              label: "Prioridad 1 · Fundacional",
+              subtitle: "Lanzar en producción",
+              tone: "indigo",
+              items: [
+                {
+                  number: 1,
+                  name: "Agentforce para Distribuidoras vía WhatsApp",
+                  solves: "Consultas 24/7 en lenguaje natural sobre pedidos, crédito, puntos, entrega",
+                  capability: "Agentforce + Service Cloud + WhatsApp Business API",
+                  impact: "−30% tickets Contact Center · WhatsApp como canal oficial",
+                },
+                {
+                  number: 2,
+                  name: "Journey de Onboarding Inteligente",
+                  solves: "Acompañamiento automático en las primeras 2 semanas post-alta",
+                  capability: "Marketing Cloud Journey Builder + Data Cloud (segmentación)",
+                  impact: "+15–20 pts en conversión inscripción → primer pedido",
+                },
+                {
+                  number: 3,
+                  name: "Consola de Linaje para la Mamá",
+                  solves: "Visibilidad de su red, alertas de riesgo, señales de churn temprano",
+                  capability: "Service Cloud + Data Cloud (red de linaje) + WhatsApp",
+                  impact: "+15–20% retención en primeras 8 semanas",
+                },
+              ],
+            },
+            {
+              label: "Prioridad 2 · Diferenciación",
+              subtitle: "Primeros 90 días post-producción",
+              tone: "violet",
+              items: [
+                {
+                  number: 4,
+                  name: "Resumen Semanal Personalizado",
+                  solves: "Distribuidora no sabe cuánto ganó ni cómo avanzó",
+                  capability: "Marketing Cloud + Data Cloud (ganancias y progreso) vía WhatsApp",
+                  impact: "Incremento en recurrencia de pedido semanal",
+                },
+                {
+                  number: 5,
+                  name: "Kit de Prospección Digital",
+                  solves: "DS no saben cómo reclutar ni hacer el pitch",
+                  capability: "Marketing Cloud (contenido) + WhatsApp (micro-tips)",
+                  impact: "Aumento en captación de asociadas por DS",
+                },
+                {
+                  number: 6,
+                  name: "Plan Comercial Digital (Staff + DS)",
+                  solves: "Planes se hacen en Excel fuera del sistema",
+                  capability: "Sales Cloud (plan comercial) + Tableau (visualización)",
+                  impact: "Trazabilidad de visitas · Reemplazo de Excel",
+                },
+              ],
+            },
+            {
+              label: "Prioridad 3 · Escalabilidad",
+              subtitle: "Siguiente ciclo de inversión",
+              tone: "sky",
+              items: [
+                {
+                  number: 7,
+                  name: "CRM Simple vía WhatsApp para DS",
+                  solves: "Llevan clientes en papel y lápiz",
+                  capability: "Agentforce (consultas CRM en lenguaje natural) + Service Cloud",
+                  impact: "Reemplazo del papel · Visibilidad de cartera de clientes",
+                },
+                {
+                  number: 8,
+                  name: "Programa de Mentoras Certificadas",
+                  solves: "No hay formalización del rol de la mamá de linaje",
+                  capability: "Service Cloud (perfil de mentora) + Tableau (KPIs de red)",
+                  impact: "Retención · Crecimiento de red de 2° nivel",
+                },
+                {
+                  number: 9,
+                  name: "Hub de Contenido para Influencers DS",
+                  solves: "Distribuidoras influencers sin apoyo de Better",
+                  capability: "Marketing Cloud (templates) + Salesforce CMS",
+                  impact: "Captación orgánica · Imagen de marca consistente",
+                },
+                {
+                  number: 10,
+                  name: "Automatización del Alta y Recuperación",
+                  solves: "25% de altas perdidas por documentación · 42% completan formulario",
+                  capability: "Service Cloud (case management) + Marketing Cloud (recuperación)",
+                  impact: "+20 pts en completitud de formulario",
+                },
+              ],
+            },
+          ],
+          sprints: [
+            {
+              label: "Sprint 0 · Fundación y Piloto",
+              dates: "1-jun-2026 → 31-jul-2026",
+              tone: "indigo",
+              bullets: [
+                "Lanzamiento a producción de la plataforma BEFRA (Service + Marketing + Data Cloud)",
+                "Piloto Agentforce WhatsApp con grupo controlado (50–100 DS)",
+                "Definición del modelo de datos de linaje en Data Cloud",
+                "Primeras alertas de riesgo de abandono temprano",
+                "Kick-off del diseño de la Consola de Linaje con UX research con mamás reales",
+              ],
+            },
+            {
+              label: "Sprint 1 · Activación y Onboarding",
+              dates: "1-ago-2026 → 31-oct-2026",
+              tone: "violet",
+              bullets: [
+                "Journey de Onboarding Inteligente en producción (Marketing Cloud)",
+                "Resumen semanal personalizado vía WhatsApp en producción",
+                "Consola de Linaje v1 (alertas básicas de red)",
+                "Kit de Prospección Digital v1 (micro-tips en WhatsApp)",
+                "Inicio del Plan Comercial Digital con asesoras (reemplazo de Excel)",
+                "Medición de KPIs: conversión inscripción→primer pedido · retención 8 semanas",
+              ],
+            },
+            {
+              label: "Sprint 2 · Consolidación y Escala",
+              dates: "1-nov-2026 → 31-ene-2027",
+              tone: "sky",
+              bullets: [
+                "CRM simple vía WhatsApp (Agentforce responde consultas de cartera)",
+                "Programa de Mentoras Certificadas v1 (perfil formal + KPIs)",
+                "Hub de Contenido para Distribuidoras Influencers",
+                "Automatización del proceso de alta y recuperación de formularios",
+                "Dashboard de Ascenso/Upgrade (Tableau) para DS y mamás",
+                "Revisión de KPIs y decisión sobre siguiente ciclo de inversión",
+              ],
+            },
+            {
+              label: "Sprint 3 · Inteligencia y Personalización",
+              dates: "1-feb-2027 en adelante",
+              tone: "emerald",
+              bullets: [
+                "Personalización avanzada en la app por perfil (DS vs. asociada)",
+                "Modelos predictivos de riesgo de churn (Data Cloud + Einstein)",
+                "Integración Amplitude + Data Cloud para journey optimization",
+                "Expansión del modelo de Mentoras a toda la red",
+              ],
+            },
+          ],
+          kpis: [
+            {
+              kpi: "Conversión inscripción → primer pedido",
+              baseline: "52–60%",
+              goal90d: "65%",
+              goal6m: "75%",
+            },
+            {
+              kpi: "Completitud del formulario de alta",
+              baseline: "42%",
+              goal90d: "60%",
+              goal6m: "70%",
+            },
+            {
+              kpi: "Retención DS nuevas (8 semanas)",
+              baseline: "No medido sistemáticamente",
+              goal90d: "Línea base establecida",
+              goal6m: "+15–20 pts vs. línea base",
+            },
+            {
+              kpi: "Tickets Contact Center (consultas operativas)",
+              baseline: "Línea base actual",
+              goal90d: "−15%",
+              goal6m: "−30%",
+            },
+            {
+              kpi: "Apertura comunicaciones WhatsApp vs App push",
+              baseline: "App: \"casi no se abren\"",
+              goal90d: "WhatsApp: >40% open rate",
+              goal6m: "WhatsApp: >60% open rate",
+            },
+            {
+              kpi: "DS con mamá de linaje activa en sistema",
+              baseline: "0% (sin visibilidad)",
+              goal90d: "Piloto: 50–100 mamás",
+              goal6m: "20% de la red activa en sistema",
+            },
+            {
+              kpi: "Planes comerciales creados digitalmente",
+              baseline: "0 (Excel)",
+              goal90d: "50 planes piloto",
+              goal6m: "80% del staff usa herramienta digital",
+            },
+          ],
+        },
+      },
+
+      // ── 7. Solución ────────────────────────────────────────────────────
       {
         id: "solution",
         label: "Solución",
         title: "Aliada Digital — Un ecosistema que conoce, guía y resuelve",
         content:
-          "Aliada Digital no es un chatbot. Es un sistema inteligente con cuatro componentes que trabajan en conjunto sobre una capa de datos confiable y bajo controles explícitos de gobernanza. A continuación, el principio rector, los cuatro componentes, el diseño de tópicos del agente y la capa de confianza.",
+          "Aliada Digital no es un chatbot. Es un sistema inteligente con cuatro componentes que trabajan en conjunto sobre una capa de datos confiable y bajo controles explícitos de gobernanza. A continuación, el principio rector, los cuatro componentes, el diseño de tópicos del agente y la capa de confianza. Validado contra los 10 Jobs to Be Done identificados — ver pestaña JTBD.",
         blueprintData: {
           principle: {
             title:
@@ -2549,7 +3189,7 @@ export const customerDemos: CustomerDemo[] = [
               number: 1,
               name: "MVP · Resolver en Primer Contacto",
               goal: "Demostrar valor rápido resolviendo los motivos de contacto más frecuentes de la DS.",
-              duration: "8 a 12 semanas",
+              duration: "Sprint 0 · jun → jul 2026 · 8 a 12 semanas",
               isMvp: true,
               color: "indigo",
               scope: [
@@ -2572,6 +3212,7 @@ export const customerDemos: CustomerDemo[] = [
               number: 2,
               name: "DS 360 y Staff Copilot",
               goal: "Dar contexto completo al staff y mejorar la calidad de atención.",
+              duration: "Sprint 1 · ago → oct 2026",
               color: "violet",
               scope: [
                 "Perfil DS 360 completo",
@@ -2592,6 +3233,7 @@ export const customerDemos: CustomerDemo[] = [
               number: 3,
               name: "Onboarding inteligente y comunicación proactiva",
               goal: "Acompañar a las DS nuevas durante sus primeros 6 meses para mejorar activación, adopción y retención.",
+              duration: "Sprint 2 · nov 2026 → ene 2027",
               color: "sky",
               scope: [
                 "Journeys por etapa (6 momentos clave)",
@@ -2613,6 +3255,7 @@ export const customerDemos: CustomerDemo[] = [
               number: 4,
               name: "Inteligencia predictiva y optimización comercial",
               goal: "Pasar de resolver problemas a anticiparlos y recomendar acciones de crecimiento.",
+              duration: "Sprint 3 · feb 2027 en adelante",
               color: "emerald",
               scope: [
                 "Predicción de riesgo de churn",
@@ -2774,6 +3417,14 @@ export const customerDemos: CustomerDemo[] = [
               url: "/Customers/Betterware/files/Antiexperience Workshop — Betterware.pdf",
             },
             {
+              name: "Entregable JTBD — Insights, Journey & Roadmap (14-may-2026)",
+              description:
+                "Canvas Jobs to Be Done construido con el equipo Betterware: insights del workshop + visita en calle, perfil de la DS nueva, funnel de 6 etapas, AS-IS vs TO-BE, gap analysis priorizado, rol de canales (WhatsApp ↔ App), 10 iniciativas y roadmap de 3 sprints con KPIs de éxito. EA Lead: Rina Margarita Suarez.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/Betterware%20%E2%80%94%20Entregable%20JTBD%3A%20Insights%2C%20Journey%20%26%20Roadmap.pdf",
+            },
+            {
               name: "Aliada Digital — Blueprint Betterware",
               description:
                 "Documento maestro del programa Aliada Digital: principio rector, 4 componentes (Agente DS 360, Copiloto Staff 360, Capa de datos, Orquestación proactiva), tópicos del agente con acciones y límites, controles de gobernanza, roadmap 4 fases y MVP recomendado.",
@@ -2788,6 +3439,14 @@ export const customerDemos: CustomerDemo[] = [
               available: true,
               type: "deck",
               url: "/customer-demos/betterware/deck/executive",
+            },
+            {
+              name: "Deck Ejecutivo — Jobs To Be Done",
+              description:
+                "Presentación de 14 minutos centrada en el segundo ejercicio de descubrimiento (JTBD): perfil de la DS Nueva, insights de workshop + visita en calle, funnel de 6 etapas, AS-IS vs TO-BE, gap analysis de 10 jobs, decisión estratégica de canales, 10 iniciativas y roadmap por sprints. Hermana del deck del Comité Directivo, con la misma identidad visual de Salesforce.",
+              available: true,
+              type: "deck",
+              url: "/customer-demos/betterware/deck/jtbd",
             },
             {
               name: "Historia de la DS — Modo Inmersivo (Lupita)",
@@ -2858,7 +3517,8 @@ export const customerDemos: CustomerDemo[] = [
           { id: "context", label: "Context", title: "5 critical problems identified", content: "The Blueprint identifies five structural problems that explain why the DS experience breaks today. Each one has associated pains and they all converge on the same conclusion: the DS ends up depending on people, waiting for answers, and feeling that the company does not understand her role." },
           { id: "objective", label: "Objective", title: "Transform the Distributor's experience into autonomy, growth and first-contact resolution.", content: "Move from a reactive, fragmented and human-dependent support model to an intelligent, proactive, personalized and self-service model." },
           { id: "workshop", label: "Workshop", title: "Antiexperience Workshop result", content: "On May 29, 2026, five Betterware teams worked on parallel boards: the first to define the worst possible experience for a DS, the second to design agents to invert it. The result below is the discovery input on which the Blueprint proposed in the next section was built." },
-          { id: "solution", label: "Solution", title: "Digital Ally — An ecosystem that knows, guides and resolves", content: "Digital Ally is not a chatbot. It is an intelligent system with four components that work together on a reliable data layer and under explicit governance controls. Below: the guiding principle, four components, agent topics design and trust layer." },
+          { id: "jtbd", label: "Jobs To Be Done", title: "Jobs To Be Done — Insights, Journey & Roadmap", content: "Second discovery exercise, complementary to the Antiexperience Workshop. Built from the JTBD session (May 14, 2026), field notes from real distributor visits, and the team's AS-IS / TO-BE mapping. Focus: the new Distributor — her jobs, emotions and real channels — translated into a 6-stage funnel, 10 prioritized jobs and 10 initiatives with a sprint roadmap." },
+          { id: "solution", label: "Solution", title: "Digital Ally — An ecosystem that knows, guides and resolves", content: "Digital Ally is not a chatbot. It is an intelligent system with four components that work together on a reliable data layer and under explicit governance controls. Below: the guiding principle, four components, agent topics design and trust layer. Validated against the 10 Jobs to Be Done identified — see the JTBD tab." },
           { id: "arquitectura", label: "Architecture", title: "System Landscape — Betterware (BeFra)", content: "Tech ecosystem view supporting the Blueprint: external direct-selling systems, integration layer, Salesforce products, and Einstein Trust Layer foundation." },
           { id: "roadmap", label: "Roadmap", title: "MVP and evolution roadmap", content: "The MVP should not try to solve all use cases from day one. It focuses on the highest-pain, highest-value point — Resolve in First Contact — and from there evolves across four phases toward a complete predictive intelligence and commercial optimization system." },
           { id: "historia", label: "Story", title: "Lupita and the Virtual Mom", content: "Lupita Hernández is 38, lives in Tlaquepaque, and joined Betterware 4 months ago — at the heart of the critical 6-month journey. This is the story of how, in a single hectic day, the Blueprint's agentic ecosystem held her up — and turned a DS on the verge of giving up into a growing leader." },
@@ -2876,7 +3536,8 @@ export const customerDemos: CustomerDemo[] = [
           { id: "context", label: "Contexto", title: "5 problemas críticos identificados", content: "O Blueprint identifica cinco problemas estruturais que explicam por que a experiência da DS se quebra hoje. Cada um tem dores associadas e todos convergem para a mesma conclusão: a DS acaba dependendo de pessoas, esperando respostas, e sentindo que a empresa não entende seu papel." },
           { id: "objective", label: "Objetivo", title: "Transformar a experiência da Distribuidora em autonomia, crescimento e resolução em primeiro contato.", content: "Sair de um modelo reativo, fragmentado e dependente de suporte humano para um modelo inteligente, proativo, personalizado e de autoatendimento." },
           { id: "workshop", label: "Workshop", title: "Resultado do Antiexperience Workshop", content: "Em 29 de maio de 2026, cinco times da Betterware trabalharam em quadros paralelos: o primeiro para definir a pior experiência possível para uma DS, o segundo para desenhar agentes que a invertam. O resultado a seguir é o insumo de descoberta sobre o qual o Blueprint proposto na seção seguinte foi construído." },
-          { id: "solution", label: "Solução", title: "Aliada Digital — Um ecossistema que conhece, orienta e resolve", content: "Aliada Digital não é um chatbot. É um sistema inteligente com quatro componentes que trabalham juntos sobre uma camada de dados confiável e sob controles explícitos de governança. A seguir: o princípio reitor, os quatro componentes, o desenho de tópicos do agente e a camada de confiança." },
+          { id: "jtbd", label: "Jobs To Be Done", title: "Jobs To Be Done — Insights, Journey & Roadmap", content: "Segundo exercício de descoberta, complementar ao Antiexperience Workshop. Construído a partir da sessão JTBD (14-mai-2026), notas de campo de visitas a Distribuidoras reais e o mapeamento AS-IS / TO-BE da equipe. Foco: a Distribuidora Nova — seus jobs, emoções e canais reais — traduzidos em um funil de 6 etapas, 10 jobs priorizados e 10 iniciativas com roadmap por sprints." },
+          { id: "solution", label: "Solução", title: "Aliada Digital — Um ecossistema que conhece, orienta e resolve", content: "Aliada Digital não é um chatbot. É um sistema inteligente com quatro componentes que trabalham juntos sobre uma camada de dados confiável e sob controles explícitos de governança. A seguir: o princípio reitor, os quatro componentes, o desenho de tópicos do agente e a camada de confiança. Validado contra os 10 Jobs to Be Done identificados — ver a aba JTBD." },
           { id: "arquitectura", label: "Arquitetura", title: "System Landscape — Betterware (BeFra)", content: "Visão do ecossistema tecnológico que suporta o Blueprint: sistemas externos do modelo de venda direta, camada de integração, produtos Salesforce e fundação Einstein Trust Layer." },
           { id: "roadmap", label: "Roadmap", title: "MVP e roteiro de evolução", content: "O MVP não deve tentar resolver todos os casos de uso desde o início. Foca-se no ponto de maior dor e maior valor — Resolver em Primeiro Contato — e a partir daí evolui em quatro fases até um sistema completo de inteligência preditiva e otimização comercial." },
           { id: "historia", label: "História", title: "Lupita e a Mamãe Virtual", content: "Lupita Hernández tem 38 anos, mora em Tlaquepaque e entrou na Betterware há 4 meses — no coração da jornada crítica de 6 meses. Esta é a história de como, em um único dia complicado, o ecossistema agêntico do Blueprint a sustentou — e transformou uma DS prestes a desistir em uma líder em crescimento." },
