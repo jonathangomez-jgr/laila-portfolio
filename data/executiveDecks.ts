@@ -472,6 +472,14 @@ export const executiveDecks: ExecutiveDeck[] = [
         subtitle:
           "Market Share · Segmentación · Integración Tecnológica — Plan de Cuenta Estratégico v2.0 alineado a SPRINT 4.0",
         footnote: "Executive Briefing · Confidencial · Mayo 2026",
+        brand: {
+          astro: { variant: "agent-astro-20-l", side: "right", bottom: "-30px", size: 360 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "6%",  size: 48, rotate: 12 },
+            { variant: "blue-inclined",   side: "left",  top: "92%", size: 30, rotate: -10 },
+            { variant: "yellow-inclined", side: "right", top: "4%",  size: 34, rotate: 22 },
+          ],
+        },
       },
 
       // ── SLIDE 2 · Argos hoy ───────────────────────────────────────────
@@ -487,6 +495,12 @@ export const executiveDecks: ExecutiveDeck[] = [
           { value: "40%+", label: "Ventas digitales Argos ONE" },
           { value: "SPRINT 4.0", label: "Marco estratégico activo 2026–27" },
         ],
+        brand: {
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "10%", size: 40, rotate: 14 },
+            { variant: "blue-inclined",   side: "left",  top: "78%", size: 28, rotate: -12 },
+          ],
+        },
       },
 
       // ── SLIDE 3 · El reto ─────────────────────────────────────────────
@@ -514,6 +528,11 @@ export const executiveDecks: ExecutiveDeck[] = [
             "P3 — SAP ↔ Salesforce: inventario, crédito y capacidad consultables desde el CRM",
           ],
         },
+        brand: {
+          sparkles: [
+            { variant: "yellow-main", side: "right", top: "8%", size: 38, rotate: 12 },
+          ],
+        },
       },
 
       // ── SLIDE 4 · OKRs corporativos ───────────────────────────────────
@@ -524,7 +543,7 @@ export const executiveDecks: ExecutiveDeck[] = [
         pillars: [
           {
             title: "01 Market Share",
-            body: "Meta: +15% de crecimiento. Canal Masivo creció 11% en ferreterías en 2025 con herramientas insuficientes. Agentforce SDR + Salesforce Maps + RADAR integrado capturan ese crecimiento de forma sistemática.",
+            body: "Meta: +15% de crecimiento. Canal Masivo creció 11% en ferreterías en 2025 con herramientas insuficientes. Agentforce SDR + Salesforce Maps + Slack como sistema operativo del asesor capturan ese crecimiento de forma sistemática.",
             accent: "indigo",
           },
           {
@@ -538,6 +557,13 @@ export const executiveDecks: ExecutiveDeck[] = [
             accent: "sky",
           },
         ],
+        products: ["Sales", "Agentforce", "Slack", "Marketing", "Data Cloud", "Service"],
+        brand: {
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "8%",  size: 42, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "78%", size: 28, rotate: -14 },
+          ],
+        },
       },
 
       // ── SLIDE 5 · Visión de la solución ──────────────────────────────
@@ -546,13 +572,21 @@ export const executiveDecks: ExecutiveDeck[] = [
         eyebrow: "La propuesta — 20 iniciativas sobre 3 pilares",
         title: "Cada capa de la plataforma responde a una brecha estratégica de Argos",
         subtitle:
-          "Pilar 1: Sales Cloud + Agentforce SDR + Maps · Pilar 2: Marketing Cloud + Data Cloud · Pilar 3: MuleSoft + Service Cloud + WhatsApp API",
+          "Pilar 1: Sales Cloud + Agentforce SDR + Maps + Slack · Pilar 2: Marketing Cloud + Data Cloud · Pilar 3: MuleSoft + Service Cloud + WhatsApp API",
+        products: ["Sales", "Agentforce", "Slack", "Marketing", "Data Cloud", "Service"],
+        brand: {
+          astro: { variant: "agent-astro-10-r", side: "right", bottom: "-50px", size: 230 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left", top: "14%", size: 44, rotate: 14 },
+            { variant: "yellow-inclined", side: "left", top: "72%", size: 28, rotate: -10 },
+          ],
+        },
       },
 
       // ── SLIDE 6 · Excelencia Comercial ────────────────────────────────
       {
         layout: "split",
-        eyebrow: "Pilar 1 — Sales Cloud + Agentforce SDR + Salesforce Maps",
+        eyebrow: "Pilar 1 — Sales Cloud + Agentforce SDR + Salesforce Maps + Slack",
         title: "Market Share — capturar el +15% con herramientas a la altura de la ambición",
         left: {
           heading: "Iniciativas clave",
@@ -562,6 +596,7 @@ export const executiveDecks: ExecutiveDeck[] = [
             "RADAR de clientes en riesgo integrado en CRM con acciones sugeridas automáticas",
             "Vista 360 + pedido sugerido Einstein AI — asesor llega preparado a cada visita",
             "Dashboards en tiempo real por nivel jerárquico (asesor, jefe de zona, dirección)",
+            "Slack como sistema operativo del asesor: ciclo de venta completo en una sola interfaz — crear, modificar y actualizar oportunidades del CRM, dejar registro de cada visita y conversar con Slackbot sin salir de Slack",
           ],
         },
         right: {
@@ -571,6 +606,14 @@ export const executiveDecks: ExecutiveDeck[] = [
             "Oportunidades automáticas: 0% → 30%+ (6m) → 60%+ (12m)",
             "Cobertura plan de visitas: parcial → 85% (6m) → 95%+ (12m)",
             "Clientes en riesgo gestionados: sin seguimiento → RADAR 100% → reducción fuga >20%",
+            "Adopción Slack del equipo comercial: 0 → 60% (6m) → 90%+ con Slackbot guiando el flujo (12m)",
+          ],
+        },
+        products: ["Sales", "Agentforce", "Slack"],
+        brand: {
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "12%", size: 40, rotate: 12 },
+            { variant: "yellow-inclined", side: "left",  top: "82%", size: 28, rotate: -10 },
           ],
         },
       },
@@ -599,6 +642,13 @@ export const executiveDecks: ExecutiveDeck[] = [
             "ROI marketing: sin trazabilidad → línea base (6m) → ROI visible por campaña (12m)",
           ],
         },
+        products: ["Marketing", "Data Cloud", "Agentforce"],
+        brand: {
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "10%", size: 38, rotate: 12 },
+            { variant: "blue-inclined",   side: "right", top: "78%", size: 28, rotate: -14 },
+          ],
+        },
       },
 
       // ── SLIDE 8 · Crecimiento y Fidelización ─────────────────────────
@@ -623,6 +673,13 @@ export const executiveDecks: ExecutiveDeck[] = [
             "SAP desde Salesforce: manual/asíncrono → piloto (6m) → tiempo real todos los asesores (12m)",
             "PQRs por Agente autónomo: 0% → 30%+ (6m) → 50%+ (12m)",
             "WhatsApp: múltiples líneas separadas → 1 línea + agente (6m) → >80% resolución autónoma (12m)",
+          ],
+        },
+        products: ["Service", "Agentforce", "Data Cloud"],
+        brand: {
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "10%", size: 38, rotate: 14 },
+            { variant: "yellow-inclined", side: "left",  top: "78%", size: 28, rotate: -10 },
           ],
         },
       },
@@ -669,6 +726,13 @@ export const executiveDecks: ExecutiveDeck[] = [
             accent: "sky",
           },
           {
+            label: "Adopción Slack del equipo comercial",
+            baseline: "0% — sin Slack como SO del asesor",
+            goal6m: "60% del equipo gestionando ciclo en Slack",
+            goal12m: "90%+ con Slackbot guiando el flujo",
+            accent: "indigo",
+          },
+          {
             label: "NPS post-interacción",
             baseline: "Sin medición sistemática en CRM",
             goal6m: "Medición activa",
@@ -686,11 +750,17 @@ export const executiveDecks: ExecutiveDeck[] = [
         metrics: [
           { value: "+15%", label: "Market share — meta SPRINT (P1)" },
           { value: "60%+", label: "Oportunidades creadas automáticamente (P1)" },
+          { value: "90%+", label: "Asesores gestionando el ciclo de venta en Slack (P1)" },
           { value: "6+", label: "Campañas Machine Sellers activas (P2)" },
           { value: "100%", label: "Argos ONE integrado en Salesforce vía MuleSoft (P3)" },
-          { value: "50%+", label: "PQRs resueltas por agente autónomo (P3)" },
           { value: "+8 pts", label: "NPS post-interacción (P3)" },
         ],
+        brand: {
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "8%",  size: 40, rotate: 12 },
+            { variant: "blue-inclined",   side: "right", top: "82%", size: 28, rotate: -10 },
+          ],
+        },
       },
 
       // ── SLIDE 11 · Por qué 2026 ───────────────────────────────────────
@@ -699,13 +769,19 @@ export const executiveDecks: ExecutiveDeck[] = [
         eyebrow: "Timing estratégico — Por qué los 3 pilares son urgentes en 2026",
         title: "El momento es estratégico — cada mes de espera tiene un costo real",
         bullets: [
-          "P1 — Canal ferreterías creció 11% en 2025 con herramientas insuficientes. Con Maps + Agentforce, la meta del +15% es alcanzable este ciclo.",
+          "P1 — Canal ferreterías creció 11% en 2025 con herramientas insuficientes. Con Maps + Agentforce + Slack como SO del asesor, la meta del +15% es alcanzable este ciclo.",
           "P1 — SPRINT 4.0 exige márgenes EBITDA 24-26%: la eficiencia comercial no es opcional, es una obligación estratégica.",
           "P2 — Cada mes sin Machine Sellers automatizado es un mes donde los competidores pueden activar clientes inactivos de Argos antes que Argos misma.",
           "P3 — Argos ONE ya genera el 40%+ de ventas. Cada día sin integración con Salesforce es un día donde servicio opera a ciegas frente al comportamiento digital del cliente.",
           "General — Agentforce for Manufacturing disponible con habilidades preconfiguradas. El time-to-value es significativamente menor que hace 12 meses.",
         ],
         highlight: "La base de clientes ya existe en Salesforce. El costo marginal de activar los tres pilares es mínimo comparado con construir desde cero.",
+        brand: {
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "10%", size: 40, rotate: 14 },
+            { variant: "yellow-inclined", side: "left",  top: "76%", size: 28, rotate: -10 },
+          ],
+        },
       },
 
       // ── SLIDE 12 · El journey del asesor ─────────────────────────────
@@ -720,6 +796,7 @@ export const executiveDecks: ExecutiveDeck[] = [
             "No sabe si el cliente tiene PQR abierta ni si bajó su volumen de compra",
             "Cotización de concretos compleja sin filtros inteligentes — frena el cierre",
             "Reporta en Excel al final del día — el gerente lo ve al día siguiente con 24h+ de rezago",
+            "Salta entre apps: CRM, correo, WhatsApp, Excel — la información de cada cliente vive en un sistema distinto",
           ],
         },
         after: {
@@ -729,6 +806,13 @@ export const executiveDecks: ExecutiveDeck[] = [
             "RADAR de riesgo integrado en CRM: alerta si el cliente redujo volumen o lleva días sin actividad",
             "Vista 360 con historial de compra, pedido sugerido por Einstein y estado de cartera en una pantalla",
             "Pipeline del gerente actualizado en tiempo real — jefe de zona y dirección deciden el mismo día",
+            "Slack como base y sistema operativo del asesor: crea, modifica y actualiza cada oportunidad del CRM, deja registro de visitas y consulta su Vista 360 desde una sola interfaz, asistido por Slackbot — toda la información del ciclo de venta en Slack",
+          ],
+        },
+        brand: {
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "10%", size: 40, rotate: 12 },
+            { variant: "yellow-inclined", side: "left",  top: "82%", size: 28, rotate: -10 },
           ],
         },
       },
@@ -738,6 +822,13 @@ export const executiveDecks: ExecutiveDeck[] = [
         layout: "quote",
         quote: "Market Share. Segmentación. Integración. Tres pilares, una plataforma, un socio.",
         context: "Plan de Cuenta Estratégico v2.0 · Grupo Argos / Cementos Argos S.A. · Salesforce · Mayo 2026",
+        brand: {
+          astro: { variant: "agent-astro-12-r", side: "left", bottom: "-30px", size: 220 },
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "20%", size: 44, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
+          ],
+        },
       },
 
       // ── SLIDE 14 · Cierre y próximos pasos ───────────────────────────
@@ -749,11 +840,19 @@ export const executiveDecks: ExecutiveDeck[] = [
           "Discovery Comercial P1 (Jun 2026) — workshop con Carlos Alzate y equipo de campo: visitas, oportunidades y cotizaciones",
           "Assessment Integraciones P3 (Jun 2026) — revisión técnica de APIs Argos ONE y SAP con CTO Argos + Arquitecto Salesforce",
           "POC Vista 360 P1+P3 (Jul 2026) — demo con datos reales: cliente en Salesforce con actividad Argos ONE + disponibilidad SAP",
+          "Demo Slack como SO del asesor (Jul 2026) — flujo completo del ciclo de venta en Slack con Slackbot y conectores nativos a Sales Cloud",
           "Discovery Segmentación P2 (Jul 2026) — workshop Marketing: inventario de segmentos, campañas y trazabilidad deseada",
           "Business Case (Ago 2026) — cuantificación de ROI por pilar con métricas reales para CFO/CTO",
           "Kick-off Pilot Zona (Sep 2026) — implementación piloto en zona ferreterías con los 3 pilares activos",
         ],
         cta: "¿Agendamos el Executive Briefing con los stakeholders clave esta semana?",
+        brand: {
+          astro: { variant: "agent-astro-10-l", side: "right", bottom: "-50px", size: 230 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left", top: "12%", size: 44, rotate: 14 },
+            { variant: "yellow-inclined", side: "left", top: "70%", size: 28, rotate: -10 },
+          ],
+        },
       },
 
       // ── SLIDE 15 · Gracias ────────────────────────────────────────────
@@ -762,6 +861,14 @@ export const executiveDecks: ExecutiveDeck[] = [
         eyebrow: "Salesforce · Grupo Argos / Cementos Argos S.A.",
         title: "Gracias",
         subtitle: "Market Share. Segmentación. Integración. Tres pilares, una plataforma, un socio.",
+        brand: {
+          astro: { variant: "astro-11", side: "right", bottom: "-50px", size: 240 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "16%", size: 44, rotate: -10 },
+            { variant: "yellow-inclined", side: "left",  top: "70%", size: 28, rotate: 18 },
+            { variant: "blue-main",       side: "right", top: "20%", size: 32, rotate: 6 },
+          ],
+        },
       },
     ],
   },

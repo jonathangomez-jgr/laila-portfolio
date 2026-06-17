@@ -1291,6 +1291,7 @@ export const customerDemos: CustomerDemo[] = [
       "Service Cloud",
       "Marketing Cloud",
       "Data Cloud",
+      "Slack",
       "MuleSoft",
       "Manufacturing",
     ],
@@ -1354,7 +1355,8 @@ export const customerDemos: CustomerDemo[] = [
             { category: "Fidelización", tool: "Gluki (integrado con CRM para Argos Amigos y Trade Mkt)" },
             { category: "Contact Center", tool: "Konecta / BTO (sin integración omnicanal — brecha Pilar 3)" },
             { category: "Integrador CRM", tool: "Quantics (soporte y desarrollo Salesforce)" },
-            { category: "Com. interna", tool: "Grupos de WhatsApp (no estandarizado, sin trazabilidad)" },
+            { category: "Com. interna", tool: "Grupos de WhatsApp (no estandarizado, sin trazabilidad — Slack como reemplazo propuesto en Pilar 1)" },
+            { category: "SO del Asesor (propuesto)", tool: "Slack + Slackbot — base para gestionar el ciclo completo de venta del CRM, registrar visitas y operar Vista 360 sin salir de la conversación (Pilar 1)" },
           ],
         },
       },
@@ -1375,6 +1377,7 @@ export const customerDemos: CustomerDemo[] = [
                 "Cotización de concretos excesivamente compleja — frena el cierre de oportunidades",
                 "Reporte diario de ventas por email en Excel con rezago de 24h+ — toma de decisiones lenta",
                 "Liberación de pedidos manual con fotos de consignaciones vía WhatsApp — alta carga operativa",
+                "Asesor sin un sistema operativo único: información del cliente repartida entre CRM, correo, WhatsApp y Excel — sin Slack como base de trabajo",
               ],
             },
             {
@@ -1415,8 +1418,8 @@ export const customerDemos: CustomerDemo[] = [
             {
               label: "PILAR 1 — Market Share",
               description:
-                "Meta: +15% de crecimiento. Equipar al equipo comercial con herramientas que aumenten la productividad en campo y la conversión de oportunidades. Canal ferreterías ya creció 11% en 2025 — hay mercado resiliente que capturar.",
-              enabler: "Sales Cloud + Agentforce SDR + Salesforce Maps",
+                "Meta: +15% de crecimiento. Equipar al equipo comercial con herramientas que aumenten la productividad en campo y la conversión de oportunidades. Canal ferreterías ya creció 11% en 2025 — hay mercado resiliente que capturar. Slack se convierte en el sistema operativo del asesor: vista 360 unificada, gestión del ciclo de venta y registro de visitas en una sola interfaz.",
+              enabler: "Sales Cloud + Agentforce SDR + Salesforce Maps + Slack",
               color: "indigo",
             },
             {
@@ -1473,7 +1476,7 @@ export const customerDemos: CustomerDemo[] = [
           "La arquitectura propuesta es una respuesta directa a los tres pilares estratégicos de Argos. Cada capa de la plataforma está alineada con al menos un pilar, y la integración entre capas cierra las brechas identificadas en el proceso de discovery.",
         solution: [
           {
-            product: "Sales Cloud + Agentforce Sales + Maps",
+            product: "Sales Cloud + Agentforce Sales + Maps + Slack",
             focus: "PILAR 1 — Market Share",
             color: "indigo",
             items: [
@@ -1485,6 +1488,7 @@ export const customerDemos: CustomerDemo[] = [
               "Cotización inteligente multiproducto (cemento, concreto, agregados)",
               "Dashboards en tiempo real por nivel jerárquico",
               "Gestión de obras con alertas de finalización",
+              "Slack como sistema operativo del asesor: ciclo de venta completo en una sola interfaz — crear, modificar y actualizar oportunidades del CRM, dejar registro de visitas y operar la Vista 360 conversando con Slackbot",
             ],
           },
           {
@@ -1567,6 +1571,12 @@ export const customerDemos: CustomerDemo[] = [
                 baseline: "Manual — horas/días (sin SAP integrado)",
                 goal6m: "Tiempo real (MuleSoft piloto)",
                 goal12m: "Tiempo real para todos los asesores",
+              },
+              {
+                name: "Adopción de Slack como SO del asesor",
+                baseline: "0% — sin Slack como base del ciclo de venta",
+                goal6m: "60% del equipo gestionando oportunidades y visitas en Slack",
+                goal12m: "90%+ con Slackbot guiando el flujo en una sola interfaz",
               },
             ],
           },
