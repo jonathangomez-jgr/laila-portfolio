@@ -392,6 +392,79 @@ export type JtbdData = {
   kpis: JtbdKpiRow[];
 };
 
+export type Sprint3Role = {
+  name: string;
+  tagline: string;
+  description: string;
+  tone: "indigo" | "violet" | "sky" | "emerald";
+};
+
+export type Sprint3FlowStep = {
+  number: number;
+  title: string;
+  description: string;
+  actor: string;
+  tone: "indigo" | "violet" | "sky" | "emerald";
+};
+
+export type Sprint3LandingZone = {
+  number: number;
+  label: string;
+  example: string;
+  description: string;
+};
+
+export type Sprint3Audience = {
+  name: string;
+  signal: string;
+  activation: string;
+  outcome: string;
+  tone: "indigo" | "violet" | "sky" | "emerald" | "amber";
+};
+
+export type Sprint3StackItem = {
+  product: string;
+  role: string;
+  tone: "indigo" | "violet" | "sky" | "emerald";
+};
+
+export type Sprint3Kpi = {
+  metric: string;
+  before: string;
+  after: string;
+};
+
+export type Sprint3Phase = {
+  label: string;
+  subtitle: string;
+  recommended?: boolean;
+  description: string;
+  enables: string[];
+  tone: "indigo" | "violet";
+};
+
+export type Sprint3Data = {
+  conceptQuote: string;
+  highlights: { value: string; label: string }[];
+  roles: Sprint3Role[];
+  shift: {
+    before: { heading: string; body: string; bullets: string[] };
+    after: { heading: string; body: string; bullets: string[] };
+  };
+  flow: Sprint3FlowStep[];
+  landingZones: Sprint3LandingZone[];
+  audiences: Sprint3Audience[];
+  attribution: {
+    intro: string;
+    direct: { title: string; how: string; when: string };
+    indirect: { title: string; how: string; when: string };
+    persistence: string;
+  };
+  stack: Sprint3StackItem[];
+  kpis: Sprint3Kpi[];
+  phases: Sprint3Phase[];
+};
+
 export type CustomerDemoTab = {
   id: string;
   label: string;
@@ -419,6 +492,7 @@ export type CustomerDemoTab = {
   blueprintData?: BlueprintData;
   roadmapData?: RoadmapData;
   jtbdData?: JtbdData;
+  sprint3Data?: Sprint3Data;
 };
 
 export type CustomerDemoI18n = {
@@ -2690,7 +2764,305 @@ export const customerDemos: CustomerDemo[] = [
         },
       },
 
-      // ── 7. Solución ────────────────────────────────────────────────────
+      // ── 7. Inteligencia y Personalización ────────────────────────────
+      {
+        id: "sprint-3",
+        label: "Inteligencia y Personalización",
+        title: "Inteligencia y Personalización",
+        content:
+          "La continuación natural del roadmap del JTBD. Aquí Betterware da el salto: deja de tratar a todas las distribuidoras igual y convierte a cada una en una influencer digital con su propia tienda — sin crear miles de páginas. Un solo sitio, un link único por distribuidora, contenido que se transforma en tiempo real con su identidad, y atribución 1:1 entre cada compra y la distribuidora que la generó.",
+        sprint3Data: {
+          conceptQuote:
+            "Betterware crea el contenido. Salesforce le da identidad. La distribuidora se convierte en influencer digital — sin crear nada desde cero.",
+          highlights: [
+            { value: "1 sitio", label: "Una sola landing — no miles de micrositios" },
+            { value: "1 link", label: "Único y seguro por distribuidora" },
+            { value: "1:1", label: "Atribución directa: compra ↔ distribuidora" },
+            { value: "5+", label: "Audiencias dinámicas en Data 360" },
+          ],
+          roles: [
+            {
+              name: "Betterware",
+              tagline: "Empresa · marca",
+              description:
+                "Crea el contenido base de la campaña una sola vez: copy, productos, estructura. Configura la plataforma. No mantiene una página por distribuidora.",
+              tone: "indigo",
+            },
+            {
+              name: "Distribuidora",
+              tagline: "Cada una con su propia red de asociadas",
+              description:
+                "Recibe por WhatsApp su link único personalizado. Lo comparte con sus asociadas como si fuera su propia tienda digital. No edita, no diseña, no crea.",
+              tone: "violet",
+            },
+            {
+              name: "Asociada",
+              tagline: "Cliente final · revendedora",
+              description:
+                "Recibe el link, abre la landing y ve la \"tienda de María\" con su mensaje, sus productos top y su CTA personal. Compra directamente — y esa compra queda atribuida a su distribuidora.",
+              tone: "sky",
+            },
+          ],
+          shift: {
+            before: {
+              heading: "Antes — Miles de micrositios",
+              body:
+                "Una página por cada distribuidora. Cada cambio de catálogo, cada promoción, cada producto agotado obliga a actualizar miles de páginas en paralelo.",
+              bullets: [
+                "Una página estática por cada distribuidora",
+                "Catálogo que se desactualiza el día siguiente del lanzamiento",
+                "Equipo de marketing atrapado en mantenimiento",
+                "Difícil de medir y de escalar",
+              ],
+            },
+            after: {
+              heading: "Ahora — Un sitio, identidad por distribuidora",
+              body:
+                "Una sola landing base. Cuando la asociada abre el link, el sitio se transforma en tiempo real con la identidad de la distribuidora: su nombre, su mensaje, sus productos top, su CTA.",
+              bullets: [
+                "Una sola página que mantener — el catálogo se actualiza una vez",
+                "UX unificada con el resto del sitio · checkout directo",
+                "Atribución limpia entre compra y distribuidora",
+                "Cada distribuidora se siente como creadora de contenido",
+              ],
+            },
+          },
+          flow: [
+            {
+              number: 1,
+              title: "Marketing crea el contenido base",
+              description:
+                "Betterware diseña una sola campaña con audiencia, copy y estructura. El contenido base vive en una librería compartida — no se duplica por distribuidora.",
+              actor: "Marketing Cloud",
+              tone: "indigo",
+            },
+            {
+              number: 2,
+              title: "Se genera un link único por distribuidora",
+              description:
+                "Cada distribuidora recibe un link seguro y personal. El link no expone IDs internos y no se puede falsificar — está pensado para vivir en WhatsApp.",
+              actor: "Marketing Cloud",
+              tone: "indigo",
+            },
+            {
+              number: 3,
+              title: "Marketing lo envía por WhatsApp",
+              description:
+                "La distribuidora recibe su link como un mensaje de WhatsApp oficial de Betterware, listo para reenviar a sus asociadas.",
+              actor: "Marketing Cloud",
+              tone: "indigo",
+            },
+            {
+              number: 4,
+              title: "La distribuidora comparte su link",
+              description:
+                "Reenvía el mensaje a sus asociadas como si fuera su propia tienda digital. Cero esfuerzo creativo: el contenido y la identidad ya están listos.",
+              actor: "Distribuidora",
+              tone: "violet",
+            },
+            {
+              number: 5,
+              title: "La asociada hace clic",
+              description:
+                "El link abre el sitio oficial de Betterware. La asociada nunca sale del entorno seguro de la marca — el checkout vive en el mismo lugar.",
+              actor: "Asociada",
+              tone: "violet",
+            },
+            {
+              number: 6,
+              title: "Salesforce reconoce a la distribuidora",
+              description:
+                "Salesforce Personalization detecta el link único y consulta a Data 360 para resolver la identidad de la distribuidora que lo generó.",
+              actor: "Salesforce",
+              tone: "sky",
+            },
+            {
+              number: 7,
+              title: "Data 360 entrega el perfil unificado",
+              description:
+                "Data 360 devuelve nombre, badge, mensaje personal y los productos top que la distribuidora recomienda — todo en milisegundos.",
+              actor: "Data 360",
+              tone: "sky",
+            },
+            {
+              number: 8,
+              title: "La landing se transforma en tiempo real",
+              description:
+                "La página se renderiza con la identidad de la distribuidora: su nombre, su mensaje, sus productos, su CTA. La asociada ve la tienda personal de su distribuidora — sin que Betterware haya creado miles de páginas.",
+              actor: "Salesforce",
+              tone: "emerald",
+            },
+          ],
+          landingZones: [
+            {
+              number: 1,
+              label: "Encabezado de identidad",
+              example: "María González · Distribuidora Diamante",
+              description:
+                "Nombre y badge de la distribuidora en el hero — la asociada reconoce a quién le está comprando desde el primer segundo.",
+            },
+            {
+              number: 2,
+              label: "Mensaje inspiracional",
+              example: "\"Estos productos cambiaron mi vida — y pueden cambiar la tuya.\"",
+              description:
+                "Una frase personal que da voz a la distribuidora. La marca presta el contenido base; ella aporta la cercanía.",
+            },
+            {
+              number: 3,
+              label: "Productos top que recomienda",
+              example: "Set cocina · Limpiadores · Velas",
+              description:
+                "Grid dinámico con los productos que esa distribuidora vende más, alineados a su perfil y a su región.",
+            },
+            {
+              number: 4,
+              label: "CTA personal",
+              example: "Pide con María",
+              description:
+                "El llamado a la acción se siente personal, no genérico. Hace explícito que esta compra apoya el negocio de su distribuidora.",
+            },
+          ],
+          audiences: [
+            {
+              name: "Top performers digitales",
+              signal: "Distribuidoras con mayor tasa de conversión por link compartido",
+              activation: "Campañas de reconocimiento, badges públicos, contenido premium destacado",
+              outcome: "Refuerzo del comportamiento que ya está funcionando",
+              tone: "indigo",
+            },
+            {
+              name: "Asociadas que vieron pero no compraron",
+              signal: "Llegaron al link pero no completaron pedido",
+              activation: "Recordatorio en WhatsApp con el carrito y un cupón de la distribuidora",
+              outcome: "Recuperación de la conversión sin esfuerzo manual de la distribuidora",
+              tone: "violet",
+            },
+            {
+              name: "Distribuidoras inactivas con red activa",
+              signal: "DS sin movimiento, pero con asociadas que sí compran",
+              activation: "Reactivación con resumen de su red y oferta de re-onboarding",
+              outcome: "Recuperación de DS con potencial real, no de DS vacías",
+              tone: "sky",
+            },
+            {
+              name: "Asociadas leales · embajadoras potenciales",
+              signal: "Asociadas con compras recurrentes desde el link de una misma DS",
+              activation: "Invitación a convertirse en distribuidoras (programa de upgrade)",
+              outcome: "Crecimiento orgánico de la red — sin captación pagada",
+              tone: "emerald",
+            },
+            {
+              name: "Audiencias por región y producto",
+              signal: "Comportamiento de compra por geografía y categoría",
+              activation: "Campañas regionales con productos relevantes y mensaje local",
+              outcome: "Mensaje correcto, en el lugar correcto, con la distribuidora correcta",
+              tone: "amber",
+            },
+          ],
+          attribution: {
+            intro:
+              "La atribución no vive en cookies del navegador — vive en el perfil unificado de Data 360. No se pierde si la asociada cierra el navegador, si cambia de dispositivo o si vuelve días después.",
+            direct: {
+              title: "Directa",
+              how: "La asociada compra en la misma sesión en que abrió el link",
+              when: "Caso ideal — sesión continua",
+            },
+            indirect: {
+              title: "Indirecta",
+              how: "Llega desde el link, no compra, pero regresa después y Data 360 la reconoce",
+              when: "Asociada ya identificada en Data Cloud (login o resolución por email/teléfono)",
+            },
+            persistence:
+              "La atribución es persistente en el perfil de ambas — distribuidora y asociada. Cada comisión, cada ranking y cada campaña de fidelización vive sobre una verdad medible: quién generó qué venta.",
+          },
+          stack: [
+            {
+              product: "Marketing Cloud",
+              role: "Crea el contenido base, genera los links únicos y los envía por WhatsApp en escala",
+              tone: "indigo",
+            },
+            {
+              product: "Data 360",
+              role: "Mantiene el perfil unificado de cada distribuidora, resuelve identidades y guarda la atribución",
+              tone: "violet",
+            },
+            {
+              product: "Salesforce Personalization",
+              role: "Transforma la landing en tiempo real con la identidad de cada distribuidora",
+              tone: "sky",
+            },
+            {
+              product: "Sitio de Betterware",
+              role: "Es el lienzo donde la experiencia personalizada se renderiza — checkout incluido",
+              tone: "emerald",
+            },
+          ],
+          kpis: [
+            {
+              metric: "Tasa de conversión por distribuidora",
+              before: "No medible — sin link único",
+              after: "Visible y comparable entre distribuidoras",
+            },
+            {
+              metric: "Ticket promedio por link compartido",
+              before: "Promedio único de la marca",
+              after: "Por distribuidora · por región · por producto",
+            },
+            {
+              metric: "Ranking de distribuidoras digitales",
+              before: "Basado en pedido propio (no en su red)",
+              after: "Basado en lo que cada DS genera con sus asociadas",
+            },
+            {
+              metric: "Asociadas activas por distribuidora",
+              before: "Conteo manual",
+              after: "Dashboard en tiempo real desde Data 360",
+            },
+            {
+              metric: "Comisiones e incentivos",
+              before: "Sujetas a disputa por falta de trazabilidad",
+              after: "Liquidación automática con atribución 1:1 verificable",
+            },
+            {
+              metric: "Audiencias activables",
+              before: "1 lista genérica de marketing masivo",
+              after: "5+ audiencias dinámicas alimentadas por Data 360",
+            },
+          ],
+          phases: [
+            {
+              label: "Fase 1 — Punto de partida",
+              subtitle: "MVP rápido · sin tocar el sitio de Betterware",
+              description:
+                "Permite a Betterware enviar links únicos y mostrar contenido personalizado a corto plazo, sin modificar su sitio principal. Buena opción para validar la mecánica antes de invertir en la versión completa.",
+              enables: [
+                "Link único por distribuidora vía WhatsApp",
+                "Personalización con datos básicos de la distribuidora",
+                "Atribución de la compra cuando la asociada vuelve al sitio",
+                "Mide adopción y aprendizaje antes de escalar",
+              ],
+              tone: "indigo",
+            },
+            {
+              label: "Fase 2 — Versión completa",
+              subtitle: "Recomendada · UX unificada con el sitio de Betterware",
+              recommended: true,
+              description:
+                "La distribuidora vive dentro del propio sitio de Betterware. La asociada compra sin salir del entorno de marca. Personalización en tiempo real, atribución más limpia y todas las audiencias de Data 360 activables.",
+              enables: [
+                "Landing dentro del sitio de Betterware con identidad por distribuidora",
+                "Checkout directo · atribución 1:1 sin saltos entre dominios",
+                "Personalización en tiempo real sin recargar la página",
+                "Audiencias dinámicas y campañas multicanal desde Data 360",
+              ],
+              tone: "violet",
+            },
+          ],
+        },
+      },
+
+      // ── 8. Solución ────────────────────────────────────────────────────
       {
         id: "solution",
         label: "Solución",
@@ -3435,6 +3807,22 @@ export const customerDemos: CustomerDemo[] = [
               url: "/Customers/Betterware/files/Betterware%20%E2%80%94%20Entregable%20JTBD%3A%20Insights%2C%20Journey%20%26%20Roadmap.pdf",
             },
             {
+              name: "Sprint 3 — Contenido Personalizado con Atribución por Distribuidora",
+              description:
+                "Documento de arquitectura del Sprint 3: cómo Betterware convierte a cada distribuidora en una creadora de contenido digital con un solo sitio que se transforma en tiempo real. Incluye flujo completo, zonas personalizables de la landing, audiencias activables en Data 360 y atribución directa vs. indirecta.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/Betterware%20%E2%80%94%20Arquitectura%3A%20Contenido%20Personalizado%20con%20Atribuci%C3%B3n%20por%20Distribuidora.pdf",
+            },
+            {
+              name: "Deck Ejecutivo — Inteligencia y Personalización",
+              description:
+                "Presentación de 14 minutos: el cambio de enfoque de micrositios a un solo sitio personalizado, los 8 pasos del flujo, las 4 zonas de la landing, las audiencias dinámicas de Data 360, atribución 1:1 y fases de despliegue. Misma identidad visual que los demás decks.",
+              available: true,
+              type: "deck",
+              url: "/customer-demos/betterware/deck/sprint-3",
+            },
+            {
               name: "Aliada Digital — Blueprint Betterware",
               description:
                 "Documento maestro del programa Aliada Digital: principio rector, 4 componentes (Agente DS 360, Copiloto Staff 360, Capa de datos, Orquestación proactiva), tópicos del agente con acciones y límites, controles de gobernanza, roadmap 4 fases y MVP recomendado.",
@@ -3528,6 +3916,7 @@ export const customerDemos: CustomerDemo[] = [
           { id: "objective", label: "Objective", title: "Transform the Distributor's experience into autonomy, growth and first-contact resolution.", content: "Move from a reactive, fragmented and human-dependent support model to an intelligent, proactive, personalized and self-service model." },
           { id: "workshop", label: "Workshop", title: "Antiexperience Workshop result", content: "On May 29, 2026, five Betterware teams worked on parallel boards: the first to define the worst possible experience for a DS, the second to design agents to invert it. The result below is the discovery input on which the Blueprint proposed in the next section was built." },
           { id: "jtbd", label: "Jobs To Be Done", title: "Jobs To Be Done — Insights, Journey & Roadmap", content: "Second discovery exercise, complementary to the Antiexperience Workshop. Built from the JTBD session (May 14, 2026), field notes from real distributor visits, and the team's AS-IS / TO-BE mapping. Focus: the new Distributor — her jobs, emotions and real channels — translated into a 6-stage funnel, 10 prioritized jobs and 10 initiatives with a sprint roadmap." },
+          { id: "sprint-3", label: "Intelligence & Personalization", title: "Intelligence & Personalization", content: "The natural continuation of the JTBD roadmap. Betterware turns each distributor into a digital influencer with her own storefront — without creating thousands of pages. One landing, one unique link per distributor, real-time identity rendering, and 1:1 attribution between every order and the distributor who generated it." },
           { id: "solution", label: "Solution", title: "Digital Ally — An ecosystem that knows, guides and resolves", content: "Digital Ally is not a chatbot. It is an intelligent system with four components that work together on a reliable data layer and under explicit governance controls. Below: the guiding principle, four components, agent topics design and trust layer. Validated against the 10 Jobs to Be Done identified — see the JTBD tab." },
           { id: "arquitectura", label: "Architecture", title: "System Landscape — Betterware (BeFra)", content: "Tech ecosystem view supporting the Blueprint: external direct-selling systems, integration layer, Salesforce products, and Einstein Trust Layer foundation." },
           { id: "roadmap", label: "Roadmap", title: "MVP and evolution roadmap", content: "The MVP should not try to solve all use cases from day one. It focuses on the highest-pain, highest-value point — Resolve in First Contact — and from there evolves across four phases toward a complete predictive intelligence and commercial optimization system." },
@@ -3547,6 +3936,7 @@ export const customerDemos: CustomerDemo[] = [
           { id: "objective", label: "Objetivo", title: "Transformar a experiência da Distribuidora em autonomia, crescimento e resolução em primeiro contato.", content: "Sair de um modelo reativo, fragmentado e dependente de suporte humano para um modelo inteligente, proativo, personalizado e de autoatendimento." },
           { id: "workshop", label: "Workshop", title: "Resultado do Antiexperience Workshop", content: "Em 29 de maio de 2026, cinco times da Betterware trabalharam em quadros paralelos: o primeiro para definir a pior experiência possível para uma DS, o segundo para desenhar agentes que a invertam. O resultado a seguir é o insumo de descoberta sobre o qual o Blueprint proposto na seção seguinte foi construído." },
           { id: "jtbd", label: "Jobs To Be Done", title: "Jobs To Be Done — Insights, Journey & Roadmap", content: "Segundo exercício de descoberta, complementar ao Antiexperience Workshop. Construído a partir da sessão JTBD (14-mai-2026), notas de campo de visitas a Distribuidoras reais e o mapeamento AS-IS / TO-BE da equipe. Foco: a Distribuidora Nova — seus jobs, emoções e canais reais — traduzidos em um funil de 6 etapas, 10 jobs priorizados e 10 iniciativas com roadmap por sprints." },
+          { id: "sprint-3", label: "Inteligência e Personalização", title: "Inteligência e Personalização", content: "A continuação natural do roadmap do JTBD. A Betterware transforma cada distribuidora em uma influenciadora digital com sua própria vitrine — sem criar milhares de páginas. Uma landing única, um link exclusivo por distribuidora, identidade renderizada em tempo real e atribuição 1:1 entre cada pedido e a distribuidora que o gerou." },
           { id: "solution", label: "Solução", title: "Aliada Digital — Um ecossistema que conhece, orienta e resolve", content: "Aliada Digital não é um chatbot. É um sistema inteligente com quatro componentes que trabalham juntos sobre uma camada de dados confiável e sob controles explícitos de governança. A seguir: o princípio reitor, os quatro componentes, o desenho de tópicos do agente e a camada de confiança. Validado contra os 10 Jobs to Be Done identificados — ver a aba JTBD." },
           { id: "arquitectura", label: "Arquitetura", title: "System Landscape — Betterware (BeFra)", content: "Visão do ecossistema tecnológico que suporta o Blueprint: sistemas externos do modelo de venda direta, camada de integração, produtos Salesforce e fundação Einstein Trust Layer." },
           { id: "roadmap", label: "Roadmap", title: "MVP e roteiro de evolução", content: "O MVP não deve tentar resolver todos os casos de uso desde o início. Foca-se no ponto de maior dor e maior valor — Resolver em Primeiro Contato — e a partir daí evolui em quatro fases até um sistema completo de inteligência preditiva e otimização comercial." },

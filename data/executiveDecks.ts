@@ -1629,6 +1629,364 @@ export const executiveDecks: ExecutiveDeck[] = [
       },
     ],
   },
+
+  // ───────────────────────────────────────────────────────────────────
+  // BETTERWARE · SPRINT 3 DECK · Inteligencia y Personalización
+  // ───────────────────────────────────────────────────────────────────
+  {
+    slug: "sprint-3",
+    customerSlug: "betterware",
+    title: "Inteligencia y Personalización",
+    subtitle:
+      "Contenido base + identidad de cada distribuidora = atribución 1:1",
+    duration: "14 min",
+    slides: [
+      // ── 1 · Portada ────────────────────────────────────────────────────
+      {
+        layout: "title",
+        eyebrow: "Betterware · Sprint 3 del Roadmap",
+        title: "Inteligencia\ny Personalización.",
+        subtitle:
+          "Cada distribuidora se convierte en una influencer digital — sin crear nada desde cero. Un sitio. Un link único. Atribución 1:1.",
+        footnote: "Sprint 3 · feb 2027 en adelante · Confidencial",
+        brand: {
+          astro: { variant: "agent-astro-20-l", side: "right", bottom: "-30px", size: 360 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "8%",  size: 48, rotate: 14 },
+            { variant: "blue-inclined",   side: "left",  top: "92%", size: 30, rotate: -10 },
+            { variant: "yellow-inclined", side: "right", top: "6%",  size: 34, rotate: 22 },
+          ],
+        },
+      },
+
+      // ── 2 · El concepto central ─────────────────────────────────────
+      {
+        layout: "quote",
+        quote:
+          "Betterware crea el contenido. Salesforce le da identidad. La distribuidora se convierte en influencer digital — sin crear nada desde cero.",
+        context: "El concepto central · Sprint 3",
+        brand: {
+          astro: { variant: "agent-astro-12-r", side: "left", bottom: "-30px", size: 220 },
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "20%", size: 44, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
+          ],
+        },
+      },
+
+      // ── 3 · El cambio de enfoque ────────────────────────────────────
+      {
+        layout: "comparison",
+        eyebrow: "El cambio de enfoque",
+        title: "De miles de micrositios a un solo sitio que se transforma en tiempo real",
+        before: {
+          heading: "Antes — Miles de micrositios",
+          items: [
+            "Una página estática por cada distribuidora",
+            "Catálogo que se desactualiza el día siguiente del lanzamiento",
+            "Equipo de marketing atrapado en mantenimiento",
+            "Difícil de medir y de escalar",
+          ],
+        },
+        after: {
+          heading: "Ahora — Un sitio, identidad por distribuidora",
+          items: [
+            "Una sola landing que mantener",
+            "UX unificada con el sitio de Betterware · checkout directo",
+            "Atribución limpia entre compra y distribuidora",
+            "Cada distribuidora se siente como creadora de contenido",
+          ],
+        },
+      },
+
+      // ── 4 · Roles y jerarquía ───────────────────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "Roles y jerarquía",
+        title: "Tres actores. Cada uno hace lo que mejor sabe hacer.",
+        pillars: [
+          {
+            title: "Betterware",
+            body: "Crea el contenido base de la campaña una sola vez. No mantiene una página por distribuidora. Configura la plataforma y deja que el sistema haga el resto.",
+            accent: "indigo",
+          },
+          {
+            title: "Distribuidora",
+            body: "Recibe por WhatsApp su link único personalizado. Lo comparte con sus asociadas como su propia tienda digital. Cero esfuerzo creativo.",
+            accent: "violet",
+          },
+          {
+            title: "Asociada",
+            body: "Abre el link y ve la tienda personal de su distribuidora con su mensaje, sus productos top y su CTA. Compra sin salir del sitio de Betterware.",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // ── 5 · El flujo en 8 pasos ─────────────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "El flujo de la experiencia",
+        title: "8 pasos — del contenido base a la atribución 1:1",
+        left: {
+          heading: "Pasos 1–4 · Marketing y distribución",
+          items: [
+            "1 · Marketing crea el contenido base (una sola vez)",
+            "2 · Se genera un link único y seguro por distribuidora",
+            "3 · Marketing Cloud envía el link por WhatsApp",
+            "4 · La distribuidora reenvía a sus asociadas",
+          ],
+        },
+        right: {
+          heading: "Pasos 5–8 · Personalización y atribución",
+          items: [
+            "5 · La asociada hace clic — entra al sitio de Betterware",
+            "6 · Salesforce reconoce a la distribuidora desde el link",
+            "7 · Data 360 entrega el perfil unificado en milisegundos",
+            "8 · La landing se transforma en tiempo real con su identidad",
+          ],
+        },
+        products: ["Marketing", "Data Cloud", "Platform"],
+      },
+
+      // ── 6 · María, distribuidora diamante ───────────────────────────
+      {
+        layout: "section",
+        eyebrow: "Storytelling · Lo que ve la asociada",
+        title: "María González · Distribuidora Diamante",
+        subtitle:
+          "La asociada abre el link y entra a una tienda que se siente personal: el nombre de María, su mensaje, sus productos top y su CTA — todo dentro del sitio oficial de Betterware.",
+        brand: {
+          astro: { variant: "astro-7", side: "left", bottom: "-50px", size: 230 },
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "16%", size: 44, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
+          ],
+        },
+      },
+
+      // ── 7 · Las 4 zonas de la landing ───────────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "La landing transformada",
+        title: "Cuatro zonas que se renderizan con la identidad de cada distribuidora",
+        pillars: [
+          {
+            title: "1 · Identidad",
+            body: "Nombre y badge en el hero — \"María González · Distribuidora Diamante\". La asociada reconoce a quién le compra desde el primer segundo.",
+            accent: "indigo",
+          },
+          {
+            title: "2 · Mensaje personal",
+            body: "\"Estos productos cambiaron mi vida — y pueden cambiar la tuya.\" La marca presta el contenido base; la distribuidora aporta cercanía.",
+            accent: "violet",
+          },
+          {
+            title: "3 · Productos top",
+            body: "Grid dinámico con los productos que esa distribuidora vende más, alineados a su perfil y a su región.",
+            accent: "sky",
+          },
+          {
+            title: "4 · CTA personal",
+            body: "\"Pide con María\" — el llamado se siente personal, no genérico. Hace explícito que esta compra apoya el negocio de su distribuidora.",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // ── 8 · Audiencias de Data 360 ──────────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Audiencias dinámicas en Data 360",
+        title: "Cinco audiencias accionables — el sistema las arma; marketing decide qué decirles",
+        left: {
+          heading: "Audiencias",
+          items: [
+            "Top performers digitales — DS con mayor conversión por link",
+            "Asociadas que vieron pero no compraron — recuperación",
+            "Distribuidoras inactivas con red activa — reactivación",
+            "Asociadas leales — embajadoras potenciales para upgrade a DS",
+            "Audiencias por región y producto — campañas locales",
+          ],
+        },
+        right: {
+          heading: "Cómo se activan",
+          items: [
+            "Reconocimiento, badges, contenido premium",
+            "Recordatorio de carrito por WhatsApp con cupón de la DS",
+            "Resumen de su red + oferta de re-onboarding",
+            "Invitación a programa de upgrade",
+            "Mensaje correcto, en el lugar correcto, con la DS correcta",
+          ],
+        },
+        products: ["Data Cloud", "Marketing"],
+      },
+
+      // ── 9 · Atribución directa vs indirecta ─────────────────────────
+      {
+        layout: "comparison",
+        eyebrow: "Atribución 1:1",
+        title: "Cada compra deja huella en el perfil — no en una cookie",
+        before: {
+          heading: "Atribución directa",
+          items: [
+            "La asociada compra en la misma sesión en que abrió el link",
+            "Caso ideal — sesión continua",
+            "Atribución inmediata al cierre del pedido",
+            "100% trazable sin dependencia del navegador",
+          ],
+        },
+        after: {
+          heading: "Atribución indirecta",
+          items: [
+            "La asociada llega desde el link, no compra, regresa después",
+            "Data 360 la reconoce por login, email o teléfono",
+            "La atribución vive en el perfil — no se pierde",
+            "Funciona aún cambiando de dispositivo o navegador",
+          ],
+        },
+      },
+
+      // ── 10 · El stack ──────────────────────────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "El stack que lo hace posible",
+        title: "Cuatro piezas — cada una hace su trabajo",
+        pillars: [
+          {
+            title: "Marketing Cloud",
+            body: "Crea el contenido base, genera los links únicos y los envía por WhatsApp en escala.",
+            accent: "indigo",
+          },
+          {
+            title: "Data 360",
+            body: "Mantiene el perfil unificado de cada distribuidora, resuelve identidades y guarda la atribución.",
+            accent: "violet",
+          },
+          {
+            title: "Salesforce Personalization",
+            body: "Transforma la landing en tiempo real con la identidad de cada distribuidora.",
+            accent: "sky",
+          },
+          {
+            title: "Sitio de Betterware",
+            body: "Es el lienzo donde la experiencia personalizada se renderiza — checkout incluido.",
+            accent: "emerald",
+          },
+        ],
+        products: ["Marketing", "Data Cloud", "Platform"],
+      },
+
+      // ── 11 · Impacto de negocio ────────────────────────────────────
+      {
+        layout: "kpi-table",
+        eyebrow: "Impacto de negocio",
+        title: "Lo que pasa de no medible a medible",
+        rows: [
+          {
+            label: "Tasa de conversión por distribuidora",
+            baseline: "No medible — sin link único",
+            goal6m: "Visible por DS",
+            goal12m: "Comparable entre DS",
+            accent: "indigo",
+          },
+          {
+            label: "Ticket promedio por link",
+            baseline: "Promedio único de la marca",
+            goal6m: "Por DS y por región",
+            goal12m: "Por DS, región y producto",
+            accent: "indigo",
+          },
+          {
+            label: "Ranking de DS digitales",
+            baseline: "Basado en pedido propio",
+            goal6m: "Basado en pedido propio + red",
+            goal12m: "Basado en lo que cada DS genera con sus asociadas",
+            accent: "violet",
+          },
+          {
+            label: "Asociadas activas por DS",
+            baseline: "Conteo manual",
+            goal6m: "Dashboard semanal",
+            goal12m: "Dashboard en tiempo real",
+            accent: "violet",
+          },
+          {
+            label: "Comisiones e incentivos",
+            baseline: "Sujetas a disputa",
+            goal6m: "Reducción de disputas",
+            goal12m: "Liquidación automática 1:1 verificable",
+            accent: "sky",
+          },
+          {
+            label: "Audiencias activables",
+            baseline: "1 lista genérica",
+            goal6m: "3 audiencias dinámicas",
+            goal12m: "5+ audiencias dinámicas en Data 360",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // ── 12 · Fases de despliegue ───────────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Fases de despliegue",
+        title: "Empieza simple. Escala completo.",
+        left: {
+          heading: "Fase 1 — Punto de partida (MVP)",
+          items: [
+            "Sin tocar el sitio de Betterware",
+            "Link único por distribuidora vía WhatsApp",
+            "Personalización con datos básicos de la DS",
+            "Atribución cuando la asociada vuelve al sitio",
+            "Valida la mecánica antes de invertir más",
+          ],
+        },
+        right: {
+          heading: "Fase 2 — Versión completa (Recomendada)",
+          items: [
+            "Landing dentro del sitio de Betterware",
+            "Identidad por distribuidora en tiempo real",
+            "Checkout directo · atribución 1:1 sin saltos",
+            "Personalización sin recargar la página",
+            "Audiencias dinámicas y campañas multicanal desde Data 360",
+          ],
+        },
+      },
+
+      // ── 13 · Próximos pasos ───────────────────────────────────────
+      {
+        layout: "closing",
+        title: "Próximos pasos recomendados",
+        bullets: [
+          "Validar el alcance del MVP (Fase 1) con marketing y operaciones de Betterware.",
+          "Definir la lista inicial de distribuidoras piloto (50–100) y los productos del catálogo a destacar.",
+          "Acordar las primeras 3 audiencias dinámicas a construir en Data 360 — empezar por las que tienen mayor potencial de revenue.",
+          "Diseñar el template de WhatsApp y aprobarlo con Meta antes del envío.",
+          "Confirmar el equipo dev de Betterware para Fase 2 — Web SDK, zonas personalizables y API de conversión.",
+        ],
+        cta: "¿Avanzamos con el MVP del Sprint 3 — link único por DS y primera audiencia activa en Data 360?",
+      },
+
+      // ── 14 · Cierre narrativa ─────────────────────────────────────
+      {
+        layout: "thanks",
+        eyebrow: "Salesforce · Betterware de México (BeFra)",
+        title: "Gracias",
+        subtitle:
+          "Cada compra sabrá quién la generó. Cada distribuidora se sentirá creadora. Y la marca seguirá hablando con una sola voz — la suya.",
+        brand: {
+          astro: { variant: "agent-astro-flip-020", side: "right", bottom: "-50px", size: 240 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "16%", size: 44, rotate: -10 },
+            { variant: "yellow-inclined", side: "left",  top: "70%", size: 28, rotate: 18 },
+            { variant: "blue-main",       side: "right", top: "20%", size: 32, rotate: 6 },
+          ],
+        },
+      },
+    ],
+  },
 ];
 
 export function getExecutiveDeck(

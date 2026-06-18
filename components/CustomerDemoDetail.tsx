@@ -18,6 +18,7 @@ import RoadmapTimeline from "./RoadmapTimeline";
 import StoryTimeline from "./StoryTimeline";
 import JourneyTimeline from "./JourneyTimeline";
 import JtbdCanvas from "./JtbdCanvas";
+import Sprint3Canvas from "./Sprint3Canvas";
 import ObjectiveInfographic from "./ObjectiveInfographic";
 import OverviewStats from "./OverviewStats";
 import SolutionLayers from "./SolutionLayers";
@@ -364,6 +365,17 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 />
               )}
 
+              {activeTab.sprint3Data && (
+                <Sprint3Canvas
+                  data={activeTab.sprint3Data}
+                  deckHref={
+                    hasExecutiveDeck(demo.slug, "sprint-3")
+                      ? `/${lang}/customer-demos/${demo.slug}/deck/sprint-3`
+                      : undefined
+                  }
+                />
+              )}
+
               {activeTab.assetsData && (
                 <AssetsGrid data={activeTab.assetsData} />
               )}
@@ -387,6 +399,7 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 !activeTab.blueprintData &&
                 !activeTab.roadmapData &&
                 !activeTab.jtbdData &&
+                !activeTab.sprint3Data &&
                 !activeTab.assetsData && (
                   <div className="mt-10 rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-6">
                     <p className="text-sm font-semibold text-indigo-700">
