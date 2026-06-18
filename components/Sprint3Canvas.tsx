@@ -122,7 +122,7 @@ export default function Sprint3Canvas({
                 Inteligencia y Personalización
               </p>
               <p className="mt-1 text-xs text-white/85 sm:text-sm">
-                Vista presentable: concepto, flujo, audiencias, atribución, KPIs y fases.
+                Vista presentable: concepto, flujo, segmentos, atribución y KPIs.
               </p>
             </div>
           </div>
@@ -213,51 +213,34 @@ export default function Sprint3Canvas({
       <section>
         <SectionHeader
           eyebrow="El cambio de enfoque"
-          title="De miles de micrositios a un solo sitio que se transforma en tiempo real"
+          title="Un solo sitio dinámico que se transforma en tiempo real"
           subtitle="Un cambio de arquitectura que simplifica la operación y, a la vez, hace la experiencia más rica para la asociada."
         />
-        <div className="grid gap-4 lg:grid-cols-2">
-          <div className="rounded-3xl border border-gray-200 bg-gray-50/60 p-6">
-            <div className="mb-4 flex items-center gap-2">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-300 text-[11px] font-bold text-white">✕</span>
-              <p className="text-[11px] font-bold uppercase tracking-widest text-gray-500">{data.shift.before.heading}</p>
-            </div>
-            <p className="text-sm leading-6 text-gray-700">{data.shift.before.body}</p>
-            <ul className="mt-4 space-y-2">
-              {data.shift.before.bullets.map((b) => (
-                <li key={b} className="flex items-start gap-2.5 text-sm leading-6 text-gray-600">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
+        <div className="rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50/80 to-sky-50/40 p-6">
+          <div className="mb-4 flex items-center gap-2">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 text-[11px] font-bold text-white">✓</span>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-700">{data.shift.after.heading}</p>
           </div>
-          <div className="rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50/80 to-sky-50/40 p-6">
-            <div className="mb-4 flex items-center gap-2">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 text-[11px] font-bold text-white">✓</span>
-              <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-700">{data.shift.after.heading}</p>
-            </div>
-            <p className="text-sm leading-6 text-gray-800">{data.shift.after.body}</p>
-            <ul className="mt-4 space-y-2">
-              {data.shift.after.bullets.map((b) => (
-                <li key={b} className="flex items-start gap-2.5 text-sm leading-6 text-gray-700">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <p className="text-sm leading-6 text-gray-800">{data.shift.after.body}</p>
+          <ul className="mt-4 grid gap-2 md:grid-cols-2">
+            {data.shift.after.bullets.map((b) => (
+              <li key={b} className="flex items-start gap-2.5 text-sm leading-6 text-gray-700">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      {/* ── 5. Flujo en 8 pasos ────────────────────────────────── */}
+      {/* ── 5. Flujo en 10 pasos ────────────────────────────────── */}
       <section>
         <SectionHeader
           eyebrow="El flujo de la experiencia"
-          title="8 pasos — del contenido base a la atribución 1:1"
+          title="10 pasos — del contenido base a la atribución 1:1"
           subtitle="Selecciona un paso para ver el detalle. Cada paso responde a un actor concreto y deja una huella medible."
         />
-        <div className="grid gap-2 md:grid-cols-4 lg:grid-cols-8">
+        <div className="grid gap-2 md:grid-cols-5 lg:grid-cols-10">
           {data.flow.map((s) => {
             const tone = TONES[s.tone as ToneKey];
             const isActive = activeStep === s.number;
@@ -313,12 +296,12 @@ export default function Sprint3Canvas({
         <SectionHeader
           eyebrow="La landing transformada"
           title="Cuatro zonas que se renderizan con la identidad de cada distribuidora"
-          subtitle="La asociada ve la tienda personal de su distribuidora. Sin que Betterware haya creado miles de páginas."
+          subtitle="La asociada ve el catálogo personal de su distribuidora. Sin que Betterware haya creado miles de páginas."
         />
         <div className="overflow-hidden rounded-3xl border border-indigo-200 bg-gradient-to-br from-indigo-50/40 via-white to-violet-50/30 shadow-sm">
           <div className="border-b border-indigo-100 bg-white/60 px-6 py-3">
             <p className="text-[11px] font-bold uppercase tracking-widest text-indigo-600">
-              Vista de la landing — ejemplo: María González · Distribuidora Diamante
+              Vista de la landing — ejemplo: María González · Distribuidora Líder
             </p>
           </div>
           <div className="grid gap-0 p-2 md:p-4">
@@ -351,11 +334,11 @@ export default function Sprint3Canvas({
         </div>
       </section>
 
-      {/* ── 7. Audiencias Data 360 ─────────────────────────────── */}
+      {/* ── 7. Segmentos Data 360 ─────────────────────────────── */}
       <section>
         <SectionHeader
-          eyebrow="Audiencias dinámicas en Data 360"
-          title="Cinco audiencias accionables que viven en el perfil unificado"
+          eyebrow="Segmentos dinámicos en Data 360"
+          title="Ejemplos de segmentos accionables en campañas de Marketing"
           subtitle="Data 360 no solo guarda datos: convierte cada señal de comportamiento en un grupo activable. La marca decide qué decirles, cuándo y por qué canal."
         />
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -364,7 +347,7 @@ export default function Sprint3Canvas({
             return (
               <div key={a.name} className={`rounded-3xl border p-5 ${tone.border} ${tone.bg}`}>
                 <div className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${tone.badge}`}>
-                  Audiencia
+                  Segmento
                 </div>
                 <h4 className="mt-3 text-base font-bold text-gray-950">{a.name}</h4>
                 <div className="mt-4 space-y-2.5">
@@ -403,8 +386,12 @@ export default function Sprint3Canvas({
               </div>
               <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400">Cómo funciona</p>
               <p className="mt-1 text-sm leading-6 text-gray-700">{data.attribution.direct.how}</p>
-              <p className="mt-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">Cuándo aplica</p>
-              <p className="mt-1 text-sm leading-6 text-gray-700">{data.attribution.direct.when}</p>
+              {data.attribution.direct.when && (
+                <>
+                  <p className="mt-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">Cuándo aplica</p>
+                  <p className="mt-1 text-sm leading-6 text-gray-700">{data.attribution.direct.when}</p>
+                </>
+              )}
             </div>
             <div className="rounded-2xl border border-sky-200 bg-white p-5">
               <div className="mb-3 flex items-center gap-2">
@@ -413,8 +400,12 @@ export default function Sprint3Canvas({
               </div>
               <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400">Cómo funciona</p>
               <p className="mt-1 text-sm leading-6 text-gray-700">{data.attribution.indirect.how}</p>
-              <p className="mt-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">Cuándo aplica</p>
-              <p className="mt-1 text-sm leading-6 text-gray-700">{data.attribution.indirect.when}</p>
+              {data.attribution.indirect.when && (
+                <>
+                  <p className="mt-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">Cuándo aplica</p>
+                  <p className="mt-1 text-sm leading-6 text-gray-700">{data.attribution.indirect.when}</p>
+                </>
+              )}
             </div>
           </div>
           <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-500/10 p-4">
@@ -427,10 +418,10 @@ export default function Sprint3Canvas({
       <section>
         <SectionHeader
           eyebrow="El stack que lo hace posible"
-          title="Cuatro piezas trabajando juntas"
+          title="Cinco piezas trabajando juntas"
           subtitle="Cada producto cumple un rol específico. Ninguno hace el trabajo de otro."
         />
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           {data.stack.map((s) => {
             const tone = TONES[s.tone];
             return (
@@ -450,13 +441,12 @@ export default function Sprint3Canvas({
       <section>
         <SectionHeader
           eyebrow="Impacto de negocio"
-          title="Lo que pasa de no medible a medible"
+          title="KPIs medibles"
         />
         <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm">
           <div className="hidden grid-cols-12 gap-4 border-b border-gray-100 bg-gray-50 px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-gray-500 md:grid">
-            <div className="col-span-4">Métrica</div>
-            <div className="col-span-4">Antes</div>
-            <div className="col-span-4">Después</div>
+            <div className="col-span-5">Indicador</div>
+            <div className="col-span-7">Cómo se mide</div>
           </div>
           <ul>
             {data.kpis.map((row, i) => (
@@ -466,14 +456,11 @@ export default function Sprint3Canvas({
                   i !== data.kpis.length - 1 ? "border-b border-gray-100" : ""
                 }`}
               >
-                <div className="md:col-span-4">
+                <div className="md:col-span-5">
                   <p className="text-sm font-bold text-gray-950">{row.metric}</p>
                 </div>
-                <div className="md:col-span-4">
-                  <p className="text-sm text-gray-500">{row.before}</p>
-                </div>
-                <div className="md:col-span-4">
-                  <p className="text-sm font-semibold text-emerald-700">{row.after}</p>
+                <div className="md:col-span-7">
+                  <p className="text-sm font-semibold text-emerald-700">{row.detail}</p>
                 </div>
               </li>
             ))}
@@ -481,45 +468,6 @@ export default function Sprint3Canvas({
         </div>
       </section>
 
-      {/* ── 11. Phases ─────────────────────────────────────────── */}
-      <section>
-        <SectionHeader
-          eyebrow="Fases de despliegue"
-          title="Empieza simple. Escala completo."
-          subtitle="Dos puntos de partida posibles. La Fase 1 valida la mecánica; la Fase 2 entrega la versión completa con UX unificada y atribución más limpia."
-        />
-        <div className="grid gap-4 lg:grid-cols-2">
-          {data.phases.map((p) => {
-            const tone = TONES[p.tone];
-            return (
-              <div
-                key={p.label}
-                className={`relative overflow-hidden rounded-3xl border bg-white p-6 shadow-sm ${tone.border}`}
-              >
-                {p.recommended && (
-                  <div className="absolute right-4 top-4">
-                    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-700">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                      Recomendada
-                    </span>
-                  </div>
-                )}
-                <p className={`text-[11px] font-bold uppercase tracking-widest ${tone.text}`}>{p.label}</p>
-                <h4 className="mt-1 text-xl font-bold text-gray-950">{p.subtitle}</h4>
-                <p className="mt-3 text-sm leading-6 text-gray-600">{p.description}</p>
-                <ul className="mt-4 space-y-2">
-                  {p.enables.map((e) => (
-                    <li key={e} className="flex items-start gap-2.5 text-sm leading-6 text-gray-700">
-                      <span className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${tone.dot}`} />
-                      <span>{e}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
-        </div>
-      </section>
     </div>
   );
 }

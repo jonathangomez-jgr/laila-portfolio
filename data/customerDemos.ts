@@ -430,17 +430,7 @@ export type Sprint3StackItem = {
 
 export type Sprint3Kpi = {
   metric: string;
-  before: string;
-  after: string;
-};
-
-export type Sprint3Phase = {
-  label: string;
-  subtitle: string;
-  recommended?: boolean;
-  description: string;
-  enables: string[];
-  tone: "indigo" | "violet";
+  detail: string;
 };
 
 export type Sprint3Data = {
@@ -448,7 +438,6 @@ export type Sprint3Data = {
   highlights: { value: string; label: string }[];
   roles: Sprint3Role[];
   shift: {
-    before: { heading: string; body: string; bullets: string[] };
     after: { heading: string; body: string; bullets: string[] };
   };
   flow: Sprint3FlowStep[];
@@ -456,13 +445,12 @@ export type Sprint3Data = {
   audiences: Sprint3Audience[];
   attribution: {
     intro: string;
-    direct: { title: string; how: string; when: string };
-    indirect: { title: string; how: string; when: string };
+    direct: { title: string; how: string; when?: string };
+    indirect: { title: string; how: string; when?: string };
     persistence: string;
   };
   stack: Sprint3StackItem[];
   kpis: Sprint3Kpi[];
-  phases: Sprint3Phase[];
 };
 
 export type CustomerDemoTab = {
@@ -2720,7 +2708,7 @@ export const customerDemos: CustomerDemo[] = [
             { value: "1 sitio", label: "Una sola landing — no miles de micrositios" },
             { value: "1 link", label: "Único y seguro por distribuidora" },
             { value: "1:1", label: "Atribución directa: compra ↔ distribuidora" },
-            { value: "5+", label: "Audiencias dinámicas en Data 360" },
+            { value: "+", label: "Adopción de la app" },
           ],
           roles: [
             {
@@ -2734,31 +2722,20 @@ export const customerDemos: CustomerDemo[] = [
               name: "Distribuidora",
               tagline: "Cada una con su propia red de asociadas",
               description:
-                "Recibe por WhatsApp su link único personalizado. Lo comparte con sus asociadas como si fuera su propia tienda digital. No edita, no diseña, no crea.",
+                "Recibe por WhatsApp su link único personalizado. Lo comparte con sus asociadas como si fuera su propio catálogo personal. No edita, no diseña, no crea.",
               tone: "violet",
             },
             {
               name: "Asociada",
               tagline: "Cliente final · revendedora",
               description:
-                "Recibe el link, abre la landing y ve la \"tienda de María\" con su mensaje, sus productos top y su CTA personal. Compra directamente — y esa compra queda atribuida a su distribuidora.",
+                "Recibe el link, abre la landing y ve el \"catálogo personal de María\" con su mensaje, sus productos top y su CTA personal. Compra directamente — y esa compra queda atribuida a su distribuidora.",
               tone: "sky",
             },
           ],
           shift: {
-            before: {
-              heading: "Antes — Miles de micrositios",
-              body:
-                "Una página por cada distribuidora. Cada cambio de catálogo, cada promoción, cada producto agotado obliga a actualizar miles de páginas en paralelo.",
-              bullets: [
-                "Una página estática por cada distribuidora",
-                "Catálogo que se desactualiza el día siguiente del lanzamiento",
-                "Equipo de marketing atrapado en mantenimiento",
-                "Difícil de medir y de escalar",
-              ],
-            },
             after: {
-              heading: "Ahora — Un sitio, identidad por distribuidora",
+              heading: "Un sitio, identidad por distribuidora",
               body:
                 "Una sola landing base. Cuando la asociada abre el link, el sitio se transforma en tiempo real con la identidad de la distribuidora: su nombre, su mensaje, sus productos top, su CTA.",
               bullets: [
@@ -2774,7 +2751,7 @@ export const customerDemos: CustomerDemo[] = [
               number: 1,
               title: "Marketing crea el contenido base",
               description:
-                "Betterware diseña una sola campaña con audiencia, copy y estructura. El contenido base vive en una librería compartida — no se duplica por distribuidora.",
+                "Betterware diseña una sola campaña con segmento, copy y estructura. El contenido base vive en una librería compartida — no se duplica por distribuidora.",
               actor: "Marketing Cloud",
               tone: "indigo",
             },
@@ -2798,20 +2775,12 @@ export const customerDemos: CustomerDemo[] = [
               number: 4,
               title: "La distribuidora comparte su link",
               description:
-                "Reenvía el mensaje a sus asociadas como si fuera su propia tienda digital. Cero esfuerzo creativo: el contenido y la identidad ya están listos.",
+                "Reenvía el mensaje a sus asociadas como si fuera su propio catálogo personal. Cero esfuerzo creativo: el contenido y la identidad ya están listos.",
               actor: "Distribuidora",
               tone: "violet",
             },
             {
               number: 5,
-              title: "La asociada hace clic",
-              description:
-                "El link abre el sitio oficial de Betterware. La asociada nunca sale del entorno seguro de la marca — el checkout vive en el mismo lugar.",
-              actor: "Asociada",
-              tone: "violet",
-            },
-            {
-              number: 6,
               title: "Salesforce reconoce a la distribuidora",
               description:
                 "Salesforce Personalization detecta el link único y consulta a Data 360 para resolver la identidad de la distribuidora que lo generó.",
@@ -2819,7 +2788,7 @@ export const customerDemos: CustomerDemo[] = [
               tone: "sky",
             },
             {
-              number: 7,
+              number: 6,
               title: "Data 360 entrega el perfil unificado",
               description:
                 "Data 360 devuelve nombre, badge, mensaje personal y los productos top que la distribuidora recomienda — todo en milisegundos.",
@@ -2827,11 +2796,35 @@ export const customerDemos: CustomerDemo[] = [
               tone: "sky",
             },
             {
-              number: 8,
+              number: 7,
               title: "La landing se transforma en tiempo real",
               description:
-                "La página se renderiza con la identidad de la distribuidora: su nombre, su mensaje, sus productos, su CTA. La asociada ve la tienda personal de su distribuidora — sin que Betterware haya creado miles de páginas.",
+                "La página se renderiza con la identidad de la distribuidora: su nombre, su mensaje, sus productos, su CTA. La asociada ve el catálogo personal de su distribuidora — sin que Betterware haya creado miles de páginas.",
               actor: "Salesforce",
+              tone: "emerald",
+            },
+            {
+              number: 8,
+              title: "La asociada hace clic",
+              description:
+                "El link abre el sitio oficial de Betterware. La asociada nunca sale del entorno seguro de la marca — dirigir a la app en un click para realizar pedido.",
+              actor: "Asociada",
+              tone: "violet",
+            },
+            {
+              number: 9,
+              title: "Se direcciona a la app para realizar el pedido",
+              description:
+                "Desde la landing, la asociada pasa a la app Betterware Plus en un click. El checkout vive en la app — donde ya hay catálogo completo, gestión de pago y entrega.",
+              actor: "App Betterware Plus",
+              tone: "emerald",
+            },
+            {
+              number: 10,
+              title: "Se genera la atribución para la distribuidora",
+              description:
+                "La compra queda atribuida a la distribuidora — directa si la asociada cierra en la misma sesión, indirecta si vuelve después y Data 360 la reconoce.",
+              actor: "Data 360",
               tone: "emerald",
             },
           ],
@@ -2839,7 +2832,7 @@ export const customerDemos: CustomerDemo[] = [
             {
               number: 1,
               label: "Encabezado de identidad",
-              example: "María González · Distribuidora Diamante",
+              example: "María González · Distribuidora Líder",
               description:
                 "Nombre y badge de la distribuidora en el hero — la asociada reconoce a quién le está comprando desde el primer segundo.",
             },
@@ -2895,7 +2888,7 @@ export const customerDemos: CustomerDemo[] = [
               tone: "emerald",
             },
             {
-              name: "Audiencias por región y producto",
+              name: "Segmentos por región y producto",
               signal: "Comportamiento de compra por geografía y categoría",
               activation: "Campañas regionales con productos relevantes y mensaje local",
               outcome: "Mensaje correcto, en el lugar correcto, con la distribuidora correcta",
@@ -2907,8 +2900,7 @@ export const customerDemos: CustomerDemo[] = [
               "La atribución no vive en cookies del navegador — vive en el perfil unificado de Data 360. No se pierde si la asociada cierra el navegador, si cambia de dispositivo o si vuelve días después.",
             direct: {
               title: "Directa",
-              how: "La asociada compra en la misma sesión en que abrió el link",
-              when: "Caso ideal — sesión continua",
+              how: "La asociada compra a través del link que direcciona a la app",
             },
             indirect: {
               title: "Indirecta",
@@ -2931,74 +2923,36 @@ export const customerDemos: CustomerDemo[] = [
             },
             {
               product: "Salesforce Personalization",
-              role: "Transforma la landing en tiempo real con la identidad de cada distribuidora",
+              role: "Transforma la landing en tiempo real con la identidad de cada distribuidora y link que direcciona a la app",
               tone: "sky",
             },
             {
-              product: "Sitio de Betterware",
-              role: "Es el lienzo donde la experiencia personalizada se renderiza — checkout incluido",
+              product: "Una sola landing",
+              role: "Es el lienzo donde la experiencia personalizada se renderiza",
               tone: "emerald",
+            },
+            {
+              product: "App Betterware Plus",
+              role: "Hacia donde se direccionan para hacer el checkout",
+              tone: "indigo",
             },
           ],
           kpis: [
             {
               metric: "Tasa de conversión por distribuidora",
-              before: "No medible — sin link único",
-              after: "Visible y comparable entre distribuidoras",
+              detail: "Visible y comparable entre distribuidoras",
             },
             {
               metric: "Ticket promedio por link compartido",
-              before: "Promedio único de la marca",
-              after: "Por distribuidora · por región · por producto",
+              detail: "Por distribuidora · por región · por producto",
             },
             {
               metric: "Ranking de distribuidoras digitales",
-              before: "Basado en pedido propio (no en su red)",
-              after: "Basado en lo que cada DS genera con sus asociadas",
+              detail: "Basado en lo que cada DS genera con sus asociadas",
             },
             {
               metric: "Asociadas activas por distribuidora",
-              before: "Conteo manual",
-              after: "Dashboard en tiempo real desde Data 360",
-            },
-            {
-              metric: "Comisiones e incentivos",
-              before: "Sujetas a disputa por falta de trazabilidad",
-              after: "Liquidación automática con atribución 1:1 verificable",
-            },
-            {
-              metric: "Audiencias activables",
-              before: "1 lista genérica de marketing masivo",
-              after: "5+ audiencias dinámicas alimentadas por Data 360",
-            },
-          ],
-          phases: [
-            {
-              label: "Fase 1 — Punto de partida",
-              subtitle: "MVP rápido · sin tocar el sitio de Betterware",
-              description:
-                "Permite a Betterware enviar links únicos y mostrar contenido personalizado a corto plazo, sin modificar su sitio principal. Buena opción para validar la mecánica antes de invertir en la versión completa.",
-              enables: [
-                "Link único por distribuidora vía WhatsApp",
-                "Personalización con datos básicos de la distribuidora",
-                "Atribución de la compra cuando la asociada vuelve al sitio",
-                "Mide adopción y aprendizaje antes de escalar",
-              ],
-              tone: "indigo",
-            },
-            {
-              label: "Fase 2 — Versión completa",
-              subtitle: "Recomendada · UX unificada con el sitio de Betterware",
-              recommended: true,
-              description:
-                "La distribuidora vive dentro del propio sitio de Betterware. La asociada compra sin salir del entorno de marca. Personalización en tiempo real, atribución más limpia y todas las audiencias de Data 360 activables.",
-              enables: [
-                "Landing dentro del sitio de Betterware con identidad por distribuidora",
-                "Checkout directo · atribución 1:1 sin saltos entre dominios",
-                "Personalización en tiempo real sin recargar la página",
-                "Audiencias dinámicas y campañas multicanal desde Data 360",
-              ],
-              tone: "violet",
+              detail: "Dashboard en tiempo real desde Data 360",
             },
           ],
         },
