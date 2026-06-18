@@ -33,7 +33,7 @@ export default function SiteFooter({
                 />
                 <div>
                   <p className="text-sm font-semibold leading-tight text-gray-900">
-                    Jonathan Gomez | Laila
+                    Laila | Solutions Hub
                   </p>
                   <p className="text-xs text-gray-500">Personal-professional hub</p>
                 </div>

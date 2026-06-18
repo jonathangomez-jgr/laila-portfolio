@@ -150,7 +150,7 @@ export default function SiteHeader({
             />
             <div className="hidden sm:block">
               <p className="text-base font-semibold leading-tight tracking-tight text-gray-900">
-                Jonathan Gomez | Laila
+                Laila | Solutions Hub
               </p>
               <p className="text-xs text-gray-500">Personal-professional hub</p>
             </div>
