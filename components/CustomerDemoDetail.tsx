@@ -242,7 +242,7 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                         }`}
                       >
                         <span
-                          className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
+                          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                             isActive
                               ? "bg-indigo-500 text-white"
                               : "bg-gray-100 text-gray-500"
