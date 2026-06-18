@@ -92,6 +92,9 @@ export default function JtbdCanvas({
   const [activeStage, setActiveStage] = useState<number>(1);
   const stage = data.funnel.find((s) => s.number === activeStage) ?? data.funnel[0];
   const stageTone = TONES[stage.color as ToneKey];
+  const initiativeByNumber = new Map(
+    data.initiatives.flatMap((b) => b.items.map((it) => [it.number, it] as const))
+  );
 
   return (
     <div className="mt-10 space-y-14">
@@ -244,8 +247,8 @@ export default function JtbdCanvas({
       <section>
         <SectionHeader
           eyebrow="Funnel de la Distribuidora Nueva"
-          title="6 etapas con dos perspectivas: lo que la DS hace, lo que Better debe habilitar"
-          subtitle="Selecciona una etapa para ver el job, lo que Better debe habilitar, el KPI crítico y el canal."
+          title="6 etapas del journey de la DS Nueva"
+          subtitle="Selecciona una etapa para ver el job, el KPI crítico y el canal. Lo que Better debe habilitar vive en el Gap Analysis más abajo."
         />
 
         {/* Stage selector */}
@@ -296,23 +299,12 @@ export default function JtbdCanvas({
               <h4 className="text-xl font-bold text-gray-950">{stage.name}</h4>
             </div>
           </div>
-          <div className="grid gap-5 p-6 md:grid-cols-2">
-            <div>
+          <div className="grid gap-5 p-6 md:grid-cols-3">
+            <div className="md:col-span-3">
               <p className={`text-xs font-bold uppercase tracking-widest ${stageTone.text}`}>Job to be Done</p>
               <p className="mt-2 text-sm leading-6 text-gray-700">{stage.jobToBeDone}</p>
             </div>
-            <div>
-              <p className={`text-xs font-bold uppercase tracking-widest ${stageTone.text}`}>Better debe habilitar</p>
-              <ul className="mt-2 space-y-2">
-                {stage.betterEnables.map((b) => (
-                  <li key={b} className="flex items-start gap-2 text-sm leading-6 text-gray-700">
-                    <span className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${stageTone.dot}`} />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className={`rounded-2xl border p-4 ${stageTone.border} ${stageTone.bg}`}>
+            <div className={`rounded-2xl border p-4 md:col-span-2 ${stageTone.border} ${stageTone.bg}`}>
               <p className={`text-xs font-bold uppercase tracking-widest ${stageTone.text}`}>KPI crítico</p>
               <p className="mt-1.5 text-sm font-semibold text-gray-950">{stage.kpi}</p>
             </div>
@@ -468,31 +460,47 @@ export default function JtbdCanvas({
       <section>
         <SectionHeader
           eyebrow="Roadmap por Sprints"
-          title="De fundación a inteligencia predictiva en 4 sprints"
-          subtitle="Junio 2026 → Febrero 2027 en adelante. Cada sprint con entregables concretos en producción."
+          title="Cuándo entrega cada iniciativa"
+          subtitle="Timeline que ordena en el tiempo las 10 iniciativas de arriba. Cada chip refiere por número a la iniciativa correspondiente."
         />
-        <div className="space-y-4">
+        <div className="space-y-3">
           {data.sprints.map((sp) => {
             const tone = TONES[sp.tone];
             return (
               <div
                 key={sp.label}
-                className={`overflow-hidden rounded-3xl border bg-white shadow-sm ${tone.border}`}
+                className={`flex flex-col gap-3 rounded-2xl border bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:gap-5 ${tone.border}`}
               >
-                <div className={`border-b px-5 py-3 ${tone.border} ${tone.bgSolid}`}>
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <p className={`text-sm font-bold ${tone.text}`}>{sp.label}</p>
-                    <p className="text-xs font-semibold text-gray-600">{sp.dates}</p>
-                  </div>
+                <div className="shrink-0 sm:w-56">
+                  <p className={`text-sm font-bold ${tone.text}`}>{sp.label}</p>
+                  <p className="text-xs font-semibold text-gray-500">{sp.dates}</p>
                 </div>
-                <ul className="grid gap-2 p-5 md:grid-cols-2">
-                  {sp.bullets.map((b) => (
-                    <li key={b} className="flex items-start gap-2.5 text-sm leading-6 text-gray-700">
-                      <span className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${tone.dot}`} />
-                      <span>{b}</span>
-                    </li>
+                <div className="flex flex-1 flex-wrap items-center gap-1.5">
+                  {sp.initiatives.map((n) => {
+                    const init = initiativeByNumber.get(n);
+                    if (!init) return null;
+                    return (
+                      <span
+                        key={n}
+                        title={init.name}
+                        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold ${tone.badge}`}
+                      >
+                        <span className={`flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white ${tone.dot}`}>
+                          {n}
+                        </span>
+                        {init.name}
+                      </span>
+                    );
+                  })}
+                  {sp.extras?.map((x) => (
+                    <span
+                      key={x}
+                      className="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-1 text-[11px] text-gray-600"
+                    >
+                      {x}
+                    </span>
                   ))}
-                </ul>
+                </div>
               </div>
             );
           })}

@@ -324,7 +324,6 @@ export type JtbdFunnelStage = {
   name: string;
   color: "indigo" | "violet" | "sky" | "emerald";
   jobToBeDone: string;
-  betterEnables: string[];
   kpi: string;
   channel: string;
 };
@@ -363,7 +362,8 @@ export type JtbdSprint = {
   label: string;
   dates: string;
   tone: "indigo" | "violet" | "sky" | "emerald";
-  bullets: string[];
+  initiatives: number[];
+  extras?: string[];
 };
 
 export type JtbdKpiRow = {
@@ -2225,11 +2225,8 @@ export const customerDemos: CustomerDemo[] = [
           workshopDate: "Junio 2026 · Post-Workshop JTBD + Visita en Calle",
           funnelStats: [
             { value: "40–48%", label: "DS no realizan su primer pedido" },
-            { value: "52–60%", label: "No logran primer pedido en 2 semanas" },
-            { value: "42%", label: "Completitud actual del formulario de alta" },
             { value: "25%", label: "Altas con problemas de documentación" },
             { value: "30%", label: "Asociadas que arman pedido en la app" },
-            { value: "0%", label: "Mamás de linaje visibles en el sistema hoy" },
           ],
           insightGroups: [
             {
@@ -2248,10 +2245,6 @@ export const customerDemos: CustomerDemo[] = [
                 {
                   title: "El proceso de alta es manual y lento",
                   body: "10 personas en 3 turnos validan solicitudes. El 25% de las altas tienen problemas de documentación; solo el 10% de esos casos se recupera.",
-                },
-                {
-                  title: "La app no genera engagement",
-                  body: "Las notificaciones \"casi no se abren\". Solo el 30% de las asociadas montan pedidos en la app. El carrito se elimina semanalmente sin acompañamiento inteligente.",
                 },
                 {
                   title: "El staff opera sin trazabilidad",
@@ -2342,11 +2335,8 @@ export const customerDemos: CustomerDemo[] = [
                 heading: "Su relación con la tecnología",
                 tone: "sky",
                 items: [
-                  "Usa WhatsApp intensivamente",
-                  "Usa la app de Better solo para hacer pedidos",
-                  "No ve la app como fuente de valor más allá del catálogo",
-                  "Lleva el control de sus clientes en papel",
-                  "No consulta métricas ni reportes digitales",
+                  "Adopta lo digital cuando es simple, conversacional y resuelve un dolor inmediato",
+                  "Rechaza herramientas que la obligan a cambiar su rutina (papel, WhatsApp, voz)",
                 ],
               },
             ],
@@ -2358,11 +2348,6 @@ export const customerDemos: CustomerDemo[] = [
               color: "indigo",
               jobToBeDone:
                 "Escucha la propuesta de su mamá de linaje o ve contenido en redes · Evalúa si el negocio es real y confiable · Decide inscribirse",
-              betterEnables: [
-                "Contenido de captación auténtico (testimonios reales, distribuidoras influencers)",
-                "Material de apoyo para que la mamá haga el pitch",
-                "Landing page clara que resuelva la desconfianza",
-              ],
               kpi: "Conversión prospecto → inicio de formulario · Hoy: 36–37%",
               channel: "WhatsApp (boca a boca) · Redes sociales (influencers DS)",
             },
@@ -2372,12 +2357,6 @@ export const customerDemos: CustomerDemo[] = [
               color: "indigo",
               jobToBeDone:
                 "Llena formulario · Entrega documentos · Espera validación crediticia y domiciliaria · Recibe activación en la app",
-              betterEnables: [
-                "Formulario guiado con pasos claros",
-                "Recuperación automática de formularios abandonados",
-                "Comunicación inmediata sobre estado de solicitud y rechazos",
-                "Validación automatizada con IA",
-              ],
               kpi: "Completitud del formulario · Hoy: 42% → Meta: >65%",
               channel: "App · WhatsApp (notificaciones de estado)",
             },
@@ -2387,13 +2366,6 @@ export const customerDemos: CustomerDemo[] = [
               color: "violet",
               jobToBeDone:
                 "Aprende cómo funciona la app y el catálogo · Entiende cuánto debe pedir para activarse · Construye su primer pedido · Recibe acompañamiento de su mamá",
-              betterEnables: [
-                "Bienvenida personalizada vía WhatsApp (Agentforce)",
-                "Checklist de primeros pasos simple y visual",
-                "Alerta inteligente a la mamá cuando la DS no ha avanzado",
-                "Recordatorio de carrito antes del cierre semanal",
-                "Tips de venta en micro-formato (60 segundos)",
-              ],
               kpi: "Primer pedido en las primeras 2 semanas · Hoy: 52–60% NO lo logra",
               channel: "WhatsApp (primario) · App (pedido)",
             },
@@ -2403,13 +2375,6 @@ export const customerDemos: CustomerDemo[] = [
               color: "violet",
               jobToBeDone:
                 "Vende a sus clientas · Entrega pedidos · Cobra · Recibe su primer ingreso o incentivo",
-              betterEnables: [
-                "Contenido de ventas listo para compartir en WhatsApp",
-                "Tips de prospección y pitch para reclutar",
-                "Simulador de ganancias simple",
-                "Visita del asesor/promotor si no ha hecho primer pedido",
-                "Notificación de incentivos ganados en tiempo real",
-              ],
               kpi: "% DS que completan venta y cobran en primeras 4 semanas",
               channel: "WhatsApp · App (pedido y seguimiento)",
             },
@@ -2419,13 +2384,6 @@ export const customerDemos: CustomerDemo[] = [
               color: "sky",
               jobToBeDone:
                 "Construye su cartera de clientas · Hace pedidos recurrentes · Recluta asociadas · Gestiona entregas · Sigue metas de incentivos",
-              betterEnables: [
-                "Dashboard de red personal vía WhatsApp/app",
-                "Plan comercial digital con la asesora (reemplazar Excel)",
-                "Alertas de asociadas inactivas",
-                "Herramientas de contenido para distribuidoras influencers",
-                "Visibilidad de progreso hacia metas de incentivos",
-              ],
               kpi: "Recurrencia semanal de pedidos · Retención a 90 días",
               channel: "WhatsApp (relacional) · App (operativo)",
             },
@@ -2435,12 +2393,6 @@ export const customerDemos: CustomerDemo[] = [
               color: "emerald",
               jobToBeDone:
                 "Recluta nuevas distribuidoras · Las acompaña · Gestiona su red de linaje · Crece en categoría",
-              betterEnables: [
-                "Consola de linaje: vista de su red, alertas de riesgo de churn, progreso por DS",
-                "Notificación proactiva: \"tu distribuidora lleva 10 días sin pedido\"",
-                "Programa formal de Mentoras Certificadas",
-                "KPIs de linaje visibles",
-              ],
               kpi: "Crecimiento de red de 2° nivel · % retención de su linaje",
               channel: "WhatsApp (primario para la mamá) · App/consola (Salesforce)",
             },
@@ -2671,49 +2623,39 @@ export const customerDemos: CustomerDemo[] = [
               label: "Sprint 0 · Fundación y Piloto",
               dates: "1-jun-2026 → 31-jul-2026",
               tone: "indigo",
-              bullets: [
+              initiatives: [1],
+              extras: [
                 "Lanzamiento a producción de la plataforma BEFRA (Service + Marketing + Data Cloud)",
-                "Piloto Agentforce WhatsApp con grupo controlado (50–100 DS)",
-                "Definición del modelo de datos de linaje en Data Cloud",
-                "Primeras alertas de riesgo de abandono temprano",
-                "Kick-off del diseño de la Consola de Linaje con UX research con mamás reales",
+                "Modelo de datos de linaje en Data Cloud · UX research con mamás reales",
               ],
             },
             {
               label: "Sprint 1 · Activación y Onboarding",
               dates: "1-ago-2026 → 31-oct-2026",
               tone: "violet",
-              bullets: [
-                "Journey de Onboarding Inteligente en producción (Marketing Cloud)",
-                "Resumen semanal personalizado vía WhatsApp en producción",
-                "Consola de Linaje v1 (alertas básicas de red)",
-                "Kit de Prospección Digital v1 (micro-tips en WhatsApp)",
-                "Inicio del Plan Comercial Digital con asesoras (reemplazo de Excel)",
-                "Medición de KPIs: conversión inscripción→primer pedido · retención 8 semanas",
+              initiatives: [2, 3, 4, 5, 6],
+              extras: [
+                "Medición de KPIs: conversión inscripción → primer pedido · retención 8 semanas",
               ],
             },
             {
               label: "Sprint 2 · Consolidación y Escala",
               dates: "1-nov-2026 → 31-ene-2027",
               tone: "sky",
-              bullets: [
-                "CRM simple vía WhatsApp (Agentforce responde consultas de cartera)",
-                "Programa de Mentoras Certificadas v1 (perfil formal + KPIs)",
-                "Hub de Contenido para Distribuidoras Influencers",
-                "Automatización del proceso de alta y recuperación de formularios",
-                "Dashboard de Ascenso/Upgrade (Tableau) para DS y mamás",
-                "Revisión de KPIs y decisión sobre siguiente ciclo de inversión",
+              initiatives: [7, 8, 9, 10],
+              extras: [
+                "Dashboard de Ascenso/Upgrade en Tableau · Revisión de KPIs y decisión sobre siguiente ciclo",
               ],
             },
             {
               label: "Sprint 3 · Inteligencia y Personalización",
               dates: "1-feb-2027 en adelante",
               tone: "emerald",
-              bullets: [
+              initiatives: [],
+              extras: [
                 "Personalización avanzada en la app por perfil (DS vs. asociada)",
-                "Modelos predictivos de riesgo de churn (Data Cloud + Einstein)",
-                "Integración Amplitude + Data Cloud para journey optimization",
-                "Expansión del modelo de Mentoras a toda la red",
+                "Modelos predictivos de churn (Data Cloud + Einstein)",
+                "Amplitude + Data Cloud para journey optimization · Expansión de Mentoras a toda la red",
               ],
             },
           ],
