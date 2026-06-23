@@ -37,7 +37,7 @@ export default async function InsightDeckPage({ params }: Props) {
   return (
     <ExecutiveDeckPlayer
       deck={deck}
-      customerName={insight.title}
+      customerName="Arquitectura multiagente"
       backHref={`/${lang}/insights/${slug}`}
     />
   );
