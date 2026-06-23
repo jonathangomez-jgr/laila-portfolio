@@ -307,6 +307,8 @@
     "architect": "For architects",
     "deep": "Deep position",
     "summary": "Executive summary",
+    "execDeckBtn": "Executive presentation",
+    "execDeckHint": "Slide-by-slide version of the content — ideal to share or present.",
     "nextRead": "Coming soon",
     "nextReadDesc": "We are preparing the next entries. If you'd like a heads-up when we publish, drop us a line."
   },

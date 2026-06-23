@@ -22,6 +22,8 @@ type Dict = {
   executive: string;
   architect: string;
   deep: string;
+  execDeckBtn: string;
+  execDeckHint: string;
 };
 
 const AUDIENCE_KEY: Record<"executive" | "architect" | "deep", keyof Dict> = {
@@ -331,10 +333,12 @@ export default function InsightArticle({
   insight,
   lang,
   dict,
+  hasDeck = false,
 }: {
   insight: Insight;
   lang: string;
   dict: Dict;
+  hasDeck?: boolean;
 }) {
   const [active, setActive] = useState<string>(insight.sections[0]?.id ?? "");
 
@@ -400,6 +404,32 @@ export default function InsightArticle({
           <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-600">
             {insight.subtitle}
           </p>
+
+          {hasDeck && (
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <a
+                href={`/${lang}/insights/${insight.slug}/deck`}
+                className="primary-button inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold"
+              >
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.2}
+                  aria-hidden
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 5h16M4 5v14h16V5M4 5l8 7 8-7"
+                  />
+                </svg>
+                {dict.execDeckBtn}
+              </a>
+              <span className="text-xs text-gray-500">{dict.execDeckHint}</span>
+            </div>
+          )}
 
           {/* Meta row */}
           <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500">

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "@/lib/i18n";
 import { insights } from "@/data/insights";
+import { getInsightDeck } from "@/data/insightDecks";
 
 const AUDIENCE_LABEL = {
   executive: { es: "Para ejecutivos", en: "For executives", pt: "Para executivos" },
@@ -86,18 +87,38 @@ export default async function InsightsPage({
                   <span className="mx-1.5">·</span>
                   {insight.authorRole}
                 </div>
-                <span className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 transition group-hover:gap-3">
-                  Leer
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 5l7 7-7 7" />
-                  </svg>
-                </span>
+                <div className="flex items-center gap-3">
+                  {getInsightDeck(insight.slug) && (
+                    <span className="hidden items-center gap-1.5 rounded-full border border-indigo-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-indigo-600 sm:inline-flex">
+                      <svg
+                        className="h-3 w-3"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.4}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 5h16M4 5v14h16V5M4 5l8 7 8-7"
+                        />
+                      </svg>
+                      Deck
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 transition group-hover:gap-3">
+                    Leer
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2.5}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </div>
               </div>
             </a>
           ))}

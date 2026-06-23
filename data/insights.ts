@@ -90,13 +90,13 @@ const multiAgent: Insight = {
         },
         {
           type: "paragraph",
-          text: "Esta entrada está pensada para arquitectos empresariales y líderes técnicos que están diseñando — o defendiendo — una arquitectura multiagente donde Salesforce convive con Vertex AI, Bedrock, Azure AI Foundry, copilotos internos, agentes custom, APIs legacy y core systems. No es un manifiesto de producto, es una postura consultiva: hay escenarios en que Salesforce debe ser el cerebro, otros en los que debe ser un especialista invocado, y otros donde forzarlo como único orquestador es un error de arquitectura.",
+          text: "No es un manifiesto de producto. Es una postura consultiva: hay escenarios en los que Salesforce debe ser el cerebro de la arquitectura, otros en los que debe ser un especialista invocado por otros agentes, y otros en los que forzarlo como único orquestador es un error de diseño. Esta entrada desarrolla cuál es cuál y por qué.",
         },
         {
           type: "callout",
           tone: "info",
           title: "Cómo leer esta entrada",
-          text: "Cada sección es autocontenida. Si tienes 5 minutos, lee el statement, la postura estratégica y la conclusión. Si tienes 30 minutos, recorre las opciones A–E, la arquitectura de referencia y la matriz de decisión. Si vas a defender el diseño en un comité, llévate las recomendaciones y el modelo de madurez.",
+          text: "Cada sección es autocontenida. Con 5 minutos basta el statement, la postura estratégica y la conclusión. Con 30 minutos se recorren las opciones A–E, la arquitectura de referencia y la matriz de decisión. Para llevar la conversación a un comité o a una reunión de negocio, las recomendaciones y el modelo de madurez funcionan como hoja de ruta.",
         },
       ],
     },
@@ -669,7 +669,7 @@ const multiAgent: Insight = {
       blocks: [
         {
           type: "paragraph",
-          text: "Estas recomendaciones funcionan como contrato de diseño. Si una arquitectura propuesta viola tres o más, vale la pena pausar y revisarla — independientemente de la plataforma.",
+          text: "Estas recomendaciones funcionan como contrato de diseño y, también, como brújula para una conversación de negocio. Si una propuesta concreta rompe tres o más, vale la pena pausarla y revisarla — sea cual sea la plataforma o el proveedor.",
         },
         {
           type: "cards",
@@ -930,7 +930,7 @@ const multiAgent: Insight = {
       blocks: [
         {
           type: "paragraph",
-          text: "Esta postura está construida sobre documentación oficial y materiales de plataforma. Recomendamos a cualquier arquitecto profundizar directamente en las fuentes — las especificaciones evolucionan rápido y la lectura primaria es la única defensa contra desactualización.",
+          text: "Esta postura está construida sobre documentación oficial y materiales de plataforma. Quien quiera profundizar puede ir directamente a las fuentes: las especificaciones evolucionan rápido y la lectura primaria es la mejor defensa contra desactualización.",
         },
         {
           type: "sources",

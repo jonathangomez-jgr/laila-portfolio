@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "@/lib/i18n";
 import { insights } from "@/data/insights";
+import { getInsightDeck } from "@/data/insightDecks";
 import InsightArticle from "@/components/InsightArticle";
 
 export default async function InsightDetailPage({
@@ -36,5 +37,14 @@ export default async function InsightDetailPage({
     );
   }
 
-  return <InsightArticle insight={insight} lang={lang} dict={dict.insights} />;
+  const hasDeck = Boolean(getInsightDeck(slug));
+
+  return (
+    <InsightArticle
+      insight={insight}
+      lang={lang}
+      dict={dict.insights}
+      hasDeck={hasDeck}
+    />
+  );
 }

@@ -307,6 +307,8 @@
     "architect": "Para arquitetos",
     "deep": "Posicionamento profundo",
     "summary": "Resumo executivo",
+    "execDeckBtn": "Apresentação executiva",
+    "execDeckHint": "Versão slide a slide do conteúdo — ideal para compartilhar ou apresentar.",
     "nextRead": "Em breve",
     "nextReadDesc": "Estamos preparando as próximas entradas. Se quiser receber aviso quando publicarmos, escreva para nós."
   },
