@@ -453,6 +453,75 @@ export type Sprint3Data = {
   kpis: Sprint3Kpi[];
 };
 
+export type JobStoryKnowledgeSource = {
+  label: string;
+  path: string;
+  library?: string;
+  relevance?: string;
+};
+
+export type JobStory = {
+  id: string;
+  epicId: string;
+  epicName: string;
+  name: string;
+  category:
+    | "Information & Discovery"
+    | "Self-Service & Transactions"
+    | "Personalization"
+    | "Status & Tracking"
+    | "Problem Resolution"
+    | "Retention & Engagement"
+    | "Escalation & Human Handoff";
+  cuando: string;
+  yoQuiero: string;
+  paraPoder: string;
+  businessValue: string;
+  priority: "High" | "Medium" | "Low";
+  package: "MVP" | "TBD" | "NA" | "Blocked";
+  blocked?: boolean;
+  coverage: "covered" | "partial" | "missing" | "out-of-scope";
+  knowledgeSources?: JobStoryKnowledgeSource[];
+  pending?: string[];
+  resolution?: "knowledge" | "data-only" | "handoff" | "hybrid";
+};
+
+export type JobStoriesSummary = {
+  totalStories: number;
+  byCoverage: { covered: number; partial: number; missing: number; outOfScope: number };
+  byResolution: { knowledgeOnly: number; dataOnly: number; hybrid: number; handoff: number };
+  notes: string[];
+  pendingArtifacts: string[];
+};
+
+export type JobStoriesData = {
+  intro: string;
+  stories: JobStory[];
+  summary: JobStoriesSummary;
+};
+
+export type KnowledgeLibraryFileGroup = {
+  label: string;
+  note?: string;
+  files: string[];
+};
+
+export type KnowledgeLibraryItem = {
+  id: string;
+  name: string;
+  focus: string;
+  description: string;
+  tone: "indigo" | "violet" | "sky" | "emerald" | "amber";
+  fileCount?: number;
+  indexed?: boolean;
+  fileGroups: KnowledgeLibraryFileGroup[];
+  pending?: string[];
+};
+
+export type KnowledgeLibraryInventoryData = {
+  libraries: KnowledgeLibraryItem[];
+};
+
 export type CustomerDemoTab = {
   id: string;
   label: string;
@@ -481,6 +550,8 @@ export type CustomerDemoTab = {
   roadmapData?: RoadmapData;
   jtbdData?: JtbdData;
   sprint3Data?: Sprint3Data;
+  knowledgeInventoryData?: KnowledgeLibraryInventoryData;
+  jobStoriesData?: JobStoriesData;
 };
 
 export type CustomerDemoI18n = {
@@ -501,6 +572,7 @@ export type CustomerDemo = {
   tags: string[];
   tabs: CustomerDemoTab[];
   passcode: string;
+  hidden?: boolean;
   translations?: { en?: CustomerDemoI18n; pt?: CustomerDemoI18n };
 };
 

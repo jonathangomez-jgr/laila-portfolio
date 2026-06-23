@@ -41,7 +41,7 @@ export default async function CustomerDemosPage({
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {customerDemos.map((demo) => {
+          {customerDemos.filter((demo) => !demo.hidden).map((demo) => {
             const i18n = lang === "en" ? demo.translations?.en : lang === "pt" ? demo.translations?.pt : undefined;
             const title = i18n?.title ?? demo.title;
             const description = i18n?.description ?? demo.description;

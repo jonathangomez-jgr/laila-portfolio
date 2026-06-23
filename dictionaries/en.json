@@ -6,6 +6,7 @@
     "generalDemos": "General Demos",
     "customerSolutions": "Customer's Solutions",
     "letsTalk": "Let's Talk",
+    "insights": "Insights",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
   },
@@ -240,6 +241,14 @@
     "confidentialityText": "This section can handle public, anonymized, or private versions of each demo to avoid exposing sensitive client information.",
     "confidentialityNote": "For private versions, you will be asked for a one-time viewing code."
   },
+  "customerProjects": {
+    "eyebrow": "Customer's Projects",
+    "title": "Implementation work and technical discovery with clients.",
+    "description": "Unlike commercial demos, this section documents implementation work: Knowledge Base analysis, data model, agent design, architecture, and concrete technical deliverables.",
+    "confidentialityTitle": "Confidentiality note",
+    "confidentialityText": "Projects here may contain sensitive client information (data model, org IDs, internal metrics). Access is always code-gated.",
+    "confidentialityNote": "Some projects are hidden from the listing and accessible only via direct URL with a code."
+  },
   "contact": {
     "eyebrow": "Contact",
     "title": "Let's Talk.",
@@ -275,6 +284,31 @@
     "requestLoading": "Sending...",
     "requestBtn": "Request access",
     "requestError": "Oops.. something didn't go as expected. Please try again later or send an email to jonathan.gomez@salesforce.com"
+  },
+  "insights": {
+    "eyebrow": "Insights",
+    "title": "Technical and strategic positions to take AI to the heart of the business.",
+    "description": "Deep analyses, consultative opinions and reference architectures on Salesforce, Agentforce, Data Cloud, MuleSoft, integrations, enterprise generative AI and digital transformation. Designed so that an architect, a technical leader or an executive walks away with clear, defensible judgment.",
+    "filtersTitle": "Coming soon",
+    "filtersDesc": "More entries on the way: multi-agent architecture, Data Cloud, MuleSoft, Agentforce ROI, AI governance, industry use cases. Filters by topic and maturity level will be enabled when content is rich enough.",
+    "readingTime": "min read",
+    "tableOfContents": "Table of contents",
+    "level": "Level",
+    "topic": "Topic",
+    "updated": "Updated",
+    "author": "Author",
+    "backToInsights": "Back to Insights",
+    "notFound": "Insight not found",
+    "notFoundDesc": "The insight you are looking for doesn't exist or has been moved. Return to the list to explore the available ones.",
+    "shareTitle": "Was this useful?",
+    "shareDesc": "Share it with your team or let's discuss it in an architecture call.",
+    "shareCta": "Let's talk",
+    "executive": "For executives",
+    "architect": "For architects",
+    "deep": "Deep position",
+    "summary": "Executive summary",
+    "nextRead": "Coming soon",
+    "nextReadDesc": "We are preparing the next entries. If you'd like a heads-up when we publish, drop us a line."
   },
   "customerDetail": {
     "eyebrow": "Customer Solution",

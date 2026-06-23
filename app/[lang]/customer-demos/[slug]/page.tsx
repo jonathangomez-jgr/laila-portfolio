@@ -4,6 +4,7 @@ import { hasLocale, getDictionary } from "@/lib/i18n";
 import CustomerDemoDetail from "@/components/CustomerDemoDetail";
 import DemoAccessGate from "@/components/DemoAccessGate";
 import { customerDemos } from "@/data/customerDemos";
+import { verifyPasscode } from "./actions";
 
 type CustomerDemoPageProps = {
   params: Promise<{
@@ -51,6 +52,7 @@ export default async function CustomerDemoPage({
         customerName={demo.customerName}
         logo={demo.logo}
         dict={dict}
+        verifyAction={verifyPasscode}
       />
     );
   }

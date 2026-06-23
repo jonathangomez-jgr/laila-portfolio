@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paradise Pass — Knowledge Base Analysis &amp; Agentforce RAG Data Library Strategy</title>
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --panel: #ffffff;
+    --panel-2: #f1f4fa;
+    --ink: #1a2235;
+    --ink-mute: #5a6478;
+    --accent: #c2761a;
+    --accent-2: #1e6bd8;
+    --good: #15803d;
+    --warn: #b45309;
+    --bad: #b91c1c;
+    --neutral: #64748b;
+    --border: #e2e6ee;
+    --code-bg: #f3f5fa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Helvetica Neue", sans-serif;
+    background: linear-gradient(180deg, #f7f8fb 0%, #eef1f7 100%);
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.6;
+  }
+  .container { max-width: 1180px; margin: 0 auto; padding: 40px 28px 96px; }
+  header.hero {
+    background: linear-gradient(135deg, rgba(194,118,26,.08), rgba(30,107,216,.07));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px 36px;
+    margin-bottom: 36px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.04);
+  }
+  header.hero .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    font-size: .78rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  header.hero h1 {
+    margin: 8px 0 6px;
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
+  header.hero .subtitle {
+    color: var(--ink-mute);
+    font-size: 1.05rem;
+    max-width: 820px;
+  }
+  header.hero .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 28px;
+    margin-top: 22px;
+    font-size: .9rem;
+    color: var(--ink-mute);
+  }
+  header.hero .meta strong { color: var(--ink); }
+  nav.toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 36px;
+    box-shadow: 0 1px 2px rgba(15,23,42,.03);
+  }
+  nav.toc h3 { margin: 0 0 10px; font-size: .9rem; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-mute); }
+  nav.toc ol { margin: 0; padding-left: 22px; }
+  nav.toc a { color: var(--accent-2); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+
+  section { margin-bottom: 44px; }
+  h2 {
+    font-size: 1.5rem;
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+  h2 .num {
+    display: inline-block;
+    width: 30px; height: 30px; line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #ffffff;
+    font-size: .9rem;
+    margin-right: 10px;
+    font-weight: 700;
+  }
+  h3 { font-size: 1.15rem; margin: 26px 0 10px; color: var(--accent); }
+  h4 { font-size: 1rem; margin: 18px 0 6px; color: var(--accent-2); }
+
+  .lang-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 2px rgba(15,23,42,.03);
+  }
+  .lang-block .lang-tag {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    color: var(--ink-mute);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .lang-block .es .lang-tag { color: var(--accent); }
+  .lang-block .en .lang-tag { color: var(--accent-2); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 14px 0;
+    font-size: .92rem;
+    box-shadow: 0 1px 2px rgba(15,23,42,.03);
+  }
+  table th, table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table th {
+    background: var(--panel-2);
+    color: var(--ink);
+    font-weight: 600;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  table tr:last-child td { border-bottom: none; }
+  table tr:hover td { background: rgba(30,107,216,.05); }
+
+  .pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .pill.applies { background: rgba(21,128,61,.10);  color: var(--good); border: 1px solid rgba(21,128,61,.30); }
+  .pill.partial { background: rgba(180,83,9,.10);   color: var(--warn); border: 1px solid rgba(180,83,9,.30); }
+  .pill.foreign { background: rgba(185,28,28,.10);  color: var(--bad);  border: 1px solid rgba(185,28,28,.30); }
+  .pill.shared  { background: rgba(30,107,216,.10); color: var(--accent-2); border: 1px solid rgba(30,107,216,.30); }
+
+  .callout {
+    border-left: 4px solid var(--accent);
+    background: rgba(194,118,26,.07);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+  .callout.warn { border-left-color: var(--warn); background: rgba(180,83,9,.07); }
+  .callout.danger { border-left-color: var(--bad); background: rgba(185,28,28,.06); }
+  .callout.info { border-left-color: var(--accent-2); background: rgba(30,107,216,.06); }
+  .callout strong { color: var(--accent); }
+
+  code, pre {
+    font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: .88rem;
+  }
+  code { background: var(--code-bg); padding: 1px 6px; border-radius: 4px; color: #b1591a; border: 1px solid var(--border); }
+  pre {
+    background: #fbfcfe;
+    padding: 16px 18px;
+    border-radius: 10px;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    line-height: 1.5;
+    color: #1a2235;
+  }
+  pre code { background: transparent; padding: 0; color: var(--ink); border: none; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 820px) {
+    .grid-2, .grid-3, .lang-block { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 2px rgba(15,23,42,.03);
+  }
+  .card h4 { margin-top: 0; }
+
+  ul, ol { padding-left: 22px; }
+  li { margin-bottom: 6px; }
+
+  .source {
+    font-size: .8rem;
+    color: var(--ink-mute);
+    margin-top: 6px;
+  }
+  .source a { color: var(--accent-2); }
+
+  footer.report-footer {
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+    padding-top: 24px;
+    color: var(--ink-mute);
+    font-size: .85rem;
+  }
+
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 14px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 8px 0 18px; font-size: .85rem; }
+  .legend > div { display: flex; align-items: center; gap: 8px; }
+
+  details summary {
+    cursor: pointer;
+    padding: 8px 0;
+    color: var(--accent-2);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="hero">
+  <div class="eyebrow">Salesforce Agentforce · Concierge Digital</div>
+  <h1>Paradise Pass — Knowledge Base Audit &amp; RAG Data Library Strategy</h1>
+  <p class="subtitle">
+    Análisis del programa Paradise Pass operado por PAM Hotels (ex-RCD Hotels), clasificación de los 51 archivos
+    del repositorio <code>PAM_Hotels_Knowledge_Base_RAG/</code>, y propuesta de Data Libraries para Agentforce
+    con criterios de chunking, metadata y gobierno.
+  </p>
+  <div class="meta">
+    <div><strong>Cliente:</strong> PAM Hotels (Solaya Hospitality Management Group)</div>
+    <div><strong>Caso de uso:</strong> Concierge Digital · Agentforce</div>
+    <div><strong>Fecha:</strong> 2026-06-22</div>
+    <div><strong>Idioma:</strong> ES / EN</div>
+  </div>
+</header>
+
+<nav class="toc">
+  <h3>Contenido / Table of Contents</h3>
+  <ol>
+    <li><a href="#sec1">Resumen ejecutivo / Executive Summary</a></li>
+    <li><a href="#sec2">¿Qué es Paradise Pass? / What is Paradise Pass?</a></li>
+    <li><a href="#sec3">Estructura corporativa / Corporate Structure</a></li>
+    <li><a href="#sec4">Propiedades participantes / Participating Properties</a></li>
+    <li><a href="#sec5">Estructura del repositorio / Repository Structure</a></li>
+    <li><a href="#sec6">Mapeo archivo-por-archivo / File-by-File Mapping</a></li>
+    <li><a href="#sec7">Propuesta de Data Libraries / Data Library Proposal</a></li>
+    <li><a href="#sec8">Estrategia de chunking y metadata / Chunking &amp; Metadata Strategy</a></li>
+    <li><a href="#sec9">Casos de uso del Concierge / Concierge Use Cases</a></li>
+    <li><a href="#sec10">Riesgos, gaps y preguntas abiertas / Risks, Gaps &amp; Open Questions</a></li>
+    <li><a href="#sec11">Fuentes / Sources</a></li>
+  </ol>
+</nav>
+
+<!-- ============================================================== -->
+<section id="sec1">
+  <h2><span class="num">1</span>Resumen ejecutivo / Executive Summary</h2>
+
+  <div class="lang-block">
+    <div class="es">
+      <div class="lang-tag">Español</div>
+      <p>
+        <strong>Paradise Pass</strong> es un programa de <em>escapadas vacacionales all-inclusive</em>
+        (paquetes de 4/5 o 7/8 noches) que se activa mediante un certificado con vencimiento, otorgando
+        beneficios como <em>Member's Bracelet</em>, <em>Resort Credits</em> y eventos por invitación
+        (notablemente <em>Legends of Paradise</em>, 6–13 de diciembre de 2026 en AVA Resort Cancún).
+        Documentación interna del cliente lo describe como
+        <strong>"la puerta de entrada al ecosistema Legendary"</strong> — es decir, la antesala
+        comercial al programa Legendary Vacation Club (LVC).
+      </p>
+      <p>
+        Corporativamente, <strong>RCD Hotels evolucionó a PAM Hotels</strong> en enero de 2026 tras más
+        de cuatro décadas; <code>rcdhotels.com</code> redirige 301 a <code>pamhotels.com</code>.
+        La entidad legal operadora es <strong>Solaya Hospitality Management Group, S. de R.L. de C.V.</strong>
+        (Av. Bonampak, Cancún), que también figura como Responsable del Tratamiento en el aviso de privacidad
+        de <code>paradisepass.com</code>, confirmando que PAM opera tanto el portafolio hotelero como el programa.
+      </p>
+      <p>
+        El repositorio entregado contiene <strong>51 archivos</strong> distribuidos en 7 carpetas. Tras
+        clasificarlos: <strong>~46 aplican directa o transversalmente a Paradise Pass</strong> (Tono y Voz,
+        Políticas, FAQs, Programa de Referidos, Transportación ON TOUR, fichas técnicas de las 9 propiedades);
+        <strong>~5 son específicos de LVC</strong> (Políticas de Reservaciones LVC, parte de la matriz de FAQs);
+        <strong>1 carpeta está vacía</strong> (<code>Marcas/</code>).
+      </p>
+    </div>
+    <div class="en">
+      <div class="lang-tag">English</div>
+      <p>
+        <strong>Paradise Pass</strong> is an <em>all-inclusive getaway program</em>
+        (4/5 or 7/8 night packages) activated through an expiring certificate, granting benefits such as
+        a <em>Member's Bracelet</em>, <em>Resort Credits</em>, and invite-only events
+        (notably <em>Legends of Paradise</em>, December 6–13, 2026 at AVA Resort Cancun).
+        Client-internal documentation describes it as
+        <strong>"the gateway to the Legendary ecosystem"</strong> — i.e., the commercial entry-point
+        to Legendary Vacation Club (LVC).
+      </p>
+      <p>
+        Corporately, <strong>RCD Hotels evolved into PAM Hotels</strong> in January 2026 after more than four
+        decades; <code>rcdhotels.com</code> issues a 301 redirect to <code>pamhotels.com</code>.
+        The operating legal entity is <strong>Solaya Hospitality Management Group, S. de R.L. de C.V.</strong>
+        (Av. Bonampak, Cancun), which also appears as the Data Controller in the
+        <code>paradisepass.com</code> privacy policy, confirming PAM operates both the hotel portfolio and the program.
+      </p>
+      <p>
+        The delivered repository holds <strong>51 files</strong> across 7 folders. After classification:
+        <strong>~46 apply directly or cross-cuttingly to Paradise Pass</strong> (Tone &amp; Voice, Policies, FAQs,
+        Referral Program, ON TOUR transportation, fact sheets for 9 properties);
+        <strong>~5 are LVC-specific</strong> (LVC Reservation Policies, part of the FAQ matrix);
+        <strong>1 folder is empty</strong> (<code>Marcas/</code>).
+      </p>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <strong>Recomendación clave / Key recommendation:</strong>
+    Estructurar el RAG en <strong>6 Data Libraries</strong> separadas (Brand Voice, Programs, Policies,
+    Properties, Operations, FAQs) en lugar de una única biblioteca monolítica. Esto permite control de acceso
+    por audiencia (Paradise Pass vs. LVC member), routing del retriever por intent, y actualizaciones
+    independientes sin re-indexar todo el corpus. Ver §<a href="#sec7">7</a>.
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<section id="sec2">
+  <h2><span class="num">2</span>¿Qué es Paradise Pass? / What is Paradise Pass?</h2>
+
+  <div class="lang-block">
+    <div class="es">
+      <div class="lang-tag">Español</div>
+      <p>
+        Paradise Pass es un <strong>pase activable de viaje all-inclusive</strong>, no un vacation club
+        tradicional ni una suscripción. Sus elementos verificados en <code>paradisepass.com</code>:
+      </p>
+      <ul>
+        <li><strong>Duración:</strong> "4/5 days or 7/8 days* under the sun"</li>
+        <li><strong>Mecánica:</strong> certificados con vencimiento ("Don't Let Your Paradise Pass Expire!")
+          con bonus si la compra se completa dentro de 3 meses ("An Extra Dose of Paradise").</li>
+        <li><strong>Beneficios:</strong> Member's Bracelet, Resort Credits (canjeables en spa/wellness,
+          aventuras al aire libre y belleza/styling), eventos solo por invitación.</li>
+        <li><strong>Promociones 2026:</strong> Legends of Paradise (AVA Cancún, 6–13 dic 2026),
+          Summer Like Heaven, Camp Rockaway, Superbia Summer, "Kids Stay FREE",
+          ahorros de hasta $996 USD en UNICO.</li>
+        <li><strong>Posicionamiento de marca (interno, doc <em>Tono y Voz Bot LVC_SF</em>):</strong>
+          "Paradise Pass representa la puerta de entrada al ecosistema Legendary. Es una experiencia diseñada
+          para inspirar, generar confianza y permitir que los viajeros descubran nuevas posibilidades."</li>
+      </ul>
+      <p>
+        Posicionamiento dual confirmado: <em>Paradise Pass = descubrimiento / activación</em>,
+        <em>LVC = pertenencia / miembros activos</em>. El bot adopta el arquetipo del
+        <strong>"Anfitrión Exclusivo"</strong> + <strong>"Concierge Experto"</strong>.
+      </p>
+    </div>
+    <div class="en">
+      <div class="lang-tag">English</div>
+      <p>
+        Paradise Pass is an <strong>activatable all-inclusive travel pass</strong>, not a traditional
+        vacation club nor a subscription. Elements verified on <code>paradisepass.com</code>:
+      </p>
+      <ul>
+        <li><strong>Duration:</strong> "4/5 days or 7/8 days* under the sun"</li>
+        <li><strong>Mechanics:</strong> expiring certificates ("Don't Let Your Paradise Pass Expire!")
+          with a bonus if purchase is completed within 3 months ("An Extra Dose of Paradise").</li>
+        <li><strong>Benefits:</strong> Member's Bracelet, Resort Credits (redeemable for spa/wellness,
+          outdoor adventures, and beauty/styling), invite-only events.</li>
+        <li><strong>2026 promotions:</strong> Legends of Paradise (AVA Cancun, Dec 6–13, 2026),
+          Summer Like Heaven, Camp Rockaway, Superbia Summer, "Kids Stay FREE",
+          up to $996 USD off at UNICO.</li>
+        <li><strong>Brand positioning (internal, <em>Tono y Voz Bot LVC_SF</em>):</strong>
+          "Paradise Pass is the gateway to the Legendary ecosystem. It is an experience designed
+          to inspire, build trust, and let travelers discover new possibilities."</li>
+      </ul>
+      <p>
+        Dual positioning confirmed: <em>Paradise Pass = discovery / activation</em>,
+        <em>LVC = belonging / active members</em>. The bot adopts the
+        <strong>"Exclusive Host"</strong> + <strong>"Expert Concierge"</strong> archetypes.
+      </p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Hallazgo importante / Important finding:</strong>
+    El sitio público <code>paradisepass.com</code> <strong>NO menciona</strong> los tiers
+    <em>Deluxe / VIP / Hall of Fame / Chairman</em>, ni <em>Legend Coins</em>, ni el programa
+    <em>ON TOUR</em>, ni el de referidos, ni precios. Estos elementos provienen de documentación interna
+    (matriz de FAQs LVC) y aplican a la capa de membresía LVC más profunda. El bot debe distinguir
+    audiencias antes de citar estos términos.
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<section id="sec3">
+  <h2><span class="num">3</span>Estructura corporativa / Corporate Structure</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Entidad / Entity</th>
+        <th>Rol / Role</th>
+        <th>Estado actual / Current Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>PAM Hotels</strong></td>
+        <td>Marca corporativa actual / Current corporate brand</td>
+        <td>Vigente desde ene-2026 / Active since Jan 2026 (<code>pamhotels.com</code>)</td>
+      </tr>
+      <tr>
+        <td><strong>RCD Hotels</strong></td>
+        <td>Marca corporativa histórica / Legacy corporate brand</td>
+        <td>Evolucionó a PAM en 2026 / Rebranded to PAM in 2026 (<code>rcdhotels.com</code> → 301)</td>
+      </tr>
+      <tr>
+        <td><strong>Solaya Hospitality Management Group, S. de R.L. de C.V.</strong></td>
+        <td>Entidad legal operadora / Operating legal entity</td>
+        <td>Av. Bonampak SM 9, M 2, Cancún Q.Roo, C.P. 77503</td>
+      </tr>
+      <tr>
+        <td><strong>Paradise Pass</strong></td>
+        <td>Programa comercial (pase activable) / Commercial program (activatable pass)</td>
+        <td>Operado por Solaya (Responsable del Tratamiento confirmado en aviso de privacidad)</td>
+      </tr>
+      <tr>
+        <td><strong>Legendary Vacation Club (LVC)</strong></td>
+        <td>Programa de membresía histórico / Legacy membership program</td>
+        <td>Fundado 2012 (14 años en 2026); portal <code>legendary.myaccountinquiry.com</code></td>
+      </tr>
+      <tr>
+        <td><strong>Palace Resorts Reservations / Palace Premier Dominicana</strong></td>
+        <td>Operador del portal LVC (matiz) / LVC portal operator (nuance)</td>
+        <td>Aparece en T&amp;Cs del portal LVC — requiere validación con cliente</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <strong>Matiz no resuelto / Unresolved nuance:</strong>
+    Los Términos del portal LVC nombran a <em>Palace Resorts Reservations, S.A. de C.V.</em> y
+    <em>Palace Premier Dominicana, S.R.L.</em>, no a Solaya. Esto sugiere que LVC y Paradise Pass
+    podrían ser productos comerciales <strong>distintos pero coexistentes</strong> dentro del ecosistema
+    PAM/RCD. <strong>Confirmar con el cliente</strong> antes de cargar al KB un statement explícito
+    sobre la relación contractual entre ambos.
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<section id="sec4">
+  <h2><span class="num">4</span>Propiedades participantes / Participating Properties</h2>
+
+  <div class="lang-block">
+    <div class="es">
+      <div class="lang-tag">Español</div>
+      <p>
+        Las <strong>9 propiedades</strong> presentes en el repositorio se mapean así contra Paradise Pass
+        (según <code>paradisepass.com</code>):
+      </p>
+    </div>
+    <div class="en">
+      <div class="lang-tag">English</div>
+      <p>
+        The <strong>9 properties</strong> in the repo map to Paradise Pass as follows
+        (per <code>paradisepass.com</code>):
+      </p>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Acrónimo</th>
+        <th>Nombre completo / Full name</th>
+        <th>Ubicación</th>
+        <th>Segmento</th>
+        <th>En Paradise Pass</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>HRHC</strong></td><td>Hard Rock Hotel Cancun</td><td>Cancún, México</td><td>Familiar</td><td><span class="pill applies">Sí</span></td></tr>
+      <tr><td><strong>HRRM</strong></td><td>Hard Rock Hotel Riviera Maya (Hacienda + Heaven 18+)</td><td>Playa del Carmen, México</td><td>Familiar + Solo Adultos</td><td><span class="pill applies">Sí</span></td></tr>
+      <tr><td><strong>HRHV</strong></td><td>Hard Rock Hotel Vallarta</td><td>Puerto Vallarta, México</td><td>Familiar</td><td><span class="pill applies">Sí</span></td></tr>
+      <tr><td><strong>HRLC</strong></td><td>Hard Rock Hotel Los Cabos</td><td>Los Cabos, México</td><td>Familiar</td><td><span class="pill applies">Sí</span></td></tr>
+      <tr><td><strong>HRPC</strong></td><td>Hard Rock Hotel &amp; Casino Punta Cana</td><td>Punta Cana, RD</td><td>Familiar (Casino 18+)</td><td><span class="pill applies">Sí</span></td></tr>
+      <tr><td><strong>AVA</strong></td><td>AVA Resort Cancun</td><td>Cancún, México</td><td>Familiar de ultra-lujo · Sede Legends of Paradise 2026</td><td><span class="pill applies">Sí</span></td></tr>
+      <tr><td><strong>UNICO RM</strong></td><td>UNICO 20°87° Hotel Riviera Maya</td><td>Playa del Carmen, México</td><td>Solo Adultos 18+</td><td><span class="pill applies">Sí</span></td></tr>
+      <tr><td><strong>UNICO RN</strong></td><td>UNICO 20°105° Hotel Riviera Nayarit</td><td>Punta de Mita, México</td><td>Solo Adultos 18+</td><td><span class="pill applies">Sí</span></td></tr>
+      <tr><td><strong>UNICO MB</strong></td><td>UNICO Jamaica (Montego Bay)</td><td>Montego Bay, Jamaica</td><td>Solo Adultos 18+</td><td><span class="pill foreign">⚠ NO listado</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout danger">
+    <strong>Alerta UNICO Jamaica / UNICO Jamaica alert:</strong>
+    Esta propiedad aparece en el repositorio del cliente (carpeta <code>Propiedades/UNICO JAMAICA/</code>)
+    pero <strong>NO aparece</strong> en <code>paradisepass.com</code> ni en el portafolio público de PAM Hotels
+    (limitado a EE.UU., México y RD). Posibles explicaciones: (a) propiedad anunciada / en pipeline,
+    (b) afiliación corporativa pero no participante en Paradise Pass, (c) error del cliente.
+    <strong>Validar antes de incluir en el KB del bot.</strong>
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<section id="sec5">
+  <h2><span class="num">5</span>Estructura del repositorio / Repository Structure</h2>
+
+  <p>El directorio <code>PAM_Hotels_Knowledge_Base_RAG/</code> contiene:</p>
+
+  <pre><code>PAM_Hotels_Knowledge_Base_RAG/
+├── FAQ´s/                          (1 archivo XLSX)
+├── Marcas/                         (VACÍO)
+├── ON TOUR TRANSPORTACION/         (1 PDF)
+├── Personalidad_Coversacional/     (1 DOCX)
+├── Politicas de Cancelacion...     (2 PDFs)
+├── Programa de referidos/          (1 XLSX)
+└── Propiedades/                    (45 PDFs en 9 hoteles)
+    ├── AVA/  HRHC/  HRHV/  HRLC/  HRPC/  HRRM/
+    └── UNICO RIVIERA MAYA/  UNICO RIVIERA NAYARIT/  UNICO JAMAICA/
+
+Total: 51 archivos · 7 carpetas principales · 3 idiomas (ES/EN/PT)</code></pre>
+
+  <div class="legend">
+    <div><span class="pill applies">Aplica a Paradise Pass</span></div>
+    <div><span class="pill shared">Compartido (Paradise Pass + LVC)</span></div>
+    <div><span class="pill partial">Mixto / segmentar contenido</span></div>
+    <div><span class="pill foreign">Ajeno a Paradise Pass (LVC-only o fuera de scope)</span></div>
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<section id="sec6">
+  <h2><span class="num">6</span>Mapeo archivo-por-archivo / File-by-File Mapping</h2>
+
+  <h3>6.1 Personalidad Conversacional</h3>
+  <table>
+    <thead><tr><th>Archivo</th><th>Contenido</th><th>Aplicabilidad</th><th>Audiencia</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>Tono y Voz Bot - LVC_SF.docx</code></td>
+        <td>Personalidad oficial del bot. Define arquetipos (Anfitrión Exclusivo + Concierge Experto),
+          atributos (calidez, elegancia, cercanía, etc.), diferenciación de audiencia Paradise Pass vs.
+          Legendary, principios de comunicación, vocabulario oficial, escalamiento humano, adaptación
+          por idioma (ES/EN/PT).</td>
+        <td><span class="pill shared">Compartido</span></td>
+        <td>Bot · ambos productos</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>6.2 FAQ's</h3>
+  <table>
+    <thead><tr><th>Archivo</th><th>Contenido</th><th>Aplicabilidad</th><th>Audiencia</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx</code></td>
+        <td>4 FAQs × 9 propiedades. Cubre: Resort Credits / Legend Coins / Unlimited Inclusions;
+          restricciones de edad; beneficios por tier (Deluxe, VIP, Hall of Fame, Chairman);
+          reservas de restaurantes y dress codes.</td>
+        <td><span class="pill partial">Mixto</span></td>
+        <td>Socios LVC (principalmente) + datos transversales útiles para Paradise Pass</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="source">
+    Recomendación: dividir esta matriz al cargarla. Las preguntas sobre <em>edad, dress codes,
+    áreas familiares vs adultos</em> son universales y aplican a ambos productos. Las preguntas sobre
+    <em>Legend Coins, niveles de tier (Chairman, Hall of Fame), beneficios por nivel</em> son LVC-only.
+  </p>
+
+  <h3>6.3 Políticas de Cancelación, No Show, Cambios y Hold</h3>
+  <table>
+    <thead><tr><th>Archivo</th><th>Contenido</th><th>Aplicabilidad</th><th>Audiencia</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>Política de Cancelación socios_.pdf</code></td>
+        <td>Penalizaciones escalonadas (600–1,500 USD según antelación); tarifas especiales en
+          temporadas alta; políticas de grupo (10+ reservas); penalizaciones de no-show;
+          protocolo ECPAT (protección de menores); política de mascotas.</td>
+        <td><span class="pill applies">Aplica</span></td>
+        <td>Socios LVC + huéspedes Paradise Pass que activen estancias</td>
+      </tr>
+      <tr>
+        <td><code>Políticas de Reservaciones LVC.pdf</code></td>
+        <td>Reglas de reservación LVC-específicas: fees de cambio (10 USD), descuentos de grupo
+          (50% de flexibilidad de pago), transportación incluida (4+ noches), ECPAT, mascotas.</td>
+        <td><span class="pill foreign">LVC-only</span></td>
+        <td>Solo socios LVC</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>6.4 Programa de Referidos</h3>
+  <table>
+    <thead><tr><th>Archivo</th><th>Contenido</th><th>Aplicabilidad</th><th>Audiencia</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>PROGRAMA REFERIDOS.xlsx</code></td>
+        <td>5 sub-programas activos:
+          <ul>
+            <li><strong>Dynamic Referral Rewards:</strong> 500 RCo noches por presentación atendida.</li>
+            <li><strong>Dynamic Referral Week:</strong> 2x1, 4x2, 6x3 (manda 2 refs, recibe 1 semana).</li>
+            <li><strong>Web Rate 15% Referral:</strong> 15% desc. tarifa web + 1 noche; 2 noches si compra Deluxe; 3 si VIP+.</li>
+            <li><strong>Referral Experience Nights:</strong> tarifa web menos 500.</li>
+            <li><strong>Dynamic Referral Nights:</strong> 2 noches por reservar 7; 2+2 si compra membresía.</li>
+          </ul>
+        </td>
+        <td><span class="pill foreign">LVC-only</span></td>
+        <td>Socios LVC emisores de referidos</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>6.5 ON TOUR Transportación</h3>
+  <table>
+    <thead><tr><th>Archivo</th><th>Contenido</th><th>Aplicabilidad</th><th>Audiencia</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>INFORMACIÓN ON TOUR BY RCD HOTELS 2026.pdf</code></td>
+        <td>Tarifario de transportación terrestre 2026 (act. 20/02/2026) para 9 propiedades.
+          Opciones privadas y compartidas, política de cancelación 24h gratis, fees de silla infantil,
+          límites de equipaje. Cubre Hard Rock, UNICO, AVA y Nobu Los Cabos.</td>
+        <td><span class="pill applies">Aplica</span></td>
+        <td>Huéspedes en general + miembros</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="source">
+    Nota: el nombre del archivo aún usa "RCD HOTELS" (legacy). Mantener el contenido pero etiquetar la
+    fuente como <em>operador: PAM Hotels (ex-RCD)</em> en la metadata.
+  </p>
+
+  <h3>6.6 Propiedades (45 archivos)</h3>
+  <p>
+    Cada uno de los 9 hoteles tiene dos sub-conjuntos: <strong>Fact Sheets</strong> (descripción general
+    del resort) y <strong>Room Descriptions</strong> (tipologías de habitación). La mayoría está disponible
+    en ES, EN y PT.
+  </p>
+  <table>
+    <thead><tr><th>Hotel</th><th>Fact Sheets</th><th>Room Descriptions</th><th>Aplicabilidad</th></tr></thead>
+    <tbody>
+      <tr><td>AVA Resort Cancun</td><td>ES, EN, PT</td><td>ES, EN(layouts)</td><td><span class="pill applies">Aplica</span></td></tr>
+      <tr><td>Hard Rock Hotel Cancun (HRHC)</td><td>ES, EN, PT</td><td>ES, EN</td><td><span class="pill applies">Aplica</span></td></tr>
+      <tr><td>Hard Rock Hotel Riviera Maya (HRRM)</td><td>ES, EN, PT</td><td>ES, EN (Hacienda + Heaven)</td><td><span class="pill applies">Aplica</span></td></tr>
+      <tr><td>Hard Rock Hotel Vallarta (HRHV)</td><td>ES, EN, PT</td><td>ES, EN</td><td><span class="pill applies">Aplica</span></td></tr>
+      <tr><td>Hard Rock Hotel Los Cabos (HRLC)</td><td>ES, EN, PT</td><td>ES, EN</td><td><span class="pill applies">Aplica</span></td></tr>
+      <tr><td>Hard Rock Hotel Punta Cana (HRPC)</td><td>ES, EN, PT</td><td>ES, EN</td><td><span class="pill applies">Aplica</span></td></tr>
+      <tr><td>UNICO 20°87° Riviera Maya</td><td>ES, EN, PT</td><td>ES, EN</td><td><span class="pill applies">Aplica</span></td></tr>
+      <tr><td>UNICO 20°105° Riviera Nayarit</td><td>ES, EN, PT</td><td>ES, EN</td><td><span class="pill applies">Aplica</span></td></tr>
+      <tr><td>UNICO Jamaica (Montego Bay)</td><td>ES, EN</td><td>EN</td><td><span class="pill foreign">⚠ Validar</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>6.7 Marcas</h3>
+  <div class="callout warn">
+    <strong>Carpeta vacía / Empty folder:</strong>
+    <code>Marcas/</code> no contiene archivos. Se recomienda llenarla con la <em>brand guide</em>
+    de PAM Hotels (post-rebranding), descripciones oficiales de cada marca (Hard Rock All-Inclusive,
+    UNICO Hotel Collection, AVA Resort, Nobu Hotels, Residence Inn by Marriott que el grupo opera) y
+    el lineamiento de comunicación post-evolución RCD → PAM.
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<section id="sec7">
+  <h2><span class="num">7</span>Propuesta de Data Libraries / Data Library Proposal</h2>
+
+  <div class="lang-block">
+    <div class="es">
+      <div class="lang-tag">Español</div>
+      <p>
+        Agentforce permite definir <strong>múltiples Data Libraries</strong> consumidas por un <em>retriever</em>
+        vectorial. Recomendamos <strong>6 bibliotecas</strong> en lugar de una sola monolítica, por tres razones:
+        (1) control de acceso por audiencia, (2) routing del retriever por intent del usuario,
+        (3) ciclos de actualización independientes.
+      </p>
+    </div>
+    <div class="en">
+      <div class="lang-tag">English</div>
+      <p>
+        Agentforce supports <strong>multiple Data Libraries</strong> consumed by a vector
+        <em>retriever</em>. We recommend <strong>6 libraries</strong> instead of one monolith, for three reasons:
+        (1) audience-based access control, (2) intent-based retriever routing,
+        (3) independent refresh cycles.
+      </p>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Data Library</th>
+        <th>Contenido</th>
+        <th>Origen (carpetas del repo)</th>
+        <th>Audiencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>DL-BrandVoice</strong></td>
+        <td>Personalidad, tono, arquetipos, vocabulario oficial, principios de comunicación, adaptación por idioma, reglas de escalamiento humano.</td>
+        <td><code>Personalidad_Coversacional/</code></td>
+        <td>Sistema (system prompt augmentation) — NO indexada como contenido respondible</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>DL-Programs</strong></td>
+        <td>Definición y mecánica de Paradise Pass; ecosistema Legendary; tiers (Deluxe/VIP/HoF/Chairman); Legend Coins; Resort Credits; eventos (Legends of Paradise 2026); programa de referidos.</td>
+        <td><code>Programa de referidos/</code> + extractos de la matriz de FAQs sobre programa + (futuro) brand guide.</td>
+        <td>Paradise Pass · LVC · prospects</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>DL-Policies</strong></td>
+        <td>Cancelaciones, no-show, cambios, hold; políticas de grupo; ECPAT; mascotas; políticas de reservaciones LVC; T&amp;Cs de certificados Paradise Pass.</td>
+        <td><code>Politicas de Cancelacion, No show, Cambios y Hold/</code></td>
+        <td>Todos los públicos (con marca de tier-específico)</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>DL-Properties</strong></td>
+        <td>Fact sheets y descripciones de habitación de las 9 propiedades, en ES/EN/PT. Metadata: <code>property</code>, <code>language</code>, <code>doc_type</code>, <code>segment</code> (familiar/adults-only).</td>
+        <td><code>Propiedades/*</code> (45 PDFs)</td>
+        <td>Todos los públicos</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>DL-Operations</strong></td>
+        <td>Transportación ON TOUR 2026, traslados, transfers, tarifas privadas/compartidas, sillas infantiles, equipaje, contactos por propiedad.</td>
+        <td><code>ON TOUR TRANSPORTACION/</code></td>
+        <td>Huéspedes con reserva activa</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>DL-FAQs</strong></td>
+        <td>Preguntas frecuentes operativas y de uso de beneficios, normalizadas a formato Q/A por propiedad y tema.</td>
+        <td>Reconstruir desde <code>FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx</code> (un fragmento por celda).</td>
+        <td>Mixto · separar tags <code>audience=lvc</code> vs <code>audience=any</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout info">
+    <strong>Por qué BrandVoice no se indexa / Why BrandVoice is not indexed:</strong>
+    El documento de tono no debe ser recuperado por el retriever — debe vivir en el <em>system prompt</em>
+    o como instrucciones de la <em>Agent Topic</em>. Si entra al RAG, el bot puede citar literalmente reglas
+    internas al usuario ("según mi guía de tono debo ser cálido…"), lo cual rompe la ilusión conversacional.
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<section id="sec8">
+  <h2><span class="num">8</span>Estrategia de chunking y metadata / Chunking &amp; Metadata Strategy</h2>
+
+  <h3>8.1 Reglas de chunking por tipo de documento</h3>
+  <table>
+    <thead>
+      <tr><th>Tipo de doc</th><th>Tamaño de chunk</th><th>Overlap</th><th>Estrategia de corte</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Fact Sheet (PDF, prosa)</td>
+        <td>500–800 tokens</td>
+        <td>10–15%</td>
+        <td>Por sección semántica (amenidades, restaurantes, kids club, etc.). NO por página.</td>
+      </tr>
+      <tr>
+        <td>Room Descriptions (PDF, tabular)</td>
+        <td>1 habitación = 1 chunk</td>
+        <td>0%</td>
+        <td>Por tipología de habitación. Cada chunk autocontenido.</td>
+      </tr>
+      <tr>
+        <td>FAQs (XLSX)</td>
+        <td>1 Q/A = 1 chunk</td>
+        <td>0%</td>
+        <td>Pregunta + respuesta como unidad atómica. Nunca agrupar.</td>
+      </tr>
+      <tr>
+        <td>Políticas (PDF)</td>
+        <td>200–400 tokens</td>
+        <td>20%</td>
+        <td>Por cláusula. Overlap alto porque las cláusulas se referencian entre sí.</td>
+      </tr>
+      <tr>
+        <td>ON TOUR Tarifario</td>
+        <td>1 propiedad = 1 chunk</td>
+        <td>0%</td>
+        <td>Tabla por hotel como bloque único. Reescribir a prosa para mejor recall.</td>
+      </tr>
+      <tr>
+        <td>Programa Referidos (XLSX)</td>
+        <td>1 sub-programa = 1 chunk</td>
+        <td>0%</td>
+        <td>Cada uno de los 5 programas como chunk independiente con su mecánica completa.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>8.2 Metadata schema obligatorio</h3>
+  <p>Cada chunk debe llevar (mínimo) estos campos para habilitar filtros pre-retrieval:</p>
+  <pre><code>{
+  "doc_id":          "ava_factsheet_es_v2026-03",
+  "library":         "DL-Properties",          // 1 of 6
+  "property":        "AVA",                    // null si transversal
+  "property_brand":  "AVA Resort",             // Hard Rock | UNICO | AVA | null
+  "language":        "es",                     // es | en | pt
+  "audience":        ["paradise_pass", "lvc"], // any | paradise_pass | lvc
+  "tier":            null,                     // Deluxe | VIP | HoF | Chairman | null
+  "segment":         "family",                 // family | adults_only | mixed
+  "doc_type":        "fact_sheet",             // fact_sheet | room_desc | faq | policy | program | ops
+  "topic":           ["amenities","dining"],
+  "source_file":     "AVA_FACT_SHEET_GENERAL_SP.pdf",
+  "effective_date":  "2026-01-01",
+  "last_updated":    "2026-06-22",
+  "operator_legacy": "RCD Hotels",             // para handling de docs pre-rebranding
+  "operator_current":"PAM Hotels"
+}</code></pre>
+
+  <h3>8.3 Pre-procesamiento crítico antes de cargar</h3>
+  <ol>
+    <li><strong>OCR + corrección manual</strong> de los PDFs cuyo extractor falló (varios fact sheets están
+      en formato Google Docs Renderer comprimido — el chunker debe usar OCR como fallback).</li>
+    <li><strong>Reescribir tablas a prosa.</strong> Las tablas (ON TOUR, FAQs matrix) pierden contexto al
+      vectorizar. Convertir cada fila a oración completa:
+      <br><em>"Para el Hard Rock Hotel Cancún, el traslado privado desde el Aeropuerto Internacional de Cancún
+      tiene una tarifa de [X USD]; la cancelación es gratuita con 24 horas de anticipación."</em></li>
+    <li><strong>Unificar nomenclatura RCD ↔ PAM.</strong> Agregar al chunk un nota: <em>"RCD Hotels evolucionó
+      a PAM Hotels en 2026; ambos nombres refieren al mismo grupo operador."</em></li>
+    <li><strong>Normalizar idiomas.</strong> Cargar los 3 idiomas (ES/EN/PT) como chunks separados con el
+      mismo <code>doc_id</code> base y solo el <code>language</code> diferente. El retriever filtra por
+      <code>language = user_locale</code>.</li>
+    <li><strong>Quitar PII de las matrices.</strong> Revisar que la matriz LVC no contenga datos de socios
+      reales (nombres, emails, números de membresía).</li>
+    <li><strong>Glosario de acrónimos como chunks dedicados.</strong> HRHC, HRRM, HRHV, HRLC, HRPC, AVA,
+      UNICO RM, UNICO RN, RCo, LVC, ECPAT, etc. — un chunk por término con expansión completa.</li>
+  </ol>
+
+  <h3>8.4 Estructura física recomendada en Salesforce</h3>
+  <pre><code>Salesforce Data Cloud / Agentforce
+└── Knowledge Library: "Paradise Pass &amp; PAM Hotels Concierge"
+    ├── Topic: BrandVoice         → no-retrieval, system prompt only
+    ├── Topic: Programs           → DL-Programs
+    ├── Topic: Policies           → DL-Policies
+    ├── Topic: Properties         → DL-Properties (filtered by property + language)
+    ├── Topic: Operations         → DL-Operations
+    └── Topic: FAQs               → DL-FAQs
+
+Retriever config:
+  - Pre-filter:  language = $user.locale
+                 AND (audience = "any" OR audience CONTAINS $user.product)
+  - Top-K:       5–8 por library, agregado y re-ranqueado
+  - Re-rank:     Cross-encoder por relevancia + recencia (last_updated DESC tiebreaker)
+  - Fallback:    Si no hay match con threshold > 0.72, escalar a humano</code></pre>
+</section>
+
+<!-- ============================================================== -->
+<section id="sec9">
+  <h2><span class="num">9</span>Casos de uso del Concierge / Concierge Use Cases</h2>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4>Paradise Pass (descubrimiento / discovery)</h4>
+      <ul>
+        <li>¿Qué es Paradise Pass y cómo lo activo?</li>
+        <li>¿Cuándo expira mi certificado? ¿Cómo evito perderlo?</li>
+        <li>¿Qué propiedades familiares vs solo-adultos puedo elegir?</li>
+        <li>¿Cómo uso mis Resort Credits? ¿En qué se canjean?</li>
+        <li>¿Qué incluye Legends of Paradise 2026 en AVA Cancún?</li>
+        <li>¿Cómo reservo mi estancia de 4/5 o 7/8 noches?</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Legendary Vacation Club (pertenencia / belonging)</h4>
+      <ul>
+        <li>Saldo de Legend Coins y movimientos.</li>
+        <li>Beneficios por nivel (Deluxe → VIP → Hall of Fame → Chairman).</li>
+        <li>Reservaciones, cambios y políticas de cancelación.</li>
+        <li>Programa de referidos: ¿qué noches gano y cómo?</li>
+        <li>Reserva de restaurantes y dress codes.</li>
+        <li>Acceso a zonas VIP, lounges, Heaven, áreas Rock Royalty.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Operaciones (todos / all audiences)</h4>
+      <ul>
+        <li>Traslados aeropuerto-hotel (privado vs compartido, ON TOUR).</li>
+        <li>Sillas infantiles, equipaje, requisitos especiales.</li>
+        <li>Cancelación de transfer (24h gratis).</li>
+        <li>Información de habitación: layout, vista, amenidades.</li>
+        <li>Mascotas y políticas ECPAT.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Escalamiento humano / Human handoff</h4>
+      <ul>
+        <li>Excepciones operativas.</li>
+        <li>Reclamaciones complejas.</li>
+        <li>Situaciones emocionalmente sensibles.</li>
+        <li>Solicitud explícita del usuario de hablar con persona.</li>
+        <li>Validaciones manuales (cambios de nombre, certificados perdidos).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================== -->
+<section id="sec10">
+  <h2><span class="num">10</span>Riesgos, gaps y preguntas abiertas / Risks, Gaps &amp; Open Questions</h2>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>Riesgo / gap</th><th>Impacto</th><th>Acción recomendada</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Tiers (Deluxe/VIP/HoF/Chairman) y Legend Coins <strong>no están publicados</strong> en paradisepass.com ni pamhotels.com.</td>
+        <td>Alto — riesgo de que el bot invente información o filtre datos internos.</td>
+        <td>Solicitar al cliente el documento oficial de tiers y mecánica de Legend Coins con efectividad <code>2026</code>.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Relación contractual Paradise Pass ↔ LVC <strong>no está declarada</strong> en fuentes públicas; términos del portal LVC mencionan Palace Resorts.</td>
+        <td>Medio — el bot puede confundir audiencias.</td>
+        <td>Confirmar con el cliente: ¿son productos paralelos, sucesores, o coexistentes?</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>UNICO Jamaica</strong> aparece en repo pero NO en paradisepass.com ni en el portafolio PAM.</td>
+        <td>Alto — el bot podría ofrecer una propiedad inexistente al cliente.</td>
+        <td>Validar: ¿propiedad operativa, en pipeline, o legacy fuera de Paradise Pass?</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Carpeta <code>Marcas/</code> vacía.</td>
+        <td>Medio — falta la guía oficial post-rebranding RCD → PAM.</td>
+        <td>Solicitar brand guide PAM 2026 + lineamientos de comunicación sobre el rebranding.</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Varios PDFs usan <strong>Google Docs Renderer</strong> que dificulta extracción de texto.</td>
+        <td>Medio — chunking pobre = retrieval pobre.</td>
+        <td>Aplicar OCR (e.g. Tesseract o Salesforce Document Cloud) en pipeline de ingesta. Validar muestra antes de cargar.</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>ON TOUR y Programa de Referidos <strong>no están publicados</strong> en sitios públicos.</td>
+        <td>Bajo — el bot puede manejarlos como propietarios.</td>
+        <td>Marcar <code>audience: lvc</code> hasta confirmar disponibilidad para Paradise Pass.</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Documentos mencionan "RCD" mientras la marca actual es "PAM".</td>
+        <td>Bajo — confusión de marca.</td>
+        <td>Pre-procesar: anexar nota de equivalencia. No reescribir originales (preservar trazabilidad).</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Tablas (ON TOUR, matriz FAQs) sin reescribir a prosa.</td>
+        <td>Alto — el retrieval vectorial de tablas crudas es pobre.</td>
+        <td>Linearizar a oraciones completas antes de vectorizar. Estimado: ~4–6 horas de trabajo manual o LLM-assisted.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============================================================== -->
+<section id="sec11">
+  <h2><span class="num">11</span>Fuentes / Sources</h2>
+
+  <h4>Fuentes primarias / Primary sources</h4>
+  <ul>
+    <li><a href="https://paradisepass.com">paradisepass.com</a> — sitio oficial del programa</li>
+    <li><a href="https://paradisepass.com/en">paradisepass.com/en</a> — versión EN</li>
+    <li><a href="https://paradisepass.com/en/legends-of-paradise">paradisepass.com/en/legends-of-paradise</a></li>
+    <li><a href="https://paradisepass.com/lop-ava-resort-cancun-2026.htm">Legends of Paradise · AVA Cancún 2026</a></li>
+    <li><a href="https://www.paradisepass.com/contact.htm">paradisepass.com/contact</a></li>
+    <li><a href="http://pamhotels.com/">pamhotels.com</a> — sitio corporativo actual</li>
+    <li><a href="http://pamhotels.com/newsroom">pamhotels.com/newsroom</a> — anuncio del rebranding (ene-2026)</li>
+    <li><a href="https://www.rcdhotels.com">rcdhotels.com</a> — redirige 301 a pamhotels.com</li>
+    <li><a href="https://www.unicohotelrivieramaya.com">unicohotelrivieramaya.com</a> — propiedad UNICO RM</li>
+    <li><a href="https://www.linkedin.com/company/rcd-hotels">LinkedIn · RCD Hotels</a> — anuncio de evolución a PAM</li>
+    <li><a href="https://legendary.myaccountinquiry.com">legendary.myaccountinquiry.com</a> — portal de miembros LVC</li>
+    <li><a href="https://hotel.hardrock.com/punta-cana/">Hard Rock Hotel Punta Cana</a></li>
+  </ul>
+
+  <h4>Documentos internos del cliente / Client-internal documents</h4>
+  <ul>
+    <li><code>Personalidad_Coversacional/Tono y Voz Bot - LVC_SF.docx</code> — define "Paradise Pass como puerta de entrada al ecosistema Legendary"</li>
+    <li><code>FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx</code> — referencia los tiers Deluxe/VIP/Hall of Fame/Chairman</li>
+    <li><code>Programa de referidos/PROGRAMA REFERIDOS.xlsx</code> — 5 sub-programas activos de referidos</li>
+    <li><code>ON TOUR TRANSPORTACION/INFORMACIÓN ON TOUR BY RCD HOTELS 2026.pdf</code> — tarifario act. 20/02/2026</li>
+    <li><code>Politicas de Cancelacion, No show, Cambios y Hold/*.pdf</code> (2 archivos)</li>
+    <li><code>Propiedades/*</code> — 45 archivos de fichas técnicas y descripciones de habitación</li>
+  </ul>
+
+  <h4>Metodología / Methodology</h4>
+  <p>
+    Investigación profunda multi-fuente con verificación adversarial (Deep Research):
+    5 ángulos · 17 fuentes consultadas · 70 claims extraídos · 25 verificados · <strong>23 confirmados</strong> con
+    votación 2/3 o 3/3 · 2 refutados. Total: 99 agentes ejecutados en paralelo.
+  </p>
+</section>
+
+<footer class="report-footer">
+  <p>
+    Documento generado el 2026-06-22 por Claude (Anthropic) como apoyo al ejercicio de consultoría
+    Salesforce Agentforce sobre el caso de uso de Concierge Digital del programa Paradise Pass para PAM Hotels.
+  </p>
+  <p>
+    <strong>Próximos pasos sugeridos / Suggested next steps:</strong>
+    (1) Validar con el cliente los puntos abiertos de la sección 10. (2) Solicitar brand guide PAM 2026 y
+    documentación oficial de tiers / Legend Coins. (3) Definir pipeline de ingesta con OCR + reescritura a prosa.
+    (4) Crear las 6 Data Libraries en Agentforce con metadata schema unificado. (5) Implementar retriever con
+    filtros pre-retrieval por <code>language</code> + <code>audience</code>. (6) Validar con un set golden de
+    50–80 preguntas reales antes de pasar a producción.
+  </p>
+</footer>
+
+</div>
+</body>
+</html>

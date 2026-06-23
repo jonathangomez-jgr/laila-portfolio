@@ -6,6 +6,7 @@ const NAV_LINKS = [
   { key: "laila", href: "/laila" },
   { key: "generalDemos", href: "/general-demos" },
   { key: "customerSolutions", href: "/customer-demos" },
+  { key: "insights", href: "/insights" },
 ] as const;
 
 export default function SiteFooter({

@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PAM-Sandbox — Modelo de Datos</title>
+<style>
+  :root{
+    --bg:#f7f8fa; --panel:#ffffff; --panel2:#eef1f5; --border:#dde2ea;
+    --text:#1f2328; --muted:#5a6470; --accent:#0969da; --warn:#9a6700;
+    --good:#1a7f37; --bad:#cf222e; --chip:#f0f3f7;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.55}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:32px 40px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:linear-gradient(180deg,var(--bg) 80%,rgba(247,248,250,0));backdrop-filter:blur(6px);z-index:5}
+  h1{margin:0 0 4px;font-size:24px;letter-spacing:-.01em}
+  h2{margin:32px 0 12px;font-size:20px;border-bottom:1px solid var(--border);padding-bottom:6px}
+  h3{margin:20px 0 8px;font-size:16px;color:var(--accent)}
+  .sub{color:var(--muted);font-size:13px}
+  main{max-width:1200px;margin:0 auto;padding:24px 40px 80px}
+  .grid{display:grid;gap:16px}
+  .cols-4{grid-template-columns:repeat(4,1fr)}
+  .cols-3{grid-template-columns:repeat(3,1fr)}
+  .cols-2{grid-template-columns:repeat(2,1fr)}
+  @media (max-width:900px){.cols-4,.cols-3,.cols-2{grid-template-columns:1fr 1fr}}
+  @media (max-width:560px){.cols-4,.cols-3,.cols-2{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:14px 16px;box-shadow:0 1px 2px rgba(31,35,40,.04)}
+  .stat{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:14px 16px;box-shadow:0 1px 2px rgba(31,35,40,.04)}
+  .stat .n{font-size:22px;font-weight:600}
+  .stat .l{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .chip{display:inline-block;background:var(--chip);border:1px solid var(--border);border-radius:12px;padding:2px 8px;font-size:11.5px;color:var(--muted);margin:2px 4px 2px 0}
+  .chip.accent{color:var(--accent);border-color:#a4c4ec}
+  .chip.warn{color:var(--warn);border-color:#e7c98a}
+  .chip.good{color:var(--good);border-color:#a5d6b1}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0 4px}
+  th,td{padding:6px 10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+  th{color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.04em;background:var(--panel2)}
+  tr:hover td{background:#f3f5f8}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;color:var(--accent)}
+  code{background:var(--chip);padding:1px 6px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:#6f42c1}
+  .legend{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 16px}
+  .pill{font-size:12px;color:var(--muted);background:var(--panel);border:1px solid var(--border);padding:2px 8px;border-radius:999px}
+  .pill.dot::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .pill.crm.dot::before{background:#0969da}
+  .pill.com.dot::before{background:#8250df}
+  .pill.rcd.dot::before{background:#218bff}
+  .pill.cat.dot::before{background:#1a7f37}
+  .pill.res.dot::before{background:#bf8700}
+  .pill.cob.dot::before{background:#cf222e}
+  .pill.svc.dot::before{background:#bc4c00}
+  .pill.legacy.dot::before{background:#6e7781}
+  .pill.ops.dot::before{background:#0550ae}
+  .mermaid{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:14px;overflow:auto;font-size:13px}
+  details{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:8px 0;box-shadow:0 1px 2px rgba(31,35,40,.04)}
+  details>summary{cursor:pointer;color:var(--text);font-weight:600;list-style:none}
+  details>summary::-webkit-details-marker{display:none}
+  details>summary::before{content:"▸ ";color:var(--muted);transition:transform .15s}
+  details[open]>summary::before{content:"▾ "}
+  .nav{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .nav a{font-size:12.5px;padding:3px 9px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;color:var(--text)}
+  .nav a:hover{border-color:var(--accent);text-decoration:none}
+  .kpi-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:12px 0 20px}
+  @media (max-width:900px){.kpi-strip{grid-template-columns:repeat(3,1fr)}}
+  .note{background:#ddf4ff;border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 14px;margin:10px 0;font-size:13.5px;color:#0a3069}
+  .warn-box{background:#fff8c5;border-left:3px solid var(--warn);border-radius:0 6px 6px 0;padding:10px 14px;margin:10px 0;font-size:13.5px;color:#633c01}
+  .footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:12px}
+  /* mermaid theme overrides */
+  .mermaid .er.entityLabel{fill:#1f2328 !important}
+  .mermaid .er.relationshipLine{stroke:#0969da !important}
+</style>
+</head>
+<body>
+<header>
+  <h1>PAM-Sandbox — Modelo de Datos</h1>
+  <div class="sub">Org: <code>00DO400000YzKHZMA3</code> · Alias <code>PAM-Sandbox</code> · Snapshot 2026-06-23</div>
+  <nav class="nav">
+    <a href="#tldr">TL;DR</a>
+    <a href="#kpis">KPIs</a>
+    <a href="#dominios">Dominios</a>
+    <a href="#erd">ERD</a>
+    <a href="#volumen">Volumen</a>
+    <a href="#rts">Record Types</a>
+    <a href="#relaciones">Relaciones</a>
+    <a href="#observaciones">Observaciones</a>
+  </nav>
+</header>
+
+<main>
+
+<section id="tldr">
+<h2>TL;DR</h2>
+<p>Esta org modela el negocio de <b>RCD Hotels</b> — venta y operación de <b>membresías vacacionales</b> bajo tres líneas: <b>Vacation Club (VCL)</b>, <b>Paradise Pass (PPASS)</b> y <b>Legendary Experience</b>. Está construida sobre una base estándar de Salesforce (Account/Contact/Opportunity/Contract/Case) <i>fuertemente extendida</i> con 90 objetos custom organizados en 12 dominios funcionales, y dos paquetes administrados clave: <b>Amazon Connect</b> (CTI), <b>DocuSign</b> y <b>Marketing Cloud Connect</b>.</p>
+
+<div class="note">
+  <b>Lo más importante de entender de entrada:</b><br>
+  1) Hay <b>dos stacks paralelos de contrato/membresía</b> — uno comercial (<code>Contract</code> + <code>Benefit__c</code>) y otro operativo (<code>RCD_Contract__c</code> + <code>RCD_Membership__c</code> + <code>RCD_Certificate__c</code>). Antes de tocar uno, confirma cuál es <i>source of truth</i> para el caso de uso.<br>
+  2) <code>Catalog__c</code> es el <b>diccionario universal</b> (36 record types). Casi todo lo referencia: cambiar algo ahí impacta múltiples dominios.<br>
+  3) El stack financiero tiene <b>cuatro niveles</b>: <code>PagoMes__c</code> → <code>Movimiento__c</code> → <code>TransaccionesMovimientos__c</code> → <code>TransaccionLog__c</code> + <code>VCL_Wallet</code> y <code>VCL_Abono</code> en paralelo.<br>
+  4) <b>Person Accounts está activo</b> — los huéspedes/socios son Person Accounts, no solo Contacts.
+</div>
+</section>
+
+<section id="kpis">
+<h2>KPIs de la org</h2>
+<div class="kpi-strip">
+  <div class="stat"><div class="n">90</div><div class="l">Objetos custom (no managed)</div></div>
+  <div class="stat"><div class="n">~69</div><div class="l">Objetos de paquetes</div></div>
+  <div class="stat"><div class="n">220</div><div class="l">Record Types activos</div></div>
+  <div class="stat"><div class="n">2.6 M</div><div class="l">Accounts</div></div>
+  <div class="stat"><div class="n">340 K</div><div class="l">Contracts</div></div>
+  <div class="stat"><div class="n">491 K</div><div class="l">Cases</div></div>
+</div>
+</section>
+
+<section id="dominios">
+<h2>Dominios funcionales</h2>
+<div class="legend">
+  <span class="pill crm dot">Personas / CRM</span>
+  <span class="pill com dot">Comercial</span>
+  <span class="pill rcd dot">RCD (operativo)</span>
+  <span class="pill cat dot">Catálogos / Producto</span>
+  <span class="pill res dot">Reservaciones</span>
+  <span class="pill cob dot">Cobranza / Financiero</span>
+  <span class="pill svc dot">Service</span>
+  <span class="pill legacy dot">Historial / Legacy</span>
+  <span class="pill ops dot">Ops / Integraciones</span>
+</div>
+
+<div class="grid cols-2">
+
+  <div class="card">
+    <h3>1. Personas / CRM <span class="chip crm">Crítico</span></h3>
+    <p class="sub">Quién es el cliente y cómo entró al funnel.</p>
+    <table>
+      <tr><th>Objeto</th><th>Notas</th></tr>
+      <tr><td><code>Account</code></td><td>2.6M · Person Accounts ON · 10 RTs (Person, Guest/Member, Property, Agency, Company, Competitor, Airport, Ceco…)</td></tr>
+      <tr><td><code>Contact</code></td><td>2.6M · titulares, cotitulares, empleados (PR/Concierge)</td></tr>
+      <tr><td><code>Lead</code></td><td>20K · 7 RTs</td></tr>
+      <tr><td><code>Discovery__c</code></td><td>53K · perfilamiento previo a la oportunidad</td></tr>
+      <tr><td><code>Invitation__c</code></td><td>56K · 9 RTs (External/In-house/Out-house, Path, Pools) — captación</td></tr>
+      <tr><td><code>Wave__c</code></td><td>12K · olas/cohortes de invitación</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>2. Comercial <span class="chip com">Crítico</span></h3>
+    <p class="sub">Embudo Oportunidad → Contrato → Beneficios.</p>
+    <table>
+      <tr><th>Objeto</th><th>Notas</th></tr>
+      <tr><td><code>Opportunity</code></td><td>266K · 9 RTs (CC Paradise Pass, Groups, Legendary Experience, Memberships, Referral CC, Reservaciones)</td></tr>
+      <tr><td><code>Contract</code></td><td>340K · 5 RTs (Socios, Contrato Membresía, CC PPASS, Membership, Paradise Pass) · self-refs upgrade/downgrade/parent/referido</td></tr>
+      <tr><td><code>Contract_Beneficiary__c</code></td><td>420K · cotitulares / beneficiarios</td></tr>
+      <tr><td><code>Benefit__c</code></td><td>374K · 18 RTs (Certificate, Day Pass, Golf Rounds, Legendary Week, Silver Week, Yachtvibes, Pack 3 Nights, Move In…)</td></tr>
+      <tr><td><code>VCL_His_Hoja_de_Venta__c</code></td><td>202K · histórico de hojas de venta</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>3. RCD — Stack operativo paralelo <span class="chip warn">Atención</span></h3>
+    <p class="sub">Línea de membresía "histórica" / operativa separada de la comercial. Confirma source-of-truth antes de cambios.</p>
+    <table>
+      <tr><th>Objeto</th><th>Volumen</th></tr>
+      <tr><td><code>RCD_Account_Contracts__c</code></td><td class="num">758,712</td></tr>
+      <tr><td><code>RCD_DatosContacto__c</code></td><td class="num">350,193</td></tr>
+      <tr><td><code>RCD_Certificate__c</code></td><td class="num">277,693</td></tr>
+      <tr><td><code>RCD_Contract__c</code></td><td class="num">248,358</td></tr>
+      <tr><td><code>RCD_Membership__c</code></td><td class="num">181,004</td></tr>
+      <tr><td><code>RCD_Project__c</code> / <code>RCD_Project_Sales_Office__c</code></td><td>configuración</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>4. Catálogos / Producto <span class="chip accent">Universal</span></h3>
+    <p class="sub"><code>Catalog__c</code> es el diccionario universal: 36 record types, referenciado desde todos lados.</p>
+    <table>
+      <tr><th>Objeto</th><th>Notas</th></tr>
+      <tr><td><code>Catalog__c</code></td><td>16K · <b>36 RTs</b> (Rate codes, Market/Source Code, Package, Season, Room type, Properties, Annual Fee, Worksheet Room, etc.)</td></tr>
+      <tr><td><code>Benefit_Season_Hotel__c</code></td><td>215K · beneficios × temporada × hotel</td></tr>
+      <tr><td><code>Benefit_Season_Room__c</code></td><td>1.18M · beneficios × temporada × tipo de habitación</td></tr>
+      <tr><td><code>Season__c</code> / <code>Season_Rate_Hotel__c</code></td><td>temporadas y tarifas</td></tr>
+      <tr><td><code>VCL_Room_type__c</code> / <code>Airline_Catalog__c</code> / <code>Blackout__c</code></td><td>habitaciones, aerolíneas, bloqueos</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>5. Reservaciones <span class="chip accent">Hub</span></h3>
+    <p class="sub"><code>Reservation__c</code> es la entidad <b>más conectada</b>: ~40 lookups, toca todos los dominios.</p>
+    <table>
+      <tr><th>Objeto</th><th>Notas</th></tr>
+      <tr><td><code>Reservation__c</code></td><td>761K · refs a Account(×6 roles), Contract, Opportunity, Benefit, PagoMes, Movimiento, Case, Invitation, Catalog(×8), VCL_Room_type, autoref</td></tr>
+      <tr><td><code>Reservation_Items__c</code></td><td>42K · 4 RTs (Rooms / Service / Tours / Transfer)</td></tr>
+      <tr><td><code>ReservationPolicy__c</code></td><td>82K</td></tr>
+      <tr><td><code>Booking__c</code> / <code>ConverterVoucher__c</code></td><td>vouchers y reservas auxiliares</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>6. Cobranza / Financiero <span class="chip cob">Más pesado</span></h3>
+    <p class="sub">Stack de cuatro niveles + wallet + abonos sueltos.</p>
+    <table>
+      <tr><th>Objeto</th><th>Vol</th></tr>
+      <tr><td><code>Movimiento__c</code></td><td class="num">4,390,641</td></tr>
+      <tr><td><code>TransaccionesMovimientos__c</code></td><td class="num">2,323,169</td></tr>
+      <tr><td><code>PagoMes__c</code></td><td class="num">971,115</td></tr>
+      <tr><td><code>VCL_Abono__c</code></td><td class="num">725,265</td></tr>
+      <tr><td><code>TransaccionLog__c</code></td><td class="num">140,511</td></tr>
+      <tr><td><code>VCL_WalletMovement__c</code> / <code>VCL_Wallet__c</code></td><td class="num">8,819 / 3,234</td></tr>
+      <tr><td><code>VCL_PaymentPreference__c</code>, <code>Form_of_payment__c</code>, <code>VCL_Credit_Card_Hints__c</code>, <code>Gateway__c</code>, <code>Terminal__c</code>, <code>Token__c</code>, <code>PAM_OTP__c</code></td><td>medios de pago + tokenización</td></tr>
+    </table>
+    <p class="sub" style="margin-top:6px">RTs financieros: Enganche, Mensualidades, Anualidades, Costo de contrato, Cuota Admin, Financiamiento, Tabla de amortización, Add-ons, Converters, Refund.</p>
+  </div>
+
+  <div class="card">
+    <h3>6b. Cancelaciones / Refunds <span class="chip cob">Financiero</span></h3>
+    <table>
+      <tr><td><code>VCL_CancellationFund__c</code> · <code>VCL_CancellationFundMovement__c</code> · <code>VCL_CancellationReceivable__c</code></td></tr>
+      <tr><td><code>VCL_Hist_Hoja_de_cancelacion__c</code> (27K) · <code>Worksheet_Authorization__c</code> (25K)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>7. Comisiones</h3>
+    <table>
+      <tr><th>Objeto</th><th>Notas</th></tr>
+      <tr><td><code>CommissionBatch__c</code></td><td>24 · lote</td></tr>
+      <tr><td><code>CommissionEntry__c</code></td><td>46K · entradas → Contract / Opportunity / Contact(empleado)</td></tr>
+      <tr><td><code>CommissionRuleCatalog__c</code></td><td>reglas</td></tr>
+      <tr><td><code>VCL_CostCenterChargeBatch__c</code> / <code>Entry__c</code></td><td>cargos a centro de costos</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>8. Service (Call Center) <span class="chip svc">29 RTs</span></h3>
+    <p class="sub">Toda la operación CC vive aquí. Conectado a casi todo: Reservation, Contract, RCD_Contract, Movimiento, PagoMes, Transaccion, Benefit, Catalog, Invitation, Opportunity.</p>
+    <p class="sub"><b>RTs principales:</b> B2C Contact Center, RCD Contact Center, Reservas, Paradise Pass, VCL Contact Center, VCL Audit, VCL Capacitación y Calidad, Contratos CIO, Finanzas, Refunds and Disputes, Member Experience Service, Premier Customer, Ontour, Legendary {Customer / ASM / Collection / Operation / Reservas / VLO / Vacation Maker / Specialized Collections}…</p>
+  </div>
+
+  <div class="card">
+    <h3>9. Historiales / Legacy <span class="chip legacy">Migración</span></h3>
+    <table>
+      <tr><th>Objeto</th><th>Vol</th></tr>
+      <tr><td><code>Hist_LC__c</code></td><td class="num">1,153,655</td></tr>
+      <tr><td><code>VCL_Hist_legacy_Notes__c</code></td><td class="num">431,270</td></tr>
+      <tr><td><code>Hist_PP__c</code></td><td class="num">211,781</td></tr>
+      <tr><td><code>Hist_LC_UN__c</code></td><td class="num">89,179</td></tr>
+      <tr><td><code>History_Record__c</code></td><td class="num">~varios</td></tr>
+    </table>
+    <p class="sub">Volumen alto, parecen dumps de sistemas previos. Candidato a archivado.</p>
+  </div>
+
+  <div class="card">
+    <h3>10. Operación / Logging</h3>
+    <table>
+      <tr><th>Objeto</th><th>Vol</th></tr>
+      <tr><td><code>Log_Message__c</code></td><td class="num">6,439,654</td></tr>
+      <tr><td><code>Comments__c</code></td><td class="num">83,908</td></tr>
+      <tr><td><code>Time_With_Case__c</code></td><td>SLA / tiempo en caso</td></tr>
+      <tr><td><code>Configuracion__c</code></td><td>8 reg · 14 RTs (settings paramétricos)</td></tr>
+      <tr><td><code>EBA_Note__c</code> / <code>EBA_Additional_Info__c</code></td><td>notas internas</td></tr>
+    </table>
+    <p class="sub"><code>Log_Message__c</code> con 6.4M registros: revisar política de retención.</p>
+  </div>
+
+  <div class="card">
+    <h3>11. Integraciones (paquetes) <span class="chip ops">Managed</span></h3>
+    <table>
+      <tr><td><code>amazonconnect__*</code></td><td>CTI con Amazon Connect (AC_PhoneCall, AC_ContactTraceRecord, AC_Queue*, etc.)</td></tr>
+      <tr><td><code>dfsle__*</code></td><td>DocuSign (Envelope, Recipient, Status, Documents)</td></tr>
+      <tr><td><code>et4ae5__*</code></td><td>Marketing Cloud Connect (SendDefinition, Automated_Send, IndividualEmailResult, Business_Unit, SMS)</td></tr>
+      <tr><td><code>datamask__*</code></td><td>Salesforce Data Mask (sandbox)</td></tr>
+    </table>
+  </div>
+
+</div>
+</section>
+
+<section id="erd">
+<h2>Diagramas de relaciones</h2>
+<p class="sub">Vistas resumidas — los lookups técnicos (CreatedBy / OwnerId / RecordTypeId) se omiten.</p>
+
+<h3>Vista global (alto nivel)</h3>
+<div class="mermaid">
+flowchart LR
+  classDef crm fill:#ddf4ff,stroke:#0969da,color:#0a3069
+  classDef com fill:#fbefff,stroke:#8250df,color:#3b246b
+  classDef rcd fill:#dff7ff,stroke:#218bff,color:#0a3069
+  classDef cat fill:#dafbe1,stroke:#1a7f37,color:#0f4f1c
+  classDef res fill:#fff8c5,stroke:#bf8700,color:#633c01
+  classDef cob fill:#ffebe9,stroke:#cf222e,color:#660018
+  classDef svc fill:#fff1e5,stroke:#bc4c00,color:#5d2900
+
+  Acc(Account / Person Acc · 2.6M):::crm
+  Con(Contact · 2.6M):::crm
+  Lead(Lead · 20K):::crm
+  Inv(Invitation · 56K):::crm
+  Dis(Discovery · 53K):::crm
+
+  Opp(Opportunity · 266K):::com
+  Ctr(Contract · 340K):::com
+  Bnf(Benefit · 374K):::com
+  CB(Contract_Beneficiary · 420K):::com
+
+  RCDc(RCD_Contract · 248K):::rcd
+  RCDm(RCD_Membership · 181K):::rcd
+  RCDe(RCD_Certificate · 278K):::rcd
+  RCDac(RCD_Account_Contracts · 759K):::rcd
+
+  Cat(Catalog · 16K · 36 RTs):::cat
+  Bsh(Benefit_Season_Hotel · 215K):::cat
+  Bsr(Benefit_Season_Room · 1.18M):::cat
+
+  Res(Reservation · 761K):::res
+  RI(Reservation_Items · 42K):::res
+
+  PM(PagoMes · 971K):::cob
+  Mov(Movimiento · 4.4M):::cob
+  Trx(TransaccionesMovimientos · 2.3M):::cob
+  Wal(VCL_Wallet · 3K):::cob
+  Abn(VCL_Abono · 725K):::cob
+
+  Csv(Case · 491K · 29 RTs):::svc
+
+  Lead --> Inv
+  Inv --> Opp
+  Dis --> Opp
+  Acc --- Con
+  Acc --> Opp
+  Acc --> Ctr
+  Acc --> RCDac
+  Con --> Opp
+  Con --> Ctr
+
+  Opp --> Ctr
+  Ctr --> Bnf
+  Ctr --> CB
+  Ctr --> Res
+  Ctr --> Mov
+  Ctr --> PM
+  Ctr --> Inv
+
+  Bnf --> Bsh --> Bsr
+  Cat -.referenciado por todos.-> Opp
+  Cat -.-> Res
+  Cat -.-> Bnf
+  Cat -.-> Csv
+  Cat -.-> Inv
+
+  Res --> RI
+  Res --> Csv
+  Res --> Inv
+  Res --> Mov
+
+  PM --> Mov --> Trx
+  Trx --> Abn
+  Abn --> Wal
+
+  RCDac --> Acc
+  RCDac --> RCDc
+  RCDc --> RCDm
+  RCDc --> RCDe
+
+  Csv --> Acc
+  Csv --> Con
+  Csv --> Ctr
+  Csv --> Mov
+  Csv --> PM
+</div>
+
+<h3>Embudo comercial (Lead → Contrato)</h3>
+<div class="mermaid">
+flowchart LR
+  L[Lead] --> I[Invitation__c<br>9 RTs · 56K]
+  D[Discovery__c<br>53K] --> O
+  I --> O[Opportunity<br>9 RTs · 266K]
+  W[Wave__c] --> I
+  O --> C[Contract<br>5 RTs · 340K]
+  C --> B[Benefit__c<br>18 RTs · 374K]
+  C --> CB[Contract_Beneficiary__c<br>420K]
+  C -. upgrade/downgrade/parent .-> C
+  C --> R[Reservation__c<br>761K]
+</div>
+
+<h3>Stack financiero / cobranza</h3>
+<div class="mermaid">
+flowchart LR
+  C[Contract] --> PM[PagoMes__c<br>11 RTs · 971K]
+  PM --> M[Movimiento__c<br>12 RTs · 4.4M]
+  M --> T[TransaccionesMovimientos__c<br>12 RTs · 2.3M]
+  T --> TL[TransaccionLog__c<br>140K]
+  T --> A[VCL_Abono__c<br>725K]
+  A --> W[VCL_Wallet__c<br>3K]
+  WM[VCL_WalletMovement__c<br>9K] --> W
+  PM --> WM
+  PM -. medios de pago .-> FOP[Form_of_payment__c]
+  PM --> PP[VCL_PaymentPreference__c]
+  FOP --> G[Gateway__c]
+  FOP --> TR[Terminal__c]
+  FOP --> TK[Token__c / PAM_OTP__c]
+</div>
+
+<h3>Catálogos y beneficios</h3>
+<div class="mermaid">
+flowchart LR
+  Cat[Catalog__c<br>36 RTs · 16K]
+  Cat -. Rate code .-> Res[Reservation__c]
+  Cat -. Market/Source .-> Opp[Opportunity]
+  Cat -. Package .-> B[Benefit__c]
+  Cat -. Season .-> SR[Season_Rate_Hotel__c]
+  Cat -. Department/Tag .-> Case[Case]
+  Cat -. Room type .-> RT[VCL_Room_type__c]
+  B --> BSH[Benefit_Season_Hotel__c<br>215K]
+  BSH --> BSR[Benefit_Season_Room__c<br>1.18M]
+  SR --> BSH
+</div>
+
+<h3>RCD (stack operativo paralelo)</h3>
+<div class="mermaid">
+flowchart LR
+  Acc[Account] --> RAC[RCD_Account_Contracts__c<br>759K]
+  RAC --> RCDc[RCD_Contract__c<br>248K]
+  RCDc --> RCDm[RCD_Membership__c<br>181K]
+  RCDc --> RCDe[RCD_Certificate__c<br>278K]
+  RCDe --> RR[RCD_Reservation__c]
+  RDC[RCD_DatosContacto__c<br>350K] --> Acc
+  RP[RCD_Project__c] --> RPO[RCD_Project_Sales_Office__c]
+</div>
+
+</section>
+
+<section id="volumen">
+<h2>Top 30 objetos por volumen</h2>
+<table>
+  <thead><tr><th>#</th><th>Objeto</th><th class="num">Registros</th><th>Dominio</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><code>Log_Message__c</code></td><td class="num">6,439,654</td><td><span class="pill ops dot">Ops</span></td></tr>
+    <tr><td>2</td><td><code>Movimiento__c</code></td><td class="num">4,390,641</td><td><span class="pill cob dot">Cobranza</span></td></tr>
+    <tr><td>3</td><td><code>Account</code></td><td class="num">2,639,707</td><td><span class="pill crm dot">CRM</span></td></tr>
+    <tr><td>4</td><td><code>Contact</code></td><td class="num">2,627,912</td><td><span class="pill crm dot">CRM</span></td></tr>
+    <tr><td>5</td><td><code>TransaccionesMovimientos__c</code></td><td class="num">2,323,169</td><td><span class="pill cob dot">Cobranza</span></td></tr>
+    <tr><td>6</td><td><code>Benefit_Season_Room__c</code></td><td class="num">1,175,808</td><td><span class="pill cat dot">Catálogos</span></td></tr>
+    <tr><td>7</td><td><code>Hist_LC__c</code></td><td class="num">1,153,655</td><td><span class="pill legacy dot">Legacy</span></td></tr>
+    <tr><td>8</td><td><code>PagoMes__c</code></td><td class="num">971,115</td><td><span class="pill cob dot">Cobranza</span></td></tr>
+    <tr><td>9</td><td><code>Task</code> (std)</td><td class="num">779,355</td><td><span class="pill ops dot">Ops</span></td></tr>
+    <tr><td>10</td><td><code>Reservation__c</code></td><td class="num">761,248</td><td><span class="pill res dot">Reservas</span></td></tr>
+    <tr><td>11</td><td><code>RCD_Account_Contracts__c</code></td><td class="num">758,712</td><td><span class="pill rcd dot">RCD</span></td></tr>
+    <tr><td>12</td><td><code>VCL_Abono__c</code></td><td class="num">725,265</td><td><span class="pill cob dot">Cobranza</span></td></tr>
+    <tr><td>13</td><td><code>Case</code></td><td class="num">490,678</td><td><span class="pill svc dot">Service</span></td></tr>
+    <tr><td>14</td><td><code>VCL_Hist_legacy_Notes__c</code></td><td class="num">431,270</td><td><span class="pill legacy dot">Legacy</span></td></tr>
+    <tr><td>15</td><td><code>Contract_Beneficiary__c</code></td><td class="num">419,935</td><td><span class="pill com dot">Comercial</span></td></tr>
+    <tr><td>16</td><td><code>Benefit__c</code></td><td class="num">373,955</td><td><span class="pill com dot">Comercial</span></td></tr>
+    <tr><td>17</td><td><code>RCD_DatosContacto__c</code></td><td class="num">350,193</td><td><span class="pill rcd dot">RCD</span></td></tr>
+    <tr><td>18</td><td><code>Contract</code></td><td class="num">339,836</td><td><span class="pill com dot">Comercial</span></td></tr>
+    <tr><td>19</td><td><code>RCD_Certificate__c</code></td><td class="num">277,693</td><td><span class="pill rcd dot">RCD</span></td></tr>
+    <tr><td>20</td><td><code>Opportunity</code></td><td class="num">266,211</td><td><span class="pill com dot">Comercial</span></td></tr>
+    <tr><td>21</td><td><code>RCD_Contract__c</code></td><td class="num">248,358</td><td><span class="pill rcd dot">RCD</span></td></tr>
+    <tr><td>22</td><td><code>Benefit_Season_Hotel__c</code></td><td class="num">215,312</td><td><span class="pill cat dot">Catálogos</span></td></tr>
+    <tr><td>23</td><td><code>Hist_PP__c</code></td><td class="num">211,781</td><td><span class="pill legacy dot">Legacy</span></td></tr>
+    <tr><td>24</td><td><code>VCL_His_Hoja_de_Venta__c</code></td><td class="num">201,950</td><td><span class="pill legacy dot">Legacy</span></td></tr>
+    <tr><td>25</td><td><code>RCD_Membership__c</code></td><td class="num">181,004</td><td><span class="pill rcd dot">RCD</span></td></tr>
+    <tr><td>26</td><td><code>TransaccionLog__c</code></td><td class="num">140,511</td><td><span class="pill cob dot">Cobranza</span></td></tr>
+    <tr><td>27</td><td><code>Converter__c</code></td><td class="num">120,530</td><td><span class="pill com dot">Comercial</span></td></tr>
+    <tr><td>28</td><td><code>Hist_LC_UN__c</code></td><td class="num">89,179</td><td><span class="pill legacy dot">Legacy</span></td></tr>
+    <tr><td>29</td><td><code>OpportunityLineItem</code> (std)</td><td class="num">87,618</td><td><span class="pill com dot">Comercial</span></td></tr>
+    <tr><td>30</td><td><code>Comments__c</code></td><td class="num">83,908</td><td><span class="pill ops dot">Ops</span></td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="rts">
+<h2>Record Types — objetos más diversificados</h2>
+<p class="sub">El negocio se segmenta vía RT (no objetos separados). Aquí los más relevantes.</p>
+
+<details open>
+  <summary>Catalog__c — 36 RTs (diccionario universal)</summary>
+  <div class="legend">
+    <span class="chip">Administrative Fee</span><span class="chip">B4T - Service group</span><span class="chip">Guest type</span><span class="chip">NVL - Department</span><span class="chip">NVL - Tag</span><span class="chip">OPERA - Rate codes</span><span class="chip">Principal</span><span class="chip">VCL - Accesses</span><span class="chip">VCL - Annual Fee</span><span class="chip">VCL - Cash Commission</span><span class="chip">VCL - Certificates rules</span><span class="chip">VCL - Easter Week Range</span><span class="chip">VCL - Exchange Rates</span><span class="chip">VCL - Golf Rounds</span><span class="chip">VCL - Group's Sales Reps</span><span class="chip">VCL - Hotels in Punta Cana</span><span class="chip">VCL - ISO Code</span><span class="chip">VCL - Legendary Month</span><span class="chip">VCL - Legendary Yachtvibes</span><span class="chip">VCL - Market Code</span><span class="chip">VCL - Membership Book</span><span class="chip">VCL - Nationality</span><span class="chip">VCL - Opera Profiles - Company</span><span class="chip">VCL - Opera Profiles - Source</span><span class="chip">VCL - Pack Commission</span><span class="chip">VCL - Package</span><span class="chip">VCL - Properties</span><span class="chip">VCL - Reservation Guest Type</span><span class="chip">VCL - Room type</span><span class="chip">VCL - Season</span><span class="chip">VCL - Season Rates</span><span class="chip">VCL - Silver Week Stock</span><span class="chip">VCL - Source Code</span><span class="chip">VCL - Travel Reason</span><span class="chip">VCL - VCM Months</span><span class="chip">VCL - Worksheet Room</span>
+  </div>
+</details>
+
+<details>
+  <summary>Case — 29 RTs (call center)</summary>
+  <div class="legend">
+    <span class="chip">B2C Contact Center</span><span class="chip">COR - Cases CC</span><span class="chip">Paradise Pass</span><span class="chip">RCD Contact Center</span><span class="chip">Reservas</span><span class="chip">VCL - Audit</span><span class="chip">VCL - B2C Case Record Type</span><span class="chip">VCL - Capacitacion y Calidad</span><span class="chip">VCL - Contratos CIO</span><span class="chip">VCL - Finanzas</span><span class="chip">VCL - Legendary Customer</span><span class="chip">VCL - Legendary ASM</span><span class="chip">VCL - Legendary Collection</span><span class="chip">VCL - Legendary Funtal ASM</span><span class="chip">VCL - Legendary Funtal Regular Collection</span><span class="chip">VCL - Legendary Operation</span><span class="chip">VCL - Legendary Regular Collection</span><span class="chip">VCL - Legendary Reservas</span><span class="chip">VCL - Legendary Specialized Collections</span><span class="chip">VCL - Legendary Vacation Maker</span><span class="chip">VCL - Legendary VLO</span><span class="chip">VCL - Member Experience Service</span><span class="chip">VCL - Ontour</span><span class="chip">VCL - Paradise Pass Customer</span><span class="chip">VCL - PPASS CC</span><span class="chip">VCL - Refunds and Disputes</span><span class="chip">VCL - Reservación</span><span class="chip">VCL Contact Center</span><span class="chip">VCL- Premier Customer</span>
+  </div>
+</details>
+
+<details>
+  <summary>Benefit__c — 18 RTs (catálogo de beneficios)</summary>
+  <div class="legend">
+    <span class="chip">VCL - Access</span><span class="chip">VCL - Additionals</span><span class="chip">VCL - Authorization</span><span class="chip">VCL - Certificate</span><span class="chip">VCL - Conversion de semanas</span><span class="chip">VCL - Day Pass</span><span class="chip">VCL - DayPass By Sale</span><span class="chip">VCL - Golf Rounds</span><span class="chip">VCL - Legendary Week</span><span class="chip">VCL - MoveIn By Sale</span><span class="chip">VCL - Nights Move In</span><span class="chip">VCL - Pack 3 Nights</span><span class="chip">VCL - Pack Airport Transfer</span><span class="chip">VCL - Promo Week</span><span class="chip">VCL - Resort Credit Collection</span><span class="chip">VCL - Silver Week</span><span class="chip">VCL - Week Rate</span><span class="chip">VCL - Yachtvibes</span>
+  </div>
+</details>
+
+<details>
+  <summary>Configuracion__c — 14 RTs (settings paramétricos)</summary>
+  <div class="legend">
+    <span class="chip">Paquetes</span><span class="chip">Principal</span><span class="chip">Tipo de cambio</span><span class="chip">VC - Afiliaciones</span><span class="chip">VC - Eq Habitaciones</span><span class="chip">VC - Links encuestas</span><span class="chip">VC - Membresías y Certificados</span><span class="chip">VC - Propiedades</span><span class="chip">VC - Recorre Fechas</span><span class="chip">VC - Referencias santander</span><span class="chip">VC - Servicios</span><span class="chip">VC - Token cobros</span><span class="chip">VC – Segmentos</span><span class="chip">VC Tarjetas</span>
+  </div>
+</details>
+
+<details>
+  <summary>Movimiento__c — 12 RTs</summary>
+  <div class="legend">
+    <span class="chip">Anualidad</span><span class="chip">Costo de contrato</span><span class="chip">Cuota Administrativa</span><span class="chip">Enganche</span><span class="chip">Financiamiento</span><span class="chip">Financiamiento Pago Maestro</span><span class="chip">Mensualidades y liquidaciones</span><span class="chip">Movimiento Amortización</span><span class="chip">Tabla de amortización</span><span class="chip">VCL - Add-ons</span><span class="chip">VCL - Converter</span><span class="chip">VCL - Otros cargos</span>
+  </div>
+</details>
+
+<details>
+  <summary>TransaccionesMovimientos__c — 12 RTs</summary>
+  <div class="legend">
+    <span class="chip">Inicial</span><span class="chip">Movimiento de pagos mensuales</span><span class="chip">Movimientos de nueva tabla de amortización</span><span class="chip">Principal</span><span class="chip">Transacciones adelantos a capital</span><span class="chip">Transacciones Converters</span><span class="chip">Transacciones costo de contrato</span><span class="chip">Transacciones de Enganche Adicional</span><span class="chip">Transacciones de liquidación</span><span class="chip">Transacciones Enganches</span><span class="chip">Transacciones por cargo</span><span class="chip">VCL_Refund</span>
+  </div>
+</details>
+
+<details>
+  <summary>PagoMes__c — 11 RTs</summary>
+  <div class="legend">
+    <span class="chip">VC - Cuota Administrativa</span><span class="chip">VC - Pago</span><span class="chip">VC Anualidades</span><span class="chip">VC Costo de contrato</span><span class="chip">VC Enganche</span><span class="chip">VC Financiamiento</span><span class="chip">VC Mensualidades y liquidaciones</span><span class="chip">VCL - Add-ons</span><span class="chip">VCL - Converters Payment</span><span class="chip">VCL - Otro cargo</span><span class="chip">VCL - Reservation payment</span>
+  </div>
+</details>
+
+<details>
+  <summary>Account — 10 RTs · Opportunity — 9 RTs · Invitation — 9 RTs · Contract — 5 RTs</summary>
+  <table>
+    <tr><th>Objeto</th><th>RTs</th></tr>
+    <tr><td><code>Account</code></td><td>Business Account, Empresa, Guest/Member, VCL - Agency, VCL - Airport, VCL - Ceco, VCL - Company, VCL - Competitor, VCL - Person Account, VCL - Property</td></tr>
+    <tr><td><code>Opportunity</code></td><td>VCL - CC Paradise Pass, VCL - CC Reservation, VCL - Groups, VCL - Legendary Experience, VCL - Memberships, VCL - Migration Template, VCL - Paradise Pass, VCL - Referral CC, VCL Reservaciones</td></tr>
+    <tr><td><code>Invitation__c</code></td><td>External, External (ReadOnly), In-house, In-house (ReadOnly), Out-house, Out-house (ReadOnly), Path, Pools, Pools (ReadOnly)</td></tr>
+    <tr><td><code>Contract</code></td><td>VC - Socios, VC - Contrato de Membresía, VCL - CC Paradise Pass, VCL - Membership contract, VCL - Paradise Pass</td></tr>
+  </table>
+</details>
+
+</section>
+
+<section id="relaciones">
+<h2>Hotspots de relaciones</h2>
+<p class="sub">Los objetos más conectados — donde un cambio impacta a más áreas.</p>
+
+<div class="grid cols-2">
+  <div class="card">
+    <h3>Reservation__c — ~40 lookups</h3>
+    <p class="sub">Apunta a:</p>
+    <div>
+      <span class="chip">Account (×6 roles: Agency, Chain, Company, Person, Property, Travel agency)</span>
+      <span class="chip">Contract</span><span class="chip">Opportunity</span><span class="chip">Benefit (Certificate)</span>
+      <span class="chip">PagoMes (Payment)</span><span class="chip">Movimiento (Movement)</span><span class="chip">Case</span>
+      <span class="chip">Invitation</span><span class="chip">VCL_Room_type (×2)</span><span class="chip">Catalog (×8: Rate, Market, Source, Travel Reason, Opera Profile…)</span>
+      <span class="chip">Lead</span><span class="chip">Campaign</span><span class="chip">User (PR / Butler / Concierge / Promoter)</span><span class="chip">self-ref</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Case — ~25 lookups</h3>
+    <div>
+      <span class="chip">Account</span><span class="chip">Contact</span><span class="chip">Asset</span><span class="chip">Reservation</span>
+      <span class="chip">Contract</span><span class="chip">RCD_Contract (Legendary_Contract / RCD_Contrato)</span>
+      <span class="chip">Movimiento</span><span class="chip">PagoMes</span><span class="chip">TransaccionesMovimientos</span>
+      <span class="chip">Benefit (Certificate ×2)</span><span class="chip">Catalog (Dept / Tag)</span><span class="chip">Invitation</span>
+      <span class="chip">Opportunity</span><span class="chip">Hotel (Account)</span><span class="chip">VoiceCall</span><span class="chip">MessagingSession</span><span class="chip">Parent_Case</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Contract — ~25 lookups</h3>
+    <div>
+      <span class="chip">Account</span><span class="chip">Property_Account</span><span class="chip">Agency</span><span class="chip">Company</span>
+      <span class="chip">Contact (titular, cotitular, Co_Owner_3, Co_Owner_4, Companion)</span>
+      <span class="chip">Opportunity (×2)</span><span class="chip">Benefit</span><span class="chip">Campaign</span><span class="chip">Case</span>
+      <span class="chip">Reservation</span><span class="chip">VCL_Membership_Rule</span>
+      <span class="chip">self: Parent / Upgrade(From/To) / Downgrade(From/To) / Referido / Anterior / Nuevo</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Catalog__c — referenciado desde</h3>
+    <p class="sub">Es el destino, no el origen. Por lo menos:</p>
+    <div>
+      <span class="chip">Reservation (×8 campos)</span><span class="chip">Opportunity (Rate code, Agent 1/2)</span>
+      <span class="chip">Benefit</span><span class="chip">Case (Department, Tag, Catalog)</span>
+      <span class="chip">Invitation (Marketing Qualification)</span><span class="chip">Converter</span>
+      <span class="chip">Benefit_Season_Hotel / Room</span><span class="chip">Account (varios)</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="observaciones">
+<h2>Observaciones para los próximos pasos</h2>
+
+<div class="warn-box">
+  <b>1. Doble fuente de verdad contrato/membresía.</b> Las líneas <code>Contract</code>+<code>Benefit__c</code>+<code>Contract_Beneficiary__c</code> (comercial / Sales Cloud) y <code>RCD_Contract__c</code>+<code>RCD_Membership__c</code>+<code>RCD_Certificate__c</code>+<code>RCD_Account_Contracts__c</code> (operativa) coexisten. Antes de modificar reglas en una hay que confirmar cuál es source-of-truth para el caso de uso.
+</div>
+
+<div class="warn-box">
+  <b>2. <code>Catalog__c</code> es un punto crítico.</b> 36 record types, referenciado desde múltiples dominios. Es el "diccionario universal" del negocio. Cualquier cambio estructural (campos, RTs) hay que evaluarlo a nivel cross-dominio.
+</div>
+
+<div class="note">
+  <b>3. Volumen financiero.</b> El stack <code>Movimiento</code>(4.4M)→<code>Transacciones</code>(2.3M) suma ~6.7M registros. Los reportes y procesos batch sobre estos objetos deben usar selectivos correctos; revisar índices custom y configurar query optimizer son tareas valiosas.
+</div>
+
+<div class="note">
+  <b>4. Logs y legacy = candidatos de archivado.</b> <code>Log_Message__c</code> (6.4M) y los <code>Hist_*</code> / <code>VCL_Hist_*</code> (>2M acumulado) consumen storage. Vale revisar política de retención.
+</div>
+
+<div class="note">
+  <b>5. Person Accounts activos.</b> Cualquier query/automatización sobre el cliente final tiene que considerar el flag <code>IsPersonAccount</code> y los campos <code>__pc</code> de Account.
+</div>
+
+</section>
+
+<div class="footer">
+  Generado para el proyecto PAM · Datos extraídos vía <code>sf data query</code> y <code>sf sobject describe</code> sobre la org <code>PAM-Sandbox</code> el 2026-06-23. Los volúmenes son <i>row counts</i> en el momento del snapshot; las relaciones omiten lookups técnicos (CreatedBy, OwnerId, RecordTypeId).
+</div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad:true,
+    theme:'default',
+    themeVariables:{
+      darkMode:false,
+      background:'#ffffff',
+      primaryColor:'#ddf4ff',
+      primaryTextColor:'#1f2328',
+      primaryBorderColor:'#0969da',
+      lineColor:'#0969da',
+      secondaryColor:'#eef1f5',
+      tertiaryColor:'#ffffff',
+      fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif'
+    },
+    flowchart:{curve:'basis',padding:14}
+  });
+</script>
+</body>
+</html>

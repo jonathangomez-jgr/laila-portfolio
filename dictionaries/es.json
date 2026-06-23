@@ -6,6 +6,7 @@
     "generalDemos": "General Demos",
     "customerSolutions": "Customer's Solutions",
     "letsTalk": "Let's Talk",
+    "insights": "Insights",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú"
   },
@@ -240,6 +241,14 @@
     "confidentialityText": "Esta sección puede manejar versiones públicas, anonimizadas o privadas de cada demo para evitar exponer información sensible de clientes.",
     "confidentialityNote": "Para las versiones privadas, se te pedirá por una única ocasión un código de visualización."
   },
+  "customerProjects": {
+    "eyebrow": "Customer's Projects",
+    "title": "Proyectos de implementación y discovery técnico con clientes.",
+    "description": "A diferencia de las demos comerciales, esta sección documenta el trabajo de implementación: análisis de Knowledge Base, modelo de datos, diseño de agentes, arquitectura y entregables técnicos concretos.",
+    "confidentialityTitle": "Nota de confidencialidad",
+    "confidentialityText": "Los proyectos aquí pueden contener información sensible del cliente (modelo de datos, IDs de org, métricas internas). El acceso es siempre por código.",
+    "confidentialityNote": "Algunos proyectos están ocultos del listado y solo son accesibles por URL directa con código."
+  },
   "contact": {
     "eyebrow": "Contact",
     "title": "Conversemos.",
@@ -275,6 +284,31 @@
     "requestLoading": "Enviando...",
     "requestBtn": "Solicitar acceso",
     "requestError": "Ups.. algo no salió como lo esperábamos. Vuelve a intentarlo más tarde o puedes mandar un correo a jonathan.gomez@salesforce.com"
+  },
+  "insights": {
+    "eyebrow": "Insights",
+    "title": "Posturas técnicas y estratégicas para llevar IA al corazón del negocio.",
+    "description": "Análisis profundos, opiniones consultivas y arquitecturas de referencia sobre Salesforce, Agentforce, Data Cloud, MuleSoft, integraciones, IA generativa empresarial y transformación digital. Diseñados para que un arquitecto, un líder técnico o un ejecutivo terminen con criterio claro y defendible.",
+    "filtersTitle": "Próximamente",
+    "filtersDesc": "Más entradas en camino: arquitectura multiagente, Data Cloud, MuleSoft, ROI de Agentforce, governance de IA, casos por industria. Filtros por tema y nivel de madurez se habilitarán cuando haya suficiente contenido.",
+    "readingTime": "min de lectura",
+    "tableOfContents": "Tabla de contenidos",
+    "level": "Nivel",
+    "topic": "Tema",
+    "updated": "Actualizado",
+    "author": "Autor",
+    "backToInsights": "Volver a Insights",
+    "notFound": "Entrada no encontrada",
+    "notFoundDesc": "El insight que buscas no existe o fue movido. Vuelve al listado para explorar los disponibles.",
+    "shareTitle": "¿Te resultó útil?",
+    "shareDesc": "Compártelo con tu equipo o conversémoslo en una llamada de arquitectura.",
+    "shareCta": "Conversemos",
+    "executive": "Para ejecutivos",
+    "architect": "Para arquitectos",
+    "deep": "Postura profunda",
+    "summary": "Resumen ejecutivo",
+    "nextRead": "Próximamente",
+    "nextReadDesc": "Estamos preparando las próximas entradas. Si quieres recibir avisos cuando publiquemos, escríbenos."
   },
   "customerDetail": {
     "eyebrow": "Customer Solution",

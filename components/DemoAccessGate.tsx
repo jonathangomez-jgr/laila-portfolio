@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { requestPageAccess } from "../app/actions/request-page-access";
-import { verifyPasscode } from "../app/[lang]/customer-demos/[slug]/actions";
 import type { Dictionary } from "@/lib/i18n";
 
 type DemoAccessGateProps = {
@@ -11,6 +10,7 @@ type DemoAccessGateProps = {
   customerName: string;
   logo?: string;
   dict: Dictionary;
+  verifyAction: (slug: string, passcode: string) => Promise<{ success: boolean }>;
 };
 
 export default function DemoAccessGate({
@@ -18,6 +18,7 @@ export default function DemoAccessGate({
   customerName,
   logo,
   dict,
+  verifyAction,
 }: DemoAccessGateProps) {
   const t = dict.demoAccess;
   const pathname = usePathname();
@@ -34,7 +35,7 @@ export default function DemoAccessGate({
     setLoading(true);
     setError(false);
 
-    const result = await verifyPasscode(slug, passcode);
+    const result = await verifyAction(slug, passcode);
 
     if (result.success) {
       window.location.reload();

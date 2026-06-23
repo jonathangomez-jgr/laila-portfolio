@@ -6,6 +6,7 @@ import DemoAccessGate from "@/components/DemoAccessGate";
 import ExecutiveDeckPlayer from "@/components/executive-deck/ExecutiveDeckPlayer";
 import { customerDemos } from "@/data/customerDemos";
 import { getExecutiveDeck } from "@/data/executiveDecks";
+import { verifyPasscode } from "../../actions";
 
 type ExecutiveDeckPageProps = {
   params: Promise<{
@@ -74,6 +75,7 @@ export default async function ExecutiveDeckPage({
         customerName={demo.customerName}
         logo={demo.logo}
         dict={dict}
+        verifyAction={verifyPasscode}
       />
     );
   }

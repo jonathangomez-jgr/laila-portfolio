@@ -18,6 +18,8 @@ import RoadmapTimeline from "./RoadmapTimeline";
 import StoryTimeline from "./StoryTimeline";
 import JourneyTimeline from "./JourneyTimeline";
 import JtbdCanvas from "./JtbdCanvas";
+import KnowledgeLibraryInventory from "./KnowledgeLibraryInventory";
+import JobStoriesCanvas from "./JobStoriesCanvas";
 import Sprint3Canvas from "./Sprint3Canvas";
 import ObjectiveInfographic from "./ObjectiveInfographic";
 import OverviewStats from "./OverviewStats";
@@ -380,6 +382,14 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 <AssetsGrid data={activeTab.assetsData} />
               )}
 
+              {activeTab.knowledgeInventoryData && (
+                <KnowledgeLibraryInventory data={activeTab.knowledgeInventoryData} />
+              )}
+
+              {activeTab.jobStoriesData && (
+                <JobStoriesCanvas data={activeTab.jobStoriesData} />
+              )}
+
               {!activeTab.overviewData &&
                 !activeTab.customerProfile &&
                 !activeTab.contextData &&
@@ -400,7 +410,9 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 !activeTab.roadmapData &&
                 !activeTab.jtbdData &&
                 !activeTab.sprint3Data &&
-                !activeTab.assetsData && (
+                !activeTab.assetsData &&
+                !activeTab.knowledgeInventoryData &&
+                !activeTab.jobStoriesData && (
                   <div className="mt-10 rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-6">
                     <p className="text-sm font-semibold text-indigo-700">
                       {t.emptyTabTitle}

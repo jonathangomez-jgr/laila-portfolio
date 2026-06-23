@@ -108,6 +108,7 @@ export default function SiteHeader({
     { label: dict.nav.laila, href: `/${lang}/laila` },
     { label: dict.nav.generalDemos, href: `/${lang}/general-demos` },
     { label: dict.nav.customerSolutions, href: `/${lang}/customer-demos` },
+    { label: dict.nav.insights, href: `/${lang}/insights` },
   ];
 
   /* Close menu on route change */
