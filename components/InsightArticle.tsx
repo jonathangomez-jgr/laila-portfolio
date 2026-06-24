@@ -224,6 +224,50 @@ function renderBlock(block: InsightBlock, idx: number) {
           )}
         </blockquote>
       );
+    case "image": {
+      const maxCls =
+        block.maxWidth === "wide"
+          ? "max-w-none"
+          : block.maxWidth === "narrow"
+            ? "max-w-xl"
+            : "max-w-3xl";
+      const bg =
+        block.tone === "dark" ? "bg-gray-950" : "bg-gradient-to-br from-indigo-50/60 via-white to-white";
+      return (
+        <figure key={idx} className={`my-8 ${maxCls}`}>
+          <div
+            className={`overflow-hidden rounded-2xl border border-gray-200 ${bg} p-3 sm:p-5`}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={block.src}
+              alt={block.alt}
+              loading="lazy"
+              className="mx-auto block h-auto w-full max-w-full rounded-xl object-contain"
+            />
+          </div>
+          {(block.caption || block.source) && (
+            <figcaption className="mt-3 text-sm leading-6 text-gray-500">
+              {block.caption}
+              {block.source && (
+                <>
+                  {block.caption ? " " : ""}
+                  <a
+                    href={block.source.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="text-indigo-600 underline-offset-2 hover:underline"
+                  >
+                    Fuente: {block.source.label}
+                  </a>
+                  .
+                </>
+              )}
+            </figcaption>
+          )}
+        </figure>
+      );
+    }
     case "cards": {
       const cols = block.columns ?? 2;
       const gridCls =
@@ -454,6 +498,32 @@ export default function InsightArticle({
             </div>
           </div>
         </header>
+
+        {/* Cover image */}
+        {insight.coverImage && (
+          <figure className="mb-10 max-w-5xl overflow-hidden rounded-3xl border border-gray-200 bg-gradient-to-br from-indigo-50/60 via-white to-white p-3 sm:p-5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={insight.coverImage.src}
+              alt={insight.coverImage.alt}
+              loading="eager"
+              className="mx-auto block h-auto w-full max-w-full rounded-2xl object-contain"
+            />
+            {insight.coverImage.source && (
+              <figcaption className="mt-3 px-2 text-xs text-gray-500">
+                <a
+                  href={insight.coverImage.source.url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-indigo-600 underline-offset-2 hover:underline"
+                >
+                  Fuente: {insight.coverImage.source.label}
+                </a>
+                .
+              </figcaption>
+            )}
+          </figure>
+        )}
 
         {/* Executive summary card */}
         <div className="mb-12 max-w-5xl rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-50/70 via-white to-white p-6 md:p-8">

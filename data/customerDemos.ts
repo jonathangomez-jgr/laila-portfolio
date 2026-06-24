@@ -561,6 +561,15 @@ export type CustomerDemoI18n = {
   tabs: { id: string; label: string; title: string; content: string }[];
 };
 
+export type EmbeddedMessagingConfig = {
+  orgId: string;
+  deploymentName: string;
+  siteUrl: string;
+  scrt2URL: string;
+  language?: string;
+  bootstrapSrc?: string;
+};
+
 export type CustomerDemo = {
   slug: string;
   title: string;
@@ -573,6 +582,7 @@ export type CustomerDemo = {
   tabs: CustomerDemoTab[];
   passcode: string;
   hidden?: boolean;
+  embeddedMessaging?: EmbeddedMessagingConfig;
   translations?: { en?: CustomerDemoI18n; pt?: CustomerDemoI18n };
 };
 

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, getDictionary } from "@/lib/i18n";
 import CustomerDemoDetail from "@/components/CustomerDemoDetail";
 import DemoAccessGate from "@/components/DemoAccessGate";
+import EmbeddedMessaging from "@/components/EmbeddedMessaging";
 import { customerProjects } from "@/data/customerProjects";
 import { verifyProjectPasscode } from "./actions";
 
@@ -57,5 +58,12 @@ export default async function CustomerProjectPage({
     );
   }
 
-  return <CustomerDemoDetail demo={project} lang={lang} dict={dict} />;
+  return (
+    <>
+      <CustomerDemoDetail demo={project} lang={lang} dict={dict} />
+      {project.embeddedMessaging && (
+        <EmbeddedMessaging config={project.embeddedMessaging} />
+      )}
+    </>
+  );
 }

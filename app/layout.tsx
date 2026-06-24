@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
 
@@ -8,6 +8,12 @@ export const metadata: Metadata = {
   title: "JGR - Laila",
   description:
     "Personal-professional portfolio for Laila, demos, customer presentations and solution storytelling.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  minimumScale: 1,
 };
 
 export default function RootLayout({

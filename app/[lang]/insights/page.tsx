@@ -41,11 +41,21 @@ export default async function InsightsPage({
             <a
               key={insight.slug}
               href={`/${lang}/insights/${insight.slug}`}
-              className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-7 shadow-[0_14px_40px_rgba(99,102,241,0.10)] transition hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(99,102,241,0.18)] lg:col-span-2"
+              className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/80 shadow-[0_14px_40px_rgba(99,102,241,0.10)] transition hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(99,102,241,0.18)] lg:col-span-2"
             >
-              {/* Decorative gradient */}
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-indigo-50/80 via-transparent to-transparent" />
+              {insight.coverImage && (
+                <div className="relative h-44 w-full overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-indigo-50 sm:h-56">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={insight.coverImage.src}
+                    alt={insight.coverImage.alt}
+                    loading="lazy"
+                    className="h-full w-full object-contain p-4 transition duration-500 group-hover:scale-[1.02]"
+                  />
+                </div>
+              )}
 
+              <div className="relative flex flex-1 flex-col p-7">
               <div className="relative flex flex-wrap items-center gap-2">
                 <span className="rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-indigo-600">
                   {insight.topic}
@@ -119,6 +129,7 @@ export default async function InsightsPage({
                     </svg>
                   </span>
                 </div>
+              </div>
               </div>
             </a>
           ))}

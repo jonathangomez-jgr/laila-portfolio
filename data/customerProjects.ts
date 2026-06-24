@@ -13,6 +13,14 @@ export const customerProjects: CustomerProject[] = [
     logo: "/Customers/PAM/pam-logo.png",
     passcode: "paradise2026",
     hidden: true,
+    embeddedMessaging: {
+      orgId: "00DO400000YzKHZ",
+      deploymentName: "Digital_Concierge",
+      siteUrl:
+        "https://rcdhotels--fullcopy.sandbox.my.site.com/ESWDigitalConcierge1782316658590",
+      scrt2URL: "https://rcdhotels--fullcopy.sandbox.my.salesforce-scrt.com",
+      language: "es",
+    },
     tags: [
       "Agentforce",
       "Data Cloud",

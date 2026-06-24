@@ -12,6 +12,15 @@ export type InsightBlock =
   | { type: "table"; headers: string[]; rows: string[][] }
   | { type: "quote"; text: string; author?: string }
   | {
+      type: "image";
+      src: string;
+      alt: string;
+      caption?: string;
+      source?: { label: string; url: string };
+      tone?: "light" | "dark";
+      maxWidth?: "narrow" | "regular" | "wide";
+    }
+  | {
       type: "cards";
       columns?: 2 | 3;
       items: Array<{
@@ -49,6 +58,11 @@ export type Insight = {
   updatedAt: string;
   readingMinutes: number;
   tags: string[];
+  coverImage?: {
+    src: string;
+    alt: string;
+    source?: { label: string; url: string };
+  };
   sections: InsightSection[];
   hidden?: boolean;
 };
@@ -78,6 +92,14 @@ const multiAgent: Insight = {
     "Multiagente",
     "Gobierno de IA",
   ],
+  coverImage: {
+    src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
+    alt: "Plataforma agéntica empresarial completa de Salesforce: Agentforce sobre Data 360 y Customer 360.",
+    source: {
+      label: "Salesforce — Agentforce platform overview",
+      url: "https://www.salesforce.com/agentforce/",
+    },
+  },
   sections: [
     {
       id: "resumen-ejecutivo",
@@ -108,6 +130,18 @@ const multiAgent: Insight = {
         {
           type: "paragraph",
           text: "Hay cinco lecturas posibles y todas son válidas en distintos contextos. El error no es elegir mal entre ellas: es asumir que solo una es correcta para todo el cliente.",
+        },
+        {
+          type: "image",
+          src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
+          alt: "Plataforma agéntica empresarial de Salesforce: Agentforce, Data 360 y Customer 360 como tres capas integradas.",
+          caption:
+            "La promesa nativa de Salesforce: una sola plataforma donde agentes, datos y CRM comparten contexto, seguridad y observabilidad. Esa es la base sobre la que se discuten las cinco lecturas que siguen.",
+          source: {
+            label: "Salesforce · Agentforce platform overview",
+            url: "https://www.salesforce.com/agentforce/",
+          },
+          maxWidth: "wide",
         },
         {
           type: "cards",
@@ -189,6 +223,17 @@ const multiAgent: Insight = {
         {
           type: "paragraph",
           text: "Una de las disciplinas más importantes al diseñar arquitecturas con LLMs es no convertir todo en agente. La mayoría de los problemas no necesitan un agente: necesitan una herramienta bien definida, un proceso determinístico o una composición de ambos. Cuándo introducir razonamiento autónomo no es una decisión estética; es una decisión de costo, riesgo y gobernanza.",
+        },
+        {
+          type: "image",
+          src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Relevant-Accurate-Results.webp",
+          alt: "Atlas Reasoning Engine: ciclo de entendimiento, decisión y acción de Agentforce.",
+          caption:
+            "El motor de razonamiento de Agentforce entiende la intención, decide qué herramientas usar y actúa. Ese ciclo es lo que distingue a un agente — y lo que justifica su costo. Si tu caso no necesita esos tres pasos, probablemente lo que buscas no es un agente.",
+          source: {
+            label: "Salesforce · Atlas Reasoning Engine",
+            url: "https://www.salesforce.com/agentforce/",
+          },
         },
         {
           type: "table",
@@ -362,6 +407,30 @@ const multiAgent: Insight = {
         {
           type: "paragraph",
           text: "Cuando el cliente tiene muchos agentes — propios y de terceros — la conversación deja de ser 'qué agente uso' y pasa a ser 'cómo los gobierno'. Ahí entra MuleSoft como capa transversal: registro de agentes y herramientas, descubrimiento, control de acceso, observabilidad, métricas, políticas de uso y rate limiting. En 2025 Salesforce posicionó esta capa con MuleSoft Agent Fabric y el soporte de MCP server en Anypoint.",
+        },
+        {
+          type: "image",
+          src: "https://www.salesforce.com/news/wp-content/uploads/sites/3/2025/09/MuleSoft-Visualizer_UPDATED.png?w=1024",
+          alt: "MuleSoft Agent Visualizer: mapa visual de la red de agentes con interacciones, dependencias y flujos de decisión.",
+          caption:
+            "MuleSoft Agent Visualizer le da al arquitecto un mapa en tiempo real de cómo interactúan los agentes, qué dependencias tienen y dónde están los cuellos de botella. Sin esta visibilidad, el ecosistema multiagente se vuelve una caja negra costosa.",
+          source: {
+            label: "Salesforce News · MuleSoft Agent Fabric",
+            url: "https://www.salesforce.com/news/press-releases/2025/05/28/mulesoft-agent-fabric-announcement/",
+          },
+          maxWidth: "wide",
+        },
+        {
+          type: "image",
+          src: "https://www.salesforce.com/news/wp-content/uploads/sites/3/2025/09/MuleSoft-Agent-Broker_UPDATED.png?w=1024",
+          alt: "MuleSoft Agent Broker: enrutamiento dinámico de tareas hacia los agentes y MCP servers más adecuados.",
+          caption:
+            "MuleSoft Agent Broker estructura agentes y MCP servers en dominios de negocio y rutea cada solicitud al mejor agente o herramienta disponible. Es el ‘policy & discovery layer’ que permite escalar de tres agentes a treinta sin perder gobernanza.",
+          source: {
+            label: "Salesforce News · MuleSoft Agent Fabric",
+            url: "https://www.salesforce.com/news/press-releases/2025/05/28/mulesoft-agent-fabric-announcement/",
+          },
+          maxWidth: "wide",
         },
         {
           type: "list",
@@ -670,6 +739,17 @@ const multiAgent: Insight = {
         {
           type: "paragraph",
           text: "Estas recomendaciones funcionan como contrato de diseño y, también, como brújula para una conversación de negocio. Si una propuesta concreta rompe tres o más, vale la pena pausarla y revisarla — sea cual sea la plataforma o el proveedor.",
+        },
+        {
+          type: "image",
+          src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Trust-Guardrails.webp",
+          alt: "Einstein Trust Layer y guardrails de Agentforce: capas de protección de datos, masking de PII y políticas de uso.",
+          caption:
+            "Einstein Trust Layer y los guardrails de Agentforce dan auditoría, masking de PII y políticas de uso ‘de fábrica’. Por eso la recomendación 06 — gobernar desde el día uno — no es opcional: la gobernanza no se agrega después, se diseña desde el primer agente.",
+          source: {
+            label: "Salesforce · Einstein Trust Layer",
+            url: "https://help.salesforce.com/s/articleView?id=sf.generative_ai_trust_layer.htm",
+          },
         },
         {
           type: "cards",
