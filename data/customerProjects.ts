@@ -728,10 +728,10 @@ export const customerProjects: CustomerProject[] = [
         label: "Job Stories",
         title: "Backlog MVP — Job Stories que entran al primer release",
         content:
-          "15 Job Stories filtradas del backlog interno de PAM v2 — son las únicas marcadas como paquete = MVP. Cada story está clasificada por su forma de resolverse (Knowledge / datos Salesforce / handoff) y por su cobertura de Knowledge actual: qué documentos del KB ya la responden y qué falta por recibir del cliente. Al final, un resumen ejecutivo del avance del MVP.",
+          "13 Job Stories filtradas del backlog interno de PAM v2.1 — son las únicas marcadas como paquete = MVP. Cada story está clasificada por su forma de resolverse (Knowledge / datos Salesforce / handoff) y por su cobertura de Knowledge actual: qué documentos del KB ya la responden y qué falta por recibir del cliente. Al final, un resumen ejecutivo del avance del MVP.",
         jobStoriesData: {
           intro:
-            "Trabajamos sobre el backlog interno de PAM (V2), filtrado a las 15 Job Stories del paquete MVP. El Concierge se enfoca exclusivamente en Paradise Pass — esto simplifica drásticamente el problema porque la mayor parte de la información ya vive estructurada en Salesforce (Account → Contract con RT 'BCL_PPAS' → Benefits). El RAG se reserva para mecánicas, políticas, datos de propiedades y FAQs operativas. Cada tarjeta indica: qué documento(s) del KB resuelven la story, qué está pendiente por entregar y cómo se resuelve operativamente.",
+            "Trabajamos sobre el backlog interno de PAM (v2.1), filtrado a las 13 Job Stories del paquete MVP. El Concierge se enfoca exclusivamente en Paradise Pass — esto simplifica drásticamente el problema porque la mayor parte de la información ya vive estructurada en Salesforce (Account → Contract con RT 'BCL_PPAS' → Benefits). El RAG se reserva para mecánicas, políticas, datos de propiedades y FAQs operativas. Cada tarjeta indica: qué documento(s) del KB resuelven la story, qué está pendiente por entregar y cómo se resuelve operativamente.",
           stories: [
             {
               id: "JS001",
@@ -796,7 +796,7 @@ export const customerProjects: CustomerProject[] = [
                 "Obtención de nuevos leads, fortalecimiento de la marca generando valor y uso",
               priority: "High",
               package: "MVP",
-              coverage: "covered",
+              coverage: "partial",
               resolution: "hybrid",
               knowledgeSources: [
                 {
@@ -804,40 +804,13 @@ export const customerProjects: CustomerProject[] = [
                   path: "Programa de referidos/PROGRAMA REFERIDOS.xlsx",
                   library: "DL-Programs",
                   relevance:
-                    "Es la fuente única para esta story. La matriz cruza fecha de venta del contrato × programa de referidos vigente en ese momento (Dynamic Referral Rewards, Dynamic Referral Week, Web Rate 15%, Experience Nights, Dynamic Referral Nights). Cuando el socio pregunta '¿cómo funciona mi programa de referidos?', el agente lee la bandera de programa en el Contract, busca esa fila en la matriz y explica mecánica exacta: cuántas noches gana, qué bonus si el referido compra Deluxe/VIP, etc. Sin este archivo, el bot no podría dar la respuesta correcta porque cada año tiene reglas distintas.",
+                    "Aporta el contexto general de los 5 sub-programas históricos (Dynamic Referral Rewards, Dynamic Referral Week, Web Rate 15%, Experience Nights, Dynamic Referral Nights). En el alcance MVP, sin embargo, el agente NO ejecuta la mecánica completa: solo explica reglas básicas (ej. $100 USD de descuento sobre balance del certificado por cada pareja referida, máx 4 beneficiarios), hace un prelevantamiento de información y escala creando un Lead en Salesforce ligado al Contract del referidor. Es importante para el bot porque le da el lenguaje del programa, pero la transacción la termina un agente humano.",
                 },
               ],
               pending: [
                 "PAM — confirmar con Eduardo Vergara / Ricardo Dueñas que los campos de identificación de programa por contrato estén poblados en Vaclubity",
-                "Salesforce — revisar lógica que cruce fecha de venta del contrato con la matriz para entregar la promo correcta",
-              ],
-            },
-            {
-              id: "JS004",
-              epicId: "CU002",
-              epicName: "Exploración de Beneficios y Programas de Intercambio",
-              name: "Semanas Vacacionales por Expirar",
-              category: "Information & Discovery",
-              cuando: "tengo semanas vacacionales que están por expirar pronto",
-              yoQuiero: "saber qué opciones tengo para utilizarlas",
-              paraPoder: "no perder el beneficio por el que ya pagué",
-              businessValue: "Mejora el nivel de contacto y retención de socios",
-              priority: "High",
-              package: "MVP",
-              coverage: "partial",
-              resolution: "hybrid",
-              knowledgeSources: [
-                {
-                  label: "Política de Cancelación / vigencias",
-                  path: "Politicas de Cancelacion, No show, Cambios y Hold/Política de Cancelación socios_.pdf",
-                  library: "DL-Policies",
-                  relevance:
-                    "Aporta el marco formal de vigencias y reglas de uso de semanas/certificados (penalizaciones escalonadas, ventanas de antelación, condicionantes por temporada). El agente cita estas reglas para explicar al socio sus opciones reales. NO cubre la regla especial Paradise Pass — 'aunque el certificado esté Expired el club permite reservar para incentivar la venta' — esa excepción la dijo Ornella en sesión pero todavía no está documentada por escrito; por eso esta story queda en cobertura PARCIAL.",
-                },
-              ],
-              pending: [
-                "PAM — Ricardo Dueñas debe compartir lista exacta de Web Services Sabre/Synxis para consulta de disponibilidad",
-                "Regla especial Paradise Pass: aunque el certificado marque Expired, el club permite reservar — documentar esta excepción en KB",
+                "Salesforce — implementar creación de Lead ligado al Contract del socio referidor para handoff al agente humano",
+                "PAM — documentar el límite de máx. 4 beneficiarios directos (familiares directos) y el bonus de $100 USD por pareja referida",
               ],
             },
             {
@@ -910,27 +883,6 @@ export const customerProjects: CustomerProject[] = [
               resolution: "data-only",
             },
             {
-              id: "JS011",
-              epicId: "CU006",
-              epicName: "Gestión de Métodos de Pago",
-              name: "Actualización de Método de Pago (PCI)",
-              category: "Self-Service & Transactions",
-              cuando:
-                "mi tarjeta de crédito principal expira o quiero cambiar de método de pago",
-              yoQuiero: "actualizar mi método de pago registrado en el sistema",
-              paraPoder:
-                "que mis cargos automáticos pasen sin problema y mi membresía siga activa",
-              businessValue:
-                "Reduce el riesgo de morosidad y disminuye las llamadas operativas",
-              priority: "High",
-              package: "MVP",
-              coverage: "out-of-scope",
-              resolution: "handoff",
-              pending: [
-                "PAM — TI debe documentar cómo la IA solicita y renderiza la URL de Pay Token en tiempo real",
-              ],
-            },
-            {
               id: "JS013",
               epicId: "CU007",
               epicName: "Solicitud de Estados de Cuenta",
@@ -950,6 +902,7 @@ export const customerProjects: CustomerProject[] = [
               resolution: "data-only",
               pending: [
                 "PAM — compartir ejemplos de plantillas de correo actuales para replicar formato desde Salesforce Core",
+                "Salesforce — agregar suma del balance del contrato a nivel Core para que el campo 'balance' se muestre al cliente (los saldos individuales viven a nivel Benefit, requiere agregación)",
               ],
             },
             {
@@ -1112,39 +1065,40 @@ export const customerProjects: CustomerProject[] = [
             },
           ],
           summary: {
-            totalStories: 15,
+            totalStories: 13,
             byCoverage: {
-              covered: 3,
+              covered: 2,
               partial: 1,
               missing: 3,
-              outOfScope: 8,
+              outOfScope: 7,
             },
             byResolution: {
               knowledgeOnly: 3,
               dataOnly: 4,
-              hybrid: 4,
-              handoff: 4,
+              hybrid: 3,
+              handoff: 3,
             },
             notes: [
-              "Backlog MVP del Concierge: 15 Job Stories filtradas (las únicas con paquete = MVP en el backlog v2 de PAM). Las otras 15 del backlog original son TBD, NA o están bloqueadas — quedan fuera del scope inicial.",
-              "7 de 15 stories (47%) involucran Knowledge — 3 ya están totalmente cubiertas con el KB actual, 1 está parcialmente cubierta y 3 todavía no tienen documentación entregada.",
-              "8 stories (53%) NO requieren Knowledge: se resuelven directo con datos estructurados de Salesforce/Vaclubity (Account → Contract BCL_PPAS → Benefit) o con escalamiento humano. Es consecuencia del scope MVP solo Paradise Pass — la información ya vive estructurada.",
-              "Las 3 stories con coverage 'missing' son las más críticas para cerrar el MVP: política de huracán (JS021), reventa sospechosa (JS023) y phishing (JS024). Todas dependen de que PAM suba documentación oficial al KB.",
-              "El verdadero cuello de botella NO es el RAG: son (a) la migración de Vaclubity (beneficiarios, programas de referidos por contrato), (b) la definición de colas Omni-Channel para los 3 handoffs MVP (JS027, JS028, JS030), y (c) las 3 políticas críticas pendientes de subir a Knowledge.",
+              "Backlog MVP actualizado del Concierge: 13 Job Stories — las únicas con paquete = MVP en el backlog v2.1 de PAM. Las 17 restantes del backlog original quedaron como TBD, NA, Bloqueado o 'Va a backlog' para fases posteriores.",
+              "Cambios respecto al backlog anterior: JS004 (Semanas por Expirar) y JS011 (Actualización de Método de Pago PCI) pasaron a backlog. JS003 (Programa de Referidos) cambió de enfoque: el agente explica reglas básicas, hace prelevantamiento, crea un Lead ligado al Contract del referidor y escala a humano — ya no es flujo transaccional autónomo.",
+              "6 de 13 stories (46%) involucran Knowledge — 2 ya están cubiertas, 1 parcial (JS003 con la matriz histórica como complemento) y 3 todavía sin documentación entregada (JS021, JS023, JS024).",
+              "7 stories (54%) NO requieren Knowledge: se resuelven con datos estructurados de Salesforce/Vaclubity (Account → Contract BCL_PPAS → Benefit) o con escalamiento humano. Consecuencia directa del scope MVP solo Paradise Pass.",
+              "El verdadero cuello de botella NO es el RAG: son (a) la migración de Vaclubity (beneficiarios, identificación de programa de referidos por contrato), (b) la definición de colas Omni-Channel para los 3 handoffs MVP (JS027, JS028, JS030) y para el Lead de referidos (JS003), y (c) las 3 políticas críticas pendientes de subir a Knowledge (huracán, reventa, phishing).",
             ],
             pendingArtifacts: [
               "Política oficial de huracán y clima crítico (Knowledge — JS021)",
               "Políticas y formatos sobre reventas sospechosas (Yolanda → Knowledge — JS023)",
               "Lista oficial de dominios y terminaciones de correo legítimos del club (Knowledge — JS024)",
               "Plantillas de correo actuales para Estado de Cuenta (JS013)",
+              "Suma de balance del contrato en Core (JS013) — agregación de saldos a nivel Benefit",
               "Brand Guide PAM Hotels 2026 (carpeta Marcas/ vacía — afecta DL-BrandVoice)",
               "Documento oficial de tiers (Deluxe/VIP/HoF/Chairman) y mecánica de Legend Coins con efectividad 2026 (afecta DL-Programs)",
-              "Validación del 100% de migración de Vaclubity: beneficiarios (Eduardo Vergara), programas de referidos por contrato",
-              "Lista de Web Services de Sabre/Synxis para consulta de disponibilidad (Ricardo Dueñas — JS004)",
+              "Validación del 100% de migración de Vaclubity: beneficiarios (Eduardo Vergara), identificación de programa de referidos por contrato",
+              "Definición de la regla operativa: máx 4 beneficiarios directos + $100 USD por pareja referida (JS003)",
+              "Implementar creación de Lead ligado al Contract del socio referidor (JS003)",
               "Identificación del OWS exacto de Opera para inyectar alertas de late check-in (JS018)",
               "Confirmación si UNICO Jamaica entra o no en Paradise Pass (afecta DL-Properties)",
               "Definición operativa de colas Omni-Channel para Customer Service + Reservaciones (JS027, JS028, JS030)",
-              "PAM — TI debe documentar cómo la IA solicita y renderiza la URL de Pay Token PCI (JS011)",
             ],
           },
         },
@@ -1280,117 +1234,64 @@ export const customerProjects: CustomerProject[] = [
             {
               id: "TS003",
               jobStoryId: "JS003",
-              name: "Explicación del Programa de Referidos por Año de Compra",
-              status: "ready",
-              persona:
-                "Carla Restrepo, compró su Paradise Pass en mayo 2025 → aplica el programa 'Dynamic Referral Week' según la matriz vigente en esa fecha.",
-              channel: "Web Chat",
-              language: "es",
-              preconditions: [
-                "Contract con campo 'Programa de Referidos' poblado en Vaclubity (debe identificar a qué programa aplica según fecha de venta)",
-                "Matriz de referidos cargada en DL-Programs",
-              ],
-              steps: [
-                {
-                  turn: 1,
-                  role: "user",
-                  text: "¿Cómo funciona el programa de referidos que tengo?",
-                },
-                {
-                  turn: 2,
-                  role: "agent",
-                  text: "Carla, tu contrato Paradise Pass de mayo 2025 aplica al programa Dynamic Referral Week: por cada 2 referidos que presentes y atendamos, recibes 1 semana adicional. Si llegan a 4 referidos, son 2 semanas, y si llegan a 6, son 3 semanas. ¿Te ayudo con cómo registrar a alguien?",
-                  dataLookup: "Contract.Programa_Referidos__c",
-                  knowledgeRef:
-                    "DL-Programs · PROGRAMA REFERIDOS.xlsx (sub-programa Dynamic Referral Week)",
-                  validations: [
-                    "Cruza fecha de venta del contrato con la matriz para identificar el programa correcto",
-                    "Cita la mecánica exacta 2x1, 4x2, 6x3 sin inventar variantes",
-                    "No mezcla beneficios de otros sub-programas (Web Rate 15%, Experience Nights, etc.)",
-                  ],
-                },
-                {
-                  turn: 3,
-                  role: "user",
-                  text: "Y si mi amigo compra una membresía, ¿gano algo extra?",
-                },
-                {
-                  turn: 4,
-                  role: "agent",
-                  text: "Sí. Si tu referido compra Paradise Pass, no aplica bonus adicional bajo este programa específico — solo el conteo de noches. Los bonus por compra de membresía (Deluxe/VIP) aplican a programas Legendary, que no es tu caso. ¿Quieres que te conecte con un agente para iniciar el registro del referido?",
-                  knowledgeRef: "DL-Programs (límites del sub-programa)",
-                  handoff: "Reservaciones (opcional)",
-                  validations: [
-                    "Distingue audience: programa LVC vs Paradise Pass",
-                    "No promete bonus que no aplica al socio",
-                  ],
-                },
-              ],
-              expectedOutcome:
-                "El agente identifica correctamente el sub-programa por fecha de venta, explica la mecánica exacta y no confunde reglas LVC con Paradise Pass.",
-              successCriteria: [
-                "Programa correcto identificado por cruce fecha × matriz",
-                "Mecánica numérica precisa (2x1, 4x2, 6x3)",
-                "No menciona Legend Coins, tiers ni reglas LVC",
-              ],
-            },
-            {
-              id: "TS004",
-              jobStoryId: "JS004",
-              name: "Semanas Vacacionales por Expirar (incluye regla especial)",
+              name: "Programa de Referidos — Prelevantamiento + Lead + Handoff",
               status: "partial",
               persona:
-                "Andrés Hoyos, Paradise Pass con 1 certificado de 7 noches que vence en 4 meses (status = vigente) y 1 certificado de 4 noches con status = Expired hace 2 meses.",
+                "Carla Restrepo, socia Paradise Pass que tiene 2 amigos interesados en comprar su propio pase. Quiere entender qué gana por referirlos.",
               channel: "WhatsApp",
               language: "es",
               preconditions: [
-                "Contract con 2 Benefits con fechas controladas en sandbox",
-                "Regla especial Paradise Pass documentada en KB: 'aunque Expired, el club permite reservar'",
+                "Contract activo con RT BCL_PPAS (campo Beneficiary Name configurado)",
+                "Permiso para crear Lead ligado al Contract del referidor",
               ],
               steps: [
                 {
                   turn: 1,
                   role: "user",
-                  text: "¿Tengo semanas por vencer?",
+                  text: "Hola, tengo amigos interesados en comprar Paradise Pass. ¿Qué beneficios tengo por referirlos?",
                 },
                 {
                   turn: 2,
                   role: "agent",
-                  text: "Andrés, sí tienes movimiento. Tu certificado de 7 noches vence en 4 meses, el 24 de octubre. Además, tu certificado de 4 noches aparece como Expired desde abril, pero buenas noticias: en Paradise Pass aún puedes usarlo — el club te permite agendar la estancia aunque la fecha técnica haya pasado. ¿Quieres que te muestre opciones de propiedad para usar alguno?",
-                  dataLookup: "Benefit__c (Status, Expiration_Date__c)",
-                  knowledgeRef: "DL-Policies (regla especial Paradise Pass)",
+                  text: "Carla, qué bueno. La regla es sencilla: por cada pareja que refieras y compre, recibes $100 USD de descuento sobre el balance final de tu certificado. Recuerda que el programa tiene un límite de 4 beneficiarios directos (familiares directos). ¿Quieres que tome los datos de tus referidos ahora para iniciar el proceso?",
+                  knowledgeRef:
+                    "DL-Programs · PROGRAMA REFERIDOS.xlsx (regla básica + límite de 4 beneficiarios)",
                   validations: [
-                    "Detecta semanas que vencen en ≤12 meses (ventana acordada con Roberto González)",
-                    "Aplica regla especial: certificado Expired sigue siendo usable",
-                    "NO dice 'lo perdiste'",
+                    "Cita la regla clave: $100 USD por pareja referida sobre balance del certificado",
+                    "Menciona el límite de 4 beneficiarios directos",
+                    "NO entra en detalle de sub-programas históricos (Dynamic Referral Week, etc.) — el alcance MVP es explicar la regla básica",
                   ],
                 },
                 {
                   turn: 3,
                   role: "user",
-                  text: "Quiero algo para diciembre en Riviera Maya",
+                  text: "Sí, mi amigo se llama Pedro Martínez y su pareja Laura Gómez",
                 },
                 {
                   turn: 4,
                   role: "agent",
-                  text: "Voy a conectarte con un especialista para revisar disponibilidad real en diciembre. Le paso tu perfil, tus 2 certificados y tu preferencia de Riviera Maya para que arme las opciones contigo. Un momento.",
-                  handoff: "Reservaciones (con caso pre-documentado)",
+                  text: "Perfecto. Voy a registrar a Pedro y Laura como prospectos vinculados a tu cuenta y te conecto con un agente para que continúe el proceso contigo y ellos. Te envío al chat el número de seguimiento. Un momento.",
+                  dataLookup:
+                    "Create Lead (ligado a Contract.Id de Carla) con datos de Pedro y Laura como referidos",
+                  handoff: "Customer Service (con caso pre-documentado)",
                   validations: [
-                    "Crea Caso con datos pre-llenados (certificados, preferencia, destino)",
-                    "Agente NO intenta consultar Sabre directamente (pendiente API)",
+                    "Crea Lead correctamente ligado al Contract del referidor",
+                    "Caso incluye contexto: regla aplicable + datos del referido + balance actual del certificado",
+                    "Agente humano recibe handoff sin que Carla repita información",
                   ],
                 },
               ],
               expectedOutcome:
-                "El agente alerta sobre semanas próximas a vencer 12 meses antes (no 3-6), aplica la regla especial Paradise Pass y escala a humano con caso pre-documentado para búsqueda en Sabre.",
+                "El agente explica la regla básica del programa de referidos, hace un prelevantamiento (captura datos del referido), crea un Lead en Salesforce ligado al Contract del socio referidor y escala a humano para continuar el proceso.",
               successCriteria: [
-                "Ventana de alerta = 12 meses",
-                "Aplica regla especial Expired",
-                "Caso de handoff incluye contexto completo",
+                "Regla del $100 USD por pareja citada correctamente",
+                "Límite de 4 beneficiarios directos mencionado",
+                "Lead creado en Salesforce con vínculo al Contract correcto",
+                "Caso de handoff incluye datos completos del referido",
               ],
               blockers: [
-                "Regla 'Expired sigue siendo usable' debe estar documentada en KB — confirmar con Ornella que ya esté subida",
-                "Ricardo Dueñas — lista de Web Services de Sabre/Synxis pendiente (afecta paso siguiente de búsqueda de disponibilidad)",
+                "PAM — confirmar lógica de Lead-Contract para el agente referidor",
+                "Salesforce — implementar creación de Lead desde el flujo del agente con campo de relación al Contract",
               ],
             },
             {
@@ -1499,63 +1400,6 @@ export const customerProjects: CustomerProject[] = [
                 "Switch ES → EN en 1 turno",
                 "Pregunta explícita por persistencia",
                 "Update real al campo en Salesforce",
-              ],
-            },
-            {
-              id: "TS007",
-              jobStoryId: "JS011",
-              name: "Actualización de Método de Pago vía Pay Token (PCI-safe)",
-              status: "blocked",
-              persona:
-                "Socia con tarjeta de crédito principal próxima a expirar; quiere actualizarla antes de que falle el cargo mensual.",
-              channel: "WhatsApp",
-              language: "es",
-              preconditions: [
-                "Endpoint de Pay Token funcional en sandbox",
-                "Documentación del flow de URL renderizada por IA",
-              ],
-              steps: [
-                {
-                  turn: 1,
-                  role: "user",
-                  text: "Mi tarjeta vence el mes que viene, ¿cómo la actualizo?",
-                },
-                {
-                  turn: 2,
-                  role: "agent",
-                  text: "Por seguridad, no puedo recibir datos de tarjetas por WhatsApp. Te voy a enviar un enlace seguro de un solo uso para que actualices tu método de pago directamente en nuestro portal protegido. ¿Te lo mando ahora?",
-                  validations: [
-                    "Rechaza explícitamente recibir datos de tarjeta por el canal",
-                    "Explica el motivo (PCI compliance) sin tecnicismos",
-                  ],
-                },
-                {
-                  turn: 3,
-                  role: "user",
-                  text: "Sí, mándamelo",
-                },
-                {
-                  turn: 4,
-                  role: "agent",
-                  text: "Aquí está tu enlace seguro: [URL Pay Token única]. Es válido por 30 minutos y solo lo puedes usar una vez. Cuando termines la actualización, recibirás una confirmación automática. ¿Algo más mientras tanto?",
-                  dataLookup:
-                    "Generar Pay Token URL única (call externo a TI PAM)",
-                  validations: [
-                    "Genera URL única no adivinable",
-                    "Comunica caducidad y single-use",
-                    "Cita correctamente que la confirmación llega después",
-                  ],
-                },
-              ],
-              expectedOutcome:
-                "El agente nunca captura datos de tarjeta, genera y entrega una URL Pay Token segura, y el socio puede actualizar su método sin romper PCI.",
-              successCriteria: [
-                "0 mención/petición de datos de tarjeta en chat",
-                "URL renderizada correctamente",
-                "Confirmación automática al completar",
-              ],
-              blockers: [
-                "PAM — TI debe entregar la documentación de cómo la IA solicita y renderiza la URL de Pay Token en tiempo real. Validado por Ornella + Enrique Koh con Juan Carlos Torres pero NO documentado todavía.",
               ],
             },
             {
@@ -2150,7 +1994,7 @@ export const customerProjects: CustomerProject[] = [
           { id: "concierge", label: "Agentforce Concierge", title: "Paradise Pass Digital Concierge design", content: "An Agentforce agent that combines brand personality, RAG over 6 specialized Data Libraries, and direct access to the PAM org to respond with real customer context." },
           { id: "data-libraries", label: "Knowledge", title: "Knowledge — Concierge KB", content: "Instead of loading the KB's 51 documents as a single monolithic corpus, 6 separate Data Libraries are proposed. This enables: (1) audience-based access control, (2) intent-based retriever routing, (3) independent updates without re-indexing everything. Below: the 6 DLs, the file-by-file mapping of the delivered repository, chunking strategy, mandatory metadata schema, and critical pre-processing." },
           { id: "archivos-por-dl", label: "Files per DL", title: "File inventory per Data Library", content: "Concrete mapping of the PAM_Hotels_Knowledge_Base_RAG/ repository files to each of the 6 Data Libraries. This is the load list for the Concierge ingestion pipeline." },
-          { id: "job-stories", label: "Job Stories", title: "MVP backlog — Job Stories in the first release", content: "15 Job Stories filtered from PAM's v2 internal backlog — the only ones flagged as package = MVP. Each story is classified by its resolution path (Knowledge / Salesforce data / handoff) and by its current Knowledge coverage: which KB documents already answer it and what is still pending from the client. A final executive summary tracks MVP progress." },
+          { id: "job-stories", label: "Job Stories", title: "MVP backlog — Job Stories in the first release", content: "13 Job Stories filtered from PAM's v2.1 internal backlog — the only ones flagged as package = MVP. Each story is classified by its resolution path (Knowledge / Salesforce data / handoff) and by its current Knowledge coverage: which KB documents already answer it and what is still pending from the client. A final executive summary tracks MVP progress." },
           { id: "test-scripts", label: "Test scripts", title: "Agentforce test scripts — one per MVP Job Story", content: "15 conversational scripts to validate the Digital Concierge before UAT. Each script links to its Job Story, defines persona, channel, language, data preconditions, expected turn-by-turn transcript with inline validations (which Knowledge to cite, which Salesforce object to read, when to hand off), success criteria, and active blockers." },
           { id: "casos-uso", label: "Use cases", title: "Conversations the Concierge resolves", content: "The conversational flows the agent must handle end-to-end. Each flow combines KB (RAG) + real customer data (Salesforce) + escalation rules." },
           { id: "riesgos", label: "Risks & open questions", title: "Risks, gaps, and open questions", content: "Before going live, decisions must be confirmed with the customer. Each risk is mapped to its impact and the recommended action." },
@@ -2171,7 +2015,7 @@ export const customerProjects: CustomerProject[] = [
           { id: "concierge", label: "Concierge Agentforce", title: "Desenho do Concierge Digital Paradise Pass", content: "Um agente Agentforce que combina personalidade de marca, RAG sobre 6 Data Libraries especializadas e acesso direto à org da PAM para responder com contexto real do cliente." },
           { id: "data-libraries", label: "Knowledge", title: "Knowledge — KB do Concierge", content: "Em vez de carregar os 51 documentos do KB como um único corpus monolítico, propõem-se 6 Data Libraries separadas. Isso habilita: (1) controle de acesso por audiência, (2) roteamento do retriever por intent, (3) atualizações independentes sem reindexar tudo. Abaixo: as 6 DLs, o mapeamento arquivo-por-arquivo do repositório entregue, a estratégia de chunking, o schema de metadata obrigatório e o pré-processamento crítico." },
           { id: "archivos-por-dl", label: "Arquivos por DL", title: "Inventário de arquivos por Data Library", content: "Mapeamento concreto dos arquivos do repositório PAM_Hotels_Knowledge_Base_RAG/ para cada uma das 6 Data Libraries. É a lista de carga para o pipeline de ingestão do Concierge." },
-          { id: "job-stories", label: "Job Stories", title: "Backlog MVP — Job Stories do primeiro release", content: "15 Job Stories filtradas do backlog interno v2 da PAM — as únicas marcadas como pacote = MVP. Cada story é classificada pelo caminho de resolução (Knowledge / dados Salesforce / handoff) e pela cobertura atual de Knowledge: quais documentos do KB já a respondem e o que ainda está pendente do cliente. Um resumo executivo final acompanha o avanço do MVP." },
+          { id: "job-stories", label: "Job Stories", title: "Backlog MVP — Job Stories do primeiro release", content: "13 Job Stories filtradas do backlog interno v2.1 da PAM — as únicas marcadas como pacote = MVP. Cada story é classificada pelo caminho de resolução (Knowledge / dados Salesforce / handoff) e pela cobertura atual de Knowledge: quais documentos do KB já a respondem e o que ainda está pendente do cliente. Um resumo executivo final acompanha o avanço do MVP." },
           { id: "test-scripts", label: "Scripts de teste", title: "Scripts de teste Agentforce — um por Job Story MVP", content: "15 scripts conversacionais para validar o Concierge Digital antes do UAT. Cada script está vinculado à sua Job Story, define persona, canal, idioma, pré-condições de dados, transcrição esperada turno-a-turno com validações inline (qual Knowledge citar, qual objeto do Salesforce ler, quando fazer handoff), critérios de sucesso e bloqueadores ativos." },
           { id: "casos-uso", label: "Casos de uso", title: "Conversas que o Concierge resolve", content: "Os fluxos conversacionais que o agente deve tratar end-to-end. Cada fluxo combina KB (RAG) + dados reais do cliente (Salesforce) + regras de escalonamento." },
           { id: "riesgos", label: "Riscos e dúvidas em aberto", title: "Riscos, gaps e perguntas pendentes", content: "Antes de ir para produção, há decisões que devem ser confirmadas com o cliente. Cada risco está mapeado ao seu impacto e à ação recomendada." },
