@@ -269,15 +269,19 @@ const SF_P1: ArchNode[] = [
   {
     id: "slack",
     name: "Slack",
-    subtitle: "Hub de comunicación comercial",
+    subtitle: "SO del asesor · pestaña Hoy + Slackbot + RADAR",
     pillars: ["P1"],
     description:
-      "Reemplaza grupos de WhatsApp internos. Recibe notificaciones automáticas de Agentforce: alertas RADAR, oportunidades creadas, aprobaciones de descuento.",
+      "Sistema operativo del asesor. Carlos arranca el día en la pestaña 'Hoy' de Slack — foco, tareas y agenda en una pantalla. Slackbot prepara cada reunión y devuelve briefing + RADAR. La Vista 360 se consulta dentro del chat, sin abrir el CRM. Las alertas RADAR llegan en tiempo real al asesor correcto. Reemplaza grupos de WhatsApp internos.",
     bullets: [
-      "Reemplaza grupos WhatsApp internos",
-      "Alertas RADAR en tiempo real",
+      "Pestaña Hoy: foco, tareas y agenda en una pantalla",
+      "Preparar reunión con Slackbot — briefing + RADAR en el chat",
+      "Vista 360 conversacional, sin abrir el CRM",
+      "Alertas RADAR en tiempo real al asesor correcto",
+      "Registro de visitas y actualización de oportunidades desde Slack",
       "Aprobaciones de descuento y crédito",
       "Resúmenes de visita automáticos",
+      "Reemplaza grupos WhatsApp internos — trazabilidad completa",
     ],
   },
 ];

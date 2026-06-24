@@ -792,9 +792,10 @@ export const executiveDecks: ExecutiveDeck[] = [
         before: {
           heading: "Asesor hoy",
           items: [
+            "Empieza el día revisando WhatsApp, correo y un Excel — sin un lugar único para foco, tareas y agenda",
+            "Prepara cada reunión manualmente — busca histórico, cartera y cupo en sistemas distintos",
             "Construye su ruta de visitas manualmente — sin optimización de territorio",
             "No sabe si el cliente tiene PQR abierta ni si bajó su volumen de compra",
-            "Cotización de concretos compleja sin filtros inteligentes — frena el cierre",
             "Reporta en Excel al final del día — el gerente lo ve al día siguiente con 24h+ de rezago",
             "Salta entre apps: CRM, correo, WhatsApp, Excel — la información de cada cliente vive en un sistema distinto",
           ],
@@ -802,17 +803,50 @@ export const executiveDecks: ExecutiveDeck[] = [
         after: {
           heading: "Asesor con Pilar 1 activado",
           items: [
+            "Abre Slack y va a la pestaña Hoy — foco, tareas, agenda y alertas RADAR en una sola pantalla",
+            "Pide 'preparar reunión' y Slackbot devuelve briefing + Vista 360 + RADAR del día en el mismo chat",
             "Ruta optimizada por Salesforce Maps con ciclos por territorio y registro offline",
-            "RADAR de riesgo integrado en CRM: alerta si el cliente redujo volumen o lleva días sin actividad",
-            "Vista 360 con historial de compra, pedido sugerido por Einstein y estado de cartera en una pantalla",
-            "Pipeline del gerente actualizado en tiempo real — jefe de zona y dirección deciden el mismo día",
-            "Slack como base y sistema operativo del asesor: crea, modifica y actualiza cada oportunidad del CRM, deja registro de visitas y consulta su Vista 360 desde una sola interfaz, asistido por Slackbot — toda la información del ciclo de venta en Slack",
+            "Vista 360 conversacional dentro de Slack — sin abrir el CRM, sin pestañas múltiples",
+            "Registra cada visita y actualiza oportunidades desde Slack — Slackbot lo guía paso a paso",
+            "Pipeline del gerente actualizado en tiempo real — el resumen ejecutivo del viernes llega solo a Slack",
           ],
         },
         brand: {
           sparkles: [
             { variant: "yellow-main",     side: "right", top: "10%", size: 40, rotate: 12 },
             { variant: "yellow-inclined", side: "left",  top: "82%", size: 28, rotate: -10 },
+          ],
+        },
+      },
+
+      // ── SLIDE 12b · Slack-first storyboard ────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Pilar 1 · Storyboard — el día de Carlos antes de visitar a Don Hernán",
+        title: "Slack como sistema operativo del asesor — la historia en tres pasos",
+        left: {
+          heading: "Paso 1 · Pestaña Hoy",
+          items: [
+            "Carlos abre Slack en su celular antes del primer café",
+            "La pestaña 'Hoy' le muestra foco, tareas pendientes y calendario",
+            "Aparece la reunión 09:30 a.m. con Hernán Ríos — y un sugerido: '¿quieres prepararla?'",
+            "Sin abrir CRM, correo ni WhatsApp — un solo lugar para arrancar el día",
+          ],
+        },
+        right: {
+          heading: "Pasos 2 y 3 · Slackbot + Vista 360",
+          items: [
+            "Carlos hace click en 'preparar reunión' — Slackbot devuelve briefing completo + link RADAR",
+            "Esa misma alerta RADAR también puede llegarle a Slack en cualquier momento del día",
+            "Carlos pide '@Slackbot dame la 360 de Hernán Ríos' — la respuesta cabe en una sola pantalla",
+            "Histórico, cartera, cupo, Argos ONE: todo dentro del chat — sin necesidad de ir al CRM",
+          ],
+        },
+        products: ["Slack", "Agentforce"],
+        brand: {
+          sparkles: [
+            { variant: "blue-inclined",   side: "right", top: "8%",  size: 36, rotate: 14 },
+            { variant: "yellow-inclined", side: "left",  top: "80%", size: 28, rotate: -12 },
           ],
         },
       },
