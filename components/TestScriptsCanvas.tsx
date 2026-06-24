@@ -3,6 +3,63 @@
 import { useMemo, useState } from "react";
 import type { TestScript, TestScriptsData } from "../data/customerDemos";
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleCopy(e: React.MouseEvent) {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard unavailable — silent fail
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      aria-label={copied ? "Copiado" : "Copiar mensaje al portapapeles"}
+      title={copied ? "Copiado" : "Copiar"}
+      className={`ml-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-gray-400 transition hover:bg-white hover:text-gray-700 ${
+        copied ? "text-emerald-600 hover:text-emerald-600" : ""
+      }`}
+    >
+      {copied ? (
+        <svg
+          className="h-3.5 w-3.5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2.5}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M5 13l4 4L19 7"
+          />
+        </svg>
+      ) : (
+        <svg
+          className="h-3.5 w-3.5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m-7 7l3-3m0 0l-3-3m3 3H9"
+          />
+        </svg>
+      )}
+    </button>
+  );
+}
+
 const statusStyles: Record<
   TestScript["status"],
   { label: string; badge: string; dot: string; accent: string }
@@ -194,21 +251,26 @@ export default function TestScriptsCanvas({ data }: { data: TestScriptsData }) {
                                 : "border border-amber-200 bg-amber-50/60"
                           }`}
                         >
-                          <p
-                            className={`mb-1 text-[10px] font-bold uppercase tracking-wider ${
-                              step.role === "user"
-                                ? "text-gray-500"
+                          <div className="mb-1 flex items-center justify-between gap-2">
+                            <p
+                              className={`text-[10px] font-bold uppercase tracking-wider ${
+                                step.role === "user"
+                                  ? "text-gray-500"
+                                  : step.role === "agent"
+                                    ? "text-indigo-700"
+                                    : "text-amber-700"
+                              }`}
+                            >
+                              {step.role === "user"
+                                ? "Socio"
                                 : step.role === "agent"
-                                  ? "text-indigo-700"
-                                  : "text-amber-700"
-                            }`}
-                          >
-                            {step.role === "user"
-                              ? "Socio"
-                              : step.role === "agent"
-                                ? "Concierge"
-                                : "Sistema"}
-                          </p>
+                                  ? "Concierge"
+                                  : "Sistema"}
+                            </p>
+                            {step.role === "user" && (
+                              <CopyButton text={step.text} />
+                            )}
+                          </div>
                           <p className="text-sm leading-6 text-gray-800">
                             {step.text}
                           </p>
