@@ -20,6 +20,7 @@ import JourneyTimeline from "./JourneyTimeline";
 import JtbdCanvas from "./JtbdCanvas";
 import KnowledgeLibraryInventory from "./KnowledgeLibraryInventory";
 import JobStoriesCanvas from "./JobStoriesCanvas";
+import TestScriptsCanvas from "./TestScriptsCanvas";
 import Sprint3Canvas from "./Sprint3Canvas";
 import ObjectiveInfographic from "./ObjectiveInfographic";
 import OverviewStats from "./OverviewStats";
@@ -390,6 +391,10 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 <JobStoriesCanvas data={activeTab.jobStoriesData} />
               )}
 
+              {activeTab.testScriptsData && (
+                <TestScriptsCanvas data={activeTab.testScriptsData} />
+              )}
+
               {!activeTab.overviewData &&
                 !activeTab.customerProfile &&
                 !activeTab.contextData &&
@@ -412,7 +417,8 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 !activeTab.sprint3Data &&
                 !activeTab.assetsData &&
                 !activeTab.knowledgeInventoryData &&
-                !activeTab.jobStoriesData && (
+                !activeTab.jobStoriesData &&
+                !activeTab.testScriptsData && (
                   <div className="mt-10 rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-6">
                     <p className="text-sm font-semibold text-indigo-700">
                       {t.emptyTabTitle}

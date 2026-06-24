@@ -500,6 +500,36 @@ export type JobStoriesData = {
   summary: JobStoriesSummary;
 };
 
+export type TestScriptStep = {
+  turn: number;
+  role: "user" | "agent" | "system";
+  text: string;
+  validations?: string[];
+  dataLookup?: string;
+  knowledgeRef?: string;
+  handoff?: string;
+};
+
+export type TestScript = {
+  id: string;
+  jobStoryId: string;
+  name: string;
+  status: "ready" | "partial" | "blocked";
+  persona: string;
+  channel: "WhatsApp" | "Web Chat" | "SMS" | "Mobile";
+  language: "es" | "en" | "pt";
+  preconditions: string[];
+  steps: TestScriptStep[];
+  expectedOutcome: string;
+  successCriteria: string[];
+  blockers?: string[];
+};
+
+export type TestScriptsData = {
+  intro: string;
+  scripts: TestScript[];
+};
+
 export type KnowledgeLibraryFileGroup = {
   label: string;
   note?: string;
@@ -552,6 +582,7 @@ export type CustomerDemoTab = {
   sprint3Data?: Sprint3Data;
   knowledgeInventoryData?: KnowledgeLibraryInventoryData;
   jobStoriesData?: JobStoriesData;
+  testScriptsData?: TestScriptsData;
 };
 
 export type CustomerDemoI18n = {

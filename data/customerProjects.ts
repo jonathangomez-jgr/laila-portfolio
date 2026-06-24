@@ -1150,6 +1150,842 @@ export const customerProjects: CustomerProject[] = [
         },
       },
       {
+        id: "test-scripts",
+        label: "Scripts de prueba",
+        title: "Scripts de prueba Agentforce — uno por Job Story MVP",
+        content:
+          "15 scripts conversacionales para validar el Concierge Digital antes de pasar a UAT. Cada script está enlazado a su Job Story, define persona, canal, idioma, precondiciones de datos, transcripción esperada turn-by-turn con validaciones inline (qué Knowledge se debe citar, qué objeto Salesforce se debe leer, dónde aplica handoff), criterios de éxito y bloqueadores activos.",
+        testScriptsData: {
+          intro:
+            "Cada script es un caso de prueba end-to-end ejecutable contra el Concierge en sandbox. Está enlazado 1:1 con su Job Story MVP. El status indica si ya se puede correr: 🟢 listo (data + KB + Salesforce listos), 🟡 parcial (corre pero hay validaciones que dependen de data/doc pendiente), 🔴 bloqueado (no se puede correr sin que PAM entregue algo). Los pins inline en cada turno (🗂 lookup · 📚 KB · 👤 handoff) son las assertions automáticas para integrar en regression.",
+          scripts: [
+            {
+              id: "TS001",
+              jobStoryId: "JS001",
+              name: "Consulta de Membresía y Contrato Paradise Pass",
+              status: "ready",
+              persona:
+                "María Clara, socia Paradise Pass desde feb-2026. Contacto: Person Account en Vaclubity con 1 Contract activo (RT BCL_PPAS) y 2 Benefits asociados — un certificado de 7 noches vigente y uno de 4 noches activado.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Person Account 'María Clara' existe en sandbox con Phone que matchea el sender del chat",
+                "Contract activo con RT = BCL_PPAS y nivel Paradise Pass",
+                "2 Benefit__c con RT Certificate poblados (1 vigente, 1 activado)",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Hola, no me acuerdo qué incluye mi membresía exactamente",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "¡Hola María Clara! Veo que tienes un Paradise Pass activo desde febrero de 2026. Tu membresía incluye 2 certificados: uno de 7 noches que sigue vigente hasta el 15 de febrero de 2027, y uno de 4 noches que ya activaste. ¿Quieres que te explique los beneficios de cada uno?",
+                  dataLookup: "Account → Contract(BCL_PPAS) → Benefit__c[]",
+                  knowledgeRef: "DL-Programs (mecánica Paradise Pass)",
+                  validations: [
+                    "Identifica al socio por número de teléfono (Person Account lookup)",
+                    "Nombra el RT correcto (Paradise Pass, NO Legendary ni Privé)",
+                    "Cita fechas exactas de vencimiento desde Benefit__c, no inventa",
+                    "Diferencia entre certificado 'vigente' y 'activado' según Status del Benefit",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Sí, el de 7 noches",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Tu certificado de 7 noches te da acceso all-inclusive en cualquiera de nuestras 9 propiedades — Hard Rock, UNICO o AVA en México, República Dominicana y Jamaica. Incluye Member's Bracelet, Resort Credits canjeables en spa, aventuras y belleza, y acceso a eventos por invitación como Legends of Paradise en AVA Cancún del 6 al 13 de diciembre. ¿Te gustaría ver opciones de propiedad?",
+                  knowledgeRef: "DL-Programs, DL-Properties (fact sheets)",
+                  validations: [
+                    "NO menciona tiers LVC (Deluxe/VIP/HoF/Chairman) — esos son audience=lvc",
+                    "Lista correctamente las 3 marcas y las 9 propiedades",
+                    "Cita Legends of Paradise con fechas y sede correctas",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "El agente responde con datos reales del contrato del socio + contexto enriquecido del KB sobre beneficios. No confunde audiencia (no menciona LVC). El socio queda informado sin necesidad de hablar con humano.",
+              successCriteria: [
+                "Tiempo de respuesta < 5 segundos por turno",
+                "Sin alucinaciones de fechas, propiedades o beneficios",
+                "Cero mención de tiers LVC en este flujo",
+                "Cita al menos 1 propiedad y 1 evento por nombre exacto",
+              ],
+            },
+            {
+              id: "TS002",
+              jobStoryId: "JS002",
+              name: "Consulta de Beneficiarios Registrados",
+              status: "partial",
+              persona:
+                "Roberto Méndez, titular Paradise Pass desde mar-2026. Su contrato tiene 1 cotitular (su esposa) y 2 beneficiarios adicionales registrados en Vaclubity.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Person Account 'Roberto Méndez' identificable por teléfono",
+                "Contract con RT BCL_PPAS",
+                "Contract_Beneficiary__c con 3 registros vinculados al contract (cotitular + 2 adicionales)",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "¿Quiénes son los beneficiarios que tengo registrados en mi membresía?",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Veo en tu contrato Paradise Pass 3 personas registradas: tu cotitular Ana Méndez, y 2 beneficiarios adicionales — Lucía Méndez y Diego Méndez. ¿Quieres modificar o agregar a alguien?",
+                  dataLookup: "Contract → Contract_Beneficiary__c[]",
+                  validations: [
+                    "Lee Contract_Beneficiary__c filtrado por Contract del socio",
+                    "Diferencia rol de cotitular vs beneficiarios adicionales",
+                    "Cita nombres exactos sin inventar",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Sí, quiero agregar a mi sobrina",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Para agregar un nuevo beneficiario necesito conectarte con un especialista de Customer Service. Te transfiero con el contexto de tu cuenta para que no tengas que repetir nada. Un momento.",
+                  handoff: "Customer Service (Omni-Channel)",
+                  validations: [
+                    "NO intenta crear el beneficiario directamente (out-of-scope MVP)",
+                    "Abre Case con RT correcto y adjunta resumen IA",
+                    "Transfiere Messaging Session completa",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "El agente lista correctamente los beneficiarios existentes y, ante la solicitud de modificación, escala a humano con contexto completo.",
+              successCriteria: [
+                "Lista completa y precisa (sin omisiones ni duplicados)",
+                "Handoff sin pedir al usuario que repita su identidad",
+                "Caso creado con tipificación correcta",
+              ],
+              blockers: [
+                "PAM — Eduardo Vergara debe validar 100% migración de beneficiarios históricos en Vaclubity (reportado en 90%, sin testeo completo). Si la migración no está al 100%, el agente puede no encontrar registros y dará respuestas incompletas.",
+              ],
+            },
+            {
+              id: "TS003",
+              jobStoryId: "JS003",
+              name: "Explicación del Programa de Referidos por Año de Compra",
+              status: "ready",
+              persona:
+                "Carla Restrepo, compró su Paradise Pass en mayo 2025 → aplica el programa 'Dynamic Referral Week' según la matriz vigente en esa fecha.",
+              channel: "Web Chat",
+              language: "es",
+              preconditions: [
+                "Contract con campo 'Programa de Referidos' poblado en Vaclubity (debe identificar a qué programa aplica según fecha de venta)",
+                "Matriz de referidos cargada en DL-Programs",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "¿Cómo funciona el programa de referidos que tengo?",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Carla, tu contrato Paradise Pass de mayo 2025 aplica al programa Dynamic Referral Week: por cada 2 referidos que presentes y atendamos, recibes 1 semana adicional. Si llegan a 4 referidos, son 2 semanas, y si llegan a 6, son 3 semanas. ¿Te ayudo con cómo registrar a alguien?",
+                  dataLookup: "Contract.Programa_Referidos__c",
+                  knowledgeRef:
+                    "DL-Programs · PROGRAMA REFERIDOS.xlsx (sub-programa Dynamic Referral Week)",
+                  validations: [
+                    "Cruza fecha de venta del contrato con la matriz para identificar el programa correcto",
+                    "Cita la mecánica exacta 2x1, 4x2, 6x3 sin inventar variantes",
+                    "No mezcla beneficios de otros sub-programas (Web Rate 15%, Experience Nights, etc.)",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Y si mi amigo compra una membresía, ¿gano algo extra?",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Sí. Si tu referido compra Paradise Pass, no aplica bonus adicional bajo este programa específico — solo el conteo de noches. Los bonus por compra de membresía (Deluxe/VIP) aplican a programas Legendary, que no es tu caso. ¿Quieres que te conecte con un agente para iniciar el registro del referido?",
+                  knowledgeRef: "DL-Programs (límites del sub-programa)",
+                  handoff: "Reservaciones (opcional)",
+                  validations: [
+                    "Distingue audience: programa LVC vs Paradise Pass",
+                    "No promete bonus que no aplica al socio",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "El agente identifica correctamente el sub-programa por fecha de venta, explica la mecánica exacta y no confunde reglas LVC con Paradise Pass.",
+              successCriteria: [
+                "Programa correcto identificado por cruce fecha × matriz",
+                "Mecánica numérica precisa (2x1, 4x2, 6x3)",
+                "No menciona Legend Coins, tiers ni reglas LVC",
+              ],
+            },
+            {
+              id: "TS004",
+              jobStoryId: "JS004",
+              name: "Semanas Vacacionales por Expirar (incluye regla especial)",
+              status: "partial",
+              persona:
+                "Andrés Hoyos, Paradise Pass con 1 certificado de 7 noches que vence en 4 meses (status = vigente) y 1 certificado de 4 noches con status = Expired hace 2 meses.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Contract con 2 Benefits con fechas controladas en sandbox",
+                "Regla especial Paradise Pass documentada en KB: 'aunque Expired, el club permite reservar'",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "¿Tengo semanas por vencer?",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Andrés, sí tienes movimiento. Tu certificado de 7 noches vence en 4 meses, el 24 de octubre. Además, tu certificado de 4 noches aparece como Expired desde abril, pero buenas noticias: en Paradise Pass aún puedes usarlo — el club te permite agendar la estancia aunque la fecha técnica haya pasado. ¿Quieres que te muestre opciones de propiedad para usar alguno?",
+                  dataLookup: "Benefit__c (Status, Expiration_Date__c)",
+                  knowledgeRef: "DL-Policies (regla especial Paradise Pass)",
+                  validations: [
+                    "Detecta semanas que vencen en ≤12 meses (ventana acordada con Roberto González)",
+                    "Aplica regla especial: certificado Expired sigue siendo usable",
+                    "NO dice 'lo perdiste'",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Quiero algo para diciembre en Riviera Maya",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Voy a conectarte con un especialista para revisar disponibilidad real en diciembre. Le paso tu perfil, tus 2 certificados y tu preferencia de Riviera Maya para que arme las opciones contigo. Un momento.",
+                  handoff: "Reservaciones (con caso pre-documentado)",
+                  validations: [
+                    "Crea Caso con datos pre-llenados (certificados, preferencia, destino)",
+                    "Agente NO intenta consultar Sabre directamente (pendiente API)",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "El agente alerta sobre semanas próximas a vencer 12 meses antes (no 3-6), aplica la regla especial Paradise Pass y escala a humano con caso pre-documentado para búsqueda en Sabre.",
+              successCriteria: [
+                "Ventana de alerta = 12 meses",
+                "Aplica regla especial Expired",
+                "Caso de handoff incluye contexto completo",
+              ],
+              blockers: [
+                "Regla 'Expired sigue siendo usable' debe estar documentada en KB — confirmar con Ornella que ya esté subida",
+                "Ricardo Dueñas — lista de Web Services de Sabre/Synxis pendiente (afecta paso siguiente de búsqueda de disponibilidad)",
+              ],
+            },
+            {
+              id: "TS005",
+              jobStoryId: "JS005",
+              name: "Búsqueda de Destinos con Mejor Valor (filtro + handoff)",
+              status: "ready",
+              persona:
+                "Familia López — 2 adultos + 2 niños (8 y 11 años). Buscan destino familiar para junio 2026 con su certificado Paradise Pass de 7 noches.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Contract Paradise Pass con certificado vigente",
+                "Fact Sheets cargados en DL-Properties (AVA, Hard Rock, UNICO)",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Quiero usar mi semana en junio para vacaciones en familia con dos niños",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Para familias con niños te recomiendo nuestras propiedades familiares: Hard Rock Cancún, Hard Rock Riviera Maya (zona Hacienda), Hard Rock Vallarta, Hard Rock Los Cabos, Hard Rock Punta Cana o AVA Resort Cancún de ultra-lujo. Los UNICO quedan fuera porque son solo adultos. ¿Tienes preferencia por playa específica o presupuesto?",
+                  knowledgeRef:
+                    "DL-Properties (AVA, HRHC, HRRM, HRHV, HRLC, HRPC fact sheets)",
+                  validations: [
+                    "Filtra correctamente propiedades familiares y excluye adults-only",
+                    "Distingue zona Hacienda (familiar) de Heaven (18+) dentro de HRRM",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Algo en el Caribe, idealmente con casino",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Perfecto. Hard Rock Punta Cana cumple todo: Caribe, familiar y tiene casino (18+ para esa zona específica). Voy a conectarte con un agente de reservaciones con el resumen de tu búsqueda — tu certificado, fechas, preferencia Caribe + casino y perfil familiar — para que te muestre opciones reales de disponibilidad.",
+                  knowledgeRef: "DL-Properties (HRPC fact sheet)",
+                  handoff: "Reservaciones (caso pre-documentado)",
+                  validations: [
+                    "Identifica HRPC como única familiar+casino+Caribe",
+                    "Caso creado con resumen IA completo",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "El agente actúa como primer filtro inteligente, reduce el universo de 9 a 1-2 opciones según restricciones del socio, y escala a humano con contexto pre-documentado (decisión validada con Ornella Vázquez).",
+              successCriteria: [
+                "Recomendación correcta según perfil familiar + restricciones",
+                "Caso de handoff incluye filtros, fechas y preferencia",
+                "Tiempo total < 60 segundos",
+              ],
+            },
+            {
+              id: "TS006",
+              jobStoryId: "JS010",
+              name: "Cambio de Idioma Dinámico (ES → EN)",
+              status: "ready",
+              persona:
+                "Sócio brasileiro residente en EE.UU., contrato registrado en portugués pero prefiere atención en inglés.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Person Account con Preferred_Language__c = 'pt'",
+                "Agent topics configurados en ES/EN/PT",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Hi, can you help me in English please?",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Of course! I'll continue in English. Would you also like to update your preferred language on your profile so future communications come in English, or just for this conversation?",
+                  validations: [
+                    "Detecta cambio de idioma en el primer turno del usuario",
+                    "Pregunta explícitamente si actualizar Preferred_Language__c o solo sesión actual",
+                    "NO fuerza el idioma del contrato (pt)",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Please update it permanently to English",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Done — your preferred language is now English. All future emails and notifications will arrive in English. Anything else I can help you with?",
+                  dataLookup: "Update Account.Preferred_Language__c = 'en'",
+                  validations: [
+                    "Escribe el cambio en Salesforce (no solo confirma verbalmente)",
+                    "Confirma cambio al usuario en su idioma nuevo",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "El agente detecta el idioma del usuario y se adapta sin forzar el idioma del contrato. Si el usuario lo pide explícitamente, persiste el cambio en Salesforce.",
+              successCriteria: [
+                "Switch ES → EN en 1 turno",
+                "Pregunta explícita por persistencia",
+                "Update real al campo en Salesforce",
+              ],
+            },
+            {
+              id: "TS007",
+              jobStoryId: "JS011",
+              name: "Actualización de Método de Pago vía Pay Token (PCI-safe)",
+              status: "blocked",
+              persona:
+                "Socia con tarjeta de crédito principal próxima a expirar; quiere actualizarla antes de que falle el cargo mensual.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Endpoint de Pay Token funcional en sandbox",
+                "Documentación del flow de URL renderizada por IA",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Mi tarjeta vence el mes que viene, ¿cómo la actualizo?",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Por seguridad, no puedo recibir datos de tarjetas por WhatsApp. Te voy a enviar un enlace seguro de un solo uso para que actualices tu método de pago directamente en nuestro portal protegido. ¿Te lo mando ahora?",
+                  validations: [
+                    "Rechaza explícitamente recibir datos de tarjeta por el canal",
+                    "Explica el motivo (PCI compliance) sin tecnicismos",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Sí, mándamelo",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Aquí está tu enlace seguro: [URL Pay Token única]. Es válido por 30 minutos y solo lo puedes usar una vez. Cuando termines la actualización, recibirás una confirmación automática. ¿Algo más mientras tanto?",
+                  dataLookup:
+                    "Generar Pay Token URL única (call externo a TI PAM)",
+                  validations: [
+                    "Genera URL única no adivinable",
+                    "Comunica caducidad y single-use",
+                    "Cita correctamente que la confirmación llega después",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "El agente nunca captura datos de tarjeta, genera y entrega una URL Pay Token segura, y el socio puede actualizar su método sin romper PCI.",
+              successCriteria: [
+                "0 mención/petición de datos de tarjeta en chat",
+                "URL renderizada correctamente",
+                "Confirmación automática al completar",
+              ],
+              blockers: [
+                "PAM — TI debe entregar la documentación de cómo la IA solicita y renderiza la URL de Pay Token en tiempo real. Validado por Ornella + Enrique Koh con Juan Carlos Torres pero NO documentado todavía.",
+              ],
+            },
+            {
+              id: "TS008",
+              jobStoryId: "JS013",
+              name: "Solicitud de Estado de Cuenta por Email",
+              status: "partial",
+              persona:
+                "Socio con 3 certificados activos, cada uno con saldos parciales (Resort Credits, noches consumidas).",
+              channel: "Web Chat",
+              language: "es",
+              preconditions: [
+                "Account con Email válido",
+                "3 Benefit__c con Resort_Credits_Balance__c, Nights_Used__c, etc.",
+                "Plantilla de correo de estado de cuenta en Salesforce Core (no Marketing Cloud)",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Mándame mi estado de cuenta por correo, por favor",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Claro. Voy a enviarte un resumen consolidado de tus 3 certificados a tu correo registrado [correo enmascarado]. Incluye saldos de Resort Credits, noches consumidas y vigencias. ¿Confirmas el envío?",
+                  dataLookup: "Account.Email + Benefit__c[] (saldos agregados)",
+                  validations: [
+                    "Suma/agrupa saldos por certificado (no a nivel contrato)",
+                    "Muestra email enmascarado por seguridad",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Sí",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Enviado. Debería llegar en menos de 2 minutos. Si no lo ves, revisa spam y avísame.",
+                  dataLookup: "Trigger email template desde Core (no MC)",
+                  validations: [
+                    "Email enviado desde Salesforce Core (decisión MVP)",
+                    "Template incluye los 3 certificados con saldos correctos",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "El agente extrae saldos agregados desde Benefit (no Contract), dispara email desde Salesforce Core con plantilla replicando el formato actual de PAM.",
+              successCriteria: [
+                "Email entregado en <2 min",
+                "Saldos agregados correctamente por certificado",
+                "Sin uso de Marketing Cloud (MVP)",
+              ],
+              blockers: [
+                "PAM — compartir ejemplos de plantillas de correo actuales para que la IA pueda replicar formato",
+              ],
+            },
+            {
+              id: "TS009",
+              jobStoryId: "JS018",
+              name: "Cambio de Itinerario por Emergencia (late check-in)",
+              status: "partial",
+              persona:
+                "Socia con reservación activa en HRPC, vuelo retrasado, llegará 1 día tarde pero mantiene fecha de salida.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Reservation__c activa en HRPC con check-in mañana",
+                "Conexión OWS (Opera Web Service) configurada en sandbox",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Mi vuelo a Punta Cana se atrasó por emergencia y voy a llegar mañana en vez de hoy. ¿Pueden avisarle al hotel?",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Por supuesto. Antes de procesar, una pregunta importante: ¿tu fecha de salida sigue siendo la misma, o también la quieres mover un día?",
+                  validations: [
+                    "SIEMPRE pregunta si la fecha de salida cambia (regla validada)",
+                    "No automatiza nada sin la respuesta",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Mi fecha de salida sigue igual",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Perfecto. Ya inyecté la alerta de late check-in en tu reservación de Hard Rock Punta Cana — el hotel sabrá que llegas mañana y tu habitación queda asegurada. Importante: te recomiendo contactar directamente a tu transportadora para ajustar el traslado, eso no lo manejo desde aquí. ¿Algo más?",
+                  dataLookup:
+                    "OWS API → inyectar alert en Reservation_Items__c (RT Transfer)",
+                  validations: [
+                    "Llama al OWS correcto para late check-in",
+                    "NO procesa cambio de transportación (out of scope)",
+                    "Confirma propiedad por nombre",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "El agente automatiza la alerta vía OWS solo si la fecha de salida se mantiene; en caso contrario escala a humano. No toca transportación.",
+              successCriteria: [
+                "Pregunta explícita de fecha de salida ANTES de actuar",
+                "Inyección OWS exitosa (verificable en Opera)",
+                "Mensaje correcto sobre transportación (no automatiza)",
+              ],
+              blockers: [
+                "PAM — identificar el OWS exacto de Opera para inyectar alertas de late check-in y validar funcionamiento a escala",
+              ],
+            },
+            {
+              id: "TS010",
+              jobStoryId: "JS021",
+              name: "Política de Huracán y Clima Crítico",
+              status: "blocked",
+              persona:
+                "Socio con reservación en HRPC en 5 días, alerta de huracán categoría 3 acercándose al destino.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Política de huracán cargada en DL-Policies (Knowledge)",
+                "Reservation__c activa en HRPC",
+                "Tipificación de Casos de huracán configurada",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Voy para Punta Cana en 5 días y veo que hay un huracán anunciado. ¿Qué pasa con mi reservación?",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Entiendo la preocupación. Antes de explicarte las opciones, ¿estás bien? La buena noticia es que tenemos políticas de protección específicas para huracanes que te dan flexibilidad real. ¿Quieres que las repase contigo?",
+                  knowledgeRef: "DL-Policies (política de huracán)",
+                  validations: [
+                    "Tono empático antes que técnico (regla acordada con Ornella)",
+                    "Distingue política de huracán de cancelación regular",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Sí, dime",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Tienes 3 opciones bajo nuestra política de huracán: 1) Reprogramar tu estancia sin penalización hasta 12 meses, 2) Cambiar de propiedad a otro destino del portafolio sin costo adicional, o 3) Cancelar con crédito a futuro. Mi sugerencia es reubicarte a otro destino — por ejemplo, Los Cabos o Vallarta están seguros en esas fechas. ¿Quieres que te conecte con un agente para evaluar opciones reales de disponibilidad?",
+                  knowledgeRef:
+                    "DL-Policies (3 opciones específicas para huracán)",
+                  handoff: "Customer Service (Caso tipificado 'Huracán')",
+                  validations: [
+                    "Lista las 3 opciones exactas según política",
+                    "Sugiere reubicación (alineado al objetivo: proteger cash flow)",
+                    "Crea Caso con tipificación 'Huracán' y asigna al contract owner",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "Agente con tono empático, recita política exacta de huracán (no cancelación regular), facilita reubicación y escala a humano con caso tipificado correctamente.",
+              successCriteria: [
+                "Tono empático en primer turno",
+                "Política exacta sin alucinar opciones",
+                "Caso creado con RT/tipificación correcta",
+                "Asignación al contract owner",
+              ],
+              blockers: [
+                "PAM — subir política específica de huracán a Knowledge (NO está cargada todavía)",
+                "PAM — definir tipificación de casos (categorías, tópicos, subtópicos) para huracán",
+                "PAM — lógica de ruteo (colas Omni-Channel) hacia contract owner",
+              ],
+            },
+            {
+              id: "TS011",
+              jobStoryId: "JS023",
+              name: "Llamada de Reventa Sospechosa (orientación + fraude)",
+              status: "blocked",
+              persona:
+                "Socio recibe llamada de tercero ofreciendo comprarle su membresía con descuento; sospecha estafa.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Política oficial sobre reventas sospechosas cargada en Knowledge",
+                "Formatos exigidos por el club para casos de pago a tercero fraudulento",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Me llamó alguien diciendo que me quiere comprar mi membresía por 5 mil dólares, ¿es real?",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Gracias por preguntar antes de actuar — eso ya es una red flag importante. NO es una llamada oficial del club. Nuestra regla es clara: cualquier oferta de compra o reventa de tu membresía debe pasar SIEMPRE primero por nuestro equipo de Customer Service. ¿Ya hiciste algún pago o transferencia a esa persona?",
+                  knowledgeRef:
+                    "DL-Policies (política de reventas sospechosas)",
+                  validations: [
+                    "Confirma que NO es contacto oficial",
+                    "Explica la regla: avisar a Customer Service ANTES",
+                    "Pregunta clave: ¿ya pagaste?",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "No, todavía no he pagado nada",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Perfecto, llegaste a tiempo. Mi recomendación: bloquea ese contacto, no respondas más mensajes y comparte con nosotros el teléfono o nombre que te contactó. Voy a generar un reporte de fraude preventivo en tu cuenta para que quede registrado. ¿Me compartes el número?",
+                  dataLookup: "Create Case (RT = Fraud Prevention)",
+                  validations: [
+                    "Caso preventivo (no víctima aún)",
+                    "Pide datos del contacto sospechoso para registro",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "Si el socio NO pagó: orienta y crea caso preventivo. Si SÍ pagó (otra rama): escala inmediato al equipo especial de fraudes.",
+              successCriteria: [
+                "Detecta correctamente si hay víctima materializada vs prevención",
+                "Caso generado con tipificación correcta",
+                "Excluye al área de Reservaciones (regla acordada)",
+              ],
+              blockers: [
+                "PAM (Yolanda) — subir archivos y políticas oficiales sobre reventas sospechosas al Knowledge",
+                "Documentación específica: qué formatos exige el club cuando hay pago fraudulento materializado",
+              ],
+            },
+            {
+              id: "TS012",
+              jobStoryId: "JS024",
+              name: "Phishing — Validación de Comunicación Oficial",
+              status: "blocked",
+              persona:
+                "Socia recibe correo sospechoso supuestamente del club pidiéndole confirmar datos bancarios; quiere validar si es real.",
+              channel: "Web Chat",
+              language: "es",
+              preconditions: [
+                "Lista oficial de dominios y terminaciones de correo del club cargada en Knowledge",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Me llegó un correo de PAM Hotels pidiéndome que confirme mis datos bancarios. El dominio es @pamhotels-secure.net. ¿Es legítimo?",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "No, ese correo NO es nuestro. Nuestros dominios oficiales son exclusivamente @pamhotels.com y nuestras campañas de marketing salen desde dominios verificados de Marketing Cloud que terminan en nuestro nombre oficial. Cualquier variante como '-secure.net' es phishing. ¿Hiciste clic en algún enlace o ingresaste algún dato?",
+                  knowledgeRef:
+                    "DL-Policies (dominios oficiales del club)",
+                  validations: [
+                    "Compara dominio recibido vs lista oficial",
+                    "Identifica claramente el patrón sospechoso",
+                    "Pregunta crítica: ¿clic o datos ingresados?",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Hice clic en el enlace pero no ingresé datos",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Buenas noticias: sin ingresar datos el riesgo es bajo, pero por precaución te recomiendo escanear tu dispositivo. Voy a transferirte con Customer Service para que dejen registro y te orienten sobre pasos adicionales. Si en algún momento ingresaste contraseña o datos, avísanos de inmediato.",
+                  handoff: "Customer Service (caso Phishing)",
+                  validations: [
+                    "Distingue clic sin datos vs datos ingresados",
+                    "Escala correctamente según severidad",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "El agente actúa como filtro de validación dando tranquilidad o escalando según severidad (clic vs datos ingresados).",
+              successCriteria: [
+                "Dominios oficiales citados correctamente",
+                "Diferencia clic vs datos ingresados",
+                "Escalamiento solo si hubo interacción de riesgo",
+              ],
+              blockers: [
+                "PAM — compartir lista exacta de dominios y terminaciones de correo oficiales del club",
+                "Documentar reglas de comunicación oficial en Knowledge",
+              ],
+            },
+            {
+              id: "TS013",
+              jobStoryId: "JS027",
+              name: "Handoff a Contact Center con Contexto Completo",
+              status: "partial",
+              persona:
+                "Socio con queja compleja sobre cobro doble que el agente no puede resolver autónomamente.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Colas Omni-Channel de Customer Service configuradas",
+                "Messaging Session habilitada para transferencia",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Veo un cobro doble en mi tarjeta este mes y no entiendo. Necesito que alguien lo revise.",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Entiendo la frustración, un cobro doble se revisa con cuidado. Voy a transferirte con un especialista de Customer Service que tiene acceso completo a tu historial de pagos. Le paso todo el contexto de tu cuenta y de esta conversación para que no tengas que repetir nada. Un momento.",
+                  handoff:
+                    "Customer Service (Messaging Session + Case tipificado)",
+                  validations: [
+                    "Transfiere Messaging Session completa",
+                    "Crea Case con RT correcto",
+                    "Adjunta resumen IA + análisis de sentimiento",
+                    "Enruta a Customer Service (NO Reservaciones)",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "Transferencia fluida con contexto completo al equipo correcto. El socio no repite identidad ni problema.",
+              successCriteria: [
+                "Identidad y contexto pasan al agente humano",
+                "Cola correcta (Customer Service)",
+                "Sentimiento adjunto",
+                "Tiempo de espera < SLA acordado",
+              ],
+              blockers: [
+                "PAM — gerentes del Contact Center + Isaías (TI) deben definir y crear las colas Omni-Channel exactas",
+              ],
+            },
+            {
+              id: "TS014",
+              jobStoryId: "JS028",
+              name: "Disputa de Cobro con Análisis de Sentimiento",
+              status: "partial",
+              persona:
+                "Socia molesta por cobro no reconocido en su estado de cuenta, usa lenguaje fuerte desde el primer turno.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Sentiment Analysis configurado en Agentforce",
+                "Prompts de diferenciación (calmado vs molesto) implementados",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Esto es un robo. Tienen un cobro mío que no autoricé, no me vengan con cuentos. Quiero hablar con un humano YA.",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Te escucho y entiendo tu molestia. No te voy a hacer perder más tiempo conmigo — te transfiero inmediatamente con Customer Service. Te paso tu cuenta y esta conversación para que el equipo arranque con todo el contexto. Un momento.",
+                  handoff: "Customer Service (escalamiento inmediato)",
+                  validations: [
+                    "Detecta sentimiento negativo fuerte en turno 1",
+                    "NO intenta recabar más información (regla acordada)",
+                    "Transfiere inmediato sin fricción",
+                    "Caso incluye sentiment = high frustration",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "Si sentimiento negativo fuerte → escalamiento inmediato. Si calmado → el agente recaba más detalles antes de transferir.",
+              successCriteria: [
+                "Sentiment Analysis detecta frustración en turno 1",
+                "Sin intento de recabar más info cuando hay molestia alta",
+                "Transferencia a Customer Service (no Reembolsos)",
+                "Caso con sentiment flag = high",
+              ],
+              blockers: [
+                "Salesforce (FDE) — agregar prompts específicos para diferenciar calmado (sacar info) vs molesto (transferir)",
+                "PAM — estructurar colas Omni-Channel de Customer Service",
+              ],
+            },
+            {
+              id: "TS015",
+              jobStoryId: "JS030",
+              name: "Modificación / Cancelación de Reservación → Handoff",
+              status: "ready",
+              persona:
+                "Socio quiere mover su reservación existente 2 semanas adelante por cambio de planes laborales.",
+              channel: "WhatsApp",
+              language: "es",
+              preconditions: [
+                "Reservation__c activa en sandbox",
+                "Colas de Reservaciones (skills) configuradas en Omni-Channel",
+              ],
+              steps: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Necesito cambiar las fechas de mi reservación de Vallarta, ¿se puede?",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "Sí, las modificaciones se manejan directamente con nuestro equipo de Reservaciones. Te voy a transferir con un agente comercial que tiene acceso al sistema para hacer los cambios bajo las reglas correctas. Le paso tu reservación actual y el detalle de tu solicitud. Un momento.",
+                  handoff:
+                    "Reservaciones (skills-based routing en Omni-Channel)",
+                  validations: [
+                    "NO redirige a portal de autoservicio (regla acordada)",
+                    "Rutea a Reservaciones (no Customer Service)",
+                    "Adjunta detalle de la reservación actual",
+                  ],
+                },
+              ],
+              expectedOutcome:
+                "El agente NO intenta procesar la modificación; transfiere directo a Reservaciones con el contexto correcto.",
+              successCriteria: [
+                "0 intento de modificación autónoma",
+                "Ruteo correcto a Reservaciones (no CS)",
+                "Caso con detalle de reservación",
+              ],
+            },
+          ],
+        },
+      },
+      {
         id: "casos-uso",
         label: "Casos de uso",
         title: "Conversaciones que el Concierge resuelve",
@@ -1315,6 +2151,7 @@ export const customerProjects: CustomerProject[] = [
           { id: "data-libraries", label: "Knowledge", title: "Knowledge — Concierge KB", content: "Instead of loading the KB's 51 documents as a single monolithic corpus, 6 separate Data Libraries are proposed. This enables: (1) audience-based access control, (2) intent-based retriever routing, (3) independent updates without re-indexing everything. Below: the 6 DLs, the file-by-file mapping of the delivered repository, chunking strategy, mandatory metadata schema, and critical pre-processing." },
           { id: "archivos-por-dl", label: "Files per DL", title: "File inventory per Data Library", content: "Concrete mapping of the PAM_Hotels_Knowledge_Base_RAG/ repository files to each of the 6 Data Libraries. This is the load list for the Concierge ingestion pipeline." },
           { id: "job-stories", label: "Job Stories", title: "MVP backlog — Job Stories in the first release", content: "15 Job Stories filtered from PAM's v2 internal backlog — the only ones flagged as package = MVP. Each story is classified by its resolution path (Knowledge / Salesforce data / handoff) and by its current Knowledge coverage: which KB documents already answer it and what is still pending from the client. A final executive summary tracks MVP progress." },
+          { id: "test-scripts", label: "Test scripts", title: "Agentforce test scripts — one per MVP Job Story", content: "15 conversational scripts to validate the Digital Concierge before UAT. Each script links to its Job Story, defines persona, channel, language, data preconditions, expected turn-by-turn transcript with inline validations (which Knowledge to cite, which Salesforce object to read, when to hand off), success criteria, and active blockers." },
           { id: "casos-uso", label: "Use cases", title: "Conversations the Concierge resolves", content: "The conversational flows the agent must handle end-to-end. Each flow combines KB (RAG) + real customer data (Salesforce) + escalation rules." },
           { id: "riesgos", label: "Risks & open questions", title: "Risks, gaps, and open questions", content: "Before going live, decisions must be confirmed with the customer. Each risk is mapped to its impact and the recommended action." },
           { id: "assets", label: "Assets", title: "Solution assets", content: "Discovery and design materials delivered to the customer. The two HTML analyses are the foundation on which the Concierge was designed: the KB Audit classified the 51 documents and proposed the 6 Data Libraries; the Data Model Overview mapped the PAM-Sandbox org for agent grounding." },
@@ -1335,6 +2172,7 @@ export const customerProjects: CustomerProject[] = [
           { id: "data-libraries", label: "Knowledge", title: "Knowledge — KB do Concierge", content: "Em vez de carregar os 51 documentos do KB como um único corpus monolítico, propõem-se 6 Data Libraries separadas. Isso habilita: (1) controle de acesso por audiência, (2) roteamento do retriever por intent, (3) atualizações independentes sem reindexar tudo. Abaixo: as 6 DLs, o mapeamento arquivo-por-arquivo do repositório entregue, a estratégia de chunking, o schema de metadata obrigatório e o pré-processamento crítico." },
           { id: "archivos-por-dl", label: "Arquivos por DL", title: "Inventário de arquivos por Data Library", content: "Mapeamento concreto dos arquivos do repositório PAM_Hotels_Knowledge_Base_RAG/ para cada uma das 6 Data Libraries. É a lista de carga para o pipeline de ingestão do Concierge." },
           { id: "job-stories", label: "Job Stories", title: "Backlog MVP — Job Stories do primeiro release", content: "15 Job Stories filtradas do backlog interno v2 da PAM — as únicas marcadas como pacote = MVP. Cada story é classificada pelo caminho de resolução (Knowledge / dados Salesforce / handoff) e pela cobertura atual de Knowledge: quais documentos do KB já a respondem e o que ainda está pendente do cliente. Um resumo executivo final acompanha o avanço do MVP." },
+          { id: "test-scripts", label: "Scripts de teste", title: "Scripts de teste Agentforce — um por Job Story MVP", content: "15 scripts conversacionais para validar o Concierge Digital antes do UAT. Cada script está vinculado à sua Job Story, define persona, canal, idioma, pré-condições de dados, transcrição esperada turno-a-turno com validações inline (qual Knowledge citar, qual objeto do Salesforce ler, quando fazer handoff), critérios de sucesso e bloqueadores ativos." },
           { id: "casos-uso", label: "Casos de uso", title: "Conversas que o Concierge resolve", content: "Os fluxos conversacionais que o agente deve tratar end-to-end. Cada fluxo combina KB (RAG) + dados reais do cliente (Salesforce) + regras de escalonamento." },
           { id: "riesgos", label: "Riscos e dúvidas em aberto", title: "Riscos, gaps e perguntas pendentes", content: "Antes de ir para produção, há decisões que devem ser confirmadas com o cliente. Cada risco está mapeado ao seu impacto e à ação recomendada." },
           { id: "assets", label: "Ativos", title: "Ativos da solução", content: "Materiais de discovery e desenho entregues ao cliente. Os dois análises em HTML são a base sobre a qual o Concierge foi desenhado: o KB Audit classificou os 51 documentos e propôs as 6 Data Libraries; o Data Model Overview mapeou a org PAM-Sandbox para grounding do agente." },
