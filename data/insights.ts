@@ -75,11 +75,11 @@ const multiAgent: Insight = {
   title:
     "Salesforce como actor principal en arquitecturas multiagente empresariales",
   subtitle:
-    "Cuándo Agentforce debe ser el orquestador, cuándo solo el cerebro de experiencia y cuándo es un participante más dentro de un ecosistema gobernado por MuleSoft, Data Cloud, MCP y A2A.",
+    "Cuándo Agentforce debe ser el orquestador, cuándo solo el cerebro de experiencia y cuándo conviene posicionarlo como un participante de primera clase dentro de un ecosistema gobernado por MuleSoft, Data Cloud, MCP y A2A. Documento escrito para usted, desde la mirada de un arquitecto técnico en IA y Agentforce.",
   summary:
-    "Una arquitectura multiagente que pone a Salesforce en el centro funciona cuando el proceso gira alrededor del cliente, los datos transaccionales viven en la plataforma y la experiencia se entrega por canales digitales. Fuera de ese eje, Salesforce debe ser un participante de primera clase, no un cerebro forzado. Esta entrada desarrolla la postura, las cinco opciones de arquitectura realistas, la diferencia entre MCP y A2A, una arquitectura de referencia accionable, criterios de decisión, recomendaciones consultivas y un modelo de madurez de tres niveles.",
+    "Una arquitectura multiagente que pone a Salesforce en el centro funciona cuando el proceso de su organización gira alrededor del cliente, los datos transaccionales viven en la plataforma y la experiencia se entrega por canales digitales. Fuera de ese eje, Salesforce debe ser un participante de primera clase, no un cerebro forzado. Este documento desarrolla la postura, distingue claramente entre agente, herramienta / acción y proceso, recorre cinco opciones de arquitectura realistas, explica la diferencia entre MCP y A2A, propone una arquitectura de referencia accionable, criterios de decisión, recomendaciones consultivas y un modelo de madurez de tres niveles para su organización.",
   author: "Jonathan Gomez",
-  authorRole: "Principal Solution Engineer · Salesforce",
+  authorRole: "Arquitecto técnico · IA & Agentforce",
   publishedAt: "2026-06-23",
   updatedAt: "2026-06-23",
   readingMinutes: 28,
@@ -108,17 +108,17 @@ const multiAgent: Insight = {
       blocks: [
         {
           type: "statement",
-          text: "Salesforce debe ser el orquestador de experiencia, contexto y acción cuando el proceso gira alrededor del cliente. Agentforce maneja conversación, intención y delegación a especialistas. MuleSoft es la capa de interoperabilidad, gobierno y observabilidad cuando el ecosistema incluye agentes y herramientas de múltiples plataformas. Data Cloud aporta contexto unificado. Flow y Apex controlan lo determinístico. MCP se usa para herramientas. A2A se reserva para colaboración real entre agentes autónomos.",
+          text: "Salesforce debe ser el orquestador de experiencia, contexto y acción cuando el proceso de su organización gira alrededor del cliente. Agentforce maneja conversación, intención y delegación a especialistas. MuleSoft es la capa de interoperabilidad, gobierno y observabilidad cuando el ecosistema incluye agentes y herramientas / acciones de múltiples plataformas. Data Cloud aporta contexto unificado. Flow y Apex controlan lo determinístico. MCP se usa para herramientas / acciones. A2A se reserva para colaboración real entre agentes autónomos.",
         },
         {
           type: "paragraph",
-          text: "No es un manifiesto de producto. Es una postura consultiva: hay escenarios en los que Salesforce debe ser el cerebro de la arquitectura, otros en los que debe ser un especialista invocado por otros agentes, y otros en los que forzarlo como único orquestador es un error de diseño. Esta entrada desarrolla cuál es cuál y por qué.",
+          text: "Este documento está escrito desde la mirada de un arquitecto técnico especializado en IA y Agentforce, dirigido a usted como responsable de la decisión — sea un líder de negocio, un CIO o un equipo de arquitectura empresarial. No es un manifiesto de producto. Es una postura consultiva: hay escenarios en los que Salesforce debe ser el cerebro de su arquitectura, otros en los que conviene que sea un especialista invocado por otros agentes, y otros en los que forzarlo como único orquestador sería un error de diseño que pagará caro más adelante. Aquí desarrollamos cuál es cuál y por qué.",
         },
         {
           type: "callout",
           tone: "info",
-          title: "Cómo leer esta entrada",
-          text: "Cada sección es autocontenida. Con 5 minutos basta el statement, la postura estratégica y la conclusión. Con 30 minutos se recorren las opciones A–E, la arquitectura de referencia y la matriz de decisión. Para llevar la conversación a un comité o a una reunión de negocio, las recomendaciones y el modelo de madurez funcionan como hoja de ruta.",
+          title: "Cómo leer este documento",
+          text: "Cada sección es autocontenida. Con 5 minutos basta el statement, la postura estratégica y la conclusión. Con 30 minutos recorre las opciones A–E, la arquitectura de referencia y la matriz de decisión. Para llevar la conversación a un comité o a una reunión de negocio, las recomendaciones y el modelo de madurez funcionan como hoja de ruta para su equipo.",
         },
       ],
     },
@@ -129,7 +129,7 @@ const multiAgent: Insight = {
       blocks: [
         {
           type: "paragraph",
-          text: "Hay cinco lecturas posibles y todas son válidas en distintos contextos. El error no es elegir mal entre ellas: es asumir que solo una es correcta para todo el cliente.",
+          text: "Existen cinco lecturas posibles y todas son válidas en distintos contextos de su organización. El error no es elegir mal entre ellas: es asumir que solo una es correcta para todos los casos de uso. Como arquitecto, mi recomendación es que evalúe cada una de las cinco contra su propio mapa de procesos antes de comprometer una arquitectura objetivo.",
         },
         {
           type: "image",
@@ -202,7 +202,7 @@ const multiAgent: Insight = {
           items: [
             "El proceso es de back-office puro: ETL, conciliaciones, reporting financiero, riesgo de crédito a gran escala.",
             "La fuente de verdad y la lógica de negocio principal viven en el ERP, el core bancario, el sistema de billing, el WMS o el LIMS.",
-            "Existe ya un orquestador corporativo (interno, sobre MuleSoft, Camunda, Azure o un hub propio) y el cliente decidió que la IA empresarial se gobierna desde ahí.",
+            "Existe ya un orquestador corporativo (interno, sobre MuleSoft, Camunda, Azure o un hub propio) y su organización decidió que la IA empresarial se gobierna desde ahí.",
             "El caso de uso no es centrado en cliente — por ejemplo, un asistente para ingeniería, devops, finanzas internas o un copiloto de Microsoft 365.",
             "El cliente no tiene una historia de canal en Salesforce y forzar la conversación en Service Cloud sería sobre-ingeniería.",
           ],
@@ -211,25 +211,31 @@ const multiAgent: Insight = {
           type: "callout",
           tone: "warning",
           title: "Honestidad consultiva",
-          text: "Ningún cliente serio necesita que defendamos a Salesforce en todos los escenarios. Necesita que lo defendamos donde claramente gana — y que reconozcamos abiertamente dónde es mejor un participante. Ese segundo movimiento es lo que construye credibilidad técnica.",
+          text: "Como arquitecto, mi trabajo no es defender a Salesforce en todos los escenarios. Es ayudarle a posicionarlo donde claramente gana — y decirle abiertamente dónde es mejor que sea un participante de primera clase dentro de algo mayor. Esa franqueza es lo que protege la inversión de su organización a tres años, no la elegancia del diagrama del día uno.",
         },
       ],
     },
     {
       id: "agente-herramienta-proceso",
       eyebrow: "Parte 2 · Conceptos",
-      title: "Agente, herramienta y proceso: tres cosas distintas",
+      title: "Agente, herramienta / acción y proceso: tres cosas distintas",
       blocks: [
         {
           type: "paragraph",
-          text: "Una de las disciplinas más importantes al diseñar arquitecturas con LLMs es no convertir todo en agente. La mayoría de los problemas no necesitan un agente: necesitan una herramienta bien definida, un proceso determinístico o una composición de ambos. Cuándo introducir razonamiento autónomo no es una decisión estética; es una decisión de costo, riesgo y gobernanza.",
+          text: "Una de las disciplinas más importantes al diseñar arquitecturas con LLMs es no convertir todo en agente. La mayoría de los problemas que vemos en sus mesas de discovery no necesitan un agente: necesitan una herramienta / acción bien definida, un proceso determinístico o una composición de ambos. Cuándo introducir razonamiento autónomo no es una decisión estética; es una decisión de costo, riesgo y gobernanza que conviene tomar con criterio arquitectónico.",
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Por qué la terminología importa",
+          text: "Aquí usamos 'herramienta / acción' (en lugar de solo 'herramienta') para alinear con la terminología de Agentforce, donde una Action es exactamente eso: una función determinística — Flow, Apex, Prompt Template, External Service, MCP — que el agente puede invocar. Esto deja claro qué la separa de un Proceso: la acción es la unidad de ejecución; el proceso es la orquestación de varias acciones a lo largo del tiempo, con estado, transaccionalidad y reglas de negocio.",
         },
         {
           type: "image",
           src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Relevant-Accurate-Results.webp",
           alt: "Atlas Reasoning Engine: ciclo de entendimiento, decisión y acción de Agentforce.",
           caption:
-            "El motor de razonamiento de Agentforce entiende la intención, decide qué herramientas usar y actúa. Ese ciclo es lo que distingue a un agente — y lo que justifica su costo. Si tu caso no necesita esos tres pasos, probablemente lo que buscas no es un agente.",
+            "El motor de razonamiento de Agentforce entiende la intención, decide qué acción invocar y actúa. Ese ciclo es lo que distingue a un agente — y lo que justifica su costo. Si su caso no necesita esos tres pasos, probablemente lo que busca no es un agente, sino una acción o un proceso.",
           source: {
             label: "Salesforce · Atlas Reasoning Engine",
             url: "https://www.salesforce.com/agentforce/",
@@ -241,23 +247,29 @@ const multiAgent: Insight = {
           rows: [
             [
               "Agente",
-              "Componente que recibe una intención en lenguaje natural, planifica, decide qué herramientas usar, mantiene contexto y puede delegar.",
-              "Cuando la entrada es ambigua, el camino no es predecible y necesitas razonamiento, planificación o redacción.",
-              "Cuando el proceso es fijo, regulado o el costo de un error semántico del LLM es alto sin supervisión.",
+              "Componente que recibe una intención en lenguaje natural, planifica, decide qué acciones invocar, mantiene contexto y puede delegar a otros agentes.",
+              "Cuando la entrada es ambigua, el camino no es predecible y necesita razonamiento, planificación o redacción.",
+              "Cuando el proceso es fijo, regulado o el costo de un error semántico del LLM es alto sin supervisión humana.",
             ],
             [
-              "Herramienta",
-              "Función determinística invocable por un agente o por un proceso: Apex, Flow, External Service, MCP server, API REST.",
-              "Cuando la operación tiene parámetros claros, resultados verificables y reglas de negocio explícitas.",
-              "Cuando intentas que la herramienta reemplace al razonamiento o que oculte ambigüedad.",
+              "Herramienta / Acción",
+              "Función determinística que el agente o un proceso invoca: Apex, Flow, Prompt Template, External Service, MCP server, API REST. En Agentforce se modela explícitamente como Action.",
+              "Cuando la operación tiene parámetros claros, resultados verificables y reglas de negocio explícitas. Es atómica: una entrada, una salida, sin estado a largo plazo.",
+              "Cuando intenta que la acción reemplace al razonamiento o que oculte ambigüedad. Y cuando la operación requiere coordinar varios pasos con estado — eso ya es un proceso.",
             ],
             [
               "Proceso",
-              "Orquestación determinística: Flow Orchestration, Apex Queueable, OmniStudio, BPMN, MuleSoft flow.",
-              "Procesos regulados, transaccionales, con SLAs, ramas de excepción y necesidad de auditoría.",
+              "Orquestación determinística que compone varias acciones a lo largo del tiempo, con estado, transacciones y compensaciones: Flow Orchestration, Apex Queueable, OmniStudio, BPMN, MuleSoft flow.",
+              "Procesos regulados, transaccionales, con SLAs, ramas de excepción y necesidad de auditoría punto-a-punto.",
               "Cuando la entrada es naturalmente conversacional y la lógica no se puede codificar como árbol de decisión.",
             ],
           ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "La diferencia que más se confunde",
+          text: "Herramienta / Acción ≠ Proceso. La acción es la unidad atómica que el agente invoca (un Flow simple, un Apex, una llamada a una API). El proceso compone varias acciones con estado, reintentos y reglas — eso ya pide gobernanza de proceso (Flow Orchestration, MuleSoft, BPMN). Mantener esta separación clara en su diseño le ahorra discusiones de ownership y debates de 'esto debería ser un agente' que en realidad eran 'esto debería ser un proceso'.",
         },
         {
           type: "heading",
@@ -268,17 +280,17 @@ const multiAgent: Insight = {
           type: "list",
           ordered: true,
           items: [
-            "Si la entrada se puede normalizar a parámetros y la salida se valida con reglas, es una herramienta — no un agente.",
+            "Si la entrada se puede normalizar a parámetros y la salida se valida con reglas, es una herramienta / acción — no un agente.",
             "Si el flujo tiene pasos fijos, transacciones y rollback, es un proceso — Flow o Apex, no LLM.",
-            "Si lo único que aporta el LLM es redactar la respuesta final, el agente es un wrapper sobre Prompt Templates, no un agente autónomo.",
-            "Si necesitas planificar, descomponer, elegir herramientas distintas según el contexto, mantener memoria de la conversación o delegar a otro especialista — entonces sí, es un agente.",
+            "Si lo único que aporta el LLM es redactar la respuesta final, el supuesto agente es un wrapper sobre Prompt Templates, no un agente autónomo.",
+            "Si necesita planificar, descomponer, elegir acciones distintas según el contexto, mantener memoria de la conversación o delegar a otro especialista — entonces sí, es un agente.",
           ],
         },
         {
           type: "callout",
           tone: "critical",
           title: "Anti-patrón frecuente",
-          text: "Convertir en agente lo que era un Flow con buenas etiquetas. El resultado es un componente más caro, más lento, más difícil de auditar y con menor cobertura de pruebas que la versión determinística que ya funcionaba. La regla de oro: si no necesitas razonamiento, no pagues por razonamiento.",
+          text: "Convertir en agente lo que era un Flow con buenas etiquetas. El resultado es un componente más caro, más lento, más difícil de auditar y con menor cobertura de pruebas que la versión determinística que ya funcionaba en su organización. La regla de oro: si no necesita razonamiento, no pague por razonamiento.",
         },
       ],
     },
@@ -289,7 +301,7 @@ const multiAgent: Insight = {
       blocks: [
         {
           type: "paragraph",
-          text: "No hay una única topología correcta. Hay cinco patrones que cubren la mayoría de los escenarios empresariales. Las opciones no son excluyentes: la mayoría de los clientes maduros terminan con una combinación de A+B+C, y los más grandes incorporan D y E para escalar.",
+          text: "No hay una única topología correcta. Hay cinco patrones que cubren la mayoría de los escenarios empresariales. Las opciones no son excluyentes: en organizaciones maduras suele convivir una combinación de A + B + C, y las más grandes incorporan D y E para escalar. Le recomiendo leerlas como un menú, no como una secuencia.",
         },
         {
           type: "heading",
@@ -337,27 +349,27 @@ const multiAgent: Insight = {
         {
           type: "heading",
           level: 3,
-          text: "Opción B · Agentforce como orquestador de herramientas",
+          text: "Opción B · Agentforce como orquestador de herramientas / acciones",
         },
         {
           type: "paragraph",
-          text: "El agente principal no delega a otros agentes; consume herramientas — Flow, Apex, Prompt Templates, External Services, MuleSoft API, MCP servers. Es la arquitectura más simple y la que mejor resultado da en la mayoría de los casos: una sola superficie conversacional y muchas acciones bien definidas detrás.",
+          text: "El agente principal no delega a otros agentes; consume herramientas / acciones — Flow, Apex, Prompt Templates, External Services, MuleSoft API, MCP servers. Es la arquitectura más simple y la que mejor resultado entrega en la mayoría de los casos: una sola superficie conversacional y muchas Actions bien definidas detrás. En el modelo de Agentforce, estas Actions son la unidad de trabajo que el agente conoce, prueba y audita.",
         },
         {
           type: "callout",
           tone: "success",
-          title: "Cuándo una herramienta vence a un agente",
-          text: "Cuando la operación es 'consulta este sistema y devuélveme estos campos', 'crea este registro con estos datos', 'calcula esta elegibilidad con estas reglas'. No hay ambigüedad, no hay planificación, no hay razonamiento. Ahí no quieres un agente — quieres una herramienta confiable, idempotente y auditable.",
+          title: "Cuándo una acción vence a un agente",
+          text: "Cuando la operación es 'consulta este sistema y devuélveme estos campos', 'crea este registro con estos datos', 'calcula esta elegibilidad con estas reglas'. No hay ambigüedad, no hay planificación, no hay razonamiento. Ahí no quiere un agente — quiere una herramienta / acción confiable, idempotente y auditable.",
         },
         {
           type: "list",
           items: [
             "Flow Actions cuando la lógica vive en Salesforce y debe respetar reglas de negocio declarativas.",
-            "Apex Invocable Actions cuando hay SOQL/DML complejo, validaciones cruzadas o lógica que ya está implementada.",
-            "Prompt Templates cuando la herramienta es 'redacta', 'resume', 'clasifica' o 'extrae' usando contexto CRM.",
+            "Apex Invocable Actions cuando hay SOQL/DML complejo, validaciones cruzadas o lógica que ya está implementada en su organización.",
+            "Prompt Templates cuando la acción es 'redacta', 'resume', 'clasifica' o 'extrae' usando contexto CRM.",
             "External Services / Named Credentials para APIs corporativas con OpenAPI definido.",
-            "MuleSoft API como herramienta cuando el dato vive fuera y necesitas reuso, gobierno y rate limiting.",
-            "MCP server como herramienta cuando la fuente externa expone una superficie estandarizada (documentos, inventario, conocimiento, sistemas legacy con wrapper MCP).",
+            "MuleSoft API como acción cuando el dato vive fuera de Salesforce y necesita reuso, gobierno y rate limiting transversales.",
+            "MCP server como acción cuando la fuente externa expone una superficie estandarizada (documentos, inventario, conocimiento, sistemas legacy con wrapper MCP).",
           ],
         },
         {
@@ -367,7 +379,7 @@ const multiAgent: Insight = {
         },
         {
           type: "paragraph",
-          text: "Aquí Flow, Apex Orchestrator o MuleSoft son los que conducen el proceso, y Agentforce participa solo en los pasos donde se necesita razonamiento: clasificar, redactar, recomendar, interpretar lenguaje natural. El proceso mantiene la transaccionalidad y el agente aporta inteligencia donde aporta valor real.",
+          text: "Aquí Flow, Apex Orchestrator o MuleSoft son los que conducen el proceso, y Agentforce participa solo en los pasos donde se necesita razonamiento: clasificar, redactar, recomendar, interpretar lenguaje natural. El proceso mantiene la transaccionalidad y el agente aporta inteligencia donde aporta valor real. Es la opción que solemos recomendar cuando su organización tiene compromisos regulatorios o transaccionales que no admiten un LLM al volante.",
         },
         {
           type: "cards",
@@ -406,7 +418,7 @@ const multiAgent: Insight = {
         },
         {
           type: "paragraph",
-          text: "Cuando el cliente tiene muchos agentes — propios y de terceros — la conversación deja de ser 'qué agente uso' y pasa a ser 'cómo los gobierno'. Ahí entra MuleSoft como capa transversal: registro de agentes y herramientas, descubrimiento, control de acceso, observabilidad, métricas, políticas de uso y rate limiting. En 2025 Salesforce posicionó esta capa con MuleSoft Agent Fabric y el soporte de MCP server en Anypoint.",
+          text: "Cuando su organización tiene muchos agentes — propios y de terceros — la conversación deja de ser 'qué agente uso' y pasa a ser 'cómo los gobierno'. Ahí entra MuleSoft como capa transversal: registro de agentes y herramientas / acciones, descubrimiento, control de acceso, observabilidad, métricas, políticas de uso y rate limiting. En 2025 Salesforce posicionó esta capa con MuleSoft Agent Fabric y el soporte de MCP server en Anypoint.",
         },
         {
           type: "image",
@@ -436,7 +448,7 @@ const multiAgent: Insight = {
           type: "list",
           items: [
             "Registry: catálogo único de agentes y MCP servers disponibles, con metadata de dominio, owner, versión y SLA.",
-            "Discovery: cómo un agente encuentra otro o una herramienta sin acoplarse a su endpoint físico.",
+            "Discovery: cómo un agente encuentra otro agente o una herramienta / acción sin acoplarse a su endpoint físico.",
             "Policy enforcement: quién puede llamar qué, con qué datos, bajo qué condiciones (PII, compliance, geografía).",
             "Observabilidad: logs unificados de invocaciones, costos por token, latencia, tasa de error, hand-offs.",
             "API management: rate limiting, versionado, depreciación, contratos OpenAPI y MCP estables.",
@@ -447,7 +459,7 @@ const multiAgent: Insight = {
           type: "callout",
           tone: "note",
           title: "Realidad de campo",
-          text: "Muchos clientes inician sin esta capa y la introducen cuando llegan al tercer o cuarto agente y se les hace inmanejable la gobernanza. Recomendación: si el roadmap del cliente apunta a más de tres agentes en dos años, plantea esta capa desde el día uno aunque no se construya completa en la primera ola.",
+          text: "En la mayoría de los proyectos que vemos, los equipos inician sin esta capa y la introducen cuando llegan al tercer o cuarto agente y se les hace inmanejable la gobernanza. Mi recomendación: si su roadmap apunta a más de tres agentes en dos años, planee esta capa desde el día uno, aunque no se construya completa en la primera ola.",
         },
         {
           type: "heading",
@@ -456,7 +468,7 @@ const multiAgent: Insight = {
         },
         {
           type: "paragraph",
-          text: "El cliente ya tiene un orquestador corporativo, un copiloto de Microsoft, un asistente en Vertex AI o un hub propio. Salesforce no controla el canal — pero controla los datos CRM, los procesos transaccionales y los objetos de negocio. La respuesta correcta no es pelear el canal: es exponer Agentforce como un agente especializado invocable, a través de Agentforce API, MCP server o A2A.",
+          text: "Su organización ya tiene un orquestador corporativo, un copiloto de Microsoft, un asistente en Vertex AI o un hub propio. Salesforce no controla el canal — pero sí los datos CRM, los procesos transaccionales y los objetos de negocio. La respuesta correcta no es pelear el canal: es exponer Agentforce como un agente especializado invocable, a través de Agentforce API, MCP server o A2A.",
         },
         {
           type: "cards",
@@ -466,12 +478,12 @@ const multiAgent: Insight = {
               eyebrow: "Vía Agentforce API",
               title: "Invocación directa al agente",
               description:
-                "Un orquestador externo llama al agente con sesiones autenticadas y consume su respuesta. Útil cuando el cliente quiere mantener su shell pero usar el cerebro CRM.",
+                "Un orquestador externo llama al agente con sesiones autenticadas y consume su respuesta. Útil cuando su organización quiere mantener su shell pero usar el cerebro CRM.",
               tone: "primary",
             },
             {
               eyebrow: "Vía MCP server",
-              title: "Salesforce como herramienta estandarizada",
+              title: "Salesforce como herramienta / acción estandarizada",
               description:
                 "Agentforce expone capacidades como tools MCP — consulta de cuenta, creación de caso, actualización de oportunidad — invocables por cualquier agente compatible.",
               tone: "success",
@@ -487,7 +499,7 @@ const multiAgent: Insight = {
               eyebrow: "Riesgo",
               title: "Pérdida de control de experiencia",
               description:
-                "El cliente pierde la oportunidad de unificar canal y datos. Útil técnicamente, pero obliga a una conversación de negocio honesta sobre dónde vive realmente la experiencia.",
+                "Su organización pierde la oportunidad de unificar canal y datos. Útil técnicamente, pero obliga a una conversación de negocio honesta sobre dónde vive realmente la experiencia.",
               tone: "warn",
             },
           ],
@@ -509,9 +521,9 @@ const multiAgent: Insight = {
           items: [
             {
               eyebrow: "MCP — Model Context Protocol",
-              title: "Agente ↔ Herramienta",
+              title: "Agente ↔ Herramienta / Acción",
               description:
-                "Estandariza cómo un agente descubre, autentica y consume herramientas, recursos y prompts expuestos por un servidor. Es 'USB-C para agentes': el agente pide; el servidor responde. No hay razonamiento del otro lado.",
+                "Estandariza cómo un agente descubre, autentica y consume herramientas / acciones, recursos y prompts expuestos por un servidor. Es 'USB-C para agentes': el agente pide; el servidor responde. No hay razonamiento del otro lado.",
               tone: "primary",
             },
             {
@@ -529,7 +541,7 @@ const multiAgent: Insight = {
           rows: [
             [
               "Relación",
-              "Cliente–servidor (agente → herramienta).",
+              "Cliente–servidor (agente → herramienta / acción).",
               "Par–par (agente ↔ agente).",
             ],
             [
@@ -568,7 +580,7 @@ const multiAgent: Insight = {
           type: "list",
           items: [
             "Agentforce llama a un MCP server para consultar el estado de un envío en el WMS → es MCP, no necesita razonamiento del otro lado.",
-            "Agentforce llama a un MCP server expuesto por MuleSoft para obtener la póliza vigente del cliente → es MCP, herramienta determinística.",
+            "Agentforce llama a un MCP server expuesto por MuleSoft para obtener la póliza vigente del cliente → es MCP, herramienta / acción determinística.",
             "Agentforce delega a un agente de riesgo crediticio en Vertex AI que evalúa probabilidad de default → es A2A, el otro lado razona.",
             "Agentforce delega a un agente legal interno que decide si una cláusula es aceptable → es A2A, el especialista tiene su propio criterio.",
             "Agentforce delega a un agente de pricing dinámico que evalúa elasticidad y devuelve oferta → es A2A.",
@@ -579,7 +591,7 @@ const multiAgent: Insight = {
           type: "callout",
           tone: "warning",
           title: "Trampa común",
-          text: "Exponer como A2A lo que en realidad es una herramienta. Síntoma: la 'parte agente' del otro lado solo formatea respuestas. Si no hay razonamiento real, es MCP — más simple, más rápido, más auditable. Reserva A2A para cuando el otro lado verdaderamente piensa.",
+          text: "Exponer como A2A lo que en realidad es una herramienta / acción. Síntoma: la 'parte agente' del otro lado solo formatea respuestas. Si no hay razonamiento real, es MCP — más simple, más rápido, más auditable. Reserve A2A para cuando el otro lado verdaderamente piensa.",
         },
       ],
     },
@@ -590,7 +602,7 @@ const multiAgent: Insight = {
       blocks: [
         {
           type: "paragraph",
-          text: "Esta es una arquitectura realista para un cliente empresarial donde Salesforce es el actor principal y conviven agentes, herramientas y sistemas externos. El diagrama no muestra todos los productos posibles — muestra los roles y las fronteras de responsabilidad.",
+          text: "Esta arquitectura de referencia está pensada para una organización empresarial donde Salesforce es el actor principal y conviven agentes, herramientas / acciones y sistemas externos. El diagrama no muestra todos los productos posibles — muestra los roles y las fronteras de responsabilidad. Le sugiero usarlo como base para mapear su propia realidad antes de elegir su arquitectura objetivo.",
         },
         {
           type: "ascii",
@@ -674,18 +686,22 @@ const multiAgent: Insight = {
       title: "Matriz de decisión: qué patrón recomendar según el escenario",
       blocks: [
         {
+          type: "paragraph",
+          text: "Use esta matriz como filtro inicial al evaluar un caso de uso concreto en su organización. Identifique el escenario que más se parezca al suyo y empiece la conversación de arquitectura desde el patrón recomendado, en lugar de partir desde una página en blanco.",
+        },
+        {
           type: "table",
-          headers: ["Escenario del cliente", "Patrón recomendado", "Por qué"],
+          headers: ["Escenario de su organización", "Patrón recomendado", "Por qué"],
           rows: [
             [
               "Todo el caso vive dentro de Salesforce.",
-              "Opción A o B — Agentforce orquesta agentes propios o herramientas.",
-              "No hay ecosistema externo significativo; introducir MuleSoft o A2A es sobre-ingeniería.",
+              "Opción A o B — Agentforce orquesta agentes propios o herramientas / acciones.",
+              "No hay ecosistema externo significativo; introducir MuleSoft o A2A sería sobre-ingeniería.",
             ],
             [
               "Salesforce + sistemas externos vía APIs.",
-              "Opción B + MuleSoft como capa de tools.",
-              "Necesitas gobierno y reuso de APIs; A2A es prematuro.",
+              "Opción B + MuleSoft como capa de tools / acciones.",
+              "Necesita gobierno y reuso de APIs; A2A todavía es prematuro.",
             ],
             [
               "Salesforce + agentes de otras plataformas (Vertex / Bedrock / Azure).",
@@ -693,7 +709,7 @@ const multiAgent: Insight = {
               "Hay razonamiento del otro lado; A2A respeta autonomía y permite gobernanza.",
             ],
             [
-              "El cliente ya tiene un orquestador corporativo.",
+              "Su organización ya tiene un orquestador corporativo.",
               "Opción E — Agentforce headless, invocado vía API/MCP/A2A.",
               "No vale la pena pelear el canal; gana exponiendo capacidades CRM.",
             ],
@@ -703,7 +719,7 @@ const multiAgent: Insight = {
               "El LLM no puede ser quien decida la transacción; el proceso protege auditoría.",
             ],
             [
-              "Cliente con muchos agentes creados por áreas distintas.",
+              "Muchos agentes creados por áreas distintas dentro de su organización.",
               "Opción D — MuleSoft Agent Fabric como control plane.",
               "Sin gobernanza transversal, el ecosistema se vuelve inmanejable.",
             ],
@@ -714,8 +730,8 @@ const multiAgent: Insight = {
             ],
             [
               "Asistente interno para empleados.",
-              "Opción B o E según el cliente. Slack + Agentforce o copiloto corporativo + Agentforce headless.",
-              "Depende de dónde viva la productividad del empleado.",
+              "Opción B o E según su realidad: Slack + Agentforce, o copiloto corporativo + Agentforce headless.",
+              "Depende de dónde viva la productividad del empleado en su día a día.",
             ],
             [
               "Caso transaccional crítico (pagos, claims, contratos).",
@@ -734,11 +750,11 @@ const multiAgent: Insight = {
     {
       id: "recomendaciones",
       eyebrow: "Parte 7 · Recomendaciones",
-      title: "Recomendaciones consultivas para clientes empresariales",
+      title: "Recomendaciones consultivas para su organización",
       blocks: [
         {
           type: "paragraph",
-          text: "Estas recomendaciones funcionan como contrato de diseño y, también, como brújula para una conversación de negocio. Si una propuesta concreta rompe tres o más, vale la pena pausarla y revisarla — sea cual sea la plataforma o el proveedor.",
+          text: "Estas recomendaciones funcionan como contrato de diseño y, también, como brújula para una conversación de negocio. Si una propuesta concreta para su organización rompe tres o más, vale la pena pausarla y revisarla — sea cual sea la plataforma o el proveedor que la presente.",
         },
         {
           type: "image",
@@ -759,7 +775,7 @@ const multiAgent: Insight = {
               eyebrow: "01",
               title: "No crear agentes por moda",
               description:
-                "Si la tarea se resuelve con Flow, Apex o un Prompt Template, ahí termina. Un agente añade costo, latencia y superficie de error sin valor proporcional.",
+                "Si la tarea se resuelve con una herramienta / acción (Flow, Apex, Prompt Template), ahí termina. Un agente añade costo, latencia y superficie de error sin valor proporcional.",
               tone: "primary",
             },
             {
@@ -822,7 +838,7 @@ const multiAgent: Insight = {
               eyebrow: "10",
               title: "Evolucionar por niveles de madurez",
               description:
-                "Ningún cliente serio llega a Nivel 3 en seis meses. Asume etapas y comunica honestamente cuándo cada capacidad se vuelve realista.",
+                "Ninguna organización seria llega a Nivel 3 en seis meses. Defina etapas y comunique honestamente al negocio cuándo cada capacidad se vuelve realista para su realidad.",
               tone: "violet",
             },
           ],
@@ -836,7 +852,7 @@ const multiAgent: Insight = {
       blocks: [
         {
           type: "paragraph",
-          text: "El modelo no es de marketing — es operativo. Ayuda al cliente a entender en qué nivel está, qué capacidades necesita para subir y cuáles son los riesgos de saltar etapas.",
+          text: "Este modelo no es de marketing — es operativo. Le ayuda a entender en qué nivel está hoy su organización, qué capacidades necesita para subir y cuáles son los riesgos de saltar etapas.",
         },
         {
           type: "cards",
@@ -853,14 +869,14 @@ const multiAgent: Insight = {
               eyebrow: "Nivel 2 · Composable",
               title: "Agentforce orquesta agentes especializados",
               description:
-                "Primary + secondary por dominio. Tools robustas vía Flow/Apex/External Services. Data Cloud como contexto compartido. Métricas operativas, evaluación continua, governance del catálogo de topics y actions.",
+                "Primary + secondary por dominio. Herramientas / acciones robustas vía Flow/Apex/External Services. Data Cloud como contexto compartido. Métricas operativas, evaluación continua, governance del catálogo de topics y actions.",
               tone: "success",
             },
             {
               eyebrow: "Nivel 3 · Ecosystem",
               title: "Ecosistema multiagente gobernado",
               description:
-                "MuleSoft Agent Fabric como control plane. MCP para herramientas, A2A para agentes externos. Observabilidad transversal, policy engine, registry, discovery. Agentes propios y de terceros coexisten con seguridad y trazabilidad.",
+                "MuleSoft Agent Fabric como control plane. MCP para herramientas / acciones, A2A para agentes externos. Observabilidad transversal, policy engine, registry, discovery. Agentes propios y de terceros coexisten con seguridad y trazabilidad.",
               tone: "violet",
             },
           ],
@@ -893,7 +909,7 @@ const multiAgent: Insight = {
           type: "callout",
           tone: "warning",
           title: "Salto típico mal hecho",
-          text: "Saltar de Nivel 1 directo a Nivel 3 'porque suena más moderno'. Resultado: control plane sin agentes maduros que gobernar, gasto en MuleSoft Agent Fabric sin ROI, y un equipo abrumado. El nivel 2 — composabilidad sólida dentro de Salesforce — es donde la mayoría debe vivir uno o dos años antes de pensar en ecosistema.",
+          text: "Saltar de Nivel 1 directo a Nivel 3 'porque suena más moderno'. Resultado: control plane sin agentes maduros que gobernar, gasto en MuleSoft Agent Fabric sin ROI y un equipo abrumado. El nivel 2 — composabilidad sólida dentro de Salesforce — es donde la mayoría de las organizaciones deben vivir uno o dos años antes de pensar en ecosistema.",
         },
       ],
     },
@@ -904,7 +920,7 @@ const multiAgent: Insight = {
       blocks: [
         {
           type: "paragraph",
-          text: "Casos donde Salesforce orquesta agentes o herramientas con resultado defendible. Cada caso indica el patrón recomendado y por qué.",
+          text: "Casos típicos donde Salesforce orquesta agentes o herramientas / acciones con resultado defendible. Cada uno indica el patrón recomendado y por qué — para que pueda contrastarlos con los suyos.",
         },
         {
           type: "table",
@@ -912,7 +928,7 @@ const multiAgent: Insight = {
           rows: [
             [
               "Consulta de contratos del cliente",
-              "B · Tools + Data Cloud + MCP de documentos",
+              "B · Acciones + Data Cloud + MCP de documentos",
               "Es razonamiento + lookup; no necesita un segundo agente.",
             ],
             [
@@ -932,7 +948,7 @@ const multiAgent: Insight = {
             ],
             [
               "Loyalty",
-              "A + B · Primary + tools de loyalty",
+              "A + B · Primary + acciones de loyalty",
               "Personalización + acción sobre miembro. CRM y loyalty viven en Salesforce.",
             ],
             [
@@ -942,13 +958,13 @@ const multiAgent: Insight = {
             ],
             [
               "Asistente de ventas",
-              "A + B · Primary + tools de oportunidad, lead, conocimiento",
+              "A + B · Primary + acciones de oportunidad, lead, conocimiento",
               "Aumenta capacidad del vendedor sin reemplazar su criterio.",
             ],
             [
               "Preparación de reuniones",
-              "B · Tools sobre cuenta, oportunidad, historial, Data Cloud, MCP de documentos",
-              "Razonamiento + síntesis; un solo agente con herramientas.",
+              "B · Acciones sobre cuenta, oportunidad, historial, Data Cloud, MCP de documentos",
+              "Razonamiento + síntesis; un solo agente con herramientas / acciones.",
             ],
             [
               "Resolución de casos",
@@ -957,7 +973,7 @@ const multiAgent: Insight = {
             ],
             [
               "Consulta de pólizas",
-              "B + D · Tool sobre core de pólizas vía MuleSoft",
+              "B + D · Acción sobre core de pólizas vía MuleSoft",
               "El core no es Salesforce; MuleSoft gobierna el acceso.",
             ],
             [
@@ -972,7 +988,7 @@ const multiAgent: Insight = {
             ],
             [
               "Field service",
-              "A + B · Agentforce sobre Field Service + tools de scheduling y inventario",
+              "A + B · Agentforce sobre Field Service + acciones de scheduling y inventario",
               "Caso nativo de Salesforce con extensiones externas vía MuleSoft.",
             ],
             [
@@ -991,15 +1007,15 @@ const multiAgent: Insight = {
       blocks: [
         {
           type: "paragraph",
-          text: "Una arquitectura multiagente con Salesforce no se evalúa por cuántos agentes tiene ni por qué tan vistoso es el diagrama. Se evalúa por tres preguntas: ¿el cliente recibe una sola experiencia coherente?, ¿el negocio entiende quién es dueño de cada agente y qué garantías ofrece?, ¿el área de tecnología puede auditar, evolucionar y desactivar componentes sin pedir permiso a un proveedor? Si las tres respuestas son sí, la arquitectura está sana — independientemente de su sofisticación.",
+          text: "Una arquitectura multiagente con Salesforce no se evalúa por cuántos agentes tiene ni por qué tan vistoso es el diagrama. Se evalúa por tres preguntas que, como arquitecto, le invito a hacerse cuando reciba cualquier propuesta: ¿su cliente final recibe una sola experiencia coherente?, ¿su negocio entiende quién es dueño de cada agente y qué garantías ofrece?, ¿su área de tecnología puede auditar, evolucionar y desactivar componentes sin pedir permiso a un proveedor? Si las tres respuestas son sí, la arquitectura está sana — independientemente de su sofisticación.",
         },
         {
           type: "paragraph",
-          text: "Salesforce gana cuando el proceso gira alrededor del cliente, el canal y el contexto. Pierde cuando se le pide ser el cerebro de procesos que no son suyos. La elegancia consultiva está en saber cuándo defenderlo como centro y cuándo posicionarlo como participante de primera clase dentro de algo mayor.",
+          text: "Salesforce gana cuando el proceso de su organización gira alrededor del cliente, el canal y el contexto. Pierde cuando se le pide ser el cerebro de procesos que no son suyos. La elegancia consultiva está en saber cuándo defenderlo como centro y cuándo posicionarlo como participante de primera clase dentro de algo mayor.",
         },
         {
           type: "statement",
-          text: "Salesforce debe ser el orquestador de experiencia, contexto y acción cuando el proceso gira alrededor del cliente. Agentforce maneja conversación, intención y delegación a especialistas. MuleSoft es la capa de interoperabilidad, gobierno y observabilidad cuando el ecosistema incluye agentes y herramientas de múltiples plataformas. Data Cloud aporta contexto unificado. Flow y Apex controlan procesos determinísticos. MCP se usa para herramientas. A2A se reserva para colaboración real entre agentes autónomos.",
+          text: "Salesforce debe ser el orquestador de experiencia, contexto y acción cuando el proceso gira alrededor del cliente. Agentforce maneja conversación, intención y delegación a especialistas. MuleSoft es la capa de interoperabilidad, gobierno y observabilidad cuando el ecosistema incluye agentes y herramientas / acciones de múltiples plataformas. Data Cloud aporta contexto unificado. Flow y Apex controlan procesos determinísticos. MCP se usa para herramientas / acciones. A2A se reserva para colaboración real entre agentes autónomos.",
         },
       ],
     },

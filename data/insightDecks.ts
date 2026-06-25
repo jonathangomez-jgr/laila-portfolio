@@ -28,7 +28,7 @@ export const insightDecks: InsightDeck[] = [
       {
         layout: "quote",
         quote:
-          "Salesforce debe ser el orquestador de experiencia, contexto y acción cuando el proceso gira alrededor del cliente. Agentforce maneja conversación, intención y delegación a especialistas. MuleSoft gobierna la interoperabilidad. Data Cloud aporta contexto. Flow y Apex controlan lo determinístico. MCP se usa para herramientas. A2A se reserva para colaboración real entre agentes.",
+          "Salesforce debe ser el orquestador de experiencia, contexto y acción cuando el proceso gira alrededor del cliente. Agentforce maneja conversación, intención y delegación a especialistas. MuleSoft gobierna la interoperabilidad. Data Cloud aporta contexto. Flow y Apex controlan lo determinístico. MCP se usa para herramientas / acciones. A2A se reserva para colaboración real entre agentes.",
         context: "Statement ejecutivo · Postura completa",
       },
 
@@ -101,12 +101,12 @@ export const insightDecks: InsightDeck[] = [
       {
         layout: "section",
         eyebrow: "Parte 2 · Conceptos",
-        title: "Agente, herramienta y proceso: tres cosas distintas",
+        title: "Agente, herramienta / acción y proceso: tres cosas distintas",
         subtitle:
-          "La mayoría de problemas no necesitan un agente. Necesitan una herramienta bien definida o un proceso determinístico.",
+          "La mayoría de problemas no necesitan un agente. Necesitan una herramienta / acción bien definida o un proceso determinístico — y conviene no confundirlas.",
       },
 
-      // 7 · Tres pilares: agente / herramienta / proceso
+      // 7 · Tres pilares: agente / herramienta-acción / proceso
       {
         layout: "pillars",
         eyebrow: "Disciplina de diseño",
@@ -114,17 +114,17 @@ export const insightDecks: InsightDeck[] = [
         pillars: [
           {
             title: "Agente",
-            body: "Cuando la entrada es ambigua, el camino no es predecible y se necesita razonamiento, planificación o redacción. Si no hay nada de eso, no pagues por razonamiento.",
+            body: "Cuando la entrada es ambigua, el camino no es predecible y se necesita razonamiento, planificación o redacción. Si no hay nada de eso, no pague por razonamiento.",
             accent: "indigo",
           },
           {
-            title: "Herramienta",
-            body: "Cuando hay parámetros claros, resultados verificables y reglas explícitas. Flow, Apex, External Services, MCP server. Determinismo y auditabilidad.",
+            title: "Herramienta / Acción",
+            body: "Función determinística que el agente invoca (Action en Agentforce): Flow, Apex, Prompt Template, External Service, MCP server. Atómica, parametrizable, idempotente, auditable.",
             accent: "sky",
           },
           {
             title: "Proceso",
-            body: "Cuando hay pasos fijos, transacciones, rollback, SLAs y auditoría regulatoria. Flow Orchestration, Apex, MuleSoft. El LLM no decide la transacción.",
+            body: "Orquestación de varias acciones con estado, transacciones, rollback, SLAs y auditoría regulatoria. Flow Orchestration, Apex, MuleSoft. El LLM no decide la transacción.",
             accent: "violet",
           },
         ],
@@ -176,18 +176,18 @@ export const insightDecks: InsightDeck[] = [
       {
         layout: "split",
         eyebrow: "Opción B",
-        title: "Agentforce como orquestador de herramientas",
+        title: "Agentforce como orquestador de herramientas / acciones",
         left: {
           heading: "Cuándo aplica",
           items: [
-            "Una sola superficie conversacional + muchas acciones detrás.",
+            "Una sola superficie conversacional + muchas Actions bien definidas detrás.",
             "Operaciones determinísticas y bien parametrizadas.",
             "Es el patrón más simple — y el de mejor relación valor/riesgo.",
             "Ejemplo: agente de ventas con Flow + Apex + Prompt Templates.",
           ],
         },
         right: {
-          heading: "Herramientas típicas",
+          heading: "Herramientas / acciones típicas",
           items: [
             "Flow Actions para lógica declarativa.",
             "Apex Invocable Actions para lógica compleja existente.",
@@ -245,9 +245,9 @@ export const insightDecks: InsightDeck[] = [
         title: "Agentforce headless invocado desde otro orquestador",
         bullets: [
           "Vía Agentforce API: el orquestador externo consume al agente directamente.",
-          "Vía MCP: Salesforce expone capacidades como tools estandarizadas (cuenta, caso, oportunidad).",
+          "Vía MCP: Salesforce expone capacidades como herramientas / acciones estandarizadas (cuenta, caso, oportunidad).",
           "Vía A2A: Agentforce y el agente externo se descubren, negocian capacidades y colaboran.",
-          "Aplica cuando el cliente ya tiene su orquestador corporativo o su copiloto.",
+          "Aplica cuando su organización ya tiene su orquestador corporativo o su copiloto.",
         ],
         highlight:
           "No es derrota — es elegir bien la pelea. Si el canal vive afuera, gana exponiendo capacidades CRM, no peleando el canal.",
@@ -266,14 +266,14 @@ export const insightDecks: InsightDeck[] = [
       {
         layout: "comparison",
         eyebrow: "Diferencia operativa",
-        title: "Agente ↔ Herramienta  vs.  Agente ↔ Agente",
+        title: "Agente ↔ Herramienta / Acción  vs.  Agente ↔ Agente",
         before: {
           heading: "MCP — el otro lado NO razona",
           items: [
             "Cliente–servidor: el agente pide, el servidor responde.",
             "Operación clara, parametrizable, idempotente.",
             "Ejemplo: consultar póliza, inventario, ubicación, documento.",
-            "Salesforce expone capacidades CRM como tools MCP estandarizadas.",
+            "Salesforce expone capacidades CRM como Actions / tools MCP estandarizadas.",
           ],
         },
         after: {
@@ -293,7 +293,7 @@ export const insightDecks: InsightDeck[] = [
         eyebrow: "Parte 5 · Arquitectura",
         title: "Una arquitectura de referencia, viva y defendible",
         subtitle:
-          "Canales convergen en un primary. Tools y procesos viven en Salesforce. MuleSoft gobierna lo que cruza la frontera. Data Cloud da contexto unificado.",
+          "Canales convergen en un primary. Herramientas / acciones y procesos viven en Salesforce. MuleSoft gobierna lo que cruza la frontera. Data Cloud da contexto unificado.",
       },
 
       // 18 · Pilares de la referencia
@@ -425,12 +425,12 @@ export const insightDecks: InsightDeck[] = [
           },
           {
             title: "Nivel 2 · Composable",
-            body: "Primary + secondary por dominio. Tools robustas. Data Cloud como contexto compartido. Evaluación continua y governance del catálogo.",
+            body: "Primary + secondary por dominio. Herramientas / acciones robustas. Data Cloud como contexto compartido. Evaluación continua y governance del catálogo.",
             accent: "violet",
           },
           {
             title: "Nivel 3 · Ecosystem",
-            body: "MuleSoft Agent Fabric como control plane. MCP para herramientas, A2A para agentes externos. Observabilidad y policy engine transversales.",
+            body: "MuleSoft Agent Fabric como control plane. MCP para herramientas / acciones, A2A para agentes externos. Observabilidad y policy engine transversales.",
             accent: "sky",
           },
         ],
@@ -467,7 +467,7 @@ export const insightDecks: InsightDeck[] = [
             label: "Consulta de contratos",
             baseline: "—",
             goal6m: "B + Data Cloud + MCP",
-            goal12m: "Razonamiento + lookup; un solo agente con herramientas.",
+            goal12m: "Razonamiento + lookup; un solo agente con herramientas / acciones.",
             accent: "emerald",
           },
           {
