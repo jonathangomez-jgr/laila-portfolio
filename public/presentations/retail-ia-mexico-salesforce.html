@@ -2,7 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=1440, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#066afe" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>IA en Retail · Del mandato global a la oportunidad mexicana con Salesforce</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -489,6 +492,244 @@
     .hud,.footer{display:none}
     .slide{position:relative!important;opacity:1!important;pointer-events:auto!important;transform:none!important;page-break-after:always;min-height:100vh;width:100vw}
     .slide::after{content:"";display:block}
+  }
+
+  /* ── TABLET ────────────────────────────────────────────────── */
+  @media (max-width: 1100px){
+    .slide{padding:64px 40px 80px}
+    h1.title{font-size:48px}
+    h2.title{font-size:36px}
+    .lede{font-size:17px}
+    .body-txt{font-size:15px}
+    .gauge-grid{grid-template-columns:repeat(2,1fr);gap:20px}
+    .cards-grid.c3,.cards-grid.c4{grid-template-columns:repeat(2,1fr)}
+    .case-grid{grid-template-columns:1fr;gap:16px}
+    .roadmap{grid-template-columns:1fr;gap:14px}
+    .mosaic{grid-template-columns:repeat(3,1fr);grid-template-rows:auto;height:auto}
+    .mosaic .tile.wide{grid-column:span 3}
+    .split,.split.reverse{grid-template-columns:1fr;gap:32px}
+    .stat-row{grid-template-columns:repeat(2,1fr)!important}
+    .agenda-grid{grid-template-columns:repeat(2,1fr)}
+    .region-viz{width:100%;aspect-ratio:900/560}
+  }
+
+  /* ── MOBILE ────────────────────────────────────────────────── */
+  @media (max-width: 720px){
+    html,body{overflow:hidden;touch-action:pan-y;-webkit-overflow-scrolling:touch}
+    body{overscroll-behavior:contain}
+
+    .hud{
+      padding:12px 16px;font-size:9px;letter-spacing:.10em;
+      background:linear-gradient(180deg,rgba(0,25,80,.85),rgba(0,25,80,0));
+      padding-bottom:24px;
+    }
+    .hud .brand{gap:8px}
+    .hud .brand .sf-logo{height:16px}
+    .hud .brand .sep{display:none}
+    .hud .brand b{font-size:9px;letter-spacing:.10em;max-width:130px;line-height:1.2;display:none}
+    .hud .progress{gap:8px}
+    .hud .progress .bar{width:80px;height:2px}
+    .hud .progress .count{font-size:10px}
+
+    .footer{display:none}       /* replaced by swipe hint + mobile-nav dots */
+
+    .slide{
+      padding:64px 20px 72px;
+      overflow-y:auto;overflow-x:hidden;
+      -webkit-overflow-scrolling:touch;
+      background:linear-gradient(160deg,#066afe 0%,#0347e0 45%,#022ac0 100%);
+    }
+
+    /* Typography */
+    .eyebrow{font-size:10px;padding:5px 10px;margin-bottom:16px;letter-spacing:.14em}
+    h1.title{font-size:32px;line-height:1.08;margin-bottom:14px}
+    h2.title{font-size:26px;line-height:1.1;margin-bottom:12px}
+    .lede{font-size:15px;line-height:1.5}
+    .body-txt{font-size:14px;line-height:1.55}
+    h3.section{font-size:11px;margin-bottom:12px}
+
+    /* Cover */
+    .cover{padding:70px 22px 72px;justify-content:flex-start;gap:16px}
+    .cover .orb{width:420px;height:420px;right:-160px;top:-120px}
+    .cover .orb2{width:360px;height:360px;left:-140px;bottom:-160px}
+    .cover h1{font-size:44px;line-height:1.02;margin-top:16px;letter-spacing:-.02em}
+    .cover .sub{font-size:15px;margin-top:16px;line-height:1.45}
+    .cover .signature{
+      margin-top:auto;gap:12px;padding:14px 18px 14px 14px;width:100%;
+    }
+    .cover .sig-avatar{width:44px;height:44px;font-size:16px;border-radius:10px}
+    .cover .sig-role{font-size:9px;letter-spacing:.2em}
+    .cover .sig-name{font-size:15px}
+    .cover .sig-mail{font-size:11px;word-break:break-all}
+
+    /* Gauges — stack 2x2, smaller */
+    .gauge-grid{grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px}
+    .gauge-card{padding:16px 12px 16px}
+    .gauge-svg{width:120px;height:120px}
+    .gauge-value{font-size:24px}
+    .gauge-value .u{font-size:11px}
+    .gauge-label{font-size:11.5px;min-height:44px;margin-top:10px}
+    .gauge-src{font-size:9px;letter-spacing:.08em}
+
+    /* Cards & agenda */
+    .cards-grid.c2,.cards-grid.c3,.cards-grid.c4{grid-template-columns:1fr;gap:12px;margin-top:16px}
+    .card{padding:18px}
+    .card h5{font-size:15px}
+    .card p{font-size:12.5px}
+    .agenda-grid{grid-template-columns:1fr;gap:10px;margin-top:20px}
+    .agenda-card{padding:20px 18px}
+    .agenda-card h4{font-size:16px}
+    .agenda-card .time{position:static;display:inline-block;margin-bottom:8px}
+
+    /* Bars & stats */
+    .stat-row{grid-template-columns:1fr 1fr!important;gap:10px}
+    .stat-badge{padding:14px 16px}
+    .stat-badge .val{font-size:26px}
+    .stat-badge .lbl{font-size:11px}
+    .bars{gap:12px;margin-top:16px}
+    .bar-row{grid-template-columns:1fr;gap:6px}
+    .bar-row .name{font-size:12.5px}
+    .bar-row .name small{font-size:10.5px}
+    .bar-row .val{text-align:left;font-size:11.5px}
+    .bar-row .track{height:10px}
+    .kpis{gap:12px}
+
+    /* Timeline */
+    .timeline::before{left:16px}
+    .tl-row{grid-template-columns:60px 1fr;gap:14px}
+    .tl-row .year{font-size:11px;padding-right:12px}
+    .tl-row .year::after{width:10px;height:10px}
+    .tl-row .body b{font-size:13.5px}
+    .tl-row .body p{font-size:12px}
+
+    /* Split layouts collapse */
+    .split,.split.reverse{grid-template-columns:1fr;gap:24px}
+
+    /* Region-viz (LATAM map) — compact labels, hide subtitle */
+    .region-viz{width:100%;aspect-ratio:900/650;margin-top:14px}
+    .region-node .pulse{width:11px;height:11px}
+    .region-node .lbl{
+      padding:3px 8px;font-size:10px;line-height:1.15;
+      white-space:nowrap;max-width:none;
+      background:rgba(0,25,80,.95);
+    }
+    .region-node .lbl b{color:#ffdd00}
+    .region-node .lbl span{display:none}       /* hide subtitle on small screens */
+    .region-node .lbl::before{display:none}    /* hide arrow — labels are tight */
+    /* Simplify position offsets for tighter map */
+    .region-node .lbl{top:14px;left:50%;transform:translateX(-50%)}
+    .region-node.lbl-up .lbl{top:auto;bottom:14px}
+    .region-node.lbl-right .lbl{top:50%;left:14px;transform:translateY(-50%)}
+    .region-node.lbl-left .lbl{top:50%;left:auto;right:14px;transform:translateY(-50%)}
+
+    /* Tables become stacked cards */
+    .seg-table,.diff-table{margin-top:16px}
+    .seg-row,.diff-row{grid-template-columns:1fr;gap:6px;padding:12px 14px}
+    .seg-row.head,.diff-row.head{display:none}
+    .seg-row .col b,.diff-row .col b{font-size:13px}
+    .seg-row .col span,.diff-row .col{font-size:12px}
+    table,.table-wrap{font-size:12px}
+
+    /* Stack diagram */
+    .stack-layer{grid-template-columns:1fr;gap:8px;padding:14px 16px}
+    .stack-layer .tag{font-size:10px}
+    .stack-layer .lyr b{font-size:14px}
+    .stack-layer .lyr span{font-size:12px}
+
+    /* Mosaic collapses to 1 col */
+    .mosaic{grid-template-columns:1fr;grid-template-rows:auto;gap:10px;height:auto;margin-top:16px}
+    .mosaic .tile{padding:14px}
+    .mosaic .tile.wide{grid-column:span 1}
+    .mosaic .tile h6{font-size:14px}
+    .mosaic .tile p{font-size:11.5px}
+    .mosaic .tile .metric{font-size:11px}
+
+    /* Case cards */
+    .case-grid{grid-template-columns:1fr;gap:14px;margin-top:16px}
+    .case-card{padding:20px 18px}
+    .case-card .logo{width:48px;height:48px;font-size:16px;margin-bottom:12px}
+    .case-card h5{font-size:17px}
+    .case-card .sub{font-size:11px;margin-bottom:12px}
+    .case-card .m .v{font-size:18px;min-width:70px}
+    .case-card .m .l{font-size:11.5px}
+
+    /* Roadmap levels */
+    .roadmap{grid-template-columns:1fr;gap:12px;margin-top:16px}
+    .rm-lvl{padding:20px 18px}
+    .rm-lvl h5{font-size:17px}
+    .rm-lvl .cap .tag{font-size:10.5px;padding:4px 8px}
+
+    /* Statement / quotes */
+    .statement,.slide .statement,section .statement{font-size:22px;line-height:1.35}
+
+    /* Callout */
+    .callout{padding:14px 16px;margin-top:16px}
+    .callout p{font-size:12.5px}
+    .callout .tt{font-size:10px}
+
+    /* Closing */
+    .close{padding:70px 20px 90px}
+    .close .q{font-size:11px;letter-spacing:.18em;margin-bottom:14px}
+    .close .big{font-size:34px;line-height:1.1}
+    .close .divider-close{width:60px;margin:22px auto}
+    .close .kicker{font-size:14px;line-height:1.55}
+    .close .three-things{grid-template-columns:1fr;gap:10px;margin-top:22px}
+    .close .three-things .tt{padding:14px 16px}
+    .close .three-things .tt .t{font-size:13px}
+    .close .cta{margin-top:24px;gap:8px;flex-direction:column;position:relative;z-index:2}
+    .close .cta .box{font-size:12px;padding:10px 16px;width:100%;text-align:center;box-sizing:border-box}
+    .sf-logo-close{display:none}       /* Salesforce logo already in top HUD on mobile */
+
+    /* Grids that used 2-col fixed */
+    .grid-2col{grid-template-columns:1fr;gap:20px}
+
+    /* Ensure long labels wrap */
+    .lbl,.tag,.tl-row .body{overflow-wrap:anywhere}
+  }
+
+  /* Touch swipe indicator (mobile only) */
+  @media (max-width: 720px) and (hover: none){
+    .swipe-hint{
+      position:fixed;bottom:calc(64px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
+      display:flex;gap:10px;align-items:center;
+      padding:6px 12px;border-radius:99px;
+      background:rgba(255,221,0,.14);border:1px solid rgba(255,221,0,.4);
+      color:#ffdd00;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+      pointer-events:none;z-index:200;
+      animation:swipe-fade 4s ease-out forwards;
+    }
+    .swipe-hint::before{content:"←";animation:swipe-nudge 1.4s ease-in-out infinite}
+    .swipe-hint::after{content:"→";animation:swipe-nudge 1.4s ease-in-out infinite reverse}
+  }
+  @keyframes swipe-fade{0%,60%{opacity:1}100%{opacity:0}}
+  @keyframes swipe-nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+
+  /* Mobile nav dots (visual page indicator, tap to jump not required) */
+  @media (max-width: 720px){
+    .mobile-nav{
+      position:fixed;bottom:calc(6px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
+      display:flex;gap:5px;z-index:150;pointer-events:none;
+    }
+    .mobile-nav i{
+      width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.25);
+      transition:all .3s ease;
+    }
+    .mobile-nav i.on{background:#ffdd00;width:16px;border-radius:3px;box-shadow:0 0 8px rgba(255,221,0,.6)}
+  }
+  @media (min-width: 721px){.mobile-nav,.swipe-hint{display:none}}
+
+  /* Landscape phone (short height) */
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape){
+    .cover h1{font-size:32px}
+    .cover .sub{font-size:13px}
+    .cover .signature{margin-top:16px;padding:10px 14px}
+    .cover .sig-avatar{width:40px;height:40px;font-size:14px}
+    h1.title{font-size:28px}
+    h2.title{font-size:22px}
+    .slide{padding:44px 30px 56px}
+    .hud{padding:8px 16px}
+    .footer{padding:8px 16px}
+    .gauge-svg{width:100px;height:100px}
   }
 </style>
 </head>
@@ -1003,21 +1244,34 @@
 
 </div>
 
+<div class="swipe-hint" id="swipe-hint">Desliza para navegar</div>
+<div class="mobile-nav" id="mobile-nav"></div>
+
 <script>
 (() => {
   const slides = [...document.querySelectorAll('.slide')];
   const bar = document.getElementById('hud-bar');
   const count = document.getElementById('hud-count');
+  const navDots = document.getElementById('mobile-nav');
+  const swipeHint = document.getElementById('swipe-hint');
   let idx = 0;
 
   const pad = n => String(n).padStart(2, '0');
+
+  // Build mobile dots
+  slides.forEach((_, i) => {
+    const dot = document.createElement('i');
+    navDots.appendChild(dot);
+  });
 
   function show(n) {
     n = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach((s, i) => {
       s.classList.toggle('active', i === n);
       s.classList.toggle('past', i < n);
+      if (i === n) s.scrollTop = 0;  // reset scroll when entering a slide
     });
+    [...navDots.children].forEach((d, i) => d.classList.toggle('on', i === n));
     idx = n;
     const pct = ((n + 1) / slides.length) * 100;
     bar.style.width = pct + '%';
@@ -1070,13 +1324,64 @@
     else if (e.key === 'p' || e.key === 'P') window.print();
   });
 
-  // click nav
-  document.addEventListener('click', (e) => {
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  const isMobile = window.innerWidth <= 720;
+
+  // Desktop click nav — only when NOT touch
+  if (!isCoarse) {
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('a,button,input,kbd,.mobile-nav,.swipe-hint')) return;
+      const w = window.innerWidth;
+      if (e.clientX > w * 0.6) show(idx + 1);
+      else if (e.clientX < w * 0.4) show(idx - 1);
+    });
+  }
+
+  // Touch swipe navigation
+  let touchStartX = 0, touchStartY = 0, touchStartT = 0;
+  let touching = false;
+  const SWIPE_MIN_X = 50;        // min horizontal distance
+  const SWIPE_MAX_Y = 60;        // max vertical drift before it becomes a scroll gesture
+  const SWIPE_MAX_TIME = 800;    // ms
+
+  document.addEventListener('touchstart', (e) => {
     if (e.target.closest('a,button,input,kbd')) return;
-    const w = window.innerWidth;
-    if (e.clientX > w * 0.6) show(idx + 1);
-    else if (e.clientX < w * 0.4) show(idx - 1);
-  });
+    const t = e.changedTouches[0];
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+    touchStartT = performance.now();
+    touching = true;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    if (!touching) return;
+    touching = false;
+    if (e.target.closest('a,button,input,kbd')) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
+    const dt = performance.now() - touchStartT;
+    if (dt > SWIPE_MAX_TIME) return;
+    if (Math.abs(dy) > SWIPE_MAX_Y) return;    // it was probably a vertical scroll
+    if (Math.abs(dx) < SWIPE_MIN_X) return;    // too short — likely a tap
+    if (dx < 0) show(idx + 1);
+    else show(idx - 1);
+  }, { passive: true });
+
+  // Fade out swipe hint after any interaction
+  const dismissHint = () => {
+    if (swipeHint) swipeHint.style.display = 'none';
+    document.removeEventListener('touchstart', dismissHint);
+    document.removeEventListener('keydown', dismissHint);
+  };
+  if (isMobile && swipeHint) {
+    document.addEventListener('touchstart', dismissHint, { passive: true, once: true });
+    document.addEventListener('keydown', dismissHint, { once: true });
+    // Also auto-hide after 5s via CSS animation-fill-forwards
+    setTimeout(() => { if (swipeHint) swipeHint.style.display = 'none'; }, 5000);
+  } else if (swipeHint) {
+    swipeHint.style.display = 'none';
+  }
 
   show(0);
 })();
