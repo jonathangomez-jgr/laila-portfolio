@@ -48,7 +48,7 @@ export const customerProjects: CustomerProject[] = [
             { value: "16", label: "Carpetas temáticas en el repositorio actualizado" },
             { value: "1000+", label: "Tipificaciones de Caso en el layout entregado" },
             { value: "2.6M", label: "Person Accounts ya en Salesforce" },
-            { value: "✅", label: "Foundation FWD_ desplegada en Sandbox (jul-2026)" },
+            { value: "36 / 42", label: "KB Articles publicados Online en Sandbox (jul-2026)" },
           ],
         },
       },
@@ -1059,7 +1059,7 @@ export const customerProjects: CustomerProject[] = [
           "Lista concreta de artículos a crear en Salesforce Knowledge del sandbox PAM. Cada tarjeta define título, resumen, Record Type, Data Categories y los Retrievers que lo consumirán. IDs `KA-XXX-NNN` son los que llevará el artículo en Salesforce para trazabilidad. Cobertura completa del MVP (13 Job Stories) sin over-engineering — solo lo que necesitamos para el primer release.",
         kbArticlesData: {
           intro:
-            "42 artículos master en español (41 del plan MVP + KA-POL-009 sumado durante la lectura verbatim de fuentes) · con traducciones a EN y PT queda un total de 126 versiones. Cada artículo lleva los 3 Data Categories obligatorios (Audience · Topic · Property) más el picklist Lifecycle en el objeto. El status inicial es 'planned'; pasa a 'draft' al crearlo en sandbox, 'in-review' cuando la fuente tiene contradicciones o requiere aprobación adicional, 'validated' al publicarse.",
+            "42 artículos master en español (41 del plan MVP + KA-POL-009 sumado durante la lectura verbatim de fuentes) · con traducciones a EN y PT queda un total de 126 versiones. Cada artículo lleva los 3 Data Categories obligatorios (Audience · Topic · Property) más el picklist Lifecycle en el objeto. Ciclo de vida: 'planned' (sin fuente para autorear) → 'draft' (creado en sandbox con Q/A verbatim) → 'in-review' (bloqueado por contradicción o decisión del cliente) → 'validated' (publicado Online, PublishStatus=Online, disponible para el retriever). Al 2 de julio de 2026 · 36 Validated · 2 In Review · 4 Planned.",
           totals: {
             masterArticles: 42,
             languageVersions: 126,
@@ -1090,7 +1090,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS001", "JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/AVA/AVA_FACT_SHEETS/AVA_FACT_SHEET_GENERAL_SP.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-PFS-002",
@@ -1110,7 +1110,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS001", "JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/HRHC/HRHC_FACT_SHEETS/HRHC_FACT_SHEET_ES.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-PFS-003",
@@ -1131,7 +1131,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/HRRM /HRRM_FACT_SHEETS/HRRM_FACT_SHEET_ES.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-PFS-004",
@@ -1151,7 +1151,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/HRHV/HRHV_FACT_SHEETS/HRHV_Descriptivo de habitaciones_ES.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-PFS-005",
@@ -1171,7 +1171,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/HRLC/HRLC_FACT_SHEETS/HRLC_FACT_SHEET_ES.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-PFS-006",
@@ -1191,7 +1191,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/HRPC/HRPC_FACT_SHEETS/HRPC_FACT_SHEET_ES.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-PFS-007",
@@ -1211,7 +1211,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/UNICO RIVIERA MAYA/UNICO RM_ FACT_SHEETS/UNICO_RM_Fact Sheet_ES.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-PFS-008",
@@ -1231,7 +1231,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/UNICO RIVIERA NAYARIT/UNICO RN_FACT_SHEETS/UNICO_RN_Fact Sheet_General_ES.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-PFS-009",
@@ -1278,7 +1278,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS021", "JS027"],
                   membershipLevel: "ALL",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Política de Cancelación socios_.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-POL-002",
@@ -1298,7 +1298,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS021", "JS027"],
                   membershipLevel: "ALL",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Política de Cancelación socios_.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-POL-003",
@@ -1338,7 +1338,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS030"],
                   membershipLevel: "LVC (Deluxe · VIP · HoF · Chairman)",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Políticas de Reservaciones LVC.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-POL-005",
@@ -1358,7 +1358,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS030"],
                   membershipLevel: "LVC",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Políticas de Reservaciones LVC.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-POL-006",
@@ -1378,7 +1378,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS021"],
                   membershipLevel: "ALL",
                   sourceFile: "Política de huracán y clima/Protocolo Huracán_ En caso de una contingencia climática, Política o social, decretada formalmente por los organismos correspondientes, aplican los siguientes escenarios_.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-POL-007",
@@ -1397,7 +1397,7 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   membershipLevel: "ALL",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Políticas de Reservaciones LVC.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-POL-008",
@@ -1416,7 +1416,7 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   membershipLevel: "ALL",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Políticas de Reservaciones LVC.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-POL-009",
@@ -1435,7 +1435,7 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   membershipLevel: "LVC (Deluxe · VIP · HoF · Chairman)",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Políticas de Reservaciones LVC.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
               ],
             },
@@ -1501,7 +1501,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS003"],
                   membershipLevel: "Paradise Pass",
                   sourceFile: "Programa de referidos/Programa de Referidos PPASS.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-BEN-004",
@@ -1546,7 +1546,7 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   membershipLevel: "ALL",
                   sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r5 · Hard Rock Hotel Punta Cana FAQ 1)",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-FAQ-002",
@@ -1566,7 +1566,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r7-r8 · UNICO FAQ 2)",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-FAQ-003",
@@ -1586,7 +1586,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r2 · HRRM FAQ 2)",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-FAQ-004",
@@ -1606,7 +1606,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r9 · AVA FAQ 2)",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-FAQ-005",
@@ -1625,7 +1625,7 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   membershipLevel: "ALL",
                   sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r3, r5, r9 · FAQ 4)",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-FAQ-006",
@@ -1644,7 +1644,7 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   membershipLevel: "ALL",
                   sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r3, r4 · FAQ 4)",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-FAQ-007",
@@ -1663,7 +1663,7 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   membershipLevel: "ALL",
                   sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r6 · HRHV FAQ 4)",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-FAQ-008",
@@ -1682,7 +1682,7 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   membershipLevel: "LVC (Deluxe · VIP · HoF · Chairman)",
                   sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r2 · HRRM FAQ 1)",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-FAQ-009",
@@ -1701,7 +1701,7 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   membershipLevel: "LVC (Deluxe · VIP · HoF · Chairman)",
                   sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r7-r8 · UNICO FAQ 1)",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-FAQ-010",
@@ -1721,7 +1721,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "LVC (Deluxe · VIP · HoF · Chairman)",
                   sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r4 · HRLC FAQ 3)",
-                  status: "draft",
+                  status: "validated",
                 },
               ],
             },
@@ -1767,7 +1767,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS010"],
                   membershipLevel: "ALL",
                   sourceFile: "Actualización de Datos/ACTUALIZACION DE INFORMACION/",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-HOW-003",
@@ -1787,7 +1787,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS002"],
                   membershipLevel: "LVC",
                   sourceFile: "Actualización de Datos/CAMBIO DE PROPIETARIO/",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-HOW-004",
@@ -1807,7 +1807,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS002"],
                   membershipLevel: "LVC",
                   sourceFile: "Beneficiarios/AGREGAR NUEVO PROPIETARIO/",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-HOW-005",
@@ -1827,7 +1827,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS002"],
                   membershipLevel: "LVC",
                   sourceFile: "Actualización de Datos/REMOCION DE PROPIETARIO/",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-HOW-006",
@@ -1847,7 +1847,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS002"],
                   membershipLevel: "LVC",
                   sourceFile: "Beneficiarios/BENEFICIARIOS/",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-HOW-007",
@@ -1867,7 +1867,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS002"],
                   membershipLevel: "LVC",
                   sourceFile: "Beneficiarios/REMOCION POR FALLECIMIENTO/",
-                  status: "draft",
+                  status: "validated",
                 },
               ],
             },
@@ -1894,7 +1894,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS024", "JS023"],
                   membershipLevel: "LVC",
                   sourceFile: "Canales Oficiales/LEGENDARY VACATION CLUB OFFICIAL COMMUNICATION CHANNELS.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-SEC-002",
@@ -1914,7 +1914,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS024"],
                   membershipLevel: "Paradise Pass",
                   sourceFile: "Estado de Cuenta-Balance/TYLER, know our official channels!.eml",
-                  status: "draft",
+                  status: "validated",
                 },
                 {
                   id: "KA-SEC-003",
@@ -1934,7 +1934,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS023"],
                   membershipLevel: "ALL",
                   sourceFile: "Fraude/DOCUMENTOS SOLICITADOS POR FRAUDE.docx.pdf",
-                  status: "draft",
+                  status: "validated",
                 },
               ],
             },
@@ -2011,6 +2011,15 @@ export const customerProjects: CustomerProject[] = [
                   "Al construir los 4 artículos Benefit & Program de Paradise Pass descubrimos que el repositorio 'PAM_Hotels_Knowledge_Base_RAG/' NO contiene un documento oficial que describa la mecánica del pase (certificado, activación, vencimiento, tarifas 4/5 vs 7/8 noches, bonus 'An Extra Dose of Paradise') ni los beneficios tangibles (Member's Bracelet, Resort Credits, eventos por invitación como Legends of Paradise 2026).\n\nSolo KA-BEN-003 (Programa de Referidos PPass) pudo crearse porque su fuente entregada — 'Programa de Referidos PPASS.pdf' — es concreta y citable.\n\nAplicando el protocolo editorial (no crear artículos sin fuente literal), los otros 3 KA-BEN-001, KA-BEN-002 y KA-BEN-004 quedan PENDIENTES en el portfolio pero NO se crean en la org hasta recibir contenido oficial. El bot podría en el interín usar información pública de paradisepass.com si el cliente lo autoriza como fuente citable temporal.",
                 askOfClient:
                   "Entregar el brief oficial 2026 de Paradise Pass con: (1) mecánica completa del certificado (compra, activación, vencimiento, opciones 4/5 y 7/8 noches, bonus 'An Extra Dose of Paradise'), (2) beneficios tangibles al check-in (Member's Bracelet, Resort Credits — cómo se ganan y canjean), (3) eventos por invitación con fechas 2026 (Legends of Paradise en AVA Cancún, Summer Like Heaven, Camp Rockaway, Superbia Summer). Alternativa: autorizar scraping de paradisepass.com como fuente pública citable con marca de tiempo.",
+              },
+              {
+                id: "PND-010",
+                title: "Alinear FWD_Validation_Status__c en artículos ya Online",
+                severity: "info",
+                description:
+                  "Los 36 artículos publicados el 2 de julio 2026 tienen PublishStatus = Online pero su campo FWD_Validation_Status__c quedó en 'Draft' porque se marcaron para publicar antes de que se implementara el ciclo Draft → In Review → Validated en el campo custom. Salesforce Knowledge NO permite editar campos de artículos Online (son read-only), por lo que ajustar el campo requiere: (a) editar el artículo — que crea automáticamente una nueva versión Draft — (b) actualizar el campo a Validated y (c) republicar la nueva versión.\n\nNo afecta el retriever (que filtra por Data Categories + Lifecycle, no por Validation_Status), pero conviene alinearlo para reportes editoriales.",
+                askOfClient:
+                  "Autorizar la re-versión de los 36 artículos Online para actualizar el campo FWD_Validation_Status__c a 'Validated'. Es una operación silenciosa que crea una nueva versión con el mismo contenido y republica.",
               },
               {
                 id: "PND-009",

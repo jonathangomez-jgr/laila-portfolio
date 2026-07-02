@@ -104,6 +104,24 @@ export default async function InsightsPage({
                       Deck
                     </span>
                   )}
+                  {insight.externalDeckUrl && (
+                    <span className="hidden items-center gap-1.5 rounded-full border border-gray-900/15 bg-gray-950 px-2.5 py-1 text-[11px] font-semibold text-white sm:inline-flex">
+                      <svg
+                        className="h-3 w-3"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.4}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M3 7.5A2.5 2.5 0 015.5 5h13A2.5 2.5 0 0121 7.5v9a2.5 2.5 0 01-2.5 2.5h-13A2.5 2.5 0 013 16.5v-9zM8 21h8M12 19v2"
+                        />
+                      </svg>
+                      Presentación
+                    </span>
+                  )}
                   <span className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 transition group-hover:gap-3">
                     Leer
                     <svg

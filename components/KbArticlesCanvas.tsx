@@ -3,6 +3,7 @@ import type {
   KbArticleDataCategory,
   KbArticlePendingItem,
 } from "../data/customerDemos";
+import KbProgressDashboard from "./KbProgressDashboard";
 
 const severityStyles: Record<KbArticlePendingItem["severity"], { badge: string; label: string; accent: string }> = {
   info: {
@@ -75,23 +76,7 @@ export default function KbArticlesCanvas({ data }: { data: KbArticlesData }) {
         <p className="max-w-4xl text-base leading-7 text-gray-600">{data.intro}</p>
       )}
 
-      {data.totals && (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard
-            label="Artículos master (ES)"
-            value={data.totals.masterArticles}
-          />
-          <StatCard
-            label="Versiones × 3 idiomas"
-            value={data.totals.languageVersions}
-          />
-          <StatCard
-            label="Job Stories cubiertas"
-            value={`${data.totals.coveredJobStories} / ${data.totals.totalMvpJobStories}`}
-          />
-          <StatCard label="Record Types" value={data.buckets.length} />
-        </div>
-      )}
+      <KbProgressDashboard data={data} />
 
       {data.buckets.map((bucket) => {
         const style =
@@ -295,13 +280,3 @@ export default function KbArticlesCanvas({ data }: { data: KbArticlesData }) {
   );
 }
 
-function StatCard({ label, value }: { label: string; value: string | number }) {
-  return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-      <p className="text-3xl font-bold text-gray-950">{value}</p>
-      <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-gray-500">
-        {label}
-      </p>
-    </div>
-  );
-}
