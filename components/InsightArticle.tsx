@@ -449,29 +449,69 @@ export default function InsightArticle({
             {insight.subtitle}
           </p>
 
-          {hasDeck && (
+          {(hasDeck || insight.externalDeckUrl) && (
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <a
-                href={`/${lang}/insights/${insight.slug}/deck`}
-                className="primary-button inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold"
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.2}
-                  aria-hidden
+              {hasDeck && (
+                <a
+                  href={`/${lang}/insights/${insight.slug}/deck`}
+                  className="primary-button inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4 5h16M4 5v14h16V5M4 5l8 7 8-7"
-                  />
-                </svg>
-                {dict.execDeckBtn}
-              </a>
-              <span className="text-xs text-gray-500">{dict.execDeckHint}</span>
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.2}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 5h16M4 5v14h16V5M4 5l8 7 8-7"
+                    />
+                  </svg>
+                  {dict.execDeckBtn}
+                </a>
+              )}
+              {insight.externalDeckUrl && (
+                <a
+                  href={insight.externalDeckUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-gray-950/10 bg-gray-950 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-800"
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.2}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 7.5A2.5 2.5 0 015.5 5h13A2.5 2.5 0 0121 7.5v9a2.5 2.5 0 01-2.5 2.5h-13A2.5 2.5 0 013 16.5v-9zM8 21h8M12 19v2"
+                    />
+                  </svg>
+                  {insight.externalDeckLabel ?? "Ver presentación"}
+                  <svg
+                    className="h-3.5 w-3.5 opacity-70"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.2}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M14 5h5v5M19 5l-9 9M10 5H5v14h14v-5"
+                    />
+                  </svg>
+                </a>
+              )}
+              {hasDeck && <span className="text-xs text-gray-500">{dict.execDeckHint}</span>}
             </div>
           )}
 

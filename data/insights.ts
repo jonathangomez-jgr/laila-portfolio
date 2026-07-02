@@ -63,6 +63,8 @@ export type Insight = {
     alt: string;
     source?: { label: string; url: string };
   };
+  externalDeckUrl?: string;
+  externalDeckLabel?: string;
   sections: InsightSection[];
   hidden?: boolean;
 };
@@ -1843,6 +1845,8 @@ const retailAiMexico: Insight = {
       url: "https://www.salesforce.com/agentforce/",
     },
   },
+  externalDeckUrl: "/presentations/retail-ia-mexico-salesforce.html",
+  externalDeckLabel: "Ver presentación ejecutiva · 15 min",
   sections: [
     {
       id: "resumen-ejecutivo",

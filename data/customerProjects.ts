@@ -1090,7 +1090,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS001", "JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/AVA/AVA_FACT_SHEETS/AVA_FACT_SHEET_GENERAL_SP.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-PFS-002",
@@ -1110,7 +1110,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS001", "JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/HRHC/HRHC_FACT_SHEETS/HRHC_FACT_SHEET_ES.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-PFS-003",
@@ -1131,7 +1131,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/HRRM /HRRM_FACT_SHEETS/HRRM_FACT_SHEET_ES.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-PFS-004",
@@ -1151,7 +1151,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/HRHV/HRHV_FACT_SHEETS/HRHV_Descriptivo de habitaciones_ES.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-PFS-005",
@@ -1171,7 +1171,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/HRLC/HRLC_FACT_SHEETS/HRLC_FACT_SHEET_ES.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-PFS-006",
@@ -1191,7 +1191,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/HRPC/HRPC_FACT_SHEETS/HRPC_FACT_SHEET_ES.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-PFS-007",
@@ -1211,7 +1211,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/UNICO RIVIERA MAYA/UNICO RM_ FACT_SHEETS/UNICO_RM_Fact Sheet_ES.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-PFS-008",
@@ -1231,7 +1231,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
                   sourceFile: "Propiedades/UNICO RIVIERA NAYARIT/UNICO RN_FACT_SHEETS/UNICO_RN_Fact Sheet_General_ES.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-PFS-009",
@@ -1251,7 +1251,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS005"],
                   membershipLevel: "LVC only",
                   sourceFile: "Propiedades/UNICO JAMAICA/UNICO JAMAICA_FACTS SHEETS/UNICO_MB_Fact Sheet_EN.pdf",
-                  status: "planned",
+                  status: "in-review",
                 },
               ],
             },
