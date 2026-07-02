@@ -19,9 +19,12 @@ import StoryTimeline from "./StoryTimeline";
 import JourneyTimeline from "./JourneyTimeline";
 import JtbdCanvas from "./JtbdCanvas";
 import KnowledgeLibraryInventory from "./KnowledgeLibraryInventory";
+import CustomRetrieverCards from "./CustomRetrieverCards";
+import KbArticlesCanvas from "./KbArticlesCanvas";
 import JobStoriesCanvas from "./JobStoriesCanvas";
 import TestScriptsCanvas from "./TestScriptsCanvas";
 import Sprint3Canvas from "./Sprint3Canvas";
+import WorkPlanCanvas from "./WorkPlanCanvas";
 import ObjectiveInfographic from "./ObjectiveInfographic";
 import OverviewStats from "./OverviewStats";
 import SolutionLayers from "./SolutionLayers";
@@ -379,12 +382,24 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 />
               )}
 
+              {activeTab.workPlanData && (
+                <WorkPlanCanvas data={activeTab.workPlanData} />
+              )}
+
               {activeTab.assetsData && (
                 <AssetsGrid data={activeTab.assetsData} />
               )}
 
               {activeTab.knowledgeInventoryData && (
                 <KnowledgeLibraryInventory data={activeTab.knowledgeInventoryData} />
+              )}
+
+              {activeTab.customRetrieverData && (
+                <CustomRetrieverCards data={activeTab.customRetrieverData} />
+              )}
+
+              {activeTab.kbArticlesData && (
+                <KbArticlesCanvas data={activeTab.kbArticlesData} />
               )}
 
               {activeTab.jobStoriesData && (
@@ -415,8 +430,11 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 !activeTab.roadmapData &&
                 !activeTab.jtbdData &&
                 !activeTab.sprint3Data &&
+                !activeTab.workPlanData &&
                 !activeTab.assetsData &&
                 !activeTab.knowledgeInventoryData &&
+                !activeTab.customRetrieverData &&
+                !activeTab.kbArticlesData &&
                 !activeTab.jobStoriesData &&
                 !activeTab.testScriptsData && (
                   <div className="mt-10 rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-6">

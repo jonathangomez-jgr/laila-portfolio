@@ -511,6 +511,407 @@ export const insightDecks: InsightDeck[] = [
       },
     ],
   },
+  {
+    slug: "deck",
+    customerSlug: "insight",
+    insightSlug: "customer-feedback-strategy-salesforce",
+    title: "Customer Feedback con Salesforce",
+    subtitle:
+      "De la encuesta puntual al sistema continuo de voz del cliente",
+    duration: "12 min",
+    slides: [
+      // 1 · Portada
+      {
+        layout: "title",
+        eyebrow: "Insights · Postura técnica y estratégica",
+        title:
+          "Estrategia de Customer Feedback\ncon Salesforce",
+        subtitle:
+          "Cómo combinar Surveys, Feedback Management, Customer Signals Intelligence y Agentforce para pasar de medir a actuar.",
+        footnote: "Postura ejecutiva · Laila Portfolio · 2026",
+      },
+
+      // 2 · Statement
+      {
+        layout: "quote",
+        quote:
+          "Customer Feedback debe operarse como un sistema continuo, no como un proyecto de encuestas. Señales activas + pasivas, unificadas en Data Cloud, accionadas con Agentforce y medidas por tiempo a cierre del loop — no solo por el score.",
+        context: "Statement ejecutivo · Postura completa",
+      },
+
+      // 3 · Sección contexto
+      {
+        layout: "section",
+        eyebrow: "Parte 1 · Contexto",
+        title:
+          "Por qué la conversación de Customer Feedback cambió",
+        subtitle:
+          "Las encuestas trimestrales agregadas ya no alcanzan. La diferencia hoy se hace con señales continuas y acciones automáticas.",
+      },
+
+      // 4 · El problema
+      {
+        layout: "bullets",
+        eyebrow: "Lo que vemos en campo",
+        title: "El problema que casi todas las organizaciones tienen",
+        bullets: [
+          "Encuestas dispersas en tres herramientas distintas, sin trazabilidad al cliente.",
+          "Tasas de respuesta cayendo — el cliente no diferencia entre encuesta corporativa y spam.",
+          "Métricas agregadas (NPS, CSAT, CES) que no se conectan al registro del cliente.",
+          "Comentarios abiertos en hojas de cálculo que nadie procesa.",
+          "Sin disparo de acciones cuando la respuesta es mala — el dashboard sube, la experiencia no.",
+        ],
+        highlight:
+          "El programa de feedback se mide por dashboards, no por acciones. Esa es exactamente la trampa que esta postura busca evitar.",
+      },
+
+      // 5 · Sección productos
+      {
+        layout: "section",
+        eyebrow: "Parte 2 · Productos vigentes",
+        title:
+          "Qué ofrece hoy Salesforce para capturar la experiencia del cliente",
+        subtitle:
+          "Tres bloques vigentes que cubren el espectro completo. Más Agentforce for Service como capa transversal.",
+      },
+
+      // 6 · Tres bloques
+      {
+        layout: "pillars",
+        eyebrow: "Mapa de productos",
+        title: "Tres bloques. Una sola estrategia.",
+        pillars: [
+          {
+            title: "Salesforce Surveys",
+            body: "Base incluida con Service Cloud. Encuestas simples, registradas en el CRM como objetos estándar. Punto de partida sin licencia adicional.",
+            accent: "emerald",
+          },
+          {
+            title: "Feedback Management",
+            body: "Add-on (Starter / Growth). AI Survey Generation, Translation y Summarization. Dynamic Surveys, Data Mapper, Customer Lifecycle Maps, dashboards prebuilt.",
+            accent: "indigo",
+          },
+          {
+            title: "Customer Signals Intelligence",
+            body: "Consumo por Experience Signals. Sentiment 24/7 sobre toda interacción de servicio. Captura señales pasivas sin pedirle nada al cliente.",
+            accent: "violet",
+          },
+        ],
+      },
+
+      // 7 · Tabla productos
+      {
+        layout: "kpi-table",
+        eyebrow: "Comparación operativa",
+        title: "Qué producto resuelve cuál necesidad",
+        rows: [
+          {
+            label: "Salesforce Surveys",
+            baseline: "Activa",
+            goal6m: "Incluido en Service Cloud",
+            goal12m: "Punto de partida — encuestas simples y volumen bajo.",
+            accent: "emerald",
+          },
+          {
+            label: "Feedback Management — Starter",
+            baseline: "Activa dinámica",
+            goal6m: "Add-on por org/mes + Survey Pack",
+            goal12m: "Encuestas profesionales multicanal con dashboards listos.",
+            accent: "indigo",
+          },
+          {
+            label: "Feedback Management — Growth",
+            baseline: "Activa + Lifecycle",
+            goal6m: "Add-on por org/mes (tier superior)",
+            goal12m: "Customer Lifecycle Maps + volumen alto de respuestas.",
+            accent: "violet",
+          },
+          {
+            label: "Customer Signals Intelligence",
+            baseline: "Pasiva 24/7",
+            goal6m: "Consumo por Experience Signal",
+            goal12m: "Sentiment continuo sobre cada interacción de servicio.",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // 8 · Sección conceptos
+      {
+        layout: "section",
+        eyebrow: "Parte 3 · Conceptos",
+        title:
+          "Señales activas y pasivas: por qué necesita ambas",
+        subtitle:
+          "Una sola dimensión nunca alcanza. La combinación es la que genera valor real.",
+      },
+
+      // 9 · Activa vs Pasiva
+      {
+        layout: "comparison",
+        eyebrow: "Dos dimensiones complementarias",
+        title:
+          "Voz declarada  vs.  Voz observada",
+        before: {
+          heading: "Señales activas — Surveys / Feedback Management",
+          items: [
+            "El cliente responde lo que dice pensar.",
+            "Específicas, controladas, comparables (NPS, CSAT, CES).",
+            "Costo: fatiga si se abusa de ellas.",
+            "Limitación: el cliente que más sufre rara vez responde.",
+          ],
+        },
+        after: {
+          heading: "Señales pasivas — Customer Signals Intelligence",
+          items: [
+            "Sentimiento captado desde cada interacción de servicio.",
+            "No requiere acción del cliente.",
+            "Costo: necesita volumen y calidad conversacional.",
+            "Limitación: no se pueden hacer preguntas específicas.",
+          ],
+        },
+      },
+
+      // 10 · Sección momentos
+      {
+        layout: "section",
+        eyebrow: "Parte 4 · Diseño",
+        title: "Los siete momentos donde tiene sentido medir",
+        subtitle:
+          "Una estrategia de Customer Feedback no es 'mandar más encuestas'. Es elegir bien los momentos.",
+      },
+
+      // 11 · Tabla de momentos
+      {
+        layout: "kpi-table",
+        eyebrow: "Los siete momentos",
+        title: "Métrica · canal · disparador en Salesforce",
+        rows: [
+          {
+            label: "Post-interacción de servicio",
+            baseline: "CSAT + CES",
+            goal6m: "Email · post-chat · SMS",
+            goal12m: "Workflow al cerrar el caso + Data Mapper.",
+            accent: "indigo",
+          },
+          {
+            label: "Post-onboarding (30–60 días)",
+            baseline: "Onboarding Score",
+            goal6m: "Email + in-app",
+            goal12m: "Customer Lifecycle Map al hito de onboarding.",
+            accent: "violet",
+          },
+          {
+            label: "Post-compra / post-entrega",
+            baseline: "CSAT producto",
+            goal6m: "Email · WhatsApp · in-app",
+            goal12m: "Disparo al pasar el pedido a 'Entregado'.",
+            accent: "sky",
+          },
+          {
+            label: "Renewal / aniversario",
+            baseline: "Relationship NPS",
+            goal6m: "Email programado",
+            goal12m: "Customer Lifecycle Map por fecha aniversario.",
+            accent: "emerald",
+          },
+          {
+            label: "Eventos críticos / escalación",
+            baseline: "Recovery survey",
+            goal6m: "Email + llamada",
+            goal12m: "Disparo desde Case severidad alta.",
+            accent: "indigo",
+          },
+        ],
+      },
+
+      // 12 · Sección arquitectura
+      {
+        layout: "section",
+        eyebrow: "Parte 5 · Arquitectura",
+        title:
+          "Customer Feedback como sistema continuo",
+        subtitle:
+          "Activas + pasivas convergen en Data Cloud. Agentforce y Data Mapper convierten la voz del cliente en acción real en el CRM.",
+      },
+
+      // 13 · Pilares de la arquitectura
+      {
+        layout: "pillars",
+        eyebrow: "Roles claros, fronteras claras",
+        title: "Quién hace qué",
+        pillars: [
+          {
+            title: "Captura",
+            body: "Surveys + Feedback Management para activas. Customer Signals Intelligence para pasivas. Ambas alimentan el mismo perfil.",
+            accent: "indigo",
+          },
+          {
+            title: "Unificación",
+            body: "Data Cloud consolida survey + sentiment + engagement history en un solo perfil del cliente. Una sola verdad.",
+            accent: "violet",
+          },
+          {
+            title: "Acción",
+            body: "Agentforce resume y recomienda. Data Mapper convierte respuestas malas en casos, tareas o journeys de recuperación.",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // 14 · Sección recomendaciones
+      {
+        layout: "section",
+        eyebrow: "Parte 6 · Recomendaciones",
+        title: "Diez principios de diseño",
+        subtitle:
+          "Si su programa rompe tres o más, pause antes de seguir invirtiendo en licencias.",
+      },
+
+      // 15 · Recomendaciones 1–5
+      {
+        layout: "bullets",
+        eyebrow: "Recomendaciones (1/2)",
+        title: "Cinco principios para no quemar al cliente",
+        bullets: [
+          "01 · Mida solo lo que vaya a accionar — si nadie hace nada con la respuesta, no la pida.",
+          "02 · Diseñe el cierre del loop antes que la encuesta — Data Mapper desde el día uno.",
+          "03 · No mezcle relacional con transaccional — NPS de marca ≠ CSAT de caso.",
+          "04 · Cuide la fatiga — máximo una encuesta cada 30–45 días por cliente, salvo evento crítico.",
+          "05 · Use preguntas cortas con ramificación dinámica — empiece con dos y profundice si amerita.",
+        ],
+      },
+
+      // 16 · Recomendaciones 6–10
+      {
+        layout: "bullets",
+        eyebrow: "Recomendaciones (2/2)",
+        title: "Cinco principios para escalar con confianza",
+        bullets: [
+          "06 · Combine activo + pasivo desde el inicio — el valor está en cruzar señales sobre el mismo perfil.",
+          "07 · Use IA para leer comentarios abiertos — AI Survey Summarization convierte texto en clusters.",
+          "08 · Mida 'tiempo a cierre del loop', no solo el score — ese es el KPI que diferencia un programa serio.",
+          "09 · Defina ownership claro por dominio — todos miden, alguien actúa.",
+          "10 · Cierre el loop con el cliente, no solo con la dirección — 'gracias a su feedback hicimos X'.",
+        ],
+        highlight:
+          "Las recomendaciones funcionan como contrato de diseño y como brújula para la conversación con su comité ejecutivo.",
+      },
+
+      // 17 · Modelo de madurez
+      {
+        layout: "pillars",
+        eyebrow: "Parte 7 · Madurez",
+        title: "Modelo de tres niveles",
+        pillars: [
+          {
+            title: "Nivel 1 · Foundational",
+            body: "Salesforce Surveys + CSAT post-caso + reportes básicos. Cierre del loop manual. Primer baseline de NPS y CSAT.",
+            accent: "indigo",
+          },
+          {
+            title: "Nivel 2 · Lifecycle",
+            body: "Feedback Management + Customer Lifecycle Maps + Dynamic Surveys + Data Mapper. Dashboards prebuilt en producción.",
+            accent: "violet",
+          },
+          {
+            title: "Nivel 3 · Continuous Signals",
+            body: "Customer Signals Intelligence 24/7 + Agentforce for Service + perfil unificado en Data Cloud. KPI de tiempo de cierre.",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // 18 · Trampas
+      {
+        layout: "bullets",
+        eyebrow: "Parte 8 · Trampas comunes",
+        title: "Cinco errores que vemos en campo",
+        bullets: [
+          "01 · Convertir el NPS en un objetivo, no en una métrica — el equipo gestiona la encuesta, no la experiencia.",
+          "02 · Encuestas larguísimas — la tasa de respuesta cae y los datos se sesgan al cliente sobre-comprometido.",
+          "03 · Comentarios abiertos sin lectura — si no usa AI Summarization, no los pida.",
+          "04 · Programas duplicados entre áreas — sin governance, tres encuestas en una semana al mismo cliente.",
+          "05 · No medir el cierre del loop — el KPI que importa es el porcentaje de respuestas malas que terminaron en acción.",
+        ],
+      },
+
+      // 19 · Casos
+      {
+        layout: "kpi-table",
+        eyebrow: "Parte 9 · Casos de uso",
+        title: "Casos empresariales — bloque recomendado",
+        rows: [
+          {
+            label: "Servicio al cliente: CSAT post-caso",
+            baseline: "—",
+            goal6m: "Surveys + Data Mapper",
+            goal12m: "Volumen alto, pregunta simple, cierre del loop sobre el caso mismo.",
+            accent: "indigo",
+          },
+          {
+            label: "Seguros: post-claim",
+            baseline: "—",
+            goal6m: "Feedback Mgmt + Signals",
+            goal12m: "Encuesta corta + sentiment de la llamada de claims juntos.",
+            accent: "violet",
+          },
+          {
+            label: "Retail: post-compra y post-entrega",
+            baseline: "—",
+            goal6m: "Feedback Mgmt — Dynamic",
+            goal12m: "Personalización por producto + canal preferido del cliente.",
+            accent: "sky",
+          },
+          {
+            label: "Telco: voz de contact center",
+            baseline: "—",
+            goal6m: "Signals + Agentforce",
+            goal12m: "Volumen conversacional alto justifica medir 24/7 sin encuesta.",
+            accent: "emerald",
+          },
+          {
+            label: "B2B SaaS: renewal + health score",
+            baseline: "—",
+            goal6m: "FM Growth + Data Cloud",
+            goal12m: "Lifecycle Map para renewal + uso del producto = health real.",
+            accent: "indigo",
+          },
+        ],
+      },
+
+      // 20 · Conclusión
+      {
+        layout: "quote",
+        quote:
+          "Una estrategia de Customer Feedback no se evalúa por el NPS del reporte trimestral. Se evalúa por tres preguntas: ¿cuántas respuestas malas terminaron en acción este mes?, ¿el agente sabe lo que su cliente ha dicho los últimos 90 días?, ¿la dirección decide en función de patrones reales o solo de un score agregado?",
+        context: "Conclusión · Tres preguntas que importan",
+      },
+
+      // 21 · Cierre con CTA
+      {
+        layout: "closing",
+        title: "Próximos pasos",
+        bullets: [
+          "Defina los 3–5 momentos del ciclo donde sí tiene sentido medir.",
+          "Diseñe el cierre del loop con Data Mapper antes de enviar la primera encuesta.",
+          "Combine activas + pasivas desde el diseño — no espere a estar maduro en una para empezar la otra.",
+          "Mida el programa por 'tiempo a cierre del loop' además del score.",
+          "Crezca en madurez por capacidades, no por marketing.",
+        ],
+        cta: "¿Conversamos sobre su estrategia de Customer Feedback?",
+      },
+
+      // 22 · Gracias
+      {
+        layout: "thanks",
+        eyebrow: "Insights · Laila Portfolio",
+        title: "Gracias",
+        subtitle:
+          "La voz del cliente importa cuando la convierte en acción.",
+      },
+    ],
+  },
 ];
 
 export function getInsightDeck(insightSlug: string): InsightDeck | undefined {

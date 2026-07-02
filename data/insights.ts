@@ -1088,4 +1088,723 @@ const multiAgent: Insight = {
   ],
 };
 
-export const insights: Insight[] = [multiAgent];
+const customerFeedback: Insight = {
+  slug: "customer-feedback-strategy-salesforce",
+  topic: "Customer Feedback",
+  audience: ["executive", "architect", "deep"],
+  heroEyebrow: "Postura técnica · Voz del cliente",
+  title:
+    "Estrategia de Customer Feedback con Salesforce: de la encuesta puntual al sistema continuo de voz del cliente",
+  subtitle:
+    "Cómo combinar Surveys, Feedback Management, Customer Signals Intelligence y Agentforce for Service para pasar de medir satisfacción a actuar sobre la experiencia. Documento escrito para usted, desde la mirada de un arquitecto técnico en IA y Agentforce.",
+  summary:
+    "Capturar feedback hoy no es enviar una encuesta — es operar un sistema continuo que combina señales activas (encuestas) y pasivas (sentiment) a lo largo de todo el ciclo del cliente, las analiza con IA, las conecta al perfil unificado y dispara acciones reales en el CRM. Salesforce ofrece tres bloques vigentes que, bien combinados, cubren todo el espectro: Salesforce Surveys (incluido en Service Cloud), Feedback Management (add-on) y Customer Signals Intelligence (consumo). Sobre eso, una estrategia consultiva — qué medir, cuándo medir, cómo no quemar al cliente con encuestas y cómo cerrar el loop — define si la inversión genera valor real o si se convierte en otra carpeta de dashboards que nadie mira.",
+  author: "Jonathan Gomez",
+  authorRole: "Arquitecto técnico · IA & Agentforce",
+  publishedAt: "2026-06-26",
+  updatedAt: "2026-06-26",
+  readingMinutes: 24,
+  tags: [
+    "Feedback Management",
+    "Salesforce Surveys",
+    "Customer Signals",
+    "Agentforce",
+    "CSAT",
+    "NPS",
+    "Sentiment",
+    "Voice of Customer",
+  ],
+  coverImage: {
+    src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Trust-Guardrails.webp",
+    alt: "Capa de confianza y observabilidad de Agentforce, base sobre la que se gobiernan los datos de feedback del cliente.",
+    source: {
+      label: "Salesforce · Agentforce / Trust Layer",
+      url: "https://www.salesforce.com/agentforce/",
+    },
+  },
+  sections: [
+    {
+      id: "resumen",
+      eyebrow: "Statement ejecutivo",
+      title: "La tesis en una página",
+      blocks: [
+        {
+          type: "statement",
+          text: "Una estrategia de Customer Feedback madura combina señales activas (encuestas) y pasivas (sentiment de interacciones) a lo largo del ciclo del cliente, las unifica con el perfil 360, las analiza con IA y cierra el loop con acciones en el CRM. En Salesforce eso se construye sobre tres bloques vigentes: Salesforce Surveys (incluido), Feedback Management (add-on Starter o Growth) y Customer Signals Intelligence (consumo). La parte difícil no es comprar la licencia — es decidir qué medir, en qué momento, cómo evitar la fatiga de encuestas, y cómo asegurarse de que cada respuesta dispare una acción.",
+        },
+        {
+          type: "paragraph",
+          text: "Este documento está escrito desde la mirada de un arquitecto técnico especializado en IA y Agentforce, dirigido a usted como responsable de la decisión — sea un líder de CX, un director de servicio, un CMO o un equipo de arquitectura. No vengo a venderle encuestas: vengo a ayudarle a diseñar un sistema de voz del cliente que su organización pueda operar, medir y evolucionar durante años.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Cómo leer este documento",
+          text: "Con 5 minutos basta el statement, el mapa de productos y la conclusión. Con 25 minutos recorre los siete momentos del ciclo, la diferencia entre señales activas y pasivas, las recomendaciones consultivas, el modelo de madurez y las trampas más comunes que vemos en campo.",
+        },
+      ],
+    },
+    {
+      id: "por-que-hoy",
+      eyebrow: "Parte 1 · Contexto",
+      title: "Por qué la conversación de Customer Feedback cambió",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Durante años, capturar la experiencia del cliente significó enviarle una encuesta NPS al final del trimestre y agregar los resultados en un PowerPoint. Ese modelo no escala, no es accionable y, peor, le pide al cliente trabajo sin devolverle nada. Lo que cambió en los últimos dos años — y por qué esta entrada existe — es que ya tenemos las piezas para hacerlo distinto: encuestas dinámicas asistidas por IA, análisis de sentimiento sobre cada interacción, perfil unificado del cliente en Data Cloud y agentes que pueden actuar sobre lo que la voz del cliente revela.",
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "El problema que casi todas las organizaciones tienen",
+          text: "Encuestas dispersas en tres herramientas distintas, sin trazabilidad al cliente, con tasas de respuesta cayendo, sin conexión al CRM, sin disparo de acciones cuando la respuesta es mala. Resultado: la dirección recibe un NPS agregado, pero el agente de servicio no sabe que su cliente de hoy lleva tres encuestas mal calificadas en un mes. Eso es exactamente lo que esta estrategia busca evitar.",
+        },
+        {
+          type: "list",
+          items: [
+            "Tasas de respuesta a encuestas en caída: el cliente no diferencia entre una encuesta corporativa y un spam.",
+            "Métricas agregadas (NPS, CSAT, CES) que no se conectan al registro del cliente — imposible accionarlas a nivel individual.",
+            "Análisis de comentarios abiertos que vive en una hoja de cálculo, no en el CRM — los temas críticos se pierden.",
+            "Falta de coordinación entre 'medir' y 'actuar': las áreas que envían encuestas no son las mismas que pueden cerrar el loop.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "que-ofrece-salesforce",
+      eyebrow: "Parte 2 · Productos vigentes",
+      title: "Qué ofrece hoy Salesforce para capturar la experiencia del cliente",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Antes de hablar de estrategia, conviene aclarar qué piezas tiene Salesforce hoy en producción y cuál es el rol de cada una. Existen tres bloques vigentes — más una capa transversal de inteligencia — que cubren el espectro completo de Customer Feedback.",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              eyebrow: "Bloque 1 · Base incluida",
+              title: "Salesforce Surveys",
+              description:
+                "Capacidad de encuestas básica incluida con Service Cloud y otras ediciones. Permite crear encuestas, distribuirlas por email, comunidad o link directo, y registrar las respuestas como objetos estándar en el CRM. Ideal para empezar a medir sin licencia adicional.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Bloque 2 · Add-on Feedback Management",
+              title: "Salesforce Feedback Management",
+              description:
+                "Add-on profesional con dos niveles: Starter y Growth. Habilita encuestas dinámicas asistidas por IA, traducción a 18 idiomas, summarization, merge fields personalizados, Data Mapper para automatizar acciones, Customer Lifecycle Maps (en Growth) y los dashboards de Customer Lifecycle Analytics.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Bloque 3 · Consumo",
+              title: "Customer Signals Intelligence",
+              description:
+                "Captura sentimiento y señales pasivas de cada interacción de servicio 24/7, sin pedirle nada al cliente. Genera Experience Signals que alimentan los mismos dashboards y el contexto de Agentforce. Modelo de consumo, no de suscripción.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Cómo se relacionan",
+          text: "Surveys es la base; Feedback Management es la herramienta profesional que la mayoría de las organizaciones empresariales necesitan; Customer Signals Intelligence agrega la dimensión pasiva (sentimiento de interacciones) que las encuestas por sí solas nunca capturarán. Agentforce for Service es la capa transversal que resume issues, sugiere acciones y entrega guía a los representantes y a la dirección — funciona encima de los tres bloques anteriores.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Capacidades clave de Salesforce Feedback Management (vigentes)",
+        },
+        {
+          type: "list",
+          items: [
+            "AI Survey Generation — generación de encuestas adaptadas al público, industria y objetivos del negocio.",
+            "AI Survey Translation — traducción automática a 18 idiomas para encuestas multinacionales.",
+            "AI Survey Summarization — resúmenes individuales o por grupo para extraer insights sin leer respuesta por respuesta.",
+            "Dynamic Surveys — encuestas con ramificación condicional en tiempo real según las respuestas previas.",
+            "Data Mapper — workflows no-code para automatizar follow-up de casos, escalaciones y disparos en el CRM.",
+            "Merge Fields — personalización con datos del CRM (número de caso, agente que atendió, producto, etc.).",
+            "Customer Lifecycle Analytics — dashboards prebuilt de CSAT y NPS a lo largo del journey del cliente.",
+            "Customer Lifecycle Maps (Growth tier) — mapeo de momentos clave del ciclo del cliente con disparo automático de encuestas.",
+            "Intelligent Survey Reminders — recordatorios adaptativos según el nivel de engagement de cada participante.",
+            "Prebuilt Reports & Dashboards — biblioteca de reportes listos para usar.",
+            "My Service Journey — guía de mejores prácticas de implementación.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Capacidades de Customer Signals Intelligence",
+        },
+        {
+          type: "list",
+          items: [
+            "AI-Powered Sentiment Analytics — análisis continuo del sentimiento de cada interacción de servicio.",
+            "24/7 Omnichannel Sentiment Analysis — análisis transversal de canales, no solo de un canal aislado.",
+            "Customer Experience Analytics out-of-the-box — patrones surgidos automáticamente, sin construir reportes a mano.",
+            "AI-Powered Recommendations and Actions — sugerencias de próximo paso integradas al Service Console.",
+            "Agentforce for Service — summarization de issues, generación de artículos de Knowledge, guía a representantes y líderes.",
+            "Customer 360 Data — integración nativa con el perfil unificado: el sentiment vive junto al historial de engagement y a las respuestas de encuesta.",
+          ],
+        },
+        {
+          type: "table",
+          headers: ["Producto", "Tipo de señal", "Modelo comercial", "Cuándo es el adecuado"],
+          rows: [
+            [
+              "Salesforce Surveys",
+              "Activa (el cliente responde).",
+              "Incluido con Service Cloud (y otras ediciones).",
+              "Punto de partida cuando el feedback es esporádico, simple y no requiere ramificación dinámica ni IA.",
+            ],
+            [
+              "Feedback Management — Starter",
+              "Activa, dinámica, multicanal.",
+              "Add-on por org/mes + Survey Response Pack por consumo.",
+              "Organizaciones que necesitan encuestas profesionales, dinámicas, post-chat y dashboards listos.",
+            ],
+            [
+              "Feedback Management — Growth",
+              "Activa + lifecycle journey orquestado.",
+              "Add-on por org/mes (tier superior).",
+              "Cuando se opera un journey completo con Customer Lifecycle Maps y volumen alto de respuestas.",
+            ],
+            [
+              "Customer Signals Intelligence",
+              "Pasiva (sentiment de cada interacción).",
+              "Consumo por Experience Signals.",
+              "Cuando ya hay flujo conversacional alto en Service Cloud y se quiere medir sin pedir nada al cliente.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Una nota sobre licenciamiento",
+          text: "Los modelos comerciales evolucionan. Antes de tomar cualquier decisión, valide la lista de precios y SKUs vigentes con su cuenta de Salesforce: lo que aquí se describe es la combinación funcional, no una propuesta comercial. El valor estratégico está en cómo combina las piezas, no en cuál SKU compra primero.",
+        },
+      ],
+    },
+    {
+      id: "senales-activas-pasivas",
+      eyebrow: "Parte 3 · Modelo conceptual",
+      title: "Señales activas y señales pasivas: por qué necesita ambas",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Toda estrategia de feedback se mueve en dos ejes. Las señales activas son las que su organización solicita explícitamente (encuestas, NPS, CSAT, CES, feedback in-app). Las señales pasivas son las que el cliente emite sin saber que las está emitiendo (tono de la llamada, lenguaje del chat, tiempo de resolución, abandono del journey). Una sola dimensión nunca alcanza.",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Señales activas",
+              title: "Encuestas — voz declarada",
+              description:
+                "El cliente responde lo que dice pensar. Son específicas, controladas y permiten comparación estructurada (NPS, CSAT, CES). Costo: la fatiga si abusa de ellas. Limitación: el cliente que más sufre rara vez responde.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Señales pasivas",
+              title: "Sentiment — voz observada",
+              description:
+                "Captura sentimiento desde llamadas, chats, emails y casos. No requiere acción del cliente. Costo: no se pueden hacer preguntas específicas. Limitación: necesita volumen y calidad de transcripción.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "La combinación que sí funciona",
+          text: "Use señales pasivas (Customer Signals Intelligence) para detectar quién necesita atención y por qué. Use señales activas (Feedback Management) para confirmar la hipótesis con el cliente y para medir el cierre del loop. Cuando ambas se cruzan en el mismo perfil, el agente de servicio y la dirección ven la misma realidad — y pueden actuar sin pelear con interpretaciones distintas.",
+        },
+      ],
+    },
+    {
+      id: "siete-momentos",
+      eyebrow: "Parte 4 · Diseño del ciclo",
+      title: "Los siete momentos donde tiene sentido capturar feedback",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Una estrategia de Customer Feedback no es 'mandar más encuestas'. Es elegir bien los momentos. Estos son los siete que cubren al menos el 80% del valor en una organización empresarial. Cada uno tiene una métrica de referencia, un canal sugerido y un disparador natural dentro del CRM.",
+        },
+        {
+          type: "table",
+          headers: ["Momento", "Métrica típica", "Canal sugerido", "Disparo en Salesforce"],
+          rows: [
+            [
+              "Post-interacción de servicio (caso cerrado)",
+              "CSAT + CES",
+              "Email, post-chat survey, SMS",
+              "Workflow al cerrar el caso · Customer Lifecycle Map con Data Mapper.",
+            ],
+            [
+              "Post-onboarding (primeros 30–60 días)",
+              "Onboarding Score + comentario abierto",
+              "Email + in-app",
+              "Customer Lifecycle Map al alcanzar hito de onboarding.",
+            ],
+            [
+              "Post-compra / post-entrega",
+              "CSAT producto + recomendación",
+              "Email, WhatsApp, in-app",
+              "Disparo al cambiar estado de pedido a 'Entregado'.",
+            ],
+            [
+              "Renewal / aniversario de contrato",
+              "Relationship NPS",
+              "Email programado",
+              "Customer Lifecycle Map en fecha aniversario.",
+            ],
+            [
+              "Churn anunciado o detectado",
+              "Exit survey + razón estructurada",
+              "Email + entrevista cualitativa",
+              "Disparo cuando la oportunidad cambia a 'Closed Lost' o el cliente pide cancelar.",
+            ],
+            [
+              "Eventos críticos (incidente, escalación, queja)",
+              "Recovery survey",
+              "Email + llamada de seguimiento",
+              "Disparo desde Case con severidad alta o desde escalación.",
+            ],
+            [
+              "Relacional periódica (semestral / anual)",
+              "Relationship NPS + drivers",
+              "Email, in-app",
+              "Customer Lifecycle Map con ventana configurable, respetando fatiga.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Regla práctica de fatiga",
+          text: "Un cliente no debería recibir más de una encuesta cada 30–45 días, salvo eventos críticos que justifiquen una recovery survey adicional. Las Intelligent Survey Reminders de Feedback Management ayudan, pero no reemplazan la disciplina de no sobre-medir. Si su estrategia genera tres encuestas por mes al mismo cliente, no tiene estrategia: tiene spam corporativo.",
+        },
+      ],
+    },
+    {
+      id: "arquitectura-referencia",
+      eyebrow: "Parte 5 · Arquitectura",
+      title: "Arquitectura de referencia de Customer Feedback",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Esta es una arquitectura realista para una organización empresarial que decide operar Customer Feedback como un sistema continuo, no como un proyecto de encuestas. El diagrama muestra roles y fronteras de responsabilidad — no productos puntuales.",
+        },
+        {
+          type: "ascii",
+          title: "Vista lógica · Customer Feedback como sistema continuo",
+          content: String.raw`
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  TOUCHPOINTS  ·  Donde el cliente interactúa                                 │
+│  Web · App · Email · WhatsApp · Chat · Voz · Tienda · Field · Portal         │
+└────────────────────────────────┬─────────────────────────────────────────────┘
+                                 │
+            ┌────────────────────┴────────────────────┐
+            ▼                                         ▼
+┌──────────────────────────┐               ┌──────────────────────────┐
+│  SEÑALES ACTIVAS         │               │  SEÑALES PASIVAS         │
+│  Salesforce Surveys      │               │  Customer Signals        │
+│  Feedback Management     │               │  Intelligence            │
+│  · AI Survey Gen/Trans   │               │  · Sentiment 24/7        │
+│  · Dynamic + Merge       │               │  · Omnichannel           │
+│  · Lifecycle Maps        │               │  · Experience Signals    │
+└────────────┬─────────────┘               └────────────┬─────────────┘
+             │                                          │
+             └──────────────────┬───────────────────────┘
+                                ▼
+                ┌──────────────────────────────────┐
+                │  DATA CLOUD  ·  Perfil unificado │
+                │  Survey responses + Sentiment +  │
+                │  Engagement history + CRM data   │
+                └──────────────┬───────────────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              ▼                ▼                ▼
+       ┌────────────┐   ┌────────────┐   ┌────────────────┐
+       │ Agentforce │   │ Customer   │   │ Service Cloud  │
+       │ for        │   │ Lifecycle  │   │ + Data Mapper  │
+       │ Service    │   │ Analytics  │   │ (cerrar loop)  │
+       │ summariza  │   │ CSAT · NPS │   │ acciones reales│
+       │ recomienda │   │ trends     │   │ en el CRM      │
+       └────────────┘   └────────────┘   └────────────────┘
+                               │
+                               ▼
+                ┌──────────────────────────────────┐
+                │  ACCIÓN  ·  Cierre del loop      │
+                │  Caso · Tarea · Escalación ·     │
+                │  Journey de recuperación · KPI   │
+                └──────────────────────────────────┘
+`,
+        },
+        {
+          type: "list",
+          items: [
+            "Los touchpoints son cualquier canal donde el cliente interactúa — algunos generan señales activas, otros pasivas, varios ambas.",
+            "Las señales activas pasan por Surveys o Feedback Management. Las pasivas son producidas continuamente por Customer Signals Intelligence.",
+            "Ambas convergen en Data Cloud como perfil unificado — el sentiment de la llamada de ayer vive junto al CSAT de la encuesta de la semana pasada.",
+            "Agentforce for Service consume el perfil para resumir, recomendar y entregar guía al agente humano y a la dirección.",
+            "Customer Lifecycle Analytics es la vista ejecutiva — CSAT y NPS por canal, por momento del ciclo, por industria.",
+            "El cierre del loop ocurre en el CRM: Data Mapper convierte una respuesta mala en un caso, una tarea o una journey de recuperación.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "buenas-practicas",
+      eyebrow: "Parte 6 · Buenas prácticas",
+      title: "Diez recomendaciones consultivas para su estrategia",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Estas diez recomendaciones funcionan como contrato de diseño y como brújula para una conversación con su comité ejecutivo. Si su programa actual rompe tres o más, vale la pena pausarlo y rediseñarlo antes de seguir invirtiendo en licencias adicionales.",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "01",
+              title: "Mida solo lo que vaya a accionar",
+              description:
+                "Antes de lanzar una pregunta, defina quién hará algo distinto si la respuesta sale mal. Si nadie hace nada, la pregunta sobra — y le cuesta credibilidad con el cliente.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "02",
+              title: "Diseñe el cierre del loop antes que la encuesta",
+              description:
+                "Una respuesta de 2/5 debería disparar un caso, una llamada o una journey de recuperación. Use Data Mapper para automatizarlo desde el día uno — no a los seis meses.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "03",
+              title: "No mezcle relacional con transaccional",
+              description:
+                "Un Relationship NPS pregunta por la marca. Un CSAT post-interacción pregunta por el caso. Confundirlos contamina las métricas y desorienta al cliente.",
+              tone: "neutral",
+            },
+            {
+              eyebrow: "04",
+              title: "Cuide la fatiga como cuida la conversión",
+              description:
+                "Aplique una regla de exclusión: máximo una encuesta cada 30–45 días por cliente, salvo evento crítico. Documente quién no encuestar (clientes inactivos, vips en riesgo, etc.).",
+              tone: "warn",
+            },
+            {
+              eyebrow: "05",
+              title: "Trabaje con preguntas cortas y ramificación",
+              description:
+                "Las Dynamic Surveys de Feedback Management permiten que la encuesta cambie según la respuesta. Empiece con dos preguntas — luego profundice solo si la respuesta lo amerita.",
+              tone: "success",
+            },
+            {
+              eyebrow: "06",
+              title: "Combine activo + pasivo desde el inicio",
+              description:
+                "No espere a estar 'maduro' en Surveys para empezar con Signals. El valor real está en cruzar ambos sobre el mismo perfil — y eso se diseña, no se improvisa.",
+              tone: "violet",
+            },
+            {
+              eyebrow: "07",
+              title: "Use IA para leer comentarios abiertos",
+              description:
+                "AI Survey Summarization convierte miles de comentarios en clusters accionables. Sin IA, el comentario abierto se queda en un Excel que nadie procesa.",
+              tone: "success",
+            },
+            {
+              eyebrow: "08",
+              title: "Mida 'tiempo a cierre de loop', no solo el score",
+              description:
+                "El KPI que diferencia un programa serio de un dashboard es: ¿cuánto tarda su organización en responder a una respuesta mala? Si la respuesta es 'no sabemos', empiece por ahí.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "09",
+              title: "Defina ownership claro por dominio",
+              description:
+                "Cada momento del ciclo tiene un dueño: servicio, ventas, producto, marketing. Si todos miden y nadie actúa, el programa muere por anemia organizacional.",
+              tone: "neutral",
+            },
+            {
+              eyebrow: "10",
+              title: "Cierre el loop con el cliente, no solo con la dirección",
+              description:
+                "Cuando un cliente reportó algo y alguien actuó, dígaselo. 'Gracias a su feedback hicimos X.' Ese mensaje vale más que diez campañas de retención.",
+              tone: "primary",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "modelo-madurez",
+      eyebrow: "Parte 7 · Madurez",
+      title: "Modelo de madurez de tres niveles",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Este modelo es operativo. Le ayuda a entender en qué nivel está hoy su organización, qué capacidades necesita para subir y cuáles son los riesgos de saltar etapas.",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              eyebrow: "Nivel 1 · Foundational",
+              title: "Encuestas estándar conectadas al CRM",
+              description:
+                "Salesforce Surveys activo. CSAT post-caso enviado por email. Respuestas registradas en el cliente. Reportes básicos. Cierre del loop manual en los casos con peor score.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Nivel 2 · Lifecycle",
+              title: "Feedback Management orquestado por ciclo",
+              description:
+                "Customer Lifecycle Maps activos para 3–5 momentos. Encuestas dinámicas con ramificación. Data Mapper cierra loop automáticamente. Dashboards de Customer Lifecycle Analytics en producción.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Nivel 3 · Continuous Signals",
+              title: "Activas + pasivas unificadas con Agentforce",
+              description:
+                "Customer Signals Intelligence en producción 24/7. Sentiment integrado al perfil unificado. Agentforce for Service resume issues y sugiere acciones a representantes y líderes. Programa medido por 'tiempo a cierre de loop', no solo por NPS.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "table",
+          headers: ["Nivel", "Capacidades clave", "Beneficios", "Riesgos"],
+          rows: [
+            [
+              "1 · Foundational",
+              "Salesforce Surveys, CSAT post-caso, reportes básicos, cierre del loop manual.",
+              "Tiempo a valor corto, baja inversión, primer baseline de CSAT y NPS.",
+              "Quedarse aquí cuando el negocio necesita más; encuestas estáticas; tasa de respuesta sin gestión activa.",
+            ],
+            [
+              "2 · Lifecycle",
+              "Feedback Management, Customer Lifecycle Maps, Dynamic Surveys, Data Mapper, dashboards prebuilt.",
+              "Orquestación real del ciclo, cierre del loop automatizado, métricas por momento del journey.",
+              "Sobre-medir si no se gestiona fatiga; dashboards que nadie mira si falta ownership.",
+            ],
+            [
+              "3 · Continuous Signals",
+              "Customer Signals Intelligence, Agentforce for Service, perfil unificado en Data Cloud, KPI de tiempo de cierre.",
+              "Visión 360 real, intervención proactiva, voz del cliente conectada a la acción del agente.",
+              "Costo de consumo de Experience Signals; requiere volumen conversacional para que el ROI sea claro.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Salto típico mal hecho",
+          text: "Saltar de Nivel 1 directo a Nivel 3 'porque suena más moderno'. Resultado: sentiment captado sin un proceso de acción detrás, agentes que reciben alertas que no saben cómo gestionar y una dirección que pierde confianza en el programa. El Nivel 2 — Lifecycle bien operado — es donde la mayoría de las organizaciones deben vivir un año antes de añadir señales pasivas.",
+        },
+      ],
+    },
+    {
+      id: "trampas",
+      eyebrow: "Parte 8 · Trampas comunes",
+      title: "Cinco errores que vemos en campo (y cómo evitarlos)",
+      blocks: [
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Error 01",
+              title: "Convertir el NPS en un objetivo, no en una métrica",
+              description:
+                "Cuando el bonus depende de subir el NPS, los equipos aprenden a 'gestionar la encuesta', no la experiencia. Use NPS como termómetro, no como meta de venta interna.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "Error 02",
+              title: "Encuestas larguísimas 'porque ya tenemos al cliente'",
+              description:
+                "Si tarda más de 90 segundos en responder, la tasa de respuesta cae y los datos se sesgan al cliente sobre-comprometido. Use ramificación dinámica, no longitud.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "Error 03",
+              title: "Comentarios abiertos sin lectura",
+              description:
+                "Capturar texto libre sin AI Survey Summarization es decirle al cliente que no le importa lo suficiente como para leerlo. Léalo todo, o no lo pida.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "Error 04",
+              title: "Programas duplicados entre áreas",
+              description:
+                "Servicio envía su CSAT, marketing su NPS, producto su feedback in-app. Sin governance, el cliente recibe tres encuestas en una semana de tres áreas distintas de la misma empresa.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "Error 05",
+              title: "No medir el cierre del loop",
+              description:
+                "El KPI más importante no es el score. Es el porcentaje de respuestas malas que terminaron en una acción documentada y el tiempo promedio para hacerlo. Si no lo mide, no lo gestiona.",
+              tone: "warn",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "casos-uso",
+      eyebrow: "Parte 9 · Casos de uso",
+      title: "Ejemplos empresariales concretos",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Casos típicos donde Salesforce orquesta una estrategia de Customer Feedback con resultado defendible. Cada uno indica el bloque recomendado y por qué.",
+        },
+        {
+          type: "table",
+          headers: ["Caso de uso", "Bloque recomendado", "Por qué"],
+          rows: [
+            [
+              "Servicio al cliente: CSAT post-caso",
+              "Surveys (base) + Data Mapper en Feedback Management",
+              "Volumen alto, pregunta simple, requiere cerrar el loop sobre el caso mismo.",
+            ],
+            [
+              "Banca: relación post-onboarding",
+              "Feedback Management — Growth (Lifecycle Maps)",
+              "Momento crítico con ramificación según producto contratado; valor alto del primer mes.",
+            ],
+            [
+              "Seguros: post-claim experience",
+              "Feedback Management + Customer Signals Intelligence",
+              "Encuesta corta + sentimiento de la llamada de claims juntos dan la imagen real.",
+            ],
+            [
+              "Retail: post-compra y post-entrega",
+              "Feedback Management (Dynamic Surveys multicanal)",
+              "Personalización por producto + canal preferido del cliente (email, WhatsApp, in-app).",
+            ],
+            [
+              "Telco / utilities: voz de contact center",
+              "Customer Signals Intelligence + Agentforce for Service",
+              "El volumen conversacional justifica medir 24/7 sin pedirle al cliente otra encuesta.",
+            ],
+            [
+              "B2B SaaS: renewal y health score",
+              "Feedback Management — Growth + Data Cloud",
+              "Lifecycle Map para renewal + cruce con uso del producto = health score real.",
+            ],
+            [
+              "Salud / pacientes: post-consulta",
+              "Surveys + Data Mapper",
+              "Volumen alto, pregunta corta, regulación que pide trazabilidad — cierre del loop manual o semi.",
+            ],
+            [
+              "Sector público: experiencia de trámite",
+              "Feedback Management + Customer Lifecycle Analytics",
+              "Procesos largos con varios momentos clave — mapeo de ciclo y reporte público.",
+            ],
+            [
+              "Industria / B2B field service",
+              "Feedback Management + Service Cloud Mobile",
+              "Encuesta corta al finalizar el work order; el técnico recibe el resultado en su perfil.",
+            ],
+            [
+              "Programas de fidelización / loyalty",
+              "Feedback Management — Growth + Agentforce",
+              "Lifecycle Map cruzado con tier de loyalty; Agentforce alerta al gestor de cuenta cuando un VIP baja.",
+            ],
+          ],
+        },
+      ],
+    },
+    {
+      id: "conclusion",
+      eyebrow: "Cierre",
+      title: "Conclusión",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Una estrategia de Customer Feedback no se evalúa por el NPS que se publica en el reporte trimestral. Se evalúa por tres preguntas: ¿cuántas respuestas malas terminaron en una acción documentada el mismo mes?, ¿el agente que atiende a un cliente sabe lo que ese cliente ha dicho los últimos 90 días?, ¿la dirección decide en función de patrones reales — sentiment + encuestas — o solo de un score agregado? Si las tres respuestas son sí, el programa está sano.",
+        },
+        {
+          type: "paragraph",
+          text: "Salesforce tiene hoy las piezas para construirlo: Surveys como base, Feedback Management como orquestador de ciclo, Customer Signals Intelligence como sensor continuo y Agentforce for Service como capa que conecta voz del cliente con acción concreta. La parte técnica es la fácil. La difícil es decidir qué medir, cuándo medir, cómo no quemar al cliente y cómo asegurarse de que cada respuesta dispare una acción — y eso es exactamente lo que esta postura busca dejar claro.",
+        },
+        {
+          type: "statement",
+          text: "Customer Feedback debe operarse como un sistema continuo, no como un proyecto de encuestas. Combine señales activas (Surveys + Feedback Management) y pasivas (Customer Signals Intelligence), unifíquelas en Data Cloud, conviértalas en acción con Agentforce y Data Mapper, y mida el programa por tiempo a cierre del loop — no solo por el score que aparece en el dashboard.",
+        },
+      ],
+    },
+    {
+      id: "fuentes",
+      eyebrow: "Referencias",
+      title: "Fuentes oficiales",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Esta postura está construida sobre páginas oficiales de Salesforce vigentes a la fecha de publicación. Las capacidades y nombres de producto evolucionan rápido: confirme con su cuenta de Salesforce la lista exacta de SKUs y precios antes de cualquier decisión comercial.",
+        },
+        {
+          type: "sources",
+          items: [
+            {
+              label: "Salesforce Feedback Management — página de producto",
+              url: "https://www.salesforce.com/products/feedback-management/",
+            },
+            {
+              label:
+                "Salesforce Feedback Management dentro de Service Cloud Operations",
+              url: "https://www.salesforce.com/service/customer-service-operations/feedback-management/",
+            },
+            {
+              label:
+                "Service Intelligence y Customer Signals Intelligence",
+              url: "https://www.salesforce.com/service/customer-service-operations/",
+            },
+            {
+              label: "Service Cloud — visión general",
+              url: "https://www.salesforce.com/service/cloud/",
+            },
+            {
+              label: "Agentforce for Service",
+              url: "https://www.salesforce.com/agentforce/",
+            },
+            {
+              label: "Data Cloud — perfil unificado",
+              url: "https://www.salesforce.com/data/",
+            },
+            {
+              label: "State of Service Report — Salesforce Research",
+              url: "https://www.salesforce.com/resources/research-reports/state-of-service/",
+            },
+            {
+              label: "Pricing · Service Cloud",
+              url: "https://www.salesforce.com/service/pricing/",
+            },
+            {
+              label: "Valoir CX Intelligence — white paper",
+              url: "https://www.salesforce.com/form/service-cloud/valoir-customer-signals-intelligence-report/",
+            },
+            {
+              label: "Salesforce Architects · Well-Architected Framework",
+              url: "https://architect.salesforce.com/well-architected",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+export const insights: Insight[] = [multiAgent, customerFeedback];

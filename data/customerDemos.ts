@@ -552,6 +552,132 @@ export type KnowledgeLibraryInventoryData = {
   libraries: KnowledgeLibraryItem[];
 };
 
+export type CustomRetrieverArticleRef = {
+  articleId: string;
+  title: string;
+  recordType:
+    | "Property Fact Sheet"
+    | "Room Description"
+    | "Policy"
+    | "FAQ"
+    | "Benefit & Program"
+    | "How-To / Self-Service"
+    | "Security";
+};
+
+export type CustomRetrieverCard = {
+  id: string;
+  order: number;
+  name: string;
+  backend: "Salesforce Knowledge" | "UDMO Files (Data Cloud)" | "Hybrid" | "System Prompt";
+  tone: "indigo" | "violet" | "sky" | "emerald" | "amber";
+  intent: string;
+  description: string;
+  articles: CustomRetrieverArticleRef[];
+  filters: string[];
+  threshold?: string;
+  fallback?: string;
+};
+
+export type CustomRetrieverData = {
+  intro?: string;
+  retrievers: CustomRetrieverCard[];
+};
+
+export type KbArticleDataCategory = {
+  group: "Audience" | "Topic" | "Property" | "Lifecycle" | "Room Category";
+  value: string;
+};
+
+export type KbArticleCard = {
+  id: string;
+  title: string;
+  summary: string;
+  recordType:
+    | "Property Fact Sheet"
+    | "Room Description"
+    | "Policy"
+    | "FAQ"
+    | "Benefit & Program"
+    | "How-To / Self-Service"
+    | "Security";
+  dataCategories: KbArticleDataCategory[];
+  retrievers: string[];
+  channels?: Array<"Agentforce" | "Portal LVC" | "Service Console" | "Public Web">;
+  languages?: Array<"es" | "en" | "pt">;
+  jobStories?: string[];
+  membershipLevel?: string;
+  sourceFile?: string;
+  status?: "planned" | "draft" | "in-review" | "validated";
+};
+
+export type KbArticleBucket = {
+  recordType: string;
+  description: string;
+  articles: KbArticleCard[];
+};
+
+export type KbArticlesData = {
+  intro?: string;
+  totals?: {
+    masterArticles: number;
+    languageVersions: number;
+    coveredJobStories: number;
+    totalMvpJobStories: number;
+  };
+  buckets: KbArticleBucket[];
+};
+
+export type WorkPlanOpportunity = {
+  code: string;
+  name: string;
+  pilar: "P1" | "P2" | "P3" | "P0";
+  pilarColor: "indigo" | "violet" | "sky" | "emerald";
+  useCase: string;
+  salesforceProducts: string[];
+  duration: string;
+  prerequisites: string[];
+  sizing: string[];
+  dependsOn?: string[];
+  outcome: string;
+};
+
+export type WorkPlanWave = {
+  id: string;
+  label: string;
+  window: string;
+  headline: string;
+  focus: string;
+  color: "indigo" | "violet" | "sky" | "emerald";
+  goals: string[];
+  opportunities: WorkPlanOpportunity[];
+  clientAsk: string[];
+};
+
+export type WorkPlanCriticalPathStep = {
+  step: number;
+  gate: string;
+  detail: string;
+};
+
+export type WorkPlanData = {
+  intro: string;
+  horizon: string;
+  principles: string[];
+  waves: WorkPlanWave[];
+  criticalPath: WorkPlanCriticalPathStep[];
+  governance: {
+    steerco: string;
+    roles: { role: string; owner: string }[];
+    risks: { risk: string; mitigation: string }[];
+  };
+  nextGate: {
+    title: string;
+    body: string;
+    asks: string[];
+  };
+};
+
 export type CustomerDemoTab = {
   id: string;
   label: string;
@@ -574,6 +700,7 @@ export type CustomerDemoTab = {
   assetsData?: AssetsData;
   argosArch?: true;
   argosKpiSummary?: true;
+  workPlanData?: WorkPlanData;
   agentforceLandscapeData?: AgentforceLandscapeData;
   workshopData?: WorkshopData;
   blueprintData?: BlueprintData;
@@ -581,6 +708,8 @@ export type CustomerDemoTab = {
   jtbdData?: JtbdData;
   sprint3Data?: Sprint3Data;
   knowledgeInventoryData?: KnowledgeLibraryInventoryData;
+  customRetrieverData?: CustomRetrieverData;
+  kbArticlesData?: KbArticlesData;
   jobStoriesData?: JobStoriesData;
   testScriptsData?: TestScriptsData;
 };
@@ -1943,6 +2072,591 @@ export const customerDemos: CustomerDemo[] = [
         },
       },
       {
+        id: "plan-de-trabajo",
+        label: "Plan de trabajo",
+        title: "Plan de trabajo — Roadmap ejecutable de oportunidades",
+        content:
+          "Del diagnóstico a la ejecución. Este plan traduce los 3 pilares y las 20 iniciativas en un roadmap comercial de 18 meses articulado en 4 waves y 12 oportunidades de venta. Cada oportunidad especifica el caso de uso que resuelve, las soluciones Salesforce involucradas, el tiempo estimado de implementación, los prerequisitos que necesitamos del cliente y un dimensionamiento orientativo para dimensionar la propuesta económica.",
+        workPlanData: {
+          intro:
+            "El roadmap sigue una línea crítica: Wave 0 valida y compromete, Wave 1 conquista al asesor, Wave 2 desbloquea segmentación de alta resolución y Wave 3 cierra la visión 360 con el ecosistema integrado. Cada wave habilita técnicamente a la siguiente — no se ejecutan en paralelo por diseño sino por dependencia.",
+          horizon: "Jul 2026 → Dic 2027 · 18 meses · alineado a cierre SPRINT 4.0",
+          principles: [
+            "Cliente pilotea con equipo real antes de escalar (sin big-bang).",
+            "Slack es el sistema operativo del asesor desde Wave 1 — no un add-on posterior.",
+            "Quantics ejecuta Sales Cloud y Service Cloud; Salesforce PS lidera Data Cloud, Agentforce y MuleSoft.",
+            "Cada wave cierra con business review formal (Go/No-Go a la siguiente).",
+            "Sizing indicativo — la propuesta comercial formal se firma tras la fase de discovery técnico de Wave 0.",
+          ],
+          waves: [
+            {
+              id: "wave-0",
+              label: "Wave 0 · Discovery Ejecutivo + Quick Wins",
+              window: "Jul 2026 → Ago 2026 (8 semanas)",
+              headline: "Alinear, dimensionar y comprometer.",
+              focus:
+                "No es implementación de plataforma. Es el paquete de trabajo pagado que baja el plan estratégico a un backlog técnico ejecutable, dimensiona la inversión real y firma el contrato marco. Sin esta wave, cualquier estimación posterior es especulación.",
+              color: "emerald",
+              goals: [
+                "Contrato marco firmado con alcance, sizing y comercial de Wave 1 aprobados.",
+                "Backlog técnico detallado de las 20 iniciativas priorizadas por valor/esfuerzo.",
+                "Arquitectura de referencia validada con Quantics y con TI Argos.",
+              ],
+              opportunities: [
+                {
+                  code: "W0-01",
+                  name: "Discovery Técnico + Assessment Salesforce actual",
+                  pilar: "P0",
+                  pilarColor: "emerald",
+                  useCase:
+                    "Auditar la instancia productiva de Argos, mapear customizaciones de Quantics, medir deuda técnica de Sales y Service Cloud, y proponer plan de saneamiento para habilitar Agentforce sobre base limpia.",
+                  salesforceProducts: [
+                    "Salesforce Professional Services (Advisory)",
+                    "Well-Architected review",
+                    "Signals Discovery",
+                  ],
+                  duration: "3 semanas",
+                  prerequisites: [
+                    "Acceso solo-lectura al org productivo de Argos.",
+                    "Sesiones con Sandra Pulgarin (Admin CRM) y equipo Quantics.",
+                    "Reportes de adopción actuales (login history, feature usage).",
+                  ],
+                  sizing: [
+                    "1 equipo advisory Salesforce (arquitecto + business architect).",
+                    "~120 horas de consultoría.",
+                  ],
+                  outcome:
+                    "Documento de assessment con hallazgos priorizados + Well-Architected scorecard + roadmap de remediación técnica.",
+                },
+                {
+                  code: "W0-02",
+                  name: "Executive Alignment + Value Engineering",
+                  pilar: "P0",
+                  pilarColor: "emerald",
+                  useCase:
+                    "Sesión ejecutiva con Dirección Comercial, Dirección de TI y CFO para validar hipótesis de valor por pilar, atar cada iniciativa a un KPI SPRINT 4.0 y construir el business case consolidado que se presentará al Comité.",
+                  salesforceProducts: [
+                    "Value Engineering (Salesforce)",
+                    "Executive Briefing Center (opcional visita)",
+                  ],
+                  duration: "2 semanas",
+                  prerequisites: [
+                    "Sponsors ejecutivos identificados (Comercial + TI + Finanzas).",
+                    "Data histórica de KPIs del plan de cuenta (baselines documentados).",
+                    "Agenda del Comité SPRINT 4.0 alineada.",
+                  ],
+                  sizing: [
+                    "1 sesión Value Discovery (~4 horas).",
+                    "1 sesión Executive Readout (~2 horas).",
+                    "Value Engineer asignado al programa completo.",
+                  ],
+                  dependsOn: ["W0-01"],
+                  outcome:
+                    "Business case firmado con TCV objetivo, ROI proyectado por wave y comité de dirección comprometido con el programa.",
+                },
+                {
+                  code: "W0-03",
+                  name: "Contrato Marco + Sizing definitivo Wave 1",
+                  pilar: "P0",
+                  pilarColor: "emerald",
+                  useCase:
+                    "Cerrar comercial de Wave 1 (Slack + Agentforce SDR + Sales Cloud extensions) con precio, volumetría y calendario. Marco maestro con precios de referencia para Waves 2 y 3, sujeto a discovery incremental.",
+                  salesforceProducts: [
+                    "Contrato Marco (MSA + Order Form Wave 1)",
+                    "Salesforce Signature Success (opcional)",
+                  ],
+                  duration: "3 semanas",
+                  prerequisites: [
+                    "Aprobación Comité SPRINT 4.0.",
+                    "Legal Argos y Legal Salesforce coordinados.",
+                    "Definición del rol Quantics vs. Salesforce PS en cada wave.",
+                  ],
+                  sizing: [
+                    "Order Form Wave 1 firmado.",
+                    "MSA con addendums de Data, Security y GDPR/Habeas Data Colombia.",
+                  ],
+                  dependsOn: ["W0-02"],
+                  outcome:
+                    "Contrato firmado. Wave 1 arranca kickoff en septiembre 2026.",
+                },
+              ],
+              clientAsk: [
+                "Nombrar Sponsor Ejecutivo (nivel VP) y PMO del programa por Argos.",
+                "Confirmar disponibilidad de Sandra Pulgarin, Carlos Alzate, Carolina Camacho y Jorge Mario Yepes para sesiones de discovery.",
+                "Acceso solo-lectura a org Salesforce productivo + a Tableau (dashboards RADAR).",
+                "Definición de responsabilidad Argos vs. Quantics vs. Salesforce en el governance.",
+              ],
+            },
+            {
+              id: "wave-1",
+              label: "Wave 1 · Pilar 1 — Slack como SO del asesor",
+              window: "Sep 2026 → Feb 2027 (6 meses)",
+              headline: "El asesor arranca el día en Slack, no en el CRM.",
+              focus:
+                "La wave que mueve la aguja del KPI +15% market share. Slack se convierte en la interfaz única del ciclo de venta: pestaña Hoy, Slackbot para preparación de reuniones, Vista 360 conversacional, RADAR en tiempo real, registro de visitas y aprobación de oportunidades desde el chat. Se despliega piloto en Antioquia (~40 asesores) antes de escalar nacional.",
+              color: "indigo",
+              goals: [
+                "60% del equipo de canal masivo arranca el día en Slack.",
+                "70%+ de visitas preparadas con briefing automático.",
+                "RADAR llega al asesor en Slack en <5 minutos vs. reporte semanal actual.",
+                "Adopción validada en Antioquia → luz verde para rollout nacional Wave 2.",
+              ],
+              opportunities: [
+                {
+                  code: "W1-01",
+                  name: "Slack + Sales Cloud Integration Core",
+                  pilar: "P1",
+                  pilarColor: "indigo",
+                  useCase:
+                    "Desplegar Slack para toda la fuerza comercial de canal masivo con integración nativa Sales Cloud: canales por territorio, pestaña Hoy con foco/tareas/agenda, mensajería DM con clientes internos y Chatter migrado a Slack.",
+                  salesforceProducts: [
+                    "Slack Business+ (canales, huddles, workflows)",
+                    "Sales Cloud Enterprise / Unlimited (verificar edición actual)",
+                    "Slack Sales Elevate (integración nativa Sales-Slack)",
+                  ],
+                  duration: "10 semanas",
+                  prerequisites: [
+                    "SSO corporativo Argos (Azure AD o Okta) validado.",
+                    "Política de seguridad y DLP aprobada por CISO.",
+                    "Lista de canales por territorio y jerarquía comercial.",
+                    "Change management plan con RH y Comunicaciones internas.",
+                  ],
+                  sizing: [
+                    "~150-250 usuarios Slack Business+ (piloto Antioquia + expansión).",
+                    "~150-250 licencias Sales Cloud Enterprise (base ya existente — verificar upgrade).",
+                    "~50-80 licencias Slack Sales Elevate (asesores y jefes de zona).",
+                  ],
+                  outcome:
+                    "Slack productivo con 100% de asesores del piloto conectados. Ciclo de venta operable desde Slack sin abrir CRM.",
+                },
+                {
+                  code: "W1-02",
+                  name: "Slackbot Conversacional + Vista 360",
+                  pilar: "P1",
+                  pilarColor: "indigo",
+                  useCase:
+                    "Construir el Slackbot que responde '@Slackbot dame la 360 de [cliente]', prepara briefings automáticos antes de cada reunión (histórico + cartera + cupo + RADAR + Argos ONE) y permite registrar visitas desde el chat con geoetiquetado.",
+                  salesforceProducts: [
+                    "Agentforce for Sales (Employee Agent)",
+                    "Data Cloud (perfil unificado — foundation edition)",
+                    "Slack Platform (Slack apps + Bolt SDK)",
+                    "Einstein Trust Layer",
+                  ],
+                  duration: "12 semanas",
+                  prerequisites: [
+                    "Fuentes de datos identificadas: Sales Cloud, Argos ONE (API), Tableau RADAR, cartera SAP (feed batch aceptable en esta wave).",
+                    "Definición del prompt corporativo y guardrails de Agentforce.",
+                    "Aprobación de datos que Agentforce puede consumir (compliance).",
+                  ],
+                  sizing: [
+                    "1 agente Agentforce Sales productivo.",
+                    "Data Cloud: ~1-3 millones Customer Information (perfiles asesor + cliente).",
+                    "~50K-100K Einstein Requests/mes (proyección piloto).",
+                  ],
+                  dependsOn: ["W1-01"],
+                  outcome:
+                    "Asesor pide 360, briefing y registra visita desde Slack. Tiempo de preparación de reunión: <2 min vs. ~20 min actual.",
+                },
+                {
+                  code: "W1-03",
+                  name: "RADAR de Fuga en Slack + Salesforce Maps",
+                  pilar: "P1",
+                  pilarColor: "indigo",
+                  useCase:
+                    "Migrar el reporte RADAR de Tableau (semanal) a alertas Slack en tiempo real con acción sugerida. Añadir Salesforce Maps para plan de visitas inteligente por ruta y territorio con optimización.",
+                  salesforceProducts: [
+                    "Salesforce Maps (Standard + Territory Planning)",
+                    "Data Cloud Segments + Activation",
+                    "Slack workflows + Slack notifications",
+                    "Einstein Discovery (opcional — modelo de propensión de fuga)",
+                  ],
+                  duration: "8 semanas",
+                  prerequisites: [
+                    "Modelo RADAR actual documentado (variables, umbral, frecuencia).",
+                    "Datos de geolocalización de clientes (direcciones normalizadas).",
+                    "Territorios formales de canal masivo cargados en Salesforce.",
+                  ],
+                  sizing: [
+                    "~150-250 licencias Salesforce Maps.",
+                    "~5-10 territorios activos (piloto).",
+                  ],
+                  dependsOn: ["W1-02"],
+                  outcome:
+                    "Alerta RADAR llega al asesor <5 min después de detección. Cobertura del plan de visitas trimestral pasa de manual a 85%+.",
+                },
+                {
+                  code: "W1-04",
+                  name: "Cotización Inteligente + Pedido Sugerido (Agentforce SDR)",
+                  pilar: "P1",
+                  pilarColor: "indigo",
+                  useCase:
+                    "Simplificar la cotización de concretos y agregados con un asistente en Slack que sugiere producto/volumen/precio y arma el CPQ. Agentforce SDR ingesta obras nuevas de Galería Inmobiliaria, Licitacion.info y Secop, y crea oportunidades automáticamente.",
+                  salesforceProducts: [
+                    "Salesforce CPQ (Revenue Cloud)",
+                    "Agentforce Sales (SDR Agent)",
+                    "Einstein AI for Sales (pedido sugerido)",
+                    "MuleSoft Composer (para conectores no productivos: Galería, Licitación, Secop)",
+                  ],
+                  duration: "12 semanas",
+                  prerequisites: [
+                    "Reglas de negocio actuales de cotización de concreto documentadas.",
+                    "Catálogo maestro de productos limpio en Sales Cloud.",
+                    "Contratos de acceso a Galería Inmobiliaria, Licitacion.info y Secop.",
+                    "Reglas de aprobación (montos, descuentos, plazos).",
+                  ],
+                  sizing: [
+                    "~150-250 licencias CPQ.",
+                    "1 agente Agentforce SDR productivo.",
+                    "MuleSoft Composer con ~3 conectores externos.",
+                  ],
+                  dependsOn: ["W1-01"],
+                  outcome:
+                    "Tiempo de cotización de concretos: horas → minutos. Oportunidades creadas automáticamente: 0% → 30%+.",
+                },
+              ],
+              clientAsk: [
+                "Definir el piloto (recomendado: Antioquia, ~40 asesores + 3 jefes de zona).",
+                "SSO corporativo funcionando (Azure AD/Okta) + DLP aprobado.",
+                "Modelo RADAR actual documentado (Sandra Pulgarin + equipo Analítica).",
+                "Reglas de cotización de concreto documentadas por producto.",
+                "Change management activo: comunicación, entrenamiento y adopción con RH.",
+                "Contratos vigentes con Galería Inmobiliaria, Licitacion.info y Secop (o proceso de compra iniciado).",
+              ],
+            },
+            {
+              id: "wave-2",
+              label: "Wave 2 · Pilar 2 — Segmentación de alta resolución",
+              window: "Mar 2027 → Ago 2027 (6 meses)",
+              headline: "Cada punto de mercado vale millones. La genérica desperdicia.",
+              focus:
+                "Con Slack ya como interfaz del asesor, ahora activamos Marketing Cloud + Data Cloud para microsegmentar (ferreterías A/B/C, constructoras por proyecto, distribuidores por canal), automatizar Machine Sellers, dar trazabilidad ROI a Trade Marketing y reactivar clientes inactivos. Argos Amigos y Gluki se unifican en Data Cloud.",
+              color: "violet",
+              goals: [
+                "5+ segmentos activos y diferenciados a 6 meses.",
+                "2 campañas Machine Sellers automatizadas (venta cruzada).",
+                "Reactivación de 5%+ de la base inactiva mensual.",
+                "Reducción 50% de carga manual del Admin CRM (Sandra Pulgarin).",
+              ],
+              opportunities: [
+                {
+                  code: "W2-01",
+                  name: "Data Cloud — Perfil unificado del cliente masivo",
+                  pilar: "P2",
+                  pilarColor: "violet",
+                  useCase:
+                    "Unificar en Data Cloud las fuentes: Sales Cloud, Argos ONE (feed diario), Brevo, Gluki (Argos Amigos), Tableau (RADAR) y SAP (batch). Identity resolution + calculated insights (frecuencia, recencia, tendencia, propensión de compra por producto).",
+                  salesforceProducts: [
+                    "Data Cloud (Enterprise) — expansión sobre foundation W1",
+                    "Data Cloud Segments + Calculated Insights",
+                    "Data Cloud Activation Targets",
+                  ],
+                  duration: "14 semanas",
+                  prerequisites: [
+                    "Feeds definidos por sistema (Argos ONE, Brevo, Gluki, Tableau).",
+                    "Modelo de datos unificado aprobado (Cliente Masivo, Cliente Industrial).",
+                    "Data governance: dueño de dato por dominio.",
+                  ],
+                  sizing: [
+                    "Data Cloud: ~5-10 millones CIs.",
+                    "~15-25 fuentes de datos.",
+                    "~500K-1M unified profiles.",
+                  ],
+                  dependsOn: ["W1-02"],
+                  outcome:
+                    "Perfil unificado disponible para Marketing, Ventas y Servicio. Base para microsegmentación y para Wave 3.",
+                },
+                {
+                  code: "W2-02",
+                  name: "Marketing Cloud + Journey Builder por perfil",
+                  pilar: "P2",
+                  pilarColor: "violet",
+                  useCase:
+                    "Migrar Brevo a Marketing Cloud Engagement con Journey Builder por segmento y comportamiento. Reemplazo del email masivo por journeys personalizados (bienvenida, activación, reactivación, cross-sell, fidelización).",
+                  salesforceProducts: [
+                    "Marketing Cloud Engagement (Pro / Corporate)",
+                    "Journey Builder + Content Builder + Audience Builder",
+                    "Data Cloud → Marketing Cloud Activation",
+                  ],
+                  duration: "12 semanas",
+                  prerequisites: [
+                    "Playbook de comunicación por segmento aprobado.",
+                    "Plantillas de email y SMS aprobadas por Marca.",
+                    "Migración de contactos y suscripciones Brevo → MC (con opt-in validado).",
+                  ],
+                  sizing: [
+                    "Marketing Cloud Corporate — ~500K-1M contactos activos.",
+                    "~10-15 usuarios Marketing (analistas + admin).",
+                    "3-5 SMS units / MMS units según necesidad.",
+                  ],
+                  dependsOn: ["W2-01"],
+                  outcome:
+                    "Journeys activos por segmento. Base para Machine Sellers automatizados.",
+                },
+                {
+                  code: "W2-03",
+                  name: "Agentforce Marketing — Machine Sellers automatizado",
+                  pilar: "P2",
+                  pilarColor: "violet",
+                  useCase:
+                    "Automatizar la creación de campañas de venta cruzada e incremental que hoy el Lab Digital corre manualmente. Agentforce Marketing detecta patrones (ej. ferreterías A que compran cemento → también compran mortero seco), genera contenido y dispara la campaña.",
+                  salesforceProducts: [
+                    "Agentforce for Marketing",
+                    "Einstein Copy Insights + Einstein Content Generation",
+                    "Marketing Cloud Personalization (opcional)",
+                  ],
+                  duration: "10 semanas",
+                  prerequisites: [
+                    "Modelos de propensión validados (Wave 2-01).",
+                    "Playbook de aprobación de contenido generado por IA.",
+                    "Guardrails de marca y tono aprobados.",
+                  ],
+                  sizing: [
+                    "1 agente Agentforce Marketing productivo.",
+                    "~50K-100K Einstein Requests/mes adicionales.",
+                  ],
+                  dependsOn: ["W2-02"],
+                  outcome:
+                    "6+ campañas Machine Sellers activas a 12 meses. ROI trazable por campaña.",
+                },
+                {
+                  code: "W2-04",
+                  name: "Trade Marketing + Argos Amigos digitalizado",
+                  pilar: "P2",
+                  pilarColor: "violet",
+                  useCase:
+                    "Digitalizar Argos Amigos (fidelización multicanal) y Trade Marketing (gestión de acciones + inversión + analítica) sobre Marketing Cloud + Data Cloud. Trazabilidad completa: inversión → activación → pedido → venta.",
+                  salesforceProducts: [
+                    "Marketing Cloud + Data Cloud (extensión)",
+                    "Loyalty Management (opcional — evaluar vs. Gluki extendido)",
+                    "CRM Analytics (para dashboards de ROI Trade)",
+                  ],
+                  duration: "12 semanas",
+                  prerequisites: [
+                    "Modelo actual Gluki documentado + decisión: extender o migrar a Loyalty Management.",
+                    "Presupuestos Trade Marketing por acción disponibles en CRM o feed.",
+                    "Definición de KPI de ROI Trade y fuente de la venta atribuida.",
+                  ],
+                  sizing: [
+                    "~10-15 usuarios CRM Analytics.",
+                    "Loyalty Management: ~100K-500K miembros (si se decide migrar).",
+                  ],
+                  dependsOn: ["W2-02"],
+                  outcome:
+                    "ROI de Trade Marketing visible por campaña. Argos Amigos con activaciones automatizadas.",
+                },
+              ],
+              clientAsk: [
+                "Data governance formal: dueño de dato por dominio.",
+                "Contratos y opt-in de Brevo listos para migración legal.",
+                "Decisión: extender Gluki o migrar a Loyalty Management (recomendación en Wave 0).",
+                "Alineación con Marca: guardrails para contenido generado por IA.",
+                "Analista de Data Cloud dedicado (interno o Quantics).",
+              ],
+            },
+            {
+              id: "wave-3",
+              label: "Wave 3 · Pilar 3 — Integración y Visión 360 unificada",
+              window: "Sep 2027 → Dic 2027 (4 meses de arranque, extensión 2028)",
+              headline: "Los silos cuestan. Argos ONE + SAP dentro de Salesforce.",
+              focus:
+                "Cerrar la triada. MuleSoft conecta Argos ONE (40%+ ventas digitales) y SAP (inventario, crédito, capacidad) a Salesforce en tiempo real. Service Cloud omnicanal + WhatsApp Business API + Agentforce Service consolidan PQRs. App móvil offline. Contact Center integrado con Konecta.",
+              color: "sky",
+              goals: [
+                "POC Argos ONE ↔ Salesforce activo en 90 días desde kickoff.",
+                "Consulta SAP desde Slack/Sales Cloud en tiempo real (inventario + crédito).",
+                "PQRs unificadas de todos los canales en Service Cloud.",
+                "WhatsApp Business unificado con agente autónomo (>50% resolución).",
+              ],
+              opportunities: [
+                {
+                  code: "W3-01",
+                  name: "MuleSoft — Argos ONE ↔ Salesforce en tiempo real",
+                  pilar: "P3",
+                  pilarColor: "sky",
+                  useCase:
+                    "Conectar el e-commerce Argos ONE con Salesforce vía MuleSoft en tiempo real: catálogo, cotizaciones sin cerrar, pedidos, actividad de navegación y estado de cuenta. Nutre Data Cloud y hace visible el 40%+ de ventas digitales en el CRM.",
+                  salesforceProducts: [
+                    "MuleSoft Anypoint Platform (Titan edition)",
+                    "Anypoint Connectors (custom para Argos ONE)",
+                    "Salesforce Data Cloud ingestion",
+                  ],
+                  duration: "14 semanas",
+                  prerequisites: [
+                    "API de Argos ONE documentada + ambiente sandbox.",
+                    "Modelo de datos Argos ONE mapeado a Data Cloud.",
+                    "Latencia SLA acordada con TI Argos.",
+                  ],
+                  sizing: [
+                    "MuleSoft Titan: ~2-4 vCores producción + 1 vCore sandbox.",
+                    "~5-8 APIs bidireccionales.",
+                  ],
+                  dependsOn: ["W2-01"],
+                  outcome:
+                    "Argos ONE 100% integrado. Cotización abandonada en digital → oportunidad en Sales Cloud + alerta en Slack del asesor.",
+                },
+                {
+                  code: "W3-02",
+                  name: "MuleSoft — SAP conector (inventario + crédito + capacidad)",
+                  pilar: "P3",
+                  pilarColor: "sky",
+                  useCase:
+                    "Consultar SAP desde Salesforce y desde Slack (Slackbot) en tiempo real: inventario de cemento/concreto/agregados por planta, cupo de crédito por cliente y capacidad productiva. Habilita el 'pedido que se hace solo' del storytelling.",
+                  salesforceProducts: [
+                    "MuleSoft Anypoint SAP Connector",
+                    "Salesforce Flow Orchestration",
+                    "Composable Storefront (opcional para Argos ONE)",
+                  ],
+                  duration: "16 semanas",
+                  prerequisites: [
+                    "Acceso SAP con permisos de lectura + módulos definidos (MM, FI, SD).",
+                    "Integrator SAP interno de Argos disponible para pareo técnico.",
+                    "Reglas de negocio de crédito y liberación de pedidos.",
+                  ],
+                  sizing: [
+                    "MuleSoft vCores adicionales: ~2-4 sobre W3-01.",
+                    "~3-5 servicios SAP consumidos (RFC/BAPI/OData).",
+                  ],
+                  dependsOn: ["W3-01"],
+                  outcome:
+                    "Asesor consulta stock y cupo en tiempo real desde Slack. Fin de la liberación manual con fotos de consignaciones por WhatsApp.",
+                },
+                {
+                  code: "W3-03",
+                  name: "Service Cloud Omni + WhatsApp Business API + Agentforce Service",
+                  pilar: "P3",
+                  pilarColor: "sky",
+                  useCase:
+                    "Consolidar Service Cloud como plataforma única de PQRs con Omni-Channel (WhatsApp, web, correo, RRSS). Línea única WhatsApp Business con Agentforce Service resolviendo pedidos, consultas de cartera y PQRs simples. Escalación con contexto completo al Contact Center (Konecta).",
+                  salesforceProducts: [
+                    "Service Cloud Enterprise/Unlimited (upgrade sobre base actual)",
+                    "Digital Engagement (WhatsApp Business API oficial)",
+                    "Agentforce Service Agent",
+                    "Service Cloud Voice (evaluar integración Konecta)",
+                    "Einstein Case Classification",
+                  ],
+                  duration: "16 semanas",
+                  prerequisites: [
+                    "Unificación de números WhatsApp existentes (proceso con Meta).",
+                    "Base de conocimiento (KB Articles) construida — probablemente durante Wave 2/3.",
+                    "SLAs y jerarquías de escalamiento definidos con Konecta.",
+                    "Compliance Habeas Data para conversaciones WhatsApp.",
+                  ],
+                  sizing: [
+                    "~40-80 licencias Service Cloud (agentes Konecta + supervisores).",
+                    "1 agente Agentforce Service productivo.",
+                    "Digital Engagement: ~500K-1M conversaciones/año iniciales.",
+                    "~100K-200K Einstein Requests/mes.",
+                  ],
+                  dependsOn: ["W3-02"],
+                  outcome:
+                    "30%+ de PQRs resueltos por agente autónomo a 6 meses. WhatsApp unificado con >50% de resolución sin humano a 12 meses.",
+                },
+              ],
+              clientAsk: [
+                "Owner técnico de SAP con capacidad de pareo (mínimo 20h/semana durante W3-02).",
+                "Estrategia de unificación WhatsApp: consolidación de números vs. migración progresiva.",
+                "Contrato con Meta para WhatsApp Business API (o vía Salesforce Digital Engagement).",
+                "Revisión de contrato con Konecta: modelo de operación con Agentforce en Tier-1.",
+                "KB Articles base disponible (idealmente arrancada durante Wave 2).",
+              ],
+            },
+          ],
+          criticalPath: [
+            {
+              step: 1,
+              gate: "Kickoff programa (Jul 2026)",
+              detail:
+                "W0 arranca. Discovery técnico + Value Engineering en paralelo. Sin resultado de W0-01 y W0-02, no se firma W0-03.",
+            },
+            {
+              step: 2,
+              gate: "Firma contrato marco (Ago 2026)",
+              detail:
+                "W0-03 cierra. Sin este gate no arranca Wave 1. Es el único punto donde el proyecto puede pausarse sin costo hundido de plataforma.",
+            },
+            {
+              step: 3,
+              gate: "Piloto Antioquia productivo (Nov 2026)",
+              detail:
+                "W1-01 y W1-02 en producción. Punto de decisión: adopción >60% en el piloto habilita rollout nacional en W1-03 y W1-04.",
+            },
+            {
+              step: 4,
+              gate: "Rollout nacional Wave 1 completo (Feb 2027)",
+              detail:
+                "Toda la fuerza de canal masivo operando en Slack. Fin de la dependencia Excel/WhatsApp para el ciclo de venta. Business Review de Wave 1.",
+            },
+            {
+              step: 5,
+              gate: "Data Cloud unificado productivo (Jun 2027)",
+              detail:
+                "W2-01 en producción. Prerequisito para Marketing Cloud, Machine Sellers y para toda la Wave 3. Cuello de botella crítico del programa.",
+            },
+            {
+              step: 6,
+              gate: "Machine Sellers en producción (Ago 2027)",
+              detail:
+                "W2-03 activo. Marketing pasa de operativo a estratégico. Business Review de Wave 2.",
+            },
+            {
+              step: 7,
+              gate: "Integración SAP + Argos ONE productiva (Dic 2027)",
+              detail:
+                "W3-01 y W3-02 productivos. Fin de los silos operativos. Cierre formal SPRINT 4.0. Business Review de programa completo.",
+            },
+          ],
+          governance: {
+            steerco:
+              "Comité mensual con Sponsor Ejecutivo Argos, PMO Argos, Delivery Lead Quantics, Customer Success Salesforce y Business Architect. Business Review formal al cierre de cada wave con decisión Go/No-Go a la siguiente.",
+            roles: [
+              { role: "Sponsor Ejecutivo Argos", owner: "Por definir (VP Comercial o CTO)" },
+              { role: "PMO Programa", owner: "Argos + apoyo Salesforce Signature Success" },
+              { role: "Delivery Sales/Service Cloud", owner: "Quantics (partner integrador)" },
+              { role: "Delivery Data Cloud + Agentforce + MuleSoft", owner: "Salesforce Professional Services" },
+              { role: "Value Engineering + Business Case", owner: "Salesforce Value Engineer asignado" },
+              { role: "Adoption + Change Management", owner: "Argos RH + Comunicaciones (con playbook Salesforce)" },
+            ],
+            risks: [
+              {
+                risk: "Capacidad de Quantics limitada — cuello de botella en delivery Wave 1.",
+                mitigation:
+                  "Firma anexo de capacidad garantizada en Wave 0. Salesforce PS cubre picos con equipo dedicado a Data Cloud/Agentforce/MuleSoft para no competir por Quantics.",
+              },
+              {
+                risk: "Adopción del asesor (WhatsApp → Slack): resistencia cultural.",
+                mitigation:
+                  "Change management activo desde Wave 0. Piloto Antioquia con champions internos. Incentivos comerciales atados a adopción durante primer trimestre.",
+              },
+              {
+                risk: "Calidad de datos SAP y de Argos ONE por debajo de lo asumido.",
+                mitigation:
+                  "Discovery técnico W0-01 incluye data quality assessment. Si el índice es <70%, se agrega Wave 2.5 de saneamiento antes de Data Cloud unificado.",
+              },
+              {
+                risk: "SPRINT 4.0 sufre reprioorización — el programa pierde tracción.",
+                mitigation:
+                  "Business case atado a KPIs SPRINT 4.0 desde W0-02. Value Engineer sigue KPIs mensualmente. Wave 1 diseñada para dar resultado visible en 6 meses (antes del segundo semestre 2027).",
+              },
+              {
+                risk: "Compliance / Habeas Data Colombia para IA generativa y WhatsApp.",
+                mitigation:
+                  "Einstein Trust Layer + revisión legal Argos + Salesforce Legal en cada wave que consuma datos de cliente.",
+              },
+            ],
+          },
+          nextGate: {
+            title: "Próximo paso para arrancar el programa",
+            body: "Wave 0 puede arrancar en 2 semanas desde la firma del acuerdo de discovery. No requiere contrato marco todavía — es la fase que dimensiona ese contrato. Recomendamos cerrar comercial de W0 en las próximas 4 semanas para preservar la ventana de 18 meses y aterrizar el programa dentro de SPRINT 4.0.",
+            asks: [
+              "Confirmación de Sponsor Ejecutivo (nivel VP) por parte de Argos.",
+              "Acuerdo de discovery firmado (SoW de 8 semanas para Wave 0).",
+              "Agenda del Comité SPRINT 4.0 para presentar business case consolidado al final de Wave 0.",
+              "Definición del rol de Quantics en el programa: co-delivery vs. líder Wave 1.",
+            ],
+          },
+        },
+      },
+      {
         id: "assets",
         label: "Assets",
         title: "Assets de la solución",
@@ -2013,6 +2727,7 @@ export const customerDemos: CustomerDemo[] = [
           { id: "arquitectura", label: "Architecture", title: "Technical Architecture — Cementos Argos", content: "Full view of the 4-layer solution: contact channels, Salesforce platform (9 products + transversal Agentforce), MuleSoft integration layer (5 bidirectional real-time connectors), and Argos ecosystem external systems. Critical integration gaps are marked with their status and proposed solution." },
           { id: "outcomes", label: "Results", title: "Expected outcomes", content: "Success KPIs are organized by strategic pillar. Each metric has a documented baseline from discovery sessions, a 6-month target, and a 12-month target." },
           { id: "historia", label: "Story", title: "Don Hernán's Hardware Store and the Team That Never Sleeps", content: "Hernán Ríos has been running Ferretería El Paisa in Itagüí, Antioquia for years. A class B bulk customer who used to buy 12 to 15 tons of cement per month — until he stopped. This is the story of how Salesforce turned an at-risk customer into the most active distributor of the quarter." },
+          { id: "plan-de-trabajo", label: "Work plan", title: "Work plan — Executable opportunity roadmap", content: "From diagnosis to execution. This plan translates the 3 pillars and 20 initiatives into an 18-month commercial roadmap articulated in 4 waves and 12 sales opportunities. Each opportunity specifies the use case it solves, the Salesforce solutions involved, the estimated implementation time, the prerequisites we need from the client, and orientative sizing to shape the commercial proposal." },
           { id: "assets", label: "Assets", title: "Solution assets", content: "Available and to-be-developed materials to support the conversation with Cementos Argos." },
         ],
       },
@@ -2030,6 +2745,7 @@ export const customerDemos: CustomerDemo[] = [
           { id: "arquitectura", label: "Arquitetura", title: "Arquitetura Técnica — Cementos Argos", content: "Visão completa das 4 camadas da solução: canais de contato, plataforma Salesforce (9 produtos + Agentforce transversal), camada de integração MuleSoft (5 conectores bidirecionais em tempo real) e sistemas externos do ecossistema Argos. As lacunas críticas de integração estão marcadas com seu status e solução proposta." },
           { id: "outcomes", label: "Resultados", title: "Resultados esperados", content: "Os KPIs de sucesso estão organizados por pilar estratégico. Cada métrica tem uma linha de base documentada nas sessões de discovery, uma meta de 6 meses e uma meta de 12 meses." },
           { id: "historia", label: "História", title: "A Ferreteria do Don Hernán e a Equipe que Nunca Para", content: "Hernán Ríos está à frente da Ferreteria El Paisa em Itagüí, Antioquia há anos. Um cliente classe B que comprava entre 12 e 15 toneladas de cimento por mês — até que parou. Esta é a história de como o Salesforce transformou um cliente em risco de fuga no distribuidor mais ativo do trimestre." },
+          { id: "plan-de-trabajo", label: "Plano de trabalho", title: "Plano de trabalho — Roadmap executável de oportunidades", content: "Do diagnóstico à execução. Este plano traduz os 3 pilares e as 20 iniciativas em um roadmap comercial de 18 meses articulado em 4 waves e 12 oportunidades de venda. Cada oportunidade especifica o caso de uso que resolve, as soluções Salesforce envolvidas, o tempo estimado de implementação, os prerequisitos do cliente e um dimensionamento orientativo para a proposta comercial." },
           { id: "assets", label: "Ativos", title: "Ativos da solução", content: "Materiais disponíveis e a serem desenvolvidos para apoiar a conversa com a Cementos Argos." },
         ],
       },
