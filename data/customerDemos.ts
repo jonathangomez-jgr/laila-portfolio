@@ -617,6 +617,20 @@ export type KbArticleBucket = {
   articles: KbArticleCard[];
 };
 
+export type KbArticlePendingItem = {
+  id: string;
+  title: string;
+  severity: "info" | "warning" | "blocker";
+  articles?: string[];
+  description: string;
+  askOfClient?: string;
+};
+
+export type KbArticlesPending = {
+  intro?: string;
+  items: KbArticlePendingItem[];
+};
+
 export type KbArticlesData = {
   intro?: string;
   totals?: {
@@ -626,6 +640,7 @@ export type KbArticlesData = {
     totalMvpJobStories: number;
   };
   buckets: KbArticleBucket[];
+  pending?: KbArticlesPending;
 };
 
 export type WorkPlanOpportunity = {

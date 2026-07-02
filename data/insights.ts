@@ -1807,4 +1807,1077 @@ const customerFeedback: Insight = {
   ],
 };
 
-export const insights: Insight[] = [multiAgent, customerFeedback];
+const retailAiMexico: Insight = {
+  slug: "retail-ia-mexico-salesforce",
+  topic: "IA en Retail",
+  audience: ["executive", "architect", "deep"],
+  heroEyebrow: "Postura de industria · Retail & IA",
+  title:
+    "IA en la industria Retail: del mandato global a la oportunidad mexicana con Salesforce",
+  subtitle:
+    "Hacia dónde va la industria retail bajo la ola de agentic AI, cómo se está redistribuyendo el liderazgo entre los retailers que adoptaron IA a tiempo y qué debe hacer un retailer mexicano hoy para no quedarse atrás. Escrito desde la mirada de un Industry Advisor especializado en Retail.",
+  summary:
+    "Entramos a 2026 con la IA agentica como prioridad ejecutiva #1 del retail global — 91% de los CIOs de la industria (Gartner) y 75% de los retailers (Salesforce Connected Shoppers Report) la consideran esencial. Amazon superó a Walmart como #1 retailer de EE.UU. por primera vez en décadas gracias a su stack de IA y datos. Latinoamérica crecerá 54% en e-commerce hacia 2028 con WhatsApp Commerce como diferenciador único de la región. México llega a este punto con 88.2% de sus internautas comprando en línea, ANTAD reportando +6.7% de crecimiento nominal en abril 2026 y una brecha ensanchándose entre los tres grandes (Walmex, Liverpool, FEMSA) y el resto. En ese contexto, Salesforce empaquetó su respuesta bajo Agentforce 360 for Retail: un stack unificado — Commerce, Service, Marketing, Data 360, Retail Cloud con Modern POS — que ya tiene métricas duras verificables (Pandora: 60% de casos deflectados y +10 NPS; SharkNinja: +6% conversión y 20K chats/semana automatizados; Williams-Sonoma: implementación en 7.5 meses y 21M nuevos suscriptores).",
+  author: "Industry Advisor · Retail",
+  authorRole: "Consultor especializado en industria Retail · IA & CX",
+  publishedAt: "2026-07-02",
+  updatedAt: "2026-07-02",
+  readingMinutes: 30,
+  tags: [
+    "Retail",
+    "IA generativa",
+    "Agentic AI",
+    "México",
+    "LATAM",
+    "Agentforce",
+    "Commerce Cloud",
+    "Data 360",
+    "Omnicanalidad",
+    "WhatsApp Commerce",
+  ],
+  coverImage: {
+    src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
+    alt: "Agentforce 360 sobre Data 360 y Customer 360: el stack agentico completo aplicado a retail.",
+    source: {
+      label: "Salesforce · Agentforce platform overview",
+      url: "https://www.salesforce.com/agentforce/",
+    },
+  },
+  sections: [
+    {
+      id: "resumen-ejecutivo",
+      eyebrow: "Statement ejecutivo",
+      title: "La tesis en una página",
+      blocks: [
+        {
+          type: "statement",
+          text: "La industria retail entró en la fase donde la IA dejó de ser diferenciador y pasó a ser condición de supervivencia. El 91% de los CIOs de retail (Gartner) y el 75% de los retailers (Salesforce Connected Shoppers Report) declaran que los agentes de IA son esenciales para 2026. Amazon superó a Walmart como #1 retailer de EE.UU. gracias a su stack de IA y datos. En México, con 88.2% de los internautas ya comprando en línea (AMVO) y ANTAD reportando +6.7% de crecimiento nominal en abril 2026, la ventana para adoptar IA con retorno claro se cierra rápido — y la brecha entre los tres grandes (Walmex, Liverpool, FEMSA) y el resto se ensancha cada trimestre. Salesforce respondió con Agentforce 360 for Retail: Commerce + Service + Marketing + Data 360 + Modern POS sobre un solo modelo de datos, con Trust Layer nativo, Zero Copy hacia el data lake que el retailer ya tiene y agentes retail-tuned (Personal Shopper, Merchandiser, Buyer, Service, Help). Los casos con métricas duras públicas — Pandora, SharkNinja, Williams-Sonoma — muestran que la promesa se materializa cuando el stack está unificado, no cuando la IA se compra por piezas.",
+        },
+        {
+          type: "paragraph",
+          text: "Este documento está escrito desde la mirada de un Industry Advisor especializado en Retail y dirigido a usted como responsable de la decisión — CEO, CIO, CDO, VP Comercial, Director de CX o de Tecnología. No es una defensa de una plataforma: es una lectura consultiva del momento que vive la industria, con datos verificables de fuentes de primera confiabilidad (Gartner, Forrester, McKinsey, ANTAD, AMVO, INEGI, cartas al accionista de Amazon y Walmart, y páginas oficiales de Salesforce) y una postura clara sobre qué debe hacer hoy un retailer mexicano para capitalizar la ola de IA con retorno defendible en 12–24 meses.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Cómo leer este documento",
+          text: "Con 5 minutos basta el statement, el mapa de la industria y la conclusión. Con 20 minutos recorre el estado del retail global, la lectura LATAM y la sección de México. Con 40 minutos entra al desglose de las soluciones de Salesforce, los diferenciadores frente a competencia y las recomendaciones consultivas — que funcionan como hoja de ruta para su comité ejecutivo.",
+        },
+      ],
+    },
+    {
+      id: "estado-global",
+      eyebrow: "Parte 1 · Estado global",
+      title: "Dónde está la industria retail hoy y por qué la IA ya no espera",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La industria retail vive un punto de inflexión. Después de dos años de pilotos de IA generativa, 2026 es el año donde los retailers que adoptaron temprano están cosechando ventaja competitiva medible — y donde los que se quedaron mirando empiezan a pagar la factura. Los datos que siguen no son marketing: son la lectura consolidada de Gartner, Forrester, McKinsey, Salesforce Connected Shoppers Report, cartas al accionista de Amazon y Walmart, y comunicados oficiales.",
+        },
+        {
+          type: "kpis",
+          items: [
+            { value: "91%", label: "CIOs de retail que priorizan IA como su tecnología #1 para 2026 (Gartner)" },
+            { value: "75%", label: "Retailers que consideran los AI agents esenciales para 2026 (Salesforce)" },
+            { value: "88%", label: "Retailers que dicen que unified commerce impactará significativamente sus objetivos" },
+            { value: "$234B", label: "Gasto en software empresarial en riesgo por disrupción de agentic AI (Gartner)" },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Cinco frentes donde la IA está generando ventaja hoy",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Frente 1",
+              title: "Personalización hiper-contextual",
+              description:
+                "El descubrimiento migra de la búsqueda tradicional a la conversación: 53% de los consumidores ya descubre productos en canales sociales y agénticos (vs 46% en 2023). Los retailers ganadores unifican perfil, contexto de sesión, historial de compra y stock en tiempo real para servir la oferta correcta en el canal correcto.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Frente 2",
+              title: "Servicio al cliente autónomo",
+              description:
+                "Gartner proyecta que para 2029 el 80% de las consultas comunes de servicio se resolverán con agentes AI sin humano, con -30% en costos operativos. Los casos ya en producción hoy (Pandora 60% deflection, SharkNinja 20K chats/semana automatizados) muestran que la promesa es real cuando el agente está grounded en datos de negocio.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Frente 3",
+              title: "Forecasting, precios y merchandising",
+              description:
+                "Amazon Same-Day de perishables creció 40x apoyado en forecasting AI. Home Depot desplegó Magic Apron (DIY) y Blueprint Takeoffs (Pros). Walmart desplegó AI copilots a 750,000 asociados. La IA se corre profundo en la operación, no solo en la vitrina.",
+              tone: "violet",
+            },
+            {
+              eyebrow: "Frente 4",
+              title: "Operaciones de tienda y última milla",
+              description:
+                "Amazon opera 1 millón+ de robots en fulfillment centers, superó a USPS/FedEx/UPS como mayor carrier de EE.UU. en 2025 con ~13,000 millones de paquetes/año, y Sam's Club eliminó el checkout de salida con computer vision. La ventaja física ahora se construye con IA.",
+              tone: "neutral",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Empresas que ya monetizaron la IA (con números públicos)",
+        },
+        {
+          type: "table",
+          headers: ["Empresa", "Iniciativa de IA", "Impacto medible publicado"],
+          rows: [
+            [
+              "Amazon",
+              "Rufus / Alexa for Shopping (renombrado mayo 2026): asistente agentic con price history, auto-buy, visual search y fit review.",
+              "50M+ usuarios activos de price history desde 2024; 3x más compras por usuario en Alexa+ vs Alexa clásico; 600M endpoints activos globalmente (Andy Jassy, 2024–2025 Letters).",
+            ],
+            [
+              "Amazon Grocery",
+              "Forecasting AI sobre catálogo perecedero + red de 85+ SSDs para Same-Day.",
+              "$150B+ ventas grocery 2025 (#2 grocer de EE.UU.); 40x growth en perishables Same-Day.",
+            ],
+            [
+              "Walmart",
+              "Sparky (asistente GenAI de compras) + super agents + AI copilots + framework Adaptive Retail.",
+              "750,000 asociados con acceso a AI copilots en 2025. Framework 'Governable Agents' publicado en abril 2026 como referencia de industria.",
+            ],
+            [
+              "Sam's Club (Walmart)",
+              "AI Exit Technology: computer vision para eliminar checkout de salida.",
+              "Despliegue nacional US; reducción de fricción de salida documentada en Walmart Global Tech como caso emblema.",
+            ],
+            [
+              "Home Depot",
+              "Magic Apron (marzo 2025) para DIYers; Blueprint Takeoffs (nov 2025) y Pro AI Tools (marzo 2026) para Pros.",
+              "Expansión trimestral sostenida del stack GenAI a segmentos Pro y DIY (comunicados oficiales de IR).",
+            ],
+            [
+              "Amazon como #1 retailer USA",
+              "Stack integrado AI + data brokerage aplicado a discovery, precio, logística y retail media.",
+              "Superó a Walmart como #1 retailer de EE.UU. por GMV en 2025 (J.P. Morgan). Primer cambio de liderazgo en décadas.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "La otra cara: >40% de los proyectos agentic se cancelarán",
+          text: "Gartner alertó (junio 2025) que más del 40% de los proyectos agentic AI serán cancelados antes de fin de 2027 por costos escalantes, ROI no probado y controles de riesgo insuficientes. Esta cifra no debería frenar la adopción — debería obligarla a diseñarse con métricas de negocio desde el día uno, arquitectura de gobernanza clara y un plan de retiro para casos que no muestren valor en 6 meses. El error no es adoptar IA: es adoptarla sin marco de decisión.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Cómo se ve el futuro cercano (2026–2027) y mediano plazo (2028–2030)",
+        },
+        {
+          type: "table",
+          headers: ["Horizonte", "Predicción", "Fuente"],
+          rows: [
+            [
+              "2026–2027",
+              "Los agentes de IA pasan de piloto a componente esencial del stack retail. El sitio web tradicional inicia su declive frente a interfaces conversacionales y answer engines. Los presupuestos de display advertising caen ~30% mientras el retail media se rebalancea hacia formatos agénticos.",
+              "Forrester Predictions 2026 · Gartner CIO Agenda",
+            ],
+            [
+              "2026–2027",
+              "El agentic commerce enfrentará un cuello de botella de confianza: los consumidores no están listos para delegar pagos completos. OpenAI ya retiró instant-checkout en marzo 2026. La adopción crecerá en discovery/asistencia; el checkout autónomo se rezagará.",
+              "Forrester (Lily Varon, junio 2026)",
+            ],
+            [
+              "2028",
+              "33% de las aplicaciones empresariales tendrán agentic AI embebida (vs <1% en 2024). 15% de las decisiones diarias se tomarán autónomamente por IA (vs 0% en 2024).",
+              "Gartner (2025)",
+            ],
+            [
+              "2029",
+              "80% de las consultas comunes de servicio al cliente en retail se resolverán por agentes AI sin humano, con -30% en costos operativos de contact center.",
+              "Gartner (octubre 2024)",
+            ],
+            [
+              "2030",
+              "75% del trabajo IT (y por extensión, la mayoría del trabajo de merchandising, planning y CX en retail) será humanos aumentados con IA + 25% completamente autónomo.",
+              "Gartner · Daryl Plummer",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Lectura consultiva",
+          text: "La conversación de tablero cambió. Ya no es 'debemos usar IA'; es 'qué haremos si en tres años el 33% del stack de nuestros competidores ya tiene agentes embebidos y nosotros seguimos con dashboards y automatizaciones aisladas'. El costo de esperar dejó de ser cero.",
+        },
+      ],
+    },
+    {
+      id: "latam",
+      eyebrow: "Parte 2 · Latinoamérica",
+      title: "Cómo aterriza esta ola en Latinoamérica",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Latinoamérica no es una versión atrasada del mercado norteamericano — es un mercado distinto con dinámicas propias. Aquí la IA se adopta bajo condiciones que en EE.UU. no existen: informalidad económica alta, bancarización parcial, WhatsApp como canal transaccional dominante y una red de comercio de proximidad (convenience, farmacia, autoservicio) sin paralelo. Entender esas diferencias es lo que separa una estrategia con retorno de una réplica costosa que no aterriza.",
+        },
+        {
+          type: "kpis",
+          items: [
+            { value: "USD 232B", label: "E-commerce LATAM proyectado 2028 (vs USD 151B en 2023, +54%)" },
+            { value: "USD 28.9B", label: "Ingresos Mercado Libre 2025 (+39% YoY), 174M+ usuarios" },
+            { value: "83M", label: "MAU de Mercado Pago (54.5% lo tuvieron como primer método digital)" },
+            { value: "1M+", label: "Empresas usando un agente comercial de Meta en WhatsApp/Messenger (junio 2026)" },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Tres dinámicas que definen la adopción de IA en la región",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              title: "WhatsApp como canal primario",
+              description:
+                "Meta reporta 1M+ empresas ya usando un agente comercial en WhatsApp/Messenger. Brasil es uno de solo dos mercados globales con WhatsApp Pay integrado. Cualquier estrategia de comercio conversacional en LATAM que no arranque por WhatsApp está mal diseñada.",
+              tone: "primary",
+            },
+            {
+              title: "Retail-as-a-Bank",
+              description:
+                "La brecha de bancarización (México: 50% con cuenta bancaria, <20% con tarjeta de crédito) crea una oportunidad única para retail-fintech: 79% de comercios experimentan caída en uso de efectivo tras adoptar pagos digitales (Mercado Pago). Coppel, Elektra, OXXO ya lo entendieron.",
+              tone: "success",
+            },
+            {
+              title: "Retail media subpenetrado",
+              description:
+                "Penetración regional 'mid-teens' vs 22% global. Mercado Libre proyecta duplicar retail media a USD 6B para 2029. OXXO-Retina Media, Mercado Ads y Walmart Connect capturan la mayor parte del crecimiento — con IA como palanca clave de activación de 1P data.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Casos regionales que marcan pauta",
+        },
+        {
+          type: "table",
+          headers: ["Actor", "Movida con IA", "Escala"],
+          rows: [
+            [
+              "Mercado Libre",
+              "Ecosistema integrado de recomendación, fraud detection, credit scoring en Mercado Pago/Crédito y logística en Mercado Envíos. USD 2.6B invertidos en Argentina 2025 (+53% YoY) para expandir capacidades tecnológicas.",
+              "USD 28.9B ingresos 2025; 174M+ usuarios; retorno accionario a 5 años 'similar a las Magnificent 7'.",
+            ],
+            [
+              "Rappi",
+              "Adquirió Fountain9 (India) en septiembre 2024 para fortalecer forecasting AI en dark stores y last-mile.",
+              "USD 800M ingresos 2023; 12 países; 350,000 repartidores.",
+            ],
+            [
+              "OXXO / FEMSA / Retina Media",
+              "Red física convertida en plataforma de pagos, remesas y retail media DOOH. Coca-Cola FEMSA implementando 'omnicanalidad con propósito' con tecnología para potenciar factor humano.",
+              "23,206+ tiendas México; 11 países LATAM; USD 46.7B ingresos FEMSA 2024.",
+            ],
+            [
+              "Grupo Bimbo",
+              "Rol ejecutivo dedicado ('Global VP of Information and Transformation'). Optimización de rutas AI sobre 57,000 rutas activas.",
+              "USD 17.1B ingresos; 3M puntos de venta; 196 plantas; 33+ países.",
+            ],
+            [
+              "Meta (WhatsApp) – habilitador",
+              "Agente comercial lanzado en Conversations 2026: recomienda catálogo, califica leads, cierra ventas, transfiere a humano.",
+              "1M+ empresas ya lo usan. 1,000M personas se conectan con empresas en apps Meta diariamente.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "El diferencial regional real",
+          text: "En LATAM, un agente de IA que no habla WhatsApp, no maneja crédito informal y no entiende el modelo de tiendas de proximidad tiene un techo de valor muy bajo. Los ganadores serán quienes integren IA sobre esas tres realidades — no quienes copien la arquitectura de un retailer norteamericano.",
+        },
+      ],
+    },
+    {
+      id: "mexico",
+      eyebrow: "Parte 3 · México",
+      title: "México: el mercado retail y su ventana de adopción de IA",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "México es el segundo mercado retail más grande de Latinoamérica y tiene una peculiaridad estratégica: sus tres grandes retailers (Walmex, Liverpool, FEMSA) ya operan a escala global y compiten con MercadoLibre y Amazon en cada categoría, mientras que el resto del mercado — Chedraui, Soriana, Coppel, farmacias, tiendas de proximidad — enfrenta una brecha digital que se ensancha cada trimestre. La adopción de IA en México no es un 'nice to have': es la línea que separará a los que sobreviven la próxima década de los que serán adquiridos, replegados o disueltos.",
+        },
+        {
+          type: "kpis",
+          items: [
+            { value: "55,000+", label: "Tiendas bajo ANTAD (125 marcas, 90% de municipios de México)" },
+            { value: "88.2%", label: "Internautas mexicanos que ya compran en línea (AMVO 2026)" },
+            { value: "6.4%", label: "E-commerce como % del PIB de México (vs 3.3% en 2013, INEGI)" },
+            { value: "MXN 42,725M", label: "Ventas Hot Sale 2025 (+23.7% YoY, AMVO)" },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Segmentación del retail mexicano por vertical y madurez digital",
+        },
+        {
+          type: "table",
+          headers: ["Segmento", "Actores clave", "Escala México", "Madurez digital / IA"],
+          rows: [
+            [
+              "Autoservicio y grocery",
+              "Walmart de México (Walmex), Chedraui, Soriana, La Comer, HEB México, Casa Ley. Disruptor: Tiendas 3B.",
+              "Walmex ~2,291 tiendas + Bodega Aurrera Express; Chedraui 262; Soriana 804.",
+              "Walmex lidera (Cashi, Bait, marketplace propio). Chedraui invierte MXN 7,800M en Edomex. Soriana subutiliza su Tarjeta Recompensas Payback.",
+            ],
+            [
+              "Departamentales y moda",
+              "Liverpool, El Palacio de Hierro, Coppel, Suburbia, Sanborns/Sears.",
+              "Liverpool 125 + Suburbia 195; Palacio 15+; Coppel 1,800+; Sears MX 97.",
+              "Liverpool es el más avanzado (omnicanal profundo, adquirió 49.9% de Nordstrom en 2025). Palacio con Palacio Rewards. Coppel entra a 'un nuevo Coppel' con Diego Coppel Sullivan (jul 2025).",
+            ],
+            [
+              "Convenience y proximidad",
+              "OXXO (FEMSA), 7-Eleven, Círculo K, Tiendas 3B.",
+              "OXXO 23,206 en México; Tiendas 3B superó a Bodega Aurrera Express en 2026.",
+              "OXXO es plataforma de pagos y remesas más que conveniencia pura (Spin, Loop, corresponsalía). 3B invierte MXN 5,000M+ en logística y tech.",
+            ],
+            [
+              "Farmacia",
+              "Farmacias Similares (Dr. Simi), Farmacias del Ahorro, Farmacias Guadalajara (Fragua), Benavides (Walgreens Boots).",
+              "Similares 6,000+ (~25% del mercado); Guadalajara 1,725+; Benavides 1,100+.",
+              "Segmento con mayor upside de IA: triage clínico + adherencia + consulta remota. Fragua y Benavides con mayor músculo tech; Similares con mayor red de consultorios (potencial de scale-up).",
+            ],
+            [
+              "Home, electrónica y multi-categoría",
+              "Elektra, Home Depot México, Office Depot, Sears, Sanborns.",
+              "Elektra 7,700+ puntos, 23M clientes; Home Depot MX presencia consolidada.",
+              "Elektra/Banco Azteca: >60% de préstamos originados vía app en 2025 (retail-fintech híbrido más maduro de México).",
+            ],
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Necesidades puntuales del retail mexicano frente a la IA",
+        },
+        {
+          type: "list",
+          items: [
+            "Conversión sobre tráfico existente — el 88.2% de internautas ya compra en línea (AMVO). El reto ya no es captar: es convertir y personalizar sobre quien ya está adentro.",
+            "Servicio conversacional en WhatsApp — 32M mexicanos usan apps móviles (ENDUTIH 2024, INEGI); 8M ya compran vía app. WhatsApp es el canal más natural para agentes de servicio, no la app propia del retailer.",
+            "Crédito embebido con scoring alternativo — 50% con cuenta bancaria y <20% con tarjeta de crédito abren un mercado gigante para retail-fintech con IA (Coppel, Elektra, Cashi ya operan aquí).",
+            "Personalización sobre programas de lealtad ya existentes — Loop (OXXO), Palacio Rewards, Recompensas Payback (Soriana), Livertu (Liverpool), Cashi (Walmex): datos históricos abundantes que hoy están subutilizados para IA.",
+            "Última milla y omnicanalidad — 90% de municipios con presencia ANTAD, pero fragmentación logística; Coca-Cola FEMSA y Motive lideran adopción de IA en operaciones físicas.",
+            "Cumplimiento LFPDPPP y seguridad — el incidente de ciberseguridad de Coppel (abril 2024) establece un precedente: la IA sin trust layer y sin gobierno de datos es un riesgo legal y reputacional real, no hipotético.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Oportunidades claras según el contexto regional",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Oportunidad 1",
+              title: "Comercio conversacional WhatsApp-first",
+              description:
+                "El retailer mexicano promedio puede construir un agente de compra-servicio-crédito en WhatsApp más rápido que un e-commerce con app propia — y con mejor tasa de adopción. Es la oportunidad más grande y menos aprovechada de la industria.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Oportunidad 2",
+              title: "Servicio autónomo en contact center",
+              description:
+                "Los benchmarks internacionales (Pandora 60% deflection, SharkNinja 20K chats/semana) muestran que se puede automatizar 50–70% del contact center en 6–12 meses con retorno directo en costo por interacción. El ROI en México es aún más atractivo por la relación costo/hora.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Oportunidad 3",
+              title: "Merchandising y forecasting sobre catálogo local",
+              description:
+                "El retailer con marca propia (Chedraui Selecto, Liverpool moda, Farmacias Similares) tiene el dataset ideal para IA de merchandising: catálogo controlado, historial de venta local, elasticidad por sucursal. Forecast accuracy de +10 puntos se traduce directo a menos merma y sell-through.",
+              tone: "violet",
+            },
+            {
+              eyebrow: "Oportunidad 4",
+              title: "Retail media network sobre 1P data",
+              description:
+                "OXXO-Retina Media ya lo hizo — pero la oportunidad se abre para Walmex, Liverpool, Chedraui, Coppel y Farmacias Guadalajara. Cada uno con audiencias primarias monetizables. La IA activa la segmentación; el retailer captura el margen que hoy va a Meta/Google.",
+              tone: "neutral",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "critical",
+          title: "La ventana se cierra",
+          text: "Tres grandes (Walmex, Liverpool, FEMSA) dominarán la adopción de IA en pricing dinámico, forecasting y last-mile. El resto tiene 12–24 meses para reaccionar antes de que la brecha se vuelva estructural. Los que esperen 'a que madure el mercado' descubrirán que el mercado ya maduró — sin ellos.",
+        },
+      ],
+    },
+    {
+      id: "salesforce-general",
+      eyebrow: "Parte 4 · Postura Salesforce",
+      title: "Cómo Salesforce acompaña al retail mexicano en esta transición",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Antes de entrar al detalle producto por producto, conviene fijar la postura. La ventaja de Salesforce para retail no es un modelo de IA propietario ni un algoritmo particular — es la arquitectura vertical que integra los cuatro elementos que hoy separan una implementación con retorno de un piloto costoso: (1) una capa de confianza nativa que resuelve gobierno, PII y auditabilidad de fábrica; (2) un data layer con zero-copy que ancla los agentes en la verdad operativa del retailer sin obligar a mover el data lake; (3) una plataforma de agentes retail-tuned con motor de razonamiento y agent script para composición híbrida; y (4) comercio + servicio + marketing + operaciones de tienda sobre un solo modelo de metadatos.",
+        },
+        {
+          type: "statement",
+          text: "En una industria donde el 40% de los proyectos agentic AI se cancelará antes de 2027 (Gartner), lo que importa no es qué modelo se usa — es qué tan rápido pasa un caso de uso de piloto a producción con métricas duras. Salesforce compite en esa dimensión con evidencia pública: Pandora 60% de casos deflectados y +10 NPS; SharkNinja 14 países en vivo con +6% conversión; Williams-Sonoma implementación en 7.5 meses y 21M nuevos suscriptores.",
+        },
+        {
+          type: "image",
+          src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
+          alt: "Plataforma agentic empresarial completa de Salesforce: Agentforce sobre Data 360 y Customer 360.",
+          caption:
+            "La promesa nativa de Salesforce para retail: una sola plataforma donde agentes, datos, comercio, servicio y marketing comparten contexto, seguridad y observabilidad. Esa unidad es la que reduce el time-to-value de meses a semanas.",
+          source: {
+            label: "Salesforce · Agentforce platform overview",
+            url: "https://www.salesforce.com/agentforce/",
+          },
+          maxWidth: "wide",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Cinco diferenciadores frente a la oferta alternativa del mercado",
+        },
+        {
+          type: "table",
+          headers: ["Diferenciador", "Por qué importa para retail", "Frente a"],
+          rows: [
+            [
+              "Einstein Trust Layer nativo (PII masking + zero retention + grounding + toxicity + audit)",
+              "Retail maneja loyalty, PCI, LFPDPPP, LGPD. Salesforce entrega gobierno de fábrica; competidores lo dejan como implementación custom.",
+              "AWS Bedrock (guardrails sueltos), Google Vertex (safety filters), Microsoft Copilot (Azure Content Safety).",
+            ],
+            [
+              "Data 360 con Zero Copy a Snowflake, Databricks, BigQuery, Redshift",
+              "El retailer mantiene su data lake y aún así grounded los agentes sobre él. Elimina meses de ETL y reduce riesgo de fuga.",
+              "Adobe Real-Time CDP y Microsoft Customer Insights (dependen de ingest-and-store); Shopify (locked-in).",
+            ],
+            [
+              "Commerce + Service + Marketing + Modern POS sobre un solo modelo de metadatos",
+              "Un agente puede leer el perfil, colocar la orden, escalar el caso y disparar la journey sin integraciones brokered.",
+              "Adobe (Magento + Experience Platform + Journey Optimizer stitched); Microsoft (D365 modules); Oracle Retail (Xstore + Merchandising + Retail Cloud).",
+            ],
+            [
+              "Agent Script + Atlas Reasoning: determinístico + LLM híbrido",
+              "Compliance-critical (price-check, tax, refund cap) se codifica determinístico; el LLM razona lo abierto. Predecibilidad para transacciones sensibles.",
+              "Shopify Sidekick (prompt-driven, scoped a admin); Amazon Q y Bedrock (orquestación por prompts).",
+            ],
+            [
+              "AgentExchange + MCP + BYOM + interoperabilidad Google Cloud (abril 2026)",
+              "El retailer no queda locked-in: puede usar OpenAI, Anthropic, Google, o hacer handoff a agentes externos vía MCP/A2A.",
+              "Shopify (locked al admin); Amazon Q/Bedrock (AWS-native); Microsoft Copilot (Azure-bias).",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Reconocimientos que importan",
+          text: "Salesforce es Leader en Gartner MQ Digital Commerce por 10 años consecutivos (furthest en Completeness of Vision), Leader en Gartner MQ Multichannel Marketing Hubs por 8 años, Leader en Gartner CDP por 3 años, IDC MarketScape Leader B2C/B2B/Mobile POS Fashion Retail, IHL Tier 1 para Order Management y Forrester TEI de 289% ROI con 6 meses de payback en B2B Commerce. Es la única plataforma que puede reclamar liderazgo simultáneo en las cuatro grillas que un retailer evalúa para consolidar stack.",
+        },
+      ],
+    },
+    {
+      id: "salesforce-desglose",
+      eyebrow: "Parte 5 · Desglose de soluciones",
+      title: "Qué ofrece Salesforce para retail en concreto y cómo aporta a cada frente",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Bajo el paraguas de Agentforce 360 for Retail, Salesforce empaqueta diez piezas activas que se pueden adoptar por fases. No es necesario comprar todo el stack: sí es necesario entender cómo se conectan y qué caso de uso resuelve cada una para no invertir sobre la pieza equivocada. Este desglose combina la ficha oficial de cada producto con la lectura consultiva de dónde aporta más valor en el contexto de un retailer mexicano.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "1 · Agentforce 360 for Retail — la plataforma agéntica",
+        },
+        {
+          type: "paragraph",
+          text: "Es la plataforma unificada que combina workflows retail-nativos, contexto profundo de cliente/negocio y orquestación de agentes de IA. Sobre esta base se instancian agentes específicos: Personal Shopper, Merchandiser Agent, Buyer Agent (B2B), Service Agent, Help Agent y Retail Industry Agent. Utiliza el Atlas Reasoning Engine para descomponer intención, planear pasos y ejecutar, con Agent Script para fusionar reglas determinísticas con razonamiento LLM.",
+        },
+        {
+          type: "list",
+          items: [
+            "Aporta al frente 'servicio autónomo': Pandora reporta 60% de casos deflectados; Williams-Sonoma anticipa autónomamente 60%+ de chat inquiries en sus 9 marcas.",
+            "Aporta al frente 'conversión': 53% de lift en conversión atribuido a Agentforce Commerce (dato oficial en la página de retail).",
+            "Aporta al frente 'costo operativo': pricing outcome-based en Agentforce Help Agent — el retailer paga por resolución exitosa, no por token ni por asiento.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "2 · Commerce Cloud — B2C, B2B y D2C sobre un motor común",
+        },
+        {
+          type: "paragraph",
+          text: "Plataforma discovery-to-checkout que soporta storefronts templated, headless o híbridos. Powered by 2 billion shoppers según Salesforce; Leader en Gartner MQ Digital Commerce por 10 años consecutivos. Sobre ella corren Cimulate AI-native search, Guided Shopping, Einstein Product Recommendations y los agentes Personal Shopper, Merchandiser y Buyer.",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              title: "Cimulate AI-native search",
+              description:
+                "Búsqueda semántica grounded sobre catálogo real + datos simulados. Impacto oficial: +13% conversión, +17% add-to-cart.",
+              tone: "primary",
+            },
+            {
+              title: "Agentforce Personal Shopper",
+              description:
+                "Concierge conversacional en site y apps de mensajería. Razona, aprende y adapta. En LATAM: aterrizable en WhatsApp como canal primario.",
+              tone: "success",
+            },
+            {
+              title: "Storefront composable",
+              description:
+                "+20% conversión en storefronts composable; +29% digital revenue vs commerce legacy; 99.99% uptime histórico.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "3 · Retail Cloud con Modern POS — tienda física + IA en el piso de venta",
+        },
+        {
+          type: "paragraph",
+          text: "Punto de venta móvil cloud-native que unifica online y offline sobre el AI CRM de Salesforce. Nombrado IDC MarketScape Leader para Mobile POS Fashion Retail. Convierte dispositivos handheld en POS funcional con clienteling, endless aisle, y fulfillment de tienda. Janie and Jack lo desplegó en 106 tiendas en 18 semanas — dato oficial en la página de retail.",
+        },
+        {
+          type: "list",
+          items: [
+            "POS voice assistant integrado — útil en tiendas mexicanas donde el asociado tiene ambas manos ocupadas (moda, home, jugueterías).",
+            "Return fraud analysis — reduce merma por devoluciones fraudulentas, problema crítico en departamentales.",
+            "Recomendaciones personalizadas en el POS — clienteling sobre el perfil unificado del shopper (Palacio Rewards, Livertu, Loop).",
+            "Tableau Pulse GenAI para líderes de tienda — analítica en lenguaje natural sin depender del área de BI central.",
+            "BOPIS, ship-from-store, curbside — casos donde ANTAD tiene ventaja estructural sobre marketplaces puros.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "4 · Order Management (OMS) — el nervio central de la omnicanalidad",
+        },
+        {
+          type: "paragraph",
+          text: "Módulo dentro de Commerce Cloud que centraliza órdenes, workflows de fulfillment, promesa de entrega y visibilidad de inventario omni-canal en tiempo real. Salesforce es IHL Tier 1 vendor para Order Management. Incluye Agentic Order Routing (resolución dinámica de excepciones), Agentic Order Support (self-service de status/cancel/return) y Order-on-Behalf-Of desde el service console.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Por qué importa en México",
+          text: "Un retailer con 262 tiendas físicas (Chedraui) o 1,800 sucursales (Coppel) tiene un OMS como oportunidad #1 de eficiencia. La promesa 'ship-from-store' o 'pick-up-in-store' sin OMS moderno se convierte en incumplimientos que erosionan NPS. OMS + Modern POS + Agentforce Service resuelven el triángulo entrega-consulta-devolución sobre el mismo modelo de datos.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "5 · Data 360 (antes Data Cloud) — la fundación de datos para todo lo demás",
+        },
+        {
+          type: "paragraph",
+          text: "Motor de datos en tiempo real, renombrado Data 360 en 2025, con integraciones Zero Copy a Snowflake, Databricks, BigQuery, AWS e IBM. Salesforce lo describe explícitamente como 'the essential data foundation for Agentforce'. Leader en Gartner CDP MQ por 3 años consecutivos.",
+        },
+        {
+          type: "list",
+          items: [
+            "Identity Resolution + Unified Data Model — un solo perfil de shopper cruzando ecommerce, POS, servicio y loyalty.",
+            "Predictive Models — Propensity to Buy, Customer Lifetime Value, Engagement, Disengagement risk.",
+            "AI Tagging & Classification — clasifica automáticamente datos sensibles (crítico para LFPDPPP).",
+            "Intelligent Context — extrae insights de imágenes, tablas y documentos (útil para catálogos, facturas, contratos).",
+            "Activación a Google, Meta y ad platforms — el motor del retail media network sobre 1P data.",
+            "Fisher & Paykel (retail electrodomésticos) reporta +33% en conversión de órdenes al unificar 100K+ perfiles con Agentforce Marketing + Data 360.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "6 · Agentforce Marketing (Marketing Cloud Next) — journeys que la IA genera y optimiza",
+        },
+        {
+          type: "paragraph",
+          text: "Plataforma de marketing rebrandeada como Agentforce Marketing / Marketing Cloud Next, cubriendo Engagement, Personalization, Data 360 for Marketing, Marketing Intelligence, Loyalty Management y Retail Media. Leader en Gartner MQ Multichannel Marketing Hubs por 8 años consecutivos (furthest en Completeness of Vision).",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              title: "Agentforce Campaign Optimizer",
+              description:
+                "Automatiza el ciclo completo de campaña: brief → segmento → creativo → send-time → medición.",
+              tone: "primary",
+            },
+            {
+              title: "Einstein Marketing Insights + lookalikes",
+              description:
+                "Análisis siempre-encendido de KPIs y expansión de audiencias con IA sobre 1P data.",
+              tone: "success",
+            },
+            {
+              title: "Segmentación GenAI en lenguaje natural",
+              description:
+                "'Clientes VIP inactivos de Palacio Polanco con ticket >$5,000 último trimestre' se convierte en segmento sin SQL.",
+              tone: "violet",
+            },
+            {
+              title: "Impacto reportado",
+              description:
+                "+32% marketing ROI, +34% customer lifetime value, +32% engagement, -27% CAC (métricas oficiales en marketing.com).",
+              tone: "neutral",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "7 · Customer Loyalty Platform (Loyalty Management + Offer Management + Referral)",
+        },
+        {
+          type: "paragraph",
+          text: "Plataforma B2C y B2B de lealtad configurable — puntos, tiers, cash-back, punch cards, referidos, vouchers — nativa a Salesforce y con integración CRM. Aporta al segmento donde México tiene mayor sub-utilización de datos: los programas de lealtad ya existentes (Loop, Palacio Rewards, Recompensas Payback, Livertu, DILISA, Cashi) rara vez aplican IA para personalización real.",
+        },
+        {
+          type: "list",
+          items: [
+            "Agentforce next-best-offer — la oferta correcta al miembro correcto en el momento correcto.",
+            "Predictive disengagement risk — dispara journey de recuperación antes de que el cliente se caiga.",
+            "AI offer-to-intent matching — cruza canal, engagement y comportamiento para servir la promo adecuada.",
+            "Non-purchase rewards — reviews, referrals, actividad social, in-app (clave para Gen Z, 3x más probable que boomers de valorar experiencias exclusivas).",
+            "Shared-currency y partner joint promotions — Liverpool + Suburbia + moda; Grupo Sanborns + Telcel; alianzas cross-marca sobre la misma plataforma.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "8 · Agentforce for Service (Service Cloud) — servicio autónomo 24/7",
+        },
+        {
+          type: "paragraph",
+          text: "Service Cloud acoplado a Agentforce, incluyendo Agentforce Service Agent, Help Agent (outcome-based pricing), Agentforce Contact Center y Agentforce Voice. Posicionado como 'the only contact center solution that unifies voice, digital channels, CRM data, and AI agents natively in a single system'. Forrester TEI: 125% ROI, hasta 50% de casos movidos a canales digitales de menor costo, +40% retención de agentes, -30% onboarding time.",
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "El caso Pandora — números duros",
+          text: "Dos agentes en producción: 'Gemma' (personal shopper) y 'Clara' (servicio: tracking, FAQs, escalamiento con resumen a humanos). Stack: Agentforce + Data 360 + Commerce Cloud + Service Cloud + Loyalty Management + Trust Layer con zero-retention para cumplimiento europeo. Resultado publicado: 40,000 conversaciones/mes, 60% de casos deflectados autónomamente, +10 puntos en NPS, 22% de las ventas totales vía Commerce Cloud, cobertura en 100+ países / 6,800 puntos de venta.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "9 · Agentforce Commerce — la IA del comercio conversacional",
+        },
+        {
+          type: "paragraph",
+          text: "Conjunto de agentes generativos dentro de Commerce Cloud: Agentforce Personal Shopper, Merchant/Merchandiser Agent, Buyer Agent (B2B), Guided Shopping con visual product search y AI-generated product descriptions grounded en catálogo. Salesforce cita +53% de lift en conversión atribuido a Agentforce Commerce en la página oficial de retail.",
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "El caso SharkNinja — dos marcas de $3B unificadas",
+          text: "'Agentic Enterprise' unificando marcas Shark y Ninja: shopping agent pre/post-compra, agentic unboxing (setup interactivo de electrodomésticos), Agentforce Commerce en storefront único. Stack: Agentforce + Agentforce Commerce + Data 360. Resultado: 14 países en producción, +6% tasa de conversión anual, +14% items al carrito anualmente, 20K chats/semana automatizados.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "10 · Salesforce for Retail Media + Shopping Insights HQ",
+        },
+        {
+          type: "paragraph",
+          text: "Dos piezas complementarias que capturan el margen que hoy se fuga a Meta/Google. Advertising Sales Management habilita al retailer a operar su propia retail media network sobre 1P data y activarla a partners. Shopping Insights HQ entrega forecasts de tendencias apoyados en señal agregada de 1.5B global shoppers sobre Commerce Cloud — el caso Cyber Week 2022: retailers de Commerce Cloud crecieron +11% vs +2% de la industria (5x el promedio).",
+        },
+        {
+          type: "table",
+          headers: ["Pieza", "Aporta principalmente a", "Métrica pública citada"],
+          rows: [
+            [
+              "Agentforce 360 for Retail",
+              "Orquestación transversal de agentes retail",
+              "60% autonomous service resolution · 53% conversion lift · 10% NPS lift",
+            ],
+            [
+              "Commerce Cloud",
+              "Discovery, conversión y comercio conversacional",
+              "+13% conversión / +17% ATC (Cimulate); +29% digital revenue vs legacy; +20% en composable",
+            ],
+            [
+              "Retail Cloud + Modern POS",
+              "Tienda física y clienteling",
+              "106 tiendas Janie and Jack en 18 semanas (caso oficial)",
+            ],
+            [
+              "Order Management",
+              "Omnicanalidad y promesa de entrega",
+              "IHL Tier 1 vendor para OMS",
+            ],
+            [
+              "Data 360 (Data Cloud)",
+              "Fundación de datos + zero-copy + activación",
+              "Fisher & Paykel +33% conversión de órdenes",
+            ],
+            [
+              "Agentforce Marketing",
+              "Journeys personalizados y loyalty triggers",
+              "+32% ROI marketing / +34% CLV / -27% CAC",
+            ],
+            [
+              "Customer Loyalty Platform",
+              "Personalización de programas de lealtad",
+              "Gartner MMH Leader 8 años (furthest Vision)",
+            ],
+            [
+              "Agentforce for Service",
+              "Servicio autónomo 24/7 y contact center",
+              "Forrester TEI 125% ROI · Williams-Sonoma 60%+ deflection anticipado",
+            ],
+            [
+              "Agentforce Commerce",
+              "Comercio conversacional y merchandising GenAI",
+              "+53% conversión (dato oficial retail); SharkNinja +6% conversión, 20K chats/sem",
+            ],
+            [
+              "Retail Media + Shopping Insights HQ",
+              "Retail media sobre 1P data y forecasting de tendencias",
+              "1.5B global shoppers en la red; Cyber Week 5x industria",
+            ],
+          ],
+        },
+      ],
+    },
+    {
+      id: "recomendaciones",
+      eyebrow: "Parte 6 · Recomendaciones consultivas",
+      title: "Diez movimientos para un retailer mexicano en los próximos 12–24 meses",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Estas recomendaciones no son una lista de compras — son un marco de decisión. Si su plan actual rompe tres o más, vale la pena pausarlo y revisarlo antes de aprobar la siguiente ronda de inversión, sea cual sea la plataforma o el proveedor que la presente.",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "01",
+              title: "Empiece por servicio, no por comercio",
+              description:
+                "El servicio autónomo tiene el ROI más rápido y menor superficie de riesgo. Pandora y SharkNinja lo probaron. Un caso piloto de 6 meses con Agentforce Service sobre WhatsApp o web chat entrega números duros al comité en el primer trimestre.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "02",
+              title: "Diseñe WhatsApp-first, no app-first",
+              description:
+                "En México WhatsApp es el canal transaccional dominante. Salesforce lo trata como canal de primera clase en Agentforce; la mayoría de plataformas competidoras lo tratan como integración de terceros.",
+              tone: "success",
+            },
+            {
+              eyebrow: "03",
+              title: "Unifique datos antes de comprar más IA",
+              description:
+                "Sin Data 360 (o equivalente), cada nuevo agente es una integración custom. Los que compraron IA por piezas antes de resolver el data layer llevan 18 meses sin ROI. Empiece por la fundación.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "04",
+              title: "Aplique Trust Layer desde el primer piloto",
+              description:
+                "PII, LFPDPPP, PCI, loyalty data — no son 'add-ons de compliance'. Un incidente como el de Coppel (abril 2024) borra el ROI de 3 años de IA. Trust Layer nativo, no bolt-on.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "05",
+              title: "Active loyalty existente antes de rediseñar el programa",
+              description:
+                "Loop, Palacio Rewards, Livertu, Recompensas Payback ya tienen los datos. Falta la IA que los active — next-best-offer, disengagement risk, tier upgrades disparados. No hace falta rediseñar el programa: hace falta cablearle un cerebro.",
+              tone: "violet",
+            },
+            {
+              eyebrow: "06",
+              title: "Piense el POS como plataforma, no como caja registradora",
+              description:
+                "Modern POS + clienteling + endless aisle + BOPIS es la ventaja competitiva estructural que ANTAD tiene sobre marketplaces puros. Explotarla es una decisión de negocio, no una decisión de TI.",
+              tone: "neutral",
+            },
+            {
+              eyebrow: "07",
+              title: "Construya retail media sobre su 1P data",
+              description:
+                "OXXO-Retina Media ya lo hizo. Para Walmex, Liverpool, Chedraui, Coppel y Farmacias Guadalajara es la oportunidad de captar margen que hoy se fuga a Meta y Google. IA + Data 360 + Advertising Sales Management es el trío que lo habilita.",
+              tone: "success",
+            },
+            {
+              eyebrow: "08",
+              title: "Elija el modelo, no lo case",
+              description:
+                "Bring Your Own Model (OpenAI, Anthropic, Google) e interoperabilidad MCP evitan lock-in. Cualquier plataforma que le obligue a un único proveedor de LLM va a envejecer mal — la industria de modelos se está moviendo demasiado rápido.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "09",
+              title: "Métrica de negocio en cada caso, o cancele",
+              description:
+                "Gartner: >40% de proyectos agentic se cancelarán antes de 2027. La mejor prevención es la métrica de negocio desde el día uno: costo por interacción, conversión, forecast accuracy, tiempo a resolución. Sin métrica, no hay caso.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "10",
+              title: "No espere a 2027 para empezar",
+              description:
+                "Las tres grandes de México (Walmex, Liverpool, FEMSA) ya están en producción. La ventana para el resto es 12–24 meses. Después, cerrar la brecha se vuelve un problema de M&A, no de tecnología.",
+              tone: "warn",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "modelo-madurez",
+      eyebrow: "Parte 7 · Modelo de madurez",
+      title: "Ruta de tres niveles para el retailer mexicano",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Este modelo es operativo, no de marketing. Le ayuda a ubicar en qué nivel está hoy su organización, qué capacidades necesita para subir y cuáles son los riesgos de saltar etapas.",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              eyebrow: "Nivel 1 · Foundational",
+              title: "Servicio y comercio digital unificados",
+              description:
+                "Data 360 en producción con las fuentes core (ecommerce, POS, loyalty, servicio). Agentforce Service en un canal (WhatsApp o web chat). Commerce Cloud con Cimulate y product recommendations. Trust Layer activo. KPIs de línea base establecidos.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Nivel 2 · Composable",
+              title: "Omnicanal + loyalty + retail media activo",
+              description:
+                "Modern POS en tiendas piloto. Agentforce Personal Shopper en producción. Loyalty Management activa disengagement risk y next-best-offer. Retail media network lanzada con 1P data. Agentic Order Routing gestionando excepciones.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Nivel 3 · Autonomous",
+              title: "Ecosistema agentico gobernado",
+              description:
+                "Agentes de merchandising, pricing, forecasting y planning en producción. MCP + AgentExchange abren interoperabilidad con socios (bancos, telcos, marketplaces). Governance transversal con métricas de negocio y evaluación continua. Voice + WhatsApp + web + tienda como un solo canal.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "table",
+          headers: ["Nivel", "Capacidades clave", "Beneficios", "Riesgos"],
+          rows: [
+            [
+              "1 · Foundational",
+              "Data 360, Agentforce Service (1 canal), Commerce Cloud, Trust Layer, KPIs base.",
+              "Time-to-value en 6–9 meses. ROI defendible en costo de servicio y conversión digital.",
+              "Quedarse aquí cuando el negocio necesita más. Subestimar la disciplina de datos.",
+            ],
+            [
+              "2 · Composable",
+              "Modern POS, Personal Shopper, Loyalty AI, Retail Media, Agentic OMS.",
+              "Omnicanalidad real; captura del margen de retail media; loyalty finalmente accionable.",
+              "Sobre-medir sin gobierno; mega-agentes sin ownership de dominio; deuda técnica.",
+            ],
+            [
+              "3 · Autonomous",
+              "Merchandising/Pricing/Forecast agents, MCP interoperabilidad, gobernanza transversal.",
+              "Ventaja estructural: forecast accuracy, margen, velocidad de decisión.",
+              "Complejidad; costo de gobernanza; riesgo de over-engineering si no hay caso real.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Salto típico mal hecho",
+          text: "Saltar de Nivel 1 directo a Nivel 3 'porque el CEO leyó un informe de McKinsey'. Resultado: agentes desplegados sobre datos fragmentados, control plane sin agentes maduros que gobernar, gasto sin ROI y un equipo abrumado. El Nivel 2 — composabilidad sólida con loyalty y retail media activos — es donde la mayoría de los retailers mexicanos debe vivir 12–24 meses antes de pensar en ecosistema agentico completo.",
+        },
+      ],
+    },
+    {
+      id: "conclusion",
+      eyebrow: "Cierre",
+      title: "Conclusión",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La industria retail vive un cambio de era, no una moda tecnológica. Amazon superó a Walmart en EE.UU. gracias a su stack de IA y datos. El 75% de los retailers globales declara que los agentes son esenciales para 2026. En México, con 88.2% de internautas comprando en línea y ANTAD sosteniendo crecimientos nominales de un dígito medio, la ventana para adoptar IA con retorno claro se cierra rápido. Los tres grandes ya se movieron; el resto tiene 12–24 meses para reaccionar antes de que la brecha se vuelva estructural.",
+        },
+        {
+          type: "paragraph",
+          text: "Salesforce responde con Agentforce 360 for Retail: no un modelo de IA propietario, sino la arquitectura vertical que integra Trust Layer nativo, Data 360 con Zero Copy, agentes retail-tuned y comercio + servicio + marketing + operaciones de tienda sobre un solo modelo de metadatos. Los casos con métricas duras públicas — Pandora, SharkNinja, Williams-Sonoma, Fisher & Paykel, Janie and Jack, PepsiCo — muestran que el retorno es real cuando el stack está unificado, no cuando la IA se compra por piezas.",
+        },
+        {
+          type: "paragraph",
+          text: "La decisión de un retailer mexicano hoy no es 'adoptar o no adoptar IA'. Es 'construir la arquitectura correcta o pagar dos veces el costo de la primera versión mal diseñada'. Ese es el trabajo del comité ejecutivo en los próximos seis meses — y ese es exactamente el rol de un Industry Advisor: darle el marco para decidirlo con datos, no con marketing.",
+        },
+        {
+          type: "statement",
+          text: "La IA en retail dejó de ser diferenciador y pasó a ser condición de supervivencia. En México, con 88.2% de internautas ya comprando en línea, los tres grandes ya en producción y una brecha que se ensancha cada trimestre, el retailer que quiera seguir compitiendo en cinco años tiene 12–24 meses para construir tres cosas: fundación de datos unificada, un primer agente en producción con métrica de negocio, y una arquitectura que le permita escalar sin recomprarse a sí mismo. Ese es el marco. Todo lo demás es ejecución.",
+        },
+      ],
+    },
+    {
+      id: "fuentes",
+      eyebrow: "Referencias",
+      title: "Fuentes oficiales y de alta confiabilidad",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Este documento está construido sobre reportes de industria, comunicados oficiales, cartas al accionista, páginas oficiales de Salesforce y estadísticas de organismos mexicanos. Las cifras y capacidades evolucionan rápido — se recomienda revisar la fuente primaria antes de decisiones de inversión.",
+        },
+        {
+          type: "sources",
+          items: [
+            {
+              label: "Salesforce · Sixth Edition Connected Shoppers Report",
+              url: "https://www.salesforce.com/resources/research-reports/connected-shoppers-report/",
+            },
+            {
+              label: "Salesforce for Retail (Agentforce 360 for Retail)",
+              url: "https://www.salesforce.com/industries/retail/",
+            },
+            {
+              label: "Salesforce · Agentforce platform overview",
+              url: "https://www.salesforce.com/agentforce/",
+            },
+            {
+              label: "Salesforce · Commerce Cloud",
+              url: "https://www.salesforce.com/commerce/",
+            },
+            {
+              label: "Salesforce · Data 360 (formerly Data Cloud)",
+              url: "https://www.salesforce.com/data/",
+            },
+            {
+              label: "Salesforce · Marketing / Agentforce Marketing",
+              url: "https://www.salesforce.com/marketing/",
+            },
+            {
+              label: "Salesforce · Service Cloud / Agentforce for Service",
+              url: "https://www.salesforce.com/service/",
+            },
+            {
+              label: "Salesforce · Retail Operations Software (Retail Cloud with Modern POS)",
+              url: "https://www.salesforce.com/retail/operations-software/",
+            },
+            {
+              label: "Salesforce · Order Management",
+              url: "https://www.salesforce.com/commerce/order-management/",
+            },
+            {
+              label: "Salesforce · Customer Loyalty Platform",
+              url: "https://www.salesforce.com/marketing/loyalty-management/",
+            },
+            {
+              label: "Salesforce · Einstein Trust Layer",
+              url: "https://www.salesforce.com/artificial-intelligence/trusted-ai/",
+            },
+            {
+              label: "Pandora + Salesforce (customer story oficial)",
+              url: "https://www.salesforce.com/customer-stories/pandora/",
+            },
+            {
+              label: "SharkNinja + Salesforce (customer story oficial)",
+              url: "https://www.salesforce.com/customer-stories/sharkninja/",
+            },
+            {
+              label: "Williams-Sonoma + Salesforce (customer story oficial)",
+              url: "https://www.salesforce.com/customer-stories/williams-sonoma/",
+            },
+            {
+              label: "PepsiCo + Salesforce (customer story oficial)",
+              url: "https://www.salesforce.com/customer-stories/pepsico/",
+            },
+            {
+              label: "Saks + Salesforce (press release, sept 2024)",
+              url: "https://www.salesforce.com/news/press-releases/2024/09/17/saks-data-cloud-agentforce-ecommerce/",
+            },
+            {
+              label: "Gartner · Retail Industry Insights",
+              url: "https://www.gartner.com/en/industries/retail",
+            },
+            {
+              label: "Gartner · Newsroom (agentic AI predictions, $234B at risk)",
+              url: "https://www.gartner.com/en/newsroom",
+            },
+            {
+              label: "Forrester · Predictions 2026 · Retail",
+              url: "https://www.forrester.com/predictions/",
+            },
+            {
+              label: "Andy Jassy · Amazon 2024 & 2025 Letters to Shareholders",
+              url: "https://www.aboutamazon.com/news/company-news/amazon-ceo-andy-jassy-2025-letter-to-shareholders",
+            },
+            {
+              label: "Walmart Global Tech Blog (Sparky, Agents, AI operations)",
+              url: "https://tech.walmart.com/content/walmart-global-tech/en_us/blog.html",
+            },
+            {
+              label: "Home Depot Investor Relations · News Releases",
+              url: "https://ir.homedepot.com/news-releases",
+            },
+            {
+              label: "ANTAD · Crecimiento Nominal en Ventas",
+              url: "https://antad.net/indicadores/crecimiento-nominal-en-ventas/",
+            },
+            {
+              label: "ANTAD · Portal institucional",
+              url: "https://antad.net/",
+            },
+            {
+              label: "AMVO · Asociación Mexicana de Venta Online",
+              url: "https://www.amvo.org.mx/",
+            },
+            {
+              label: "INEGI · Comercio electrónico y ENDUTIH 2024",
+              url: "https://www.inegi.org.mx/temas/comercio/",
+            },
+            {
+              label: "Mercado Libre · Investor Relations",
+              url: "https://investor.mercadolibre.com/",
+            },
+            {
+              label: "Meta LATAM · Conversations 2026 (agente comercial)",
+              url: "https://about.fb.com/ltam/news/2026/06/conversations-2026-presentamos-el-agente-comercial-de-meta/",
+            },
+            {
+              label: "IAB México · Ecosistema retail media",
+              url: "https://www.iabmexico.com/",
+            },
+            {
+              label: "Capgemini Research Institute · Generative AI in Organizations",
+              url: "https://www.capgemini.com/insights/research-library/generative-ai-in-organizations/",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+export const insights: Insight[] = [multiAgent, customerFeedback, retailAiMexico];

@@ -357,16 +357,16 @@ export const customerProjects: CustomerProject[] = [
                 { articleId: "KA-BEN-002", title: "Beneficios Paradise Pass · Member's Bracelet & Resort Credits", recordType: "Benefit & Program" },
                 { articleId: "KA-BEN-003", title: "Programa de Referidos Paradise Pass · $100 USD × 5", recordType: "Benefit & Program" },
                 { articleId: "KA-BEN-004", title: "Legends of Paradise 2026 · Evento AVA Cancún", recordType: "Benefit & Program" },
-                { articleId: "KA-FAQ-001", title: "Resort Credits · qué son y dónde se canjean", recordType: "FAQ" },
-                { articleId: "KA-FAQ-002", title: "Legend Coins vs Resort Credits", recordType: "FAQ" },
-                { articleId: "KA-FAQ-003", title: "Créditos y Casino · restricciones locales", recordType: "FAQ" },
-                { articleId: "KA-FAQ-004", title: "Restricciones de edad por propiedad y zona", recordType: "FAQ" },
-                { articleId: "KA-FAQ-005", title: "Reserva de restaurantes y dress code", recordType: "FAQ" },
-                { articleId: "KA-FAQ-006", title: "Kids Stay FREE · condiciones", recordType: "FAQ" },
-                { articleId: "KA-FAQ-007", title: "Expiración del certificado Paradise Pass", recordType: "FAQ" },
-                { articleId: "KA-FAQ-008", title: "Diferencia Paradise Pass vs Legendary Vacation Club", recordType: "FAQ" },
-                { articleId: "KA-FAQ-009", title: "Rebranding RCD Hotels → PAM Hotels", recordType: "FAQ" },
-                { articleId: "KA-FAQ-010", title: "Glosario de Acrónimos (HRHC, AVA, UNICO, LVC, ECPAT, Rco)", recordType: "FAQ" },
+                { articleId: "KA-FAQ-001", title: "Créditos del club en el Casino de HRPC", recordType: "FAQ" },
+                { articleId: "KA-FAQ-002", title: "UNICO · Restricción de edad (solo adultos 18+)", recordType: "FAQ" },
+                { articleId: "KA-FAQ-003", title: "HRRM · Heaven es exclusivamente adultos 18+", recordType: "FAQ" },
+                { articleId: "KA-FAQ-004", title: "AVA · Concepto familiar de ultra-lujo con áreas segmentadas", recordType: "FAQ" },
+                { articleId: "KA-FAQ-005", title: "Códigos de vestimenta en restaurantes de especialidad", recordType: "FAQ" },
+                { articleId: "KA-FAQ-006", title: "Cómo reservo cenas de especialidad en el hotel", recordType: "FAQ" },
+                { articleId: "KA-FAQ-007", title: "Room service disponible 24/7", recordType: "FAQ" },
+                { articleId: "KA-FAQ-008", title: "Uso de Legend Coins con service fee en Spa y Woodward", recordType: "FAQ" },
+                { articleId: "KA-FAQ-009", title: "UNICO · Esquema Unlimited Inclusions con 25% service fee", recordType: "FAQ" },
+                { articleId: "KA-FAQ-010", title: "Traslado aeropuerto — cortesía vs tarifa preferencial por tier", recordType: "FAQ" },
                 { articleId: "KA-HOW-001", title: "Cómo Consultar mi Estado de Cuenta por Email", recordType: "How-To / Self-Service" },
                 { articleId: "KA-HOW-002", title: "Cómo Actualizar mis Datos Personales", recordType: "How-To / Self-Service" },
                 { articleId: "KA-HOW-003", title: "Cómo Solicitar Cambio de Propietario", recordType: "How-To / Self-Service" },
@@ -1059,10 +1059,10 @@ export const customerProjects: CustomerProject[] = [
           "Lista concreta de artículos a crear en Salesforce Knowledge del sandbox PAM. Cada tarjeta define título, resumen, Record Type, Data Categories y los Retrievers que lo consumirán. IDs `KA-XXX-NNN` son los que llevará el artículo en Salesforce para trazabilidad. Cobertura completa del MVP (13 Job Stories) sin over-engineering — solo lo que necesitamos para el primer release.",
         kbArticlesData: {
           intro:
-            "41 artículos master en español · con traducciones a EN y PT queda un total de 123 versiones. Cada artículo lleva los 4 Data Categories obligatorios (Audience · Topic · Property · Lifecycle). El status inicial es 'planned'; pasa a 'draft' al crearlo en sandbox, 'in-review' al enviarlo a approver, 'validated' al publicarse.",
+            "42 artículos master en español (41 del plan MVP + KA-POL-009 sumado durante la lectura verbatim de fuentes) · con traducciones a EN y PT queda un total de 126 versiones. Cada artículo lleva los 3 Data Categories obligatorios (Audience · Topic · Property) más el picklist Lifecycle en el objeto. El status inicial es 'planned'; pasa a 'draft' al crearlo en sandbox, 'in-review' cuando la fuente tiene contradicciones o requiere aprobación adicional, 'validated' al publicarse.",
           totals: {
-            masterArticles: 41,
-            languageVersions: 123,
+            masterArticles: 42,
+            languageVersions: 126,
             coveredJobStories: 13,
             totalMvpJobStories: 13,
           },
@@ -1258,7 +1258,7 @@ export const customerProjects: CustomerProject[] = [
             {
               recordType: "Policy",
               description:
-                "8 artículos — reglas oficiales con approver Legal. Cada uno con Membership_Level_Applicable, Effective_Date y sección 'Aplicabilidad · Regla · Excepciones'.",
+                "9 artículos — reglas oficiales con approver Legal. Cada uno con Membership_Level_Applicable, Effective_Date y sección 'Aplicabilidad · Regla · Excepciones'. KA-POL-009 (Transportación) se añadió durante la lectura verbatim de las fuentes en julio 2026 — ver pendientes.",
               articles: [
                 {
                   id: "KA-POL-001",
@@ -1278,7 +1278,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS021", "JS027"],
                   membershipLevel: "ALL",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Política de Cancelación socios_.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-POL-002",
@@ -1298,7 +1298,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS021", "JS027"],
                   membershipLevel: "ALL",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Política de Cancelación socios_.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-POL-003",
@@ -1318,7 +1318,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS027"],
                   membershipLevel: "ALL",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Políticas de Reservaciones LVC.pdf",
-                  status: "planned",
+                  status: "in-review",
                 },
                 {
                   id: "KA-POL-004",
@@ -1338,7 +1338,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS030"],
                   membershipLevel: "LVC (Deluxe · VIP · HoF · Chairman)",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Políticas de Reservaciones LVC.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-POL-005",
@@ -1358,7 +1358,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS030"],
                   membershipLevel: "LVC",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Políticas de Reservaciones LVC.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-POL-006",
@@ -1378,7 +1378,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS021"],
                   membershipLevel: "ALL",
                   sourceFile: "Política de huracán y clima/Protocolo Huracán_ En caso de una contingencia climática, Política o social, decretada formalmente por los organismos correspondientes, aplican los siguientes escenarios_.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-POL-007",
@@ -1397,7 +1397,7 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   membershipLevel: "ALL",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Políticas de Reservaciones LVC.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-POL-008",
@@ -1416,7 +1416,26 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   membershipLevel: "ALL",
                   sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Políticas de Reservaciones LVC.pdf",
-                  status: "planned",
+                  status: "draft",
+                },
+                {
+                  id: "KA-POL-009",
+                  title: "Política de Transportación Incluida",
+                  summary:
+                    "Transportación incluida con estancias de 4+ noches. Agendar por email con 15 días de anticipación (dirección según carta de confirmación).",
+                  recordType: "Policy",
+                  dataCategories: [
+                    { group: "Audience", value: "LVC" },
+                    { group: "Topic", value: "Policies_and_Rules" },
+                    { group: "Property", value: "All_Properties" },
+                    { group: "Lifecycle", value: "Active" },
+                  ],
+                  retrievers: ["R1 · KB-Policies"],
+                  channels: ["Agentforce", "Portal LVC", "Service Console"],
+                  languages: ["es", "en", "pt"],
+                  membershipLevel: "LVC (Deluxe · VIP · HoF · Chairman)",
+                  sourceFile: "Politicas de Cancelacion, No show, Cambios y Hold/Políticas de Reservaciones LVC.pdf",
+                  status: "draft",
                 },
               ],
             },
@@ -1482,7 +1501,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS003"],
                   membershipLevel: "Paradise Pass",
                   sourceFile: "Programa de referidos/Programa de Referidos PPASS.pdf",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-BEN-004",
@@ -1512,47 +1531,9 @@ export const customerProjects: CustomerProject[] = [
               articles: [
                 {
                   id: "KA-FAQ-001",
-                  title: "Resort Credits · qué son y dónde se canjean",
+                  title: "Créditos del club en el Casino de HRPC",
                   summary:
-                    "Crédito real (no puntos virtuales) canjeable en spa/wellness, aventuras al aire libre y belleza/styling. Aplica al catálogo del hotel y a agencias aliadas seleccionadas.",
-                  recordType: "FAQ",
-                  dataCategories: [
-                    { group: "Audience", value: "ALL" },
-                    { group: "Topic", value: "FAQs_General" },
-                    { group: "Property", value: "All_Properties" },
-                    { group: "Lifecycle", value: "Active" },
-                  ],
-                  retrievers: ["R2 · KB-Programs-FAQs"],
-                  channels: ["Agentforce", "Portal LVC", "Public Web"],
-                  languages: ["es", "en", "pt"],
-                  jobStories: ["JS001"],
-                  membershipLevel: "ALL",
-                  status: "planned",
-                },
-                {
-                  id: "KA-FAQ-002",
-                  title: "Legend Coins vs Resort Credits · diferencia",
-                  summary:
-                    "Legend Coins: moneda del programa LVC (audience=lvc). Resort Credits: crédito del programa Paradise Pass. Terminología diferenciada por producto.",
-                  recordType: "FAQ",
-                  dataCategories: [
-                    { group: "Audience", value: "ALL" },
-                    { group: "Topic", value: "FAQs_General" },
-                    { group: "Property", value: "All_Properties" },
-                    { group: "Lifecycle", value: "Active" },
-                  ],
-                  retrievers: ["R2 · KB-Programs-FAQs"],
-                  channels: ["Agentforce", "Portal LVC"],
-                  languages: ["es", "en", "pt"],
-                  jobStories: ["JS001"],
-                  membershipLevel: "ALL",
-                  status: "planned",
-                },
-                {
-                  id: "KA-FAQ-003",
-                  title: "Créditos y Casino · restricciones locales",
-                  summary:
-                    "En HRPC (Punta Cana) los créditos NO aplican en Casino por regulaciones locales de RD sobre juego y azar. En otras propiedades sin casino no aplica.",
+                    "Los créditos del club NO aplican en el casino de Hard Rock Punta Cana por regulaciones locales de RD sobre juego y azar.",
                   recordType: "FAQ",
                   dataCategories: [
                     { group: "Audience", value: "ALL" },
@@ -1564,18 +1545,19 @@ export const customerProjects: CustomerProject[] = [
                   channels: ["Agentforce", "Portal LVC", "Public Web"],
                   languages: ["es", "en", "pt"],
                   membershipLevel: "ALL",
-                  status: "planned",
+                  sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r5 · Hard Rock Hotel Punta Cana FAQ 1)",
+                  status: "draft",
                 },
                 {
-                  id: "KA-FAQ-004",
-                  title: "Restricciones de edad por propiedad y zona",
+                  id: "KA-FAQ-002",
+                  title: "UNICO · Restricción de edad (solo adultos 18+)",
                   summary:
-                    "UNICO RM/RN: 18+. AVA/Hard Rock: familiar. HRRM tiene zona Heaven 18+ y zona Hacienda familiar. Zonas exclusivas (Rock Royalty, VIP) requieren nivel LVC.",
+                    "UNICO es estrictamente adultos 18+; no admite menores bajo ninguna circunstancia ni nivel de membresía. Aplica a UNICO 20°87° Riviera Maya y UNICO 20°105° Riviera Nayarit.",
                   recordType: "FAQ",
                   dataCategories: [
                     { group: "Audience", value: "ALL" },
                     { group: "Topic", value: "FAQs_General" },
-                    { group: "Property", value: "All_Properties" },
+                    { group: "Property", value: "UNICO" },
                     { group: "Lifecycle", value: "Active" },
                   ],
                   retrievers: ["R2 · KB-Programs-FAQs"],
@@ -1583,13 +1565,54 @@ export const customerProjects: CustomerProject[] = [
                   languages: ["es", "en", "pt"],
                   jobStories: ["JS005"],
                   membershipLevel: "ALL",
-                  status: "planned",
+                  sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r7-r8 · UNICO FAQ 2)",
+                  status: "draft",
+                },
+                {
+                  id: "KA-FAQ-003",
+                  title: "HRRM · Heaven es exclusivamente adultos 18+",
+                  summary:
+                    "En Hard Rock Hotel Riviera Maya la sección Heaven es solo adultos 18+. Con menores se usa la sección Hacienda.",
+                  recordType: "FAQ",
+                  dataCategories: [
+                    { group: "Audience", value: "ALL" },
+                    { group: "Topic", value: "FAQs_General" },
+                    { group: "Property", value: "HRRM" },
+                    { group: "Lifecycle", value: "Active" },
+                  ],
+                  retrievers: ["R2 · KB-Programs-FAQs"],
+                  channels: ["Agentforce", "Portal LVC", "Public Web"],
+                  languages: ["es", "en", "pt"],
+                  jobStories: ["JS005"],
+                  membershipLevel: "ALL",
+                  sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r2 · HRRM FAQ 2)",
+                  status: "draft",
+                },
+                {
+                  id: "KA-FAQ-004",
+                  title: "AVA · Concepto familiar de ultra-lujo con áreas segmentadas",
+                  summary:
+                    "AVA es un resort familiar disruptivo de ultra-lujo con áreas segmentadas por edades (niños, adolescentes y espacios exclusivos para adultos).",
+                  recordType: "FAQ",
+                  dataCategories: [
+                    { group: "Audience", value: "ALL" },
+                    { group: "Topic", value: "FAQs_General" },
+                    { group: "Property", value: "AVA" },
+                    { group: "Lifecycle", value: "Active" },
+                  ],
+                  retrievers: ["R2 · KB-Programs-FAQs"],
+                  channels: ["Agentforce", "Portal LVC", "Public Web"],
+                  languages: ["es", "en", "pt"],
+                  jobStories: ["JS005"],
+                  membershipLevel: "ALL",
+                  sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r9 · AVA FAQ 2)",
+                  status: "draft",
                 },
                 {
                   id: "KA-FAQ-005",
-                  title: "Reserva de restaurantes y dress code",
+                  title: "Códigos de vestimenta en restaurantes de especialidad",
                   summary:
-                    "Reserva vía app/chatbot con 24h de anticipación. Casual Regular en la mayoría; Casual Elegant en cenas de especialidad. Nunca traje de baño ni ropa mojada.",
+                    "Casual Regular en centros de consumo generales (sin traje de baño ni ropa mojada). Casual Elegant en cenas de especialidad. En AVA, Chez Moi y Bao exigen Resort Evening.",
                   recordType: "FAQ",
                   dataCategories: [
                     { group: "Audience", value: "ALL" },
@@ -1601,99 +1624,104 @@ export const customerProjects: CustomerProject[] = [
                   channels: ["Agentforce", "Portal LVC"],
                   languages: ["es", "en", "pt"],
                   membershipLevel: "ALL",
-                  status: "planned",
+                  sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r3, r5, r9 · FAQ 4)",
+                  status: "draft",
                 },
                 {
                   id: "KA-FAQ-006",
-                  title: "Kids Stay FREE · condiciones",
+                  title: "Cómo reservo cenas de especialidad en el hotel",
                   summary:
-                    "Aplica en propiedades familiares (AVA, HRHC, HRRM Hacienda, HRHV, HRLC, HRPC). Requiere reserva del adulto tarifa full. Verificar temporada — hay ventanas donde no aplica.",
+                    "El agente inteligente centraliza el aforo diario y permite reservar. Recomendado con 24h de anticipación. Camas balinesas con prioridad a Chairman/Hall of Fame.",
                   recordType: "FAQ",
                   dataCategories: [
                     { group: "Audience", value: "ALL" },
                     { group: "Topic", value: "FAQs_General" },
-                    { group: "Property", value: "All_Properties" },
-                    { group: "Lifecycle", value: "Seasonal" },
-                  ],
-                  retrievers: ["R2 · KB-Programs-FAQs"],
-                  channels: ["Agentforce", "Public Web"],
-                  languages: ["es", "en", "pt"],
-                  membershipLevel: "ALL",
-                  status: "planned",
-                },
-                {
-                  id: "KA-FAQ-007",
-                  title: "Expiración del certificado Paradise Pass",
-                  summary:
-                    "El certificado tiene fecha de expiración. Ejemplo: certificado de 7 noches con vigencia hasta la fecha X del año siguiente. Al activar la estancia se congela el vencimiento.",
-                  recordType: "FAQ",
-                  dataCategories: [
-                    { group: "Audience", value: "Paradise Pass" },
-                    { group: "Topic", value: "Program_Membership" },
                     { group: "Property", value: "All_Properties" },
                     { group: "Lifecycle", value: "Active" },
                   ],
                   retrievers: ["R2 · KB-Programs-FAQs"],
                   channels: ["Agentforce", "Portal LVC"],
                   languages: ["es", "en", "pt"],
-                  jobStories: ["JS001"],
-                  membershipLevel: "Paradise Pass",
-                  status: "planned",
+                  membershipLevel: "ALL",
+                  sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r3, r4 · FAQ 4)",
+                  status: "draft",
+                },
+                {
+                  id: "KA-FAQ-007",
+                  title: "Room service disponible 24/7",
+                  summary:
+                    "Room service 24/7 disponible. Se ordena directamente desde la interfaz del chatbot con menú premium del club.",
+                  recordType: "FAQ",
+                  dataCategories: [
+                    { group: "Audience", value: "ALL" },
+                    { group: "Topic", value: "FAQs_General" },
+                    { group: "Property", value: "All_Properties" },
+                    { group: "Lifecycle", value: "Active" },
+                  ],
+                  retrievers: ["R2 · KB-Programs-FAQs"],
+                  channels: ["Agentforce", "Portal LVC"],
+                  languages: ["es", "en", "pt"],
+                  membershipLevel: "ALL",
+                  sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r6 · HRHV FAQ 4)",
+                  status: "draft",
                 },
                 {
                   id: "KA-FAQ-008",
-                  title: "Diferencia Paradise Pass vs Legendary Vacation Club",
+                  title: "Uso de Legend Coins con service fee en Spa y Woodward",
                   summary:
-                    "Paradise Pass = producto activable de descubrimiento (certificado con vencimiento). LVC = programa de membresía con tiers (Deluxe/VIP/HoF/Chairman). PPass es la antesala de LVC.",
+                    "Woodward y Spa aceptan Legend Coins con service fee correspondiente sobre el valor del servicio, liquidable al checkout.",
                   recordType: "FAQ",
                   dataCategories: [
-                    { group: "Audience", value: "ALL" },
-                    { group: "Topic", value: "Program_Membership" },
-                    { group: "Property", value: "All_Properties" },
+                    { group: "Audience", value: "LVC" },
+                    { group: "Topic", value: "FAQs_General" },
+                    { group: "Property", value: "HRRM" },
                     { group: "Lifecycle", value: "Active" },
                   ],
                   retrievers: ["R2 · KB-Programs-FAQs"],
-                  channels: ["Agentforce", "Portal LVC", "Public Web"],
+                  channels: ["Agentforce", "Portal LVC"],
                   languages: ["es", "en", "pt"],
-                  jobStories: ["JS001"],
-                  membershipLevel: "ALL",
-                  status: "planned",
+                  membershipLevel: "LVC (Deluxe · VIP · HoF · Chairman)",
+                  sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r2 · HRRM FAQ 1)",
+                  status: "draft",
                 },
                 {
                   id: "KA-FAQ-009",
-                  title: "Rebranding RCD Hotels → PAM Hotels",
+                  title: "UNICO · Esquema Unlimited Inclusions con 25% service fee",
                   summary:
-                    "RCD Hotels evolucionó a PAM Hotels en enero 2026. Ambos nombres refieren al mismo grupo operador. Documentos legacy que dicen 'RCD' siguen siendo válidos.",
+                    "En UNICO, el catálogo de spa y tours opera bajo Unlimited Inclusions con un service fee obligatorio del 25% sobre el valor del menú.",
                   recordType: "FAQ",
                   dataCategories: [
-                    { group: "Audience", value: "ALL" },
+                    { group: "Audience", value: "LVC" },
                     { group: "Topic", value: "FAQs_General" },
-                    { group: "Property", value: "All_Properties" },
+                    { group: "Property", value: "UNICO" },
                     { group: "Lifecycle", value: "Active" },
                   ],
                   retrievers: ["R2 · KB-Programs-FAQs"],
-                  channels: ["Agentforce", "Portal LVC", "Public Web"],
+                  channels: ["Agentforce", "Portal LVC"],
                   languages: ["es", "en", "pt"],
-                  membershipLevel: "ALL",
-                  status: "planned",
+                  membershipLevel: "LVC (Deluxe · VIP · HoF · Chairman)",
+                  sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r7-r8 · UNICO FAQ 1)",
+                  status: "draft",
                 },
                 {
                   id: "KA-FAQ-010",
-                  title: "Glosario de Acrónimos (HRHC · AVA · UNICO · LVC · ECPAT · Rco)",
+                  title: "Traslado aeropuerto — cortesía vs tarifa preferencial por tier",
                   summary:
-                    "Diccionario de términos internos: HRHC=Hard Rock Hotel Cancun, HRRM=Riviera Maya, HRHV=Vallarta, HRLC=Los Cabos, HRPC=Punta Cana, AVA=AVA Resort, UNICO=UNICO 20°87°, LVC=Legendary Vacation Club, ECPAT=protección de menores, Rco=Resort credits.",
+                    "La transportación terrestre varía de cortesía a tarifa preferencial según el nivel Legendary. Complementa la política general (KA-POL-009): incluida con estancias 4+ noches.",
                   recordType: "FAQ",
                   dataCategories: [
-                    { group: "Audience", value: "ALL" },
+                    { group: "Audience", value: "LVC" },
                     { group: "Topic", value: "FAQs_General" },
                     { group: "Property", value: "All_Properties" },
                     { group: "Lifecycle", value: "Active" },
                   ],
                   retrievers: ["R2 · KB-Programs-FAQs"],
-                  channels: ["Agentforce", "Service Console"],
+                  channels: ["Agentforce", "Portal LVC"],
                   languages: ["es", "en", "pt"],
-                  membershipLevel: "ALL",
-                  status: "planned",
+                  jobStories: ["JS005"],
+                  membershipLevel: "LVC (Deluxe · VIP · HoF · Chairman)",
+                  sourceFile: "FAQ´s/Matriz Completa de FAQs- Legendary Vacation Club_SF.xlsx (r4 · HRLC FAQ 3)",
+                  status: "draft",
                 },
               ],
             },
@@ -1739,7 +1767,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS010"],
                   membershipLevel: "ALL",
                   sourceFile: "Actualización de Datos/ACTUALIZACION DE INFORMACION/",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-HOW-003",
@@ -1759,7 +1787,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS002"],
                   membershipLevel: "LVC",
                   sourceFile: "Actualización de Datos/CAMBIO DE PROPIETARIO/",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-HOW-004",
@@ -1779,7 +1807,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS002"],
                   membershipLevel: "LVC",
                   sourceFile: "Beneficiarios/AGREGAR NUEVO PROPIETARIO/",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-HOW-005",
@@ -1799,7 +1827,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS002"],
                   membershipLevel: "LVC",
                   sourceFile: "Actualización de Datos/REMOCION DE PROPIETARIO/",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-HOW-006",
@@ -1819,7 +1847,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS002"],
                   membershipLevel: "LVC",
                   sourceFile: "Beneficiarios/BENEFICIARIOS/",
-                  status: "planned",
+                  status: "draft",
                 },
                 {
                   id: "KA-HOW-007",
@@ -1839,7 +1867,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStories: ["JS002"],
                   membershipLevel: "LVC",
                   sourceFile: "Beneficiarios/REMOCION POR FALLECIMIENTO/",
-                  status: "planned",
+                  status: "draft",
                 },
               ],
             },
@@ -1911,6 +1939,100 @@ export const customerProjects: CustomerProject[] = [
               ],
             },
           ],
+          pending: {
+            intro:
+              "Temas surgidos durante la construcción de los KB Articles del MVP que requieren decisión o input del cliente antes de que los artículos afectados pasen de Draft / In Review a Validated. Cada tarjeta describe el hallazgo, los artículos impactados y la petición concreta al cliente.",
+            items: [
+              {
+                id: "PND-001",
+                title: "Contradicción documental — penalidad por no-show en fechas especiales",
+                severity: "blocker",
+                articles: ["KA-POL-003"],
+                description:
+                  "Al construir la Política de No-Show detectamos que las dos fuentes oficiales entregadas contradicen el monto de la penalidad en fechas especiales (Semana Santa, Pascua y del 27 de diciembre al 3 de enero):\n\n• 'Política de Cancelación socios_.pdf' declara en un párrafo la penalidad de 1,500 USD y, en un párrafo posterior del mismo documento, declara 1,200 USD. Es una inconsistencia interna dentro del mismo PDF.\n\n• 'Políticas de Reservaciones LVC.pdf' declara únicamente 1,200 USD.\n\nEl artículo KA-POL-003 fue creado en Salesforce Knowledge con status 'In Review' y su Answer explicita ambas versiones para que el bot no cite un monto incorrecto. El body incluye ambas cifras marcadas como 'contradicción documental detectada — pendiente de resolver con Legal'. Hasta que Legal confirme la versión vigente, el retriever R1 · KB-Policies devolverá el artículo pero el bot escalará al humano para responder el monto exacto.",
+                askOfClient:
+                  "Confirmar cuál es el monto oficial vigente para 2026 de la penalidad por no-show en fechas especiales (Semana Santa · Pascua · 27 dic – 3 ene): ¿1,200 USD o 1,500 USD? Idealmente reemplazar el PDF fuente con una versión consolidada sin la contradicción, para poder pasar KA-POL-003 a Validated y publicar como Online.",
+              },
+              {
+                id: "PND-002",
+                title: "Definición de 'grupo' — coincidencia de noches ambigua entre fuentes",
+                severity: "warning",
+                articles: ["(pendiente crear KA-POL-010)"],
+                description:
+                  "Las dos fuentes coinciden en que 10 reservas o más en la misma propiedad y para las mismas fechas se consideran grupo, pero difieren en la regla de coincidencia de noches:\n\n• 'Política de Cancelación socios_.pdf' dice 'que coincidan por mínimo noches' — frase incompleta o ambigua.\n\n• 'Políticas de Reservaciones LVC.pdf' dice 'que coincidan por 3 noches o más' — específico.\n\nAdemás, la política completa de cancelación de grupos (100% del monto pagado con 90 días o menos; 600 USD por reserva con 91 días o más; no aplican cambios con 90 días o menos) sólo está en 'Política de Cancelación socios_.pdf'. Esto amerita un artículo KB dedicado (KA-POL-010) que aún no está en el plan de 41 MVP.",
+                askOfClient:
+                  "Confirmar (a) el umbral de coincidencia de noches para considerar un grupo (¿3 noches u otro valor?) y (b) si la política de cancelación de grupos aplica solo a LVC o también a Paradise Pass. Con esa confirmación creamos KA-POL-010 con Q/A y body verbatim.",
+              },
+              {
+                id: "PND-003",
+                title: "Contenido inventado retirado en los pilotos KA-SEC-001 y KA-SEC-003",
+                severity: "info",
+                articles: ["KA-SEC-001", "KA-SEC-003"],
+                description:
+                  "Durante la primera pasada del piloto de julio 2026 se incluyeron en el body de dos artículos afirmaciones que NO aparecen en el documento fuente:\n\n• En KA-SEC-001 se incluyó 'Nunca solicitamos datos bancarios por email' — es una inferencia razonable pero no está literal en 'LEGENDARY VACATION CLUB OFFICIAL COMMUNICATION CHANNELS.pdf'. Se retiró.\n\n• En KA-SEC-003 se incluyó 'Tiempo objetivo de respuesta del equipo especializado: primer contacto dentro de 24 horas hábiles' — no está en 'DOCUMENTOS SOLICITADOS POR FRAUDE.pdf'. Se retiró.\n\nAmbos artículos fueron actualizados en el sandbox retirando el contenido no citable y separando en el body 'Fuente oficial' de 'Cómo lo maneja el Concierge (decisión de diseño)'. El aprendizaje se codificó en el 'Protocolo editorial — fuente vs interpretación del bot' del tab de Riesgos y guía la autoría de los 30+ artículos restantes.",
+                askOfClient:
+                  "Definir con el equipo de Fraud Prevention si existe un SLA oficial de primer contacto para casos de fraude materializado. Si existe, se documenta con approver y se re-añade al artículo con firma de fuente.",
+              },
+              {
+                id: "PND-004",
+                title: "Artículo extra propuesto — Política de Transportación Incluida",
+                severity: "info",
+                articles: ["KA-POL-009"],
+                description:
+                  "Durante la lectura verbatim de 'Políticas de Reservaciones LVC.pdf' se identificó una política clara y citable que NO estaba en el plan original de 41 artículos del MVP: la transportación terrestre se incluye para estancias de 4 noches o más, con requisito de agendar por email al menos 15 días antes de la llegada. Se creó como KA-POL-009 para no perder ese contenido, dado que responde directamente a Job Stories operativas del bot y complementa la política de mascotas (KA-POL-008).",
+                askOfClient:
+                  "Confirmar si la política de transportación incluida aplica también a Paradise Pass o solo a socios LVC (el documento fuente es específico de LVC). Con la confirmación se ajusta el Membership_Level_Applicable del artículo.",
+              },
+              {
+                id: "PND-005",
+                title: "Carpetas del repositorio KB entregado que siguen vacías",
+                severity: "warning",
+                description:
+                  "Tres carpetas del repositorio 'PAM_Hotels_Knowledge_Base_RAG/' entregado en junio 2026 siguen sin contenido:\n\n• Marcas/ — bloquea la finalización del System Prompt del agente (brand guide PAM 2026 post-rebranding).\n\n• Llamada Sospechosa/ — bloquea el guion oficial para orientar al socio ante llamadas de reventa ANTES de que pague. Impacta cobertura completa de JS023.\n\n• Phishing/ — bloquea la construcción de la lista de dominios apócrifos conocidos y el fastpath de detección automática. Impacta cobertura completa de JS024.\n\nEl piloto de Security cubre canales oficiales (KA-SEC-001/002) y documentos requeridos en fraude materializado (KA-SEC-003), pero el guion preventivo y las listas de dominios apócrifos aún dependen de estas carpetas.",
+                askOfClient:
+                  "PAM (Yolanda / equipo Fraud Prevention) entrega el guion oficial de llamadas sospechosas y la guía de campañas phishing detectadas. PAM (Brand) entrega el brand guide 2026.",
+              },
+              {
+                id: "PND-006",
+                title: "UNICO Jamaica — inclusión en Paradise Pass sin confirmar",
+                severity: "warning",
+                articles: ["KA-PFS-009"],
+                description:
+                  "El fact sheet oficial de UNICO Jamaica (Montego Bay) está en el repositorio pero NO menciona Paradise Pass. Antes de publicar el Property Fact Sheet KA-PFS-009 como Online, hay que confirmar si esta propiedad está en el catálogo activable del pase o solo aplica a socios LVC.",
+                askOfClient:
+                  "Confirmar si un cliente con Paradise Pass puede activar noches en UNICO Jamaica. Si no, se etiqueta el artículo como Audience = LVC y se restringe el retriever para no ofrecer la propiedad a clientes PPass.",
+              },
+              {
+                id: "PND-008",
+                title: "Mecánica de Paradise Pass sin documento fuente entregado",
+                severity: "blocker",
+                articles: ["KA-BEN-001", "KA-BEN-002", "KA-BEN-004"],
+                description:
+                  "Al construir los 4 artículos Benefit & Program de Paradise Pass descubrimos que el repositorio 'PAM_Hotels_Knowledge_Base_RAG/' NO contiene un documento oficial que describa la mecánica del pase (certificado, activación, vencimiento, tarifas 4/5 vs 7/8 noches, bonus 'An Extra Dose of Paradise') ni los beneficios tangibles (Member's Bracelet, Resort Credits, eventos por invitación como Legends of Paradise 2026).\n\nSolo KA-BEN-003 (Programa de Referidos PPass) pudo crearse porque su fuente entregada — 'Programa de Referidos PPASS.pdf' — es concreta y citable.\n\nAplicando el protocolo editorial (no crear artículos sin fuente literal), los otros 3 KA-BEN-001, KA-BEN-002 y KA-BEN-004 quedan PENDIENTES en el portfolio pero NO se crean en la org hasta recibir contenido oficial. El bot podría en el interín usar información pública de paradisepass.com si el cliente lo autoriza como fuente citable temporal.",
+                askOfClient:
+                  "Entregar el brief oficial 2026 de Paradise Pass con: (1) mecánica completa del certificado (compra, activación, vencimiento, opciones 4/5 y 7/8 noches, bonus 'An Extra Dose of Paradise'), (2) beneficios tangibles al check-in (Member's Bracelet, Resort Credits — cómo se ganan y canjean), (3) eventos por invitación con fechas 2026 (Legends of Paradise en AVA Cancún, Summer Like Heaven, Camp Rockaway, Superbia Summer). Alternativa: autorizar scraping de paradisepass.com como fuente pública citable con marca de tiempo.",
+              },
+              {
+                id: "PND-009",
+                title: "Plantilla de correo de Estado de Cuenta no entregada",
+                severity: "warning",
+                articles: ["KA-HOW-001"],
+                description:
+                  "La Job Story JS013 (Estado de Cuenta por Email) requiere que el bot dispare un correo desde Salesforce Core replicando el formato oficial actual de PAM. El repositorio KB entregado no incluye ejemplos de la plantilla de correo vigente que el equipo de finanzas usa. Sin ese ejemplo no podemos escribir KA-HOW-001 verbatim ni construir el email template en Salesforce.\n\nMientras tanto, el resto de How-To's (KA-HOW-002 a KA-HOW-007) sí se pudieron crear porque sus fuentes son los formularios PDF oficiales entregados.",
+                askOfClient:
+                  "PAM (Finanzas / Customer Service) entrega uno o dos ejemplos de correos de Estado de Cuenta actualmente enviados, con datos enmascarados. Con esa referencia se autora KA-HOW-001 y se construye el email template estándar de Salesforce Core.",
+              },
+              {
+                id: "PND-007",
+                title: "Tiers LVC — Legend Coins y niveles sin documentación oficial detallada",
+                severity: "warning",
+                description:
+                  "La matriz de FAQs y el documento de tono confirman los 4 tiers LVC (Deluxe · VIP · Hall of Fame · Chairman) y la existencia de Legend Coins como moneda del programa, pero no hay un documento oficial 2026 que detalle: mecánica completa de Legend Coins (cómo se ganan, cómo se canjean, tasas por tier), beneficios exclusivos por tier y reglas de upgrade. Esta información es crítica para los artículos KA-BEN-* y para que el bot no alucine sobre tiers.",
+                askOfClient:
+                  "PAM entrega documento oficial 2026 de tiers LVC + mecánica completa de Legend Coins con approver Producto y Legal.",
+              },
+            ],
+          },
         },
       },
       {
