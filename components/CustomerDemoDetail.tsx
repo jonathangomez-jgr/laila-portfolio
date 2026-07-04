@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import AssetsGrid from "./AssetsGrid";
+import Markdown from "./Markdown";
 import ContextFindings from "./ContextFindings";
 import CustomerProfile from "./CustomerProfile";
 import ArchDiagram from "./ArchDiagram";
@@ -284,9 +285,26 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                 </div>
               )}
 
-              <p className="mt-6 max-w-3xl text-base leading-8 text-gray-600 sm:text-lg">
-                {activeTab.content}
-              </p>
+              {(() => {
+                const c = activeTab.content ?? "";
+                // Detect markdown-ish syntax: paragraph breaks, headings, tables, lists, code, blockquotes
+                const hasRichSyntax =
+                  /\n\n|\n[#•*\-\d]|\|\s*[-]+\s*\|/.test(c) ||
+                  /```/.test(c) ||
+                  /\*\*[^*]+\*\*/.test(c);
+                if (hasRichSyntax) {
+                  return (
+                    <div className="mt-6 max-w-4xl">
+                      <Markdown source={c} />
+                    </div>
+                  );
+                }
+                return (
+                  <p className="mt-6 max-w-3xl text-base leading-8 text-gray-600 sm:text-lg">
+                    {c}
+                  </p>
+                );
+              })()}
 
               {activeTab.overviewData && (
                 <OverviewStats data={activeTab.overviewData} />
