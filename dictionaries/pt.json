@@ -318,8 +318,6 @@
     "demoStructure": "Estrutura da Solução",
     "collapseSidebar": "Recolher",
     "expandSidebar": "Expandir estrutura",
-    "emptyTabTitle": "Espaço editável",
-    "emptyTabDesc": "Aqui podemos substituir este placeholder por conteúdo real: imagens, bullets, métricas, diagramas, scripts, links, vídeos ou ativos de apresentação.",
     "demoNotFound": "Demo não encontrada",
     "demoNotFoundDesc": "Nenhum caso está configurado para este cliente. Verifique o slug ou adicione o caso no arquivo de dados.",
     "deckNotFound": "Apresentação não encontrada",
