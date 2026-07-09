@@ -511,6 +511,28 @@ export default function InsightArticle({
                   </svg>
                 </a>
               )}
+              {insight.presenterDeckRoute && (
+                <a
+                  href={`/${lang}/insights/${insight.slug}/${insight.presenterDeckRoute}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-[#00b3ff]/40 bg-[#00b3ff]/10 px-5 py-2.5 text-sm font-semibold text-[#022ac0] shadow-sm transition hover:border-[#00b3ff]/70 hover:bg-[#00b3ff]/20"
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.2}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 6h16M4 12h10M4 18h16M18 10l3 2-3 2v-4z"
+                    />
+                  </svg>
+                  {insight.presenterDeckLabel ?? "Modo presentador"}
+                </a>
+              )}
               {hasDeck && <span className="text-xs text-gray-500">{dict.execDeckHint}</span>}
             </div>
           )}

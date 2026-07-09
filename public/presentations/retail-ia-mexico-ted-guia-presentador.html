@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Guía del presentador · Introducción Retail IA México</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#181614;
+    --ink-soft:#3a3733;
+    --ink-mute:#7c7770;
+    --paper:#f5f4ef;
+    --paper-2:#ece9e0;
+    --accent:#ff5b3a;
+    --gold:#c99a2f;
+    --teal:#0d7a6b;
+    --line:rgba(24,22,20,.12);
+    --line-strong:rgba(24,22,20,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:'Inter',-apple-system,sans-serif;
+    font-size:15.5px;line-height:1.6;
+    font-feature-settings:"ss01","cv11";
+  }
+  .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto;letter-spacing:-.02em}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+
+  .container{max-width:960px;margin:0 auto;padding:80px 40px 120px}
+
+  .eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-mute);font-weight:600}
+  .eyebrow .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:12px;vertical-align:middle}
+
+  h1{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(40px,5vw,64px);line-height:1.02;letter-spacing:-.03em;margin:24px 0 20px}
+  h1 em{font-style:normal;color:var(--accent)}
+  h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(28px,3.5vw,40px);line-height:1.15;letter-spacing:-.02em;margin:64px 0 18px;color:var(--ink)}
+  h2 .num{color:var(--accent);font-weight:400;margin-right:14px}
+  h3{font-family:'Fraunces',serif;font-weight:500;font-size:22px;line-height:1.3;letter-spacing:-.01em;margin:36px 0 12px}
+  h4{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;margin:28px 0 8px}
+
+  p{margin:0 0 16px;max-width:65ch}
+  p.lead{font-size:19px;line-height:1.55;color:var(--ink-soft);max-width:60ch;margin-bottom:24px}
+
+  ul,ol{margin:0 0 20px 24px;max-width:64ch}
+  ul li,ol li{margin:6px 0;line-height:1.55}
+
+  hr{border:none;border-top:1px solid var(--line);margin:60px 0}
+
+  .callout{
+    margin:24px 0;padding:22px 26px;border-left:3px solid var(--accent);
+    background:rgba(255,91,58,.06);border-radius:0 10px 10px 0;
+  }
+  .callout.warn{border-color:var(--gold);background:rgba(201,154,47,.08)}
+  .callout.ok{border-color:var(--teal);background:rgba(13,122,107,.06)}
+  .callout b{font-weight:600}
+
+  .slide-card{
+    margin:36px 0;padding:32px 34px;
+    background:#fff;border:1px solid var(--line);border-radius:16px;
+    box-shadow:0 2px 8px rgba(24,22,20,.03);
+  }
+  .slide-card .head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;margin-bottom:18px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .slide-card .head .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.14em;font-weight:600}
+  .slide-card .head .tm{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-mute)}
+  .slide-card .head h3{margin:0;font-size:26px}
+  .slide-card .head .role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);font-weight:600}
+
+  .slide-card .goal{font-size:13.5px;color:var(--ink-soft);margin-bottom:20px;padding:10px 14px;background:rgba(24,22,20,.03);border-radius:8px}
+  .slide-card .goal b{color:var(--ink)}
+
+  .slide-card .script{background:rgba(24,22,20,.02);border-radius:10px;padding:18px 22px;margin:16px 0;border-left:2px solid var(--ink)}
+  .slide-card .script p{margin:0 0 10px}
+  .slide-card .script p:last-child{margin:0}
+  .slide-card .script .stage{font-size:12px;color:var(--ink-mute);font-style:italic;font-family:'Fraunces',serif;letter-spacing:0}
+
+  .slide-card .body-txt strong{font-weight:600}
+  .slide-card .body-txt em{font-style:italic}
+
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+  .tag{font-size:11px;letter-spacing:.06em;padding:4px 10px;border:1px solid var(--line);border-radius:100px;color:var(--ink-mute);background:#fff}
+  .tag.warn{border-color:rgba(201,154,47,.4);color:var(--gold);background:rgba(201,154,47,.06)}
+  .tag.ok{border-color:rgba(13,122,107,.3);color:var(--teal);background:rgba(13,122,107,.05)}
+
+  .meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:32px 0 12px}
+  .meta-grid .cell{padding:18px 20px;background:#fff;border:1px solid var(--line);border-radius:12px}
+  .meta-grid .cell .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;margin-bottom:6px}
+  .meta-grid .cell .v{font-family:'Fraunces',serif;font-size:24px;font-weight:500;letter-spacing:-.01em;line-height:1.1}
+
+  .toc{margin:32px 0;padding:24px 28px;border:1px solid var(--line);border-radius:14px;background:#fff}
+  .toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
+  .toc li{counter-increment:t;padding:8px 0;display:flex;gap:14px;align-items:baseline;font-size:14.5px;border-top:1px solid var(--line)}
+  .toc li:first-child{border-top:none}
+  .toc li::before{content:counter(t,decimal-leading-zero);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);width:32px;flex-shrink:0;font-weight:600}
+  .toc li .t{flex:1}
+  .toc li .m{color:var(--ink-mute);font-family:'JetBrains Mono',monospace;font-size:11.5px}
+
+  .checklist{margin:24px 0;padding:0;list-style:none}
+  .checklist li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+  .checklist li:first-child{border-top:none}
+  .checklist li::before{content:"";width:14px;height:14px;border:1.5px solid var(--ink-mute);border-radius:3px;flex-shrink:0;margin-top:5px}
+
+  .qa{margin:20px 0;padding:18px 22px;border-radius:10px;background:rgba(13,122,107,.05);border:1px solid rgba(13,122,107,.15)}
+  .qa .q{font-weight:600;color:var(--ink);margin-bottom:6px;font-size:14.5px}
+  .qa .a{font-size:14px;color:var(--ink-soft)}
+
+  .kbd{font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:2px 7px;border:1px solid var(--line-strong);border-radius:4px;background:#fff;color:var(--ink)}
+
+  @media print{
+    body{background:#fff}
+    .container{padding:20px}
+    .slide-card{page-break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+    h2{page-break-after:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <p class="eyebrow"><span class="dot"></span>Guía del presentador · Uso interno</p>
+  <h1>El cliente ya cambió.<br/><em>Guía para presentar los 20 minutos.</em></h1>
+  <p class="lead">Esta guía acompaña al deck <span class="mono">retail-ia-mexico-ted.html</span>. Está pensada para ensayar, no para leerse en vivo. Incluye guion sugerido, tiempos por slide, movimientos de escena, señales de la audiencia y respuestas anticipadas a preguntas probables.</p>
+
+  <div class="meta-grid">
+    <div class="cell"><div class="k">Duración</div><div class="v">20 min</div></div>
+    <div class="cell"><div class="k">Audiencia</div><div class="v">30 pax</div></div>
+    <div class="cell"><div class="k">Roles</div><div class="v">CEO · CMO · CFO</div></div>
+    <div class="cell"><div class="k">Formato</div><div class="v">TED · I-I-I</div></div>
+  </div>
+
+  <hr/>
+
+  <h2><span class="num">01</span>La tesis en una frase</h2>
+  <p class="lead">La IA en retail dejó de ser diferenciador y se volvió condición de supervivencia — pero la ventana para construirla con retorno se cierra en 24 meses, y quienes ganen la próxima década no serán los que compren más IA, sino los que compren la arquitectura correcta.</p>
+
+  <p>Todo lo que decimos en esos 20 minutos gira alrededor de ese eje. Si en cualquier momento la audiencia hace una pregunta que no cabe ahí, se acepta la pregunta y se estaciona con un: <em>"Vale la pena en la Q&amp;A — vamos a llegar allá"</em>. No se desvía el hilo.</p>
+
+  <div class="callout">
+    <b>Explícito vs. implícito.</b> Explícitamente decimos: hay una ola, ya está aquí, la evidencia es pública, la ventana es corta, hay un marco (los 4 pilares). Implícitamente decimos: Salesforce es la respuesta obvia — porque los cinco casos y los cuatro pilares describen la arquitectura de Salesforce sin nombrarla. El cierre lo hace el partner en la demo.
+  </div>
+
+  <h2><span class="num">02</span>Estructura Inspiration → Information → Inspiration</h2>
+  <div class="toc">
+    <ol>
+      <li><span class="t"><b>Portada:</b> "El cliente ya cambió."</span><span class="m">0:00 · Inspiration</span></li>
+      <li><span class="t"><b>Escena WhatsApp:</b> Sara, martes 21:47.</span><span class="m">0:15 · Inspiration</span></li>
+      <li><span class="t"><b>Encuesta:</b> "6 sí, 4 no".</span><span class="m">1:00 · Inspiration</span></li>
+      <li><span class="t"><b>La ola llegó:</b> 3 de cada 4 · reasignación de liderazgo.</span><span class="m">1:45 · Information</span></li>
+      <li><span class="t"><b>México:</b> 88.2% ya está adentro.</span><span class="m">3:15 · Information</span></li>
+      <li><span class="t"><b>Comportamiento:</b> 53% descubre hablando.</span><span class="m">4:45 · Information</span></li>
+      <li><span class="t"><b>Tres frentes:</b> servicio · comercio · operación.</span><span class="m">6:15 · Information</span></li>
+      <li><span class="t"><b>Evidencia pública:</b> 5 casos con métricas duras.</span><span class="m">7:45 · Information</span></li>
+      <li><span class="t"><b>LATAM:</b> tres reglas propias de la región.</span><span class="m">10:15 · Information</span></li>
+      <li><span class="t"><b>La ventana:</b> 12–24 meses · callback a Sara.</span><span class="m">11:45 · Information</span></li>
+      <li><span class="t"><b>El 40% + 4 pilares:</b> el marco de decisión (fusionado).</span><span class="m">13:15 · Information</span></li>
+      <li><span class="t"><b>Handoff:</b> Sara vuelve — en vivo.</span><span class="m">15:45 · Inspiration</span></li>
+      <li><span class="t"><b>Takeaways:</b> tres frases para llevarse.</span><span class="m">16:45 · Inspiration</span></li>
+      <li><span class="t"><b>Cierre:</b> "La ventana está abierta. Sara existe."</span><span class="m">18:15 · Inspiration</span></li>
+    </ol>
+  </div>
+
+  <hr/>
+
+  <h2><span class="num">03</span>Guion detallado por slide</h2>
+
+  <!-- ─────── SLIDE 1 ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">01 · PORTADA</div>
+        <h3>El cliente ya cambió. El retail, todavía no.</h3>
+      </div>
+      <div>
+        <div class="tm">0:00 – 0:15</div>
+        <div class="role">Inspiration · Hook</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> establecer autoridad y tono en 15 segundos. Que la sala deje de mirar el teléfono.</div>
+
+    <div class="tags"><span class="tag">Silencio inicial</span><span class="tag">Contacto visual</span><span class="tag ok">Postura firme</span></div>
+
+    <div class="script">
+      <p class="stage">[antes de hablar, mirar la sala 3 segundos completos]</p>
+      <p>"El retail no está esperando… a nadie."</p>
+      <p class="stage">[silencio de 2 segundos]</p>
+      <p>"En los próximos 20 minutos voy a intentar convencerlos de que esa frase no es una advertencia. Es una invitación."</p>
+    </div>
+
+    <h4>Señales que buscar</h4>
+    <ul>
+      <li>La gente deja el teléfono en la mesa. Si no, repite la primera frase.</li>
+      <li>Miradas cruzadas entre CEO y CFO cuando dices "no está esperando". Buena señal — te están comprando el marco.</li>
+    </ul>
+
+    <h4>Trampas a evitar</h4>
+    <ul>
+      <li>No leer el subtítulo. Se lee solo.</li>
+      <li>No arrancar con "buenas tardes, gracias por venir". Eso lo hizo quien te presentó. Arranca con la frase.</li>
+    </ul>
+  </div>
+
+  <!-- ─────── SLIDE 2 ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">02 · ESCENA WHATSAPP</div>
+        <h3>Sara acaba de acostar a su hijo.</h3>
+      </div>
+      <div>
+        <div class="tm">0:15 – 1:00</div>
+        <div class="role">Inspiration · Escena</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> anclar toda la sesión en una escena concreta. La audiencia debe visualizar a Sara — o a su equivalente — antes de escuchar un solo número.</div>
+
+    <div class="tags"><span class="tag">Ritmo lento</span><span class="tag">Voz baja</span><span class="tag warn">Espera las burbujas</span></div>
+
+    <div class="script">
+      <p>"Un martes cualquiera. Nueve y cuarenta y siete de la noche."</p>
+      <p class="stage">[esperar a que aparezca la primera burbuja del concierge]</p>
+      <p>"Sara acaba de acostar a su hijo. Se acuerda que hoy se le rompió el zapato que usa todos los días para trabajar."</p>
+      <p class="stage">[esperar burbuja out — 'Se me rompieron…']</p>
+      <p>"No abre la app del retailer. No entra al sitio. Abre WhatsApp."</p>
+      <p class="stage">[esperar la respuesta del concierge con stock]</p>
+      <p>"Y del otro lado — no la atiende un humano. Pero la conversación se siente humana."</p>
+      <p class="stage">[esperar 'Mándalos a casa']</p>
+      <p><b>Cierre:</b> "Esta conversación duró 40 segundos. Del otro lado no había nadie escribiendo. Y esta cliente acaba de comprarle a un retailer que hace 18 meses no existía como opción para ella."</p>
+    </div>
+
+    <h4>Movimiento de escena</h4>
+    <p>Camina un paso hacia la audiencia mientras dice "no había nadie escribiendo". Es la primera vez que rompes la distancia física con la sala. Se siente.</p>
+
+    <div class="callout warn">
+      <b>Placeholder abierto.</b> El video/still atmosférico del slide es opcional. Si no está listo, la escena del teléfono sola sostiene el momento. No añadas texto para llenar.
+    </div>
+  </div>
+
+  <!-- ─────── SLIDE 3 ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">03 · ENCUESTA</div>
+        <h3>¿Cuántos aquí pueden entregar esa experiencia hoy?</h3>
+      </div>
+      <div>
+        <div class="tm">1:00 – 1:45</div>
+        <div class="role">Inspiration · Tensión</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> convertir a la audiencia en participante. Que dejen de escuchar y empiecen a estar involucrados.</div>
+
+    <div class="tags"><span class="tag">Mano alzada</span><span class="tag">Cambio de tono</span><span class="tag ok">Ríe la respuesta</span></div>
+
+    <div class="script">
+      <p class="stage">[cambio de tono: más directo, casual, camina hacia la audiencia]</p>
+      <p>"Levanten la mano — quien crea que su empresa puede entregar esa experiencia hoy. Tal cual. Un martes a las 10 de la noche. Mismo canal. Misma velocidad."</p>
+      <p class="stage">[espera. cuenta rápido con la vista. casi siempre son 2 o 3, a veces cero]</p>
+      <p>"Si en esta sala — con los CEOs, CMOs y CFOs del retail mexicano — seis de cada diez no pueden levantar la mano… la pregunta ya no es <em>si</em> vamos a construir ese cliente. Es <em>quién</em> lo va a construir primero."</p>
+    </div>
+
+    <h4>Variantes según la respuesta</h4>
+    <ul>
+      <li><b>Muchas manos (5+):</b> "Bueno, esta sala está adelantada. Entonces la conversación que sigue les va a servir para diferenciarse del promedio."</li>
+      <li><b>Pocas manos (2 o menos):</b> "Perfecto. Entonces la conversación que sigue es para ustedes."</li>
+      <li><b>Cero manos:</b> "…y eso, en sí mismo, ya es un dato. No hace falta más justificación para la próxima media hora."</li>
+    </ul>
+  </div>
+
+  <!-- ─────── SLIDE 4 ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">04 · LA OLA LLEGÓ</div>
+        <h3>3 de cada 4 · Reasignación de liderazgo</h3>
+      </div>
+      <div>
+        <div class="tm">1:45 – 3:15</div>
+        <div class="role">Information · Contexto global</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> fijar el marco global con fuentes primarias. La audiencia deja de dudar si "esto está pasando".</div>
+
+    <div class="tags"><span class="tag">Cita fuentes</span><span class="tag">Tono ejecutivo</span><span class="tag warn">Sin nombrar a Walmart explícito</span></div>
+
+    <div class="script">
+      <p>"Tres de cada cuatro retailers globales — no cualquiera, los que compiten al top — declaran que los agentes de IA son esenciales para 2026. No un experimento. Condición para competir."</p>
+      <p><b>Punchline:</b> "Y en Estados Unidos, el liderazgo del top-3 retail se está redistribuyendo. Con base en stack de datos y de IA — no en superficie de tienda."</p>
+      <p class="stage">[deja la timeline en pantalla 20 segundos completos — la audiencia va a leerla]</p>
+      <p><b>Cierre / puente:</b> "Esta reasignación no es solo un fenómeno gringo. Ahora vamos a ver por qué México ya está adentro."</p>
+    </div>
+
+    <h4>Datos que puedes profundizar si te preguntan</h4>
+    <ul>
+      <li>75% de retailers globales — Salesforce Sixth Edition Connected Shoppers Report.</li>
+      <li>Reasignación de liderazgo top-3 EE.UU. — cálculo J.P. Morgan basado en volumen de venta 2025.</li>
+      <li>750K asociados de Walmart con copilots de IA — Walmart Global Tech Blog, 2025.</li>
+      <li>+1M robots Amazon fulfillment — Amazon Shareholder Letter 2024.</li>
+    </ul>
+  </div>
+
+  <!-- ─────── SLIDE 5 ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">05 · MÉXICO</div>
+        <h3>El mercado ya está adentro.</h3>
+      </div>
+      <div>
+        <div class="tm">3:15 – 4:45</div>
+        <div class="role">Information · Contexto local</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> aterrizar. La audiencia siente que dejamos de hablar del mundo y empezamos a hablar de su casa.</div>
+
+    <div class="tags"><span class="tag">Baja el tono</span><span class="tag">Habla más lento</span></div>
+
+    <div class="script">
+      <p>"Aquí viene la parte que a mí me sorprendió cuando la vi por primera vez. México no es un mercado retail rezagado. México es el <em>segundo</em> mercado retail más grande de Latinoamérica."</p>
+      <p>"Y el ochenta y ocho punto dos por ciento de los internautas mexicanos <em>ya</em> compra en línea. Ya. Al menos una vez al mes."</p>
+      <p class="stage">[pausa, señala el tile de 88.2%]</p>
+      <p>"Cincuenta y cinco mil tiendas bajo ANTAD. Nueve de cada diez municipios del país. Seis punto cuatro por ciento del PIB. Cuarenta y dos mil setecientos millones en Hot Sale del año pasado."</p>
+      <p><b>Cierre:</b> "La pregunta ya no es si el cliente mexicano está listo para la IA. Es si la industria mexicana está lista para el cliente que ya la está usando."</p>
+    </div>
+
+    <h4>Trampa a evitar</h4>
+    <p>No compares con Colombia, Brasil o Chile. La sala está en México y quiere hablar de México. Ese comparativo lo puede lanzar el partner si le sirve para pricing.</p>
+  </div>
+
+  <!-- ─────── SLIDE 6 ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">06 · COMPORTAMIENTO</div>
+        <h3>El cliente cambió sin permiso.</h3>
+      </div>
+      <div>
+        <div class="tm">4:45 – 6:15</div>
+        <div class="role">Information · Comportamiento</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> mover a la audiencia del "esto es tecnología" al "esto es mi cliente".</div>
+
+    <div class="script">
+      <p>"El cliente cambió sin pedirnos permiso."</p>
+      <p class="stage">[pausa]</p>
+      <p>"El cincuenta y tres por ciento — más de la mitad — ya descubre productos hablando. Con IA. En canales sociales. En mensajería. Hace tres años eran el cuarenta y seis. En dos años más, esto va a ser mayoría absoluta."</p>
+      <p>"Esto no es lo que las marcas están haciendo. Esto es lo que el cliente <em>ya está haciendo</em>."</p>
+      <p><b>La pregunta:</b> "¿Nuestro cliente nos encuentra donde nos busca, o nos busca donde lo obligamos a buscarnos?"</p>
+    </div>
+
+    <h4>Cita citable</h4>
+    <div class="callout">
+      "Search is becoming answer. The website is becoming conversation." — Forrester Predictions 2026. Léela con pausa. Es la única cita literal del deck.
+    </div>
+  </div>
+
+  <!-- ─────── SLIDE 7 ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">07 · TRES FRENTES</div>
+        <h3>Servicio · Comercio · Operación</h3>
+      </div>
+      <div>
+        <div class="tm">6:15 – 7:45</div>
+        <div class="role">Information · Marco cognitivo</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> dar a la audiencia el mapa mental que va a usar para procesar todo lo que sigue.</div>
+
+    <div class="script">
+      <p>"La IA no es <em>una</em> cosa que hace el retail. Son tres cosas — que se sienten distintas del lado del cliente pero que comparten el mismo cerebro por atrás."</p>
+      <p><b>Servicio:</b> "Conversar antes, durante y después de la compra. Un agente 24/7 que recuerda todo, resuelve devoluciones y escala al humano cuando importa."</p>
+      <p><b>Comercio:</b> "Descubrir, elegir y pagar sin fricción. Un asistente que entiende lo que el cliente quiere en <em>sus</em> palabras. No en filtros."</p>
+      <p><b>Operación:</b> "Anticipar, planear y ejecutar mejor que ayer. El cerebro que trabaja mientras la tienda duerme."</p>
+      <p><b>Cierre:</b> "Tres frentes. Un cerebro. Cualquier proyecto que ataque uno de estos sin resolver los otros dos… se rompe al segundo trimestre."</p>
+    </div>
+  </div>
+
+  <!-- ─────── SLIDE 8 ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">08 · EVIDENCIA</div>
+        <h3>La prueba está publicada.</h3>
+      </div>
+      <div>
+        <div class="tm">7:45 – 10:15</div>
+        <div class="role">Information · Prueba dura</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> quitarle a la audiencia la objeción "sí, pero eso no ha funcionado a escala". Cinco casos, cinco métricas, cinco fuentes públicas.</div>
+
+    <div class="tags"><span class="tag warn">2:30 min · el slide más denso</span><span class="tag">Baja el ritmo</span></div>
+
+    <div class="script">
+      <p><b>Apertura:</b> "Cuando hablamos de IA en retail, muchas veces la conversación se queda en el terreno de <em>lo posible</em>. Yo les voy a mostrar cinco casos donde ya no es posible. Es hecho. En producción. Con números públicos."</p>
+
+      <p><b>Pandora (25 seg):</b> "Pandora. Joyería. Cien países. Sesenta por ciento de los casos de servicio se resuelven <em>sin</em> intervención humana. Diez puntos de NPS arriba. Cuarenta mil conversaciones al mes. Y el veintidós por ciento de sus ventas totales ya viene por comercio conversacional."</p>
+
+      <p><b>SharkNinja (15 seg):</b> "SharkNinja. Marca de electrodomésticos de tres mil millones. Catorce países en producción. Más seis por ciento de conversión anual. Veinte mil chats por semana automatizados."</p>
+
+      <p><b>Fisher &amp; Paykel (15 seg):</b> "Fisher and Paykel. Cien mil perfiles unificados en un solo cliente. Resultado: más treinta y tres por ciento en conversión de órdenes."</p>
+
+      <p><b>Williams-Sonoma (15 seg):</b> "Williams-Sonoma. Nueve marcas. Implementación completa en siete meses y medio. Veintiún millones de nuevos suscriptores. Sesenta por ciento de las consultas de chat se anticipan solas."</p>
+
+      <p><b>Janie and Jack (10 seg):</b> "Y en tienda física — Janie and Jack — punto de venta moderno con IA en ciento seis tiendas en dieciocho semanas."</p>
+
+      <p class="stage">[pausa larga · mira el gráfico de barras]</p>
+      <p><b>Cierre (el clincher):</b> "Ninguna de estas cinco compañías compite directamente con ustedes. Pero las cinco compraron el mismo tipo de arquitectura. Y las cinco publican los números — porque los números aguantan escrutinio."</p>
+    </div>
+
+    <div class="callout warn">
+      <b>Por qué estos casos y no otros.</b> PepsiCo (competencia de Kraft Heinz), Home Depot (traslape parcial con Office Max), Saks (competencia lujo de Liverpool) y Sam's Club (competencia Costco) están intencionalmente fuera del deck. Amazon/Walmart aparecen en el slide 4 como referencia macro, no como comparable directo.
+    </div>
+  </div>
+
+  <!-- ─────── SLIDE 9 ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">09 · LATAM</div>
+        <h3>Aquí las reglas son otras.</h3>
+      </div>
+      <div>
+        <div class="tm">10:15 – 11:45</div>
+        <div class="role">Information · Regional</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> convertir los ejemplos globales del slide anterior en oportunidad local. Y sembrar la relevancia de WhatsApp para la demo del partner.</div>
+
+    <div class="script">
+      <p>"Todo lo que acaban de ver funcionó en Europa, Estados Unidos y Asia. Pero LATAM no es una versión atrasada de esos mercados. Es un mercado distinto."</p>
+      <p><b>Regla 1:</b> "WhatsApp es <em>el</em> canal. No un canal. El. Un millón de empresas ya venden con un agente de IA en WhatsApp. Si su estrategia de comercio conversacional no arranca por WhatsApp, está mal diseñada. Punto."</p>
+      <p><b>Regla 2:</b> "Retail-as-a-Bank. Cincuenta por ciento de los mexicanos tiene cuenta bancaria — pero menos del veinte por ciento tiene tarjeta de crédito. Eso convierte al retailer con red física en la fintech más cercana al consumidor. Con un dataset que ningún banco tiene."</p>
+      <p><b>Regla 3:</b> "Retail media subpenetrado. La región crece a 'mid-teens' contra 22% global. El margen que hoy se fuga a Meta y Google… puede regresar al retailer que active su 1P data."</p>
+    </div>
+  </div>
+
+  <!-- ─────── SLIDE 10 ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">10 · LA VENTANA</div>
+        <h3>12–24 meses.</h3>
+      </div>
+      <div>
+        <div class="tm">11:45 – 13:15</div>
+        <div class="role">Information · Urgencia</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> instalar urgencia sin dramatismo. La audiencia debe sentir el reloj — no ser sermoneada.</div>
+
+    <div class="tags"><span class="tag">Voz seria</span><span class="tag">Sin adjetivos</span><span class="tag warn">Sin nombres</span></div>
+
+    <div class="script">
+      <p class="stage">[baja la voz. postura seria pero tranquila]</p>
+      <p>"Aquí es donde me toca decir la parte que no es agradable de escuchar."</p>
+      <p class="stage">[pausa de 2 segundos]</p>
+      <p>"Los tres grandes del retail mexicano — no voy a nombrarlos, ustedes saben quiénes son — <em>ya se movieron</em>. Están en producción con IA. Con data unificada. Con equipos internos que llevan 24 meses ejecutando."</p>
+      <p>"La brecha entre esos tres y el resto se está ensanchando cada trimestre. Y hay una ventana — la calculo entre 12 y 24 meses — antes de que la brecha se vuelva estructural."</p>
+      <p><b>El punchline:</b> "Después de este ciclo, cerrarla ya no es tecnología. Es M&amp;A."</p>
+    </div>
+
+    <div class="callout warn">
+      <b>No los nombres.</b> Si alguien pregunta explícitamente por Walmex/Liverpool/FEMSA, respondes: "Es información pública, pueden verla en sus reportes anuales — mi trabajo aquí no es señalar competidores, es señalar la ventana." Se cierra ahí.
+    </div>
+  </div>
+
+  <!-- ─────── SLIDE 11 · FUSIONADO 40% + PILARES ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">11 · 40% + CUATRO PILARES</div>
+        <h3>El error no es adoptar IA. Es adoptarla sin marco.</h3>
+      </div>
+      <div>
+        <div class="tm">13:15 – 15:45</div>
+        <div class="role">Information · Puente al partner</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> pivote clave + marco decisional en un mismo slide. Movemos la conversación de "adoptar IA" a "adoptarla bien", y describimos — sin nombrar producto — los cuatro atributos que separan a los que ganan. Cuando el partner arranque su demo, la audiencia va a reconocer estos cuatro pilares en pantalla.</div>
+
+    <div class="tags"><span class="tag ok">Puente implícito a Salesforce</span><span class="tag warn">No decir "Agentforce"</span><span class="tag warn">Sin nombrar a Coppel</span></div>
+
+    <div class="script">
+      <p><b>Apertura (30 seg):</b> "No quiero ser el consultor que sube y dice 'todo funciona, corran a comprar'. Gartner acaba de publicar que <em>más del 40% de los proyectos de IA agéntica se cancelará antes de 2027</em>. No por la tecnología. Por cómo se compraron."</p>
+      <p class="stage">[pausa breve]</p>
+      <p><b>El giro (15 seg):</b> "El error no es adoptar IA. Es adoptarla <em>sin un marco de decisión</em> que la sostenga. Los pilotos que <em>sí</em> llegan a producción tienen cuatro cosas en común. Cuatro. No cinco. No diez. Cuatro."</p>
+      <p><b>Pilar 1 (20 seg):</b> "Un solo cerebro de datos. Perfil, historial, stock, precio y servicio en el mismo modelo. Sin eso, cada agente es una integración custom que envejece mal."</p>
+      <p><b>Pilar 2 (20 seg):</b> "Una capa de confianza desde el día cero. Datos personales enmascarados, retención cero, auditoría continua. En un mercado con LFPDPPP endurecida y con incidentes recientes en la industria mexicana, esto no es 'add-on de compliance'. Es la base."</p>
+      <p><b>Pilar 3 (20 seg):</b> "Reglas duras y razonamiento suave. El precio, el impuesto, el tope de reembolso — reglas duras. El descubrimiento, la empatía, el matiz — modelo. La compañía que mezcla estas dos capas produce agentes impredecibles en las decisiones críticas."</p>
+      <p><b>Pilar 4 (20 seg):</b> "Métrica de negocio en cada caso, o se cancela. Costo por interacción. Conversión. Precisión del pronóstico. Tiempo a resolución. Sin métrica desde el día uno, el piloto se convierte en teatro. Y el teatro se cancela."</p>
+      <p><b>Cierre (10 seg):</b> "Si su próxima inversión en IA no cumple estos cuatro… van a estar en el cuarenta por ciento que se cancela. Y no me lo agradezcan a mí — agradézcanselo a Gartner."</p>
+    </div>
+
+    <div class="callout warn">
+      <b>Precaución explícita — Coppel:</b> este slide originalmente decía "el precedente de Coppel 2024" en el pilar 2. Se cambió a lenguaje neutro ("incidentes recientes en la industria mexicana") porque Coppel es cliente probable en la sala. Si alguien pregunta por casos específicos, responder: "es información pública que pueden verificar por sus propios medios; mi punto es que la industria mexicana entera ya vive con un estándar más alto de datos".
+    </div>
+  </div>
+
+  <!-- ─────── SLIDE 12 · HANDOFF ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">12 · HANDOFF</div>
+        <h3>Sara vuelve. Y esta vez, la ven en vivo.</h3>
+      </div>
+      <div>
+        <div class="tm">15:45 – 16:45</div>
+        <div class="role">Inspiration · Puente al partner</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> cerrar el círculo con la escena inicial y entregar la audiencia al partner con la expectativa altísima. <b>Nombrar al partner completo</b>.</div>
+
+    <div class="script">
+      <p>"Al inicio les mostré una escena. Una cliente que se llama Sara — o Ana, o María, no importa — que resuelve una necesidad a las diez de la noche por WhatsApp."</p>
+      <p>"Esa escena tiene un cerebro por atrás. Ese cerebro es <em>exactamente</em> los cuatro pilares que acabo de describir. Con datos unificados. Con capa de confianza. Con reglas duras y razonamiento suave. Con métricas de negocio en cada movimiento."</p>
+      <p><b>El handoff:</b> "En los siguientes minutos, <b>[Nombre completo del partner], [Rol]</b>, va a mostrarles <em>cómo se ve eso</em> en su empresa. No en teoría — en la pantalla de su cliente, un martes cualquiera. Les pido que lo miren con dos preguntas en la cabeza: <em>¿Mi cliente vive esa conversación hoy? Y si no… ¿por qué no?</em>"</p>
+    </div>
+
+    <div class="callout ok">
+      <b>Alineación con el partner antes del evento:</b> pactar la línea de entrada. Después de "…que les va a mostrar cómo se ve todo esto en la pantalla de su cliente", el partner debe abrir con su nombre completo, empresa y una línea de crédito ("hemos implementado esto para N retailers de la región").
+    </div>
+  </div>
+
+  <!-- ─────── SLIDE 13 · TAKEAWAYS ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">13 · TAKEAWAYS</div>
+        <h3>Tres frases para llevar.</h3>
+      </div>
+      <div>
+        <div class="tm">16:45 – 18:15</div>
+        <div class="role">Inspiration · Anclaje</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> que la audiencia salga con tres frases sticky que puedan repetir en su comité ejecutivo el lunes. Tres, no cinco. Menos es más memorable.</div>
+
+    <div class="script">
+      <p>"Si de estos veinte minutos sólo se llevan tres frases… que sean estas."</p>
+      <p class="stage">[Léelas pausado, en voz alta. Y toma UNA — la de mayor resonancia con la sala — para ahondar 20 segundos]</p>
+      <p><b>Elige la de énfasis según la composición de la sala:</b></p>
+      <ul>
+        <li>Mayoría <b>CEO</b> → ahonda #03 (la ventana de 24 meses).</li>
+        <li>Mayoría <b>CFO</b> → ahonda #01 (el cliente ya cambió · métricas macro).</li>
+        <li>Mayoría <b>CMO</b> → ahonda #02 (WhatsApp).</li>
+        <li>Sala mixta → ahonda #01 (aplica a todos).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ─────── SLIDE 14 · CIERRE ─────── -->
+  <div class="slide-card">
+    <div class="head">
+      <div>
+        <div class="num">14 · CIERRE</div>
+        <h3>La ventana está abierta. Sara existe.</h3>
+      </div>
+      <div>
+        <div class="tm">18:15 – 20:00</div>
+        <div class="role">Inspiration · Emocional</div>
+      </div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> dejar a la audiencia con una emoción — no con una conclusión. La emoción es <em>ilusión</em>, no urgencia. La urgencia ya se instaló en el slide 10.</div>
+
+    <div class="tags"><span class="tag">Voz baja</span><span class="tag">Contacto visual final</span><span class="tag ok">Callback a Sara</span></div>
+
+    <div class="script">
+      <p class="stage">[baja el volumen. baja el ritmo. postura relajada]</p>
+      <p>"Cuando empecé les dije que estos veinte minutos no eran una advertencia. Eran una invitación."</p>
+      <p class="stage">[pausa larga]</p>
+      <p>"La IA en retail dejó de ser diferenciador. Ya es condición de supervivencia — sí. Pero también es, para quien la construya bien, el primer momento en veinte años donde un retailer mexicano puede volver a competir de igual a igual con cualquiera del mundo."</p>
+      <p class="stage">[callback perfecto a slide 2]</p>
+      <p><b>Última frase:</b> "La ventana está abierta. Sara existe. Y hoy la pueden servir. Gracias — y ahora, si me permiten, les paso la voz a <b>[Nombre del partner]</b>, que les va a mostrar cómo se ve todo esto en la pantalla de <em>su</em> cliente."</p>
+    </div>
+  </div>
+
+  <hr/>
+
+  <!-- ─────── PREGUNTAS ANTICIPADAS ─────── -->
+  <h2><span class="num">04</span>Preguntas anticipadas</h2>
+  <p class="lead">La sesión no debería tener Q&amp;A antes del partner. Pero si alguien interrumpe con una pregunta durante los 20 min, ésta es la biblioteca de respuestas cortas para no romper el hilo.</p>
+
+  <div class="qa">
+    <div class="q">"¿Cuánto cuesta esto?"</div>
+    <div class="a">"Vale la pena que mi colega les muestre la demo primero — el pricing es outcome-based en el módulo de servicio, y depende del caso. Después de la demo tenemos 10 minutos para números concretos."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Cuánto tiempo tomó Pandora / SharkNinja?"</div>
+    <div class="a">"Williams-Sonoma implementó en 7.5 meses en 9 marcas. Janie and Jack desplegó POS en 106 tiendas en 18 semanas. El tiempo depende más de qué tan limpio esté el dato del retailer que del stack tecnológico."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Y si mi cliente no usa WhatsApp?"</div>
+    <div class="a">"En México, 32M de mexicanos usan apps móviles y WhatsApp es la penetración #1 — no hay retail mexicano cuyo cliente no lo use. La pregunta real es si la operación del retailer está lista para recibirlo por ahí."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Cómo se compara con OpenAI / ChatGPT que ya usamos?"</div>
+    <div class="a">"ChatGPT es un modelo. Lo que discutimos hoy es una arquitectura para poner ese modelo — u otros — a trabajar sobre sus datos, con reglas duras, con auditoría y con métrica de negocio. Se puede traer el modelo que prefieran; lo que cambia es la fundación."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Esto no es lo mismo que ya hace Microsoft / Google / AWS?"</div>
+    <div class="a">"Los tres tienen piezas. La pregunta es cómo se conectan. En los cinco casos que les mostré, lo que hizo la diferencia no fue el modelo — fue que comercio, servicio, datos y marketing vivieran en el mismo modelo de metadatos. Eso es lo que mi colega va a mostrar en la demo."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Cuáles son los tres grandes que ya se movieron?"</div>
+    <div class="a">"Es información pública, la pueden ver en sus reportes anuales. Mi trabajo aquí no es señalar competidores — es señalar la ventana."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Y la ciberseguridad? Después de los incidentes recientes…"</div>
+    <div class="a">"Los incidentes de datos del año pasado en el retail mexicano instalaron un estándar: la capa de confianza no es 'add-on'. Es la primera línea del diseño. El pilar #2 que les mostré responde exactamente a eso. En la demo lo van a ver activo. <b>Nota importante:</b> no nombrar a Coppel ni ninguna empresa víctima específica — hablar solo de "la industria" y "los incidentes recientes".</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"El mismo comunicado de Gartner sobre el 40% advierte de 'agent washing'. ¿Cómo pruebas que esto no es agent washing?"</div>
+    <div class="a">"Excelente pregunta — y esa cita completa de Gartner es exactamente el por qué de los cuatro pilares que acabo de mostrar. Agent washing es cuando alguien te rebrandea un RPA, un chatbot o una automatización como 'agente'. La prueba de que no es agent washing es simple: (1) ¿el sistema razona sobre datos vivos o corre reglas estáticas?, (2) ¿puede escalar a un humano con contexto completo o solo redirige?, (3) ¿publica métrica de negocio del caso o solo métrica técnica? En la demo van a poder aplicar esta prueba en vivo."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Cuál es la fuente independiente — no Salesforce Research — para el 3 de cada 4 retailers?"</div>
+    <div class="a">"El Connected Shoppers Report de Salesforce da la cifra más reciente. Gartner CIO Agenda 2026 da un número parecido en su encuesta autónoma. Y en el terreno mexicano, el estudio de AMVO reporta que 88% de los internautas ya compra en línea — el otro lado del mismo fenómeno. Los tres apuntan al mismo lugar. Pero si prefieren una sola fuente independiente para citar en su comité, Gartner es la más neutral."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"El pilar 1 — 'un solo cerebro de datos' — asume una arquitectura que a mi escala cuesta $200-400M MXN. ¿Cuánto TCO real?"</div>
+    <div class="a">"Es la pregunta correcta y depende radicalmente del punto de partida. Por eso ninguno de los cinco casos que vieron es un 'big bang' — todos empezaron por <em>un</em> caso de uso, con <em>una</em> fuente de datos ancla, y crecieron desde ahí. En la demo mi colega puede mostrarles ese enfoque incremental. Un piloto real de 6 meses en México ronda el 5–10% de esa cifra."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Puedes nombrar los operadores mexicanos que ya se movieron?"</div>
+    <div class="a">"Es información pública que pueden verificar por sus propios medios — comunicados anuales, participación en foros, reportes trimestrales. Mi trabajo aquí no es señalar competidores, es señalar la ventana."</div>
+  </div>
+
+  <hr/>
+
+  <!-- ─────── CHECKLIST ─────── -->
+  <h2><span class="num">05</span>Checklist del día</h2>
+
+  <h4>90 minutos antes</h4>
+  <ol class="checklist">
+    <li>Deck cargado y probado en el equipo del venue (no en tu laptop).</li>
+    <li>Modo pantalla completa. Notas ocultas.</li>
+    <li>Clicker o control probado — con teclas <span class="kbd">←</span> <span class="kbd">→</span> como fallback.</li>
+    <li>Prueba de audio (aunque no haya video, verificar).</li>
+    <li>Micrófono ajustado. Prefiere micrófono de solapa a diadema para poder gesticular.</li>
+    <li>Vaso de agua en el atril.</li>
+    <li>Si el partner ya está en el venue, alinear el handoff literal: "…les paso la voz a mi colega" → él responde con nombre.</li>
+  </ol>
+
+  <h4>15 minutos antes</h4>
+  <ol class="checklist">
+    <li>Deck en slide 1. No en el 2.</li>
+    <li>Notebook cerrado — nada de "por si acaso"; el guion ya está en la memoria.</li>
+    <li>Respiración: 4 inhalar / 6 exhalar × 5 veces.</li>
+    <li>Última mirada al slide 8: los cinco casos, los cinco números principales. Que salgan sin dudar.</li>
+  </ol>
+
+  <h4>Durante</h4>
+  <ol class="checklist">
+    <li>Slide 1: silencio de 3 segundos antes de hablar.</li>
+    <li>Slide 3: mira quién levanta la mano — vas a usar esa señal en el slide 14.</li>
+    <li>Slide 10: baja el volumen. Es el único slide donde el tono debe sentirse grave.</li>
+    <li>Slide 15: contacto visual con 3 personas antes de la última frase.</li>
+    <li>Después del handoff: camina al costado del escenario, no atrás. Escuchar la demo desde ahí es una señal para la audiencia de que sigue habiendo un equipo.</li>
+  </ol>
+
+  <h4>Después</h4>
+  <ol class="checklist">
+    <li>No hagas Q&amp;A ni comentarios adicionales antes de que el partner arranque.</li>
+    <li>Ten a la mano los slides 8, 10 y 12 para responder preguntas específicas en la Q&amp;A final.</li>
+    <li>Si la conversación se estanca en un tema técnico, referéncialo al partner con: "esa es una pregunta perfecta para bajar al terreno técnico — y ese es el terreno de mi colega."</li>
+  </ol>
+
+  <hr/>
+
+  <!-- ─────── CONTROLES DECK ─────── -->
+  <h2><span class="num">06</span>Controles del deck</h2>
+  <ul>
+    <li><span class="kbd">→</span> · <span class="kbd">Space</span> · <span class="kbd">PageDown</span> — siguiente slide.</li>
+    <li><span class="kbd">←</span> · <span class="kbd">PageUp</span> — slide anterior.</li>
+    <li><span class="kbd">Home</span> · <span class="kbd">End</span> — primero / último.</li>
+    <li><span class="kbd">1</span>–<span class="kbd">9</span>, <span class="kbd">0</span> — salto directo a slide 1–10.</li>
+    <li><span class="kbd">N</span> — abrir / cerrar el panel de notas del presentador (no visible en pantalla externa si se usa un solo display).</li>
+    <li>Clic en la mitad derecha / izquierda del slide — avanza / retrocede.</li>
+    <li>Swipe (touch) — avanza / retrocede.</li>
+  </ul>
+
+  <div class="callout ok">
+    <b>Setup de dos pantallas.</b> Si tu laptop soporta modo "mirror", verás las notas y la audiencia verá solo el deck. Para asegurarlo: (1) abre el deck a pantalla completa en el proyector, (2) abre <span class="mono">retail-ia-mexico-ted-guia-presentador.html</span> en tu laptop, mantén esta pestaña en tu monitor.
+  </div>
+
+  <hr/>
+
+  <div style="margin-top:60px;padding:32px 36px;background:#fff;border:1px solid var(--line);border-radius:16px">
+    <p class="eyebrow" style="margin-bottom:14px"><span class="dot"></span>Último recordatorio</p>
+    <p style="font-family:'Fraunces',serif;font-size:26px;line-height:1.25;letter-spacing:-.015em;color:var(--ink);max-width:60ch">La audiencia no se acuerda de los datos. Se acuerda de cómo se sintió cuando escuchó los datos. Los tres momentos emocionales del deck son <b>slide 2 (la escena)</b>, <b>slide 10 (la ventana)</b> y <b>slide 15 (el cierre)</b>. Todo lo demás sostiene esos tres.</p>
+  </div>
+
+</div>
+</body>
+</html>

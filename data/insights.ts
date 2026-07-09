@@ -65,6 +65,8 @@ export type Insight = {
   };
   externalDeckUrl?: string;
   externalDeckLabel?: string;
+  presenterDeckRoute?: string;
+  presenterDeckLabel?: string;
   sections: InsightSection[];
   hidden?: boolean;
 };
@@ -1845,8 +1847,10 @@ const retailAiMexico: Insight = {
       url: "https://www.salesforce.com/agentforce/",
     },
   },
-  externalDeckUrl: "/presentations/retail-ia-mexico-salesforce.html",
-  externalDeckLabel: "Ver presentación ejecutiva · 15 min",
+  externalDeckUrl: "/presentations/retail-ia-mexico-ted.html",
+  externalDeckLabel: "Presentación ejecutiva · 20 min",
+  presenterDeckRoute: "deck-ted",
+  presenterDeckLabel: "Modo presentador",
   sections: [
     {
       id: "resumen-ejecutivo",
@@ -1864,8 +1868,8 @@ const retailAiMexico: Insight = {
         {
           type: "callout",
           tone: "info",
-          title: "Cómo leer este documento",
-          text: "Con 5 minutos basta el statement, el mapa de la industria y la conclusión. Con 20 minutos recorre el estado del retail global, la lectura LATAM y la sección de México. Con 40 minutos entra al desglose de las soluciones de Salesforce, los diferenciadores frente a competencia y las recomendaciones consultivas — que funcionan como hoja de ruta para su comité ejecutivo.",
+          title: "Formatos disponibles",
+          text: "Este insight tiene tres formatos complementarios. (1) La presentación ejecutiva de 20 min — charla estilo TED para audiencias de CEO / CMO / CFO — construida con Inspiration → Information → Inspiration y handoff a demo en vivo. Se puede abrir pública (para la audiencia y para descargar) o en modo presentador con notas embebidas. (2) Este documento extenso funciona como material de referencia — el deep dive con desglose de soluciones, casos verificables y hoja de ruta para comité ejecutivo. (3) Una versión ampliada del deck original (formato consultivo, 15 min) accesible en /presentations/retail-ia-mexico-salesforce.html sirve como material de apoyo post-sesión.",
         },
       ],
     },

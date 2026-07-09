@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<meta name="theme-color" content="#001e5b" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>El cliente ya cambió · Salesforce México · Retail 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800;9..144,900&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* Salesforce brand palette */
+    --sf-navy:#001e5b;      /* Electric Blue 15 */
+    --sf-deep:#022ac0;      /* Electric Blue 30 */
+    --sf-blue:#066afe;      /* Electric Blue 50 (primary) */
+    --sf-cloud:#00b3ff;     /* Cloud Blue 68 (accent) */
+    --sf-cloud-80:#90d0fe;  /* Cloud Blue 80 (soft) */
+    --sf-cloud-95:#eaf5fe;  /* Cloud Blue 95 (paper) */
+    --sf-white:#ffffff;
+    --sf-yellow:#ffdd00;
+    --sf-teal:#06a59a;
+    --sf-amber:#f5b039;
+    --sf-coral:#e0284f;
+
+    --ink:#ffffff;
+    --ink-soft:rgba(255,255,255,.85);
+    --ink-mute:rgba(255,255,255,.65);
+    --ink-dim:rgba(255,255,255,.48);
+    --paper-ink:#001e5b;
+    --paper-ink-soft:rgba(0,30,91,.75);
+    --paper-ink-mute:rgba(0,30,91,.55);
+    --paper-ink-dim:rgba(0,30,91,.38);
+    --line-dark:rgba(255,255,255,.12);
+    --line-strong:rgba(255,255,255,.22);
+    --line-paper:rgba(0,30,91,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overscroll-behavior:none}
+  body{
+    background:var(--sf-navy);color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    font-feature-settings:"ss01","cv11";
+  }
+  .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto;letter-spacing:-.02em}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+
+  #deck{position:fixed;inset:0;overflow:hidden}
+  .slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    padding:70px 88px 96px;
+    opacity:0;pointer-events:none;
+    transform:translateY(20px);
+    transition:opacity .55s ease,transform .7s cubic-bezier(.22,1,.36,1);
+    overflow:hidden;
+  }
+  .slide.active{opacity:1;pointer-events:auto;transform:translateY(0)}
+  .slide.paper{background:var(--sf-cloud-95);color:var(--paper-ink)}
+  .slide.dark{
+    background:
+      radial-gradient(1400px 900px at 15% -5%,rgba(0,179,255,.28),transparent 55%),
+      radial-gradient(1100px 800px at 100% 105%,rgba(2,42,192,.55),transparent 60%),
+      linear-gradient(160deg,#066afe 0%,#022ac0 55%,#001e5b 100%);
+  }
+  .slide.deep{
+    background:
+      radial-gradient(1200px 900px at 50% 30%,rgba(0,179,255,.22),transparent 55%),
+      linear-gradient(180deg,#001e5b 0%,#001e5b 100%);
+  }
+  .slide.cloud{
+    background:
+      radial-gradient(1200px 900px at 100% 0%,rgba(255,255,255,.30),transparent 55%),
+      linear-gradient(180deg,#00b3ff 0%,#066afe 100%);
+  }
+
+  /* ─────── HUD · logo top-left · footer bottom ─────── */
+  .hud-logo{
+    position:fixed;top:24px;right:32px;z-index:120;pointer-events:none;
+    display:flex;align-items:center;gap:10px;
+    transition:opacity .35s ease;
+  }
+  .hud-logo svg{height:30px;width:auto;filter:drop-shadow(0 2px 6px rgba(0,30,91,.28))}
+  body.cover-active .hud-logo{opacity:0;pointer-events:none}
+
+  .hud-foot{
+    position:fixed;left:0;right:0;bottom:0;z-index:120;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:22px 32px;font-size:10.5px;
+    letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink-mute);pointer-events:none;
+  }
+  body.paper-hud .hud-foot{color:var(--paper-ink-mute)}
+  .hud-foot .brand{display:flex;align-items:center;gap:10px}
+  .hud-foot .brand .dot{width:6px;height:6px;border-radius:50%;background:var(--sf-cloud);box-shadow:0 0 10px var(--sf-cloud)}
+  .hud-foot .counter{display:flex;align-items:center;gap:14px;pointer-events:auto}
+  .hud-foot .progress{width:120px;height:2px;background:rgba(255,255,255,.14);border-radius:2px;overflow:hidden}
+  body.paper-hud .hud-foot .progress{background:rgba(0,30,91,.14)}
+  .hud-foot .progress > i{display:block;height:100%;background:var(--sf-cloud);transition:width .55s cubic-bezier(.22,1,.36,1)}
+  .hud-foot .hint{opacity:.55}
+
+  /* ─────── COMMON ─────── */
+  .eyebrow{
+    font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--ink-mute);font-weight:600;
+  }
+  .slide.paper .eyebrow{color:var(--paper-ink-mute)}
+  .eyebrow .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--sf-cloud);margin-right:12px;vertical-align:middle}
+  .slide.paper .eyebrow .dot{background:var(--sf-blue)}
+
+  .display{
+    font-family:'Fraunces',Georgia,serif;
+    font-weight:400;letter-spacing:-.03em;line-height:.98;
+  }
+  .display.xxl{font-size:clamp(52px,9vw,148px)}
+  .display.xl{font-size:clamp(46px,7vw,110px)}
+  .display.l{font-size:clamp(36px,5.2vw,84px);line-height:1.02}
+  .display.m{font-size:clamp(28px,3.6vw,56px);line-height:1.05}
+
+  .kicker{font-size:clamp(16px,1.4vw,24px);line-height:1.4;color:var(--ink-soft);max-width:820px;font-weight:400}
+  .slide.paper .kicker{color:var(--paper-ink-soft)}
+
+  .stack{display:flex;flex-direction:column;gap:44px;height:100%}
+  .stack.push{justify-content:space-between;gap:0}
+
+  .accent{color:var(--sf-cloud)}
+  .accent-warm{color:var(--sf-yellow)}
+  .rule{width:56px;height:2px;background:var(--sf-cloud);border-radius:2px}
+
+  /* ─────── SLIDE 1 · PORTADA · title + logo + QR + authors ─────── */
+  .cover{padding:0}
+  .cover .cover-brand{
+    position:relative;z-index:3;
+    padding:56px 88px 0;
+    display:flex;justify-content:flex-start;
+  }
+  .cover .cover-brand svg{height:64px;width:auto;filter:drop-shadow(0 4px 16px rgba(0,30,91,.4))}
+  .cover .cover-inner{
+    flex:1;display:grid;grid-template-columns:1.35fr 1fr;gap:60px;
+    padding:32px 88px 24px;align-items:center;position:relative;
+  }
+  .cover .sparkle-bg{
+    position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.55;
+  }
+  .cover .sparkle-bg img{
+    position:absolute;width:340px;opacity:.9;filter:blur(0.5px);
+  }
+  .cover .sparkle-bg img.a{top:-80px;right:-40px;transform:rotate(12deg)}
+  .cover .sparkle-bg img.b{bottom:-40px;left:-70px;width:280px;transform:rotate(-14deg);opacity:.7}
+
+  .cover h1{
+    max-width:14ch;position:relative;z-index:2;
+    color:var(--ink);font-family:'Fraunces',serif;font-weight:400;
+    font-size:clamp(52px,7.2vw,124px);line-height:.96;letter-spacing:-.03em;
+  }
+  .cover h1 em{font-style:normal;color:var(--sf-cloud)}
+  .cover .qr-panel{
+    position:relative;z-index:2;
+    display:flex;flex-direction:column;align-items:center;gap:18px;
+    padding:30px 30px 26px;border-radius:18px;
+    background:rgba(255,255,255,.06);border:1px solid var(--line-strong);
+    backdrop-filter:blur(12px);max-width:280px;justify-self:end;
+  }
+  .cover .qr-panel .qr{
+    width:200px;height:200px;padding:12px;border-radius:12px;
+    background:#fff;box-shadow:0 20px 50px -10px rgba(0,30,91,.5);
+  }
+  .cover .qr-panel .qr img{width:100%;height:100%}
+  .cover .qr-panel .label{
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    text-align:center;color:var(--ink-soft);line-height:1.5;
+  }
+  .cover .qr-panel .label b{color:var(--ink),1;color:var(--ink);font-weight:600;display:block;margin-bottom:2px;letter-spacing:.1em}
+
+  .cover .cover-foot{
+    padding:28px 88px 68px;border-top:1px solid var(--line-strong);
+    background:rgba(0,30,91,.35);position:relative;z-index:2;
+    display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;
+  }
+  .cover .authors{display:flex;gap:36px;flex-wrap:wrap}
+  .cover .author{display:flex;flex-direction:column;gap:2px;font-size:12.5px}
+  .cover .author b{font-family:'Fraunces',serif;font-weight:500;font-size:15px;letter-spacing:-.005em;color:var(--ink)}
+  .cover .author span{font-size:11px;letter-spacing:.06em;color:var(--ink-mute)}
+  .cover .event-badge{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-mute);text-align:right;line-height:1.6}
+  .cover .event-badge b{color:var(--ink);font-weight:600;display:block;letter-spacing:.16em}
+
+  /* ─────── SLIDE 2 · VIDEO ─────── */
+  .video-slide{padding:70px 60px 96px}
+  .video-slide .video-head{margin-bottom:28px;max-width:900px}
+  .video-slide h2{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(30px,3.4vw,52px);line-height:1.05;letter-spacing:-.02em;margin-bottom:12px}
+  .video-frame-wrap{
+    flex:1;border-radius:18px;overflow:hidden;
+    background:#000;border:1px solid var(--line-strong);
+    box-shadow:0 40px 80px -30px rgba(0,0,0,.5);
+    position:relative;
+  }
+  .video-frame-wrap iframe{width:100%;height:100%;border:0;display:block}
+
+  /* ─────── SLIDE 3 · WhatsApp Sara ─────── */
+  .scene{display:grid;grid-template-columns:1.15fr 1fr;gap:64px;height:100%;align-items:center}
+  .scene .col-text{display:flex;flex-direction:column;gap:24px;max-width:640px}
+  .phone{
+    justify-self:center;
+    width:min(340px,80%);aspect-ratio:9/19;
+    border-radius:44px;padding:14px;
+    background:linear-gradient(180deg,#0a1533,#001e5b);
+    border:1px solid var(--line-strong);
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.03) inset;
+    position:relative;
+  }
+  .phone::before{
+    content:"";position:absolute;top:14px;left:50%;transform:translateX(-50%);
+    width:110px;height:24px;background:#001e5b;border-radius:0 0 18px 18px;
+  }
+  .phone .screen{
+    width:100%;height:100%;border-radius:32px;background:#e5ded1;
+    padding:44px 14px 14px;display:flex;flex-direction:column;gap:9px;
+    color:#181614;font-family:'Inter',sans-serif;font-size:13px;overflow:hidden;position:relative;
+  }
+  .phone .wa-top{display:flex;align-items:center;gap:9px;padding:2px 4px 10px;border-bottom:1px solid rgba(0,0,0,.08)}
+  .phone .wa-top .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#25d366,#128c7e)}
+  .phone .wa-top .who{font-weight:600;font-size:13px}
+  .phone .wa-top .who small{display:block;font-size:10.5px;color:rgba(0,0,0,.5);font-weight:500;letter-spacing:.02em}
+  .bubble{max-width:80%;padding:9px 12px;border-radius:12px;line-height:1.38;font-size:13px;box-shadow:0 1px 0 rgba(0,0,0,.04);animation:fadein .5s ease both}
+  .bubble.in{background:#fff;border-top-left-radius:4px;align-self:flex-start}
+  .bubble.out{background:#d9fdd3;border-top-right-radius:4px;align-self:flex-end}
+  .bubble .time{display:block;font-size:9px;color:rgba(0,0,0,.4);text-align:right;margin-top:2px}
+  .bubble.delay-1{animation-delay:.5s;opacity:0}
+  .bubble.delay-2{animation-delay:1.4s;opacity:0}
+  .bubble.delay-3{animation-delay:2.4s;opacity:0}
+  .bubble.delay-4{animation-delay:3.4s;opacity:0}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .slide.active .bubble{animation-play-state:running}
+  .slide:not(.active) .bubble{animation:none;opacity:0}
+
+  /* ─────── SLIDE 4 · Encuesta ─────── */
+  .poll{display:grid;grid-template-columns:1fr 1fr;gap:36px 56px;margin-top:36px}
+  .poll .cell{border-top:1px solid var(--line-paper);padding-top:22px}
+  .poll .cell b{display:block;font-size:64px;font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.03em;line-height:1;margin-bottom:8px;color:var(--sf-blue)}
+  .poll .cell span{font-size:14.5px;line-height:1.5;color:var(--paper-ink-soft);max-width:38ch;display:block}
+
+  /* ─────── SLIDE 5 · La ola ─────── */
+  .wave{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;height:100%;align-items:center}
+  .stat-block{display:flex;flex-direction:column;gap:12px}
+  .stat-block .num{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(66px,10vw,150px);line-height:.9;letter-spacing:-.04em}
+  .stat-block .num small{font-size:.35em;color:var(--ink-mute);letter-spacing:0;margin-left:.05em}
+  .stat-block .lbl{font-size:15px;line-height:1.5;color:var(--ink-soft);max-width:34ch}
+  .stat-block .src{font-size:11px;color:var(--ink-dim);letter-spacing:.08em;text-transform:uppercase}
+
+  .wave-timeline{padding:30px 28px;border:1px solid var(--line-strong);border-radius:16px;background:rgba(0,179,255,.06)}
+  .wave-timeline h4{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:20px}
+  .tl-row{display:grid;grid-template-columns:70px 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line-dark);align-items:baseline}
+  .tl-row:first-of-type{border-top:none}
+  .tl-row .yr{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sf-cloud);letter-spacing:.06em;font-weight:600}
+  .tl-row .txt{font-size:14.5px;line-height:1.5;color:var(--ink-soft)}
+  .tl-row .txt b{color:var(--ink);font-weight:600}
+
+  /* ─────── SLIDE 6 · México ─────── */
+  .mx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:36px}
+  .mx-tile{padding:26px 22px 22px;border:1px solid var(--line-paper);border-radius:14px;background:rgba(6,106,254,.04);display:flex;flex-direction:column;gap:8px;min-height:180px}
+  .mx-tile .n{font-family:'Fraunces',serif;font-weight:400;font-size:44px;line-height:1;letter-spacing:-.02em;color:var(--sf-blue)}
+  .mx-tile .l{font-size:13px;line-height:1.45;color:var(--paper-ink-soft);flex:1}
+  .mx-tile .s{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-ink-mute)}
+
+  /* ─────── SLIDE 7 · Comportamiento ─────── */
+  .behavior{display:grid;grid-template-columns:1fr 1fr;gap:80px;height:100%;align-items:center}
+  .donut-wrap{display:flex;flex-direction:column;align-items:center;gap:24px}
+  .donut{width:min(360px,80%);aspect-ratio:1}
+  .donut-legend{display:flex;flex-direction:column;gap:12px;font-size:14px;max-width:340px}
+  .donut-legend .row{display:flex;align-items:baseline;gap:12px}
+  .donut-legend .k{width:10px;height:10px;border-radius:2px;flex-shrink:0;position:relative;top:1px}
+
+  /* ─────── SLIDE 8 · Tres frentes ─────── */
+  .fronts{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:36px}
+  .front{position:relative;padding:30px 26px 26px;border:1px solid var(--line-strong);border-radius:18px;background:rgba(0,179,255,.06);display:flex;flex-direction:column;gap:18px;min-height:320px}
+  .front .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--sf-cloud);letter-spacing:.14em;font-weight:600}
+  .front h3{font-family:'Fraunces',serif;font-weight:400;font-size:30px;line-height:1.05;letter-spacing:-.02em}
+  .front p{font-size:14px;line-height:1.55;color:var(--ink-soft);flex:1}
+  .front .metric{font-size:12px;color:var(--ink-mute);letter-spacing:.02em;padding-top:14px;border-top:1px solid var(--line-dark)}
+  .front .metric b{color:var(--sf-yellow);font-weight:600}
+
+  /* ─────── SLIDE 9 · Evidencia ─────── */
+  .cases-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;gap:32px}
+  .cases-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;flex:1}
+  .case{padding:22px 20px;border:1px solid var(--line-paper);border-radius:14px;background:rgba(6,106,254,.04);display:flex;flex-direction:column;gap:10px;min-height:240px}
+  .case .co{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-ink-mute);font-weight:600}
+  .case .headline{font-family:'Fraunces',serif;font-weight:400;font-size:40px;line-height:.95;letter-spacing:-.03em;color:var(--sf-blue)}
+  .case .headline small{display:block;font-size:12.5px;letter-spacing:0;color:var(--paper-ink-soft);margin-top:6px;font-family:'Inter',sans-serif;line-height:1.4}
+  .case .body{font-size:12.5px;line-height:1.5;color:var(--paper-ink-soft);flex:1}
+  .case.hero{grid-column:span 2}
+  .case.hero .headline{font-size:60px}
+  .case.hero .body{font-size:13.5px;max-width:38ch}
+
+  /* ─────── SLIDE 10 · LATAM ─────── */
+  .latam{display:grid;grid-template-columns:1fr 1fr;gap:70px;height:100%;align-items:center}
+  .rule-list{display:flex;flex-direction:column;gap:24px}
+  .rule-item{display:grid;grid-template-columns:52px 1fr;gap:18px;align-items:baseline}
+  .rule-item .n{font-family:'Fraunces',serif;font-size:36px;color:var(--sf-cloud);letter-spacing:-.02em;line-height:1}
+  .rule-item h4{font-size:19px;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+  .rule-item p{font-size:14px;line-height:1.55;color:var(--ink-soft);max-width:44ch}
+  .rule-item .src{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);margin-top:8px}
+
+  /* ─────── SLIDE 11 · Ventana ─────── */
+  .window-slide{display:grid;grid-template-columns:1fr 1fr;gap:70px;height:100%;align-items:center}
+  .window-clock{position:relative;width:min(440px,100%);aspect-ratio:1;justify-self:center}
+  .clock-svg{width:100%;height:100%}
+  .clock-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px}
+  .clock-center .lg{font-family:'Fraunces',serif;font-weight:400;font-size:80px;letter-spacing:-.03em;line-height:.9;color:var(--sf-cloud)}
+  .clock-center .md{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--sf-cloud)}
+  .clock-center .sm{font-size:12px;color:var(--ink-mute);max-width:16ch;line-height:1.4}
+
+  /* ─────── SLIDE 12 · 40% + 4 pilares (rediseñado) ─────── */
+  .pillar-slide{display:grid;grid-template-columns:340px 1fr;gap:44px;height:100%;align-items:stretch;padding-top:20px}
+  .pillar-hero{
+    padding:36px 32px;border-radius:20px;
+    background:linear-gradient(160deg,rgba(0,179,255,.18) 0%,rgba(6,106,254,.10) 100%);
+    border:1px solid var(--line-strong);
+    display:flex;flex-direction:column;justify-content:space-between;gap:20px;
+  }
+  .pillar-hero .lbl{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--sf-cloud);font-weight:600}
+  .pillar-hero .big{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(88px,11vw,140px);line-height:.85;letter-spacing:-.04em;color:var(--sf-cloud)}
+  .pillar-hero .big sup{font-size:.28em;vertical-align:.55em;color:var(--ink-mute);font-weight:400;margin-left:.06em;letter-spacing:0}
+  .pillar-hero .desc{font-family:'Fraunces',serif;font-size:20px;line-height:1.25;letter-spacing:-.015em;color:var(--ink)}
+  .pillar-hero .src{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}
+
+  .pillar-content{display:flex;flex-direction:column;gap:22px}
+  .pillar-content .title-band{display:flex;flex-direction:column;gap:8px}
+  .pillar-content .title-band h2{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(32px,3.6vw,52px);line-height:1.02;letter-spacing:-.02em}
+  .pillar-content .title-band h2 em{font-style:normal;color:var(--sf-cloud)}
+  .pillar-content .title-band p{font-size:15px;line-height:1.55;color:var(--ink-soft);max-width:56ch}
+
+  .pillars-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;flex:1}
+  .pillar{padding:20px 22px;border:1px solid var(--line-strong);border-radius:14px;background:rgba(0,179,255,.05);display:flex;gap:16px;align-items:flex-start}
+  .pillar .glyph{
+    width:44px;height:44px;flex-shrink:0;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,rgba(0,179,255,.20),rgba(6,106,254,.10));
+    border:1px solid var(--line-strong);
+  }
+  .pillar .glyph svg{width:22px;height:22px;color:var(--sf-cloud)}
+  .pillar .glyph .n{font-family:'Fraunces',serif;font-weight:500;font-size:22px;color:var(--sf-cloud);line-height:1}
+  .pillar h4{font-family:'Fraunces',serif;font-weight:500;font-size:18px;line-height:1.15;letter-spacing:-.01em;margin-bottom:6px}
+  .pillar p{font-size:12.5px;line-height:1.5;color:var(--ink-soft)}
+
+  /* ─────── SLIDE 13 · Cómo lo resuelve Salesforce ─────── */
+  .solution{display:grid;grid-template-columns:1fr 1fr;gap:56px;height:100%;align-items:center}
+  .solution .col-txt{display:flex;flex-direction:column;gap:22px;max-width:560px}
+  .solution h2{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(38px,5vw,68px);line-height:1;letter-spacing:-.03em;color:var(--ink)}
+  .solution h2 em{font-style:normal;color:var(--sf-cloud)}
+  .solution .lead{font-size:16px;line-height:1.55;color:var(--ink-soft);max-width:52ch}
+  .architecture-card{
+    padding:32px 30px;border-radius:20px;
+    background:linear-gradient(160deg,rgba(0,179,255,.14) 0%,rgba(6,106,254,.06) 100%);
+    border:1px solid var(--line-strong);
+    display:flex;flex-direction:column;gap:22px;
+  }
+  .architecture-card .arc-head{display:flex;align-items:center;gap:14px}
+  .architecture-card .arc-head svg{width:36px;height:36px;color:var(--sf-cloud)}
+  .architecture-card .arc-head h3{font-family:'Fraunces',serif;font-weight:500;font-size:24px;line-height:1.1;letter-spacing:-.01em}
+  .arc-layers{display:flex;flex-direction:column;gap:10px}
+  .arc-layer{
+    padding:14px 18px;border-radius:10px;background:rgba(0,179,255,.08);
+    border:1px solid var(--line-dark);display:flex;justify-content:space-between;align-items:center;gap:16px;
+  }
+  .arc-layer:hover{background:rgba(0,179,255,.14)}
+  .arc-layer .l-name{font-size:14px;font-weight:600;color:var(--ink);letter-spacing:-.005em}
+  .arc-layer .l-desc{font-size:12px;color:var(--ink-mute);text-align:right;flex:1;max-width:60%}
+  .arc-outcome{
+    padding:14px 18px;border-radius:10px;
+    background:linear-gradient(90deg,rgba(255,221,0,.12),transparent);
+    border-left:3px solid var(--sf-yellow);
+    font-size:13px;line-height:1.5;color:var(--ink-soft);
+  }
+  .arc-outcome b{color:var(--ink);font-weight:600}
+
+  /* ─────── SLIDE 14 · Takeaways ─────── */
+  .takeaways{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:36px}
+  .take{padding:32px 26px;border:1px solid var(--line-paper);border-radius:14px;display:flex;flex-direction:column;gap:14px;min-height:290px;background:rgba(6,106,254,.04)}
+  .take .n{font-family:'Fraunces',serif;font-size:64px;line-height:.9;color:var(--sf-blue);letter-spacing:-.03em}
+  .take h4{font-family:'Fraunces',serif;font-weight:500;font-size:24px;line-height:1.12;letter-spacing:-.01em;color:var(--paper-ink)}
+  .take p{font-size:14px;line-height:1.55;color:var(--paper-ink-soft);flex:1}
+
+  /* ─────── SLIDE 15 · Cierre ─────── */
+  .closing{justify-content:center;align-items:center;text-align:center;gap:32px;position:relative}
+  .closing .closing-eyebrow{
+    display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--sf-cloud);
+    padding:8px 16px;border:1px solid rgba(0,179,255,.5);border-radius:100px;
+  }
+  .closing h2{max-width:20ch;margin:0 auto}
+  .closing .baseline{font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mute)}
+  .closing .baseline b{color:var(--ink)}
+  .closing .download-cta{
+    display:inline-flex;align-items:center;gap:10px;margin-top:14px;
+    padding:14px 24px;border-radius:100px;
+    background:var(--sf-cloud);color:var(--sf-navy);
+    font-weight:600;font-size:14px;letter-spacing:.02em;
+    box-shadow:0 20px 40px -10px rgba(0,179,255,.5);
+    transition:transform .2s,box-shadow .2s;
+    pointer-events:auto;cursor:pointer;border:none;
+  }
+  .closing .download-cta:hover{transform:translateY(-2px);box-shadow:0 24px 44px -8px rgba(0,179,255,.7)}
+  .closing .download-cta svg{width:16px;height:16px}
+
+  /* ─────── Placeholder ─────── */
+  .placeholder{
+    display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:10px;
+    background:rgba(255,221,0,.10);border:1px dashed rgba(255,221,0,.45);
+    color:var(--sf-yellow);font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.02em;line-height:1.5;
+  }
+
+  /* ─────── MOBILE ─────── */
+  @media (max-width:900px){
+    .slide{padding:64px 24px 78px}
+    .display.xxl{font-size:44px}
+    .display.xl{font-size:38px}
+    .display.l{font-size:30px}
+    .display.m{font-size:24px}
+    .kicker{font-size:15px}
+
+    .hud-logo{top:16px;left:20px}
+    .hud-logo svg{height:22px}
+    .hud-foot{padding:14px 20px;font-size:9.5px;letter-spacing:.16em}
+    .hud-foot .progress{width:80px}
+
+    .cover .cover-brand{padding:32px 24px 0;justify-content:center}
+    .cover .cover-brand svg{height:44px}
+    .cover .cover-inner{grid-template-columns:1fr;gap:24px;padding:20px 24px 16px;text-align:center}
+    .cover h1{max-width:100%}
+    .cover .qr-panel{justify-self:center;padding:22px 22px 20px}
+    .cover .qr-panel .qr{width:150px;height:150px}
+    .cover .cover-foot{padding:20px 24px 40px;flex-direction:column;text-align:center;align-items:center;gap:16px}
+    .cover .authors{gap:20px;justify-content:center}
+    .cover .event-badge{text-align:center}
+
+    .video-slide{padding:64px 20px 78px}
+    .video-frame-wrap{aspect-ratio:16/9;flex:0 0 auto}
+
+    .scene,.wave,.behavior,.latam,.window-slide,.solution{grid-template-columns:1fr;gap:28px}
+    .mx-grid,.fronts,.cases-grid,.takeaways,.pillars-grid,.poll{grid-template-columns:1fr 1fr;gap:14px}
+    .case.hero{grid-column:span 2}
+
+    .pillar-slide{grid-template-columns:1fr;gap:24px}
+    .pillar-hero{padding:24px 22px}
+    .pillar-hero .big{font-size:80px}
+    .pillars-grid{grid-template-columns:1fr}
+
+    .wave-timeline{padding:20px}
+    .tl-row{grid-template-columns:50px 1fr;padding:8px 0}
+    .tl-row .txt{font-size:13px}
+
+    .phone{width:min(240px,70%)}
+    .donut{width:min(240px,60%)}
+    .window-clock{width:min(280px,70%)}
+
+    .architecture-card{padding:22px}
+    .arc-layer{padding:12px 14px;flex-direction:column;align-items:flex-start;gap:6px}
+    .arc-layer .l-desc{text-align:left;max-width:100%}
+  }
+
+  @media (max-width:560px){
+    .mx-grid,.fronts,.cases-grid,.takeaways,.pillars-grid,.poll{grid-template-columns:1fr}
+    .case.hero{grid-column:span 1}
+    .cases-head{flex-direction:column;align-items:flex-start;gap:8px}
+    .cases-head p{text-align:left!important}
+    .cover h1{font-size:38px}
+    .display.xxl,.display.xl,.display.l{font-size:32px}
+    .display.m{font-size:22px}
+  }
+</style>
+</head>
+<body>
+
+<!-- Salesforce logo top-left, always visible -->
+<div class="hud-logo" id="hudLogo">
+  <svg class="sf-logo" viewBox="0 0 511 358" xmlns="http://www.w3.org/2000/svg" aria-label="Salesforce">
+    <path d="M212.623 39.0272C229.104 21.8612 252.043 11.1936 277.403 11.1936C311.116 11.1936 340.55 30.0123 356.224 57.9398C369.852 51.8547 384.925 48.4553 400.768 48.4553C461.588 48.4553 510.9 98.2253 510.9 159.621C510.9 221.016 461.588 270.786 400.768 270.786C393.335 270.786 386.089 270.035 379.069 268.627C365.272 293.249 338.973 309.889 308.789 309.889C296.156 309.889 284.198 306.978 273.574 301.775C259.589 334.699 227.002 357.781 189.009 357.781C151.016 357.781 115.744 332.745 102.811 297.625C97.1605 298.827 91.2851 299.446 85.2783 299.446C38.1809 299.446 0 260.851 0 213.241C0 181.332 17.157 153.479 42.6297 138.567C37.3738 126.472 34.4642 113.156 34.4642 99.1456C34.5018 44.3986 78.9148 0 133.727 0C165.901 0 194.49 15.3066 212.623 39.0272Z" fill="#00B3FF"/>
+    <path d="M74 185c-.3.8.1 1 .2 1.1 1 .7 2 1.2 3 1.8 5.2 2.7 10.1 3.5 15.2 3.5 10.5 0 17-5.5 17-14.5v-.2c0-8.3-7.3-11.3-14.2-13.5l-1-.3c-5.2-1.7-9.6-3.2-9.6-6.6v-.2c0-2.9 2.6-5 6.7-5 4.5 0 9.8 1.5 13.3 3.4 0 0 1 .7 1.4-.3.2-.5 2-5.2 2.1-5.8.2-.5-.1-1-.5-1.2-4-2.4-9.4-4-15-4h-1.1c-9.6 0-16.3 5.8-16.3 14.1v.2c0 8.7 7.4 11.6 14.3 13.6l1.1.3c5 1.5 9.4 2.9 9.4 6.4v.2c0 3.3-2.8 5.7-7.4 5.7-1.7 0-7.4 0-13.5-3.9-.7-.4-1.1-.7-1.7-1.1-.3-.2-1-.5-1.4.5L74 185z" fill="white"/>
+    <path d="M227 185c-.3.8.1 1 .2 1.1 1 .7 2 1.2 3 1.8 5.2 2.8 10.1 3.6 15.2 3.6 10.5 0 17-5.6 17-14.5v-.2c0-8.3-7.3-11.3-14.2-13.5l-.9-.3c-5.2-1.7-9.7-3.2-9.7-6.6v-.2c0-2.9 2.6-5 6.7-5 4.5 0 9.9 1.5 13.3 3.4 0 0 1 .7 1.4-.3.2-.5 2-5.2 2.1-5.8.2-.5-.1-1-.5-1.2-4-2.4-9.4-4-15-4h-1.1c-9.6 0-16.3 5.8-16.3 14.1v.2c0 8.7 7.4 11.6 14.3 13.6l1.1.3c5 1.5 9.4 2.9 9.4 6.4v.2c0 3.3-2.9 5.7-7.4 5.7-1.8 0-7.4 0-13.5-3.9-.7-.4-1.2-.7-1.7-1.1-.2-.1-1-.5-1.3.5L227 185z" fill="white"/>
+    <path d="M341 158c-.9-2.9-2.2-5.5-4-7.6s-4-3.9-6.7-5.1-5.9-1.9-9.4-1.9-6.7.6-9.4 1.9c-2.7 1.2-5 3-6.7 5.1-1.8 2.1-3.2 4.7-4 7.6-.9 2.9-1.3 6-1.3 9.4s.4 6.5 1.3 9.4c.8 2.9 2.2 5.5 4 7.6 1.8 2.1 4 3.9 6.7 5 2.7 1.3 5.9 1.9 9.4 1.9s6.7-.6 9.4-1.9c2.7-1.1 5-2.9 6.7-5 1.8-2.1 3.2-4.7 4-7.6.9-2.9 1.3-6 1.3-9.4s-.4-6.5-1.3-9.4zm-8.7 9.4c0 5.1-1 9.1-2.8 12-1.8 2.7-4.6 4.1-8.5 4.1s-6.7-1.4-8.5-4.1c-1.9-2.8-2.8-6.9-2.8-12s1-9.1 2.8-11.9c1.9-2.8 4.6-4.1 8.5-4.1s6.7 1.3 8.5 4.1c1.8 2.8 2.8 6.8 2.8 11.9z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M412.8 182.6c-.3-.8-1.1-.5-1.1-.5-1.3.5-2.6 1-4.1 1.2-1.5.2-3.1.3-4.8.3-4.2 0-7.6-1.3-10-3.8-2.4-2.5-3.8-6.5-3.8-11.9 0-5 1.2-8.7 3.4-11.5 2.1-2.8 5.4-4.3 9.7-4.3 3.6 0 6.4.4 9.3 1.3 0 0 .7.3 1-.6.8-2.1 1.4-3.6 2.2-6 .2-.6-.3-.9-.5-1-1.1-.4-3.8-1.1-5.8-1.4-1.9-.3-4.1-.4-6.6-.4-3.7 0-6.9.6-9.8 1.9-2.8 1.2-5.1 2.9-7 5.1-1.9 2.1-3.3 4.7-4.3 7.6-1 2.9-1.4 6.1-1.4 9.4 0 7.3 2 13.2 5.8 17.5 3.9 4.3 9.7 6.5 17.3 6.5 4.5 0 9.1-.9 12.4-2.2 0 0 .6-.3.4-1l-2.2-6z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M457.5 156.9c-.7-2.8-2.6-5.6-3.8-6.9-1.9-2-3.7-3.5-5.6-4.3-2.4-1-5.3-1.7-8.5-1.7-3.7 0-7 .6-9.8 1.9-2.7 1.3-5 3-6.8 5.2s-3.2 4.8-4 7.7c-.9 2.9-1.3 6.1-1.3 9.5 0 3.3.5 6.6 1.3 9.5.9 2.9 2.4 5.4 4.3 7.5 1.9 2.1 4.4 3.8 7.4 4.9 3 1.1 6.6 1.7 10.7 1.7 8.6 0 13.1-1.9 15-2.9.3-.2.6-.5.2-1.4l-1.9-5.4c-.3-.8-1.1-.5-1.1-.5-2.1.8-5.1 2.2-12.2 2.2-4.6 0-8-1.4-10.1-3.5-2.2-2.2-3.3-5.4-3.5-9.9h29.6s.8 0 .9-.7c0-.4 1-6.1-.9-12.7zm-29.5 6.2c.5-2.8 1.2-5.2 2.4-7 1.8-2.8 4.6-4.3 8.5-4.3 3.9 0 6.5 1.5 8.3 4.3 1.2 1.8 1.8 4.2 2 6.9h-21.1z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M220.4 156.9c-.7-2.8-2.6-5.6-3.8-6.9-1.9-2-3.8-3.5-5.6-4.3-2.4-1-5.3-1.7-8.5-1.7-3.7 0-7 .6-9.8 1.9-2.7 1.3-5 3-6.8 5.2-1.8 2.2-3.2 4.8-4 7.7-.9 2.9-1.3 6.1-1.3 9.5 0 3.3.5 6.6 1.3 9.5.9 2.9 2.4 5.4 4.3 7.5 1.9 2.1 4.4 3.8 7.4 4.9 3 1.1 6.6 1.7 10.7 1.7 8.6 0 13.1-1.9 15-2.9.3-.2.6-.5.2-1.4l-1.9-5.4c-.3-.8-1.1-.5-1.1-.5-2.1.8-5.1 2.2-12.2 2.2-4.6 0-8-1.4-10.1-3.5-2.2-2.2-3.3-5.4-3.5-9.9h29.6s.8 0 .9-.7c0-.4 1-6.1-.9-12.7zm-29.5 6.2c.5-2.8 1.2-5.2 2.4-7 1.8-2.8 4.6-4.3 8.5-4.3 3.9 0 6.5 1.5 8.3 4.3 1.2 1.8 1.7 4.2 2 6.9h-21.2z" fill="white"/>
+    <path d="M138.7 161.7c-1.2-.1-2.8-.2-4.6-.2-2.5 0-5 .3-7.3.9-2.3.6-4.4 1.6-6.2 2.9-1.8 1.3-3.2 2.9-4.3 4.9-1 1.9-1.6 4.2-1.6 6.8s.5 4.9 1.3 6.8 2.2 3.4 3.9 4.6 3.7 2.1 6 2.6c2.3.5 5 .8 7.9.8 3 0 6.1-.3 9-.8s6.5-1.2 7.4-1.4c1-.3 2.1-.6 2.1-.6.7-.2.7-1 .7-1v-27.1c0-5.9-1.6-10.4-4.7-13.1-3.1-2.7-7.7-4.1-13.6-4.1-2.2 0-5.8.3-7.9.7 0 0-6.5 1.3-9.1 3.3 0 0-.6.4-.3 1.2l2.1 5.6c.3.7 1 .5 1 .5s.2-.1.5-.3c5.7-3.1 12.9-3 12.9-3 3.2 0 5.7.6 7.3 1.9 1.6 1.2 2.4 3.1 2.4 7.1v1.3c-2.5-.4-4.9-.6-4.9-.6zM126.9 182.5c-1.2-.9-1.3-1.2-1.7-1.8-.6-.9-.9-2.2-.9-3.9 0-2.6.9-4.5 2.7-5.7 0 0 2.6-2.2 8.6-2.2 4.2.1 8 .7 8 .7v13.5s-3.8.8-8 1.1c-6 .4-8.7-1.7-8.7-1.7z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M377.5 146.4c.2-.7-.2-1-.4-1.1-.5-.2-3-.7-5-.8-3.7-.2-5.8.4-7.6 1.2-1.8.8-3.9 2.2-5 3.7v-3.6c0-.5-.4-.9-.9-.9h-7.6c-.5 0-.8.4-.8.9V190c0 .5.4.9.9.9h7.8c.5 0 .9-.4.9-.9v-22.1c0-3 .3-5.9 1-7.8.6-1.8 1.5-3.3 2.6-4.3 1-1.1 2.3-1.8 3.6-2.2 1.4-.4 2.9-.6 4-.6 1.5 0 3.2.4 3.2.4.6.1.9-.2 1.1-.7.5-1.4 2-5.4 2.2-6.3z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M304.5 125.9c-.9-.3-1.8-.5-2.9-.7-1.1-.2-2.5-.3-4-.3-5.3 0-9.6 1.5-12.5 4.5-3 3-5 7.5-6 13.4l-.3 2h-6.7s-.8 0-1 .9l-1.1 6.2c-.1.6.2 1 1 1h6.5l-6.6 37.1c-.5 3-1.1 5.5-1.8 7.3-.7 1.9-1.3 3.3-2.1 4.3-.7 1-1.5 1.7-2.7 2.1-1 .3-2.2.5-3.5.5-.7 0-1.7-.1-2.4-.3-.7-.1-1.1-.3-1.6-.5 0 0-.8-.3-1.1.5-.2.6-2 5.4-2.2 6-.2.6.1 1.1.5 1.2.9.3 1.5.5 2.7.8 1.7.4 3.1.4 4.4.4 2.7 0 5.2-.4 7.3-1.1 2.1-.8 3.9-2.1 5.5-3.9 1.7-1.9 2.8-3.9 3.8-6.6 1-2.7 1.9-6 2.6-9.9l6.7-37.8h9.8s.8 0 1-.9l1.1-6.2c.1-.6-.2-1-1-1h-9.5c.1-.2.5-3.5 1.6-6.7.5-1.3 1.3-2.4 2.1-3.2.7-.7 1.5-1.2 2.4-1.5.9-.3 2-.5 3.2-.5.9 0 1.7.1 2.4.3.9.2 1.3.3 1.5.4 1 .3 1.1 0 1.3-.5l2.3-6.2c.2-.7-.4-1-.6-1z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M172.2 190c0 .5-.4.9-.8.9h-7.9c-.5 0-.8-.4-.8-.9v-63.2c0-.5.4-.9.8-.9h7.9c.5 0 .8.4.8.9V190z" fill="white"/>
+  </svg>
+</div>
+
+<div id="deck">
+
+  <!-- ═══ SLIDE 1 · PORTADA ═══ -->
+  <section class="slide dark cover active" data-slide="1">
+    <div class="cover-brand">
+      <svg viewBox="0 0 511 358" xmlns="http://www.w3.org/2000/svg" aria-label="Salesforce">
+        <path d="M212.623 39.0272C229.104 21.8612 252.043 11.1936 277.403 11.1936C311.116 11.1936 340.55 30.0123 356.224 57.9398C369.852 51.8547 384.925 48.4553 400.768 48.4553C461.588 48.4553 510.9 98.2253 510.9 159.621C510.9 221.016 461.588 270.786 400.768 270.786C393.335 270.786 386.089 270.035 379.069 268.627C365.272 293.249 338.973 309.889 308.789 309.889C296.156 309.889 284.198 306.978 273.574 301.775C259.589 334.699 227.002 357.781 189.009 357.781C151.016 357.781 115.744 332.745 102.811 297.625C97.1605 298.827 91.2851 299.446 85.2783 299.446C38.1809 299.446 0 260.851 0 213.241C0 181.332 17.157 153.479 42.6297 138.567C37.3738 126.472 34.4642 113.156 34.4642 99.1456C34.5018 44.3986 78.9148 0 133.727 0C165.901 0 194.49 15.3066 212.623 39.0272Z" fill="#00B3FF"/>
+        <path d="M74 185c-.3.8.1 1 .2 1.1 1 .7 2 1.2 3 1.8 5.2 2.7 10.1 3.5 15.2 3.5 10.5 0 17-5.5 17-14.5v-.2c0-8.3-7.3-11.3-14.2-13.5l-1-.3c-5.2-1.7-9.6-3.2-9.6-6.6v-.2c0-2.9 2.6-5 6.7-5 4.5 0 9.8 1.5 13.3 3.4 0 0 1 .7 1.4-.3.2-.5 2-5.2 2.1-5.8.2-.5-.1-1-.5-1.2-4-2.4-9.4-4-15-4h-1.1c-9.6 0-16.3 5.8-16.3 14.1v.2c0 8.7 7.4 11.6 14.3 13.6l1.1.3c5 1.5 9.4 2.9 9.4 6.4v.2c0 3.3-2.8 5.7-7.4 5.7-1.7 0-7.4 0-13.5-3.9-.7-.4-1.1-.7-1.7-1.1-.3-.2-1-.5-1.4.5L74 185z" fill="white"/>
+        <path d="M227 185c-.3.8.1 1 .2 1.1 1 .7 2 1.2 3 1.8 5.2 2.8 10.1 3.6 15.2 3.6 10.5 0 17-5.6 17-14.5v-.2c0-8.3-7.3-11.3-14.2-13.5l-.9-.3c-5.2-1.7-9.7-3.2-9.7-6.6v-.2c0-2.9 2.6-5 6.7-5 4.5 0 9.9 1.5 13.3 3.4 0 0 1 .7 1.4-.3.2-.5 2-5.2 2.1-5.8.2-.5-.1-1-.5-1.2-4-2.4-9.4-4-15-4h-1.1c-9.6 0-16.3 5.8-16.3 14.1v.2c0 8.7 7.4 11.6 14.3 13.6l1.1.3c5 1.5 9.4 2.9 9.4 6.4v.2c0 3.3-2.9 5.7-7.4 5.7-1.8 0-7.4 0-13.5-3.9-.7-.4-1.2-.7-1.7-1.1-.2-.1-1-.5-1.3.5L227 185z" fill="white"/>
+        <path d="M341 158c-.9-2.9-2.2-5.5-4-7.6s-4-3.9-6.7-5.1-5.9-1.9-9.4-1.9-6.7.6-9.4 1.9c-2.7 1.2-5 3-6.7 5.1-1.8 2.1-3.2 4.7-4 7.6-.9 2.9-1.3 6-1.3 9.4s.4 6.5 1.3 9.4c.8 2.9 2.2 5.5 4 7.6 1.8 2.1 4 3.9 6.7 5 2.7 1.3 5.9 1.9 9.4 1.9s6.7-.6 9.4-1.9c2.7-1.1 5-2.9 6.7-5 1.8-2.1 3.2-4.7 4-7.6.9-2.9 1.3-6 1.3-9.4s-.4-6.5-1.3-9.4zm-8.7 9.4c0 5.1-1 9.1-2.8 12-1.8 2.7-4.6 4.1-8.5 4.1s-6.7-1.4-8.5-4.1c-1.9-2.8-2.8-6.9-2.8-12s1-9.1 2.8-11.9c1.9-2.8 4.6-4.1 8.5-4.1s6.7 1.3 8.5 4.1c1.8 2.8 2.8 6.8 2.8 11.9z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M412.8 182.6c-.3-.8-1.1-.5-1.1-.5-1.3.5-2.6 1-4.1 1.2-1.5.2-3.1.3-4.8.3-4.2 0-7.6-1.3-10-3.8-2.4-2.5-3.8-6.5-3.8-11.9 0-5 1.2-8.7 3.4-11.5 2.1-2.8 5.4-4.3 9.7-4.3 3.6 0 6.4.4 9.3 1.3 0 0 .7.3 1-.6.8-2.1 1.4-3.6 2.2-6 .2-.6-.3-.9-.5-1-1.1-.4-3.8-1.1-5.8-1.4-1.9-.3-4.1-.4-6.6-.4-3.7 0-6.9.6-9.8 1.9-2.8 1.2-5.1 2.9-7 5.1-1.9 2.1-3.3 4.7-4.3 7.6-1 2.9-1.4 6.1-1.4 9.4 0 7.3 2 13.2 5.8 17.5 3.9 4.3 9.7 6.5 17.3 6.5 4.5 0 9.1-.9 12.4-2.2 0 0 .6-.3.4-1l-2.2-6z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M457.5 156.9c-.7-2.8-2.6-5.6-3.8-6.9-1.9-2-3.7-3.5-5.6-4.3-2.4-1-5.3-1.7-8.5-1.7-3.7 0-7 .6-9.8 1.9-2.7 1.3-5 3-6.8 5.2s-3.2 4.8-4 7.7c-.9 2.9-1.3 6.1-1.3 9.5 0 3.3.5 6.6 1.3 9.5.9 2.9 2.4 5.4 4.3 7.5 1.9 2.1 4.4 3.8 7.4 4.9 3 1.1 6.6 1.7 10.7 1.7 8.6 0 13.1-1.9 15-2.9.3-.2.6-.5.2-1.4l-1.9-5.4c-.3-.8-1.1-.5-1.1-.5-2.1.8-5.1 2.2-12.2 2.2-4.6 0-8-1.4-10.1-3.5-2.2-2.2-3.3-5.4-3.5-9.9h29.6s.8 0 .9-.7c0-.4 1-6.1-.9-12.7zm-29.5 6.2c.5-2.8 1.2-5.2 2.4-7 1.8-2.8 4.6-4.3 8.5-4.3 3.9 0 6.5 1.5 8.3 4.3 1.2 1.8 1.8 4.2 2 6.9h-21.1z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M220.4 156.9c-.7-2.8-2.6-5.6-3.8-6.9-1.9-2-3.8-3.5-5.6-4.3-2.4-1-5.3-1.7-8.5-1.7-3.7 0-7 .6-9.8 1.9-2.7 1.3-5 3-6.8 5.2-1.8 2.2-3.2 4.8-4 7.7-.9 2.9-1.3 6.1-1.3 9.5 0 3.3.5 6.6 1.3 9.5.9 2.9 2.4 5.4 4.3 7.5 1.9 2.1 4.4 3.8 7.4 4.9 3 1.1 6.6 1.7 10.7 1.7 8.6 0 13.1-1.9 15-2.9.3-.2.6-.5.2-1.4l-1.9-5.4c-.3-.8-1.1-.5-1.1-.5-2.1.8-5.1 2.2-12.2 2.2-4.6 0-8-1.4-10.1-3.5-2.2-2.2-3.3-5.4-3.5-9.9h29.6s.8 0 .9-.7c0-.4 1-6.1-.9-12.7zm-29.5 6.2c.5-2.8 1.2-5.2 2.4-7 1.8-2.8 4.6-4.3 8.5-4.3 3.9 0 6.5 1.5 8.3 4.3 1.2 1.8 1.7 4.2 2 6.9h-21.2z" fill="white"/>
+        <path d="M138.7 161.7c-1.2-.1-2.8-.2-4.6-.2-2.5 0-5 .3-7.3.9-2.3.6-4.4 1.6-6.2 2.9-1.8 1.3-3.2 2.9-4.3 4.9-1 1.9-1.6 4.2-1.6 6.8s.5 4.9 1.3 6.8 2.2 3.4 3.9 4.6 3.7 2.1 6 2.6c2.3.5 5 .8 7.9.8 3 0 6.1-.3 9-.8s6.5-1.2 7.4-1.4c1-.3 2.1-.6 2.1-.6.7-.2.7-1 .7-1v-27.1c0-5.9-1.6-10.4-4.7-13.1-3.1-2.7-7.7-4.1-13.6-4.1-2.2 0-5.8.3-7.9.7 0 0-6.5 1.3-9.1 3.3 0 0-.6.4-.3 1.2l2.1 5.6c.3.7 1 .5 1 .5s.2-.1.5-.3c5.7-3.1 12.9-3 12.9-3 3.2 0 5.7.6 7.3 1.9 1.6 1.2 2.4 3.1 2.4 7.1v1.3c-2.5-.4-4.9-.6-4.9-.6zM126.9 182.5c-1.2-.9-1.3-1.2-1.7-1.8-.6-.9-.9-2.2-.9-3.9 0-2.6.9-4.5 2.7-5.7 0 0 2.6-2.2 8.6-2.2 4.2.1 8 .7 8 .7v13.5s-3.8.8-8 1.1c-6 .4-8.7-1.7-8.7-1.7z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M377.5 146.4c.2-.7-.2-1-.4-1.1-.5-.2-3-.7-5-.8-3.7-.2-5.8.4-7.6 1.2-1.8.8-3.9 2.2-5 3.7v-3.6c0-.5-.4-.9-.9-.9h-7.6c-.5 0-.8.4-.8.9V190c0 .5.4.9.9.9h7.8c.5 0 .9-.4.9-.9v-22.1c0-3 .3-5.9 1-7.8.6-1.8 1.5-3.3 2.6-4.3 1-1.1 2.3-1.8 3.6-2.2 1.4-.4 2.9-.6 4-.6 1.5 0 3.2.4 3.2.4.6.1.9-.2 1.1-.7.5-1.4 2-5.4 2.2-6.3z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M304.5 125.9c-.9-.3-1.8-.5-2.9-.7-1.1-.2-2.5-.3-4-.3-5.3 0-9.6 1.5-12.5 4.5-3 3-5 7.5-6 13.4l-.3 2h-6.7s-.8 0-1 .9l-1.1 6.2c-.1.6.2 1 1 1h6.5l-6.6 37.1c-.5 3-1.1 5.5-1.8 7.3-.7 1.9-1.3 3.3-2.1 4.3-.7 1-1.5 1.7-2.7 2.1-1 .3-2.2.5-3.5.5-.7 0-1.7-.1-2.4-.3-.7-.1-1.1-.3-1.6-.5 0 0-.8-.3-1.1.5-.2.6-2 5.4-2.2 6-.2.6.1 1.1.5 1.2.9.3 1.5.5 2.7.8 1.7.4 3.1.4 4.4.4 2.7 0 5.2-.4 7.3-1.1 2.1-.8 3.9-2.1 5.5-3.9 1.7-1.9 2.8-3.9 3.8-6.6 1-2.7 1.9-6 2.6-9.9l6.7-37.8h9.8s.8 0 1-.9l1.1-6.2c.1-.6-.2-1-1-1h-9.5c.1-.2.5-3.5 1.6-6.7.5-1.3 1.3-2.4 2.1-3.2.7-.7 1.5-1.2 2.4-1.5.9-.3 2-.5 3.2-.5.9 0 1.7.1 2.4.3.9.2 1.3.3 1.5.4 1 .3 1.1 0 1.3-.5l2.3-6.2c.2-.7-.4-1-.6-1z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M172.2 190c0 .5-.4.9-.8.9h-7.9c-.5 0-.8-.4-.8-.9v-63.2c0-.5.4-.9.8-.9h7.9c.5 0 .8.4.8.9V190z" fill="white"/>
+      </svg>
+    </div>
+    <div class="cover-inner">
+      <div class="sparkle-bg">
+        <img class="a" src="/sfdc-brand/Sparkles/Sparkles Blue Inclined.svg" alt="" />
+        <img class="b" src="/sfdc-brand/Sparkles/Sparkles DarkBlue Inclined.svg" alt="" />
+      </div>
+      <h1>El cliente <em>ya cambió</em>.<br/>El retail, todavía no.</h1>
+      <div class="qr-panel">
+        <div class="qr">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?data=https%3A%2F%2Flaila-jgr.com%2Fpresentations%2Fretail-ia-mexico-ted.html&size=400x400&margin=0&ecc=M&color=001e5b" alt="QR para seguir la presentación" width="200" height="200" />
+        </div>
+        <div class="label">
+          <b>Sigue la presentación</b>
+          desde tu teléfono
+        </div>
+      </div>
+    </div>
+    <div class="cover-foot">
+      <div class="authors">
+        <div class="author"><b>Paula Lilian Casallas</b><span>Account Executive · Salesforce</span></div>
+        <div class="author"><b>Paola Castaño</b><span>Account Executive · Salesforce</span></div>
+        <div class="author"><b>Jonathan Gomez</b><span>Agentforce Enterprise Architect</span></div>
+      </div>
+      <div class="event-badge">
+        <b>Retail · IA</b>
+        México · 2026
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 2 · VIDEO ═══ -->
+  <section class="slide deep video-slide" data-slide="2">
+    <div class="video-head">
+      <p class="eyebrow"><span class="dot"></span>Antes de empezar</p>
+      <h2 class="serif">Cómo se ve el retail cuando la IA está bien construida.</h2>
+    </div>
+    <div class="video-frame-wrap">
+      <iframe id="ytFrame" src="https://www.youtube-nocookie.com/embed/sZzAnGRZs5c?rel=0&modestbranding=1&playsinline=1&enablejsapi=1" title="Salesforce · Retail" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 3 · ESCENA WHATSAPP ═══ -->
+  <section class="slide dark" data-slide="3">
+    <div class="scene">
+      <div class="col-text">
+        <p class="eyebrow"><span class="dot"></span>Escena · Un martes cualquiera · 21:47</p>
+        <h2 class="display l serif">Sara acaba de acostar a su hijo. Se acuerda de algo que necesita mañana.</h2>
+        <p class="kicker">No abre la app del retailer. No entra al sitio. Abre WhatsApp.<br/>Del otro lado, no la atiende un humano. Pero la conversación se siente humana.</p>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="wa-top">
+            <div class="av"></div>
+            <div class="who">Tu tienda<small>en línea · responde al instante</small></div>
+          </div>
+          <div class="bubble in delay-1">Hola Sara 👋 ¿te ayudo con algo esta noche?</div>
+          <div class="bubble out delay-2">Se me acabó el café que uso todas las mañanas. El mismo de siempre.<span class="time">21:47</span></div>
+          <div class="bubble in delay-3">Lo tengo en la tienda más cerca de ti y en almacén.<br/><br/>¿Te lo mando mañana antes de las 10 am o prefieres recogerlo camino al trabajo?</div>
+          <div class="bubble out delay-4">Mándalo a casa. ✨<span class="time">21:47</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 4 · ENCUESTA ═══ -->
+  <section class="slide paper" data-slide="4">
+    <div class="stack push">
+      <div>
+        <p class="eyebrow"><span class="dot"></span>Encuesta rápida · A mano alzada</p>
+        <h2 class="display l serif" style="margin-top:20px;max-width:20ch">¿Cuántos aquí pueden entregar esa experiencia hoy?</h2>
+        <p class="kicker" style="max-width:720px;margin-top:20px;color:var(--paper-ink-soft)">Mismo canal. Misma velocidad. Misma frescura de datos. Sin transferirla a un humano. Sin pedirle que baje una app. Sin hacerla esperar hasta mañana.</p>
+      </div>
+      <div class="poll">
+        <div class="cell">
+          <b>6<span style="font-size:.35em;color:var(--paper-ink-mute);vertical-align:top">/10</span></b>
+          <span>De los retailers globales dicen que sus clientes esperan esta experiencia en 2026 — pero admiten que hoy no la entregan.<br/><em style="color:var(--paper-ink-dim)">Salesforce · Connected Shoppers Report</em></span>
+        </div>
+        <div class="cell">
+          <b>70<span style="font-size:.35em;color:var(--paper-ink-mute);vertical-align:top">%</span></b>
+          <span>De los carritos en línea a nivel global se abandonan antes de terminar la compra — por costos ocultos, cuentas obligatorias, checkouts largos y falta de respuesta a tiempo.<br/><em style="color:var(--paper-ink-dim)">Baymard Institute · benchmark global 2025</em></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 5 · LA OLA ═══ -->
+  <section class="slide dark" data-slide="5">
+    <div class="wave">
+      <div>
+        <p class="eyebrow"><span class="dot"></span>Parte 1 · La ola global</p>
+        <div class="stat-block" style="margin-top:28px">
+          <div class="num">3<small>de cada 4</small></div>
+          <div class="lbl">Retailers globales declaran que los agentes de IA son <b style="color:var(--ink);font-weight:600">esenciales</b> para competir en 2026 — no un experimento más.</div>
+          <div class="src">Salesforce · Connected Shoppers Report</div>
+        </div>
+        <p class="kicker" style="margin-top:32px;max-width:520px">Y ya se refleja en el marcador. El liderazgo del retail se está <b style="color:var(--sf-cloud);font-weight:600">redistribuyendo con base en stack de datos e IA</b> — no en superficie de tienda.</p>
+      </div>
+      <div class="wave-timeline">
+        <h4>Cómo se está moviendo el marcador</h4>
+        <div class="tl-row"><div class="yr">2024</div><div class="txt">Amazon opera <b>+1 millón de robots</b> en fulfillment. Su asistente de compra alcanza <b>decenas de millones</b> de usuarios. <span style="color:var(--ink-mute)">— Amazon Shareholder Letter 2024</span></div></div>
+        <div class="tl-row"><div class="yr">2025</div><div class="txt">El liderazgo del top-3 retail de EE.UU. <b>se reordena</b> con base en volumen de venta digital. <span style="color:var(--ink-mute)">— J.P. Morgan</span></div></div>
+        <div class="tl-row"><div class="yr">2026</div><div class="txt">Walmart despliega copilots de IA a <b>750,000 asociados</b> y publica su marco público de gobernanza de agentes.</div></div>
+        <div class="tl-row"><div class="yr">2028</div><div class="txt"><b>33%</b> de las aplicaciones empresariales tendrán agentes de IA embebidos (vs &lt;1% en 2024). <span style="color:var(--ink-mute)">— Gartner</span></div></div>
+        <div class="tl-row"><div class="yr">2029</div><div class="txt"><b>80%</b> de las consultas de servicio al cliente en retail se resolverán sin humano, con <span class="accent">−30%</span> en costo operativo.</div></div>
+        <div class="tl-row" style="margin-top:10px;padding-top:14px;border-top:1px solid var(--line-strong)"><div class="yr" style="color:var(--sf-cloud)">MX</div><div class="txt" style="color:var(--ink)">Y esta reasignación de liderazgo <b>no es solo un fenómeno gringo</b>. Ahora vamos a ver por qué México ya está adentro.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 6 · MÉXICO ═══ -->
+  <section class="slide paper" data-slide="6">
+    <div class="stack push">
+      <div>
+        <p class="eyebrow"><span class="dot"></span>Parte 2 · México</p>
+        <h2 class="display l serif" style="margin-top:20px;max-width:22ch">El mercado ya está adentro. La industria todavía se pregunta si entrar.</h2>
+      </div>
+      <div class="mx-grid">
+        <div class="mx-tile">
+          <div class="s">Comprando en línea</div>
+          <div class="n">88.2<span style="font-size:.55em;color:var(--paper-ink-mute)">%</span></div>
+          <div class="l">De los internautas mexicanos ya compra en línea al menos una vez al año. En un universo de 96M de internautas, es un mercado adentro.</div>
+          <div class="s" style="margin-top:8px;opacity:.6">AMVO · Venta Online 2025</div>
+        </div>
+        <div class="mx-tile">
+          <div class="s">Escala física</div>
+          <div class="n">55K<span style="font-size:.55em;color:var(--paper-ink-mute)">+</span></div>
+          <div class="l">Tiendas bajo ANTAD, con presencia en 90% de los municipios del país.</div>
+          <div class="s" style="margin-top:8px;opacity:.6">ANTAD · 2026</div>
+        </div>
+        <div class="mx-tile">
+          <div class="s">Peso económico</div>
+          <div class="n">6.4<span style="font-size:.55em;color:var(--paper-ink-mute)">%</span></div>
+          <div class="l">Del PIB nacional viene del e-commerce, según construcción AMVO sobre datos INEGI (vs 3.3% en 2013).</div>
+          <div class="s" style="margin-top:8px;opacity:.6">AMVO/INEGI · 2025</div>
+        </div>
+        <div class="mx-tile">
+          <div class="s">Un evento, dos semanas</div>
+          <div class="n">$42.7K<span style="font-size:.55em;color:var(--paper-ink-mute)">M</span></div>
+          <div class="l">MXN vendidos en Hot Sale 2025. +23.7% vs. el año anterior.</div>
+          <div class="s" style="margin-top:8px;opacity:.6">AMVO · Hot Sale 2025</div>
+        </div>
+      </div>
+      <div style="margin-top:28px;padding:20px 24px;border-left:3px solid var(--sf-blue);background:rgba(6,106,254,.06);border-radius:0 10px 10px 0">
+        <p style="font-size:17px;line-height:1.5;color:var(--paper-ink-soft);max-width:900px"><b style="color:var(--paper-ink);font-weight:600">En corto:</b> nuestro cliente ya está adentro. Los que no llegamos a servirlo somos nosotros.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 7 · COMPORTAMIENTO ═══ -->
+  <section class="slide dark" data-slide="7">
+    <div class="behavior">
+      <div>
+        <p class="eyebrow"><span class="dot"></span>Parte 3 · El comportamiento</p>
+        <h2 class="display l serif" style="margin-top:20px;max-width:14ch">El cliente cambió sin pedirnos permiso.</h2>
+        <p class="kicker" style="margin-top:20px;max-width:520px">Ese 53% que descubre hablando es Sara — tres semanas antes de que se le acabara el café. La búsqueda tradicional dejó de ser el punto de entrada.</p>
+        <div style="margin-top:26px;padding:22px 24px;border:1px solid var(--line-strong);border-radius:14px;background:rgba(0,179,255,.06)">
+          <p style="font-family:'Fraunces',serif;font-size:24px;line-height:1.25;letter-spacing:-.015em">La búsqueda se está volviendo <span class="accent">respuesta</span>. El sitio se está volviendo <span class="accent">conversación</span>.</p>
+          <p style="margin-top:12px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute)">Forrester · Predictions 2026</p>
+        </div>
+      </div>
+      <div class="donut-wrap">
+        <svg class="donut" viewBox="0 0 200 200" aria-hidden="true">
+          <defs>
+            <linearGradient id="gDonut" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00b3ff"/>
+              <stop offset="100%" stop-color="#90d0fe"/>
+            </linearGradient>
+          </defs>
+          <circle cx="100" cy="100" r="76" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="22"/>
+          <circle cx="100" cy="100" r="76" fill="none" stroke="url(#gDonut)" stroke-width="22" stroke-dasharray="253 224" transform="rotate(-90 100 100)"/>
+          <text x="100" y="94" text-anchor="middle" fill="#ffffff" font-family="Fraunces,serif" font-size="46" font-weight="400" letter-spacing="-2">53%</text>
+          <text x="100" y="120" text-anchor="middle" fill="rgba(255,255,255,.75)" font-family="Inter,sans-serif" font-size="11" letter-spacing="1.5" font-weight="600">DESCUBRE HABLANDO</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="row"><span class="k" style="background:linear-gradient(135deg,#00b3ff,#90d0fe)"></span><b>53%</b> ya descubre productos en canales sociales o conversacionales.</div>
+          <div class="row"><span class="k" style="background:rgba(255,255,255,.22)"></span><span style="color:var(--ink-mute)">46% en 2023 · +7 pts en dos años</span></div>
+          <div class="row" style="margin-top:6px"><span style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)">Salesforce Connected Shoppers · 2025</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 8 · TRES FRENTES ═══ -->
+  <section class="slide dark" data-slide="8">
+    <div class="stack push">
+      <div>
+        <p class="eyebrow"><span class="dot"></span>El marco · Tres frentes, un solo cerebro</p>
+        <h2 class="display l serif" style="margin-top:20px;max-width:22ch">La IA en retail no es una cosa. Son tres frentes con el mismo cerebro por atrás.</h2>
+      </div>
+      <div class="fronts">
+        <div class="front">
+          <div class="num">01 · SERVICIO</div>
+          <h3>Conversar antes, durante y después de la compra.</h3>
+          <p>Un agente que responde 24/7, recuerda el historial, resuelve devoluciones, escala al humano solo cuando importa — en el canal donde ya vive el cliente.</p>
+          <div class="metric"><b>60%</b> de casos resueltos sin humano · <span style="color:var(--sf-yellow)">+10</span> puntos NPS<br/><span style="opacity:.6">Pandora · caso público</span></div>
+        </div>
+        <div class="front">
+          <div class="num">02 · COMERCIO</div>
+          <h3>Descubrir, elegir y pagar sin fricción.</h3>
+          <p>Un asistente que entiende lo que el cliente quiere en sus palabras, no en filtros. Que arma la canasta, sugiere lo relevante y cierra la compra sin sacar al cliente del canal.</p>
+          <div class="metric"><b>+6% a +33%</b> más conversión en operadores en producción — dependiendo de baseline y madurez</div>
+        </div>
+        <div class="front">
+          <div class="num">03 · OPERACIÓN</div>
+          <h3>Anticipar, planear y ejecutar mejor que ayer.</h3>
+          <p>Pronósticos de demanda, ruteo de última milla, personalización de campañas, gestión de excepciones — el cerebro que trabaja mientras la tienda duerme.</p>
+          <div class="metric"><b>40×</b> crecimiento en Same-Day de perecederos, con IA en ruteo y fulfillment<br/><span style="opacity:.6">Amazon Shareholder Letter 2024</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 9 · EVIDENCIA ═══ -->
+  <section class="slide paper" data-slide="9">
+    <div class="stack push">
+      <div class="cases-head">
+        <div>
+          <p class="eyebrow"><span class="dot"></span>Parte 4 · Evidencia pública verificable</p>
+          <h2 class="display m serif" style="margin-top:12px;max-width:24ch">La prueba de que funciona ya está publicada.</h2>
+        </div>
+        <p style="max-width:340px;font-size:13.5px;line-height:1.55;color:var(--paper-ink-mute);text-align:right">Métricas oficiales, publicadas por las propias compañías. No proyecciones. No pilotos. Producción en múltiples países.</p>
+      </div>
+      <div class="cases-grid">
+        <div class="case hero">
+          <div class="co">Pandora · Joyería · 100+ países</div>
+          <div class="headline">60%<small>De casos de servicio resueltos sin intervención humana.<br/><b style="color:var(--paper-ink)">+10 NPS</b> · 40,000 conversaciones/mes · ~1 de cada 5 ventas asistidas por chat</small></div>
+          <div class="body">Dos agentes en producción — "Gemma" para descubrimiento y "Clara" para post-venta — sobre el mismo cerebro de datos. Cobertura: 6,800 puntos de venta.</div>
+        </div>
+        <div class="case">
+          <div class="co">SharkNinja · $3B</div>
+          <div class="headline">+6%<small>Conversión anual · <b style="color:var(--paper-ink)">14 países</b></small></div>
+          <div class="body">Agente conversacional pre y post-compra. <b>20,000 chats/semana</b> automatizados.</div>
+        </div>
+        <div class="case">
+          <div class="co">Fisher & Paykel · Electrodomésticos</div>
+          <div class="headline">+33%<small>En conversión tras unificar 100K+ perfiles.</small></div>
+          <div class="body">Un solo perfil de cliente cruzando canales — datos limpios antes de agentes.</div>
+        </div>
+        <div class="case">
+          <div class="co">Williams-Sonoma · 9 marcas</div>
+          <div class="headline">7.5<small>Meses de implementación · <b style="color:var(--paper-ink)">21M</b> nuevos suscriptores</small></div>
+          <div class="body">Anticipa autónomamente <b>60%+</b> de las consultas de chat en sus nueve marcas.</div>
+        </div>
+        <div class="case">
+          <div class="co">Janie and Jack · Retail físico</div>
+          <div class="headline">18<small>Semanas para desplegar POS moderno en <b style="color:var(--paper-ink)">106 tiendas</b>.</small></div>
+          <div class="body">Clienteling, endless aisle y omnicanal desde el piso de venta.</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:16px 24px;border-top:1px solid var(--line-paper);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap">
+        <p style="font-size:15px;line-height:1.5;color:var(--paper-ink-soft);max-width:680px"><b style="color:var(--paper-ink);font-weight:600">Ninguna de estas cinco compañías compite directamente con ustedes.</b> Todas las cifras aquí las <em>reportan ellas mismas</em> — no las publica el proveedor.</p>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-ink-mute);text-align:right">Investor releases, earnings calls,<br/>customer stories co-firmadas</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 10 · LATAM ═══ -->
+  <section class="slide dark" data-slide="10">
+    <div class="latam">
+      <div>
+        <p class="eyebrow"><span class="dot"></span>Parte 5 · Latinoamérica</p>
+        <h2 class="display l serif" style="margin-top:20px;max-width:16ch">Aquí las reglas son otras. Y eso es una ventaja.</h2>
+        <p class="kicker" style="margin-top:20px;max-width:520px">Latinoamérica no es una versión atrasada del retail norteamericano. Es un mercado con dinámicas propias — y quien las lea bien, no las copie, gana.</p>
+      </div>
+      <div class="rule-list">
+        <div class="rule-item">
+          <div class="n">1</div>
+          <div>
+            <h4>WhatsApp es <em>el</em> canal. No un canal.</h4>
+            <p>Más de 1 millón de empresas ya venden con un agente en WhatsApp o Messenger. LATAM es una de las dos regiones del mundo con WhatsApp como canal transaccional dominante.</p>
+            <div class="src">Meta · Conversations 2026</div>
+          </div>
+        </div>
+        <div class="rule-item">
+          <div class="n">2</div>
+          <div>
+            <h4>El retailer también es el banco de su cliente.</h4>
+            <p>Cerca del 50% de los adultos en México tiene cuenta bancaria y menos del 20% tarjeta de crédito. Eso convierte al retailer con red física en la financiera más cercana al consumidor — con datos que ningún banco tiene.</p>
+            <div class="src">CNBV · Encuesta Nacional de Inclusión Financiera</div>
+          </div>
+        </div>
+        <div class="rule-item">
+          <div class="n">3</div>
+          <div>
+            <h4>Publicidad propia sobre datos propios.</h4>
+            <p>La región crece a poco más del 10%, contra 22% global. Mercado Libre proyecta duplicar su plataforma de publicidad a USD 6,000M para 2029. El margen que hoy se fuga a Meta y Google puede regresar al retailer.</p>
+            <div class="src">Mercado Libre · Investor Day 2025</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 11 · VENTANA ═══ -->
+  <section class="slide dark" data-slide="11">
+    <div class="window-slide">
+      <div>
+        <p class="eyebrow"><span class="dot"></span>Parte 6 · La urgencia</p>
+        <h2 class="display l serif" style="margin-top:20px;max-width:14ch">La ventana está abierta. Se cierra en 24 meses.</h2>
+        <p class="kicker" style="margin-top:20px;max-width:520px">Varios operadores del top 10 ANTAD ya se movieron — no todos, pero suficientes para que la brecha se ensanche cada trimestre. Después de este ciclo, cerrarla deja de ser una decisión de tecnología: se convierte en una decisión de fusión o adquisición.</p>
+        <div style="margin-top:26px;padding:20px 22px;border-left:3px solid var(--sf-cloud);background:rgba(0,179,255,.10);border-radius:0 10px 10px 0">
+          <p style="font-size:16px;line-height:1.55;color:var(--ink-soft)"><b style="color:var(--ink)">Cada trimestre que pasa, mil Saras eligen al retailer que sí les contestó</b> a las 10 de la noche. El costo de esperar dejó de ser cero.</p>
+        </div>
+        <p style="margin-top:16px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)">Análisis convergentes: BCG · McKinsey · Gartner</p>
+      </div>
+      <div class="window-clock">
+        <svg class="clock-svg" viewBox="0 0 320 320" aria-hidden="true">
+          <defs>
+            <linearGradient id="gClock" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00b3ff"/>
+              <stop offset="100%" stop-color="#90d0fe"/>
+            </linearGradient>
+          </defs>
+          <circle cx="160" cy="160" r="136" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="18"/>
+          <circle cx="160" cy="160" r="136" fill="none" stroke="url(#gClock)" stroke-width="18" stroke-linecap="round" stroke-dasharray="640 854" transform="rotate(-90 160 160)"/>
+          <g stroke="rgba(255,255,255,.20)" stroke-width="1">
+            <line x1="160" y1="8" x2="160" y2="22"/>
+            <line x1="312" y1="160" x2="298" y2="160"/>
+            <line x1="160" y1="312" x2="160" y2="298"/>
+            <line x1="8" y1="160" x2="22" y2="160"/>
+          </g>
+          <text x="160" y="20" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="13" font-family="JetBrains Mono,monospace" letter-spacing="1.8" font-weight="600">HOY</text>
+          <text x="308" y="163" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="13" font-family="JetBrains Mono,monospace" letter-spacing="1.8" font-weight="600">+6M</text>
+          <text x="160" y="311" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="13" font-family="JetBrains Mono,monospace" letter-spacing="1.8" font-weight="600">+12M</text>
+          <text x="14" y="163" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="13" font-family="JetBrains Mono,monospace" letter-spacing="1.8" font-weight="600">+24M</text>
+        </svg>
+        <div class="clock-center">
+          <div class="md">Ventana de captura</div>
+          <div class="lg">12–24</div>
+          <div class="md" style="color:var(--ink);opacity:.75">meses</div>
+          <div class="sm" style="margin-top:6px">Después de este ciclo, la brecha es estructural.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 12 · 40% + 4 pilares ═══ -->
+  <section class="slide dark" data-slide="12">
+    <div class="pillar-slide">
+      <aside class="pillar-hero">
+        <div>
+          <div class="lbl">Parte 7 · El error a evitar</div>
+        </div>
+        <div class="big">40<sup>%</sup></div>
+        <div class="desc">De los proyectos de IA agéntica <span class="accent">se cancelará antes de 2027</span>.</div>
+        <div class="src">Gartner · Junio 2025</div>
+      </aside>
+      <div class="pillar-content">
+        <div class="title-band">
+          <h2>Los que <em>sí</em> llegan a producción tienen cuatro cosas en común.</h2>
+          <p>No fallan por la tecnología. Fallan por cómo se compraron. El error no es adoptar IA — es adoptarla <b style="color:var(--ink);font-weight:600">sin un marco de decisión</b> que la sostenga.</p>
+        </div>
+        <div class="pillars-grid">
+          <div class="pillar">
+            <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L3 7l9 5 9-5-9-5z"/><path d="M3 17l9 5 9-5"/><path d="M3 12l9 5 9-5"/></svg></div>
+            <div>
+              <h4>Un solo cerebro de datos.</h4>
+              <p>Perfil, historial, stock, precio y servicio en el mismo modelo. Sin eso, cada agente es una integración custom que envejece mal.</p>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div>
+              <h4>Capa de confianza desde el día cero.</h4>
+              <p>Datos personales enmascarados, retención cero, auditoría continua. En un mercado con LFPDPPP endurecida, esto no es "add-on". Es la base.</p>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div>
+            <div>
+              <h4>Reglas duras y razonamiento suave.</h4>
+              <p>Precio, impuesto, tope de reembolso — reglas duras. Descubrimiento, empatía, matiz — modelo. Quien no separa las dos capas produce agentes impredecibles.</p>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M20 4L4 20"/><circle cx="12" cy="12" r="9"/></svg></div>
+            <div>
+              <h4>Métrica de negocio o se cancela.</h4>
+              <p>Costo por interacción, conversión, precisión del pronóstico. Sin métrica desde el día uno, el piloto se convierte en teatro. Y el teatro se cancela.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 13 · CÓMO LO RESUELVE SALESFORCE ═══ -->
+  <section class="slide dark" data-slide="13">
+    <div class="solution">
+      <div class="col-txt">
+        <p class="eyebrow"><span class="dot"></span>Parte 8 · La respuesta</p>
+        <h2>Los cuatro pilares <em>ya existen</em> — construidos como una sola plataforma.</h2>
+        <p class="lead">Salesforce empaquetó estos cuatro pilares en una arquitectura vertical para retail: comercio, servicio, marketing y operaciones sobre un solo modelo de datos, con capa de confianza nativa y agentes que combinan razonamiento con reglas duras. Los cinco casos que vimos corren sobre esta misma plataforma.</p>
+        <p style="font-size:14px;color:var(--ink-mute);line-height:1.5">Es la única plataforma reconocida como Leader simultáneamente en Comercio Digital, Marketing, CDP y Servicio — las cuatro grillas que un retailer evalúa para consolidar su stack.</p>
+      </div>
+      <div class="architecture-card">
+        <div class="arc-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z"/><path d="M12 12l9-4.5M12 12v9M12 12L3 7.5"/></svg>
+          <h3>Cómo se articula, en 4 capas</h3>
+        </div>
+        <div class="arc-layers">
+          <div class="arc-layer"><span class="l-name">Agentes retail-tuned</span><span class="l-desc">Servicio, comercio, merchandiser, buyer — con razonamiento y reglas.</span></div>
+          <div class="arc-layer"><span class="l-name">Comercio · Servicio · Marketing · Tienda</span><span class="l-desc">Sobre un solo modelo de metadatos — no piezas cosidas.</span></div>
+          <div class="arc-layer"><span class="l-name">Cerebro de datos unificado</span><span class="l-desc">Perfil, stock, precio e historial vivos — con Zero Copy sobre el data lake.</span></div>
+          <div class="arc-layer"><span class="l-name">Capa de confianza nativa</span><span class="l-desc">PII enmascarada, retención cero, auditoría continua desde el día cero.</span></div>
+        </div>
+        <div class="arc-outcome">
+          <b>Resultado en retailers reales:</b> Pandora resolvió 60% del servicio sin humano. Fisher &amp; Paykel subió 33% la conversión. Williams-Sonoma implementó en 7.5 meses. La misma arquitectura, tres velocidades — porque el punto de partida es diferente.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 14 · TAKEAWAYS ═══ -->
+  <section class="slide paper" data-slide="14">
+    <div class="stack push">
+      <div>
+        <p class="eyebrow"><span class="dot"></span>Cierre · Tres frases para llevar</p>
+        <h2 class="display l serif" style="margin-top:20px;max-width:20ch">Si sólo se llevan tres cosas, que sean estas.</h2>
+      </div>
+      <div class="takeaways">
+        <div class="take">
+          <div class="n">01</div>
+          <h4>El cliente ya cambió. Sara ya no vuelve sola.</h4>
+          <p>88.2% de los internautas mexicanos ya compra en línea. La mitad descubre productos hablando, no buscando. La brecha ya no es de adopción del consumidor — es de capacidad de la industria para servirlo.</p>
+        </div>
+        <div class="take">
+          <div class="n">02</div>
+          <h4>En LATAM se compite por WhatsApp.</h4>
+          <p>No es un canal más. Es <em>el</em> canal transaccional. Cualquier estrategia de IA en retail que no arranque por ahí, está mal diseñada. Punto.</p>
+        </div>
+        <div class="take">
+          <div class="n">03</div>
+          <h4>La ventana se cierra en 24 meses.</h4>
+          <p>Los que empezaron por la fundación de datos y un caso con métrica ya llevan un año de ventaja. Después de este ciclo, cerrarla ya no es tecnología: es fusión o adquisición.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 15 · CIERRE + DESCARGA ═══ -->
+  <section class="slide dark closing" data-slide="15">
+    <div class="closing-eyebrow"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--sf-cloud)"></span>El cierre</div>
+    <h2 class="display xl serif">La ventana está abierta.<br/>Sara existe.<br/><span class="accent">Y hoy la pueden servir.</span></h2>
+    <p class="kicker" style="max-width:620px">Lo que sigue es la demostración — sobre un caso mexicano, en vivo — de cómo se ve todo esto en la pantalla de su cliente.</p>
+    <p class="baseline">Continúa · <b>Demo en vivo · WhatsApp × Retail</b></p>
+    <a class="download-cta" href="/presentations/retail-ia-mexico-ted.html" download="Retail-IA-Mexico-Salesforce-Presentacion.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg>
+      Descargar la presentación
+    </a>
+  </section>
+</div>
+
+<div class="hud-foot">
+  <div class="brand">
+    <span class="dot"></span>
+    <span>Salesforce México · Julio 2026</span>
+  </div>
+  <div class="counter">
+    <span id="counter">01 / 15</span>
+    <div class="progress"><i id="progressBar" style="width:6.6%"></i></div>
+    <span class="hint">← → &nbsp;·&nbsp; ⇥ desliza</span>
+  </div>
+</div>
+
+<script>
+  (function(){
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const counter = document.getElementById('counter');
+    const bar = document.getElementById('progressBar');
+    const ytFrame = document.getElementById('ytFrame');
+    const ytBaseSrc = ytFrame ? ytFrame.src : '';
+    let i = 0;
+
+    function pad(n){return n<10?'0'+n:''+n}
+    function paperClass(){
+      document.body.classList.toggle('paper-hud', slides[i].classList.contains('paper'));
+    }
+    function stopYouTube(){
+      if(!ytFrame) return;
+      try{ ytFrame.contentWindow.postMessage(JSON.stringify({event:'command',func:'pauseVideo',args:[]}),'*'); }catch(e){}
+    }
+    function render(){
+      slides.forEach((s,idx)=>s.classList.toggle('active', idx===i));
+      counter.textContent = pad(i+1)+' / '+pad(slides.length);
+      bar.style.width = ((i+1)/slides.length*100).toFixed(2)+'%';
+      // Stop YouTube if we've left slide 2
+      if(slides[i].getAttribute('data-slide') !== '2') stopYouTube();
+      // Hide HUD logo on the cover (slide 1 has its own big logo)
+      document.body.classList.toggle('cover-active', slides[i].getAttribute('data-slide') === '1');
+      paperClass();
+      history.replaceState(null,'','#'+(i+1));
+      // Notify parent (for embed with notes)
+      try{ if(window.parent !== window) window.parent.postMessage({type:'slide',index:i+1,total:slides.length},'*'); }catch(e){}
+    }
+    function next(){ if(i<slides.length-1){i++;render()} }
+    function prev(){ if(i>0){i--;render()} }
+    function go(n){ if(n>=0&&n<slides.length){i=n;render()} }
+
+    document.addEventListener('keydown', e=>{
+      if(e.target.tagName === 'IFRAME') return;
+      if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();next()}
+      else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev()}
+      else if(e.key==='Home'){e.preventDefault();go(0)}
+      else if(e.key==='End'){e.preventDefault();go(slides.length-1)}
+      else if(/^[0-9]$/.test(e.key)){
+        const n = e.key==='0'?9:parseInt(e.key,10)-1;
+        if(n<slides.length) go(n);
+      }
+    });
+
+    // Touch swipe
+    let startX = null, startY = null;
+    document.addEventListener('touchstart', e=>{
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, {passive:true});
+    document.addEventListener('touchend', e=>{
+      if(startX===null) return;
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)){ dx<0 ? next() : prev() }
+      startX = null; startY = null;
+    });
+
+    // Click to advance — skip inside iframe / links / buttons
+    document.getElementById('deck').addEventListener('click', e=>{
+      if(e.target.closest('a,button,iframe,.qr-panel,.video-frame-wrap,.placeholder')) return;
+      const r = document.getElementById('deck').getBoundingClientRect();
+      const x = e.clientX - r.left;
+      if(x > r.width*0.5) next(); else prev();
+    });
+
+    // Listen for parent-controlled navigation (from Next.js integrated viewer)
+    window.addEventListener('message', e=>{
+      const d = e.data || {};
+      if(d.type === 'go' && typeof d.index === 'number'){ go(d.index - 1) }
+      if(d.type === 'next') next();
+      if(d.type === 'prev') prev();
+    });
+
+    // Hash restore
+    const hash = parseInt(location.hash.replace('#',''),10);
+    if(hash>=1 && hash<=slides.length) i = hash-1;
+    render();
+  })();
+</script>
+</body>
+</html>
