@@ -281,22 +281,27 @@
   .poll{display:grid;grid-template-columns:1fr 1fr;gap:36px 56px;margin-top:36px;align-items:start}
   .poll .cell{
     border-top:1px solid var(--line-paper);padding-top:22px;
-    display:grid;grid-template-columns:auto 1fr;gap:22px 20px;align-items:baseline;
+    display:grid;grid-template-columns:auto 1fr;gap:22px 24px;align-items:center;
   }
   .poll .cell b{
-    display:flex;align-items:baseline;gap:2px;
-    font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.03em;line-height:1;
+    display:inline-flex;align-items:baseline;gap:2px;
+    font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.04em;line-height:.9;
     margin:0;color:var(--sf-blue);
-    font-size:clamp(56px,6.4vw,88px);
-    grid-row:span 2;
+    font-size:clamp(96px,11vw,168px);
   }
+  .poll .cell b .num-anim{font-size:1em;line-height:.9;letter-spacing:-.04em;font-family:'Fraunces',serif;font-weight:400;color:inherit}
   .poll .cell b .sub{
-    font-size:.42em;color:var(--paper-ink-mute);font-family:'Inter',sans-serif;
+    font-size:.36em;color:var(--paper-ink-mute);font-family:'Inter',sans-serif;
     font-weight:600;letter-spacing:.02em;line-height:1;
+    align-self:flex-end;padding-bottom:.1em;
   }
-  .poll .cell span{font-size:14.5px;line-height:1.5;color:var(--paper-ink-soft);max-width:38ch;display:block;align-self:center}
+  .poll .cell > span{font-size:15px;line-height:1.55;color:var(--paper-ink-soft);max-width:38ch;display:block}
   .poll .cell.warm b{color:var(--sf-orange)}
   .poll .cell.teal b{color:var(--sf-teal)}
+  @media (max-width:900px){
+    .poll .cell{grid-template-columns:auto 1fr;gap:14px 18px}
+    .poll .cell b{font-size:clamp(72px,18vw,112px)}
+  }
 
   /* ─────── SLIDE 5 · La ola ─────── */
   .wave{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;height:100%;align-items:center}
