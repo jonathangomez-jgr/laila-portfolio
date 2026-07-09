@@ -20,10 +20,13 @@
     --sf-cloud-80:#90d0fe;  /* Cloud Blue 80 (soft) */
     --sf-cloud-95:#eaf5fe;  /* Cloud Blue 95 (paper) */
     --sf-white:#ffffff;
-    --sf-yellow:#ffdd00;
-    --sf-teal:#06a59a;
-    --sf-amber:#f5b039;
-    --sf-coral:#e0284f;
+    /* Accessible accents — high-contrast, colorblind-friendly (blue/orange/teal pair) */
+    --sf-yellow:#ffdd00;    /* highlight — deuteranopia-safe */
+    --sf-teal:#06a59a;      /* positive · WCAG AAA on navy */
+    --sf-amber:#ff9a3d;     /* warm resalte — contrast on navy 7.4:1 */
+    --sf-orange:#ff5b3a;    /* focus · alerts */
+    --sf-coral:#e0284f;     /* critical */
+    --sf-magenta:#c644d1;   /* accent for accessibility diversity */
 
     --ink:#ffffff;
     --ink-soft:rgba(255,255,255,.85);
@@ -44,6 +47,9 @@
     font-family:'Inter',system-ui,-apple-system,sans-serif;
     font-feature-settings:"ss01","cv11";
   }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  }
   .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto;letter-spacing:-.02em}
   .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
   a{color:inherit;text-decoration:none}
@@ -59,7 +65,11 @@
     transition:opacity .55s ease,transform .7s cubic-bezier(.22,1,.36,1);
     overflow:hidden;
   }
-  .slide.active{opacity:1;pointer-events:auto;transform:translateY(0)}
+  .slide.active{opacity:1;pointer-events:auto;transform:translateY(0);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+  /* thin scrollbar on WebKit */
+  .slide::-webkit-scrollbar{width:6px;height:6px}
+  .slide::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:3px}
+  .slide.paper::-webkit-scrollbar-thumb{background:rgba(0,30,91,.22)}
   .slide.paper{background:var(--sf-cloud-95);color:var(--paper-ink)}
   .slide.dark{
     background:
@@ -128,8 +138,38 @@
   .stack.push{justify-content:space-between;gap:0}
 
   .accent{color:var(--sf-cloud)}
-  .accent-warm{color:var(--sf-yellow)}
+  .accent-warm{color:var(--sf-amber)}
+  .accent-gold{color:var(--sf-yellow)}
+  .accent-teal{color:var(--sf-teal)}
+  .accent-magenta{color:var(--sf-magenta)}
   .rule{width:56px;height:2px;background:var(--sf-cloud);border-radius:2px}
+
+  /* ─── Interactive cards · hover zoom & focus visibility ─── */
+  .card-i{
+    transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .35s ease,background-color .35s ease;
+    transform-origin:center;will-change:transform;cursor:default;
+  }
+  .card-i:hover, .card-i:focus-visible{
+    transform:translateY(-4px) scale(1.03);
+    box-shadow:0 24px 60px -20px rgba(0,179,255,.45);
+    border-color:rgba(0,179,255,.55);
+    outline:none;
+    z-index:3;position:relative;
+  }
+  .slide.paper .card-i:hover, .slide.paper .card-i:focus-visible{
+    box-shadow:0 24px 60px -20px rgba(6,106,254,.28);
+    border-color:rgba(6,106,254,.45);
+  }
+  *:focus-visible{outline:2px solid var(--sf-cloud);outline-offset:3px;border-radius:6px}
+
+  /* ─── Animated counters & bars — reveal on slide.active ─── */
+  .num-anim{display:inline-block;font-variant-numeric:tabular-nums}
+  .bar-fill{width:0;transition:width 1.4s cubic-bezier(.22,1,.36,1)}
+  .slide.active .bar-fill.on{width:var(--target,100%)}
+  .arc-anim{stroke-dasharray:var(--dash,600);stroke-dashoffset:var(--dash,600);transition:stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1)}
+  .slide.active .arc-anim.on{stroke-dashoffset:var(--offset,0)}
+  .reveal{opacity:0;transform:translateY(12px);transition:opacity .7s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+  .slide.active .reveal.on{opacity:1;transform:translateY(0)}
 
   /* ─────── SLIDE 1 · PORTADA · title + logo + QR + authors ─────── */
   .cover{padding:0}
@@ -237,11 +277,26 @@
   .slide.active .bubble{animation-play-state:running}
   .slide:not(.active) .bubble{animation:none;opacity:0}
 
-  /* ─────── SLIDE 4 · Encuesta ─────── */
-  .poll{display:grid;grid-template-columns:1fr 1fr;gap:36px 56px;margin-top:36px}
-  .poll .cell{border-top:1px solid var(--line-paper);padding-top:22px}
-  .poll .cell b{display:block;font-size:64px;font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.03em;line-height:1;margin-bottom:8px;color:var(--sf-blue)}
-  .poll .cell span{font-size:14.5px;line-height:1.5;color:var(--paper-ink-soft);max-width:38ch;display:block}
+  /* ─────── SLIDE 4 · Encuesta · métricas en la misma línea ─────── */
+  .poll{display:grid;grid-template-columns:1fr 1fr;gap:36px 56px;margin-top:36px;align-items:start}
+  .poll .cell{
+    border-top:1px solid var(--line-paper);padding-top:22px;
+    display:grid;grid-template-columns:auto 1fr;gap:22px 20px;align-items:baseline;
+  }
+  .poll .cell b{
+    display:flex;align-items:baseline;gap:2px;
+    font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.03em;line-height:1;
+    margin:0;color:var(--sf-blue);
+    font-size:clamp(56px,6.4vw,88px);
+    grid-row:span 2;
+  }
+  .poll .cell b .sub{
+    font-size:.42em;color:var(--paper-ink-mute);font-family:'Inter',sans-serif;
+    font-weight:600;letter-spacing:.02em;line-height:1;
+  }
+  .poll .cell span{font-size:14.5px;line-height:1.5;color:var(--paper-ink-soft);max-width:38ch;display:block;align-self:center}
+  .poll .cell.warm b{color:var(--sf-orange)}
+  .poll .cell.teal b{color:var(--sf-teal)}
 
   /* ─────── SLIDE 5 · La ola ─────── */
   .wave{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;height:100%;align-items:center}
@@ -263,6 +318,9 @@
   .mx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:36px}
   .mx-tile{padding:26px 22px 22px;border:1px solid var(--line-paper);border-radius:14px;background:rgba(6,106,254,.04);display:flex;flex-direction:column;gap:8px;min-height:180px}
   .mx-tile .n{font-family:'Fraunces',serif;font-weight:400;font-size:44px;line-height:1;letter-spacing:-.02em;color:var(--sf-blue)}
+  .mx-tile.c-warm .n{color:var(--sf-orange)}
+  .mx-tile.c-teal .n{color:var(--sf-teal)}
+  .mx-tile.c-magenta .n{color:var(--sf-magenta)}
   .mx-tile .l{font-size:13px;line-height:1.45;color:var(--paper-ink-soft);flex:1}
   .mx-tile .s{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-ink-mute)}
 
@@ -278,22 +336,57 @@
   .fronts{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:36px}
   .front{position:relative;padding:30px 26px 26px;border:1px solid var(--line-strong);border-radius:18px;background:rgba(0,179,255,.06);display:flex;flex-direction:column;gap:18px;min-height:320px}
   .front .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--sf-cloud);letter-spacing:.14em;font-weight:600}
+  .front.c-amber .num{color:var(--sf-amber)}
+  .front.c-teal .num{color:var(--sf-teal)}
   .front h3{font-family:'Fraunces',serif;font-weight:400;font-size:30px;line-height:1.05;letter-spacing:-.02em}
   .front p{font-size:14px;line-height:1.55;color:var(--ink-soft);flex:1}
   .front .metric{font-size:12px;color:var(--ink-mute);letter-spacing:.02em;padding-top:14px;border-top:1px solid var(--line-dark)}
   .front .metric b{color:var(--sf-yellow);font-weight:600}
+  .front.c-amber .metric b{color:var(--sf-amber)}
+  .front.c-teal .metric b{color:var(--sf-teal)}
 
-  /* ─────── SLIDE 9 · Evidencia ─────── */
-  .cases-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;gap:32px}
-  .cases-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;flex:1}
-  .case{padding:22px 20px;border:1px solid var(--line-paper);border-radius:14px;background:rgba(6,106,254,.04);display:flex;flex-direction:column;gap:10px;min-height:240px}
-  .case .co{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-ink-mute);font-weight:600}
-  .case .headline{font-family:'Fraunces',serif;font-weight:400;font-size:40px;line-height:.95;letter-spacing:-.03em;color:var(--sf-blue)}
-  .case .headline small{display:block;font-size:12.5px;letter-spacing:0;color:var(--paper-ink-soft);margin-top:6px;font-family:'Inter',sans-serif;line-height:1.4}
-  .case .body{font-size:12.5px;line-height:1.5;color:var(--paper-ink-soft);flex:1}
-  .case.hero{grid-column:span 2}
-  .case.hero .headline{font-size:60px}
-  .case.hero .body{font-size:13.5px;max-width:38ch}
+  /* ─────── SLIDE 9 · Evidencia · 5 tarjetas en fila ─────── */
+  .cases-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:56px;gap:32px}
+  .cases-grid{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:20px;
+    padding-top:60px; /* space for the photo bubbles that sit on top of each card */
+  }
+  .case{
+    position:relative;
+    padding:78px 18px 20px;
+    border:1px solid var(--line-paper);border-radius:16px;
+    background:rgba(6,106,254,.04);
+    display:flex;flex-direction:column;gap:10px;min-height:280px;
+  }
+  .case .brand-media{
+    position:absolute;top:-56px;left:50%;transform:translateX(-50%);
+    width:112px;height:112px;
+    display:flex;align-items:center;justify-content:center;
+    filter:drop-shadow(0 10px 24px rgba(0,30,91,.22));
+  }
+  .case .brand-media .photo{
+    width:112px;height:112px;border-radius:50%;
+    background-size:cover;background-position:center;
+    border:3px solid #fff;
+    box-shadow:0 6px 18px -6px rgba(0,30,91,.35);
+  }
+  .case .brand-media .badge{
+    position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+    background:#fff;border-radius:100px;
+    padding:5px 12px;height:32px;min-width:78px;max-width:130px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 18px -4px rgba(0,30,91,.28);
+    border:1px solid rgba(0,30,91,.06);
+  }
+  .case .brand-media .badge img{max-width:100%;max-height:22px;object-fit:contain;display:block}
+  .case .co{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-ink-mute);font-weight:600;text-align:center}
+  .case .headline{font-family:'Fraunces',serif;font-weight:400;font-size:44px;line-height:.95;letter-spacing:-.03em;color:var(--sf-blue);text-align:center}
+  .case.c-warm .headline{color:var(--sf-orange)}
+  .case.c-teal .headline{color:var(--sf-teal)}
+  .case.c-magenta .headline{color:var(--sf-magenta)}
+  .case.c-amber .headline{color:#c47a10}
+  .case .headline small{display:block;font-size:11.5px;letter-spacing:0;color:var(--paper-ink-soft);margin-top:6px;font-family:'Inter',sans-serif;line-height:1.4;font-weight:400}
+  .case .body{font-size:12px;line-height:1.5;color:var(--paper-ink-soft);flex:1;text-align:center}
 
   /* ─────── SLIDE 10 · LATAM ─────── */
   .latam{display:grid;grid-template-columns:1fr 1fr;gap:70px;height:100%;align-items:center}
@@ -343,6 +436,12 @@
   }
   .pillar .glyph svg{width:22px;height:22px;color:var(--sf-cloud)}
   .pillar .glyph .n{font-family:'Fraunces',serif;font-weight:500;font-size:22px;color:var(--sf-cloud);line-height:1}
+  .pillar:nth-child(2) .glyph{background:linear-gradient(135deg,rgba(255,154,61,.28),rgba(255,91,58,.12));border-color:rgba(255,154,61,.35)}
+  .pillar:nth-child(2) .glyph svg{color:var(--sf-amber)}
+  .pillar:nth-child(3) .glyph{background:linear-gradient(135deg,rgba(6,165,154,.28),rgba(6,165,154,.12));border-color:rgba(6,165,154,.35)}
+  .pillar:nth-child(3) .glyph svg{color:var(--sf-teal)}
+  .pillar:nth-child(4) .glyph{background:linear-gradient(135deg,rgba(198,68,209,.28),rgba(198,68,209,.10));border-color:rgba(198,68,209,.35)}
+  .pillar:nth-child(4) .glyph svg{color:var(--sf-magenta)}
   .pillar h4{font-family:'Fraunces',serif;font-weight:500;font-size:18px;line-height:1.15;letter-spacing:-.01em;margin-bottom:6px}
   .pillar p{font-size:12.5px;line-height:1.5;color:var(--ink-soft)}
 
@@ -381,6 +480,9 @@
   .takeaways{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:36px}
   .take{padding:32px 26px;border:1px solid var(--line-paper);border-radius:14px;display:flex;flex-direction:column;gap:14px;min-height:290px;background:rgba(6,106,254,.04)}
   .take .n{font-family:'Fraunces',serif;font-size:64px;line-height:.9;color:var(--sf-blue);letter-spacing:-.03em}
+  .take.c-warm .n{color:var(--sf-orange)}
+  .take.c-teal .n{color:var(--sf-teal)}
+  .take.c-magenta .n{color:var(--sf-magenta)}
   .take h4{font-family:'Fraunces',serif;font-weight:500;font-size:24px;line-height:1.12;letter-spacing:-.01em;color:var(--paper-ink)}
   .take p{font-size:14px;line-height:1.55;color:var(--paper-ink-soft);flex:1}
 
@@ -414,17 +516,32 @@
 
   /* ─────── MOBILE ─────── */
   @media (max-width:900px){
-    .slide{padding:64px 24px 78px}
+    /* Slides scroll internally on mobile */
+    .slide{padding:64px 24px 90px;height:auto;min-height:100%}
+    .slide.active{overflow-y:auto}
+    .stack{height:auto;min-height:100%;gap:28px}
+    .stack.push{gap:24px}
+
     .display.xxl{font-size:44px}
     .display.xl{font-size:38px}
     .display.l{font-size:30px}
     .display.m{font-size:24px}
     .kicker{font-size:15px}
 
-    .hud-logo{top:16px;left:20px}
+    .hud-logo{top:14px;right:16px}
     .hud-logo svg{height:22px}
-    .hud-foot{padding:14px 20px;font-size:9.5px;letter-spacing:.16em}
-    .hud-foot .progress{width:80px}
+    .hud-foot{padding:12px 16px;font-size:9.5px;letter-spacing:.14em}
+    .hud-foot .progress{width:70px}
+    .hud-foot .hint{display:none}
+    /* Fade the bottom of active slides so users know there's more to scroll */
+    body::before{
+      content:"";position:fixed;left:0;right:0;bottom:40px;height:44px;z-index:110;
+      pointer-events:none;
+      background:linear-gradient(180deg,transparent,rgba(0,30,91,.7));
+      opacity:0;transition:opacity .3s ease;
+    }
+    body.can-scroll::before{opacity:.9}
+    body.paper-hud::before{background:linear-gradient(180deg,transparent,rgba(234,245,254,.95))}
 
     .cover .cover-brand{padding:32px 24px 0;justify-content:center}
     .cover .cover-brand svg{height:44px}
@@ -440,8 +557,12 @@
     .video-frame-wrap{aspect-ratio:16/9;flex:0 0 auto}
 
     .scene,.wave,.behavior,.latam,.window-slide,.solution{grid-template-columns:1fr;gap:28px}
-    .mx-grid,.fronts,.cases-grid,.takeaways,.pillars-grid,.poll{grid-template-columns:1fr 1fr;gap:14px}
-    .case.hero{grid-column:span 2}
+    .mx-grid,.fronts,.takeaways,.pillars-grid,.poll{grid-template-columns:1fr 1fr;gap:14px}
+    /* Cases: apilar en móvil, mantener burbuja de marca visible */
+    .cases-grid{grid-template-columns:1fr;gap:74px;padding-top:70px}
+    .case{padding:80px 22px 22px;min-height:auto}
+    .case .brand-media{top:-60px;width:120px;height:120px}
+    .case .brand-media .photo{width:120px;height:120px}
 
     .pillar-slide{grid-template-columns:1fr;gap:24px}
     .pillar-hero{padding:24px 22px}
@@ -462,8 +583,7 @@
   }
 
   @media (max-width:560px){
-    .mx-grid,.fronts,.cases-grid,.takeaways,.pillars-grid,.poll{grid-template-columns:1fr}
-    .case.hero{grid-column:span 1}
+    .mx-grid,.fronts,.takeaways,.pillars-grid,.poll{grid-template-columns:1fr}
     .cases-head{flex-direction:column;align-items:flex-start;gap:8px}
     .cases-head p{text-align:left!important}
     .cover h1{font-size:38px}
@@ -583,11 +703,11 @@
       </div>
       <div class="poll">
         <div class="cell">
-          <b>6<span style="font-size:.35em;color:var(--paper-ink-mute);vertical-align:top">/10</span></b>
+          <b><span class="num-anim" data-count-to="6" data-count-from="0" data-count-duration="1200">0</span><span class="sub">/10</span></b>
           <span>De los retailers globales dicen que sus clientes esperan esta experiencia en 2026 — pero admiten que hoy no la entregan.<br/><em style="color:var(--paper-ink-dim)">Salesforce · Connected Shoppers Report</em></span>
         </div>
-        <div class="cell">
-          <b>70<span style="font-size:.35em;color:var(--paper-ink-mute);vertical-align:top">%</span></b>
+        <div class="cell warm">
+          <b><span class="num-anim" data-count-to="70" data-count-from="0" data-count-duration="1400">0</span><span class="sub">%</span></b>
           <span>De los carritos en línea a nivel global se abandonan antes de terminar la compra — por costos ocultos, cuentas obligatorias, checkouts largos y falta de respuesta a tiempo.<br/><em style="color:var(--paper-ink-dim)">Baymard Institute · benchmark global 2025</em></span>
         </div>
       </div>
@@ -626,27 +746,27 @@
         <h2 class="display l serif" style="margin-top:20px;max-width:22ch">El mercado ya está adentro. La industria todavía se pregunta si entrar.</h2>
       </div>
       <div class="mx-grid">
-        <div class="mx-tile">
+        <div class="mx-tile card-i" tabindex="0">
           <div class="s">Comprando en línea</div>
-          <div class="n">88.2<span style="font-size:.55em;color:var(--paper-ink-mute)">%</span></div>
+          <div class="n"><span class="num-anim" data-count-to="88.2" data-count-from="0" data-count-decimals="1" data-count-duration="1400">0</span><span style="font-size:.55em;color:var(--paper-ink-mute)">%</span></div>
           <div class="l">De los internautas mexicanos ya compra en línea al menos una vez al año. En un universo de 96M de internautas, es un mercado adentro.</div>
           <div class="s" style="margin-top:8px;opacity:.6">AMVO · Venta Online 2025</div>
         </div>
-        <div class="mx-tile">
+        <div class="mx-tile card-i c-warm" tabindex="0">
           <div class="s">Escala física</div>
-          <div class="n">55K<span style="font-size:.55em;color:var(--paper-ink-mute)">+</span></div>
+          <div class="n"><span class="num-anim" data-count-to="55" data-count-from="0" data-count-duration="1200">0</span>K<span style="font-size:.55em;color:var(--paper-ink-mute)">+</span></div>
           <div class="l">Tiendas bajo ANTAD, con presencia en 90% de los municipios del país.</div>
           <div class="s" style="margin-top:8px;opacity:.6">ANTAD · 2026</div>
         </div>
-        <div class="mx-tile">
+        <div class="mx-tile card-i c-teal" tabindex="0">
           <div class="s">Peso económico</div>
-          <div class="n">6.4<span style="font-size:.55em;color:var(--paper-ink-mute)">%</span></div>
+          <div class="n"><span class="num-anim" data-count-to="6.4" data-count-from="0" data-count-decimals="1" data-count-duration="1200">0</span><span style="font-size:.55em;color:var(--paper-ink-mute)">%</span></div>
           <div class="l">Del PIB nacional viene del e-commerce, según construcción AMVO sobre datos INEGI (vs 3.3% en 2013).</div>
           <div class="s" style="margin-top:8px;opacity:.6">AMVO/INEGI · 2025</div>
         </div>
-        <div class="mx-tile">
+        <div class="mx-tile card-i c-magenta" tabindex="0">
           <div class="s">Un evento, dos semanas</div>
-          <div class="n">$42.7K<span style="font-size:.55em;color:var(--paper-ink-mute)">M</span></div>
+          <div class="n">$<span class="num-anim" data-count-to="42.7" data-count-from="0" data-count-decimals="1" data-count-duration="1400">0</span>K<span style="font-size:.55em;color:var(--paper-ink-mute)">M</span></div>
           <div class="l">MXN vendidos en Hot Sale 2025. +23.7% vs. el año anterior.</div>
           <div class="s" style="margin-top:8px;opacity:.6">AMVO · Hot Sale 2025</div>
         </div>
@@ -674,13 +794,13 @@
           <defs>
             <linearGradient id="gDonut" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#00b3ff"/>
-              <stop offset="100%" stop-color="#90d0fe"/>
+              <stop offset="100%" stop-color="#ff9a3d"/>
             </linearGradient>
           </defs>
           <circle cx="100" cy="100" r="76" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="22"/>
-          <circle cx="100" cy="100" r="76" fill="none" stroke="url(#gDonut)" stroke-width="22" stroke-dasharray="253 224" transform="rotate(-90 100 100)"/>
-          <text x="100" y="94" text-anchor="middle" fill="#ffffff" font-family="Fraunces,serif" font-size="46" font-weight="400" letter-spacing="-2">53%</text>
-          <text x="100" y="120" text-anchor="middle" fill="rgba(255,255,255,.75)" font-family="Inter,sans-serif" font-size="11" letter-spacing="1.5" font-weight="600">DESCUBRE HABLANDO</text>
+          <circle class="arc-anim" style="--dash:477;--offset:224" cx="100" cy="100" r="76" fill="none" stroke="url(#gDonut)" stroke-width="22" transform="rotate(-90 100 100)"/>
+          <text x="100" y="96" text-anchor="middle" fill="#ffffff" font-family="Fraunces,serif" font-size="46" font-weight="400" letter-spacing="-2"><tspan class="num-anim" data-count-to="53" data-count-from="0" data-count-duration="1600">0</tspan>%</text>
+          <text x="100" y="122" text-anchor="middle" fill="rgba(255,255,255,.75)" font-family="Inter,sans-serif" font-size="11" letter-spacing="1.5" font-weight="600">DESCUBRE HABLANDO</text>
         </svg>
         <div class="donut-legend">
           <div class="row"><span class="k" style="background:linear-gradient(135deg,#00b3ff,#90d0fe)"></span><b>53%</b> ya descubre productos en canales sociales o conversacionales.</div>
@@ -699,19 +819,19 @@
         <h2 class="display l serif" style="margin-top:20px;max-width:22ch">La IA en retail no es una cosa. Son tres frentes con el mismo cerebro por atrás.</h2>
       </div>
       <div class="fronts">
-        <div class="front">
+        <div class="front card-i" tabindex="0">
           <div class="num">01 · SERVICIO</div>
           <h3>Conversar antes, durante y después de la compra.</h3>
           <p>Un agente que responde 24/7, recuerda el historial, resuelve devoluciones, escala al humano solo cuando importa — en el canal donde ya vive el cliente.</p>
           <div class="metric"><b>60%</b> de casos resueltos sin humano · <span style="color:var(--sf-yellow)">+10</span> puntos NPS<br/><span style="opacity:.6">Pandora · caso público</span></div>
         </div>
-        <div class="front">
+        <div class="front card-i c-amber" tabindex="0">
           <div class="num">02 · COMERCIO</div>
           <h3>Descubrir, elegir y pagar sin fricción.</h3>
           <p>Un asistente que entiende lo que el cliente quiere en sus palabras, no en filtros. Que arma la canasta, sugiere lo relevante y cierra la compra sin sacar al cliente del canal.</p>
           <div class="metric"><b>+6% a +33%</b> más conversión en operadores en producción — dependiendo de baseline y madurez</div>
         </div>
-        <div class="front">
+        <div class="front card-i c-teal" tabindex="0">
           <div class="num">03 · OPERACIÓN</div>
           <h3>Anticipar, planear y ejecutar mejor que ayer.</h3>
           <p>Pronósticos de demanda, ruteo de última milla, personalización de campañas, gestión de excepciones — el cerebro que trabaja mientras la tienda duerme.</p>
@@ -732,35 +852,51 @@
         <p style="max-width:340px;font-size:13.5px;line-height:1.55;color:var(--paper-ink-mute);text-align:right">Métricas oficiales, publicadas por las propias compañías. No proyecciones. No pilotos. Producción en múltiples países.</p>
       </div>
       <div class="cases-grid">
-        <div class="case hero">
-          <div class="co">Pandora · Joyería · 100+ países</div>
-          <div class="headline">60%<small>De casos de servicio resueltos sin intervención humana.<br/><b style="color:var(--paper-ink)">+10 NPS</b> · 40,000 conversaciones/mes · ~1 de cada 5 ventas asistidas por chat</small></div>
-          <div class="body">Dos agentes en producción — "Gemma" para descubrimiento y "Clara" para post-venta — sobre el mismo cerebro de datos. Cobertura: 6,800 puntos de venta.</div>
+        <div class="case card-i" tabindex="0">
+          <div class="brand-media">
+            <div class="photo" style="background-image:url('/insights-assets/retail/Pandora.jpeg')"></div>
+            <div class="badge"><img src="/insights-assets/retail/Logo-Pandora.png" alt="Pandora"/></div>
+          </div>
+          <div class="co">Pandora · 100+ países</div>
+          <div class="headline"><span class="num-anim" data-count-to="60" data-count-from="0" data-count-duration="1600">0</span>%<small>Servicio resuelto sin humano<br/><b style="color:var(--paper-ink)">+10 NPS</b> · 40K conv/mes</small></div>
+          <div class="body">Dos agentes en producción sobre el mismo cerebro de datos. 6,800 puntos de venta.</div>
         </div>
-        <div class="case">
+        <div class="case card-i c-warm" tabindex="0">
+          <div class="brand-media">
+            <div class="photo" style="background-image:url('/insights-assets/retail/shark-ninja.jpeg')"></div>
+            <div class="badge"><img src="/insights-assets/retail/SharkNinja_logo.png" alt="SharkNinja"/></div>
+          </div>
           <div class="co">SharkNinja · $3B</div>
-          <div class="headline">+6%<small>Conversión anual · <b style="color:var(--paper-ink)">14 países</b></small></div>
+          <div class="headline">+<span class="num-anim" data-count-to="6" data-count-from="0" data-count-duration="1200">0</span>%<small>Conversión anual · <b style="color:var(--paper-ink)">14 países</b></small></div>
           <div class="body">Agente conversacional pre y post-compra. <b>20,000 chats/semana</b> automatizados.</div>
         </div>
-        <div class="case">
-          <div class="co">Fisher & Paykel · Electrodomésticos</div>
-          <div class="headline">+33%<small>En conversión tras unificar 100K+ perfiles.</small></div>
+        <div class="case card-i c-teal" tabindex="0">
+          <div class="brand-media">
+            <div class="photo" style="background-image:url('/insights-assets/retail/fisher and paykel.jpeg')"></div>
+            <div class="badge"><img src="/insights-assets/retail/Fisherpaykel-logo.png" alt="Fisher & Paykel"/></div>
+          </div>
+          <div class="co">Fisher &amp; Paykel</div>
+          <div class="headline">+<span class="num-anim" data-count-to="33" data-count-from="0" data-count-duration="1400">0</span>%<small>Conversión tras unificar 100K+ perfiles</small></div>
           <div class="body">Un solo perfil de cliente cruzando canales — datos limpios antes de agentes.</div>
         </div>
-        <div class="case">
+        <div class="case card-i c-magenta" tabindex="0">
+          <div class="brand-media">
+            <div class="photo" style="background-image:url('/insights-assets/retail/William-sonoma.jpeg')"></div>
+            <div class="badge"><img src="/insights-assets/retail/Williams-Sonoma-Logo-2012.png" alt="Williams-Sonoma"/></div>
+          </div>
           <div class="co">Williams-Sonoma · 9 marcas</div>
-          <div class="headline">7.5<small>Meses de implementación · <b style="color:var(--paper-ink)">21M</b> nuevos suscriptores</small></div>
+          <div class="headline"><span class="num-anim" data-count-to="7.5" data-count-from="0" data-count-decimals="1" data-count-duration="1400">0</span><small>Meses · <b style="color:var(--paper-ink)">21M</b> nuevos suscriptores</small></div>
           <div class="body">Anticipa autónomamente <b>60%+</b> de las consultas de chat en sus nueve marcas.</div>
         </div>
-        <div class="case">
+        <div class="case card-i c-amber" tabindex="0">
+          <div class="brand-media">
+            <div class="photo" style="background-image:url('/insights-assets/retail/Janie and jack.jpeg')"></div>
+            <div class="badge"><img src="/insights-assets/retail/JANIEJACK-logo.png" alt="Janie and Jack"/></div>
+          </div>
           <div class="co">Janie and Jack · Retail físico</div>
-          <div class="headline">18<small>Semanas para desplegar POS moderno en <b style="color:var(--paper-ink)">106 tiendas</b>.</small></div>
+          <div class="headline"><span class="num-anim" data-count-to="18" data-count-from="0" data-count-duration="1200">0</span><small>Semanas · POS en <b style="color:var(--paper-ink)">106 tiendas</b></small></div>
           <div class="body">Clienteling, endless aisle y omnicanal desde el piso de venta.</div>
         </div>
-      </div>
-      <div style="margin-top:16px;padding:16px 24px;border-top:1px solid var(--line-paper);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap">
-        <p style="font-size:15px;line-height:1.5;color:var(--paper-ink-soft);max-width:680px"><b style="color:var(--paper-ink);font-weight:600">Ninguna de estas cinco compañías compite directamente con ustedes.</b> Todas las cifras aquí las <em>reportan ellas mismas</em> — no las publica el proveedor.</p>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-ink-mute);text-align:right">Investor releases, earnings calls,<br/>customer stories co-firmadas</div>
       </div>
     </div>
   </section>
@@ -774,7 +910,7 @@
         <p class="kicker" style="margin-top:20px;max-width:520px">Latinoamérica no es una versión atrasada del retail norteamericano. Es un mercado con dinámicas propias — y quien las lea bien, no las copie, gana.</p>
       </div>
       <div class="rule-list">
-        <div class="rule-item">
+        <div class="rule-item card-i" tabindex="0" style="padding:14px 16px;border-radius:12px">
           <div class="n">1</div>
           <div>
             <h4>WhatsApp es <em>el</em> canal. No un canal.</h4>
@@ -782,16 +918,16 @@
             <div class="src">Meta · Conversations 2026</div>
           </div>
         </div>
-        <div class="rule-item">
-          <div class="n">2</div>
+        <div class="rule-item card-i" tabindex="0" style="padding:14px 16px;border-radius:12px">
+          <div class="n" style="color:var(--sf-amber)">2</div>
           <div>
             <h4>El retailer también es el banco de su cliente.</h4>
             <p>Cerca del 50% de los adultos en México tiene cuenta bancaria y menos del 20% tarjeta de crédito. Eso convierte al retailer con red física en la financiera más cercana al consumidor — con datos que ningún banco tiene.</p>
             <div class="src">CNBV · Encuesta Nacional de Inclusión Financiera</div>
           </div>
         </div>
-        <div class="rule-item">
-          <div class="n">3</div>
+        <div class="rule-item card-i" tabindex="0" style="padding:14px 16px;border-radius:12px">
+          <div class="n" style="color:var(--sf-teal)">3</div>
           <div>
             <h4>Publicidad propia sobre datos propios.</h4>
             <p>La región crece a poco más del 10%, contra 22% global. Mercado Libre proyecta duplicar su plataforma de publicidad a USD 6,000M para 2029. El margen que hoy se fuga a Meta y Google puede regresar al retailer.</p>
@@ -823,7 +959,7 @@
             </linearGradient>
           </defs>
           <circle cx="160" cy="160" r="136" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="18"/>
-          <circle cx="160" cy="160" r="136" fill="none" stroke="url(#gClock)" stroke-width="18" stroke-linecap="round" stroke-dasharray="640 854" transform="rotate(-90 160 160)"/>
+          <circle class="arc-anim" style="--dash:854;--offset:214" cx="160" cy="160" r="136" fill="none" stroke="url(#gClock)" stroke-width="18" stroke-linecap="round" transform="rotate(-90 160 160)"/>
           <g stroke="rgba(255,255,255,.20)" stroke-width="1">
             <line x1="160" y1="8" x2="160" y2="22"/>
             <line x1="312" y1="160" x2="298" y2="160"/>
@@ -852,8 +988,8 @@
         <div>
           <div class="lbl">Parte 7 · El error a evitar</div>
         </div>
-        <div class="big">40<sup>%</sup></div>
-        <div class="desc">De los proyectos de IA agéntica <span class="accent">se cancelará antes de 2027</span>.</div>
+        <div class="big"><span class="num-anim" data-count-to="40" data-count-from="0" data-count-duration="1800">0</span><sup>%</sup></div>
+        <div class="desc">De los proyectos de IA agéntica <span style="color:var(--sf-orange)">se cancelará antes de 2027</span>.</div>
         <div class="src">Gartner · Junio 2025</div>
       </aside>
       <div class="pillar-content">
@@ -862,28 +998,28 @@
           <p>No fallan por la tecnología. Fallan por cómo se compraron. El error no es adoptar IA — es adoptarla <b style="color:var(--ink);font-weight:600">sin un marco de decisión</b> que la sostenga.</p>
         </div>
         <div class="pillars-grid">
-          <div class="pillar">
+          <div class="pillar card-i" tabindex="0">
             <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L3 7l9 5 9-5-9-5z"/><path d="M3 17l9 5 9-5"/><path d="M3 12l9 5 9-5"/></svg></div>
             <div>
               <h4>Un solo cerebro de datos.</h4>
               <p>Perfil, historial, stock, precio y servicio en el mismo modelo. Sin eso, cada agente es una integración custom que envejece mal.</p>
             </div>
           </div>
-          <div class="pillar">
+          <div class="pillar card-i" tabindex="0">
             <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
             <div>
               <h4>Capa de confianza desde el día cero.</h4>
               <p>Datos personales enmascarados, retención cero, auditoría continua. En un mercado con LFPDPPP endurecida, esto no es "add-on". Es la base.</p>
             </div>
           </div>
-          <div class="pillar">
+          <div class="pillar card-i" tabindex="0">
             <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div>
             <div>
               <h4>Reglas duras y razonamiento suave.</h4>
               <p>Precio, impuesto, tope de reembolso — reglas duras. Descubrimiento, empatía, matiz — modelo. Quien no separa las dos capas produce agentes impredecibles.</p>
             </div>
           </div>
-          <div class="pillar">
+          <div class="pillar card-i" tabindex="0">
             <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M20 4L4 20"/><circle cx="12" cy="12" r="9"/></svg></div>
             <div>
               <h4>Métrica de negocio o se cancela.</h4>
@@ -910,10 +1046,10 @@
           <h3>Cómo se articula, en 4 capas</h3>
         </div>
         <div class="arc-layers">
-          <div class="arc-layer"><span class="l-name">Agentes retail-tuned</span><span class="l-desc">Servicio, comercio, merchandiser, buyer — con razonamiento y reglas.</span></div>
-          <div class="arc-layer"><span class="l-name">Comercio · Servicio · Marketing · Tienda</span><span class="l-desc">Sobre un solo modelo de metadatos — no piezas cosidas.</span></div>
-          <div class="arc-layer"><span class="l-name">Cerebro de datos unificado</span><span class="l-desc">Perfil, stock, precio e historial vivos — con Zero Copy sobre el data lake.</span></div>
-          <div class="arc-layer"><span class="l-name">Capa de confianza nativa</span><span class="l-desc">PII enmascarada, retención cero, auditoría continua desde el día cero.</span></div>
+          <div class="arc-layer card-i" tabindex="0"><span class="l-name" style="color:var(--sf-cloud)">Agentes retail-tuned</span><span class="l-desc">Servicio, comercio, merchandiser, buyer — con razonamiento y reglas.</span></div>
+          <div class="arc-layer card-i" tabindex="0"><span class="l-name" style="color:var(--sf-amber)">Comercio · Servicio · Marketing · Tienda</span><span class="l-desc">Sobre un solo modelo de metadatos — no piezas cosidas.</span></div>
+          <div class="arc-layer card-i" tabindex="0"><span class="l-name" style="color:var(--sf-teal)">Cerebro de datos unificado</span><span class="l-desc">Perfil, stock, precio e historial vivos — con Zero Copy sobre el data lake.</span></div>
+          <div class="arc-layer card-i" tabindex="0"><span class="l-name" style="color:var(--sf-magenta)">Capa de confianza nativa</span><span class="l-desc">PII enmascarada, retención cero, auditoría continua desde el día cero.</span></div>
         </div>
         <div class="arc-outcome">
           <b>Resultado en retailers reales:</b> Pandora resolvió 60% del servicio sin humano. Fisher &amp; Paykel subió 33% la conversión. Williams-Sonoma implementó en 7.5 meses. La misma arquitectura, tres velocidades — porque el punto de partida es diferente.
@@ -930,17 +1066,17 @@
         <h2 class="display l serif" style="margin-top:20px;max-width:20ch">Si sólo se llevan tres cosas, que sean estas.</h2>
       </div>
       <div class="takeaways">
-        <div class="take">
+        <div class="take card-i" tabindex="0">
           <div class="n">01</div>
           <h4>El cliente ya cambió. Sara ya no vuelve sola.</h4>
           <p>88.2% de los internautas mexicanos ya compra en línea. La mitad descubre productos hablando, no buscando. La brecha ya no es de adopción del consumidor — es de capacidad de la industria para servirlo.</p>
         </div>
-        <div class="take">
+        <div class="take card-i c-warm" tabindex="0">
           <div class="n">02</div>
           <h4>En LATAM se compite por WhatsApp.</h4>
           <p>No es un canal más. Es <em>el</em> canal transaccional. Cualquier estrategia de IA en retail que no arranque por ahí, está mal diseñada. Punto.</p>
         </div>
-        <div class="take">
+        <div class="take card-i c-teal" tabindex="0">
           <div class="n">03</div>
           <h4>La ventana se cierra en 24 meses.</h4>
           <p>Los que empezaron por la fundación de datos y un caso con métrica ya llevan un año de ventaja. Después de este ciclo, cerrarla ya no es tecnología: es fusión o adquisición.</p>
@@ -991,6 +1127,48 @@
       if(!ytFrame) return;
       try{ ytFrame.contentWindow.postMessage(JSON.stringify({event:'command',func:'pauseVideo',args:[]}),'*'); }catch(e){}
     }
+    function easeOutCubic(t){return 1-Math.pow(1-t,3)}
+    function animateCounter(el){
+      const to = parseFloat(el.getAttribute('data-count-to'));
+      const from = parseFloat(el.getAttribute('data-count-from') || '0');
+      const duration = parseInt(el.getAttribute('data-count-duration') || '1200',10);
+      const decimals = parseInt(el.getAttribute('data-count-decimals') || '0',10);
+      if(isNaN(to)) return;
+      const start = performance.now();
+      function step(now){
+        const t = Math.min(1,(now-start)/duration);
+        const eased = easeOutCubic(t);
+        const val = from + (to-from)*eased;
+        el.textContent = decimals ? val.toFixed(decimals) : Math.round(val).toString();
+        if(t<1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    function triggerAnimations(slide){
+      // Numbers counting up
+      slide.querySelectorAll('.num-anim').forEach(el=>{
+        el.textContent = el.getAttribute('data-count-from') || '0';
+        // small stagger for visual grace
+        setTimeout(()=>animateCounter(el), 120);
+      });
+      // Arc / donut / clock — toggle .on to run stroke-dashoffset transition
+      slide.querySelectorAll('.arc-anim').forEach(el=>{
+        el.classList.remove('on');
+        // force reflow so the transition restarts
+        void el.getBoundingClientRect();
+        requestAnimationFrame(()=>el.classList.add('on'));
+      });
+      slide.querySelectorAll('.bar-fill').forEach(el=>{
+        el.classList.remove('on');
+        void el.getBoundingClientRect();
+        requestAnimationFrame(()=>el.classList.add('on'));
+      });
+      slide.querySelectorAll('.reveal').forEach((el,idx)=>{
+        el.classList.remove('on');
+        setTimeout(()=>el.classList.add('on'), 120 + idx*80);
+      });
+    }
+
     function render(){
       slides.forEach((s,idx)=>s.classList.toggle('active', idx===i));
       counter.textContent = pad(i+1)+' / '+pad(slides.length);
@@ -1000,6 +1178,21 @@
       // Hide HUD logo on the cover (slide 1 has its own big logo)
       document.body.classList.toggle('cover-active', slides[i].getAttribute('data-slide') === '1');
       paperClass();
+      // Reset scroll on the newly-active slide so mobile users always start at top
+      slides[i].scrollTop = 0;
+      // Show 'more below' hint when the slide overflows
+      requestAnimationFrame(()=>{
+        const has = slides[i].scrollHeight - slides[i].clientHeight > 8;
+        document.body.classList.toggle('can-scroll', has);
+      });
+      // Fire any animations on the newly-active slide
+      triggerAnimations(slides[i]);
+      // Update hint when the user scrolls to the bottom
+      slides[i].onscroll = ()=>{
+        const el = slides[i];
+        const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 20;
+        document.body.classList.toggle('can-scroll', !nearBottom && el.scrollHeight - el.clientHeight > 8);
+      };
       history.replaceState(null,'','#'+(i+1));
       // Notify parent (for embed with notes)
       try{ if(window.parent !== window) window.parent.postMessage({type:'slide',index:i+1,total:slides.length},'*'); }catch(e){}
@@ -1020,27 +1213,36 @@
       }
     });
 
-    // Touch swipe
-    let startX = null, startY = null;
+    // Touch swipe — horizontal only, ignore when the user is scrolling vertically
+    let startX = null, startY = null, startT = 0;
     document.addEventListener('touchstart', e=>{
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
+      startT = performance.now();
     }, {passive:true});
     document.addEventListener('touchend', e=>{
       if(startX===null) return;
       const dx = e.changedTouches[0].clientX - startX;
       const dy = e.changedTouches[0].clientY - startY;
-      if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)){ dx<0 ? next() : prev() }
+      const dt = performance.now() - startT;
+      // Require a mostly-horizontal, quick swipe of >60px to change slide.
+      if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)*1.6 && dt<600){
+        dx<0 ? next() : prev();
+      }
       startX = null; startY = null;
     });
 
-    // Click to advance — skip inside iframe / links / buttons
-    document.getElementById('deck').addEventListener('click', e=>{
-      if(e.target.closest('a,button,iframe,.qr-panel,.video-frame-wrap,.placeholder')) return;
-      const r = document.getElementById('deck').getBoundingClientRect();
-      const x = e.clientX - r.left;
-      if(x > r.width*0.5) next(); else prev();
-    });
+    // Desktop click to advance — disabled on touch so it doesn't fight scroll.
+    // Also skips inside iframe / links / buttons / interactive cards.
+    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    if(!isTouch){
+      document.getElementById('deck').addEventListener('click', e=>{
+        if(e.target.closest('a,button,iframe,.qr-panel,.video-frame-wrap,.placeholder,.card-i,.arc-layer')) return;
+        const r = document.getElementById('deck').getBoundingClientRect();
+        const x = e.clientX - r.left;
+        if(x > r.width*0.5) next(); else prev();
+      });
+    }
 
     // Listen for parent-controlled navigation (from Next.js integrated viewer)
     window.addEventListener('message', e=>{
