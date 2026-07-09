@@ -112,6 +112,20 @@
   body.paper-hud .hud-foot .progress{background:rgba(0,30,91,.14)}
   .hud-foot .progress > i{display:block;height:100%;background:var(--sf-cloud);transition:width .55s cubic-bezier(.22,1,.36,1)}
   .hud-foot .hint{opacity:.55}
+  .hud-foot .foot-download{
+    display:none;align-items:center;gap:6px;
+    padding:5px 12px;border-radius:100px;
+    border:1px solid var(--line-strong);
+    font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;
+    color:var(--ink-mute);pointer-events:auto;cursor:pointer;
+    transition:color .2s,border-color .2s,background-color .2s;
+    text-decoration:none;
+  }
+  .hud-foot .foot-download svg{width:11px;height:11px}
+  .hud-foot .foot-download:hover{color:var(--sf-cloud);border-color:rgba(0,179,255,.5);background:rgba(0,179,255,.06)}
+  body.last-slide .hud-foot .foot-download{display:inline-flex}
+  body.paper-hud .hud-foot .foot-download{border-color:rgba(0,30,91,.2)}
+  body.paper-hud .hud-foot .foot-download:hover{color:var(--sf-blue);border-color:rgba(6,106,254,.5);background:rgba(6,106,254,.06)}
 
   /* ─────── COMMON ─────── */
   .eyebrow{
@@ -178,7 +192,7 @@
     padding:56px 88px 0;
     display:flex;justify-content:flex-start;
   }
-  .cover .cover-brand svg{height:64px;width:auto;filter:drop-shadow(0 4px 16px rgba(0,30,91,.4))}
+  .cover .cover-brand svg{height:128px;width:auto;filter:drop-shadow(0 6px 24px rgba(0,30,91,.42))}
   .cover .cover-inner{
     flex:1;display:grid;grid-template-columns:1.35fr 1fr;gap:60px;
     padding:32px 88px 24px;align-items:center;position:relative;
@@ -351,47 +365,49 @@
   .front.c-teal .metric b{color:var(--sf-teal)}
 
   /* ─────── SLIDE 9 · Evidencia · 5 tarjetas en fila ─────── */
-  .cases-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:56px;gap:32px}
+  .cases-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;gap:32px;flex-shrink:0}
+  .cases-wrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
   .cases-grid{
     display:grid;grid-template-columns:repeat(5,1fr);gap:20px;
-    padding-top:60px; /* space for the photo bubbles that sit on top of each card */
+    padding-top:78px;padding-bottom:8px;
+    width:100%;
   }
   .case{
     position:relative;
-    padding:78px 18px 20px;
+    padding:88px 20px 32px;
     border:1px solid var(--line-paper);border-radius:16px;
     background:rgba(6,106,254,.04);
-    display:flex;flex-direction:column;gap:10px;min-height:280px;
+    display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:420px;
   }
   .case .brand-media{
-    position:absolute;top:-56px;left:50%;transform:translateX(-50%);
-    width:112px;height:112px;
+    position:absolute;top:-70px;left:50%;transform:translateX(-50%);
+    width:132px;height:132px;
     display:flex;align-items:center;justify-content:center;
     filter:drop-shadow(0 10px 24px rgba(0,30,91,.22));
   }
   .case .brand-media .photo{
-    width:112px;height:112px;border-radius:50%;
+    width:132px;height:132px;border-radius:50%;
     background-size:cover;background-position:center;
     border:3px solid #fff;
     box-shadow:0 6px 18px -6px rgba(0,30,91,.35);
   }
   .case .brand-media .badge{
-    position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+    position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
     background:#fff;border-radius:100px;
-    padding:5px 12px;height:32px;min-width:78px;max-width:130px;
+    padding:4px 16px;height:38px;min-width:120px;max-width:190px;
     display:flex;align-items:center;justify-content:center;
     box-shadow:0 6px 18px -4px rgba(0,30,91,.28);
     border:1px solid rgba(0,30,91,.06);
   }
-  .case .brand-media .badge img{max-width:100%;max-height:22px;object-fit:contain;display:block}
+  .case .brand-media .badge img{max-width:100%;max-height:32px;object-fit:contain;display:block}
   .case .co{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-ink-mute);font-weight:600;text-align:center}
   .case .headline{font-family:'Fraunces',serif;font-weight:400;font-size:44px;line-height:.95;letter-spacing:-.03em;color:var(--sf-blue);text-align:center}
   .case.c-warm .headline{color:var(--sf-orange)}
   .case.c-teal .headline{color:var(--sf-teal)}
   .case.c-magenta .headline{color:var(--sf-magenta)}
   .case.c-amber .headline{color:#c47a10}
-  .case .headline small{display:block;font-size:11.5px;letter-spacing:0;color:var(--paper-ink-soft);margin-top:6px;font-family:'Inter',sans-serif;line-height:1.4;font-weight:400}
-  .case .body{font-size:12px;line-height:1.5;color:var(--paper-ink-soft);flex:1;text-align:center}
+  .case .headline small{display:block;font-size:11.5px;letter-spacing:0;color:var(--paper-ink-soft);margin-top:10px;font-family:'Inter',sans-serif;line-height:1.5;font-weight:400}
+  .case .body{font-size:12px;line-height:1.6;color:var(--paper-ink-soft);text-align:center}
 
   /* ─────── SLIDE 10 · LATAM ─────── */
   .latam{display:grid;grid-template-columns:1fr 1fr;gap:70px;height:100%;align-items:center}
@@ -415,15 +431,30 @@
   .pillar-slide{display:grid;grid-template-columns:340px 1fr;gap:44px;height:100%;align-items:stretch;padding-top:20px}
   .pillar-hero{
     padding:36px 32px;border-radius:20px;
-    background:linear-gradient(160deg,rgba(0,179,255,.18) 0%,rgba(6,106,254,.10) 100%);
-    border:1px solid var(--line-strong);
-    display:flex;flex-direction:column;justify-content:space-between;gap:20px;
+    background:
+      radial-gradient(400px 300px at 20% 20%,rgba(255,221,0,.10),transparent 70%),
+      linear-gradient(160deg,rgba(0,30,91,.55) 0%,rgba(2,42,192,.35) 100%);
+    border:1px solid rgba(255,221,0,.28);
+    box-shadow:inset 0 0 60px rgba(255,221,0,.05);
+    display:flex;flex-direction:column;justify-content:space-between;gap:22px;
   }
-  .pillar-hero .lbl{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--sf-cloud);font-weight:600}
-  .pillar-hero .big{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(88px,11vw,140px);line-height:.85;letter-spacing:-.04em;color:var(--sf-cloud)}
-  .pillar-hero .big sup{font-size:.28em;vertical-align:.55em;color:var(--ink-mute);font-weight:400;margin-left:.06em;letter-spacing:0}
-  .pillar-hero .desc{font-family:'Fraunces',serif;font-size:20px;line-height:1.25;letter-spacing:-.015em;color:var(--ink)}
-  .pillar-hero .src{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}
+  .pillar-hero .lbl{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--sf-yellow);font-weight:600}
+  .pillar-hero .big{
+    font-family:'Fraunces',serif;font-weight:500;font-size:clamp(96px,12vw,160px);
+    line-height:.85;letter-spacing:-.04em;color:var(--sf-yellow);
+    text-shadow:0 0 40px rgba(255,221,0,.35),0 4px 24px rgba(0,0,0,.25);
+    position:relative;
+  }
+  .pillar-hero .big::before{
+    content:"";position:absolute;left:-8px;top:8%;width:5px;height:84%;
+    background:var(--sf-yellow);border-radius:4px;
+    box-shadow:0 0 16px rgba(255,221,0,.5);
+  }
+  .pillar-hero .big sup{font-size:.30em;vertical-align:.55em;color:rgba(255,221,0,.7);font-weight:400;margin-left:.06em;letter-spacing:0;text-shadow:none}
+  .pillar-hero .big .num-anim{color:inherit;font-family:inherit;font-weight:inherit}
+  .pillar-hero .desc{font-family:'Fraunces',serif;font-size:22px;line-height:1.25;letter-spacing:-.015em;color:var(--ink);padding-left:6px}
+  .pillar-hero .desc .accent{color:var(--sf-yellow);font-weight:500}
+  .pillar-hero .src{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);padding-left:6px}
 
   .pillar-content{display:flex;flex-direction:column;gap:22px}
   .pillar-content .title-band{display:flex;flex-direction:column;gap:8px}
@@ -491,26 +522,32 @@
   .take h4{font-family:'Fraunces',serif;font-weight:500;font-size:24px;line-height:1.12;letter-spacing:-.01em;color:var(--paper-ink)}
   .take p{font-size:14px;line-height:1.55;color:var(--paper-ink-soft);flex:1}
 
-  /* ─────── SLIDE 15 · Cierre ─────── */
-  .closing{justify-content:center;align-items:center;text-align:center;gap:32px;position:relative}
-  .closing .closing-eyebrow{
-    display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--sf-cloud);
-    padding:8px 16px;border:1px solid rgba(0,179,255,.5);border-radius:100px;
+  /* ─────── SLIDE 15 · Cierre · Gracias ─────── */
+  .closing{justify-content:center;align-items:center;text-align:center;gap:48px;position:relative;overflow:hidden}
+  .closing .sparkle-bg{
+    position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;
   }
-  .closing h2{max-width:20ch;margin:0 auto}
-  .closing .baseline{font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mute)}
-  .closing .baseline b{color:var(--ink)}
-  .closing .download-cta{
-    display:inline-flex;align-items:center;gap:10px;margin-top:14px;
-    padding:14px 24px;border-radius:100px;
-    background:var(--sf-cloud);color:var(--sf-navy);
-    font-weight:600;font-size:14px;letter-spacing:.02em;
-    box-shadow:0 20px 40px -10px rgba(0,179,255,.5);
-    transition:transform .2s,box-shadow .2s;
-    pointer-events:auto;cursor:pointer;border:none;
+  .closing .sparkle-bg img{position:absolute;filter:blur(.5px)}
+  .closing .sparkle-bg img.a{top:8%;left:6%;width:200px;opacity:.6;transform:rotate(-8deg)}
+  .closing .sparkle-bg img.b{top:14%;right:10%;width:260px;opacity:.7;transform:rotate(14deg)}
+  .closing .sparkle-bg img.c{bottom:12%;left:14%;width:170px;opacity:.55;transform:rotate(22deg)}
+  .closing .sparkle-bg img.d{bottom:18%;right:8%;width:220px;opacity:.5;transform:rotate(-18deg)}
+  .closing .sparkle-bg img.e{top:52%;left:44%;width:110px;opacity:.35;transform:translateX(-50%) rotate(6deg)}
+
+  .closing .gracias{
+    position:relative;z-index:2;
+    font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.05em;line-height:.85;
+    font-size:clamp(140px,20vw,300px);
+    color:rgba(255,255,255,.9);
   }
-  .closing .download-cta:hover{transform:translateY(-2px);box-shadow:0 24px 44px -8px rgba(0,179,255,.7)}
-  .closing .download-cta svg{width:16px;height:16px}
+
+  .closing .takeaway-final{
+    position:relative;z-index:2;
+    font-family:'Fraunces',serif;font-weight:400;line-height:1.25;letter-spacing:-.015em;
+    font-size:clamp(24px,2.6vw,40px);
+    color:rgba(255,255,255,.9);max-width:32ch;margin:0 auto;
+  }
+  .closing .takeaway-final .accent{color:var(--sf-cloud);font-style:italic;font-weight:500}
 
   /* ─────── Placeholder ─────── */
   .placeholder{
@@ -549,7 +586,7 @@
     body.paper-hud::before{background:linear-gradient(180deg,transparent,rgba(234,245,254,.95))}
 
     .cover .cover-brand{padding:32px 24px 0;justify-content:center}
-    .cover .cover-brand svg{height:44px}
+    .cover .cover-brand svg{height:88px}
     .cover .cover-inner{grid-template-columns:1fr;gap:24px;padding:20px 24px 16px;text-align:center}
     .cover h1{max-width:100%}
     .cover .qr-panel{justify-self:center;padding:22px 22px 20px}
@@ -848,7 +885,7 @@
 
   <!-- ═══ SLIDE 9 · EVIDENCIA ═══ -->
   <section class="slide paper" data-slide="9">
-    <div class="stack push">
+    <div class="stack">
       <div class="cases-head">
         <div>
           <p class="eyebrow"><span class="dot"></span>Parte 4 · Evidencia pública verificable</p>
@@ -856,6 +893,7 @@
         </div>
         <p style="max-width:340px;font-size:13.5px;line-height:1.55;color:var(--paper-ink-mute);text-align:right">Métricas oficiales, publicadas por las propias compañías. No proyecciones. No pilotos. Producción en múltiples países.</p>
       </div>
+      <div class="cases-wrap">
       <div class="cases-grid">
         <div class="case card-i" tabindex="0">
           <div class="brand-media">
@@ -902,6 +940,7 @@
           <div class="headline"><span class="num-anim" data-count-to="18" data-count-from="0" data-count-duration="1200">0</span><small>Semanas · POS en <b style="color:var(--paper-ink)">106 tiendas</b></small></div>
           <div class="body">Clienteling, endless aisle y omnicanal desde el piso de venta.</div>
         </div>
+      </div>
       </div>
     </div>
   </section>
@@ -1090,16 +1129,17 @@
     </div>
   </section>
 
-  <!-- ═══ SLIDE 15 · CIERRE + DESCARGA ═══ -->
+  <!-- ═══ SLIDE 15 · CIERRE · GRACIAS ═══ -->
   <section class="slide dark closing" data-slide="15">
-    <div class="closing-eyebrow"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--sf-cloud)"></span>El cierre</div>
-    <h2 class="display xl serif">La ventana está abierta.<br/>Sara existe.<br/><span class="accent">Y hoy la pueden servir.</span></h2>
-    <p class="kicker" style="max-width:620px">Lo que sigue es la demostración — sobre un caso mexicano, en vivo — de cómo se ve todo esto en la pantalla de su cliente.</p>
-    <p class="baseline">Continúa · <b>Demo en vivo · WhatsApp × Retail</b></p>
-    <a class="download-cta" href="/presentations/retail-ia-mexico-ted.html" download="Retail-IA-Mexico-Salesforce-Presentacion.html">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg>
-      Descargar la presentación
-    </a>
+    <div class="sparkle-bg" aria-hidden="true">
+      <img class="a" src="/sfdc-brand/Sparkles/Sparkles Blue Main.svg" alt=""/>
+      <img class="b" src="/sfdc-brand/Sparkles/Sparkles Blue Inclined.svg" alt=""/>
+      <img class="c" src="/sfdc-brand/Sparkles/Sparkles DarkBlue Inclined.svg" alt=""/>
+      <img class="d" src="/sfdc-brand/Sparkles/Sparkles Blue Inclined 2.svg" alt=""/>
+      <img class="e" src="/sfdc-brand/Sparkles/Sparkles DarkBlue Main.svg" alt=""/>
+    </div>
+    <div class="gracias">Gracias</div>
+    <p class="takeaway-final">La ventana está abierta. Sara existe.<br/>Y la próxima década del retail mexicano <span class="accent">se escribe con su nombre</span>.</p>
   </section>
 </div>
 
@@ -1112,6 +1152,10 @@
     <span id="counter">01 / 15</span>
     <div class="progress"><i id="progressBar" style="width:6.6%"></i></div>
     <span class="hint">← → &nbsp;·&nbsp; ⇥ desliza</span>
+    <a class="foot-download" id="footDownload" href="/presentations/retail-ia-mexico-ted.html" download="Retail-IA-Mexico-Salesforce-Presentacion.html" aria-label="Descargar presentación" title="Descargar presentación">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg>
+      <span>Descargar</span>
+    </a>
   </div>
 </div>
 
@@ -1182,6 +1226,8 @@
       if(slides[i].getAttribute('data-slide') !== '2') stopYouTube();
       // Hide HUD logo on the cover (slide 1 has its own big logo)
       document.body.classList.toggle('cover-active', slides[i].getAttribute('data-slide') === '1');
+      // Show discreet download button in the footer only on the final slide
+      document.body.classList.toggle('last-slide', i === slides.length - 1);
       paperClass();
       // Reset scroll on the newly-active slide so mobile users always start at top
       slides[i].scrollTop = 0;
