@@ -207,11 +207,19 @@
   .cover .sparkle-bg img.b{bottom:-40px;left:-70px;width:280px;transform:rotate(-14deg);opacity:.7}
 
   .cover h1{
-    max-width:14ch;position:relative;z-index:2;
+    max-width:none;position:relative;z-index:2;
     color:var(--ink);font-family:'Fraunces',serif;font-weight:400;
-    font-size:clamp(52px,7.2vw,124px);line-height:.96;letter-spacing:-.03em;
+    font-size:clamp(56px,8vw,140px);line-height:1;letter-spacing:-.03em;
   }
+  .cover h1 .line{display:block;white-space:nowrap}
+  .cover h1 .line-2{white-space:normal;margin-top:.08em;color:rgba(255,255,255,.9)}
   .cover h1 em{font-style:normal;color:var(--sf-cloud)}
+  .cover .cover-dek{
+    position:relative;z-index:2;margin-top:26px;
+    font-family:'Inter',sans-serif;font-weight:400;
+    font-size:clamp(19px,1.55vw,28px);line-height:1.4;letter-spacing:-.008em;
+    color:rgba(255,255,255,.78);max-width:44ch;
+  }
   .cover .qr-panel{
     position:relative;z-index:2;
     display:flex;flex-direction:column;align-items:center;gap:18px;
@@ -443,12 +451,12 @@
     font-family:'Fraunces',serif;font-weight:500;font-size:clamp(96px,12vw,160px);
     line-height:.85;letter-spacing:-.04em;color:var(--sf-yellow);
     text-shadow:0 0 40px rgba(255,221,0,.35),0 4px 24px rgba(0,0,0,.25);
-    position:relative;
+    position:relative;padding-left:22px;
   }
   .pillar-hero .big::before{
-    content:"";position:absolute;left:-8px;top:8%;width:5px;height:84%;
-    background:var(--sf-yellow);border-radius:4px;
-    box-shadow:0 0 16px rgba(255,221,0,.5);
+    content:"";position:absolute;left:0;top:12%;width:4px;height:76%;
+    background:var(--sf-cloud);border-radius:4px;opacity:.55;
+    box-shadow:0 0 10px rgba(0,179,255,.35);
   }
   .pillar-hero .big sup{font-size:.30em;vertical-align:.55em;color:rgba(255,221,0,.7);font-weight:400;margin-left:.06em;letter-spacing:0;text-shadow:none}
   .pillar-hero .big .num-anim{color:inherit;font-family:inherit;font-weight:inherit}
@@ -523,16 +531,26 @@
   .take p{font-size:14px;line-height:1.55;color:var(--paper-ink-soft);flex:1}
 
   /* ─────── SLIDE 15 · Cierre · Gracias ─────── */
-  .closing{justify-content:center;align-items:center;text-align:center;gap:48px;position:relative;overflow:hidden}
+  /* Single flat electric-blue background — no gradient bands */
+  .slide.dark.closing{
+    background:
+      radial-gradient(900px 700px at 50% 50%,rgba(0,179,255,.14),transparent 70%),
+      #066afe;
+    /* Symmetric padding so content centers perfectly regardless of HUD */
+    padding:96px 88px 96px;
+  }
+  body.closing-active{background:#066afe}
+  .closing{
+    justify-content:center;align-items:center;text-align:center;
+    gap:48px;position:relative;overflow:hidden;
+    min-height:100%;
+  }
   .closing .sparkle-bg{
     position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;
   }
   .closing .sparkle-bg img{position:absolute;filter:blur(.5px)}
-  .closing .sparkle-bg img.a{top:8%;left:6%;width:200px;opacity:.6;transform:rotate(-8deg)}
-  .closing .sparkle-bg img.b{top:14%;right:10%;width:260px;opacity:.7;transform:rotate(14deg)}
-  .closing .sparkle-bg img.c{bottom:12%;left:14%;width:170px;opacity:.55;transform:rotate(22deg)}
-  .closing .sparkle-bg img.d{bottom:18%;right:8%;width:220px;opacity:.5;transform:rotate(-18deg)}
-  .closing .sparkle-bg img.e{top:52%;left:44%;width:110px;opacity:.35;transform:translateX(-50%) rotate(6deg)}
+  .closing .sparkle-bg img.a{top:12%;left:8%;width:220px;opacity:.65;transform:rotate(-10deg)}
+  .closing .sparkle-bg img.b{bottom:14%;right:8%;width:240px;opacity:.55;transform:rotate(16deg)}
 
   .closing .gracias{
     position:relative;z-index:2;
@@ -543,11 +561,11 @@
 
   .closing .takeaway-final{
     position:relative;z-index:2;
-    font-family:'Fraunces',serif;font-weight:400;line-height:1.25;letter-spacing:-.015em;
-    font-size:clamp(24px,2.6vw,40px);
-    color:rgba(255,255,255,.9);max-width:32ch;margin:0 auto;
+    font-family:'Fraunces',serif;font-weight:400;line-height:1.3;letter-spacing:-.015em;
+    font-size:clamp(20px,2.1vw,32px);
+    color:rgba(255,255,255,.9);max-width:36ch;margin:0 auto;
   }
-  .closing .takeaway-final .accent{color:var(--sf-cloud);font-style:italic;font-weight:500}
+  .closing .takeaway-final .accent{color:var(--sf-yellow);font-style:italic;font-weight:500;text-shadow:0 0 24px rgba(255,221,0,.25)}
 
   /* ─────── Placeholder ─────── */
   .placeholder{
@@ -600,11 +618,16 @@
 
     .scene,.wave,.behavior,.latam,.window-slide,.solution{grid-template-columns:1fr;gap:28px}
     .mx-grid,.fronts,.takeaways,.pillars-grid,.poll{grid-template-columns:1fr 1fr;gap:14px}
-    /* Cases: apilar en móvil, mantener burbuja de marca visible */
-    .cases-grid{grid-template-columns:1fr;gap:74px;padding-top:70px}
-    .case{padding:80px 22px 22px;min-height:auto}
+    /* Cases: apilar en móvil con espacio suficiente entre burbuja y tarjeta previa */
+    .cases-wrap{display:block}
+    .cases-grid{grid-template-columns:1fr;gap:90px;padding-top:70px;padding-bottom:24px}
+    .case{padding:80px 22px 28px;min-height:auto;gap:12px}
     .case .brand-media{top:-60px;width:120px;height:120px}
     .case .brand-media .photo{width:120px;height:120px}
+    .case .brand-media .badge{max-width:170px;min-width:100px;height:34px;padding:4px 14px}
+    .case .brand-media .badge img{max-height:26px}
+    /* Cases head should not eat all the vertical space above card 1 */
+    .cases-head{margin-bottom:24px}
 
     .pillar-slide{grid-template-columns:1fr;gap:24px}
     .pillar-hero{padding:24px 22px}
@@ -677,7 +700,10 @@
         <img class="a" src="/sfdc-brand/Sparkles/Sparkles Blue Inclined.svg" alt="" />
         <img class="b" src="/sfdc-brand/Sparkles/Sparkles DarkBlue Inclined.svg" alt="" />
       </div>
-      <h1>El cliente <em>ya cambió</em>.<br/>El retail, todavía no.</h1>
+      <div>
+        <h1><span class="line">El cliente <em>ya cambió</em>.</span><span class="line line-2">¿Y nosotros?</span></h1>
+        <p class="cover-dek">La industria retail frente a un cliente que no espera.</p>
+      </div>
       <div class="qr-panel">
         <div class="qr">
           <img src="https://api.qrserver.com/v1/create-qr-code/?data=https%3A%2F%2Flaila-jgr.com%2Fpresentations%2Fretail-ia-mexico-ted.html&size=400x400&margin=0&ecc=M&color=001e5b" alt="QR para seguir la presentación" width="200" height="200" />
@@ -1106,8 +1132,8 @@
   <section class="slide paper" data-slide="14">
     <div class="stack push">
       <div>
-        <p class="eyebrow"><span class="dot"></span>Cierre · Tres frases para llevar</p>
-        <h2 class="display l serif" style="margin-top:20px;max-width:20ch">Si sólo se llevan tres cosas, que sean estas.</h2>
+        <p class="eyebrow"><span class="dot"></span>Cierre</p>
+        <h2 class="display l serif" style="margin-top:20px;max-width:20ch">3 puntos clave.</h2>
       </div>
       <div class="takeaways">
         <div class="take card-i" tabindex="0">
@@ -1134,12 +1160,9 @@
     <div class="sparkle-bg" aria-hidden="true">
       <img class="a" src="/sfdc-brand/Sparkles/Sparkles Blue Main.svg" alt=""/>
       <img class="b" src="/sfdc-brand/Sparkles/Sparkles Blue Inclined.svg" alt=""/>
-      <img class="c" src="/sfdc-brand/Sparkles/Sparkles DarkBlue Inclined.svg" alt=""/>
-      <img class="d" src="/sfdc-brand/Sparkles/Sparkles Blue Inclined 2.svg" alt=""/>
-      <img class="e" src="/sfdc-brand/Sparkles/Sparkles DarkBlue Main.svg" alt=""/>
     </div>
     <div class="gracias">Gracias</div>
-    <p class="takeaway-final">La ventana está abierta. Sara existe.<br/>Y la próxima década del retail mexicano <span class="accent">se escribe con su nombre</span>.</p>
+    <p class="takeaway-final">La ventana está abierta. Sara existe.<br/>El futuro del retail no está en Silicon Valley, <span class="accent">está en esta sala.</span></p>
   </section>
 </div>
 
@@ -1228,6 +1251,8 @@
       document.body.classList.toggle('cover-active', slides[i].getAttribute('data-slide') === '1');
       // Show discreet download button in the footer only on the final slide
       document.body.classList.toggle('last-slide', i === slides.length - 1);
+      // Paint the body with the same gradient on the closing slide so no navy shows through
+      document.body.classList.toggle('closing-active', slides[i].classList.contains('closing'));
       paperClass();
       // Reset scroll on the newly-active slide so mobile users always start at top
       slides[i].scrollTop = 0;
