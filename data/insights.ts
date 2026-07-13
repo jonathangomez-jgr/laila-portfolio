@@ -2888,4 +2888,608 @@ const retailAiMexico: Insight = {
   ],
 };
 
-export const insights: Insight[] = [multiAgent, customerFeedback, retailAiMexico];
+const retailAiColombia: Insight = {
+  slug: "retail-ia-colombia-salesforce",
+  topic: "IA en Retail",
+  audience: ["executive", "architect", "deep"],
+  heroEyebrow: "Postura de industria · Retail & IA · Colombia",
+  title:
+    "IA en la industria Retail de Colombia: del mandato global al momento colombiano con Salesforce",
+  subtitle:
+    "Hacia dónde va la industria retail bajo la ola de agentic AI, cómo se está redistribuyendo el liderazgo entre los retailers que adoptaron IA a tiempo y qué debe hacer un retailer colombiano hoy para capitalizar el punto de inflexión. Escrito desde la mirada de un Industry Advisor especializado en Retail.",
+  summary:
+    "Entramos a 2026 con la IA agentica como prioridad ejecutiva #1 del retail global — 91% de los CIOs de la industria (Gartner) y 75% de los retailers (Salesforce Connected Shoppers Report) la consideran esencial. Amazon superó a Walmart como #1 retailer de EE.UU. por primera vez en décadas gracias a su stack de IA y datos. Colombia llega a este punto con señales macro fuertes: el retail físico creció +11,7% real en 2025 (DANE) y aceleró a +14,9% real en abril 2026; el e-commerce local alcanzó COP $145,4 billones y 684,6M de transacciones en 2025 (+11,1% y +19,9% YoY respectivamente, CCCE) con 9,3M compradores digitales y una participación que empezó a inflectar de 2,4% a 2,6% del retail en febrero 2026 — el primer movimiento estructural en años. La inclusión financiera es casi universal (96,3% de adultos con al menos un producto, Superfinanciera 2024) pero la tarjeta de crédito sigue en 23,3%, lo que consolida a Nequi, Daviplata (18,7M clientes) y a las financieras retail como el crédito más cercano al consumidor. Rappi (adquisición de Fountain9 en septiembre 2024) es el caso latinoamericano más maduro de IA en supply chain retail. En ese contexto, Salesforce empaquetó su respuesta bajo Agentforce 360 for Retail: un stack unificado — Commerce, Service, Marketing, Data 360, Retail Cloud con Modern POS — con métricas duras verificables en Pandora (60% deflection, +10 NPS), SharkNinja (+6% conversión, 20K chats/sem), Williams-Sonoma (7,5 meses, 21M suscriptores) y Fisher & Paykel (+33% conversión).",
+  author: "Industry Advisor · Retail",
+  authorRole: "Consultor especializado en industria Retail · IA & CX",
+  publishedAt: "2026-07-13",
+  updatedAt: "2026-07-13",
+  readingMinutes: 30,
+  tags: [
+    "Retail",
+    "IA generativa",
+    "Agentic AI",
+    "Colombia",
+    "LATAM",
+    "Agentforce",
+    "Commerce Cloud",
+    "Data 360",
+    "Omnicanalidad",
+    "WhatsApp Commerce",
+  ],
+  coverImage: {
+    src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
+    alt: "Agentforce 360 sobre Data 360 y Customer 360: el stack agentico completo aplicado a retail.",
+    source: {
+      label: "Salesforce · Agentforce platform overview",
+      url: "https://www.salesforce.com/agentforce/",
+    },
+  },
+  externalDeckUrl: "/presentations/retail-ia-colombia-ted.html",
+  externalDeckLabel: "Presentación ejecutiva · 20 min",
+  presenterDeckRoute: "deck-ted",
+  presenterDeckLabel: "Modo presentador",
+  sections: [
+    {
+      id: "resumen-ejecutivo",
+      eyebrow: "Statement ejecutivo",
+      title: "La tesis en una página",
+      blocks: [
+        {
+          type: "statement",
+          text: "La industria retail entró en la fase donde la IA dejó de ser diferenciador y pasó a ser condición de supervivencia. El 91% de los CIOs de retail (Gartner) y el 75% de los retailers (Salesforce Connected Shoppers Report) declaran que los agentes de IA son esenciales para 2026. Amazon superó a Walmart como #1 retailer de EE.UU. gracias a su stack de IA y datos. En Colombia, con el retail físico creciendo +11,7% real en 2025 (DANE) y acelerando a +14,9% en abril 2026, con 9,3M compradores digitales y la participación e-commerce inflectando de 2,4% a 2,6% del retail (CCCE, feb-2026), la ventana para adoptar IA con retorno claro se acaba de abrir — y la brecha entre los que se movieron (Rappi con Fountain9, Falabella, Bancolombia/Nequi, Grupo Éxito) y el resto se ensancha cada trimestre. Salesforce respondió con Agentforce 360 for Retail: Commerce + Service + Marketing + Data 360 + Modern POS sobre un solo modelo de datos, con Trust Layer nativo, Zero Copy hacia el data lake que el retailer ya tiene y agentes retail-tuned (Personal Shopper, Merchandiser, Buyer, Service, Help). Los casos con métricas duras públicas — Pandora, SharkNinja, Williams-Sonoma — muestran que la promesa se materializa cuando el stack está unificado, no cuando la IA se compra por piezas.",
+        },
+        {
+          type: "paragraph",
+          text: "Este documento está escrito desde la mirada de un Industry Advisor especializado en Retail y dirigido a usted como responsable de la decisión — CEO, CIO, CDO, VP Comercial, Director de CX o de Tecnología. No es una defensa de una plataforma: es una lectura consultiva del momento que vive la industria, con datos verificables de fuentes de primera confiabilidad (Gartner, Forrester, McKinsey, DANE, CCCE, Superfinanciera, MinTIC, CONPES 4144, Oxford Insights, cartas al accionista de Amazon y Walmart, y páginas oficiales de Salesforce) y una postura clara sobre qué debe hacer hoy un retailer colombiano para capitalizar la ola de IA con retorno defendible en 12–24 meses.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Formatos disponibles",
+          text: "Este insight tiene dos formatos complementarios. (1) La presentación ejecutiva de 20 min — charla estilo TED para audiencias de CEO / CMO / CFO — construida con Inspiration → Information → Inspiration y handoff a demo en vivo. Se puede abrir pública (para la audiencia y para descargar) o en modo presentador con notas embebidas. (2) Este documento extenso funciona como material de referencia — el deep dive con desglose de soluciones, casos verificables y hoja de ruta para comité ejecutivo.",
+        },
+      ],
+    },
+    {
+      id: "estado-global",
+      eyebrow: "Parte 1 · Estado global",
+      title: "Dónde está la industria retail hoy y por qué la IA ya no espera",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La industria retail vive un punto de inflexión. Después de dos años de pilotos de IA generativa, 2026 es el año donde los retailers que adoptaron temprano están cosechando ventaja competitiva medible — y donde los que se quedaron mirando empiezan a pagar la factura. Los datos que siguen no son marketing: son la lectura consolidada de Gartner, Forrester, McKinsey, Salesforce Connected Shoppers Report, cartas al accionista de Amazon y Walmart, y comunicados oficiales.",
+        },
+        {
+          type: "kpis",
+          items: [
+            { value: "91%", label: "CIOs de retail que priorizan IA como su tecnología #1 para 2026 (Gartner)" },
+            { value: "75%", label: "Retailers que consideran los AI agents esenciales para 2026 (Salesforce)" },
+            { value: "88%", label: "Retailers que dicen que unified commerce impactará significativamente sus objetivos" },
+            { value: "$234B", label: "Gasto en software empresarial en riesgo por disrupción de agentic AI (Gartner)" },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Cinco frentes donde la IA está generando ventaja hoy",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Frente 1",
+              title: "Personalización hiper-contextual",
+              description:
+                "El descubrimiento migra de la búsqueda tradicional a la conversación: 53% de los consumidores ya descubre productos en canales sociales y agénticos (vs 46% en 2023). Los retailers ganadores unifican perfil, contexto de sesión, historial de compra y stock en tiempo real para servir la oferta correcta en el canal correcto.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Frente 2",
+              title: "Servicio al cliente autónomo",
+              description:
+                "Gartner proyecta que para 2029 el 80% de las consultas comunes de servicio se resolverán con agentes AI sin humano, con -30% en costos operativos. Los casos ya en producción hoy (Pandora 60% deflection, SharkNinja 20K chats/semana automatizados) muestran que la promesa es real cuando el agente está grounded en datos de negocio.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Frente 3",
+              title: "Forecasting, precios y merchandising",
+              description:
+                "Amazon Same-Day de perishables creció 40x apoyado en forecasting AI. Home Depot desplegó Magic Apron (DIY) y Blueprint Takeoffs (Pros). Walmart desplegó AI copilots a 750,000 asociados. La IA se corre profundo en la operación, no solo en la vitrina.",
+              tone: "violet",
+            },
+            {
+              eyebrow: "Frente 4",
+              title: "Operaciones de tienda y última milla",
+              description:
+                "Amazon opera 1 millón+ de robots en fulfillment centers, superó a USPS/FedEx/UPS como mayor carrier de EE.UU. en 2025 con ~13,000 millones de paquetes/año, y Sam's Club eliminó el checkout de salida con computer vision. La ventaja física ahora se construye con IA.",
+              tone: "neutral",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "La otra cara: >40% de los proyectos agentic se cancelarán",
+          text: "Gartner alertó (junio 2025) que más del 40% de los proyectos agentic AI serán cancelados antes de fin de 2027 por costos escalantes, ROI no probado y controles de riesgo insuficientes. Esta cifra no debería frenar la adopción — debería obligarla a diseñarse con métricas de negocio desde el día uno, arquitectura de gobernanza clara y un plan de retiro para casos que no muestren valor en 6 meses. El error no es adoptar IA: es adoptarla sin marco de decisión.",
+        },
+      ],
+    },
+    {
+      id: "latam",
+      eyebrow: "Parte 2 · Latinoamérica",
+      title: "Cómo aterriza esta ola en Latinoamérica",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Latinoamérica no es una versión atrasada del mercado norteamericano — es un mercado distinto con dinámicas propias. Aquí la IA se adopta bajo condiciones que en EE.UU. no existen: informalidad económica alta, bancarización parcial, WhatsApp como canal transaccional dominante y una red de comercio de proximidad (convenience, farmacia, tenderos, hard discount en Colombia) sin paralelo. Entender esas diferencias es lo que separa una estrategia con retorno de una réplica costosa que no aterriza.",
+        },
+        {
+          type: "kpis",
+          items: [
+            { value: "USD 232B", label: "E-commerce LATAM proyectado 2028 (vs USD 151B en 2023, +54%)" },
+            { value: "USD 28.9B", label: "Ingresos Mercado Libre 2025 (+39% YoY), 174M+ usuarios" },
+            { value: "83M", label: "MAU de Mercado Pago (54.5% lo tuvieron como primer método digital)" },
+            { value: "1M+", label: "Empresas usando un agente comercial de Meta en WhatsApp/Messenger (junio 2026)" },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Tres dinámicas que definen la adopción de IA en la región",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              title: "WhatsApp como canal primario",
+              description:
+                "Meta reporta 1M+ empresas ya usando un agente comercial en WhatsApp/Messenger. Brasil es uno de solo dos mercados globales con WhatsApp Pay integrado. Cualquier estrategia de comercio conversacional en LATAM que no arranque por WhatsApp está mal diseñada.",
+              tone: "primary",
+            },
+            {
+              title: "Retail-as-a-Bank",
+              description:
+                "La brecha entre acceso financiero universal y crédito bajo abre una oportunidad única para retail-fintech. En Colombia: 96,3% de adultos con producto financiero pero sólo 23,3% con tarjeta de crédito (Superfinanciera 2024). Daviplata alcanza 18,7M clientes (Q1 2025). Nequi supera los 26M de usuarios. El retailer con red física es la financiera más cercana al consumidor.",
+              tone: "success",
+            },
+            {
+              title: "Retail media subpenetrado",
+              description:
+                "Penetración regional 'mid-teens' vs 22% global. Mercado Libre proyecta duplicar retail media a USD 6B para 2029. Mercado Ads y Rappi Ads capturan buena parte del crecimiento — con IA como palanca clave de activación de 1P data.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "El diferencial regional real",
+          text: "En LATAM, un agente de IA que no habla WhatsApp, no maneja crédito informal y no entiende el modelo de tiendas de proximidad y hard discount tiene un techo de valor muy bajo. Los ganadores serán quienes integren IA sobre esas tres realidades — no quienes copien la arquitectura de un retailer norteamericano.",
+        },
+      ],
+    },
+    {
+      id: "colombia",
+      eyebrow: "Parte 3 · Colombia",
+      title: "Colombia: el mercado retail y su ventana de adopción de IA",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Colombia entra a 2026 con una combinación macro que no había tenido antes: el comercio minorista físico se expandió +11,7% real en 2025 (DANE) y aceleró a +14,9% real en abril 2026 — la cifra más alta de la década. Al mismo tiempo, el e-commerce local llegó a COP $145,4 billones en 2025 con 684,6M transacciones (+19,9% YoY) y consolidó una base de 9,3M compradores digitales (CCCE). La participación e-commerce sobre el retail, que llevaba tres años estabilizada en 2,4%, empezó a inflectar en el Q1 2026 (2,6% en febrero, +22,2% en transacciones). Es el punto de inflexión estructural — y coincide exactamente con el momento en que la IA agéntica pasa de piloto a producción a nivel global.",
+        },
+        {
+          type: "kpis",
+          items: [
+            { value: "+11.7%", label: "Crecimiento real del comercio minorista 2025 (DANE); +14,9% real en abril 2026" },
+            { value: "$145.4B", label: "COP en e-commerce Colombia 2025 (+11,1% YoY, CCCE)" },
+            { value: "9.3M", label: "Compradores digitales activos al cierre de 2025 (CCCE)" },
+            { value: "96.3%", label: "Adultos con producto financiero — pero sólo 23,3% con tarjeta de crédito (Superfinanciera)" },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Segmentación del retail colombiano por vertical y madurez digital",
+        },
+        {
+          type: "table",
+          headers: ["Segmento", "Actores clave", "Escala Colombia", "Madurez digital / IA"],
+          rows: [
+            [
+              "Autoservicio y grocery formal",
+              "Grupo Éxito (Éxito, Carulla, Surtimax, Surtimayorista, Súper Inter), Cencosud (Jumbo, Metro), Olímpica, Alkosto, La 14.",
+              "Grupo Éxito ~600 tiendas totales; Cencosud Colombia con presencia en autoservicio + financial services (EBITDA margin 2,1% Q2 2025).",
+              "Grupo Éxito publica reportes anuales y lleva años en unified commerce; Cencosud rediseña estrategia en Colombia. Ninguno con caso público de IA con métricas duras — oportunidad abierta.",
+            ],
+            [
+              "Hard discount (fenómeno colombiano único)",
+              "Tiendas D1, Ara (Jerónimo Martins), Tostao'. Justo & Bueno en reorganización.",
+              "D1 lidera con COP $19–21 billones en ingresos 2025, ~2,600 tiendas en ~550 municipios. Ara con 1,447 puntos de venta (marzo 2025) y crecimiento +9,1% YoY.",
+              "Hard discount capturó ~25% del retail (Kantar 2023). Estudio Banco de la República: municipios con hard discount tienen +4 pp de ocupación laboral vs sin él. Segmento con menor adopción de IA por diseño operativo — pero mayor oportunidad de forecasting.",
+            ],
+            [
+              "Departamentales y moda",
+              "Falabella Colombia, Homecenter Sodimac, Éxito Wow.",
+              "Falabella con presencia consolidada; Homecenter Sodimac líder en home.",
+              "Falabella lidera adopción de IA en LATAM (asistente conversacional Falabella IA anunciado). Homecenter Sodimac con marketplace y stack digital maduro.",
+            ],
+            [
+              "Convenience y proximidad",
+              "Tiendas de barrio (fenómeno estructural: 700K+ nacionales), Justo & Bueno, Tostao', 7-Eleven en expansión.",
+              "Las tiendas de barrio son ~30-40% del consumo masivo. OXXO no opera en Colombia.",
+              "Sub-utilizadas para retail media y datos. Rappi Turbo compite con dark stores + IA (Fountain9).",
+            ],
+            [
+              "Farmacia",
+              "Cruz Verde, Farmatodo, Locatel, Cafam, Copidrogas (cooperativa), Colsubsidio, Drogas La Rebaja.",
+              "Copidrogas con red masiva vía droguerías afiliadas; Cruz Verde consolidada; Farmatodo con formato moderno.",
+              "Segmento con mayor upside de IA en LATAM: triage clínico + adherencia + consulta remota. Poca adopción pública hasta 2026.",
+            ],
+            [
+              "Home, electrónica y multi-categoría",
+              "Alkosto, Ktronix, Falabella, Homecenter Sodimac, Panamericana.",
+              "Alkosto ~65 tiendas; Ktronix con presencia en categoría electrónica; Falabella multi-categoría.",
+              "Alkosto reconocido por ejecución omnicanal en apps y web. Retail-fintech con crédito propio maduro. Oportunidad clara de agentes conversacionales.",
+            ],
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Necesidades puntuales del retail colombiano frente a la IA",
+        },
+        {
+          type: "list",
+          items: [
+            "Conversión sobre tráfico existente — 9,3M de compradores digitales ya establecidos, con la participación e-commerce en inflexión estructural (2,4% → 2,6%). El reto ya no es sólo captar: es convertir sobre quien está entrando.",
+            "Servicio conversacional en WhatsApp — Colombia es un mercado móvil-primero. WhatsApp es el canal dominante para servicio B2C — no la app propia del retailer.",
+            "Crédito embebido con scoring alternativo — 96,3% de acceso financiero pero sólo 23,3% con tarjeta de crédito y 35,5% con acceso al sistema financiero formal. Nequi (26M+ usuarios), Daviplata (18,7M, Q1 2025) y las financieras retail son la vía práctica.",
+            "Personalización sobre tenderos y hard discount — dos canales masivos (700K+ tiendas de barrio y D1/Ara con 25% de share) que hoy no se activan con datos primarios. Oportunidad estructural para retailers con visibilidad en ambos.",
+            "Última milla y omnicanalidad — Colombia tiene geografía fragmentada (regiones andina, caribe, pacífico) y logística compleja. Rappi con Fountain9 ya lidera la carrera de IA operacional.",
+            "Cumplimiento Ley 1581 y postura SIC — la Ley Estatutaria de Protección de Datos Personales de 2012 y la Superintendencia de Industria y Comercio vigilan decisiones automatizadas. La IA sin trust layer y sin gobierno de datos es un riesgo legal y reputacional real.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Oportunidades claras según el contexto local",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Oportunidad 1",
+              title: "Comercio conversacional WhatsApp-first",
+              description:
+                "El retailer colombiano promedio puede construir un agente de compra-servicio-crédito en WhatsApp más rápido que un e-commerce con app propia — y con mejor tasa de adopción. Es la oportunidad más grande y menos aprovechada de la industria.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Oportunidad 2",
+              title: "Servicio autónomo en contact center",
+              description:
+                "Los benchmarks internacionales (Pandora 60% deflection, SharkNinja 20K chats/semana) muestran que se puede automatizar 50–70% del contact center en 6–12 meses con retorno directo en costo por interacción. El ROI en Colombia es competitivo por la relación costo/hora.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Oportunidad 3",
+              title: "Forecasting sobre catálogo local + hard discount",
+              description:
+                "El retailer con marca propia (Éxito, Carulla, Alkosto) tiene el dataset ideal para IA de merchandising: catálogo controlado, historial local, elasticidad por sucursal. Y hard discount (D1/Ara) tiene el mayor upside por su modelo de rotación acelerada.",
+              tone: "violet",
+            },
+            {
+              eyebrow: "Oportunidad 4",
+              title: "Retail media network sobre 1P data",
+              description:
+                "Mercado Libre y Rappi lideran retail media en LATAM. Grupo Éxito, Falabella, Homecenter Sodimac y Alkosto tienen audiencias primarias monetizables aún sin activar. La IA activa la segmentación; el retailer captura el margen que hoy va a Meta/Google.",
+              tone: "neutral",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "critical",
+          title: "La ventana se abre y se cierra rápido",
+          text: "Rappi ya se movió (adquirió Fountain9 en sept-2024 para IA de supply chain), Falabella lanzó su asistente conversacional, y los grandes bancos con productos retail (Bancolombia/Nequi, Davivienda/Daviplata) tienen 18–24 meses de ventaja en datos y modelos. El retailer colombiano tiene 12–24 meses para reaccionar antes de que la brecha se vuelva estructural. Los que esperen 'a que madure el mercado' descubrirán que el mercado ya maduró — sin ellos.",
+        },
+      ],
+    },
+    {
+      id: "salesforce-general",
+      eyebrow: "Parte 4 · Postura Salesforce",
+      title: "Cómo Salesforce acompaña al retail colombiano en esta transición",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Antes de entrar al detalle producto por producto, conviene fijar la postura. La ventaja de Salesforce para retail no es un modelo de IA propietario ni un algoritmo particular — es la arquitectura vertical que integra los cuatro elementos que hoy separan una implementación con retorno de un piloto costoso: (1) una capa de confianza nativa que resuelve gobierno, PII y auditabilidad de fábrica; (2) un data layer con zero-copy que ancla los agentes en la verdad operativa del retailer sin obligar a mover el data lake; (3) una plataforma de agentes retail-tuned con motor de razonamiento y agent script para composición híbrida; y (4) comercio + servicio + marketing + operaciones de tienda sobre un solo modelo de metadatos.",
+        },
+        {
+          type: "statement",
+          text: "En una industria donde el 40% de los proyectos agentic AI se cancelará antes de 2027 (Gartner), lo que importa no es qué modelo se usa — es qué tan rápido pasa un caso de uso de piloto a producción con métricas duras. Salesforce compite en esa dimensión con evidencia pública: Pandora 60% de casos deflectados y +10 NPS; SharkNinja 14 países en vivo con +6% conversión; Williams-Sonoma implementación en 7.5 meses y 21M nuevos suscriptores.",
+        },
+        {
+          type: "image",
+          src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
+          alt: "Plataforma agentic empresarial completa de Salesforce: Agentforce sobre Data 360 y Customer 360.",
+          caption:
+            "La promesa nativa de Salesforce para retail: una sola plataforma donde agentes, datos, comercio, servicio y marketing comparten contexto, seguridad y observabilidad. Esa unidad es la que reduce el time-to-value de meses a semanas.",
+          source: {
+            label: "Salesforce · Agentforce platform overview",
+            url: "https://www.salesforce.com/agentforce/",
+          },
+          maxWidth: "wide",
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Reconocimientos que importan",
+          text: "Salesforce es Leader en Gartner MQ Digital Commerce por 10 años consecutivos, Leader en Gartner MQ Multichannel Marketing Hubs por 8 años, Leader en Gartner CDP por 3 años, IDC MarketScape Leader B2C/B2B/Mobile POS Fashion Retail, IHL Tier 1 para Order Management y Forrester TEI de 289% ROI con 6 meses de payback en B2B Commerce. Es la única plataforma que puede reclamar liderazgo simultáneo en las cuatro grillas que un retailer evalúa para consolidar stack.",
+        },
+      ],
+    },
+    {
+      id: "recomendaciones",
+      eyebrow: "Parte 5 · Recomendaciones consultivas",
+      title: "Diez movimientos para un retailer colombiano en los próximos 12–24 meses",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Estas recomendaciones no son una lista de compras — son un marco de decisión. Si su plan actual rompe tres o más, vale la pena pausarlo y revisarlo antes de aprobar la siguiente ronda de inversión, sea cual sea la plataforma o el proveedor que la presente.",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "01",
+              title: "Empiece por servicio, no por comercio",
+              description:
+                "El servicio autónomo tiene el ROI más rápido y menor superficie de riesgo. Pandora y SharkNinja lo probaron. Un caso piloto de 6 meses con Agentforce Service sobre WhatsApp o web chat entrega números duros al comité en el primer trimestre.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "02",
+              title: "Diseñe WhatsApp-first, no app-first",
+              description:
+                "En Colombia WhatsApp es el canal dominante para servicio B2C. Salesforce lo trata como canal de primera clase en Agentforce; la mayoría de plataformas competidoras lo tratan como integración de terceros.",
+              tone: "success",
+            },
+            {
+              eyebrow: "03",
+              title: "Unifique datos antes de comprar más IA",
+              description:
+                "Sin Data 360 (o equivalente), cada nuevo agente es una integración custom. Los que compraron IA por piezas antes de resolver el data layer llevan 18 meses sin ROI. Empiece por la fundación.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "04",
+              title: "Aplique Trust Layer desde el primer piloto",
+              description:
+                "PII, Ley 1581, PCI, datos de programas de lealtad — no son 'add-ons de compliance'. La SIC vigila decisiones automatizadas de IA. Un incidente de datos borra el ROI de 3 años de IA. Trust Layer nativo, no bolt-on.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "05",
+              title: "Active loyalty existente antes de rediseñar el programa",
+              description:
+                "Puntos Colombia (Bancolombia), programas de Grupo Éxito, Falabella y Alkosto ya tienen datos abundantes. Falta la IA que los active — next-best-offer, disengagement risk, tier upgrades disparados. No hace falta rediseñar el programa: hace falta cablearle un cerebro.",
+              tone: "violet",
+            },
+            {
+              eyebrow: "06",
+              title: "Piense el POS como plataforma, no como caja registradora",
+              description:
+                "Modern POS + clienteling + endless aisle + BOPIS es la ventaja competitiva estructural que un retailer con red física tiene sobre marketplaces puros. Colombia con hard discount y tiendas de barrio hace esta oportunidad más grande, no más pequeña.",
+              tone: "neutral",
+            },
+            {
+              eyebrow: "07",
+              title: "Construya retail media sobre su 1P data",
+              description:
+                "Mercado Libre y Rappi ya monetizan retail media en Colombia. Para Grupo Éxito, Falabella, Alkosto, Homecenter Sodimac y farmacias es la oportunidad de captar margen que hoy se fuga a Meta y Google. IA + Data 360 + Advertising Sales Management es el trío que lo habilita.",
+              tone: "success",
+            },
+            {
+              eyebrow: "08",
+              title: "Elija el modelo, no lo case",
+              description:
+                "Bring Your Own Model (OpenAI, Anthropic, Google) e interoperabilidad MCP evitan lock-in. Cualquier plataforma que le obligue a un único proveedor de LLM va a envejecer mal — la industria de modelos se está moviendo demasiado rápido.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "09",
+              title: "Métrica de negocio en cada caso, o cancele",
+              description:
+                "Gartner: >40% de proyectos agentic se cancelarán antes de 2027. La mejor prevención es la métrica de negocio desde el día uno: costo por interacción, conversión, forecast accuracy, tiempo a resolución. Sin métrica, no hay caso.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "10",
+              title: "No espere a 2027 para empezar",
+              description:
+                "Rappi, Falabella, Bancolombia/Nequi ya están en producción. La ventana para el resto es 12–24 meses. Después, cerrar la brecha se vuelve un problema de M&A, no de tecnología.",
+              tone: "warn",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "modelo-madurez",
+      eyebrow: "Parte 6 · Modelo de madurez",
+      title: "Ruta de tres niveles para el retailer colombiano",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Este modelo es operativo, no de marketing. Le ayuda a ubicar en qué nivel está hoy su organización, qué capacidades necesita para subir y cuáles son los riesgos de saltar etapas.",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              eyebrow: "Nivel 1 · Foundational",
+              title: "Servicio y comercio digital unificados",
+              description:
+                "Data 360 en producción con las fuentes core (ecommerce, POS, loyalty, servicio). Agentforce Service en un canal (WhatsApp o web chat). Commerce Cloud con Cimulate y product recommendations. Trust Layer activo. KPIs de línea base establecidos.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Nivel 2 · Composable",
+              title: "Omnicanal + loyalty + retail media activo",
+              description:
+                "Modern POS en tiendas piloto. Agentforce Personal Shopper en producción. Loyalty Management activa disengagement risk y next-best-offer. Retail media network lanzada con 1P data. Agentic Order Routing gestionando excepciones.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Nivel 3 · Autonomous",
+              title: "Ecosistema agentico gobernado",
+              description:
+                "Agentes de merchandising, pricing, forecasting y planning en producción. MCP + AgentExchange abren interoperabilidad con socios (bancos, telcos, marketplaces). Governance transversal con métricas de negocio y evaluación continua. Voice + WhatsApp + web + tienda como un solo canal.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Salto típico mal hecho",
+          text: "Saltar de Nivel 1 directo a Nivel 3 'porque el CEO leyó un informe de McKinsey'. Resultado: agentes desplegados sobre datos fragmentados, control plane sin agentes maduros que gobernar, gasto sin ROI y un equipo abrumado. El Nivel 2 — composabilidad sólida con loyalty y retail media activos — es donde la mayoría de los retailers colombianos debe vivir 12–24 meses antes de pensar en ecosistema agentico completo.",
+        },
+      ],
+    },
+    {
+      id: "conclusion",
+      eyebrow: "Cierre",
+      title: "Conclusión",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La industria retail vive un cambio de era, no una moda tecnológica. Amazon superó a Walmart en EE.UU. gracias a su stack de IA y datos. El 75% de los retailers globales declara que los agentes son esenciales para 2026. En Colombia, con el retail físico creciendo doble dígito real, el e-commerce en su primera inflexión estructural en años (2,4% → 2,6% en dos meses) y una base de 9,3M compradores digitales, la ventana para adoptar IA con retorno claro se acaba de abrir. Rappi, Falabella y Bancolombia/Nequi ya se movieron; el resto tiene 12–24 meses para reaccionar antes de que la brecha se vuelva estructural.",
+        },
+        {
+          type: "paragraph",
+          text: "Salesforce responde con Agentforce 360 for Retail: no un modelo de IA propietario, sino la arquitectura vertical que integra Trust Layer nativo, Data 360 con Zero Copy, agentes retail-tuned y comercio + servicio + marketing + operaciones de tienda sobre un solo modelo de metadatos. Los casos con métricas duras públicas — Pandora, SharkNinja, Williams-Sonoma, Fisher & Paykel, Janie and Jack — muestran que el retorno es real cuando el stack está unificado, no cuando la IA se compra por piezas.",
+        },
+        {
+          type: "statement",
+          text: "La IA en retail dejó de ser diferenciador y pasó a ser condición de supervivencia. En Colombia, con el retail creciendo +14,9% real en abril 2026, 9,3M compradores digitales ya adentro, y una ventana estructural de 12–24 meses, el retailer que quiera seguir compitiendo en cinco años tiene que construir tres cosas ya: fundación de datos unificada, un primer agente en producción con métrica de negocio, y una arquitectura que le permita escalar sin recomprarse a sí mismo. Ese es el marco. Todo lo demás es ejecución.",
+        },
+      ],
+    },
+    {
+      id: "fuentes",
+      eyebrow: "Referencias",
+      title: "Fuentes oficiales y de alta confiabilidad",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Este documento está construido sobre reportes de industria, comunicados oficiales, cartas al accionista, páginas oficiales de Salesforce y estadísticas de organismos colombianos. Las cifras y capacidades evolucionan rápido — se recomienda revisar la fuente primaria antes de decisiones de inversión.",
+        },
+        {
+          type: "sources",
+          items: [
+            {
+              label: "CCCE · Informe de Cierre eCommerce 2025 (versión pública)",
+              url: "https://ccce.org.co/noticias/informe-de-cierre-ecommerce-2025-version-publica/",
+            },
+            {
+              label: "CCCE · Primer Informe Trimestral eCommerce 2026 (Q1)",
+              url: "https://ccce.org.co/noticias/primer-informe-publico-trimestral-de-comercio-electronico-2026/",
+            },
+            {
+              label: "CCCE · Informe de Comercio Minorista",
+              url: "https://ccce.org.co/noticias/informe-de-comercio-minorista/",
+            },
+            {
+              label: "DANE · Encuesta Mensual de Comercio (EMC)",
+              url: "https://www.dane.gov.co/index.php/estadisticas-por-tema/comercio-interno/encuesta-mensual-de-comercio-emc",
+            },
+            {
+              label: "Superfinanciera + Banca de las Oportunidades · Reporte de Inclusión Financiera 2024",
+              url: "https://www.bancadelasoportunidades.gov.co/es/noticias/banca-de-las-oportunidades-y-la-superfinanciera-lanzan-el-reporte-de-inclusion-financiera",
+            },
+            {
+              label: "DNP · CONPES 4144 · Política Nacional de Inteligencia Artificial (feb-2025)",
+              url: "https://colaboracion.dnp.gov.co/CDT/Conpes/Econ%C3%B3micos/4144.pdf",
+            },
+            {
+              label: "Rappi · Adquisición de Fountain9 (PR Newswire, sept-2024)",
+              url: "https://www.prnewswire.com/news-releases/rappi-acquires-fountain9-assets-to-accelerate-turbos-retailing-growth-with-ai-and-offer-supply-chain-tech-as-b2b-solution-302239920.html",
+            },
+            {
+              label: "Oxford Insights · Government AI Readiness Index 2024",
+              url: "https://oxfordinsights.com/wp-content/uploads/2024/12/2024-Government-AI-Readiness-Index-2.pdf",
+            },
+            {
+              label: "Grupo Éxito · Investor Relations",
+              url: "https://www.grupoexito.com.co/en/financial-information",
+            },
+            {
+              label: "Grupo Cibest (Bancolombia) · Informe de Gestión",
+              url: "https://www.grupocibest.com/corporativo/informe-gestion",
+            },
+            {
+              label: "Salesforce · Sixth Edition Connected Shoppers Report",
+              url: "https://www.salesforce.com/resources/research-reports/connected-shoppers-report/",
+            },
+            {
+              label: "Salesforce for Retail (Agentforce 360 for Retail)",
+              url: "https://www.salesforce.com/industries/retail/",
+            },
+            {
+              label: "Salesforce · Agentforce platform overview",
+              url: "https://www.salesforce.com/agentforce/",
+            },
+            {
+              label: "Salesforce · Einstein Trust Layer",
+              url: "https://www.salesforce.com/artificial-intelligence/trusted-ai/",
+            },
+            {
+              label: "Pandora + Salesforce (customer story oficial)",
+              url: "https://www.salesforce.com/customer-stories/pandora/",
+            },
+            {
+              label: "SharkNinja + Salesforce (customer story oficial)",
+              url: "https://www.salesforce.com/customer-stories/sharkninja/",
+            },
+            {
+              label: "Williams-Sonoma + Salesforce (customer story oficial)",
+              url: "https://www.salesforce.com/customer-stories/williams-sonoma/",
+            },
+            {
+              label: "Gartner · Retail Industry Insights",
+              url: "https://www.gartner.com/en/industries/retail",
+            },
+            {
+              label: "Forrester · Predictions 2026 · Retail",
+              url: "https://www.forrester.com/predictions/",
+            },
+            {
+              label: "Andy Jassy · Amazon 2024 & 2025 Letters to Shareholders",
+              url: "https://www.aboutamazon.com/news/company-news/amazon-ceo-andy-jassy-2025-letter-to-shareholders",
+            },
+            {
+              label: "MinTIC · Ministerio de Tecnologías de la Información y las Comunicaciones",
+              url: "https://www.mintic.gov.co/",
+            },
+            {
+              label: "Fenalco · Federación Nacional de Comerciantes",
+              url: "https://www.fenalco.com.co/",
+            },
+            {
+              label: "ANDI · Asociación Nacional de Empresarios de Colombia",
+              url: "https://www.andi.com.co/",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+export const insights: Insight[] = [multiAgent, customerFeedback, retailAiMexico, retailAiColombia];

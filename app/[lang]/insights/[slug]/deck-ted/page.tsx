@@ -14,11 +14,11 @@ export default async function DeckTedPage({ params }: Props) {
 
   const insight = insights.find((i) => i.slug === slug);
   const notes = getPresenterNotes(slug);
-  if (!insight || !notes) notFound();
+  if (!insight || !notes || !insight.externalDeckUrl) notFound();
 
   return (
     <PresenterDeck
-      deckUrl="/presentations/retail-ia-mexico-ted.html"
+      deckUrl={insight.externalDeckUrl}
       backHref={`/${lang}/insights/${slug}`}
       slides={notes}
       insightTitle={insight.title}
