@@ -2021,6 +2021,411 @@ export const executiveDecks: ExecutiveDeck[] = [
       },
     ],
   },
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // JAFRA — Deck pre-workshop V.A.L.O.R.
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    slug: "valor-workshop",
+    customerSlug: "jafra",
+    title: "Agentforce V.A.L.O.R. Review",
+    subtitle: "Del volumen al valor — un workshop de 2 horas para operar Agentforce de forma sostenible",
+    duration: "8 min",
+    slides: [
+      // ── 1 · Portada ──────────────────────────────────────────────────
+      {
+        layout: "title",
+        eyebrow: "JAFRA Cosmetics · BeFra",
+        title: "V.A.L.O.R.\nReview.",
+        subtitle:
+          "Un workshop de 2 horas para revisar el primer mes del agente Agentforce productivo — separar valor real de volumen, decidir optimizaciones con evidencia y dejar instalado un modelo de operación continua.",
+        footnote: "Sesión de alineación pre-workshop · Confidencial",
+        brand: {
+          astro: { variant: "agent-astro-20-l", side: "right", bottom: "-30px", size: 360 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "6%",  size: 48, rotate: 12 },
+            { variant: "blue-inclined",   side: "left",  top: "92%", size: 30, rotate: -10 },
+            { variant: "yellow-inclined", side: "right", top: "4%",  size: 34, rotate: 22 },
+          ],
+        },
+      },
+
+      // ── 2 · JAFRA en contexto ────────────────────────────────────────
+      {
+        layout: "metrics",
+        eyebrow: "El punto de partida",
+        title: "JAFRA opera un agente Agentforce en producción. Es el momento de calibrar.",
+        metrics: [
+          { value: "1", label: "Agente Agentforce en producción" },
+          { value: "Mes 1", label: "Ventana crítica de calibración" },
+          { value: "Benchmark", label: "Comparación vs otros clientes en su mes 1" },
+          { value: "2h", label: "Duración del workshop V.A.L.O.R." },
+          { value: "8", label: "Entregables tangibles al cerrar" },
+          { value: "3-5d", label: "Anticipación mínima del prework" },
+        ],
+      },
+
+      // ── 3 · La pregunta rectora ──────────────────────────────────────
+      {
+        layout: "quote",
+        quote:
+          "¿Cuánto nos cuesta cada resultado exitoso, y cómo hacemos que ese resultado sea cada vez más eficiente?",
+        context: "Principio rector · V.A.L.O.R. Review",
+        brand: {
+          astro: { variant: "agent-astro-12-r", side: "left", bottom: "-30px", size: 220 },
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "20%", size: 44, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
+          ],
+        },
+      },
+
+      // ── 4 · Los 4 primeros ejes V.A.L.O.R. ───────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "V.A.L.O.R. · Los cuatro ejes de diagnóstico",
+        title: "Valor · Anatomía · Lógica · Oportunidades — cuatro miradas al mes 1",
+        pillars: [
+          {
+            title: "V — Valor generado",
+            body: "Separar adopción, actividad y valor. Clasificar cada caso de uso como demostrado, probable, desconocido o negativo — con evidencia cuantificable, no percepciones.",
+            accent: "indigo",
+          },
+          {
+            title: "A — Anatomía del consumo",
+            body: "Cascada consumo → canal → caso → tópico → acción → resultado. Consumo por resultado exitoso como métrica principal. Identificar los 3 principales generadores de consumo.",
+            accent: "violet",
+          },
+          {
+            title: "L — Lógica y arquitectura",
+            body: "Agent Health Score en 12 dimensiones (alcance, tópicos, instrucciones, acciones, datos, errores, transferencia, seguridad, pruebas, observabilidad, gobierno). Desafiar los rojos y amarillos.",
+            accent: "sky",
+          },
+          {
+            title: "O — Oportunidades de automatización",
+            body: "«El agente razona donde existe ambigüedad. La automatización ejecuta donde existe certeza.» Clasificar cada proceso: Knowledge · Regla · Flow · Apex · Agentforce · Humano · Eliminar.",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // ── 5 · El quinto eje — Roadmap ampliado ─────────────────────────
+      {
+        layout: "section",
+        eyebrow: "V.A.L.O.R. · El quinto eje",
+        title: "R — Roadmap, medición continua y próximos agentes",
+        subtitle:
+          "El bloque más importante de la sesión. Tres sub-momentos: (1) roadmap 30-60-90 con owner + fecha + métrica, (2) modelo de medición mensual con dashboard y umbrales, (3) pipeline de próximos agentes con criterios explícitos de aprobación.",
+        brand: {
+          astro: { variant: "astro-7", side: "left", bottom: "-50px", size: 230 },
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "16%", size: 44, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
+          ],
+        },
+      },
+
+      // ── 6 · Los 8 entregables ────────────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Al terminar las 2 horas",
+        title: "8 entregables tangibles — no una lista abierta de recomendaciones",
+        bullets: [
+          "1 · Evaluación del mes 1 basada en resultados, no en volumen",
+          "2 · Mapa de consumo con los 3 principales generadores + hipótesis de causa",
+          "3 · Agent Health Score con fortalezas, hallazgos críticos, riesgos y quick wins",
+          "4 · Lista clasificada de procesos a convertir en automatización determinística",
+          "5 · Backlog priorizado de optimizaciones (frecuencia × consumo × esfuerzo)",
+          "6 · Roadmap 30-60-90 con decisiones, dueños, fechas y métricas",
+          "7 · Modelo de medición mensual con dashboard, cadencia y umbrales de alerta",
+          "8 · Pipeline de próximos agentes con criterios explícitos de aprobación",
+        ],
+        highlight:
+          "Ningún entregable termina en «hay que revisar». Todos terminan en decisión con owner + fecha + métrica.",
+      },
+
+      // ── 7 · Prework parte 1 — Negocio y Consumo ──────────────────────
+      {
+        layout: "split",
+        eyebrow: "Prework · 3-5 días antes de la sesión (1/2)",
+        title: "Información de negocio y de consumo",
+        left: {
+          heading: "Negocio",
+          items: [
+            "Objetivos originales del agente",
+            "Casos de uso productivos actuales",
+            "Volumen previo a Agentforce (línea base)",
+            "Volumen atendido en el mes 1 (adopción)",
+            "Resultados exitosos por caso de uso",
+            "Transferencias a humano con motivo",
+            "Tiempo o costo del proceso anterior",
+            "CSAT, reclamos y reincidencias del mes 1",
+            "Incidentes conocidos",
+          ],
+        },
+        right: {
+          heading: "Consumo",
+          items: [
+            "Consumo diario de los últimos 30 días",
+            "Tipo de consumo y fuente (usage types)",
+            "Consumo por canal / agente / implementación",
+            "Días y horarios con picos",
+            "Entitlements, créditos y modelo comercial",
+            "Prompts, acciones y componentes adicionales",
+            "Proyección mensual con ritmo actual",
+            "Validación en Digital Wallet",
+          ],
+        },
+      },
+
+      // ── 8 · Prework parte 2 — Técnico y Conversaciones ───────────────
+      {
+        layout: "split",
+        eyebrow: "Prework · 3-5 días antes de la sesión (2/2)",
+        title: "Inventario técnico y muestra de conversaciones",
+        left: {
+          heading: "Inventario técnico",
+          items: [
+            "Agente y versiones desplegadas",
+            "Tópicos y subagentes",
+            "Instrucciones generales y por tópico",
+            "Acciones · Flows · Apex · Prompt Templates",
+            "Retrievers y fuentes de conocimiento",
+            "Integraciones y variables de contexto",
+            "Reglas de transferencia y manejo de errores",
+            "Cambios ejecutados durante el mes 1",
+          ],
+        },
+        right: {
+          heading: "Conversaciones (30 · 6 categorías)",
+          items: [
+            "5 exitosas y eficientes",
+            "5 exitosas pero largas",
+            "5 transferidas a humano",
+            "5 fallidas",
+            "5 con consumo inusualmente alto",
+            "5 con comportamiento inesperado",
+            "3 pre-seleccionadas para la sesión: buena · costosa · fallida",
+          ],
+        },
+      },
+
+      // ── 9 · Agenda de 2 horas ────────────────────────────────────────
+      {
+        layout: "kpi-table",
+        eyebrow: "Agenda ejecutable · 120 minutos",
+        title: "Los bloques, sus duraciones y sus entregables",
+        rows: [
+          {
+            label: "0 · Apertura y alineación de éxito",
+            baseline: "10 min",
+            goal6m: "Alinear qué se considera éxito",
+            goal12m: "Definición compartida (máx 4 criterios)",
+            accent: "indigo",
+          },
+          {
+            label: "V · Valor generado en el mes 1",
+            baseline: "25 min",
+            goal6m: "Separar adopción, actividad y valor",
+            goal12m: "Scorecard con clasificación por caso de uso",
+            accent: "violet",
+          },
+          {
+            label: "A · Anatomía del consumo",
+            baseline: "25 min",
+            goal6m: "Cascada + traza costosa",
+            goal12m: "Mapa de calor con 3 generadores + causas",
+            accent: "sky",
+          },
+          {
+            label: "L · Lógica y arquitectura",
+            baseline: "30 min",
+            goal6m: "Health Score + traza fallida",
+            goal12m: "Health Score con hallazgos y quick wins",
+            accent: "emerald",
+          },
+          {
+            label: "O · Oportunidades de automatización",
+            baseline: "20 min",
+            goal6m: "Clasificación + priorización top 5",
+            goal12m: "Tres grupos: automatizar / optimizar / mantener",
+          },
+          {
+            label: "R · Roadmap + medición + próximos agentes",
+            baseline: "25 min",
+            goal6m: "Decisiones con owner + métrica",
+            goal12m: "30-60-90 + modelo mensual + pipeline",
+            accent: "indigo",
+          },
+          {
+            label: "Cierre · Recap y próximos pasos",
+            baseline: "5 min",
+            goal6m: "Confirmar decision log",
+            goal12m: "Dueño de distribución + fecha",
+          },
+        ],
+      },
+
+      // ── 10 · Cómo termina la sesión ──────────────────────────────────
+      {
+        layout: "comparison",
+        eyebrow: "El cambio de narrativa",
+        title: "No es una revisión abierta. Es una sesión de decisiones.",
+        before: {
+          heading: "Cómo NO termina la sesión",
+          items: [
+            "Lista abierta de «hay que revisar las instrucciones»",
+            "«Podríamos considerar optimizar X»",
+            "Sensación de progreso sin compromisos",
+            "Recomendaciones sin dueño ni fecha",
+            "Métricas discutidas sin definir cómo se miden mes a mes",
+          ],
+        },
+        after: {
+          heading: "Cómo SÍ termina la sesión",
+          items: [
+            "«Consolidar las acciones A, B y C en una automatización única»",
+            "«Ajustar los límites de los tópicos X y Y»",
+            "«Eliminar la consulta repetida a datos Z»",
+            "«Crear 20 pruebas de regresión antes del día N»",
+            "«Instrumentar el resultado de negocio de 3 casos de uso»",
+            "«Revisar consumo por resultado exitoso semanalmente»",
+          ],
+        },
+        brand: {
+          sparkles: [
+            { variant: "yellow-main", side: "right", top: "8%", size: 38, rotate: 12 },
+          ],
+        },
+      },
+
+      // ── 11 · Los 6 tableros ──────────────────────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "Materiales de facilitación",
+        title: "6 tableros pre-cargados — la sesión valida y decide, no construye",
+        pillars: [
+          {
+            title: "Scorecard + Consumption Waterfall",
+            body: "Grid 4D × 10 métricas prellenado (V) + cascada consumo → canal → caso → tópico → acción → resultado (A).",
+            accent: "indigo",
+          },
+          {
+            title: "Conversation Trace + Agent Health Canvas",
+            body: "Trazado paso a paso de 3 conversaciones (buena · costosa · fallida) + radar 12D del arquitecto (L).",
+            accent: "violet",
+          },
+          {
+            title: "Automation Opportunity Map",
+            body: "Matriz Knowledge · Regla · Flow · Apex · Agentforce · Humano · Eliminar + priorización (F+C+D+I+R)/E (O).",
+            accent: "sky",
+          },
+          {
+            title: "30-60-90 Roadmap + Next Agents Pipeline",
+            body: "Tabla de compromisos + criterios de aprobación de nuevos agentes candidatos (R).",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // ── 12 · Criterios para próximos agentes ─────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Pipeline de próximos agentes",
+        title: "Cómo aprobamos el siguiente agente — sin crecer sin control",
+        bullets: [
+          "Business case medible — hipótesis explícita de valor con métrica y umbral",
+          "Medibilidad del agente actual — no se aprueba un segundo si el primero es desconocido",
+          "Capacity y presupuesto — entitlement disponible y proyección validada con finanzas",
+          "Alcance limitado y responsabilidad clara — misión definida y product owner asignado",
+          "Seguridad y cumplimiento — datos y acciones revisados según política",
+          "Suite de regresión — pruebas definidas desde el primer día, no después",
+        ],
+        highlight:
+          "El programa se expande solo cuando existe evidencia — no cuando existe entusiasmo.",
+      },
+
+      // ── 13 · Participantes ───────────────────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Quiénes tienen que estar",
+        title: "Del cliente y de nuestro lado — facilitador y escriba separados",
+        left: {
+          heading: "Del cliente (JAFRA)",
+          items: [
+            "Sponsor o dueño del resultado de negocio",
+            "Product Owner del agente",
+            "Operaciones o área usuaria",
+            "Administrador o arquitecto Salesforce",
+            "Responsable de automatizaciones e integraciones",
+            "Finanzas / procurement (durante bloque A)",
+            "Seguridad / cumplimiento (si aplica)",
+          ],
+        },
+        right: {
+          heading: "De nuestro lado",
+          items: [
+            "Facilitador de negocio",
+            "Arquitecto de Agentforce",
+            "Especialista en automatización (Flow · Apex · integraciones)",
+            "Escriba / capturador de decisiones (persona distinta al facilitador)",
+            "Regla firme: facilitar + trazar + documentar simultáneamente no es viable en 2h",
+          ],
+        },
+      },
+
+      // ── 14 · Modelo de seguimiento ───────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Después del taller",
+        title: "El modelo de operación continuo — la sesión no termina el trabajo, lo empieza",
+        bullets: [
+          "Semanal · 30 min · 6 primeras semanas — consumo, resultados, fallos, cambios, pruebas, anomalías, próxima optimización",
+          "Mensual · Business Review — valor, costo por resultado, ahorro/ingresos, adopción, calidad, riesgos, forecast, casos candidatos",
+          "Por cada cambio · Ciclo controlado — hipótesis → línea base → cambio → pruebas → despliegue → observación → comparación → decisión",
+          "Regla firme: ningún cambio se despliega basado en «la respuesta parece mejor» — cada modificación se liga a una métrica medible",
+        ],
+      },
+
+      // ── 15 · Próximos pasos ──────────────────────────────────────────
+      {
+        layout: "closing",
+        title: "Próximos pasos",
+        bullets: [
+          "Confirmar sponsor y participantes de JAFRA (T-14 días)",
+          "Envío formal de la carta de prework al arquitecto y al Product Owner (T-7 días)",
+          "Prework completo y compartido (T-5 días)",
+          "Pre-carga de tableros por parte del partner (T-2 días)",
+          "Ejecución del V.A.L.O.R. Review · 2 horas · agenda arriba",
+          "Distribución del decision log y arranque de cadencia semanal (T+2 días)",
+        ],
+        cta: "Confirmar fechas y quorum de participantes para agendar la sesión.",
+        brand: {
+          astro: { variant: "agent-astro-10-r", side: "right", bottom: "-50px", size: 230 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left", top: "14%", size: 44, rotate: 14 },
+            { variant: "yellow-inclined", side: "left", top: "72%", size: 28, rotate: -10 },
+          ],
+        },
+      },
+
+      // ── 16 · Cierre ──────────────────────────────────────────────────
+      {
+        layout: "thanks",
+        eyebrow: "Del volumen al valor",
+        title: "Construyamos una disciplina de Digital Labor Operations para JAFRA.",
+        subtitle:
+          "Cada peso consumido, ligado a un resultado. Cada cambio, probado. Cada nueva capacidad, con business case claro.",
+        brand: {
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "16%", size: 44, rotate: -10 },
+            { variant: "yellow-inclined", side: "left",  top: "70%", size: 28, rotate: 18 },
+            { variant: "blue-main",       side: "right", top: "20%", size: 32, rotate: 6 },
+          ],
+        },
+      },
+    ],
+  },
 ];
 
 export function getExecutiveDeck(

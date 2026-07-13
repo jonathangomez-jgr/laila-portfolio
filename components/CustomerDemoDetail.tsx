@@ -30,6 +30,7 @@ import ObjectiveInfographic from "./ObjectiveInfographic";
 import OverviewStats from "./OverviewStats";
 import SolutionLayers from "./SolutionLayers";
 import WorkshopResult from "./WorkshopResult";
+import JafraValorPlanCanvas from "./JafraValorPlanCanvas";
 import Link from "next/link";
 import type { CustomerDemo } from "../data/customerDemos";
 import { hasExecutiveDeck } from "../data/executiveDecks";
@@ -386,6 +387,10 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
 
               {activeTab.workshopData && (
                 <WorkshopResult data={activeTab.workshopData} />
+              )}
+
+              {activeTab.valorWorkshopPlanData && (
+                <JafraValorPlanCanvas data={activeTab.valorWorkshopPlanData} />
               )}
 
               {activeTab.blueprintData && (
