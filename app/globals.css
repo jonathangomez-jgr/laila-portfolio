@@ -532,6 +532,42 @@ body.deck-mode {
 }
 
 /* ── Hero (title slide) ─────────────────────────────────────────────────── */
+.deck-hero-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 72vh;
+  gap: 2rem;
+}
+
+.deck-hero-top {
+  flex-shrink: 0;
+}
+
+.deck-hero-middle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.deck-hero-bottom {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding-top: 1rem;
+}
+
+.deck-hero-logo {
+  display: block;
+  height: clamp(6rem, 10.5vw, 8.25rem);
+  width: auto;
+  max-width: 600px;
+  opacity: 0.98;
+}
+
 .deck-hero-title {
   font-family: 'AvantGarde Salesforce', 'Century Gothic', 'Trebuchet MS', system-ui, sans-serif;
   font-size: clamp(2.2rem, 5vw, 4rem);
@@ -547,6 +583,17 @@ body.deck-mode {
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.75);
   font-weight: 400;
+  font-style: italic;
+  max-width: 42rem;
+}
+
+.deck-hero-footer {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
 }
 
 .deck-thanks-title {
@@ -1015,6 +1062,696 @@ body.deck-mode {
 .deck-badge-teal{ background: rgba(6, 165, 154, 0.1);  color: #023434; }
 .deck-badge-v   { background: rgba(115, 3, 148, 0.1);  color: #481a54; }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   AGENDA BLOCK — Canvas layout with quadrants
+   Objective (large, left) · Content + Exercise (right) · Deliverable (bottom band)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.deck-agenda-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.deck-agenda-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.deck-agenda-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(6, 106, 254, 0.35);
+}
+
+.deck-agenda-step-eb50   { background: linear-gradient(135deg, #066afe 0%, #003fb5 100%); }
+.deck-agenda-step-violet { background: linear-gradient(135deg, #a066cf 0%, #730394 100%); }
+.deck-agenda-step-cb68   { background: linear-gradient(135deg, #00b3ff 0%, #0090cc 100%); }
+.deck-agenda-step-teal   { background: linear-gradient(135deg, #26c7bd 0%, #06a59a 100%); }
+
+.deck-agenda-title {
+  margin-bottom: 0 !important;
+  flex: 1;
+  min-width: 0;
+}
+
+.deck-agenda-duration {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.deck-agenda-duration::before {
+  content: "";
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.deck-agenda-canvas {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.deck-agenda-quadrant {
+  background: #ffffff;
+  border-radius: 1.1rem;
+  padding: 1.35rem 1.5rem;
+  box-shadow: 0 6px 22px rgba(6, 106, 254, 0.1);
+  border-top: 3px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+  min-height: 0;
+}
+
+.deck-agenda-quadrant:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(6, 106, 254, 0.16);
+}
+
+.deck-agenda-quadrant-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.deck-agenda-quadrant-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.deck-agenda-quadrant-label {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.deck-agenda-quadrant-body {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: #002775;
+  margin: 0;
+}
+
+/* Objective quadrant — spans full left column (both rows) */
+.deck-agenda-objective {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  background: linear-gradient(160deg, #ffffff 0%, #f6f9ff 100%);
+  border-top-width: 4px;
+}
+
+.deck-agenda-objective .deck-agenda-quadrant-body {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #022ac0;
+  flex: 1;
+}
+
+/* Content quadrant */
+.deck-agenda-content { grid-column: 2; grid-row: 1; }
+
+/* Exercise quadrant */
+.deck-agenda-exercise { grid-column: 2; grid-row: 2; }
+
+/* Deliverable band — full width, bottom, gradient */
+.deck-agenda-deliverable {
+  margin-top: 1rem;
+  padding: 1.2rem 1.5rem;
+  border-radius: 1.1rem;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 10px 30px rgba(6, 106, 254, 0.28);
+  position: relative;
+  overflow: hidden;
+}
+
+.deck-agenda-deliverable::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top right, rgba(255, 255, 255, 0.18), transparent 60%);
+  pointer-events: none;
+}
+
+.deck-agenda-deliverable-eb50   { background: linear-gradient(120deg, #066afe 0%, #022ac0 100%); }
+.deck-agenda-deliverable-violet { background: linear-gradient(120deg, #a066cf 0%, #481a54 100%); }
+.deck-agenda-deliverable-cb68   { background: linear-gradient(120deg, #00b3ff 0%, #0090cc 100%); }
+.deck-agenda-deliverable-teal   { background: linear-gradient(120deg, #26c7bd 0%, #06a59a 100%); }
+
+.deck-agenda-deliverable-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.deck-agenda-deliverable-body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+}
+
+.deck-agenda-deliverable-label {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.deck-agenda-deliverable-text {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* Icon backgrounds per accent (used inside quadrants) */
+.deck-agenda-icon-eb50   { background: rgba(6, 106, 254, 0.12);   color: #066afe; }
+.deck-agenda-icon-violet { background: rgba(115, 3, 148, 0.12);   color: #730394; }
+.deck-agenda-icon-cb68   { background: rgba(0, 179, 255, 0.14);   color: #0090cc; }
+.deck-agenda-icon-teal   { background: rgba(6, 165, 154, 0.12);   color: #06a59a; }
+
+.deck-agenda-quadrant-border-eb50   { border-top-color: #066afe; }
+.deck-agenda-quadrant-border-violet { border-top-color: #730394; }
+.deck-agenda-quadrant-border-cb68   { border-top-color: #00b3ff; }
+.deck-agenda-quadrant-border-teal   { border-top-color: #06a59a; }
+
+@media (max-width: 900px) {
+  .deck-agenda-canvas {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .deck-agenda-objective { grid-column: 1; grid-row: auto; }
+  .deck-agenda-content   { grid-column: 1; grid-row: auto; }
+  .deck-agenda-exercise  { grid-column: 1; grid-row: auto; }
+}
+
+@media (max-width: 640px) {
+  .deck-agenda-step { width: 2.4rem; height: 2.4rem; font-size: 1rem; }
+  .deck-agenda-quadrant { padding: 1rem 1.1rem; }
+  .deck-agenda-duration { font-size: 0.75rem; padding: 0.4rem 0.9rem; }
+  .deck-agenda-objective .deck-agenda-quadrant-body { font-size: 1rem; }
+  .deck-agenda-quadrant-body { font-size: 0.9rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   AGENT PROFILE — «Meet your agent» card layout
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.deck-agent-hero {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding: 1.5rem 1.75rem;
+  border-radius: 1.25rem;
+  background: linear-gradient(120deg, #003fb5 0%, #066afe 50%, #00b3ff 100%);
+  color: #ffffff;
+  box-shadow: 0 14px 40px rgba(6, 106, 254, 0.32);
+  position: relative;
+  overflow: hidden;
+}
+
+.deck-agent-hero::before {
+  content: "";
+  position: absolute;
+  right: -80px;
+  top: -80px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.16) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.deck-agent-avatar {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.deck-agent-hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.deck-agent-name {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0;
+  color: #ffffff;
+}
+
+.deck-agent-role {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 0.35rem;
+}
+
+.deck-agent-traits {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.deck-agent-trait {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1rem 1.15rem;
+  border-left: 3px solid #066afe;
+  box-shadow: 0 4px 14px rgba(6, 106, 254, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.deck-agent-trait:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(6, 106, 254, 0.18);
+}
+
+.deck-agent-trait-header {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.deck-agent-trait-icon {
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.5rem;
+  background: rgba(6, 106, 254, 0.1);
+  color: #066afe;
+  flex-shrink: 0;
+}
+
+.deck-agent-trait-label {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.deck-agent-trait-value {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #002775;
+  margin: 0;
+}
+
+.deck-agent-trait-accent-violet { border-left-color: #730394; }
+.deck-agent-trait-accent-violet .deck-agent-trait-icon { background: rgba(115, 3, 148, 0.1); color: #730394; }
+.deck-agent-trait-accent-cb68 { border-left-color: #00b3ff; }
+.deck-agent-trait-accent-cb68 .deck-agent-trait-icon { background: rgba(0, 179, 255, 0.14); color: #0090cc; }
+.deck-agent-trait-accent-teal { border-left-color: #06a59a; }
+.deck-agent-trait-accent-teal .deck-agent-trait-icon { background: rgba(6, 165, 154, 0.12); color: #06a59a; }
+
+@media (max-width: 900px) {
+  .deck-agent-traits { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .deck-agent-hero { grid-template-columns: 1fr; text-align: center; }
+  .deck-agent-avatar { margin: 0 auto; }
+  .deck-agent-traits { grid-template-columns: 1fr; }
+  .deck-agent-name { font-size: 1.35rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   AGENDA LIST — slide de agenda con tarjetas coloreadas por bloque
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.deck-agenda-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.deck-agenda-list-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.1rem;
+  align-items: center;
+  padding: 1.15rem 1.4rem;
+  border-radius: 0.9rem;
+  border-left: 5px solid transparent;
+  background: rgba(6, 106, 254, 0.06);
+  box-shadow: 0 4px 14px rgba(6, 106, 254, 0.08);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+}
+
+.deck-agenda-list-card:hover {
+  transform: translateX(3px);
+  box-shadow: 0 8px 24px rgba(6, 106, 254, 0.16);
+}
+
+.deck-agenda-list-number {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #066afe;
+  line-height: 1;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.deck-agenda-list-title {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #002775;
+  line-height: 1.3;
+}
+
+.deck-agenda-list-duration {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(6, 106, 254, 0.1);
+  color: #022ac0;
+  white-space: nowrap;
+}
+
+/* Accent variants */
+.deck-agenda-list-card-indigo {
+  border-left-color: #066afe;
+  background: rgba(6, 106, 254, 0.06);
+}
+.deck-agenda-list-card-indigo .deck-agenda-list-number { color: #066afe; }
+.deck-agenda-list-card-indigo .deck-agenda-list-duration { background: rgba(6, 106, 254, 0.12); color: #022ac0; }
+
+.deck-agenda-list-card-violet {
+  border-left-color: #730394;
+  background: rgba(115, 3, 148, 0.06);
+}
+.deck-agenda-list-card-violet .deck-agenda-list-number { color: #730394; }
+.deck-agenda-list-card-violet .deck-agenda-list-duration { background: rgba(115, 3, 148, 0.12); color: #481a54; }
+
+.deck-agenda-list-card-sky {
+  border-left-color: #00b3ff;
+  background: rgba(0, 179, 255, 0.07);
+}
+.deck-agenda-list-card-sky .deck-agenda-list-number { color: #0090cc; }
+.deck-agenda-list-card-sky .deck-agenda-list-duration { background: rgba(0, 179, 255, 0.14); color: #0090cc; }
+
+.deck-agenda-list-card-emerald {
+  border-left-color: #06a59a;
+  background: rgba(6, 165, 154, 0.06);
+}
+.deck-agenda-list-card-emerald .deck-agenda-list-number { color: #06a59a; }
+.deck-agenda-list-card-emerald .deck-agenda-list-duration { background: rgba(6, 165, 154, 0.12); color: #023434; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   AGENT QUESTIONNAIRE — «Conociendo a nuestro agente»
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.deck-questionnaire-intro {
+  margin-top: 1rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(6, 106, 254, 0.08) 0%, rgba(115, 3, 148, 0.08) 100%);
+  color: #022ac0;
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  display: inline-block;
+}
+
+.deck-questionnaire-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+.deck-questionnaire-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.1rem 1.25rem;
+  box-shadow: 0 6px 20px rgba(6, 106, 254, 0.1);
+  border-left: 4px solid #066afe;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.deck-questionnaire-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(6, 106, 254, 0.16);
+}
+
+.deck-questionnaire-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.deck-questionnaire-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: #066afe;
+  color: #ffffff;
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.deck-questionnaire-icon {
+  font-size: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background: rgba(6, 106, 254, 0.1);
+  color: #066afe;
+  flex-shrink: 0;
+}
+
+.deck-questionnaire-title {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #002775;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.deck-questionnaire-prompt {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #4b5563;
+  margin: 0;
+}
+
+.deck-questionnaire-answer {
+  margin-top: 0.15rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.6rem;
+  background: rgba(6, 106, 254, 0.04);
+  border: 1px dashed rgba(6, 106, 254, 0.25);
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.82rem;
+  color: #6b7280;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.deck-questionnaire-answer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.deck-questionnaire-answer-list-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.deck-questionnaire-answer-list-item::before {
+  content: attr(data-num);
+  font-weight: 700;
+  color: #066afe;
+  min-width: 0.75rem;
+}
+
+.deck-questionnaire-answer-list-line {
+  flex: 1;
+  border-bottom: 1px dashed rgba(6, 106, 254, 0.3);
+  height: 0.9rem;
+}
+
+.deck-questionnaire-scale {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  gap: 0.25rem;
+  margin-top: 0.15rem;
+}
+
+.deck-questionnaire-scale-cell {
+  aspect-ratio: 1;
+  border: 1.5px solid rgba(6, 106, 254, 0.35);
+  border-radius: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: rgba(6, 106, 254, 0.5);
+  background: rgba(6, 106, 254, 0.03);
+}
+
+.deck-questionnaire-nickname {
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.6rem;
+  background: linear-gradient(120deg, rgba(115, 3, 148, 0.08), rgba(0, 179, 255, 0.08));
+  border: 1.5px dashed rgba(115, 3, 148, 0.35);
+  text-align: center;
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: rgba(115, 3, 148, 0.65);
+}
+
+.deck-questionnaire-card-accent-violet { border-left-color: #730394; }
+.deck-questionnaire-card-accent-violet .deck-questionnaire-number { background: #730394; }
+.deck-questionnaire-card-accent-violet .deck-questionnaire-icon { background: rgba(115, 3, 148, 0.1); color: #730394; }
+
+.deck-questionnaire-card-accent-sky { border-left-color: #00b3ff; }
+.deck-questionnaire-card-accent-sky .deck-questionnaire-number { background: #0090cc; }
+.deck-questionnaire-card-accent-sky .deck-questionnaire-icon { background: rgba(0, 179, 255, 0.14); color: #0090cc; }
+
+.deck-questionnaire-card-accent-emerald { border-left-color: #06a59a; }
+.deck-questionnaire-card-accent-emerald .deck-questionnaire-number { background: #06a59a; }
+.deck-questionnaire-card-accent-emerald .deck-questionnaire-icon { background: rgba(6, 165, 154, 0.12); color: #06a59a; }
+
+.deck-questionnaire-print {
+  margin-top: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1.5px solid rgba(6, 106, 254, 0.3);
+  color: #066afe;
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.deck-questionnaire-print:hover {
+  background: rgba(6, 106, 254, 0.08);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .deck-questionnaire-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .deck-questionnaire-scale { grid-template-columns: repeat(11, 1fr); gap: 0.15rem; }
+  .deck-questionnaire-scale-cell { font-size: 0.55rem; }
+}
+
 /* ── Footer ─────────────────────────────────────────────────────────────── */
 .deck-footer {
   position: relative;
@@ -1282,6 +2019,167 @@ body.deck-mode {
   .deck-metric-card:hover,
   .deck-split-panel:hover,
   .deck-pillar-card:hover,
+  .deck-agenda-quadrant:hover,
+  .deck-agent-trait:hover,
+  .deck-questionnaire-card:hover,
   .deck-comparison-after:hover,
   .deck-comparison-before:hover { transform: none; box-shadow: inherit; }
+
+  /* Hero: layout más compacto en móvil */
+  .deck-hero-layout { gap: 1.5rem; min-height: 60vh; }
+  .deck-hero-bottom { gap: 1rem; }
+  .deck-hero-logo { height: 5.25rem; }
+  .deck-hero-footer {
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    line-height: 1.5;
+  }
+
+  /* Agenda list: tarjetas compactas en móvil */
+  .deck-agenda-list { gap: 0.55rem; }
+  .deck-agenda-list-card {
+    padding: 0.85rem 1rem;
+    gap: 0.75rem;
+    grid-template-columns: auto 1fr auto;
+    border-left-width: 4px;
+  }
+  .deck-agenda-list-number { font-size: 1.1rem; min-width: 1.2rem; }
+  .deck-agenda-list-title { font-size: 0.88rem; }
+  .deck-agenda-list-duration {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+  }
+  .deck-agenda-list-card:hover { transform: none; }
+
+  /* Agenda block: header compacto en columna, canvas apilado */
+  .deck-agenda-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .deck-agenda-title-wrap {
+    width: 100%;
+    gap: 0.65rem;
+  }
+  .deck-agenda-step {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.95rem;
+  }
+  .deck-agenda-title { font-size: clamp(1.1rem, 5vw, 1.55rem); }
+  .deck-agenda-duration {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.8rem;
+    align-self: flex-start;
+  }
+  .deck-agenda-canvas {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+  .deck-agenda-objective,
+  .deck-agenda-content,
+  .deck-agenda-exercise {
+    grid-column: 1;
+    grid-row: auto;
+    padding: 0.95rem 1rem;
+  }
+  .deck-agenda-quadrant-label { font-size: 0.62rem; letter-spacing: 0.12em; }
+  .deck-agenda-quadrant-icon { width: 1.65rem; height: 1.65rem; font-size: 0.85rem; }
+  .deck-agenda-objective .deck-agenda-quadrant-body { font-size: 0.92rem; }
+  .deck-agenda-quadrant-body { font-size: 0.82rem; }
+  .deck-agenda-deliverable {
+    padding: 0.95rem 1rem;
+    margin-top: 0.75rem;
+    gap: 0.65rem;
+    border-radius: 0.85rem;
+  }
+  .deck-agenda-deliverable-icon {
+    width: 1.9rem;
+    height: 1.9rem;
+    font-size: 0.9rem;
+  }
+  .deck-agenda-deliverable-label { font-size: 0.6rem; letter-spacing: 0.14em; }
+  .deck-agenda-deliverable-text { font-size: 0.85rem; }
+
+  /* Agent profile: hero compacto, traits en columna */
+  .deck-agent-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 1.15rem 1.15rem;
+    gap: 0.85rem;
+    margin-top: 1rem;
+  }
+  .deck-agent-avatar {
+    width: 3.75rem;
+    height: 3.75rem;
+    font-size: 1.75rem;
+    margin: 0 auto;
+  }
+  .deck-agent-name { font-size: 1.15rem; }
+  .deck-agent-role { font-size: 0.8rem; }
+  .deck-agent-traits {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    margin-top: 0.85rem;
+  }
+  .deck-agent-trait { padding: 0.85rem 1rem; }
+  .deck-agent-trait-label { font-size: 0.6rem; letter-spacing: 0.1em; }
+  .deck-agent-trait-value { font-size: 0.83rem; }
+
+  /* Agent questionnaire: columna sencilla, tarjetas compactas */
+  .deck-questionnaire-intro {
+    font-size: 0.78rem;
+    padding: 0.65rem 0.9rem;
+    display: block;
+    margin-top: 0.75rem;
+  }
+  .deck-questionnaire-grid {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+  .deck-questionnaire-card { padding: 0.85rem 1rem; gap: 0.4rem; }
+  .deck-questionnaire-number {
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: 0.75rem;
+  }
+  .deck-questionnaire-icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: 0.9rem;
+  }
+  .deck-questionnaire-title { font-size: 0.88rem; }
+  .deck-questionnaire-prompt { font-size: 0.75rem; }
+  .deck-questionnaire-answer { font-size: 0.75rem; padding: 0.5rem 0.65rem; }
+  .deck-questionnaire-scale {
+    grid-template-columns: repeat(11, 1fr);
+    gap: 0.15rem;
+  }
+  .deck-questionnaire-scale-cell {
+    font-size: 0.55rem;
+    border-radius: 0.25rem;
+  }
+  .deck-questionnaire-nickname {
+    font-size: 0.8rem;
+    padding: 0.6rem 0.75rem;
+  }
+  .deck-questionnaire-print {
+    font-size: 0.72rem;
+    padding: 0.5rem 0.9rem;
+    margin-top: 1rem;
+  }
+
+  /* Reducir separación superior del slide inner en móvil */
+  .deck-slide-title { padding-top: 0.5vh; }
+}
+
+/* Extra small screens (< 380px) — más ajustes finos */
+@media (max-width: 380px) {
+  .deck-agenda-step { width: 2rem; height: 2rem; font-size: 0.85rem; }
+  .deck-agenda-title { font-size: 1rem; }
+  .deck-questionnaire-scale-cell { font-size: 0.48rem; }
+  .deck-hero-footer { font-size: 0.55rem; letter-spacing: 0.14em; }
 }

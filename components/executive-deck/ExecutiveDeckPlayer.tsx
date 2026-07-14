@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { ExecutiveDeck } from "../../data/executiveDecks";
 import ExecutiveSlideView from "./ExecutiveSlideView";
 
@@ -72,6 +72,26 @@ export default function ExecutiveDeckPlayer({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [goTo, next, prev, total]);
 
+  const touchStart = useRef({ x: 0, y: 0, time: 0 });
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY, time: performance.now() };
+  }, []);
+  const onTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const t = e.changedTouches[0];
+      const dx = t.clientX - touchStart.current.x;
+      const dy = t.clientY - touchStart.current.y;
+      const dt = performance.now() - touchStart.current.time;
+      // Horizontal swipe: min 50px, dominant over vertical, quick enough
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 800) {
+        if (dx < 0) next();
+        else prev();
+      }
+    },
+    [next, prev],
+  );
+
   const slide = deck.slides[index];
   const darkLayouts = new Set(["title", "section", "closing", "quote", "thanks"]);
   const isDark = darkLayouts.has(slide.layout);
@@ -119,7 +139,11 @@ export default function ExecutiveDeckPlayer({
         </div>
       </header>
 
-      <main className="deck-stage">
+      <main
+        className="deck-stage"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
         <button
           type="button"
           className="deck-nav-zone deck-nav-zone-left"

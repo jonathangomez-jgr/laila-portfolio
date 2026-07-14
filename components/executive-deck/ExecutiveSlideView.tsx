@@ -24,6 +24,41 @@ const kpiBadge: Record<SlideAccent, string> = {
   emerald: "deck-badge-teal",
 };
 
+const agendaAccent: Record<
+  SlideAccent,
+  {
+    step: string;
+    iconBg: string;
+    quadrantBorder: string;
+    deliverable: string;
+  }
+> = {
+  indigo:  {
+    step: "deck-agenda-step-eb50",
+    iconBg: "deck-agenda-icon-eb50",
+    quadrantBorder: "deck-agenda-quadrant-border-eb50",
+    deliverable: "deck-agenda-deliverable-eb50",
+  },
+  violet:  {
+    step: "deck-agenda-step-violet",
+    iconBg: "deck-agenda-icon-violet",
+    quadrantBorder: "deck-agenda-quadrant-border-violet",
+    deliverable: "deck-agenda-deliverable-violet",
+  },
+  sky:     {
+    step: "deck-agenda-step-cb68",
+    iconBg: "deck-agenda-icon-cb68",
+    quadrantBorder: "deck-agenda-quadrant-border-cb68",
+    deliverable: "deck-agenda-deliverable-cb68",
+  },
+  emerald: {
+    step: "deck-agenda-step-teal",
+    iconBg: "deck-agenda-icon-teal",
+    quadrantBorder: "deck-agenda-quadrant-border-teal",
+    deliverable: "deck-agenda-deliverable-teal",
+  },
+};
+
 function Eyebrow({ children }: { children: string }) {
   return <p className="deck-eyebrow mb-4">{children}</p>;
 }
@@ -44,20 +79,28 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
     /* ── Title (dark) ─────────────────────────────────────────────────── */
     case "title":
       return (
-        <div className="deck-slide-inner deck-slide-title">
+        <div className="deck-slide-inner deck-slide-title deck-hero-layout">
           {brandDecor}
-          {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
-          <h1 className="deck-hero-title">{slide.title}</h1>
-          {slide.subtitle && (
-            <p className="deck-hero-subtitle mt-6 max-w-4xl">{slide.subtitle}</p>
-          )}
-          <div className="mt-10 flex flex-col items-start gap-4">
-            <DeckQRCode />
+          <div className="deck-hero-top">
+            {slide.logo && (
+              <img
+                src={slide.logo}
+                alt="Salesforce"
+                className="deck-hero-logo"
+              />
+            )}
+            {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
+          </div>
+          <div className="deck-hero-middle">
+            <h1 className="deck-hero-title">{slide.title}</h1>
+            {slide.subtitle && (
+              <p className="deck-hero-subtitle mt-6 max-w-4xl">{slide.subtitle}</p>
+            )}
+          </div>
+          <div className="deck-hero-bottom">
+            {slide.showQr && <DeckQRCode />}
             {slide.footnote && (
-              <p className="text-sm font-medium tracking-widest uppercase"
-                 style={{ color: "rgba(255,255,255,0.35)" }}>
-                {slide.footnote}
-              </p>
+              <p className="deck-hero-footer">{slide.footnote}</p>
             )}
           </div>
         </div>
@@ -288,6 +331,205 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
           </div>
         </div>
       );
+
+    /* ── Agenda block · Canvas layout (light) ─────────────────────────── */
+    case "agenda-block": {
+      const accent = slide.accent ?? "indigo";
+      const a = pillarAccent[accent];
+      const badge = kpiBadge[accent];
+      const g = agendaAccent[accent];
+      const stepNumber = slide.eyebrow?.match(/\b(\d+)\b/)?.[1] ?? "•";
+      return (
+        <div className="deck-slide-inner">
+          {brandDecor}
+          {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
+          <div className="deck-agenda-header">
+            <div className="deck-agenda-title-wrap">
+              <span className={`deck-agenda-step ${g.step}`} aria-hidden>
+                {stepNumber}
+              </span>
+              <h2 className={`deck-title deck-agenda-title ${a.title}`}>{slide.title}</h2>
+            </div>
+            <span className={`deck-agenda-duration ${badge}`}>{slide.duration}</span>
+          </div>
+
+          <div className="deck-agenda-canvas">
+            {/* Objective — spans left column */}
+            <div className={`deck-agenda-quadrant deck-agenda-objective ${g.quadrantBorder}`}>
+              <div className="deck-agenda-quadrant-header">
+                <span className={`deck-agenda-quadrant-icon ${g.iconBg}`} aria-hidden>🎯</span>
+                <span className="deck-agenda-quadrant-label">Objetivo</span>
+              </div>
+              <p className="deck-agenda-quadrant-body">{slide.objective}</p>
+            </div>
+
+            {/* Content — top right */}
+            <div className={`deck-agenda-quadrant deck-agenda-content ${g.quadrantBorder}`}>
+              <div className="deck-agenda-quadrant-header">
+                <span className={`deck-agenda-quadrant-icon ${g.iconBg}`} aria-hidden>💬</span>
+                <span className="deck-agenda-quadrant-label">Contenido</span>
+              </div>
+              <p className="deck-agenda-quadrant-body">{slide.content}</p>
+            </div>
+
+            {/* Exercise — bottom right */}
+            <div className={`deck-agenda-quadrant deck-agenda-exercise ${g.quadrantBorder}`}>
+              <div className="deck-agenda-quadrant-header">
+                <span className={`deck-agenda-quadrant-icon ${g.iconBg}`} aria-hidden>✍️</span>
+                <span className="deck-agenda-quadrant-label">Ejercicio</span>
+              </div>
+              <p className="deck-agenda-quadrant-body">{slide.exercise}</p>
+            </div>
+          </div>
+
+          {/* Deliverable — full-width gradient band */}
+          <div className={`deck-agenda-deliverable ${g.deliverable}`}>
+            <span className="deck-agenda-deliverable-icon" aria-hidden>✨</span>
+            <div className="deck-agenda-deliverable-body">
+              <span className="deck-agenda-deliverable-label">Entregable de este bloque</span>
+              <p className="deck-agenda-deliverable-text">{slide.deliverable}</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ── Agenda list · slide de agenda con tarjetas ──────────────────── */
+    case "agenda-list": {
+      const cardAccentClass = (accent?: SlideAccent) => {
+        if (accent === "violet") return "deck-agenda-list-card-violet";
+        if (accent === "sky") return "deck-agenda-list-card-sky";
+        if (accent === "emerald") return "deck-agenda-list-card-emerald";
+        return "deck-agenda-list-card-indigo";
+      };
+      return (
+        <div className="deck-slide-inner">
+          {brandDecor}
+          {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
+          <SlideTitle>{slide.title}</SlideTitle>
+          <div className="deck-agenda-list mt-8">
+            {slide.items.map((item) => (
+              <div
+                key={item.number}
+                className={`deck-agenda-list-card ${cardAccentClass(item.accent)}`}
+              >
+                <span className="deck-agenda-list-number">{item.number}</span>
+                <span className="deck-agenda-list-title">{item.title}</span>
+                <span className="deck-agenda-list-duration">{item.duration}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    /* ── Agent questionnaire · «Conociendo a nuestro agente» ─────────── */
+    case "agent-questionnaire": {
+      const accentClass = (accent?: SlideAccent) => {
+        if (accent === "violet") return "deck-questionnaire-card-accent-violet";
+        if (accent === "sky") return "deck-questionnaire-card-accent-sky";
+        if (accent === "emerald") return "deck-questionnaire-card-accent-emerald";
+        return "";
+      };
+      return (
+        <div className="deck-slide-inner">
+          {brandDecor}
+          {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
+          <SlideTitle>{slide.title}</SlideTitle>
+          <div className="deck-questionnaire-intro">{slide.intro}</div>
+
+          <div className="deck-questionnaire-grid">
+            {slide.questions.map((q) => (
+              <div key={q.number} className={`deck-questionnaire-card ${accentClass(q.accent)}`}>
+                <div className="deck-questionnaire-card-header">
+                  <span className="deck-questionnaire-number">{q.number}</span>
+                  <span className="deck-questionnaire-icon" aria-hidden>{q.icon}</span>
+                  <p className="deck-questionnaire-title">{q.title}</p>
+                </div>
+                <p className="deck-questionnaire-prompt">{q.prompt}</p>
+                {q.format === "fill-blanks" && q.template && (
+                  <div className="deck-questionnaire-answer">{q.template}</div>
+                )}
+                {q.format === "list" && (
+                  <div className="deck-questionnaire-answer-list">
+                    {Array.from({ length: q.listCount ?? 5 }).map((_, i) => (
+                      <div key={i} className="deck-questionnaire-answer-list-item" data-num={`${i + 1}.`}>
+                        <span className="deck-questionnaire-answer-list-line" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {q.format === "scale" && (
+                  <div className="deck-questionnaire-scale">
+                    {Array.from({ length: (q.scaleMax ?? 10) + 1 }).map((_, i) => (
+                      <div key={i} className="deck-questionnaire-scale-cell">{i}</div>
+                    ))}
+                  </div>
+                )}
+                {q.format === "nickname" && (
+                  <div className="deck-questionnaire-nickname">Escribe aquí el apodo que le pondrías</div>
+                )}
+                {q.format === "short" && (
+                  <div className="deck-questionnaire-answer">Espacio para tu respuesta</div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {slide.printUrl && (
+            <a
+              className="deck-questionnaire-print"
+              href={slide.printUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              🖨 Descargar / Imprimir plantilla
+            </a>
+          )}
+        </div>
+      );
+    }
+
+    /* ── Agent profile · «Meet your agent» (light) ────────────────────── */
+    case "agent-profile": {
+      return (
+        <div className="deck-slide-inner">
+          {brandDecor}
+          {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
+          <SlideTitle>{slide.title}</SlideTitle>
+
+          <div className="deck-agent-hero">
+            <div className="deck-agent-avatar" aria-hidden>{slide.avatar ?? "🤖"}</div>
+            <div className="deck-agent-hero-content">
+              <h3 className="deck-agent-name">{slide.agentName}</h3>
+              <p className="deck-agent-role">{slide.agentRole}</p>
+            </div>
+          </div>
+
+          <div className="deck-agent-traits">
+            {slide.traits.map((trait) => {
+              const accentClass =
+                trait.accent === "violet"
+                  ? "deck-agent-trait-accent-violet"
+                  : trait.accent === "sky"
+                    ? "deck-agent-trait-accent-cb68"
+                    : trait.accent === "emerald"
+                      ? "deck-agent-trait-accent-teal"
+                      : "";
+              return (
+                <div key={trait.label} className={`deck-agent-trait ${accentClass}`}>
+                  <div className="deck-agent-trait-header">
+                    <span className="deck-agent-trait-icon" aria-hidden>{trait.icon}</span>
+                    <span className="deck-agent-trait-label">{trait.label}</span>
+                  </div>
+                  <p className="deck-agent-trait-value">{trait.value}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
 
     default:
       return null;

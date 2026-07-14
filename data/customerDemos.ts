@@ -702,7 +702,7 @@ export type ValorPreworkGroup = {
 };
 
 export type ValorAgendaBlock = {
-  code: "0" | "V" | "A" | "L" | "O" | "R" | "wrap";
+  code: string;
   title: string;
   duration: string;
   objective: string;
@@ -4761,18 +4761,18 @@ export const customerDemos: CustomerDemo[] = [
   },
 
   // ══════════════════════════════════════════════════════════════════════════
-  // JAFRA — Agentforce V.A.L.O.R. Review
+  // JAFRA — Revisión del agente Agentforce
   // ══════════════════════════════════════════════════════════════════════════
   {
     slug: "jafra",
-    title: "Agentforce V.A.L.O.R. Review",
+    title: "Revisión del agente Agentforce · JAFRA",
     customerName: "JAFRA Cosmetics (BeFra)",
     industry: "Belleza y cuidado personal · Venta directa",
     description:
-      "Un workshop de 2 horas para revisar el primer mes del agente Agentforce productivo de JAFRA — usando el mes 1 como benchmark contra otros clientes — y establecer una disciplina de Digital Labor Operations que asegure valor sostenible, autonomía del cliente y un pipeline controlado de próximos agentes.",
-    logo: "/Customers/Jafra/images/Logo-jafra.svg",
+      "Una sesión de dos horas en la que Salesforce y JAFRA revisan juntos — negocio y tecnología — el valor que el agente Agentforce productivo de JAFRA ya entrega, y acuerdan los próximos pasos para que entregue más. La conversación abre con el contexto de la IA agéntica en la industria, se profundiza con el agente como protagonista, y cierra con compromisos firmados por ambos lados.",
+    logo: "/Customers/Jafra/images/jafra-logo.webp",
     passcode: "jafra2026",
-    tags: ["Agentforce", "V.A.L.O.R.", "Digital Labor Ops", "Continuous Value"],
+    tags: ["Agentforce", "Empresa agéntica", "Aliado estratégico", "Compromisos con dueño"],
     tabs: [
       // ── 1 · Overview ────────────────────────────────────────────────────
       {
@@ -4780,15 +4780,15 @@ export const customerDemos: CustomerDemo[] = [
         label: "Overview",
         title: "Resumen ejecutivo",
         content:
-          "JAFRA Cosmetics — hermana de Betterware bajo la matriz BeFra desde 2022 — ya opera un agente Agentforce en producción. La pregunta ya no es «¿qué agente construimos?», sino: «¿cuánto nos cuesta cada resultado exitoso, y cómo hacemos que ese resultado sea cada vez más eficiente?». El V.A.L.O.R. Review es un workshop de 2 horas que responde esa pregunta con evidencia — Valor generado, Anatomía del consumo, Lógica y arquitectura, Oportunidades de automatización, Roadmap y gobierno — y deja instalado un modelo de medición mensual + un pipeline con criterios claros para aprobar los siguientes agentes.",
+          "El agente Agentforce de JAFRA está en producción y ya entrega valor a la Consultora. Esta sesión se ocupa de una sola cosa: mirarlo juntos — negocio y tecnología — y acordar cómo lo acompañamos para que entregue más. Arranca con el contexto agéntico de la industria, construye entre todos la ficha del agente a partir de lo que cada participante conoce, revisa una conversación de valor demostrado y otra con oportunidad de incremento, y cierra con acuerdos firmados por Salesforce y por JAFRA — cada uno con responsable nombrado y mecanismo de seguimiento definido en la sala.",
         overviewData: {
           stats: [
-            { value: "2h", label: "Duración del workshop" },
-            { value: "5", label: "Dimensiones V.A.L.O.R." },
-            { value: "8", label: "Entregables tangibles al cerrar" },
-            { value: "1", label: "Mes de operación como benchmark" },
-            { value: "30", label: "Conversaciones a analizar en prework" },
-            { value: "3-5 días", label: "Anticipación mínima del prework" },
+            { value: "2h", label: "Duración de la sesión con negocio + tecnología" },
+            { value: "6", label: "Bloques con hilo conductor claro" },
+            { value: "5", label: "Participantes · 3 tecnología + 2 negocio" },
+            { value: "Ejercicio", label: "Individual «Conociendo a nuestro agente»" },
+            { value: "2", label: "Conversaciones reales revisadas en la sala" },
+            { value: "Acuerdos", label: "Compromisos firmados con responsables y seguimiento" },
           ],
         },
       },
@@ -4842,39 +4842,36 @@ export const customerDemos: CustomerDemo[] = [
       {
         id: "context",
         label: "Contexto",
-        title: "Por qué es el momento del V.A.L.O.R. Review",
+        title: "El momento agéntico · cómo la IA transforma la industria y qué significa para JAFRA",
         content:
-          "Un agente Agentforce productivo genera valor real, pero también consume — y cuando el consumo crece más rápido que los resultados exitosos, el modelo deja de ser sostenible. El primer mes es la ventana crítica: aún hay margen para corregir sin romper adopción, pero ya hay datos reales para separar hipótesis de evidencia. Estos son los patrones que hacen del V.A.L.O.R. Review una intervención oportuna — no reactiva.",
+          "La IA generativa dejó de ser un experimento hace más de un año. Hoy es cómo compiten las marcas líderes del sector belleza y venta directa — y JAFRA ya dio el primer paso con un agente Agentforce en producción. La sesión abre situando ese paso en el contexto global de la industria, para que la conversación sobre el agente no ocurra en el vacío, sino como parte de una visión más grande: JAFRA como empresa agéntica, acompañada por Salesforce como aliado estratégico.",
         contextData: {
           groups: [
             {
-              name: "Señales que exigen revisar ahora",
+              name: "La IA agéntica ya redefine la industria",
               findings: [
-                "Consumo creciendo más rápido que el volumen de conversaciones — sin explicación operativa clara",
-                "Casos de uso con mucho volumen y pocos resultados exitosos medibles",
-                "Transferencias a humano sin criterio consistente — algunas evitables, otras necesarias",
-                "Acciones que se ejecutan repetidamente en la misma sesión (posibles loops)",
-                "Cambios frecuentes de instrucciones sin métrica que valide la mejora",
+                "El 78% de las organizaciones ya usa IA en al menos una función de negocio — pasó de experimento a operación en menos de dos años",
+                "En belleza y venta directa, las Consultoras esperan respuestas en segundos — el canal digital concentra las consultas repetitivas ideales para agentes",
+                "Las marcas líderes ya operan agentes que atienden a su fuerza de ventas 24/7 en el canal preferido de cada persona",
+                "La medición se movió del volumen al valor — se mide qué genera cada capacidad de IA, no cuántas veces se usa",
               ],
             },
             {
-              name: "Riesgos si no se interviene",
+              name: "La visión de empresa agéntica · cuatro capacidades",
               findings: [
-                "El costo por resultado exitoso se vuelve inaceptable antes de escalar volumen",
-                "Nuevos casos de uso se aprueban sin business case medible — se agrava el problema",
-                "El cliente queda dependiente del partner para operar y auditar el agente",
-                "La organización pierde confianza en Agentforce como palanca de valor sostenible",
-                "Se toman decisiones de ajuste basadas en «la respuesta parece mejor», sin métrica",
+                "Agentes que actúan · no solo responden, ejecutan acciones controladas sobre datos reales",
+                "Datos que hablan · Data Cloud une la información del cliente en un solo perfil vivo",
+                "Personas potenciadas · el staff trabaja con el agente, no compite con él — recibe casos con contexto completo",
+                "Confianza integrada · Einstein Trust Layer, auditoría, controles de datos sensibles desde el primer día",
               ],
             },
             {
-              name: "Qué habilita el V.A.L.O.R. Review",
+              name: "Por qué esta conversación, en esta sala, hoy",
               findings: [
-                "Separar adopción, actividad y valor real con evidencia — no percepciones",
-                "Instalar «Consumo por resultado exitoso» como la métrica principal del programa",
-                "Convertir la automatización agentic en automatización determinística donde aplique",
-                "Dejar al cliente con capacidad de auditar, decidir y evolucionar sin dependencia del partner",
-                "Establecer criterios de aprobación para el pipeline de próximos agentes",
+                "El agente ya está entregando valor · nuestra tarea conjunta es hacerlo visible con evidencia y acompañar el camino para incrementarlo",
+                "Negocio y tecnología ven al agente desde ángulos distintos · cuando miran juntos, las decisiones son mejores",
+                "El primer año de operación es la ventana donde se define si un agente escala o se estanca — es el mejor momento para calibrar",
+                "Salesforce trae el marco y la disciplina · JAFRA elige el ritmo y el destino — con evidencia, no con opiniones",
               ],
             },
           ],
@@ -4885,32 +4882,32 @@ export const customerDemos: CustomerDemo[] = [
       {
         id: "objective",
         label: "Objetivo",
-        title: "Construir una disciplina de Digital Labor Operations sostenible",
+        title: "Del valor actual al valor que sigue — con negocio y tecnología en la misma mesa",
         content:
-          "El objetivo no es justificar el consumo del primer mes. Es dejar instalado un modelo donde cada peso consumido pueda relacionarse con un resultado, cada cambio esté probado, y cada nueva capacidad tenga un business case claro.",
+          "La sesión tiene una ambición clara: que Salesforce y JAFRA salgan de la sala con la misma foto del agente hoy, con al menos un caso de valor demostrado y una oportunidad de incremento identificada, y con compromisos firmados por ambos lados con responsables nombrados y mecanismo de seguimiento acordado.",
         objective: {
           headline:
-            "Al terminar las 2 horas, JAFRA tiene evidencia del valor generado en el mes 1, decisiones concretas de optimización y un modelo de gobierno que evita que el costo crezca sin control.",
+            "Con 3 personas de tecnología y 2 de negocio en la misma mesa, revisar el agente Agentforce de JAFRA — reconocer su valor actual, identificar dónde puede entregar más, y acordar acciones concretas de ambos lados que hacen que ese valor crezca.",
           okrs: [
             {
-              label: "O1 — Evidencia de valor",
+              label: "O1 — Una foto compartida del agente",
               description:
-                "Separar adopción, actividad y valor. Clasificar cada caso de uso como valor demostrado, probable, desconocido o negativo — y adoptar «Consumo por resultado exitoso» como métrica principal.",
-              enabler: "Bloque V · Scorecard del mes 1",
+                "Que los cinco participantes salgan describiendo al agente en los mismos términos, con las mismas capacidades y las mismas prioridades. Sin versiones distintas entre negocio y tecnología.",
+              enabler: "Bloque 2 · ficha del agente construida entre todos",
               color: "indigo",
             },
             {
-              label: "O2 — Optimización decidida",
+              label: "O2 — El valor actual, mapeado y protegido",
               description:
-                "Convertir hallazgos en decisiones con owner, fecha y métrica: consolidar automatizaciones, ajustar tópicos, eliminar consultas duplicadas, crear suite de regresión.",
-              enabler: "Bloques A · L · O",
+                "Reconocer al menos un caso concreto donde el agente ya está entregando valor claro — con el patrón que lo hace funcionar identificado y protegido en los cambios siguientes.",
+              enabler: "Bloques 2 y 3 · ficha compartida y caso de valor",
               color: "violet",
             },
             {
-              label: "O3 — Autonomía y evolución",
+              label: "O3 — El valor siguiente, decidido con dueño",
               description:
-                "Dejar un modelo de medición continua (semanal / mensual / por-cambio) y un pipeline con criterios explícitos para aprobar próximos agentes — para que JAFRA opere sin dependencia del partner.",
-              enabler: "Bloque R · Governance + Next Agents",
+                "Identificar la oportunidad más clara para incrementar valor y convertirla en compromisos firmados por Salesforce y por JAFRA — cada uno con responsable nombrado y mecanismo de seguimiento acordado en la sala.",
+              enabler: "Bloques 4 y 5 · oportunidad y acuerdos con seguimiento",
               color: "sky",
             },
           ],
@@ -4921,335 +4918,291 @@ export const customerDemos: CustomerDemo[] = [
       {
         id: "workshop-plan",
         label: "Plan del Workshop",
-        title: "Agentforce V.A.L.O.R. Review — Plan detallado de 2 horas",
+        title: "Agenda de la sesión · seis bloques con hilo conductor claro",
         content:
-          "Un workshop de 2 horas no puede construir análisis desde cero. Puede — y debe — validar análisis pre-procesado en el prework y convertirlo en decisiones. Este plan invierte la ecuación clásica: la mayor parte del trabajo analítico ocurre 3-5 días antes de la sesión. La sesión se dedica a desafiar hallazgos, priorizar y comprometerse.",
+          "La sesión está diseñada como una historia coherente en seis bloques: (1) introducción y encuadre, (2) construir juntos la ficha del agente con un ejercicio individual, (3) reconocer el caso donde ya entrega valor, (4) identificar la oportunidad más clara de incremento, (5) firmar acuerdos y definir seguimiento, y (6) cerrar con conclusiones. Cada bloque cierra con un entregable único y visible.",
         valorWorkshopPlanData: {
           purpose:
-            "Determinar si el agente productivo de JAFRA está generando valor sostenible, identificar qué parte del consumo produce resultados reales, detectar oportunidades de optimización y establecer un modelo continuo de operación que evite que el costo crezca sin control.",
+            "Que Salesforce y JAFRA salgan de la misma mesa con la misma foto del agente, con al menos un caso de valor demostrado protegido, con la oportunidad de incremento más clara identificada, y con compromisos firmados por ambos lados — con responsables nombrados y mecanismo de seguimiento acordado en la sala.",
           guidingQuestion:
-            "¿Cuánto nos cuesta cada resultado exitoso, y cómo hacemos que ese resultado sea cada vez más eficiente?",
+            "¿Cómo vemos el valor actual del agente — y cómo lo incrementamos juntos?",
           benchmarkNote:
-            "El mes 1 se usa como benchmark — no como límite temporal. Se compara la evolución de JAFRA contra cómo otros clientes progresaron en su primer mes de Agentforce (adopción, contención, consumo por resultado, tasa de éxito) para calibrar expectativas. A partir de ese diagnóstico, R construye el modelo de operación continuo y el pipeline de próximos agentes.",
+            "El primer año de operación es la ventana donde se define si un agente escala o se estanca. Salesforce trae el marco de acompañamiento continuo — JAFRA elige el ritmo. En esta sesión miramos juntos el valor actual con la evidencia disponible y acordamos los próximos pasos concretos.",
           expectedOutcomes: [
-            "Una evaluación del primer mes basada en resultados — no en volumen",
-            "Un mapa del consumo con sus tres principales generadores e hipótesis de causa",
-            "Un Agent Health Score con fortalezas, hallazgos críticos, riesgos y quick wins",
-            "Una lista clasificada de procesos a convertir en automatización determinística",
-            "Un backlog priorizado de optimizaciones (frecuencia × consumo × esfuerzo)",
-            "Un roadmap 30-60-90 con decisiones, dueños, fechas y métricas",
-            "Un modelo de medición mensual (dashboard, cadencia, umbrales de alerta)",
-            "Un pipeline de próximos agentes con criterios explícitos de aprobación",
+            "Contexto agéntico compartido entre los cinco participantes",
+            "El agente presentado con nombre, personalidad, capacidades y fuentes de contexto claras",
+            "Definición de éxito acordada — la vara con la que se leen los bloques siguientes",
+            "Al menos un caso de valor demostrado con patrón identificado",
+            "La oportunidad de incremento más clara nombrada con causa técnica y beneficio de negocio",
+            "Compromisos firmados por Salesforce y por JAFRA con responsables nombrados",
+            "Mecanismo de seguimiento y fechas de cumplimiento acordados en la sala",
           ],
           prework: [
             {
               key: "business",
-              title: "Información de negocio",
+              title: "Lo que negocio trae",
               purpose:
-                "Comparar promesa contra resultado, construir línea base y calcular valor real generado por caso de uso.",
+                "Tres frases claras que abren la conversación en el bloque 2 — sin diapositivas ni cifras complejas.",
               items: [
-                "Objetivos originales del agente (comparar promesa vs resultado)",
-                "Casos de uso actualmente productivos (delimitar el análisis)",
-                "Volumen previo a Agentforce (línea base)",
-                "Volumen atendido por el agente en el mes 1 (adopción)",
-                "Resultados exitosos por caso de uso (efectividad)",
-                "Transferencias a humano — con motivo cuando aplique (contención)",
-                "Tiempo o costo del proceso anterior (valor generado)",
-                "CSAT, reclamos o reincidencias del mes 1 (experiencia)",
-                "Incidentes conocidos del mes 1 (riesgos operativos)",
+                "En una frase: qué problema queríamos que el agente resolviera",
+                "En una frase: qué esperábamos ver al terminar el primer mes",
+                "En una frase: qué nos gustaría entender mejor hoy",
+                "Un comentario real de una Consultora este mes (si lo hay) — vale más que cualquier gráfico",
               ],
-              note: "Por completar en prework — 3-5 días antes de la sesión.",
+              note: "Lo prepara la persona de negocio con rol más senior. Es tres frases, no un documento.",
             },
             {
               key: "consumption",
-              title: "Información de consumo",
+              title: "Los tres números del mes",
               purpose:
-                "Distinguir consumo productivo de improductivo y proyectar el ritmo mensual bajo la operación actual.",
+                "Tres cifras únicas que anclan la conversación del bloque 2 en evidencia — no en opiniones.",
               items: [
-                "Consumo diario de los últimos 30 días",
-                "Tipo de consumo y fuente (validar usage types del contrato)",
-                "Consumo por agente, canal o implementación cuando esté disponible",
-                "Días y horarios con picos (identificar patrones)",
-                "Entitlements, créditos disponibles y modelo comercial aplicable",
-                "Prompts, acciones u otros componentes que generen consumo adicional",
-                "Proyección mensual basada en el ritmo actual",
+                "Cuántas conversaciones atendió el agente en el mes 1",
+                "Qué porcentaje terminó bien según nuestra mejor definición actual",
+                "Cuánto cuesta aproximadamente cada conversación (aunque sea una estimación gruesa)",
               ],
-              note:
-                "Digital Wallet permite revisar tendencias de consumo y desgloses por producto. Validar disponibilidad de reportes por fuentes y etiquetas en la edición contratada.",
+              note: "Los prepara el arquitecto Salesforce con el equipo de operaciones o los toma de Digital Wallet. Si un número no está disponible hoy, se dice abiertamente en la sesión — es un hallazgo en sí mismo.",
             },
             {
               key: "technical",
-              title: "Inventario técnico",
+              title: "Las dos conversaciones",
               purpose:
-                "Tener el mapa completo de qué se ejecuta y cómo — para evaluar arquitectura y detectar consumo estructural.",
+                "Las dos conversaciones reales que se revisan en vivo en los bloques 3 y 4 — el corazón material de la sesión.",
               items: [
-                "Agente y versiones desplegadas",
-                "Tópicos o subagentes",
-                "Instrucciones generales y por tópico",
-                "Acciones",
-                "Flows",
-                "Apex",
-                "Prompt Templates",
-                "Retrievers y fuentes de conocimiento",
-                "Integraciones",
-                "Variables y contexto de conversación",
-                "Reglas de transferencia",
-                "Manejo de errores y reintentos",
-                "Cambios realizados durante el primer mes",
+                "Una conversación de valor claro · el agente resolvió algo importante para la Consultora (para bloque 3)",
+                "Una conversación con oportunidad de mejora · el agente puede entregar más valor (para bloque 4)",
+                "Para cada una: pantalla o transcripción legible, con acceso desde la sala",
+                "Para cada una: un párrafo del arquitecto explicando qué hizo el agente en lenguaje simple",
               ],
-              note: "Preparado por el administrador/arquitecto Salesforce del cliente.",
+              note: "Elegir bien las dos conversaciones es la decisión más importante del prework. Las selecciona el arquitecto o el Product Owner del agente.",
             },
             {
               key: "conversations",
-              title: "Muestra de conversaciones",
+              title: "El material de la sala",
               purpose:
-                "Auditar comportamiento real del agente en escenarios representativos — no promedios.",
+                "Los artefactos visuales que se usan durante la sesión — sin más, sin menos.",
               items: [
-                "5 conversaciones exitosas y eficientes",
-                "5 conversaciones exitosas pero largas",
-                "5 conversaciones transferidas a humano",
-                "5 conversaciones fallidas",
-                "5 conversaciones con consumo inusualmente alto",
-                "5 conversaciones con comportamiento inesperado (si existen)",
+                "Este deck abierto en pantalla compartida",
+                "Pizarra virtual (Miro, FigJam o similar) con 4 zonas visibles: éxito · caso de valor · oportunidad · tabla de acuerdos",
+                "Tabla de acuerdos lista para llenarse en el bloque 5: acción · lado (Salesforce / JAFRA) · responsable · cómo sabremos que funcionó",
               ],
-              note:
-                "De estas 30, se pre-seleccionan 3 para la sesión: una buena (referencia), una costosa (bloque A) y una fallida (bloque L). Las demás se revisan en prework y solo se referencian.",
+              note: "Lo prepara Salesforce como facilitador de la sesión. Cualquier artefacto adicional distrae.",
             },
           ],
           agenda: [
             {
-              code: "0",
-              title: "Apertura y alineación de éxito",
+              code: "1",
+              title: "Introducción — contexto agéntico y encuadre de la sesión",
               duration: "10 min",
               objective:
-                "Alinear qué se considera éxito y evitar que la sesión se convierta en búsqueda de culpables.",
+                "Situar al equipo en el momento actual de la IA aplicada al negocio y compartir la visión de empresa agéntica que Salesforce trae como aliado estratégico de JAFRA — antes de entrar al agente.",
               content:
-                "Se leen los criterios de éxito pre-cargados desde el prework y se valida cada uno en 5 minutos. Se completa la frase: «Dentro de 6 meses, consideraremos exitoso al agente si…».",
-              deliverable: "Una definición compartida de éxito — máximo 4 criterios.",
+                "Un vistazo corto a las tendencias globales de IA en la industria de belleza y venta directa, seguido de cómo Salesforce acompaña a JAFRA en la construcción de una organización agéntica — con datos, agentes, personas y confianza como pilares.",
+              exercise:
+                "Presentación breve del equipo de la sala · cada participante se presenta con su rol y una expectativa concreta para la sesión.",
+              deliverable:
+                "Contexto compartido y expectativas alineadas · el equipo entra a la sesión con la misma mirada.",
               accent: "indigo",
             },
             {
-              code: "V",
-              title: "Valor generado en el mes 1",
-              duration: "25 min",
+              code: "2",
+              title: "Conociendo al agente — construyamos la ficha entre todos",
+              duration: "15 min",
               objective:
-                "Separar adopción, actividad y valor. Un agente puede tener mucho volumen y poco resultado — o mucho consumo con trabajo genuinamente valioso.",
+                "Construir de forma colectiva una descripción común del agente productivo de JAFRA — desde lo que cada participante ha visto, usado o escuchado — para que negocio y tecnología partan de la misma foto.",
               content:
-                "Se recorre el scorecard pre-cargado con las 4 dimensiones (Adopción · Efectividad · Experiencia · Valor). Por cada caso de uso el equipo valida la clasificación: demostrado / probable / desconocido / negativo. Comparación contra benchmark de otros clientes en su mes 1.",
+                "Cada participante responde individualmente el ejercicio «Conociendo a nuestro agente» — 6 preguntas cortas que se comparten después con la sala para construir juntos la ficha común: cómo lo presentamos, qué sabe hacer, qué sabe, cuándo pide ayuda humana, nivel de poder y apodo compartido.",
               exercise:
-                "Ejercicio de evidencia de valor: llenar «resultado exitoso por caso de uso» + «evidencia cuantificable» en la tabla.",
-              deliverable: "Un scorecard del mes 1 con máximo 10 métricas y clasificación por caso de uso.",
+                "Ejercicio individual «Conociendo a nuestro agente» (plantilla imprimible disponible). Después, cada participante lee su respuesta a la sala y se construye una ficha compartida.",
+              deliverable:
+                "Ficha del agente construida entre los cinco — con nombre o apodo acordado, capacidades reconocidas y una escala compartida de su poder actual.",
               accent: "violet",
             },
             {
-              code: "A",
-              title: "Anatomía del consumo",
-              duration: "25 min",
+              code: "3",
+              title: "Lo que queremos proteger — el caso donde ya entrega valor",
+              duration: "20 min",
               objective:
-                "Distinguir consumo productivo de consumo improductivo mediante la cascada consumo → canal → caso de uso → tópico → acción → resultado.",
+                "Reconocer al menos un caso concreto donde el agente ya entrega valor claro a la Consultora — para nombrar el patrón que lo hace funcionar y protegerlo en los cambios siguientes.",
               content:
-                "Se muestra la cascada de consumo (10 min) — total, por canal, por caso, por tópico, por acción. Se calcula Consumo por resultado exitoso, Acciones por resultado, Turnos por resultado. Luego se revisa la traza costosa pre-seleccionada (15 min) marcando cada paso como: razonamiento necesario / acción útil / duplicada / recuperación de error / sin valor / resultado alcanzado.",
-              exercise: "Auditoría de la traza costosa — clasificación de cada paso.",
+                "Revisamos en vivo una conversación exitosa. Tecnología cuenta qué hizo el agente en lenguaje simple. Negocio traduce: «esto le resolvió a la Consultora tal cosa concreta». Se identifica el patrón repetible.",
+              exercise:
+                "Marcamos qué pasos aportaron valor real y cuáles fueron trámite — se escribe el patrón que hace que este caso funcione, en una frase.",
               deliverable:
-                "Un mapa de calor del consumo con los 3 principales generadores y una hipótesis de causa para cada uno.",
+                "Un caso de uso etiquetado como valor demostrado — con evidencia concreta y el patrón que lo hace funcionar.",
               accent: "sky",
             },
             {
-              code: "L",
-              title: "Lógica y arquitectura del agente",
-              duration: "30 min",
+              code: "4",
+              title: "Incrementar valor — la oportunidad más clara",
+              duration: "20 min",
               objective:
-                "Evaluar si la construcción actual facilita selección precisa, ejecución eficiente y mantenimiento controlado.",
+                "Identificar el área donde el agente puede entregar más valor en las próximas semanas — nombrando la causa técnica en simple y el beneficio de negocio concreto.",
               content:
-                "Se revisa el Agent Health Score pre-puntuado por el arquitecto en prework (12 dimensiones: Alcance · Tópicos · Instrucciones · Acciones · Datos · Automatización · Errores · Transferencia · Seguridad · Pruebas · Observabilidad · Gobierno). Se desafían solo los rojos y amarillos. Se revisa la traza fallida pre-seleccionada para juzgar arquitectura con evidencia.",
+                "Revisamos en vivo una conversación con oportunidad de mejora. Tecnología explica qué está pasando sin tecnicismos. Negocio traduce el impacto en la Consultora y en el negocio. Se busca la causa raíz.",
               exercise:
-                "Desafiar las 3-5 dimensiones rojas/amarillas del Health Score con la traza fallida como caso de estudio.",
+                "Completamos entre los cinco una frase: «si mejoramos X, la Consultora recibe Y, y JAFRA gana Z». Si la frase no cierra, el hallazgo es que hay que investigar más antes de decidir.",
               deliverable:
-                "Un Agent Health Score con fortalezas, hallazgos críticos, riesgos, quick wins y elementos que requieren análisis técnico posterior.",
+                "La oportunidad principal nombrada en una frase clara — con causa técnica y beneficio de negocio.",
               accent: "emerald",
             },
             {
-              code: "O",
-              title: "Oportunidades de automatización completa",
-              duration: "20 min",
-              objective:
-                "Determinar qué decisiones realmente requieren inteligencia y qué pasos deben convertirse en procesos determinísticos.",
-              content:
-                "Se muestra la matriz pre-cargada con la clasificación por tipo (Knowledge · Regla · Flow · Apex · Agentforce · Humano · Eliminar). El equipo prioriza los top 5 candidatos usando la fórmula: (Frecuencia + Consumo + Determinismo + Impacto + Reducción de riesgo) / Esfuerzo. Principio rector: «El agente debe razonar donde existe ambigüedad. La automatización debe ejecutar donde existe certeza.»",
-              exercise: "Priorización de los top 5 candidatos con puntuación 1-5 por criterio.",
-              deliverable:
-                "Tres grupos decididos: Automatizar ahora · Optimizar dentro del agente · Mantener y monitorear.",
-              accent: "amber",
-            },
-            {
-              code: "R",
-              title: "Roadmap, medición continua y próximos agentes",
+              code: "5",
+              title: "Acuerdos y seguimiento — compromisos firmados y mecanismo definido",
               duration: "25 min",
               objective:
-                "Convertir hallazgos en un programa continuo de mejora — con decisiones, medición y pipeline de expansión.",
+                "Convertir lo aprendido en compromisos concretos por Salesforce y por JAFRA — con responsables nombrados — y acordar en la sala el mecanismo de seguimiento y las fechas esperadas de cumplimiento.",
               content:
-                "Tres sub-momentos: (1) 12 min · Roadmap 30-60-90 y tabla de compromisos con owner + fecha + métrica; (2) 8 min · modelo de medición mensual: dashboard, cadencia, umbrales de alerta, forecast de consumo; (3) 5 min · pipeline de próximos agentes con criterios explícitos de aprobación (business case, medibilidad del actual, capacity, seguridad).",
+                "Ponemos sobre la mesa lo que salió de los bloques 3 y 4. Agrupamos en dos columnas: qué compromete Salesforce y qué compromete JAFRA. Cada acuerdo lleva dueño único, mecanismo de seguimiento y fecha esperada — todo definido y aceptado en la sala.",
               exercise:
-                "Llenar la tabla de compromisos: Acción · Responsable · Fecha · Métrica afectada · Resultado esperado.",
+                "Llenamos la tabla en vivo: acción · lado (Salesforce / JAFRA) · responsable · mecanismo de seguimiento · fecha esperada. Los cinco lo aceptan y lo agendan en su calendario.",
               deliverable:
-                "Roadmap 30-60-90 + modelo de medición mensual + criterios de aprobación de próximos agentes.",
-              accent: "rose",
+                "Tabla de acuerdos firmada por ambos lados — con responsables, mecanismo de seguimiento y fechas de cumplimiento acordados.",
+              accent: "indigo",
             },
             {
-              code: "wrap",
-              title: "Recap y próximos pasos",
-              duration: "5 min",
+              code: "6",
+              title: "Conclusiones — qué nos llevamos y qué sigue",
+              duration: "10 min",
               objective:
-                "Confirmar el decision log, dueños y cadencia de seguimiento inmediata.",
+                "Sintetizar lo que se logró en la sesión y cerrar con claridad sobre próximos pasos inmediatos — para que todos salgan con el mismo entendimiento.",
               content:
-                "Lectura rápida del decision log, confirmación de dueños, fecha de la primera reunión semanal (30 min) y responsable de distribuir la memoria del taller.",
-              deliverable: "Decision log firmado — quién lo distribuye y para cuándo.",
-              accent: "indigo",
+                "Recapitulamos las tres ideas centrales de la sesión: la foto compartida del agente, los acuerdos firmados y el mecanismo de seguimiento. Cada participante comparte una frase de cierre.",
+              exercise:
+                "Ronda de cierre · una frase por persona respondiendo: «me llevo de esta sesión…».",
+              deliverable:
+                "Conclusiones compartidas y cierre alineado · la sesión no termina el trabajo, lo enciende.",
+              accent: "violet",
             },
           ],
           participants: {
             client: {
-              heading: "Del cliente (JAFRA)",
+              heading: "Negocio · 2 personas",
               roles: [
-                { role: "Sponsor o dueño del resultado de negocio" },
-                { role: "Product Owner del agente" },
-                { role: "Operaciones o área usuaria" },
-                { role: "Administrador o arquitecto Salesforce" },
-                { role: "Responsable de automatizaciones e integraciones" },
                 {
-                  role: "Finanzas / procurement / licenciamiento",
-                  note: "Presencia recomendada durante el bloque A (consumo).",
+                  role: "Sponsor / dueño del resultado de negocio",
+                  note: "Trae las 3 frases de apertura. Es la voz que dice si algo genera valor o no.",
                 },
                 {
-                  role: "Seguridad o cumplimiento",
-                  note: "Presencia requerida si hay procesos sensibles.",
+                  role: "Product Owner del agente (desde negocio)",
+                  note: "Conoce a la Consultora y traduce lo que pasa en la conversación a impacto real.",
                 },
               ],
             },
             partner: {
-              heading: "De nuestro lado",
+              heading: "Tecnología · 3 personas",
               roles: [
-                { role: "Facilitador de negocio" },
-                { role: "Arquitecto de Agentforce" },
-                { role: "Especialista en automatización (Flow · Apex · integraciones)" },
                 {
-                  role: "Escriba / capturador de decisiones",
-                  note: "Persona distinta al facilitador — indispensable para no perder decisiones.",
+                  role: "Arquitecto Salesforce / Agentforce",
+                  note: "Trae los 3 números del mes y explica las conversaciones paso a paso en lenguaje simple.",
+                },
+                {
+                  role: "Administrador / desarrollador de flujos y acciones",
+                  note: "Responde cómo se hicieron las cosas y qué cambios técnicos son viables.",
+                },
+                {
+                  role: "Facilitador / especialista de éxito del cliente",
+                  note: "Conduce la sesión, hace preguntas incómodas, protege el tiempo, cierra cada bloque con entregable.",
                 },
               ],
             },
-            note: "El facilitador y el escriba deben ser dos personas distintas del partner. Conducir la conversación, revisar trazas y documentar decisiones simultáneamente es una carga incompatible en 2 horas — separarlos protege la calidad del entregable.",
+            note: "Cinco personas · dos horas con margen entre bloques para dudas y desvíos naturales. La única regla firme: nadie sale sin haber tomado la palabra en al menos un bloque — negocio y tecnología se turnan explícitamente. Si un rol tiene que faltar, se posterga la sesión.",
           },
           materials: [
             {
-              title: "Month 1 Scorecard",
-              body: "Grid de 4 dimensiones × 10 métricas: negocio, adopción, experiencia, costo. Prellenado desde el prework.",
+              title: "Deck de agenda",
+              body: "Deck puntual con la agenda del taller · un slide por bloque con objetivo, contenido, ejercicio y entregable claramente diferenciados. El contenido detallado vive fuera del deck.",
             },
             {
-              title: "Consumption Waterfall",
-              body: "Cascada de consumo total → canal → caso de uso → tópico → acción → resultado. Base del bloque A.",
+              title: "Plantilla del ejercicio individual",
+              body: "«Conociendo a nuestro agente» · 6 preguntas cortas para responder en el bloque 2. Formato imprimible en A4 · disponible en HTML e imprimible como PDF desde el navegador.",
             },
             {
-              title: "Conversation Trace",
-              body: "Trazado paso a paso de las 3 conversaciones pre-seleccionadas (buena · costosa · fallida) con clasificación de cada paso.",
+              title: "Las dos conversaciones",
+              body: "Una de valor demostrado y una de oportunidad — pantalla o transcripción legible, con explicación en lenguaje simple del arquitecto.",
             },
             {
-              title: "Agent Health Canvas",
-              body: "Radar de 12 dimensiones con puntuación 1-5 pre-cargada. Se desafían solo los rojos y amarillos.",
+              title: "Los tres números del mes",
+              body: "Conversaciones atendidas · porcentaje que terminó bien · costo aproximado por conversación. Visibles en la pizarra virtual.",
             },
             {
-              title: "Automation Opportunity Map",
-              body: "Matriz de clasificación por tipo (Knowledge · Regla · Flow · Apex · Agentforce · Humano · Eliminar) con priorización 1-5.",
+              title: "Pizarra virtual con 4 zonas",
+              body: "Éxito acordado · caso de valor · oportunidad · tabla de acuerdos. Se llena en vivo durante la sesión.",
             },
             {
-              title: "30-60-90 Roadmap",
-              body: "Fases con acción · responsable · fecha · métrica afectada · resultado esperado. Se llena en el bloque R.",
+              title: "Tabla de acuerdos",
+              body: "Cinco columnas: acción · lado (Salesforce / JAFRA) · responsable con nombre · mecanismo de seguimiento · fecha esperada. Vacía al empezar, firmada al cerrar.",
             },
             {
-              title: "Next Agents Pipeline",
-              body: "Tablero de casos de uso candidatos con criterios de aprobación (business case, medibilidad del actual, capacity, seguridad).",
+              title: "Parking lot",
+              body: "Zona visible donde se anotan temas importantes pero fuera de alcance de esta sesión — se retoman en la siguiente.",
             },
           ],
           governance: [
             {
               cadence: "weekly",
-              title: "Revisión semanal · 6 primeras semanas",
-              duration: "30 min",
+              title: "Seguimiento operativo · definido en la sala",
               bullets: [
-                "Consumo de la semana vs línea base",
-                "Resultados exitosos por caso de uso",
-                "Principales fallos y sus causas",
-                "Cambios desplegados y resultado de sus pruebas",
-                "Anomalías detectadas",
-                "Próxima optimización a ejecutar",
+                "Frecuencia acordada por Salesforce y JAFRA según naturaleza de los acuerdos",
+                "Se revisa estado de cada compromiso (verde · amarillo · rojo)",
+                "Se levanta cualquier obstáculo o dependencia",
+                "Duración corta · foco en avance, no en debate",
               ],
             },
             {
               cadence: "monthly",
-              title: "Business Review · mensual",
+              title: "Próxima revisión con misma estructura",
               bullets: [
-                "Valor generado (evidencia cuantificable)",
-                "Costo por resultado exitoso",
-                "Ahorro operativo o ingresos habilitados",
-                "Adopción por canal / caso de uso",
-                "Calidad (CSAT, reincidencia, transferencias)",
-                "Riesgos operativos",
-                "Forecast de consumo del mes siguiente",
-                "Casos de uso candidatos a incorporar",
+                "Misma estructura de bloques para poder comparar mes a mes",
+                "Se revisan las mismas dos conversaciones (evolución) y se eligen dos nuevas",
+                "Se cierran los acuerdos anteriores y se abren los siguientes",
+                "Se ajusta la métrica única si la evidencia lo pide",
               ],
             },
             {
               cadence: "per-change",
-              title: "Ciclo controlado por cada cambio",
+              title: "Antes de cualquier cambio al agente",
               bullets: [
-                "Hipótesis explícita antes de cambiar",
-                "Línea base capturada",
-                "Cambio implementado",
-                "Pruebas contra escenarios reales (Testing Center)",
-                "Despliegue con métrica de referencia",
-                "Observación de resultado en producción",
-                "Comparación contra línea base",
-                "Decisión: mantener · ajustar · revertir",
+                "Hipótesis explícita: «si cambio X, esperamos que Y mejore en Z»",
+                "Se captura el valor actual de la métrica antes de tocar nada",
+                "Se prueba el cambio con una muestra controlada",
+                "Se compara el valor nuevo contra el anterior · se documenta la decisión",
               ],
             },
           ],
           nextAgents: {
             intro:
-              "El programa se expande solo cuando existe evidencia. Cada nuevo caso de uso o agente candidato debe superar los siguientes filtros antes de entrar al backlog de construcción — para no repetir el patrón de crecer sin control.",
+              "Esta sesión no aborda todavía el siguiente agente — la conversación se enfoca en incrementar el valor del actual. Pero deja instalados los criterios con los que Salesforce y JAFRA aprobarán juntos cualquier iniciativa siguiente, cuando el momento sea el correcto.",
             criteria: [
               {
-                title: "Business case medible",
-                body: "Existe una hipótesis explícita de valor con métrica y umbral (ahorro, ingresos, contención) — no «parece buena idea».",
+                title: "¿Qué problema de negocio resuelve?",
+                body: "Una frase de negocio, no técnica. Si no cabe en una frase, todavía no está listo para construir.",
               },
               {
-                title: "Medibilidad del agente actual",
-                body: "El agente en producción ya tiene resultados clasificados como demostrados o probables. No se aprueba un segundo agente si el primero aún es desconocido.",
+                title: "¿Cómo sabremos que funcionó?",
+                body: "Una métrica concreta con un umbral. «Mejor experiencia» no cuenta · «10% menos llamadas del tipo X» sí.",
               },
               {
-                title: "Capacity y presupuesto",
-                body: "Existe entitlement disponible y proyección de consumo aceptable — validado con finanzas antes de construir.",
+                title: "¿El agente actual ya está entregando valor visible?",
+                body: "Antes de sumar, se consolida lo existente. Salesforce acompaña la evidencia — JAFRA valida cuándo es el momento correcto.",
               },
               {
-                title: "Alcance limitado y responsabilidad clara",
-                body: "El agente candidato tiene una misión bien definida (no invade el alcance del actual) y un product owner con capacidad de decidir.",
+                title: "¿Cabe en el presupuesto y la capacidad?",
+                body: "Estimación gruesa de consumo revisada con finanzas — y bandwidth del equipo confirmado — antes de empezar a construir.",
               },
               {
-                title: "Seguridad y cumplimiento",
-                body: "Los datos involucrados y las acciones ejecutables cumplen con las políticas de la organización — con revisión previa cuando aplique.",
-              },
-              {
-                title: "Prueba antes de escalar volumen",
-                body: "Existe una suite de pruebas de regresión definida desde el primer día — no se despliega a producción sin ella.",
+                title: "¿Quién es dueño de que salga bien?",
+                body: "Una persona con nombre y apellido del lado de JAFRA — Salesforce acompaña, pero el dueño es del cliente.",
               },
             ],
           },
           guidingPrinciples: [
-            "Facilitador y escriba separados — nunca la misma persona.",
-            "Todo bloque termina con un entregable concreto, no con conversación abierta.",
-            "El parking lot es explícito y no se debate en sesión.",
-            "Cada decisión de R queda ligada a una métrica medible en el bloque V del mes siguiente.",
-            "Ningún cambio se despliega basado en «la respuesta parece mejor» — cada modificación se liga a una métrica.",
-            "El agente razona donde existe ambigüedad. La automatización ejecuta donde existe certeza.",
+            "Salesforce acompaña · JAFRA decide — la sesión es una conversación entre iguales, no una presentación unidireccional.",
+            "Negocio y tecnología se turnan explícitamente — cada bloque exige a los dos mundos.",
+            "Cada bloque cierra con un entregable visible en la pizarra — no con conversación abierta.",
+            "Los temas que no caben en el bloque van al parking lot y se retoman en la siguiente sesión.",
+            "Los acuerdos salen con responsable nombrado y con criterio de cumplimiento — nunca con «lo revisamos entre todos».",
+            "Vemos el valor actual con evidencia y acompañamos su incremento — no lo defendemos ni lo cuestionamos.",
           ],
         },
       },
@@ -5257,29 +5210,29 @@ export const customerDemos: CustomerDemo[] = [
       // ── 6 · Modelo de medición ──────────────────────────────────────────
       {
         id: "measurement",
-        label: "Modelo de medición",
-        title: "Cómo mediremos valor mes a mes",
+        label: "Cómo mediremos",
+        title: "El marco de valor · cuatro dimensiones para acompañar la evolución del agente",
         content:
-          "El scorecard del mes 1 es una foto — el modelo de medición es la película. Estas son las 4 dimensiones que se instrumentan en el bloque R y que se revisan cada mes en el Business Review. Los objetivos 6m y 12m son la línea de expectativa — se ajustan tras el primer trimestre con evidencia real.",
+          "Salesforce trae este marco como referencia para el acompañamiento continuo — cuatro dimensiones (adopción, efectividad, experiencia y valor) que se instrumentan progresivamente para que JAFRA tenga siempre visibilidad clara del agente. En la sesión priorizamos la métrica única que se sigue de forma inmediata — el resto del marco queda documentado para que el bloque 6 (cómo seguimos) y las siguientes revisiones tengan un norte compartido. Los objetivos a 6 y 12 meses son referencia — se ajustan con la evidencia del primer trimestre.",
         kpis: [
           {
             group: "Adopción",
             items: [
               {
                 name: "Conversaciones atendidas por el agente",
-                baseline: "Por completar en prework",
+                baseline: "Por capturar tras la sesión",
                 goal6m: "Crecimiento sostenido vs mes 1",
                 goal12m: "Adopción estable con expansión a nuevos casos",
               },
               {
                 name: "Usuarios únicos recurrentes",
-                baseline: "Por completar en prework",
+                baseline: "Por capturar tras la sesión",
                 goal6m: "≥60% de recurrencia mensual",
                 goal12m: "≥75% de recurrencia mensual",
               },
               {
                 name: "Volumen por canal",
-                baseline: "Por completar en prework",
+                baseline: "Por capturar tras la sesión",
                 goal6m: "Distribución balanceada · sin canal dominante inesperado",
                 goal12m: "Cobertura completa de canales priorizados",
               },
@@ -5290,20 +5243,20 @@ export const customerDemos: CustomerDemo[] = [
             items: [
               {
                 name: "Tasa de resultados exitosos por caso de uso",
-                baseline: "Por completar en prework",
+                baseline: "Por capturar tras la sesión",
                 goal6m: "≥70% en casos productivos",
                 goal12m: "≥85% en casos productivos",
               },
               {
                 name: "Contención (% resuelto sin transferencia)",
-                baseline: "Por completar en prework",
+                baseline: "Por capturar tras la sesión",
                 goal6m: "≥60% con criterio claro de transferencia",
                 goal12m: "≥75% manteniendo criterio",
               },
               {
                 name: "Acciones ejecutadas por resultado exitoso",
-                baseline: "Por completar en prework",
-                goal6m: "Reducción de acciones duplicadas identificadas en el V.A.L.O.R.",
+                baseline: "Por capturar tras la sesión",
+                goal6m: "Reducción de acciones duplicadas identificadas en la revisión",
                 goal12m: "Óptimo por caso de uso",
               },
             ],
@@ -5313,19 +5266,19 @@ export const customerDemos: CustomerDemo[] = [
             items: [
               {
                 name: "CSAT / sentimiento",
-                baseline: "Por completar en prework",
+                baseline: "Por capturar tras la sesión",
                 goal6m: "Mantener o mejorar vs baseline humano",
                 goal12m: "Superar baseline humano en casos productivos",
               },
               {
                 name: "Reincidencia (usuarios que regresan por el mismo tema)",
-                baseline: "Por completar en prework",
+                baseline: "Por capturar tras la sesión",
                 goal6m: "Reducción sostenida",
                 goal12m: "Mínimo estructural",
               },
               {
                 name: "Duración promedio de conversación exitosa",
-                baseline: "Por completar en prework",
+                baseline: "Por capturar tras la sesión",
                 goal6m: "Optimización de conversaciones largas identificadas",
                 goal12m: "Estable en el óptimo",
               },
@@ -5336,19 +5289,19 @@ export const customerDemos: CustomerDemo[] = [
             items: [
               {
                 name: "Consumo por resultado exitoso (métrica principal)",
-                baseline: "Por completar en prework — línea base del mes 1",
+                baseline: "Por capturar tras la sesión — línea base del mes 1",
                 goal6m: "Reducción del 20-30% vs baseline",
                 goal12m: "Reducción del 40-50% vs baseline",
               },
               {
                 name: "Relación valor–costo (beneficio / costo del agente)",
-                baseline: "Por completar en prework",
+                baseline: "Por capturar tras la sesión",
                 goal6m: "≥3x",
                 goal12m: "≥5x",
               },
               {
                 name: "Desviación vs forecast mensual de consumo",
-                baseline: "Sin forecast pre-V.A.L.O.R.",
+                baseline: "Forecast base establecido tras la sesión",
                 goal6m: "≤10% de desviación",
                 goal12m: "≤5% de desviación",
               },
@@ -5361,65 +5314,52 @@ export const customerDemos: CustomerDemo[] = [
       {
         id: "assets",
         label: "Assets",
-        title: "Assets del engagement",
+        title: "Materiales de la sesión",
         content:
-          "Materiales que soportan la conversación con JAFRA — desde el deck de alineación pre-workshop hasta las plantillas de los 7 tableros y la memoria del taller cuando se ejecute.",
+          "Todo lo que Salesforce y JAFRA usan para ejecutar la sesión — visual, denso en contenido y ligero en fricción.",
         assetsData: {
           items: [
             {
-              name: "Deck — Agentforce V.A.L.O.R. Review",
+              name: "Deck de agenda de la sesión",
               description:
-                "Presentación de 8 minutos para alinear a JAFRA sobre el workshop de 2 horas: propósito, prework requerido, agenda por bloques, entregables, participantes y modelo de seguimiento.",
+                "Deck puntual con la agenda del taller · portada, objetivo general, agenda de 6 bloques con sus tiempos, un slide por bloque (objetivo · contenido · ejercicio · entregable), slide del ejercicio «Conociendo a nuestro agente» y cierre. El contenido detallado vive fuera del deck.",
               available: true,
               type: "deck",
               url: "/customer-demos/jafra/deck/valor-workshop",
             },
             {
-              name: "Carta de prework (PDF)",
+              name: "«Conociendo a nuestro agente» · Plantilla imprimible",
               description:
-                "Documento formal para el sponsor de JAFRA con la lista completa de información a preparar por grupo (negocio · consumo · técnico · conversaciones), plantillas de captura y fecha de entrega.",
+                "Formato imprimible en A4 con las 6 preguntas del ejercicio individual del bloque 2. Se comparte con cada participante antes o al inicio de la sesión. Descargable en HTML e imprimible como PDF desde el navegador (Cmd/Ctrl + P).",
+              available: true,
+              type: "doc",
+              url: "/Customers/Jafra/files/Conociendo-a-nuestro-agente.html",
+            },
+            {
+              name: "Las dos conversaciones",
+              description:
+                "Una conversación de valor demostrado y una con oportunidad de incremento, con transcripción legible + explicación del arquitecto en lenguaje simple. Se revisan en los bloques 3 y 4.",
               available: false,
               type: "doc",
             },
             {
-              name: "Plantilla — Month 1 Scorecard",
+              name: "Los tres números del mes",
               description:
-                "Grid de 4 dimensiones × 10 métricas para prellenar en prework: adopción, efectividad, experiencia, valor. Base del bloque V.",
+                "Conversaciones atendidas · porcentaje que terminó bien · costo aproximado por conversación. Anclan la conversación del bloque 2 en evidencia.",
               available: false,
               type: "doc",
             },
             {
-              name: "Plantilla — Consumption Waterfall",
+              name: "Pizarra virtual con 4 zonas",
               description:
-                "Cascada consumo → canal → caso de uso → tópico → acción → resultado. Fórmulas de costo por resultado exitoso y proyección mensual. Base del bloque A.",
+                "Miro, FigJam o similar con 4 zonas visibles: éxito acordado · caso de valor · oportunidad · tabla de acuerdos. Se llena en vivo durante la sesión.",
               available: false,
               type: "doc",
             },
             {
-              name: "Plantilla — Agent Health Canvas",
+              name: "Memoria de la sesión",
               description:
-                "Radar de 12 dimensiones con guía de puntuación 1-5 y preguntas guía por dimensión. Prellenado por el arquitecto en prework.",
-              available: false,
-              type: "doc",
-            },
-            {
-              name: "Plantilla — Automation Opportunity Map",
-              description:
-                "Matriz de clasificación (Knowledge · Regla · Flow · Apex · Agentforce · Humano · Eliminar) + priorización con fórmula (F+C+D+I+R)/E. Base del bloque O.",
-              available: false,
-              type: "doc",
-            },
-            {
-              name: "Plantilla — 30-60-90 Roadmap + Next Agents",
-              description:
-                "Tabla de compromisos (acción · dueño · fecha · métrica · resultado) y pipeline de próximos agentes con criterios de aprobación. Base del bloque R.",
-              available: false,
-              type: "doc",
-            },
-            {
-              name: "Memoria del taller",
-              description:
-                "Documento consolidado que se distribuye después de la sesión: decision log firmado, entregables por bloque, dueños y cadencia de seguimiento.",
+                "Documento consolidado que se distribuye al cierre: ficha del agente construida entre todos, caso de valor con patrón, oportunidad identificada, tabla de acuerdos firmados y mecanismo de seguimiento.",
               available: false,
               type: "doc",
             },

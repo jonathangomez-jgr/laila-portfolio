@@ -64,6 +64,8 @@ export type ExecutiveSlide =
       title: string;
       subtitle?: string;
       footnote?: string;
+      logo?: string;
+      showQr?: boolean;
     } & SlideBrand)
   | ({
       layout: "section";
@@ -133,6 +135,60 @@ export type ExecutiveSlide =
       eyebrow?: string;
       title: string;
       subtitle?: string;
+    } & SlideBrand)
+  | ({
+      layout: "agenda-block";
+      eyebrow?: string;
+      title: string;
+      duration: string;
+      objective: string;
+      content: string;
+      exercise: string;
+      deliverable: string;
+      accent?: SlideAccent;
+    } & SlideBrand)
+  | ({
+      layout: "agent-profile";
+      eyebrow?: string;
+      title: string;
+      agentName: string;
+      agentRole: string;
+      avatar?: string;
+      traits: {
+        label: string;
+        value: string;
+        icon: string;
+        accent?: SlideAccent;
+      }[];
+    } & SlideBrand)
+  | ({
+      layout: "agenda-list";
+      eyebrow?: string;
+      title: string;
+      items: {
+        number: string;
+        title: string;
+        duration: string;
+        accent?: SlideAccent;
+      }[];
+    } & SlideBrand)
+  | ({
+      layout: "agent-questionnaire";
+      eyebrow?: string;
+      title: string;
+      intro: string;
+      questions: {
+        number: string;
+        icon: string;
+        title: string;
+        prompt: string;
+        format: "fill-blanks" | "list" | "scale" | "nickname" | "short";
+        accent?: SlideAccent;
+        template?: string;
+        listCount?: number;
+        scaleMax?: number;
+      }[];
+      printUrl?: string;
     } & SlideBrand);
 
 export type ExecutiveDeck = {
@@ -2023,23 +2079,24 @@ export const executiveDecks: ExecutiveDeck[] = [
   },
 
   // ══════════════════════════════════════════════════════════════════════════
-  // JAFRA — Deck pre-workshop V.A.L.O.R.
+  // JAFRA — Deck de agenda · Revisión del agente Agentforce
   // ══════════════════════════════════════════════════════════════════════════
   {
     slug: "valor-workshop",
     customerSlug: "jafra",
-    title: "Agentforce V.A.L.O.R. Review",
-    subtitle: "Del volumen al valor — un workshop de 2 horas para operar Agentforce de forma sostenible",
-    duration: "8 min",
+    title: "Revisión del agente Agentforce · JAFRA",
+    subtitle: "Agenda de la sesión de dos horas · Salesforce · JAFRA",
+    duration: "4 min",
     slides: [
       // ── 1 · Portada ──────────────────────────────────────────────────
       {
         layout: "title",
-        eyebrow: "JAFRA Cosmetics · BeFra",
-        title: "V.A.L.O.R.\nReview.",
+        logo: "/sfdc-logos/corporate-logo.png",
+        title: "Camino a su\nmáximo potencial.",
         subtitle:
-          "Un workshop de 2 horas para revisar el primer mes del agente Agentforce productivo — separar valor real de volumen, decidir optimizaciones con evidencia y dejar instalado un modelo de operación continua.",
-        footnote: "Sesión de alineación pre-workshop · Confidencial",
+          "Un agente que ya brilla · acompañémoslo hasta su mejor luz.",
+        footnote: "Salesforce México · Workshop JAFRA · Julio 2026",
+        showQr: true,
         brand: {
           astro: { variant: "agent-astro-20-l", side: "right", bottom: "-30px", size: 360 },
           sparkles: [
@@ -2050,72 +2107,13 @@ export const executiveDecks: ExecutiveDeck[] = [
         },
       },
 
-      // ── 2 · JAFRA en contexto ────────────────────────────────────────
-      {
-        layout: "metrics",
-        eyebrow: "El punto de partida",
-        title: "JAFRA opera un agente Agentforce en producción. Es el momento de calibrar.",
-        metrics: [
-          { value: "1", label: "Agente Agentforce en producción" },
-          { value: "Mes 1", label: "Ventana crítica de calibración" },
-          { value: "Benchmark", label: "Comparación vs otros clientes en su mes 1" },
-          { value: "2h", label: "Duración del workshop V.A.L.O.R." },
-          { value: "8", label: "Entregables tangibles al cerrar" },
-          { value: "3-5d", label: "Anticipación mínima del prework" },
-        ],
-      },
-
-      // ── 3 · La pregunta rectora ──────────────────────────────────────
-      {
-        layout: "quote",
-        quote:
-          "¿Cuánto nos cuesta cada resultado exitoso, y cómo hacemos que ese resultado sea cada vez más eficiente?",
-        context: "Principio rector · V.A.L.O.R. Review",
-        brand: {
-          astro: { variant: "agent-astro-12-r", side: "left", bottom: "-30px", size: 220 },
-          sparkles: [
-            { variant: "yellow-main",     side: "right", top: "20%", size: 44, rotate: 12 },
-            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
-          ],
-        },
-      },
-
-      // ── 4 · Los 4 primeros ejes V.A.L.O.R. ───────────────────────────
-      {
-        layout: "pillars",
-        eyebrow: "V.A.L.O.R. · Los cuatro ejes de diagnóstico",
-        title: "Valor · Anatomía · Lógica · Oportunidades — cuatro miradas al mes 1",
-        pillars: [
-          {
-            title: "V — Valor generado",
-            body: "Separar adopción, actividad y valor. Clasificar cada caso de uso como demostrado, probable, desconocido o negativo — con evidencia cuantificable, no percepciones.",
-            accent: "indigo",
-          },
-          {
-            title: "A — Anatomía del consumo",
-            body: "Cascada consumo → canal → caso → tópico → acción → resultado. Consumo por resultado exitoso como métrica principal. Identificar los 3 principales generadores de consumo.",
-            accent: "violet",
-          },
-          {
-            title: "L — Lógica y arquitectura",
-            body: "Agent Health Score en 12 dimensiones (alcance, tópicos, instrucciones, acciones, datos, errores, transferencia, seguridad, pruebas, observabilidad, gobierno). Desafiar los rojos y amarillos.",
-            accent: "sky",
-          },
-          {
-            title: "O — Oportunidades de automatización",
-            body: "«El agente razona donde existe ambigüedad. La automatización ejecuta donde existe certeza.» Clasificar cada proceso: Knowledge · Regla · Flow · Apex · Agentforce · Humano · Eliminar.",
-            accent: "emerald",
-          },
-        ],
-      },
-
-      // ── 5 · El quinto eje — Roadmap ampliado ─────────────────────────
+      // ── 2 · Objetivo general ─────────────────────────────────────────
       {
         layout: "section",
-        eyebrow: "V.A.L.O.R. · El quinto eje",
-        title: "R — Roadmap, medición continua y próximos agentes",
+        eyebrow: "Objetivo general de la sesión",
+        title: "Ver juntos el valor que el agente ya está entregando — y acordar cómo lo acompañamos para que entregue más.",
         subtitle:
-          "El bloque más importante de la sesión. Tres sub-momentos: (1) roadmap 30-60-90 con owner + fecha + métrica, (2) modelo de medición mensual con dashboard y umbrales, (3) pipeline de próximos agentes con criterios explícitos de aprobación.",
+          "Miramos al agente con los ojos de negocio y los de tecnología al mismo tiempo. Reconocemos lo que funciona, identificamos la oportunidad más clara de incremento, y salimos con acuerdos claros.",
         brand: {
           astro: { variant: "astro-7", side: "left", bottom: "-50px", size: 230 },
           sparkles: [
@@ -2125,297 +2123,201 @@ export const executiveDecks: ExecutiveDeck[] = [
         },
       },
 
-      // ── 6 · Los 8 entregables ────────────────────────────────────────
+      // ── 3 · Agenda ───────────────────────────────────────────────────
       {
-        layout: "bullets",
-        eyebrow: "Al terminar las 2 horas",
-        title: "8 entregables tangibles — no una lista abierta de recomendaciones",
-        bullets: [
-          "1 · Evaluación del mes 1 basada en resultados, no en volumen",
-          "2 · Mapa de consumo con los 3 principales generadores + hipótesis de causa",
-          "3 · Agent Health Score con fortalezas, hallazgos críticos, riesgos y quick wins",
-          "4 · Lista clasificada de procesos a convertir en automatización determinística",
-          "5 · Backlog priorizado de optimizaciones (frecuencia × consumo × esfuerzo)",
-          "6 · Roadmap 30-60-90 con decisiones, dueños, fechas y métricas",
-          "7 · Modelo de medición mensual con dashboard, cadencia y umbrales de alerta",
-          "8 · Pipeline de próximos agentes con criterios explícitos de aprobación",
+        layout: "agenda-list",
+        eyebrow: "Agenda de la sesión",
+        title: "Camino a su máximo potencial",
+        items: [
+          { number: "1", title: "Introducción", duration: "10 min", accent: "indigo" },
+          { number: "2", title: "Conociendo al agente", duration: "15 min", accent: "violet" },
+          { number: "3", title: "Lo que queremos proteger", duration: "20 min", accent: "sky" },
+          { number: "4", title: "Incrementar valor", duration: "20 min", accent: "emerald" },
+          { number: "5", title: "Acuerdos y seguimiento", duration: "25 min", accent: "indigo" },
+          { number: "6", title: "Conclusiones", duration: "10 min", accent: "violet" },
         ],
-        highlight:
-          "Ningún entregable termina en «hay que revisar». Todos terminan en decisión con owner + fecha + métrica.",
       },
 
-      // ── 7 · Prework parte 1 — Negocio y Consumo ──────────────────────
+      // ── 4 · Bloque 1 · Introducción ──────────────────────────────────
       {
-        layout: "split",
-        eyebrow: "Prework · 3-5 días antes de la sesión (1/2)",
-        title: "Información de negocio y de consumo",
-        left: {
-          heading: "Negocio",
-          items: [
-            "Objetivos originales del agente",
-            "Casos de uso productivos actuales",
-            "Volumen previo a Agentforce (línea base)",
-            "Volumen atendido en el mes 1 (adopción)",
-            "Resultados exitosos por caso de uso",
-            "Transferencias a humano con motivo",
-            "Tiempo o costo del proceso anterior",
-            "CSAT, reclamos y reincidencias del mes 1",
-            "Incidentes conocidos",
-          ],
-        },
-        right: {
-          heading: "Consumo",
-          items: [
-            "Consumo diario de los últimos 30 días",
-            "Tipo de consumo y fuente (usage types)",
-            "Consumo por canal / agente / implementación",
-            "Días y horarios con picos",
-            "Entitlements, créditos y modelo comercial",
-            "Prompts, acciones y componentes adicionales",
-            "Proyección mensual con ritmo actual",
-            "Validación en Digital Wallet",
-          ],
-        },
+        layout: "agenda-block",
+        eyebrow: "Bloque 1 · Introducción",
+        title: "Contexto agéntico y encuadre de la sesión",
+        duration: "10 min",
+        objective:
+          "Situar al equipo en el momento actual de la IA aplicada al negocio y compartir la visión de empresa agéntica que Salesforce trae como aliado estratégico de JAFRA — antes de entrar al agente.",
+        content:
+          "Un vistazo corto a las tendencias globales de IA en la industria de belleza y venta directa, seguido de cómo Salesforce acompaña a JAFRA en la construcción de una organización agéntica — con datos, agentes, personas y confianza como pilares.",
+        exercise:
+          "Presentación breve del equipo de la sala · cada participante se presenta con su rol y una expectativa concreta para la sesión.",
+        deliverable:
+          "Contexto compartido y expectativas alineadas · el equipo entra a la sesión con la misma mirada.",
+        accent: "indigo",
       },
 
-      // ── 8 · Prework parte 2 — Técnico y Conversaciones ───────────────
+      // ── 5 · Bloque 2 · Conociendo al agente ──────────────────────────
       {
-        layout: "split",
-        eyebrow: "Prework · 3-5 días antes de la sesión (2/2)",
-        title: "Inventario técnico y muestra de conversaciones",
-        left: {
-          heading: "Inventario técnico",
-          items: [
-            "Agente y versiones desplegadas",
-            "Tópicos y subagentes",
-            "Instrucciones generales y por tópico",
-            "Acciones · Flows · Apex · Prompt Templates",
-            "Retrievers y fuentes de conocimiento",
-            "Integraciones y variables de contexto",
-            "Reglas de transferencia y manejo de errores",
-            "Cambios ejecutados durante el mes 1",
-          ],
-        },
-        right: {
-          heading: "Conversaciones (30 · 6 categorías)",
-          items: [
-            "5 exitosas y eficientes",
-            "5 exitosas pero largas",
-            "5 transferidas a humano",
-            "5 fallidas",
-            "5 con consumo inusualmente alto",
-            "5 con comportamiento inesperado",
-            "3 pre-seleccionadas para la sesión: buena · costosa · fallida",
-          ],
-        },
+        layout: "agenda-block",
+        eyebrow: "Bloque 2 · Conociendo al agente",
+        title: "Presentemos al agente entre todos — qué es, qué hace y con qué trabaja",
+        duration: "15 min",
+        objective:
+          "Construir de forma colectiva una descripción común del agente productivo de JAFRA — desde lo que cada participante ha visto, usado o escuchado — para que negocio y tecnología partan de la misma foto.",
+        content:
+          "Cada participante responde individualmente el ejercicio «Conociendo a nuestro agente». Después se comparten respuestas, se contrastan miradas y se construye entre todos la ficha común del agente.",
+        exercise:
+          "Ejercicio individual «Conociendo a nuestro agente» · 6 preguntas cortas (ver siguiente slide o plantilla imprimible). Después, 3 min por participante para leer su respuesta a la sala.",
+        deliverable:
+          "Ficha del agente construida entre los cinco — con nombre o apodo acordado, capacidades reconocidas y una escala compartida de su poder actual.",
+        accent: "violet",
       },
 
-      // ── 9 · Agenda de 2 horas ────────────────────────────────────────
+      // ── 6 · Ejercicio · Conociendo a nuestro agente ──────────────────
       {
-        layout: "kpi-table",
-        eyebrow: "Agenda ejecutable · 120 minutos",
-        title: "Los bloques, sus duraciones y sus entregables",
-        rows: [
+        layout: "agent-questionnaire",
+        eyebrow: "Bloque 2 · Ejercicio individual",
+        title: "Conociendo a nuestro agente",
+        intro:
+          "Responde desde lo que has visto, utilizado, escuchado o lo que te imaginas que puede ser. No es necesario que conozcas su configuración técnica.",
+        questions: [
           {
-            label: "0 · Apertura y alineación de éxito",
-            baseline: "10 min",
-            goal6m: "Alinear qué se considera éxito",
-            goal12m: "Definición compartida (máx 4 criterios)",
+            number: "1",
+            icon: "👋",
+            title: "Preséntame al agente",
+            prompt:
+              "Imagina que le estás presentando al agente a alguien más. ¿Qué dirías de cómo es?",
+            format: "fill-blanks",
+            template:
+              "«_______ es un agente que atiende a _______ a través de _______. Se comunica de una manera _______.»",
             accent: "indigo",
           },
           {
-            label: "V · Valor generado en el mes 1",
-            baseline: "25 min",
-            goal6m: "Separar adopción, actividad y valor",
-            goal12m: "Scorecard con clasificación por caso de uso",
+            number: "2",
+            icon: "🛠",
+            title: "¿Qué sabe hacer?",
+            prompt:
+              "Escribe hasta cinco cosas que puede hacer. Marca con ✓ las que has visto funcionar personalmente.",
+            format: "list",
+            listCount: 5,
             accent: "violet",
           },
           {
-            label: "A · Anatomía del consumo",
-            baseline: "25 min",
-            goal6m: "Cascada + traza costosa",
-            goal12m: "Mapa de calor con 3 generadores + causas",
+            number: "3",
+            icon: "📚",
+            title: "¿Qué sabe?",
+            prompt:
+              "¿De dónde saca lo que sabe? Piensa en fuentes de información, datos o experiencia que consulta.",
+            format: "list",
+            listCount: 3,
             accent: "sky",
           },
           {
-            label: "L · Lógica y arquitectura",
-            baseline: "30 min",
-            goal6m: "Health Score + traza fallida",
-            goal12m: "Health Score con hallazgos y quick wins",
+            number: "4",
+            icon: "🤝",
+            title: "¿Cuándo pide ayuda humana?",
+            prompt:
+              "¿En qué situaciones crees que el agente entrega la conversación a una persona?",
+            format: "short",
             accent: "emerald",
           },
           {
-            label: "O · Oportunidades de automatización",
-            baseline: "20 min",
-            goal6m: "Clasificación + priorización top 5",
-            goal12m: "Tres grupos: automatizar / optimizar / mantener",
-          },
-          {
-            label: "R · Roadmap + medición + próximos agentes",
-            baseline: "25 min",
-            goal6m: "Decisiones con owner + métrica",
-            goal12m: "30-60-90 + modelo mensual + pipeline",
+            number: "5",
+            icon: "⚡",
+            title: "¿Cuál es su nivel de poder?",
+            prompt:
+              "De 0 a 10, como si fuera un personaje de acción, ¿qué tan poderoso te parece hoy?",
+            format: "scale",
+            scaleMax: 10,
             accent: "indigo",
           },
           {
-            label: "Cierre · Recap y próximos pasos",
-            baseline: "5 min",
-            goal6m: "Confirmar decision log",
-            goal12m: "Dueño de distribución + fecha",
-          },
-        ],
-      },
-
-      // ── 10 · Cómo termina la sesión ──────────────────────────────────
-      {
-        layout: "comparison",
-        eyebrow: "El cambio de narrativa",
-        title: "No es una revisión abierta. Es una sesión de decisiones.",
-        before: {
-          heading: "Cómo NO termina la sesión",
-          items: [
-            "Lista abierta de «hay que revisar las instrucciones»",
-            "«Podríamos considerar optimizar X»",
-            "Sensación de progreso sin compromisos",
-            "Recomendaciones sin dueño ni fecha",
-            "Métricas discutidas sin definir cómo se miden mes a mes",
-          ],
-        },
-        after: {
-          heading: "Cómo SÍ termina la sesión",
-          items: [
-            "«Consolidar las acciones A, B y C en una automatización única»",
-            "«Ajustar los límites de los tópicos X y Y»",
-            "«Eliminar la consulta repetida a datos Z»",
-            "«Crear 20 pruebas de regresión antes del día N»",
-            "«Instrumentar el resultado de negocio de 3 casos de uso»",
-            "«Revisar consumo por resultado exitoso semanalmente»",
-          ],
-        },
-        brand: {
-          sparkles: [
-            { variant: "yellow-main", side: "right", top: "8%", size: 38, rotate: 12 },
-          ],
-        },
-      },
-
-      // ── 11 · Los 6 tableros ──────────────────────────────────────────
-      {
-        layout: "pillars",
-        eyebrow: "Materiales de facilitación",
-        title: "6 tableros pre-cargados — la sesión valida y decide, no construye",
-        pillars: [
-          {
-            title: "Scorecard + Consumption Waterfall",
-            body: "Grid 4D × 10 métricas prellenado (V) + cascada consumo → canal → caso → tópico → acción → resultado (A).",
-            accent: "indigo",
-          },
-          {
-            title: "Conversation Trace + Agent Health Canvas",
-            body: "Trazado paso a paso de 3 conversaciones (buena · costosa · fallida) + radar 12D del arquitecto (L).",
+            number: "6",
+            icon: "🏷",
+            title: "¿Qué apodo le pondrías?",
+            prompt:
+              "Un apodo cariñoso, divertido o inspirado en su forma de trabajar. El que salga primero.",
+            format: "nickname",
             accent: "violet",
           },
-          {
-            title: "Automation Opportunity Map",
-            body: "Matriz Knowledge · Regla · Flow · Apex · Agentforce · Humano · Eliminar + priorización (F+C+D+I+R)/E (O).",
-            accent: "sky",
-          },
-          {
-            title: "30-60-90 Roadmap + Next Agents Pipeline",
-            body: "Tabla de compromisos + criterios de aprobación de nuevos agentes candidatos (R).",
-            accent: "emerald",
-          },
         ],
+        printUrl: "/Customers/Jafra/files/Conociendo-a-nuestro-agente.html",
       },
 
-      // ── 12 · Criterios para próximos agentes ─────────────────────────
+      // ── 7 · Bloque 3 · Lo que queremos proteger ──────────────────────
       {
-        layout: "bullets",
-        eyebrow: "Pipeline de próximos agentes",
-        title: "Cómo aprobamos el siguiente agente — sin crecer sin control",
-        bullets: [
-          "Business case medible — hipótesis explícita de valor con métrica y umbral",
-          "Medibilidad del agente actual — no se aprueba un segundo si el primero es desconocido",
-          "Capacity y presupuesto — entitlement disponible y proyección validada con finanzas",
-          "Alcance limitado y responsabilidad clara — misión definida y product owner asignado",
-          "Seguridad y cumplimiento — datos y acciones revisados según política",
-          "Suite de regresión — pruebas definidas desde el primer día, no después",
-        ],
-        highlight:
-          "El programa se expande solo cuando existe evidencia — no cuando existe entusiasmo.",
+        layout: "agenda-block",
+        eyebrow: "Bloque 3 · Valor actual",
+        title: "Lo que queremos proteger — el caso donde ya entrega valor",
+        duration: "20 min",
+        objective:
+          "Reconocer al menos un caso concreto donde el agente ya entrega valor claro a la Consultora — para nombrar el patrón que lo hace funcionar y protegerlo en los cambios siguientes.",
+        content:
+          "Revisamos en vivo una conversación exitosa. Tecnología cuenta qué hizo el agente en lenguaje simple. Negocio traduce: «esto le resolvió a la Consultora tal cosa concreta». Se identifica el patrón repetible.",
+        exercise:
+          "Marcamos qué pasos aportaron valor real y cuáles fueron trámite — se escribe el patrón que hace que este caso funcione, en una frase.",
+        deliverable:
+          "Un caso de uso etiquetado como valor demostrado — con evidencia concreta y el patrón que lo hace funcionar.",
+        accent: "sky",
       },
 
-      // ── 13 · Participantes ───────────────────────────────────────────
+      // ── 8 · Bloque 4 · Incrementar valor ─────────────────────────────
       {
-        layout: "split",
-        eyebrow: "Quiénes tienen que estar",
-        title: "Del cliente y de nuestro lado — facilitador y escriba separados",
-        left: {
-          heading: "Del cliente (JAFRA)",
-          items: [
-            "Sponsor o dueño del resultado de negocio",
-            "Product Owner del agente",
-            "Operaciones o área usuaria",
-            "Administrador o arquitecto Salesforce",
-            "Responsable de automatizaciones e integraciones",
-            "Finanzas / procurement (durante bloque A)",
-            "Seguridad / cumplimiento (si aplica)",
-          ],
-        },
-        right: {
-          heading: "De nuestro lado",
-          items: [
-            "Facilitador de negocio",
-            "Arquitecto de Agentforce",
-            "Especialista en automatización (Flow · Apex · integraciones)",
-            "Escriba / capturador de decisiones (persona distinta al facilitador)",
-            "Regla firme: facilitar + trazar + documentar simultáneamente no es viable en 2h",
-          ],
-        },
+        layout: "agenda-block",
+        eyebrow: "Bloque 4 · Valor siguiente",
+        title: "Incrementar valor — la oportunidad más clara",
+        duration: "20 min",
+        objective:
+          "Identificar el área donde el agente puede entregar más valor en las próximas semanas — nombrando la causa técnica en simple y el beneficio de negocio concreto.",
+        content:
+          "Revisamos en vivo una conversación con oportunidad de mejora. Tecnología explica qué está pasando sin tecnicismos. Negocio traduce el impacto en la Consultora y en el negocio. Se busca la causa raíz.",
+        exercise:
+          "Completamos entre los cinco una frase: «si mejoramos X, la Consultora recibe Y, y JAFRA gana Z». Si la frase no cierra, el hallazgo es que hay que investigar más antes de decidir.",
+        deliverable:
+          "La oportunidad principal nombrada en una frase clara — con causa técnica y beneficio de negocio.",
+        accent: "emerald",
       },
 
-      // ── 14 · Modelo de seguimiento ───────────────────────────────────
+      // ── 9 · Bloque 5 · Acuerdos y seguimiento ────────────────────────
       {
-        layout: "bullets",
-        eyebrow: "Después del taller",
-        title: "El modelo de operación continuo — la sesión no termina el trabajo, lo empieza",
-        bullets: [
-          "Semanal · 30 min · 6 primeras semanas — consumo, resultados, fallos, cambios, pruebas, anomalías, próxima optimización",
-          "Mensual · Business Review — valor, costo por resultado, ahorro/ingresos, adopción, calidad, riesgos, forecast, casos candidatos",
-          "Por cada cambio · Ciclo controlado — hipótesis → línea base → cambio → pruebas → despliegue → observación → comparación → decisión",
-          "Regla firme: ningún cambio se despliega basado en «la respuesta parece mejor» — cada modificación se liga a una métrica medible",
-        ],
+        layout: "agenda-block",
+        eyebrow: "Bloque 5 · Acuerdos y seguimiento",
+        title: "Acuerdos firmados por ambos lados y mecanismo de seguimiento",
+        duration: "25 min",
+        objective:
+          "Convertir lo aprendido en compromisos concretos por Salesforce y por JAFRA — con responsables nombrados — y acordar en la sala el mecanismo de seguimiento y las fechas esperadas de cumplimiento.",
+        content:
+          "Ponemos sobre la mesa lo que salió de los bloques 3 y 4. Agrupamos en dos columnas: qué compromete Salesforce y qué compromete JAFRA. Cada acuerdo lleva dueño único, mecanismo de seguimiento y fecha esperada — todo definido y aceptado en la sala.",
+        exercise:
+          "Llenamos la tabla en vivo: acción · lado (Salesforce / JAFRA) · responsable · mecanismo de seguimiento · fecha esperada de cumplimiento. Los cinco lo aceptan y lo agendan en su calendario.",
+        deliverable:
+          "Tabla de acuerdos firmada por ambos lados — con responsables, mecanismo de seguimiento y fechas de cumplimiento acordados.",
+        accent: "indigo",
       },
 
-      // ── 15 · Próximos pasos ──────────────────────────────────────────
+      // ── 10 · Bloque 6 · Conclusiones ─────────────────────────────────
       {
-        layout: "closing",
-        title: "Próximos pasos",
-        bullets: [
-          "Confirmar sponsor y participantes de JAFRA (T-14 días)",
-          "Envío formal de la carta de prework al arquitecto y al Product Owner (T-7 días)",
-          "Prework completo y compartido (T-5 días)",
-          "Pre-carga de tableros por parte del partner (T-2 días)",
-          "Ejecución del V.A.L.O.R. Review · 2 horas · agenda arriba",
-          "Distribución del decision log y arranque de cadencia semanal (T+2 días)",
-        ],
-        cta: "Confirmar fechas y quorum de participantes para agendar la sesión.",
-        brand: {
-          astro: { variant: "agent-astro-10-r", side: "right", bottom: "-50px", size: 230 },
-          sparkles: [
-            { variant: "yellow-main",     side: "left", top: "14%", size: 44, rotate: 14 },
-            { variant: "yellow-inclined", side: "left", top: "72%", size: 28, rotate: -10 },
-          ],
-        },
+        layout: "agenda-block",
+        eyebrow: "Bloque 6 · Conclusiones",
+        title: "Conclusiones — qué nos llevamos y qué sigue",
+        duration: "10 min",
+        objective:
+          "Sintetizar lo que se logró en la sesión y cerrar con claridad sobre próximos pasos inmediatos — para que todos salgan con el mismo entendimiento.",
+        content:
+          "Recapitulamos las tres ideas centrales de la sesión: la foto compartida del agente, los acuerdos firmados y el mecanismo de seguimiento. Cada participante comparte una frase de cierre.",
+        exercise:
+          "Ronda de cierre · una frase por persona respondiendo: «me llevo de esta sesión…».",
+        deliverable:
+          "Conclusiones compartidas y cierre alineado · la sesión no termina el trabajo, lo enciende.",
+        accent: "violet",
       },
 
-      // ── 16 · Cierre ──────────────────────────────────────────────────
+      // ── 11 · Gracias ─────────────────────────────────────────────────
       {
         layout: "thanks",
-        eyebrow: "Del volumen al valor",
-        title: "Construyamos una disciplina de Digital Labor Operations para JAFRA.",
+        eyebrow: "Salesforce · Aliado estratégico de JAFRA",
+        title: "Gracias.",
         subtitle:
-          "Cada peso consumido, ligado a un resultado. Cada cambio, probado. Cada nueva capacidad, con business case claro.",
+          "Del valor actual al valor que sigue — un paso a la vez, negocio y tecnología en la misma mesa.",
         brand: {
           sparkles: [
             { variant: "yellow-main",     side: "left",  top: "16%", size: 44, rotate: -10 },
