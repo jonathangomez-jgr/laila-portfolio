@@ -142,19 +142,68 @@ export default function DemoGuionCanvas({ data }: { data: DemoGuionData }) {
       </section>
 
       {/* Scene navigator */}
-      <section className="space-y-4">
+      <SceneNavigator
+        scenes={data.scenes}
+        activeSceneId={activeScene?.id ?? ""}
+        onSelect={setActiveSceneId}
+      />
+
+      {/* Active scene */}
+      {activeScene && (
+        <SceneView
+          scene={activeScene}
+          scenes={data.scenes}
+          onSelect={setActiveSceneId}
+        />
+      )}
+    </div>
+  );
+}
+
+function SceneNavigator({
+  scenes,
+  activeSceneId,
+  onSelect,
+}: {
+  scenes: DemoGuionScene[];
+  activeSceneId: string;
+  onSelect: (id: string) => void;
+}) {
+  const activeIndex = scenes.findIndex((s) => s.id === activeSceneId);
+  const prev = activeIndex > 0 ? scenes[activeIndex - 1] : null;
+  const next =
+    activeIndex >= 0 && activeIndex < scenes.length - 1
+      ? scenes[activeIndex + 1]
+      : null;
+
+  return (
+    <section className="space-y-4">
+      <div className="flex items-baseline justify-between gap-3">
         <p className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
           Línea de tiempo — 4 semanas de interacción
         </p>
-        <div className="flex flex-wrap gap-2">
-          {data.scenes.map((s) => {
-            const active = s.id === activeScene?.id;
+        <p className="text-[11px] font-mono text-gray-400">
+          {activeIndex + 1} / {scenes.length}
+        </p>
+      </div>
+
+      <div className="flex items-stretch gap-2">
+        <NavArrow
+          direction="prev"
+          disabled={!prev}
+          label={prev?.title ?? ""}
+          onClick={() => prev && onSelect(prev.id)}
+        />
+
+        <div className="flex flex-1 gap-2 overflow-x-auto scroll-smooth snap-x">
+          {scenes.map((s) => {
+            const active = s.id === activeSceneId;
             return (
               <button
                 key={s.id}
                 type="button"
-                onClick={() => setActiveSceneId(s.id)}
-                className={`rounded-full px-4 py-1.5 text-xs font-semibold ring-1 transition ${
+                onClick={() => onSelect(s.id)}
+                className={`shrink-0 snap-start rounded-full px-4 py-1.5 text-xs font-semibold ring-1 transition ${
                   active
                     ? "bg-emerald-600 text-white ring-emerald-600 shadow-sm"
                     : "bg-white text-gray-700 ring-gray-200 hover:bg-gray-50"
@@ -168,11 +217,57 @@ export default function DemoGuionCanvas({ data }: { data: DemoGuionData }) {
             );
           })}
         </div>
-      </section>
 
-      {/* Active scene */}
-      {activeScene && <SceneView scene={activeScene} />}
-    </div>
+        <NavArrow
+          direction="next"
+          disabled={!next}
+          label={next?.title ?? ""}
+          onClick={() => next && onSelect(next.id)}
+        />
+      </div>
+    </section>
+  );
+}
+
+function NavArrow({
+  direction,
+  disabled,
+  label,
+  onClick,
+}: {
+  direction: "prev" | "next";
+  disabled: boolean;
+  label: string;
+  onClick: () => void;
+}) {
+  const isNext = direction === "next";
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={isNext ? "Siguiente escena" : "Escena anterior"}
+      title={label ? label.replace(/^Escena \d+ · /, "") : ""}
+      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ring-1 transition ${
+        disabled
+          ? "cursor-not-allowed bg-gray-50 text-gray-300 ring-gray-200"
+          : "bg-white text-gray-700 ring-gray-300 hover:bg-emerald-50 hover:text-emerald-700 hover:ring-emerald-300"
+      }`}
+    >
+      <svg
+        className={`h-4 w-4 ${isNext ? "" : "rotate-180"}`}
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9 5l7 7-7 7"
+        />
+      </svg>
+    </button>
   );
 }
 
@@ -187,7 +282,19 @@ function PersonaField({ label, value }: { label: string; value: string }) {
   );
 }
 
-function SceneView({ scene }: { scene: DemoGuionScene }) {
+function SceneView({
+  scene,
+  scenes,
+  onSelect,
+}: {
+  scene: DemoGuionScene;
+  scenes: DemoGuionScene[];
+  onSelect: (id: string) => void;
+}) {
+  const idx = scenes.findIndex((s) => s.id === scene.id);
+  const prev = idx > 0 ? scenes[idx - 1] : null;
+  const next = idx < scenes.length - 1 ? scenes[idx + 1] : null;
+
   return (
     <article className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
       {/* Scene header */}
@@ -338,6 +445,79 @@ function SceneView({ scene }: { scene: DemoGuionScene }) {
           </div>
         </aside>
       </div>
+
+      {/* Scene footer navigation */}
+      <footer className="flex items-center justify-between gap-3 border-t border-gray-100 bg-gray-50/50 px-4 py-4 sm:px-8">
+        <button
+          type="button"
+          onClick={() => prev && onSelect(prev.id)}
+          disabled={!prev}
+          className={`flex min-w-0 items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition ${
+            prev
+              ? "bg-white text-gray-800 ring-1 ring-gray-200 hover:bg-emerald-50 hover:ring-emerald-300"
+              : "cursor-not-allowed bg-white/50 text-gray-300 ring-1 ring-gray-100"
+          }`}
+        >
+          <svg
+            className="h-4 w-4 shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          <span className="min-w-0">
+            <span className="block text-[10px] font-bold uppercase tracking-wider opacity-60">
+              Anterior
+            </span>
+            <span className="block truncate">
+              {prev
+                ? prev.title.replace(/^Escena \d+ · /, "")
+                : "—"}
+            </span>
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => next && onSelect(next.id)}
+          disabled={!next}
+          className={`flex min-w-0 items-center gap-2 rounded-xl px-3 py-2 text-right text-sm font-semibold transition ${
+            next
+              ? "bg-emerald-600 text-white ring-1 ring-emerald-600 hover:bg-emerald-700"
+              : "cursor-not-allowed bg-white/50 text-gray-300 ring-1 ring-gray-100"
+          }`}
+        >
+          <span className="min-w-0">
+            <span className="block text-[10px] font-bold uppercase tracking-wider opacity-80">
+              Siguiente
+            </span>
+            <span className="block truncate">
+              {next
+                ? next.title.replace(/^Escena \d+ · /, "")
+                : "—"}
+            </span>
+          </span>
+          <svg
+            className="h-4 w-4 shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+      </footer>
     </article>
   );
 }
@@ -379,6 +559,7 @@ function ChatBubble({ turn }: { turn: DemoGuionTurn }) {
   }
 
   const isUser = turn.role === "user";
+  const showText = isUser;
 
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
@@ -389,11 +570,30 @@ function ChatBubble({ turn }: { turn: DemoGuionTurn }) {
             : "rounded-bl-sm bg-white text-gray-900"
         }`}
       >
-        <pre className="whitespace-pre-wrap break-words font-sans text-[13.5px] leading-[1.45]">
-          {turn.text}
-        </pre>
+        {showText ? (
+          <pre className="whitespace-pre-wrap break-words font-sans text-[13.5px] leading-[1.45]">
+            {turn.text}
+          </pre>
+        ) : (
+          <p className="flex items-center gap-1.5 text-[12px] italic leading-5 text-gray-400">
+            <svg
+              className="h-3 w-3 shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
+            </svg>
+            Respuesta del agente (en vivo)
+          </p>
+        )}
 
-        {turn.attachment && (
+        {turn.attachment && showText && (
           <div
             className={`mt-2 flex items-center gap-2 rounded-lg px-2.5 py-2 ring-1 ${
               isUser
