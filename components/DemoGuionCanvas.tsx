@@ -15,6 +15,8 @@ const categoryStyles: Record<string, string> = {
   Handoff: "bg-orange-50 text-orange-700 ring-orange-200",
 };
 
+type JsInfo = DemoGuionData["coverageMatrix"][number];
+
 export default function DemoGuionCanvas({ data }: { data: DemoGuionData }) {
   const [activeSceneId, setActiveSceneId] = useState<string>(
     data.scenes[0]?.id ?? ""
@@ -24,6 +26,12 @@ export default function DemoGuionCanvas({ data }: { data: DemoGuionData }) {
     () => data.scenes.find((s) => s.id === activeSceneId) ?? data.scenes[0],
     [data.scenes, activeSceneId]
   );
+
+  const jsLookup = useMemo(() => {
+    const map = new Map<string, JsInfo>();
+    for (const js of data.coverageMatrix) map.set(js.id, js);
+    return map;
+  }, [data.coverageMatrix]);
 
   const totalJs = data.coverageMatrix.length;
 
@@ -122,9 +130,7 @@ export default function DemoGuionCanvas({ data }: { data: DemoGuionData }) {
                     : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
                 }`}
               >
-                <span className="rounded-md bg-gray-900 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
-                  {js.id}
-                </span>
+                <JsBadge id={js.id} info={js} />
                 <span className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-gray-900">
                     {js.name}
@@ -154,6 +160,7 @@ export default function DemoGuionCanvas({ data }: { data: DemoGuionData }) {
           scene={activeScene}
           scenes={data.scenes}
           onSelect={setActiveSceneId}
+          jsLookup={jsLookup}
         />
       )}
     </div>
@@ -286,10 +293,12 @@ function SceneView({
   scene,
   scenes,
   onSelect,
+  jsLookup,
 }: {
   scene: DemoGuionScene;
   scenes: DemoGuionScene[];
   onSelect: (id: string) => void;
+  jsLookup: Map<string, JsInfo>;
 }) {
   const idx = scenes.findIndex((s) => s.id === scene.id);
   const prev = idx > 0 ? scenes[idx - 1] : null;
@@ -327,11 +336,11 @@ function SceneView({
               <span
                 key={js.jobStoryId}
                 className="inline-flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-xs font-semibold ring-1 ring-gray-200"
-                title={js.description}
               >
-                <span className="rounded bg-gray-900 px-1.5 py-0.5 font-mono text-[10px] text-white">
-                  {js.jobStoryId}
-                </span>
+                <JsBadge
+                  id={js.jobStoryId}
+                  info={jsLookup.get(js.jobStoryId)}
+                />
                 <span className="text-gray-700">{js.label}</span>
               </span>
             ))}
@@ -341,13 +350,13 @@ function SceneView({
 
       {/* Turn-by-turn thread */}
       <div className="space-y-6 px-4 py-6 sm:px-8 sm:py-8">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
           Guion turno por turno
         </p>
-        <ol className="space-y-5">
+        <ol className="space-y-5 w-full max-w-[75%]">
           {scene.turns.map((turn) => (
             <li key={turn.turn}>
-              <TurnCard turn={turn} />
+              <TurnCard turn={turn} jsLookup={jsLookup} />
             </li>
           ))}
         </ol>
@@ -386,10 +395,11 @@ function SceneView({
                   key={js.jobStoryId}
                   className="border-l-2 border-emerald-500 pl-3"
                 >
-                  <div className="mb-1.5 flex items-center gap-1.5">
-                    <span className="rounded bg-gray-900 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
-                      {js.jobStoryId}
-                    </span>
+                  <div className="mb-1.5 flex items-center gap-2">
+                    <JsBadge
+                      id={js.jobStoryId}
+                      info={jsLookup.get(js.jobStoryId)}
+                    />
                     <span className="text-xs font-semibold text-gray-800">
                       {js.name}
                     </span>
@@ -563,10 +573,16 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-function TurnCard({ turn }: { turn: DemoGuionTurn }) {
+function TurnCard({
+  turn,
+  jsLookup,
+}: {
+  turn: DemoGuionTurn;
+  jsLookup: Map<string, JsInfo>;
+}) {
   if (turn.role === "note") {
     return (
-      <div className="mx-auto max-w-2xl rounded-lg bg-amber-50 px-4 py-2.5 text-center text-[12px] italic leading-5 text-amber-900 ring-1 ring-amber-200">
+      <div className="rounded-lg bg-amber-50 px-4 py-3 text-[13px] italic leading-6 text-amber-900 ring-1 ring-amber-200">
         {turn.text}
       </div>
     );
@@ -584,22 +600,22 @@ function TurnCard({ turn }: { turn: DemoGuionTurn }) {
     return (
       <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
         {/* Message box */}
-        <div className="flex items-start gap-3 border-b border-gray-100 bg-emerald-50/40 px-4 py-3 sm:px-5">
-          <span className="flex h-7 shrink-0 items-center rounded-md bg-emerald-600 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
+        <div className="flex items-start gap-3 border-b border-gray-100 bg-emerald-50/40 px-4 py-4 sm:px-5">
+          <span className="flex h-7 shrink-0 items-center rounded-md bg-emerald-600 px-2 text-[11px] font-bold uppercase tracking-wider text-white">
             {turn.turn.toString().padStart(2, "0")} · Socia
           </span>
           <div className="min-w-0 flex-1">
-            <pre className="whitespace-pre-wrap break-words font-sans text-[14px] leading-6 text-gray-900">
+            <pre className="whitespace-pre-wrap break-words font-sans text-[16px] leading-7 text-gray-900">
               {turn.text}
             </pre>
             {turn.timestamp && (
-              <p className="mt-1 text-[10px] text-gray-500">{turn.timestamp}</p>
+              <p className="mt-1.5 text-[11px] text-gray-500">{turn.timestamp}</p>
             )}
           </div>
           <CopyButton text={turn.text} />
         </div>
 
-        {hasMetadata && <TurnAnnotations turn={turn} />}
+        {hasMetadata && <TurnAnnotations turn={turn} jsLookup={jsLookup} />}
       </div>
     );
   }
@@ -607,22 +623,22 @@ function TurnCard({ turn }: { turn: DemoGuionTurn }) {
   if (turn.role === "system") {
     return (
       <div className="rounded-2xl border border-orange-200 bg-white shadow-sm">
-        <div className="flex items-start gap-3 border-b border-orange-100 bg-orange-50/60 px-4 py-3 sm:px-5">
-          <span className="flex h-7 shrink-0 items-center rounded-md bg-orange-600 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
+        <div className="flex items-start gap-3 border-b border-orange-100 bg-orange-50/60 px-4 py-4 sm:px-5">
+          <span className="flex h-7 shrink-0 items-center rounded-md bg-orange-600 px-2 text-[11px] font-bold uppercase tracking-wider text-white">
             {turn.turn.toString().padStart(2, "0")} · Sistema
           </span>
           <div className="min-w-0 flex-1">
-            <pre className="whitespace-pre-wrap break-words font-sans text-[13px] leading-5 text-orange-900">
+            <pre className="whitespace-pre-wrap break-words font-sans text-[15px] leading-7 text-orange-900">
               {turn.text}
             </pre>
             {turn.timestamp && (
-              <p className="mt-1 text-[10px] text-orange-700/70">
+              <p className="mt-1.5 text-[11px] text-orange-700/70">
                 {turn.timestamp}
               </p>
             )}
           </div>
         </div>
-        {hasMetadata && <TurnAnnotations turn={turn} />}
+        {hasMetadata && <TurnAnnotations turn={turn} jsLookup={jsLookup} />}
       </div>
     );
   }
@@ -630,13 +646,13 @@ function TurnCard({ turn }: { turn: DemoGuionTurn }) {
   // agent — no text shown, only annotations
   return (
     <div className="rounded-2xl border border-indigo-200 bg-white shadow-sm">
-      <div className="flex items-center gap-3 border-b border-indigo-100 bg-indigo-50/40 px-4 py-3 sm:px-5">
-        <span className="flex h-7 shrink-0 items-center rounded-md bg-indigo-600 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
+      <div className="flex items-center gap-3 border-b border-indigo-100 bg-indigo-50/40 px-4 py-4 sm:px-5">
+        <span className="flex h-7 shrink-0 items-center rounded-md bg-indigo-600 px-2 text-[11px] font-bold uppercase tracking-wider text-white">
           {turn.turn.toString().padStart(2, "0")} · Concierge
         </span>
-        <p className="flex items-center gap-1.5 text-[12px] italic leading-5 text-gray-500">
+        <p className="flex items-center gap-1.5 text-[13px] italic leading-6 text-gray-500">
           <svg
-            className="h-3.5 w-3.5 shrink-0"
+            className="h-4 w-4 shrink-0"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -651,35 +667,36 @@ function TurnCard({ turn }: { turn: DemoGuionTurn }) {
           Respuesta del agente en vivo — lo que sigue es lo que debe cumplir
         </p>
         {turn.timestamp && (
-          <span className="ml-auto text-[10px] text-gray-500">
+          <span className="ml-auto text-[11px] text-gray-500">
             {turn.timestamp}
           </span>
         )}
       </div>
-      {hasMetadata && <TurnAnnotations turn={turn} />}
+      {hasMetadata && <TurnAnnotations turn={turn} jsLookup={jsLookup} />}
     </div>
   );
 }
 
-function TurnAnnotations({ turn }: { turn: DemoGuionTurn }) {
+function TurnAnnotations({
+  turn,
+  jsLookup,
+}: {
+  turn: DemoGuionTurn;
+  jsLookup: Map<string, JsInfo>;
+}) {
   const hasJs = turn.jobStoryIds && turn.jobStoryIds.length > 0;
   const hasPills = turn.dataLookup || turn.knowledgeRef || turn.handoff;
   const hasValidations = turn.validations && turn.validations.length > 0;
 
   return (
-    <div className="space-y-3 px-4 py-3.5 sm:px-5">
+    <div className="space-y-3.5 px-4 py-4 sm:px-5">
       {hasJs && (
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
             Valida
           </span>
           {turn.jobStoryIds!.map((js) => (
-            <span
-              key={js}
-              className="rounded bg-gray-900 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white"
-            >
-              {js}
-            </span>
+            <JsBadge key={js} id={js} info={jsLookup.get(js)} size="md" />
           ))}
         </div>
       )}
@@ -687,17 +704,17 @@ function TurnAnnotations({ turn }: { turn: DemoGuionTurn }) {
       {hasPills && (
         <div className="flex flex-wrap gap-1.5">
           {turn.dataLookup && (
-            <span className="inline-flex items-center gap-1 rounded bg-gray-50 px-2 py-1 text-[11px] font-mono font-semibold text-gray-700 ring-1 ring-gray-200">
+            <span className="inline-flex items-center gap-1 rounded bg-gray-50 px-2 py-1 text-[12px] font-mono font-semibold text-gray-700 ring-1 ring-gray-200">
               🗂 {turn.dataLookup}
             </span>
           )}
           {turn.knowledgeRef && (
-            <span className="inline-flex items-center gap-1 rounded bg-indigo-50 px-2 py-1 text-[11px] font-mono font-semibold text-indigo-700 ring-1 ring-indigo-200">
+            <span className="inline-flex items-center gap-1 rounded bg-indigo-50 px-2 py-1 text-[12px] font-mono font-semibold text-indigo-700 ring-1 ring-indigo-200">
               📚 {turn.knowledgeRef}
             </span>
           )}
           {turn.handoff && (
-            <span className="inline-flex items-center gap-1 rounded bg-orange-50 px-2 py-1 text-[11px] font-mono font-semibold text-orange-700 ring-1 ring-orange-200">
+            <span className="inline-flex items-center gap-1 rounded bg-orange-50 px-2 py-1 text-[12px] font-mono font-semibold text-orange-700 ring-1 ring-orange-200">
               👤 {turn.handoff}
             </span>
           )}
@@ -705,8 +722,8 @@ function TurnAnnotations({ turn }: { turn: DemoGuionTurn }) {
       )}
 
       {turn.attachment && (
-        <div className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2 ring-1 ring-gray-200">
-          <span className="text-lg">
+        <div className="flex items-center gap-2.5 rounded-lg bg-gray-50 px-3 py-2.5 ring-1 ring-gray-200">
+          <span className="text-xl">
             {turn.attachment.type === "form"
               ? "📄"
               : turn.attachment.type === "pdf"
@@ -716,23 +733,23 @@ function TurnAnnotations({ turn }: { turn: DemoGuionTurn }) {
                   : "🔗"}
           </span>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-xs font-semibold text-gray-800">
+            <p className="truncate text-[13px] font-semibold text-gray-800">
               {turn.attachment.filename ?? turn.attachment.label}
             </p>
-            <p className="text-[10px] text-gray-500">{turn.attachment.label}</p>
+            <p className="text-[11px] text-gray-500">{turn.attachment.label}</p>
           </div>
         </div>
       )}
 
       {hasValidations && (
-        <ul className="space-y-1 border-t border-gray-100 pt-3">
+        <ul className="space-y-1.5 border-t border-gray-100 pt-3">
           {turn.validations!.map((v) => (
             <li
               key={v}
-              className="flex items-start gap-1.5 text-[12px] leading-5 text-gray-700"
+              className="flex items-start gap-2 text-[13px] leading-6 text-gray-700"
             >
               <svg
-                className="mt-0.5 h-3 w-3 shrink-0 text-emerald-500"
+                className="mt-1 h-3.5 w-3.5 shrink-0 text-emerald-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -750,6 +767,59 @@ function TurnAnnotations({ turn }: { turn: DemoGuionTurn }) {
         </ul>
       )}
     </div>
+  );
+}
+
+function JsBadge({
+  id,
+  info,
+  size = "sm",
+}: {
+  id: string;
+  info?: JsInfo;
+  size?: "sm" | "md";
+}) {
+  const hasTooltip = info && (info.cuando || info.yoQuiero || info.paraPoder);
+  const sizeCls =
+    size === "md"
+      ? "px-2 py-0.5 text-[12px]"
+      : "px-1.5 py-0.5 text-[11px]";
+  return (
+    <span className="group/js relative inline-flex">
+      <span
+        className={`rounded bg-gray-900 font-mono font-bold text-white ${sizeCls}`}
+      >
+        {id}
+      </span>
+      {hasTooltip && (
+        <span
+          role="tooltip"
+          className="pointer-events-none absolute left-1/2 top-full z-50 mt-2 hidden w-80 -translate-x-1/2 rounded-lg bg-gray-900 px-4 py-3 text-left text-[12px] leading-5 text-white shadow-xl ring-1 ring-black/10 group-hover/js:block"
+        >
+          <span className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-300">
+            {id} · {info!.name}
+          </span>
+          {info!.cuando && (
+            <span className="mb-1 block">
+              <span className="font-semibold text-emerald-300">Cuando</span>{" "}
+              {info!.cuando}
+            </span>
+          )}
+          {info!.yoQuiero && (
+            <span className="mb-1 block">
+              <span className="font-semibold text-emerald-300">Yo quiero</span>{" "}
+              {info!.yoQuiero}
+            </span>
+          )}
+          {info!.paraPoder && (
+            <span className="block">
+              <span className="font-semibold text-emerald-300">Para poder</span>{" "}
+              {info!.paraPoder}
+            </span>
+          )}
+        </span>
+      )}
+    </span>
   );
 }
 

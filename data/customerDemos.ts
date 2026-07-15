@@ -588,6 +588,9 @@ export type DemoGuionData = {
     name: string;
     category: string;
     sceneId: string;
+    cuando?: string;
+    yoQuiero?: string;
+    paraPoder?: string;
   }[];
   scenes: DemoGuionScene[];
 };
