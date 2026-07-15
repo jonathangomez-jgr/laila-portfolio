@@ -189,6 +189,8 @@ export type ExecutiveSlide =
         scaleMax?: number;
       }[];
       printUrl?: string;
+      driveUrl?: string;
+      driveQrSrc?: string;
     } & SlideBrand);
 
 export type ExecutiveDeck = {
@@ -2241,6 +2243,9 @@ export const executiveDecks: ExecutiveDeck[] = [
           },
         ],
         printUrl: "/Customers/Jafra/files/Conociendo-a-nuestro-agente.html",
+        driveUrl:
+          "https://docs.google.com/document/d/1fbiVgJu5CciunZ1_uo_mxE-4nIBhkwA_/edit?usp=sharing&ouid=108015117135038623865&rtpof=true&sd=true",
+        driveQrSrc: "/Customers/Jafra/images/conociendo-agente-qr.svg",
       },
 
       // ── 7 · Bloque 3 · Lo que queremos proteger ──────────────────────

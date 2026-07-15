@@ -476,15 +476,44 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
             ))}
           </div>
 
-          {slide.printUrl && (
-            <a
-              className="deck-questionnaire-print"
-              href={slide.printUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              🖨 Descargar / Imprimir plantilla
-            </a>
+          {(slide.printUrl || slide.driveUrl || slide.driveQrSrc) && (
+            <div className="deck-questionnaire-footer">
+              <div className="deck-questionnaire-actions">
+                {slide.printUrl && (
+                  <a
+                    className="deck-questionnaire-print"
+                    href={slide.printUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    🖨 Descargar / Imprimir plantilla
+                  </a>
+                )}
+                {slide.driveUrl && (
+                  <a
+                    className="deck-questionnaire-print deck-questionnaire-print-alt"
+                    href={slide.driveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    📄 Abrir en Google Docs
+                  </a>
+                )}
+              </div>
+              {slide.driveQrSrc && slide.driveUrl && (
+                <a
+                  className="deck-questionnaire-qr"
+                  href={slide.driveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Escanea para abrir la plantilla en Google Docs"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={slide.driveQrSrc} alt="QR — plantilla en Google Docs" />
+                  <span>Escanea para responder</span>
+                </a>
+              )}
+            </div>
           )}
         </div>
       );
