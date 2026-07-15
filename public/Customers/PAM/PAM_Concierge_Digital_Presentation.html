@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PAM Hotels · Concierge Digital</title>
+<link rel="icon" type="image/png" href="/Customers/PAM/pam-logo.png" />
+<style>
+  :root{
+    --navy:#0a1f3c;
+    --navy-2:#0f2b52;
+    --teal:#1fb6a6;
+    --teal-2:#12897d;
+    --gold:#d9a441;
+    --gold-2:#f0c674;
+    --ink:#0b1526;
+    --cloud:#eaf1f8;
+    --muted:#9db4cf;
+    --card:rgba(255,255,255,.06);
+    --card-brd:rgba(255,255,255,.12);
+    --sf:#00a1e0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 800px at 80% -10%,var(--navy-2),var(--navy) 55%,#06152b 100%);
+    color:var(--cloud);
+    overflow:hidden;
+  }
+
+  .deck{position:relative;height:100vh;width:100vw;overflow:hidden}
+  .slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:5vh 8vw;
+    opacity:0;transform:translateX(40px) scale(.98);
+    transition:opacity .5s ease,transform .5s ease;
+    pointer-events:none;overflow-y:auto;
+  }
+  .slide.active{opacity:1;transform:none;pointer-events:auto;z-index:2}
+  .slide.prev{transform:translateX(-40px) scale(.98)}
+
+  .topbar{
+    position:fixed;top:0;left:0;right:0;height:72px;z-index:20;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 26px;
+    background:linear-gradient(180deg,rgba(6,21,43,.85),rgba(6,21,43,0));
+  }
+  .brand{display:flex;align-items:center;gap:16px;font-weight:600;letter-spacing:.5px}
+  .brand-logo{
+    display:flex;align-items:center;gap:10px;
+    background:#fff;border-radius:10px;padding:6px 12px;
+    box-shadow:0 6px 18px rgba(0,0,0,.25);
+  }
+  .brand-logo img{height:28px;display:block}
+  .cross{color:var(--muted);font-weight:300;font-size:20px}
+  .sf-badge{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px;font-weight:600;letter-spacing:.4px}
+  .sf-badge img{height:22px;display:block}
+  .topbar-title{color:var(--muted);font-size:12.5px;font-weight:600;letter-spacing:.4px}
+
+  .kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    color:var(--gold-2);font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+    margin-bottom:16px;
+  }
+  .kicker::before{content:"";width:26px;height:2px;background:var(--gold)}
+  h1{font-size:clamp(34px,5.4vw,74px);line-height:1.02;font-weight:800;letter-spacing:-1px}
+  h2{font-size:clamp(26px,3.6vw,46px);line-height:1.08;font-weight:800;letter-spacing:-.6px;margin-bottom:8px}
+  .sub{font-size:clamp(15px,1.5vw,20px);color:var(--muted);max-width:62ch;line-height:1.55;margin-top:14px}
+  .accent{color:var(--gold-2)}
+  .teal{color:var(--teal)}
+
+  .cover-logos{display:flex;align-items:center;gap:22px;margin-bottom:40px;flex-wrap:wrap}
+  .chip{
+    display:flex;align-items:center;gap:12px;padding:12px 20px;border-radius:14px;
+    background:#fff;color:var(--navy);
+    font-weight:700;font-size:14px;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
+  }
+  .chip.dark{
+    background:var(--card);color:var(--cloud);border:1px solid var(--card-brd);
+    box-shadow:none;
+  }
+  .chip img{height:32px;display:block}
+  .chip .sf-img{height:24px}
+  .cover h1 .big{display:block}
+  .cover .tagline{margin-top:22px;font-size:clamp(16px,1.8vw,23px);color:var(--cloud);font-weight:500;max-width:56ch;line-height:1.5}
+  .cover .meta{display:flex;gap:34px;margin-top:44px;flex-wrap:wrap}
+  .cover .meta .m{display:flex;flex-direction:column;gap:2px}
+  .cover .meta .m b{font-size:26px;color:var(--gold-2);font-weight:800}
+  .cover .meta .m span{font-size:12.5px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+
+  .grid{display:grid;gap:18px;margin-top:26px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{
+    background:var(--card);border:1px solid var(--card-brd);border-radius:16px;padding:20px;
+    transition:transform .25s ease,border-color .25s ease,background .25s ease;position:relative;overflow:hidden;
+  }
+  .card:hover{transform:translateY(-4px);border-color:rgba(217,164,65,.5);background:rgba(255,255,255,.09)}
+  .card .ic{font-size:24px;margin-bottom:10px;display:block}
+  .card h3{font-size:16.5px;font-weight:800;margin-bottom:6px}
+  .card p{font-size:13px;color:var(--muted);line-height:1.5}
+  .card .tag{
+    display:inline-block;margin-top:10px;font-size:10.5px;font-weight:700;letter-spacing:.6px;
+    color:var(--teal);background:rgba(31,182,166,.12);border:1px solid rgba(31,182,166,.3);
+    padding:3px 9px;border-radius:6px;text-transform:uppercase;
+  }
+  .card .tag.gold{color:var(--gold-2);background:rgba(217,164,65,.12);border-color:rgba(217,164,65,.32)}
+  .card .tag.red{color:#ff9a9a;background:rgba(255,90,90,.12);border-color:rgba(255,90,90,.32)}
+
+  .pipeline{display:flex;align-items:stretch;gap:0;margin-top:34px;flex-wrap:wrap}
+  .stage{flex:1;min-width:150px;background:var(--card);border:1px solid var(--card-brd);border-radius:14px;padding:18px 16px;position:relative}
+  .stage .step{font-size:11px;font-weight:800;color:var(--gold);letter-spacing:1px}
+  .stage h4{font-size:15px;margin:8px 0 6px;font-weight:800}
+  .stage p{font-size:12px;color:var(--muted);line-height:1.45}
+  .arrow{align-self:center;color:var(--gold);font-size:26px;padding:0 8px;font-weight:300}
+
+  .router-wrap{display:flex;flex-direction:column;align-items:center;margin-top:20px;gap:16px}
+  .router-node{
+    background:linear-gradient(135deg,var(--teal-2),var(--teal));
+    color:#04231f;font-weight:800;padding:16px 30px;border-radius:14px;font-size:17px;
+    box-shadow:0 10px 30px rgba(31,182,166,.35);text-align:center;
+  }
+  .router-fan{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%}
+  .leaf{background:var(--card);border:1px solid var(--card-brd);border-radius:12px;padding:12px;font-size:12.5px;font-weight:700;text-align:center;display:flex;flex-direction:column;gap:5px;align-items:center}
+  .leaf .li{font-size:20px}
+  .leaf small{font-size:10.5px;color:var(--muted);font-weight:500;line-height:1.35}
+
+  ul.clean{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:12px}
+  ul.clean li{display:flex;gap:12px;font-size:15px;line-height:1.5;color:var(--cloud)}
+  ul.clean li .b{color:var(--gold);font-weight:900;flex-shrink:0}
+  ul.clean li b{color:#fff}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start;margin-top:14px}
+  .panel{background:var(--card);border:1px solid var(--card-brd);border-radius:16px;padding:24px}
+  .panel h3{font-size:18px;margin-bottom:6px}
+  .panel h3.ok{color:var(--teal)}
+  .panel h3.no{color:#ff9a9a}
+  .panel ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:12px}
+  .panel ul li{font-size:13.5px;color:var(--muted);line-height:1.45;display:flex;gap:9px}
+  .panel ul li::before{content:"";flex-shrink:0;width:7px;height:7px;border-radius:50%;margin-top:6px}
+  .panel.ok ul li::before{background:var(--teal)}
+  .panel.no ul li::before{background:#ff7a7a}
+
+  .nav{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:18px}
+  .navbtn{width:46px;height:46px;border-radius:50%;border:1px solid var(--card-brd);background:rgba(255,255,255,.07);color:#fff;font-size:19px;cursor:pointer;display:grid;place-items:center;transition:.2s;backdrop-filter:blur(6px)}
+  .navbtn:hover{background:var(--gold);color:var(--navy);border-color:var(--gold);transform:scale(1.06)}
+  .dots{display:flex;gap:8px}
+  .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:.2s}
+  .dot.active{background:var(--gold);transform:scale(1.35)}
+  .counter{position:fixed;bottom:32px;right:28px;z-index:30;font-size:13px;color:var(--muted);font-weight:600;letter-spacing:1px}
+  .counter b{color:var(--gold-2)}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--teal));z-index:40;transition:width .4s ease}
+  .hint{position:fixed;bottom:30px;left:28px;z-index:30;font-size:11.5px;color:var(--muted);opacity:.7}
+  .hint kbd{background:rgba(255,255,255,.1);border:1px solid var(--card-brd);border-radius:5px;padding:1px 6px;font-size:11px}
+
+  @media(max-width:820px){
+    .g3,.g4,.router-fan{grid-template-columns:repeat(2,1fr)}
+    .split,.g2{grid-template-columns:1fr}
+    .pipeline{flex-direction:column}.arrow{transform:rotate(90deg)}
+    .slide{padding:90px 7vw 90px}
+    .topbar{flex-wrap:wrap;height:auto;padding:12px 18px;gap:10px}
+    .brand{gap:10px}
+    .chip img{height:26px}
+    .chip .sf-img{height:20px}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-logo">
+      <img src="/Customers/PAM/pam-logo.png" alt="PAM Hotels" />
+    </div>
+    <span class="cross">×</span>
+    <div class="sf-badge">
+      <img src="/sfdc-brand/Logo/Salesforce Cloud - Primary.svg" alt="Salesforce" />
+      Agentforce
+    </div>
+  </div>
+  <div class="topbar-title">Concierge Digital · Paradise Pass</div>
+</div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · COVER -->
+  <section class="slide active cover">
+    <div class="cover-logos">
+      <div class="chip">
+        <img src="/Customers/PAM/pam-logo.png" alt="PAM Hotels" />
+      </div>
+      <span class="cross">×</span>
+      <div class="chip">
+        <img class="sf-img" src="/sfdc-brand/Logo/Salesforce Cloud - Primary.svg" alt="Salesforce" />
+        Salesforce
+      </div>
+      <span class="cross">×</span>
+      <div class="chip dark">🤖 Agentforce</div>
+    </div>
+    <div class="kicker">Anfitrión digital · WhatsApp</div>
+    <h1><span class="big">Concierge Digital</span><span class="big accent">Paradise Pass</span></h1>
+    <p class="tagline">Un anfitrión exclusivo, disponible las 24 horas, que atiende a los socios de Paradise Pass de forma segura, cálida y en su propio idioma.</p>
+    <div class="meta">
+      <div class="m"><b>24/7</b><span>Siempre disponible</span></div>
+      <div class="m"><b>3</b><span>Idiomas · ES · EN · PT</span></div>
+      <div class="m"><b>WhatsApp</b><span>Canal principal</span></div>
+    </div>
+  </section>
+
+  <!-- 2 · QUÉ ES -->
+  <section class="slide">
+    <div class="kicker">La visión</div>
+    <h2>¿Qué es el Concierge Digital?</h2>
+    <p class="sub">Un asistente inteligente que atiende por <b class="accent">WhatsApp</b> a los socios de Paradise Pass. Resuelve al instante las consultas más frecuentes y, cuando el caso lo requiere, conecta al socio con la persona correcta del equipo — sin que tenga que repetir su historia.</p>
+    <div class="grid g4">
+      <div class="card"><span class="ic">🔐</span><h3>Seguro</h3><p>Verifica la identidad del socio antes de mostrar cualquier información de su cuenta.</p></div>
+      <div class="card"><span class="ic">🌎</span><h3>En su idioma</h3><p>Detecta y responde en español, inglés o portugués según cada socio.</p></div>
+      <div class="card"><span class="ic">💬</span><h3>Cálido y cercano</h3><p>Escucha, pregunta y acompaña con el tono exclusivo de Paradise Pass.</p></div>
+      <div class="card"><span class="ic">🤝</span><h3>Bien acompañado</h3><p>Cuando hace falta una persona, lo conecta con su asesor asignado.</p></div>
+    </div>
+    <p class="sub" style="margin-top:24px">Acompaña, informa y guía. Los temas delicados como pagos, reembolsos o cambios de reserva <b class="accent">siempre</b> pasan a manos de un asesor humano.</p>
+  </section>
+
+  <!-- 3 · CAPACIDADES -->
+  <section class="slide">
+    <div class="kicker">Todo lo que puede hacer</div>
+    <h2>Un solo asistente, muchas especialidades</h2>
+    <p class="sub">El Concierge entiende la intención del socio y activa a la especialidad adecuada para darle la mejor respuesta.</p>
+    <div class="router-wrap">
+      <div class="router-node">💬 El socio escribe · el Concierge entiende y responde</div>
+      <div style="color:var(--gold);font-size:22px">▼</div>
+      <div class="router-fan">
+        <div class="leaf"><span class="li">🔐</span>Identidad<small>Verifica al socio</small></div>
+        <div class="leaf"><span class="li">📋</span>Membresía<small>Contrato y saldo</small></div>
+        <div class="leaf"><span class="li">🎁</span>Beneficios<small>Certificados y referidos</small></div>
+        <div class="leaf"><span class="li">👥</span>Beneficiarios<small>Formulario oficial</small></div>
+        <div class="leaf"><span class="li">🏝️</span>Destinos<small>Descubre a dónde ir</small></div>
+        <div class="leaf"><span class="li">✈️</span>Llegadas<small>Cambios de itinerario</small></div>
+        <div class="leaf"><span class="li">🌐</span>Idioma<small>ES · EN · PT</small></div>
+        <div class="leaf"><span class="li">🛡️</span>Políticas<small>Huracán y fraude</small></div>
+        <div class="leaf"><span class="li">🙋</span>Asesor humano<small>Escala con contexto</small></div>
+        <div class="leaf"><span class="li">↩️</span>Fuera de tema<small>Redirige amable</small></div>
+        <div class="leaf"><span class="li">❓</span>Dudas vagas<small>Ayuda a aclarar</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · AUTENTICACIÓN -->
+  <section class="slide">
+    <div class="kicker">Primero, la seguridad</div>
+    <h2>🔐 Verificación en 3 pasos</h2>
+    <p class="sub">Antes de mostrar cualquier dato, el Concierge confirma que realmente está hablando con el socio. Es un proceso obligatorio que protege la cuenta.</p>
+    <div class="pipeline">
+      <div class="stage">
+        <div class="step">PASO 1</div>
+        <h4>¿Quién eres?</h4>
+        <p>El socio comparte su nombre y teléfono, y el sistema los reconoce.</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="stage">
+        <div class="step">PASO 2</div>
+        <h4>Pregunta personal</h4>
+        <p>Una pregunta que solo el socio sabe responder (dato de su perfil).</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="stage">
+        <div class="step">PASO 3</div>
+        <h4>Código por email</h4>
+        <p>Un código de 6 dígitos enviado a su correo, válido por unos minutos.</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="stage" style="border-color:rgba(31,182,166,.5);background:rgba(31,182,166,.08)">
+        <div class="step" style="color:var(--teal)">✓ LISTO</div>
+        <h4>Identidad confirmada</h4>
+        <p>El Concierge retoma justo lo que el socio quería hacer.</p>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:22px">Si algo no coincide tras varios intentos, la conversación pasa con calma a un asesor humano.</p>
+  </section>
+
+  <!-- 5 · MEMBRESÍA -->
+  <section class="slide">
+    <div class="kicker">Especialidad · Membresía</div>
+    <h2>📋 Su membresía, siempre a la mano</h2>
+    <p class="sub">El socio consulta todo lo relacionado con su contrato Paradise Pass en segundos, sin llamadas ni esperas.</p>
+    <div class="grid g3">
+      <div class="card"><span class="ic">📄</span><h3>Estado de su membresía</h3><p>Cuántos contratos y certificados tiene, su saldo pendiente y qué certificados están vigentes, por vencer o ya usados.</p></div>
+      <div class="card"><span class="ic">👤</span><h3>Sus beneficiarios</h3><p>Consulta quiénes están registrados en su membresía, de forma clara y privada.</p></div>
+      <div class="card"><span class="ic">✉️</span><h3>Estado de cuenta por email</h3><p>Recibe su resumen de saldo y certificados en su correo, siempre confirmando antes de enviarlo.</p><span class="tag gold">Con confirmación</span></div>
+    </div>
+    <p class="sub" style="margin-top:22px">Toda la información proviene de los registros reales del socio. El Concierge nunca inventa cifras.</p>
+  </section>
+
+  <!-- 6 · BENEFICIOS Y REFERIDOS -->
+  <section class="slide">
+    <div class="kicker">Especialidad · Beneficios</div>
+    <h2>🎁 Beneficios, referidos y beneficiarios</h2>
+    <div class="grid g3">
+      <div class="card"><span class="ic">🏅</span><h3>Certificados y beneficios</h3><p>Le muestra sus certificados y lo anima a viajar. Incluso un certificado vencido sigue siendo utilizable — nunca pierde su beneficio.</p></div>
+      <div class="card"><span class="ic">🤝</span><h3>Programa de referidos</h3><p>Explica cómo referir amigos y familiares y, si el socio lo desea, registra al referido para que su asesor le dé seguimiento.</p></div>
+      <div class="card"><span class="ic">👥</span><h3>Cambio de beneficiarios</h3><p>Le entrega el formulario oficial en su idioma y le explica paso a paso cómo firmarlo y enviarlo.</p></div>
+    </div>
+    <p class="sub" style="margin-top:22px">El Concierge orienta con claridad, pero nunca promete descuentos o montos fuera de las condiciones oficiales de Paradise Pass.</p>
+  </section>
+
+  <!-- 7 · DESTINOS / LLEGADA / IDIOMA -->
+  <section class="slide">
+    <div class="kicker">Especialidades · Experiencia de viaje</div>
+    <h2>🏝️ Destinos · ✈️ Llegadas · 🌐 Idioma</h2>
+    <div class="grid g3">
+      <div class="card"><span class="ic">🏝️</span><h3>Descubrir destinos</h3><p>Conversa sobre a dónde le gustaría ir, cuándo y con cuántas personas, y prepara todo para que un asesor le arme las mejores opciones.</p></div>
+      <div class="card"><span class="ic">✈️</span><h3>Avisos de llegada</h3><p>Si cambia su vuelo u horario de llegada, recoge los detalles y coordina con un asesor para avisar al hotel a tiempo.</p></div>
+      <div class="card"><span class="ic">🌐</span><h3>Cambiar de idioma</h3><p>El socio puede pedir continuar en español, inglés o portugués cuando quiera, y el Concierge se adapta al instante.</p></div>
+    </div>
+    <p class="sub" style="margin-top:22px">En destinos y llegadas, el Concierge acompaña y prepara; la confirmación final de disponibilidad y precios la da siempre un asesor.</p>
+  </section>
+
+  <!-- 8 · POLÍTICAS CRÍTICAS -->
+  <section class="slide">
+    <div class="kicker">Especialidad · Tranquilidad</div>
+    <h2>🛡️ Situaciones sensibles, en buenas manos</h2>
+    <p class="sub">Ante temas delicados, el Concierge responde con información <b class="accent">oficial y verificada</b> — nunca improvisa políticas, teléfonos ni datos.</p>
+    <div class="grid g3">
+      <div class="card"><span class="ic">🌀</span><h3>Huracán y clima</h3><p>Explica la política de flexibilidad y ayuda a reprogramar para que el socio conserve su dinero como crédito.</p></div>
+      <div class="card"><span class="ic">📵</span><h3>Reventa y fraude</h3><p>Orienta sobre cómo reconocer canales oficiales y evitar estafas y ofertas falsas de membresía.</p></div>
+      <div class="card"><span class="ic">🚨</span><h3>Si ya fue afectado</h3><p>Conecta de inmediato con el equipo especializado para dar seguimiento y proteger al socio.</p><span class="tag red">Atención prioritaria</span></div>
+    </div>
+    <p class="sub" style="margin-top:20px">Si no tiene la respuesta oficial, no adivina: abre un seguimiento y avisa que un asesor lo contactará.</p>
+  </section>
+
+  <!-- 9 · HUMAN HANDOFF -->
+  <section class="slide">
+    <div class="kicker">El relevo humano</div>
+    <h2>🙋 Cuando hace falta una persona</h2>
+    <p class="sub">El Concierge sabe cuándo un caso necesita atención humana y hace el relevo sin fricción.</p>
+    <ul class="clean">
+      <li><span class="b">1.</span><div><b>Conexión con su asesor</b> — siempre que es posible, conecta al socio directamente con su vendedor asignado de PAM.</div></li>
+      <li><span class="b">2.</span><div><b>Equipo de atención</b> — si su asesor no está disponible, lo atiende el equipo de Contact Center.</div></li>
+      <li><span class="b">3.</span><div><b>Cancelaciones</b> — el Concierge no cancela reservas; recoge el motivo, confirma y lo canaliza al equipo de Reservaciones.</div></li>
+      <li><span class="b">4.</span><div><b>Aclaraciones y reembolsos</b> — reúne el contexto y lo pasa a un especialista, sin prometer tiempos ni montos.</div></li>
+    </ul>
+    <p class="sub" style="margin-top:18px">En cada relevo, el asesor recibe un resumen de la conversación: el socio nunca tiene que empezar de cero.</p>
+  </section>
+
+  <!-- 10 · GUARDRAILS -->
+  <section class="slide">
+    <div class="kicker">Confianza ante todo</div>
+    <h2>Reglas que cuidan al socio</h2>
+    <div class="split">
+      <div class="panel ok">
+        <h3 class="ok">✓ El Concierge siempre</h3>
+        <ul>
+          <li>Verifica la identidad antes de mostrar información</li>
+          <li>Responde temas delicados solo con información oficial</li>
+          <li>Confirma antes de realizar cualquier acción importante</li>
+          <li>Conecta con la persona correcta y con contexto</li>
+          <li>Responde en el idioma del socio</li>
+        </ul>
+      </div>
+      <div class="panel no">
+        <h3 class="no">✕ El Concierge nunca</h3>
+        <ul>
+          <li>Comparte información de otro socio</li>
+          <li>Procesa pagos, reembolsos ni cambios de pago</li>
+          <li>Crea, modifica o cancela reservas</li>
+          <li>Inventa precios, disponibilidad o políticas</li>
+          <li>Presiona al socio para tomar decisiones</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · CIERRE -->
+  <section class="slide cover">
+    <div class="cover-logos">
+      <div class="chip">
+        <img src="/Customers/PAM/pam-logo.png" alt="PAM Hotels" />
+      </div>
+      <span class="cross">×</span>
+      <div class="chip">
+        <img class="sf-img" src="/sfdc-brand/Logo/Salesforce Cloud - Primary.svg" alt="Salesforce" />
+        Agentforce
+      </div>
+    </div>
+    <div class="kicker">Gracias</div>
+    <h1>Un anfitrión digital<br/>a la altura de <span class="accent">PAM Hotels</span></h1>
+    <p class="tagline">Seguro. Cálido. Siempre disponible. El Concierge Digital cuida a cada socio de Paradise Pass como en casa.</p>
+    <div class="meta">
+      <div class="m"><b>24/7</b><span>Disponibilidad</span></div>
+      <div class="m"><b>WhatsApp</b><span>Canal principal</span></div>
+      <div class="m"><b>3 idiomas</b><span>ES · EN · PT</span></div>
+    </div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button class="navbtn" id="prev">‹</button>
+  <div class="dots" id="dots"></div>
+  <button class="navbtn" id="next">›</button>
+</div>
+<div class="counter"><b id="cur">1</b> / <span id="total">11</span></div>
+<div class="hint">Navega con <kbd>←</kbd> <kbd>→</kbd> o la barra <kbd>espacio</kbd></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const dotsWrap=document.getElementById('dots');
+  const progress=document.getElementById('progress');
+  const curEl=document.getElementById('cur');
+  document.getElementById('total').textContent=slides.length;
+  let i=0;
+
+  slides.forEach((_,n)=>{
+    const d=document.createElement('div');
+    d.className='dot'+(n===0?' active':'');
+    d.addEventListener('click',()=>go(n));
+    dotsWrap.appendChild(d);
+  });
+  const dots=[...dotsWrap.children];
+
+  function go(n){
+    n=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,idx)=>{
+      s.classList.remove('active','prev');
+      if(idx===n)s.classList.add('active');
+      else if(idx<n)s.classList.add('prev');
+    });
+    dots.forEach((d,idx)=>d.classList.toggle('active',idx===n));
+    i=n;
+    curEl.textContent=n+1;
+    progress.style.width=((n)/(slides.length-1)*100)+'%';
+    slides[n].scrollTop=0;
+  }
+  go(0);
+
+  document.getElementById('next').addEventListener('click',()=>go(i+1));
+  document.getElementById('prev').addEventListener('click',()=>go(i-1));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(i+1);}
+    if(e.key==='ArrowLeft'){go(i-1);}
+    if(e.key==='Home'){go(0);}
+    if(e.key==='End'){go(slides.length-1);}
+  });
+  let sx=0;
+  document.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>60)go(i+(dx<0?1:-1));
+  },{passive:true});
+</script>
+</body>
+</html>

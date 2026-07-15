@@ -4356,6 +4356,14 @@ export const customerProjects: CustomerProject[] = [
         assetsData: {
           items: [
             {
+              name: "Presentación ejecutiva · Concierge Digital Paradise Pass",
+              description:
+                "Deck interactivo de 11 slides para exposición ejecutiva. Cubre la visión del Concierge, sus capacidades por especialidad, el flujo de autenticación en 3 pasos, membresía, beneficios y referidos, destinos y llegadas, políticas críticas (huracán, fraude, reventa), handoff humano y los guardrails de confianza. Navegación con teclado ← → · espacio, dots y swipe. Presenta co-branding oficial PAM Hotels × Salesforce Agentforce.",
+              available: true,
+              type: "doc",
+              url: "/Customers/PAM/PAM_Concierge_Digital_Presentation.html",
+            },
+            {
               name: "Paradise Pass — KB Audit & Knowledge Strategy",
               description:
                 "Análisis completo del programa Paradise Pass, clasificación archivo-por-archivo del repositorio PAM_Hotels_Knowledge_Base_RAG/, propuesta arquitectónica (5 Custom Retrievers + 4 Data Category Groups), estrategia de chunking, casos de uso del Concierge y riesgos/gaps detectados.",
