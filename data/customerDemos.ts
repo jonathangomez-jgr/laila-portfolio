@@ -530,6 +530,68 @@ export type TestScriptsData = {
   scripts: TestScript[];
 };
 
+export type DemoGuionAssertion = {
+  jobStoryId: string;
+  label: string;
+  description: string;
+};
+
+export type DemoGuionTurn = {
+  turn: number;
+  role: "user" | "agent" | "system" | "note";
+  text: string;
+  timestamp?: string;
+  attachment?: {
+    type: "image" | "pdf" | "link" | "form";
+    label: string;
+    filename?: string;
+  };
+  dataLookup?: string;
+  knowledgeRef?: string;
+  handoff?: string;
+  jobStoryIds?: string[];
+  validations?: string[];
+};
+
+export type DemoGuionScene = {
+  id: string;
+  order: number;
+  title: string;
+  subtitle: string;
+  contextDay: string;
+  narrative: string;
+  jobStoriesCovered: DemoGuionAssertion[];
+  turns: DemoGuionTurn[];
+  outcome: string;
+  jsChecklist: {
+    jobStoryId: string;
+    name: string;
+    validated: string[];
+    residualRisk?: string;
+  }[];
+};
+
+export type DemoGuionData = {
+  intro: string;
+  persona: {
+    name: string;
+    role: string;
+    membershipSince: string;
+    home: string;
+    contract: string;
+    phone: string;
+    profile: string;
+    goals: string[];
+  };
+  coverageMatrix: {
+    id: string;
+    name: string;
+    category: string;
+    sceneId: string;
+  }[];
+  scenes: DemoGuionScene[];
+};
+
 export type KnowledgeLibraryFileGroup = {
   label: string;
   note?: string;
@@ -789,6 +851,7 @@ export type CustomerDemoTab = {
   kbArticlesData?: KbArticlesData;
   jobStoriesData?: JobStoriesData;
   testScriptsData?: TestScriptsData;
+  demoGuionData?: DemoGuionData;
   valorWorkshopPlanData?: ValorWorkshopPlanData;
 };
 

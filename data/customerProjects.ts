@@ -3220,6 +3220,865 @@ export const customerProjects: CustomerProject[] = [
         },
       },
       {
+        id: "demo-guion",
+        label: "Demo · Guion WhatsApp",
+        title: "Demo end-to-end — María Elena vive los 15 Job Stories MVP por WhatsApp",
+        content:
+          "Guion de demostración diseñado para probar en un solo hilo narrativo que el Concierge de Paradise Pass cumple las 15 Job Stories del MVP. Una socia real (María Elena Torres) interactúa por WhatsApp durante 4 semanas mientras planea, viaja y resuelve contingencias. Cada mensaje del bot lleva anotaciones inline con el ID de la Job Story que valida, las integraciones que ejerce (lookup Salesforce, Retriever KB, handoff Omni-Channel) y los criterios de aceptación puntuales que se verifican en ese turno.",
+        demoGuionData: {
+          intro:
+            "5 escenas cronológicas que arman una narrativa continua: onboarding y consulta de contrato → planeación de un viaje familiar → trámites financieros → detección de fraude → contingencias durante el viaje. En total: 15 Job Stories del MVP validadas, con anotaciones inline por turno y checklist de cierre por escena. Los handoffs se muestran hasta el punto de transferencia (creación de Case + Messaging Session con contexto).",
+          persona: {
+            name: "María Elena Torres Villegas",
+            role: "Socia Paradise Pass",
+            membershipSince: "Mar 2026 (contrato PPass-2026-03-1147)",
+            home: "Monterrey, Nuevo León",
+            contract: "Contract RT = BCL_PPAS · 2 Benefits (7-noches vigente + 4-noches activado) · balance $1,240 USD en resort credits",
+            phone: "+52 81 8112 4789 (canal WhatsApp verificado)",
+            profile:
+              "Contadora independiente, 38 años. Casada con Jorge (cotitular). Un hijo (Mateo, 9 años) y una hija (Sofía, 4 años). Idioma preferido: español. Ha viajado 1 vez con la membresía (Hard Rock Riviera Maya, mayo 2026). Este año quiere estrenar el certificado de 7 noches con toda la familia.",
+            goals: [
+              "Entender qué le cubre exactamente su Paradise Pass para el viaje de diciembre",
+              "Aprovechar el programa de referidos para invitar a su hermana",
+              "No perder el certificado de 4 noches que ya activó",
+              "Resolver todo por WhatsApp sin llamar al Contact Center",
+            ],
+          },
+          coverageMatrix: [
+            { id: "JS010", name: "Cambio de Idioma Preferido", category: "Self-Service", sceneId: "scene-1" },
+            { id: "JS001", name: "Consulta de Membresía y Contrato", category: "Information", sceneId: "scene-1" },
+            { id: "JS002", name: "Gestión de Beneficiarios", category: "Information", sceneId: "scene-1" },
+            { id: "JS004", name: "Semanas Vacacionales por Expirar", category: "Information", sceneId: "scene-2" },
+            { id: "JS003", name: "Programa de Referidos", category: "Information", sceneId: "scene-2" },
+            { id: "JS005", name: "Búsqueda de Destinos con Mejor Valor", category: "Information", sceneId: "scene-2" },
+            { id: "JS013", name: "Estado de Cuenta por Email", category: "Self-Service", sceneId: "scene-3" },
+            { id: "JS011", name: "Actualización de Método de Pago (PCI)", category: "Self-Service", sceneId: "scene-3" },
+            { id: "JS024", name: "Phishing y Seguridad", category: "Problem Resolution", sceneId: "scene-4" },
+            { id: "JS023", name: "Llamadas de Reventa Sospechosas", category: "Problem Resolution", sceneId: "scene-4" },
+            { id: "JS018", name: "Cambio de Itinerario por Emergencia", category: "Status & Tracking", sceneId: "scene-5" },
+            { id: "JS021", name: "Política de Huracán y Clima Crítico", category: "Problem Resolution", sceneId: "scene-5" },
+            { id: "JS028", name: "Escalamiento por Disputa de Cobro", category: "Handoff", sceneId: "scene-5" },
+            { id: "JS030", name: "Escalamiento por Modificaciones", category: "Handoff", sceneId: "scene-5" },
+            { id: "JS027", name: "Handoff a Contact Center con Contexto", category: "Handoff", sceneId: "scene-5" },
+          ],
+          scenes: [
+            {
+              id: "scene-1",
+              order: 1,
+              title: "Escena 1 · Reconociendo al socio y su contrato",
+              subtitle: "María Elena inicia contacto por primera vez en WhatsApp — el bot la identifica, atiende preferencia de idioma y le muestra su membresía",
+              contextDay: "Martes 3 de noviembre, 21:14 — María Elena guarda al hijo, se sienta con el celular, quiere planear diciembre",
+              narrative:
+                "Primer contacto por WhatsApp Business. El agente debe identificarla por número de teléfono, respetar su idioma de conversación, mostrar los detalles del contrato Paradise Pass (no confundir con LVC/Privé) y responder consultas sobre beneficiarios. Aquí se valida el fundamento: identidad, idioma, contract lookup, beneficiary lookup, y el límite del MVP (no crea/edita beneficiarios, envía formulario).",
+              jobStoriesCovered: [
+                { jobStoryId: "JS010", label: "Cambio de Idioma Preferido", description: "El bot detecta idioma de entrada y ofrece registrarlo como preferencia" },
+                { jobStoryId: "JS001", label: "Consulta de Membresía y Contrato", description: "Lookup Account → Contract(BCL_PPAS) → Benefit__c[] con fechas y estados" },
+                { jobStoryId: "JS002", label: "Gestión de Beneficiarios", description: "Lookup Contract_Beneficiary__c y envío de formulario PDF vía sendForm()" },
+              ],
+              turns: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Hola, me llegó tu número en un correo del club. ¿Aquí puedo ver los detalles de mi membresía?",
+                  timestamp: "21:14",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text: "¡Hola María Elena! 👋 Soy el Concierge Digital de Paradise Pass. Sí, aquí mismo puedo ayudarte. Veo que tienes una membresía Paradise Pass activa desde marzo de 2026. ¿En qué te puedo apoyar hoy?",
+                  timestamp: "21:14",
+                  dataLookup: "Account (Person Account) por Phone = +52 81 8112 4789",
+                  jobStoryIds: ["JS001"],
+                  validations: [
+                    "Identifica al socio por número de teléfono verificado en Vaclubity",
+                    "Nombra correctamente el programa (Paradise Pass, NO 'Legendary' ni 'Privé')",
+                    "Saluda con nombre real, no genérico",
+                    "Cita fecha real de inicio de membresía desde el Contract",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "¿Me podrías atender en portugués? Mi esposo es de São Paulo y quiero enseñarle esto",
+                  timestamp: "21:15",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text: "Claro que sí. Passo para o português. 🇧🇷 Antes de continuar: ¿quieres que registre el portugués como tu idioma preferido para futuras comunicaciones del club, o solo lo usamos en esta conversación?",
+                  timestamp: "21:15",
+                  jobStoryIds: ["JS010"],
+                  validations: [
+                    "Cambia el idioma de conversación dinámicamente sin forzar el idioma registrado",
+                    "Pregunta explícitamente si actualizar el registro (opt-in, no impone)",
+                    "NO asume — respeta la regla de negocio de JS010",
+                  ],
+                },
+                {
+                  turn: 5,
+                  role: "user",
+                  text: "Solo por hoy, gracias. Regresemos al español. Necesito ver bien qué tengo con mi Paradise Pass",
+                  timestamp: "21:16",
+                },
+                {
+                  turn: 6,
+                  role: "agent",
+                  text:
+                    "Perfecto, en español seguimos. Aquí está el resumen de tu Paradise Pass:\n\n📋 *Contrato PPass-2026-03-1147*\n• Titular: María Elena Torres · Cotitular: Jorge Almeida\n• Vigencia del contrato: 15 mar 2026 – 15 mar 2027\n\n🎫 *Certificados asociados*\n1. Certificado de 7 noches — Vigente ✅ (por usar hasta 15 feb 2027)\n2. Certificado de 4 noches — Activado ✅ (usado en Hard Rock Riviera Maya, mayo 2026)\n\n💳 *Resort Credits*: 1,240 USD disponibles\n\n¿Qué te gustaría hacer? Puedo profundizar en cualquiera de estos puntos.",
+                  timestamp: "21:16",
+                  dataLookup: "Account → Contract(BCL_PPAS) → Benefit__c[] (RT Certificate)",
+                  knowledgeRef: "Retriever 2 · KB-Programs-FAQs (KA-BEN-001, KA-BEN-002)",
+                  jobStoryIds: ["JS001"],
+                  validations: [
+                    "Lista los 2 Benefits reales con sus Status ('vigente', 'activado') desde el campo Benefit__c.Status__c",
+                    "Diferencia estados sin inventar fechas — todas las vigencias salen del objeto",
+                    "Cita el número de Contract exacto",
+                    "Nombra al cotitular real (Jorge Almeida) leído del contract",
+                    "NO menciona tiers LVC (Deluxe/VIP/Hall of Fame/Chairman) — audience filter",
+                    "Complementa con KB (Members Bracelet, Resort Credits) sin inventar reglas",
+                  ],
+                },
+                {
+                  turn: 7,
+                  role: "user",
+                  text: "Y quiénes tengo registrados como beneficiarios? Quiero agregar a mi hija Sofía",
+                  timestamp: "21:18",
+                },
+                {
+                  turn: 8,
+                  role: "agent",
+                  text:
+                    "En tu contrato tengo registrados 3 beneficiarios:\n\n👥 *Beneficiarios en tu Paradise Pass*\n1. Jorge Almeida — cotitular\n2. Mateo Torres Almeida — beneficiario adicional\n3. Ana Torres (tu hermana) — beneficiario adicional\n\nSofía todavía no está registrada. Para agregar un nuevo beneficiario necesito enviarte el formulario oficial (es notariable y lo tiene que revisar Customer Service). Te lo mando en un momento. ¿Está bien?",
+                  timestamp: "21:18",
+                  dataLookup: "Contract → Contract_Beneficiary__c[] filtrado por Contract del socio",
+                  jobStoryIds: ["JS002"],
+                  validations: [
+                    "Lee Contract_Beneficiary__c filtrado por Contract del socio",
+                    "Diferencia el rol cotitular vs beneficiario adicional",
+                    "Cita nombres exactos sin alucinar",
+                    "NO intenta crear el beneficiario directamente (out-of-scope MVP)",
+                    "Anuncia que enviará formulario oficial (sendForm)",
+                  ],
+                },
+                {
+                  turn: 9,
+                  role: "user",
+                  text: "Sí por favor",
+                  timestamp: "21:19",
+                },
+                {
+                  turn: 10,
+                  role: "agent",
+                  text:
+                    "Listo, aquí tienes el formulario de Beneficiary Modification. Llénalo con los datos de Sofía (nombre completo, fecha de nacimiento, CURP), fírmalo, y respóndeme por este mismo chat con el PDF firmado. Yo lo escalo con Customer Service para que lo procesen.\n\n📎 *Beneficiary_Modification_Form.pdf*",
+                  timestamp: "21:19",
+                  attachment: {
+                    type: "form",
+                    label: "Formulario oficial de modificación de beneficiarios",
+                    filename: "Beneficiary_Modification_Form.pdf",
+                  },
+                  jobStoryIds: ["JS002"],
+                  validations: [
+                    "Ejecuta Agent Action sendForm() con el PDF correcto",
+                    "Da instrucciones claras de cómo llenarlo y devolverlo",
+                    "Anticipa que el flujo termina en handoff a Customer Service (sin ejecutar la creación)",
+                  ],
+                },
+              ],
+              outcome:
+                "María Elena identificada, contrato mostrado con datos reales, beneficiarios listados, formulario entregado por chat. Cero llamadas al Contact Center. Sin alucinación de datos ni confusión de audiencia.",
+              jsChecklist: [
+                {
+                  jobStoryId: "JS010",
+                  name: "Cambio de Idioma Preferido",
+                  validated: [
+                    "Cambia idioma en tiempo real (portugués/español) sin forzar idioma registrado",
+                    "Pregunta si guardar como preferencia (opt-in explícito)",
+                    "NO altera el registro sin confirmación",
+                  ],
+                },
+                {
+                  jobStoryId: "JS001",
+                  name: "Consulta de Membresía y Contrato",
+                  validated: [
+                    "Lookup nativo Salesforce Account → Contract(RT BCL_PPAS) → Benefit__c",
+                    "Cita 100% de los datos desde el modelo (sin alucinación)",
+                    "Diferencia estados de Benefit (vigente vs activado)",
+                    "Zero mentions de tiers LVC (filtro de audiencia correcto)",
+                  ],
+                },
+                {
+                  jobStoryId: "JS002",
+                  name: "Gestión de Beneficiarios",
+                  validated: [
+                    "Lookup Contract_Beneficiary__c[] con relación al Contract",
+                    "Diferencia cotitular vs beneficiario adicional",
+                    "sendForm() con el PDF oficial de Beneficiary Modification",
+                    "NO intenta modificar directamente (respeta scope MVP)",
+                  ],
+                  residualRisk: "Falta validar % migración histórica de beneficiarios en Vaclubity (Eduardo Vergara, reportado 90%)",
+                },
+              ],
+            },
+            {
+              id: "scene-2",
+              order: 2,
+              title: "Escena 2 · Planeando el viaje de fin de año",
+              subtitle: "María Elena quiere usar sus semanas antes de que expiren, entender su programa de referidos e invitar a su hermana, y buscar la mejor propiedad para viajar en familia",
+              contextDay: "Sábado 7 de noviembre, 10:32 — desayuno familiar, revisando calendario del cierre de año",
+              narrative:
+                "El bot debe alertar sobre semanas por expirar (regla: ventana de 12 meses, incluso las 'expiradas' se pueden usar), explicar el programa de referidos con la regla oficial 2026 ($100 USD × 5, no la vieja regla LVC), y hacer un pre-filtrado de destinos capturando preferencias para escalar el detalle a un agente humano.",
+              jobStoriesCovered: [
+                { jobStoryId: "JS004", label: "Semanas Vacacionales por Expirar", description: "Alerta 12 meses antes y regla 'flexibilidad': Certificate Expired NO significa perdido" },
+                { jobStoryId: "JS003", label: "Programa de Referidos", description: "Regla 2026: USD 100 × 5 referidos, Lead en Vaclubity, penalización si cancela" },
+                { jobStoryId: "JS005", label: "Búsqueda de Destinos con Mejor Valor", description: "Bot captura preferencias, crea Case y escala a agente humano para búsqueda real" },
+              ],
+              turns: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Buen día! Ya estoy planeando el viaje de fin de año. ¿Cuándo se me vence el certificado de 7 noches?",
+                  timestamp: "10:32",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text:
+                    "¡Buen día! Tu certificado de 7 noches vence el 15 de febrero de 2027 — o sea que si viajas en diciembre estás totalmente dentro de la ventana. 👌\n\nAdemás, quería avisarte de algo importante: aunque un certificado marque una fecha de 'expirado', operativamente el club te sigue permitiendo usarlo. Nunca lo pierdes. Aún así, mientras más temprano lo agendes mejor, porque en temporada alta las mejores propiedades se llenan rápido.",
+                  timestamp: "10:32",
+                  dataLookup: "Benefit__c.Expiration_Date__c del certificado de 7 noches",
+                  knowledgeRef: "Retriever 3 · KB-Policies (regla de flexibilidad Paradise Pass — nunca decir 'perdiste el beneficio')",
+                  jobStoryIds: ["JS004"],
+                  validations: [
+                    "Lee la fecha exacta de expiración desde Benefit__c (no alucinada)",
+                    "Aplica la regla de negocio de Paradise Pass: aunque esté 'Expired', operativamente se sigue usando",
+                    "Nunca dice 'perdiste el beneficio' (regla dura del cliente para retención)",
+                    "Incentiva agendar temprano sin generar ansiedad",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Genial. Oye, mi hermana Ana también quiere entrar al club — dijo que tengo un programa de referidos, ¿cómo funciona?",
+                  timestamp: "10:34",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text:
+                    "¡Excelente noticia! 🎉 Tu programa de referidos de Paradise Pass 2026 funciona así:\n\n💰 *Regla*: USD 100 de crédito por cada referido que reserve en alguna propiedad All Inclusive\n👥 *Tope*: hasta 5 referidos → máximo USD 500 en créditos\n💳 *Aplicación*: el crédito se suma al balance de tu certificado. Si tu balance ya está cubierto, se puede usar para noches extra o upgrade de habitación\n⚠️ *Importante*: si el referido cancela su reserva, se te descuentan los USD 100 del wallet\n\nPara acreditar a Ana necesito crear un Lead con sus datos (nombre completo, teléfono, email) ligado a tu contrato. ¿Me los compartes?",
+                  timestamp: "10:34",
+                  dataLookup: "Contract.Referral_Program__c (identificador del programa vigente)",
+                  knowledgeRef: "Retriever 2 · KB-Programs-FAQs · KA-BEN-003 (Programa de Referidos Paradise Pass · $100 USD × 5)",
+                  jobStoryIds: ["JS003"],
+                  validations: [
+                    "Cita la regla oficial 2026 EXACTA: USD 100 × referido, hasta 5, tope USD 500",
+                    "NO menciona la regla vieja de '$100 por pareja' ni '4 beneficiarios directos' (ese era LVC histórico)",
+                    "Menciona la penalización por cancelación (regla del contrato)",
+                    "Anticipa la creación de Lead en Vaclubity con relación al Contract",
+                  ],
+                },
+                {
+                  turn: 5,
+                  role: "user",
+                  text: "Ana Torres Villegas, +52 81 8156 3320, ana.torresv@gmail.com",
+                  timestamp: "10:35",
+                },
+                {
+                  turn: 6,
+                  role: "agent",
+                  text:
+                    "Listo, capturé los datos de Ana. Te confirmo que quedó registrada como referido tuyo:\n\n📋 *Referido creado*\n• Nombre: Ana Torres Villegas\n• Contacto: +52 81 8156 3320 · ana.torresv@gmail.com\n• Ligado al contrato: PPass-2026-03-1147\n• Estatus: Pendiente de reservación\n\nCuando Ana confirme su reservación y se registre en la propiedad, los USD 100 se acreditan a tu wallet automáticamente. Te avisaré por aquí cuando eso pase.",
+                  timestamp: "10:35",
+                  dataLookup: "INSERT Lead (RT = Referral) con LinkedContract__c = Contract del socio",
+                  jobStoryIds: ["JS003"],
+                  validations: [
+                    "Crea Lead en Vaclubity vinculado al Contract del referidor (no huérfano)",
+                    "Confirma con datos capturados literales — sin invención",
+                    "Explica claramente cuándo se materializa el crédito",
+                  ],
+                },
+                {
+                  turn: 7,
+                  role: "user",
+                  text: "Perfecto. Ahora, mi otra pregunta: ¿en qué propiedad me conviene más usar mi certificado de 7 noches? Vamos a viajar 4 personas — mi esposo, mis 2 niños de 9 y 4, y yo. Del 20 al 27 de diciembre",
+                  timestamp: "10:37",
+                },
+                {
+                  turn: 8,
+                  role: "agent",
+                  text:
+                    "Con esas fechas y perfil familiar tengo 2 recomendaciones inmediatas basadas en tu certificado prepagado:\n\n🏝 *AVA Resort Cancún* — concepto familiar de ultra-lujo con áreas segmentadas (kids club robusto, ideal para Mateo de 9 y Sofía de 4). Es propiedad estrella del club.\n🎸 *Hard Rock Hotel Riviera Maya* — ya la conoces, muy family-friendly, con muchas actividades para niños.\n\nOJO: UNICO 20°87° es solo adultos (Sofía y Mateo no pueden entrar) y HRRM Heaven también es adults-only.\n\nPara darte precios exactos y disponibilidad del 20 al 27 dic, te voy a conectar con un agente de reservaciones. Ya tengo listas todas tus preferencias y él te contactará con opciones aterrizadas en un plazo corto. ¿Te parece?",
+                  timestamp: "10:37",
+                  dataLookup: "Benefit__c del certificado 7 noches + status",
+                  knowledgeRef: "Retriever 4 · UDMO-Properties (fact sheets AVA, HRRM) + Retriever 2 · KB-FAQ-002/003 (UNICO/Heaven adults-only)",
+                  jobStoryIds: ["JS005"],
+                  validations: [
+                    "Filtra propiedades con reglas duras (edad mínima) antes de recomendar",
+                    "Cita textualmente que UNICO y Heaven son solo adultos (KA-FAQ-002/003)",
+                    "NO intenta cotizar o reservar — captura preferencias y anuncia handoff",
+                    "Referencia el certificado prepagado real, no genérico",
+                  ],
+                },
+                {
+                  turn: 9,
+                  role: "user",
+                  text: "Sí, adelante",
+                  timestamp: "10:38",
+                },
+                {
+                  turn: 10,
+                  role: "agent",
+                  text:
+                    "Perfecto. Estoy creando un caso con toda la información pre-documentada para que el agente de reservaciones no te haga repetir nada:\n\n📄 *Caso creado — CASE-2026-11-08-4421*\n• Certificado: 7 noches vigente\n• Fechas objetivo: 20–27 dic 2026\n• Viajeros: 4 (2 adultos, 2 menores de 9 y 4)\n• Preferencias: propiedad familiar, filtradas Hard Rock Riviera Maya y AVA Cancún\n• Restricciones: UNICO y Heaven descartadas por edad\n\nUn agente de reservaciones te va a contactar por este mismo WhatsApp con opciones y precios. Mientras tanto, si tienes otra pregunta yo te sigo apoyando.",
+                  timestamp: "10:38",
+                  handoff: "Reservaciones · Omni-Channel Queue (Salesforce Case + Messaging Session)",
+                  jobStoryIds: ["JS005"],
+                  validations: [
+                    "Crea Case tipificado con RT correcto (Reservaciones · Pre-Sales)",
+                    "Case documenta certificado, fechas, viajeros, preferencias, filtros aplicados",
+                    "Transfiere Messaging Session completa (agente humano no arranca de cero)",
+                    "Ruteo a la cola de Reservaciones (no Customer Service — sub-área correcta)",
+                    "Bot NO cierra el chat, sigue disponible",
+                  ],
+                },
+              ],
+              outcome:
+                "Semana por expirar contextualizada sin miedo al cliente, referido creado como Lead ligado al Contract, viaje pre-documentado y escalado a Reservaciones con contexto completo. Bot no invade el rol del agente humano y no aluciona reglas de referidos.",
+              jsChecklist: [
+                {
+                  jobStoryId: "JS004",
+                  name: "Semanas Vacacionales por Expirar",
+                  validated: [
+                    "Lee Expiration_Date__c del Benefit real",
+                    "Aplica ventana de 12 meses",
+                    "Aplica regla de flexibilidad Paradise Pass (Expired sigue reservable)",
+                    "Nunca usa lenguaje de pérdida",
+                  ],
+                  residualRisk: "Falta lista de Web Services de Sabre para disponibilidad real (dependencia TI PAM · Ricardo Dueñas)",
+                },
+                {
+                  jobStoryId: "JS003",
+                  name: "Programa de Referidos",
+                  validated: [
+                    "Cita regla oficial 2026 (USD 100 × 5)",
+                    "Cero mención de reglas LVC históricas (audience filter)",
+                    "Crea Lead en Vaclubity ligado al Contract del referidor",
+                    "Menciona penalización si el referido cancela",
+                  ],
+                },
+                {
+                  jobStoryId: "JS005",
+                  name: "Búsqueda de Destinos con Mejor Valor",
+                  validated: [
+                    "Filtra por reglas duras (edad mínima) antes de recomendar",
+                    "NO intenta cotizar/reservar",
+                    "Crea Case con contexto pre-documentado",
+                    "Handoff a cola de Reservaciones con Messaging Session completa",
+                  ],
+                },
+              ],
+            },
+            {
+              id: "scene-3",
+              order: 3,
+              title: "Escena 3 · Trámites financieros — estado de cuenta y actualización de tarjeta",
+              subtitle: "María Elena pide su estado de cuenta y aprovecha para actualizar su tarjeta antes de que expire",
+              contextDay: "Miércoles 18 de noviembre, 08:47 — de camino a la oficina, revisando pagos del mes",
+              narrative:
+                "Dos self-services del MVP: el bot genera y envía el estado de cuenta consolidando balances a nivel Benefit (no Contract), y ante actualización de tarjeta respeta PCI — nunca captura datos de tarjeta en WhatsApp, envía Pay Token URL segura.",
+              jobStoriesCovered: [
+                { jobStoryId: "JS013", label: "Estado de Cuenta por Email", description: "Envío desde Salesforce Core (no MC), consolidando balances por Benefit" },
+                { jobStoryId: "JS011", label: "Actualización de Método de Pago (PCI)", description: "Bot NUNCA captura tarjeta en chat; envía Pay Token URL" },
+              ],
+              turns: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Hola, ¿me puedes enviar mi estado de cuenta al correo? Necesito revisarlo con mi contador",
+                  timestamp: "08:47",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text:
+                    "¡Claro! ¿Te lo envío al correo que tengo en tu contrato — mariaelena.torres@gmail.com — o prefieres otro?",
+                  timestamp: "08:47",
+                  dataLookup: "Account.PersonEmail",
+                  jobStoryIds: ["JS013"],
+                  validations: [
+                    "Lee el email desde el Account del socio (no pide dato ya conocido innecesariamente)",
+                    "Confirma antes de enviar — respeta privacidad",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Sí a ese está bien",
+                  timestamp: "08:48",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text:
+                    "Perfecto. Estoy generando el estado de cuenta consolidado por certificado. Debería llegarte en máximo 2 minutos.\n\n📧 *Enviado a mariaelena.torres@gmail.com*\nAsunto: 'Tu estado de cuenta Paradise Pass — Noviembre 2026'\nIncluye:\n• Certificado 7 noches — balance disponible USD 1,240\n• Certificado 4 noches — activado (histórico de uso mayo 2026)\n• Programa de referidos — 0 acreditados / 5 disponibles\n• Próximo pago anual: 15 mar 2027",
+                  timestamp: "08:48",
+                  dataLookup: "Aggregate SUM(Benefit__c.Balance__c) por Contract · pull last N transacciones",
+                  jobStoryIds: ["JS013"],
+                  validations: [
+                    "Agrega balances a nivel Benefit__c (regla técnica confirmada)",
+                    "Genera y envía email desde Salesforce Core (no Marketing Cloud en MVP)",
+                    "Template incluye certificados, referidos, próximo pago",
+                    "Datos leídos desde el modelo (no alucinados)",
+                  ],
+                },
+                {
+                  turn: 5,
+                  role: "user",
+                  text: "Súper. Aprovecho: mi tarjeta con la que pago la anualidad vence en enero. ¿Cómo la actualizo?",
+                  timestamp: "08:49",
+                },
+                {
+                  turn: 6,
+                  role: "agent",
+                  text:
+                    "Buen momento para actualizarla. Por seguridad, *NO capturo datos de tarjeta por WhatsApp* — cumplimos con las normas PCI que exige la industria. 🔒\n\nTe voy a enviar en un momento un enlace seguro donde puedes ingresar tu nueva tarjeta directamente en nuestro portal de pagos. El enlace es único, temporal (dura 24 horas) y solo tú lo puedes usar. ¿Te lo mando?",
+                  timestamp: "08:49",
+                  jobStoryIds: ["JS011"],
+                  validations: [
+                    "Explícitamente NO pide datos de tarjeta en WhatsApp",
+                    "Explica PCI en lenguaje del cliente (seguridad, no jerga)",
+                    "Confirma antes de enviar el link (opt-in)",
+                  ],
+                },
+                {
+                  turn: 7,
+                  role: "user",
+                  text: "Sí",
+                  timestamp: "08:49",
+                },
+                {
+                  turn: 8,
+                  role: "agent",
+                  text:
+                    "Aquí tienes:\n\n🔗 *https://pay.paradisepass.com/token/1a5c-9f42-b8d1*\n(vigencia: hasta el 19 nov 2026, 08:49)\n\nCuando termines de actualizarla, avísame por aquí y te confirmo que quedó registrada. ¿Algo más en lo que te pueda ayudar?",
+                  timestamp: "08:49",
+                  attachment: {
+                    type: "link",
+                    label: "Pay Token URL segura (single-use, expira 24h)",
+                    filename: "https://pay.paradisepass.com/token/1a5c-9f42-b8d1",
+                  },
+                  jobStoryIds: ["JS011"],
+                  validations: [
+                    "Renderiza URL de Pay Token desde el backend (no hardcoded)",
+                    "Comunica vigencia y single-use",
+                    "Ofrece seguimiento posterior sin cerrar el chat",
+                  ],
+                },
+              ],
+              outcome:
+                "Estado de cuenta enviado desde Salesforce Core con balance consolidado por Benefit. Actualización de tarjeta gestionada 100% cumpliendo PCI (Pay Token URL, cero captura de datos sensibles en WhatsApp).",
+              jsChecklist: [
+                {
+                  jobStoryId: "JS013",
+                  name: "Estado de Cuenta por Email",
+                  validated: [
+                    "Confirma email de destino antes de enviar",
+                    "Consolida balances a nivel Benefit (regla técnica)",
+                    "Salida desde Salesforce Core (MVP decision)",
+                    "Sin alucinación de saldos",
+                  ],
+                  residualRisk: "Falta plantilla email exacta de PAM para cruzar campos (dependencia PAM)",
+                },
+                {
+                  jobStoryId: "JS011",
+                  name: "Actualización de Método de Pago (PCI)",
+                  validated: [
+                    "NO captura tarjeta en WhatsApp (PCI compliant)",
+                    "Envía Pay Token URL segura con vigencia acotada",
+                    "Explica el 'por qué' de la seguridad en lenguaje del cliente",
+                  ],
+                  residualRisk: "TI PAM debe documentar cómo la IA solicita/renderiza la URL en tiempo real (dependencia Juan Carlos Torres)",
+                },
+              ],
+            },
+            {
+              id: "scene-4",
+              order: 4,
+              title: "Escena 4 · Comunicaciones sospechosas",
+              subtitle: "María Elena recibe un correo raro y una llamada extraña — el bot valida canales oficiales y detecta fraude materializado",
+              contextDay: "Jueves 26 de noviembre, 14:03 — hora de comida, María Elena revisa la bandeja de spam por si algo se coló",
+              narrative:
+                "Dos flujos de seguridad del MVP. En JS024 el bot da los dominios oficiales para que el socio valide. En JS023 el flujo bifurca: si es sospecha, se explica; si es fraude materializado (pagó a un tercero), se escala directo a Customer Service con creación de Case y transferencia de la Messaging Session.",
+              jobStoriesCovered: [
+                { jobStoryId: "JS024", label: "Phishing y Seguridad de Comunicaciones", description: "Bot cita canales oficiales; si el usuario ya hizo clic/dio pass, escala inmediato" },
+                { jobStoryId: "JS023", label: "Llamadas de Reventa Sospechosas", description: "Rama orientativa vs rama de fraude materializado → handoff a CS con Case" },
+              ],
+              turns: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "Oye, me llegó un correo diciendo que soy elegible para 'canjear puntos duplicados' y me pide entrar a un link. ¿Es del club?",
+                  timestamp: "14:03",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text:
+                    "Buena señal que preguntes antes de hacer clic. 🚨 Los correos oficiales de Paradise Pass y Legendary Vacation Club siempre salen del dominio *@legendaryvacationclub.com*. Cualquier otro remitente (@vacationsclub.net, @rewards-paradise.com, gmails, hotmails) NO es nuestro.\n\n¿Podrías compartirme el remitente del correo y una captura si es posible? Con eso te confirmo al 100% si es phishing.",
+                  timestamp: "14:03",
+                  knowledgeRef: "Retriever 3 · KB-Security · KA-SEC-002 (Canales Oficiales Paradise Pass)",
+                  jobStoryIds: ["JS024"],
+                  validations: [
+                    "Cita el dominio oficial verbatim desde KA-SEC-002 (no inventado)",
+                    "Enumera terminaciones sospechosas comunes",
+                    "Pide evidencia (remitente / captura) antes de confirmar",
+                    "Tono empático, no alarmista",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Es de @rewards-paradise.com. Y ya casi le pico al link jaja qué susto",
+                  timestamp: "14:04",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text:
+                    "Ese remitente NO es del club — es phishing. Por favor:\n\n1. NO hagas clic en el link\n2. Elimina el correo (o márcalo como spam)\n3. Si ya hiciste clic o ingresaste alguna contraseña, avísame INMEDIATAMENTE porque tengo que escalarte a nuestro equipo de seguridad\n\n¿Alcanzaste a hacer clic o solo lo viste?",
+                  timestamp: "14:04",
+                  knowledgeRef: "Retriever 3 · KB-Security · KA-SEC-002 (protocolo phishing)",
+                  jobStoryIds: ["JS024"],
+                  validations: [
+                    "Confirma la sospecha sin ambigüedad",
+                    "Da acciones concretas",
+                    "Aplica la regla dura: si ya hizo clic/dio credencial → escalamiento inmediato",
+                  ],
+                },
+                {
+                  turn: 5,
+                  role: "user",
+                  text: "No no, no llegué a picarle. Aparte oye, hace 2 días una señora me llamó ofreciéndome comprar mi Paradise Pass. Dice que trabaja con el club. ¿Es normal?",
+                  timestamp: "14:06",
+                },
+                {
+                  turn: 6,
+                  role: "agent",
+                  text:
+                    "Nooo, eso es una estafa muy común. ⚠️ El club NUNCA te contacta para 'comprar tu membresía'. Si alguien lo hace:\n\n• NO le des datos personales\n• NO firmes documentos\n• NO transfieras dinero ni deposites como 'garantía' de nada\n• AVÍSANOS al club antes de responder cualquier cosa\n\n¿La señora te pidió que hicieras algún pago, transferencia o depósito? Necesito saber si solo fue la llamada o si ya avanzó más.",
+                  timestamp: "14:06",
+                  knowledgeRef: "Retriever 3 · KB-Security · KA-SEC-003 (reventa sospechosa · protocolo)",
+                  jobStoryIds: ["JS023"],
+                  validations: [
+                    "Aplica reglas verbatim del KB de seguridad (sin inventar plazos ni cuentas)",
+                    "Bifurca: pregunta si hubo transacción (para decidir handoff)",
+                    "Tono empático + directivo",
+                  ],
+                },
+                {
+                  turn: 7,
+                  role: "user",
+                  text: "Uf pues sí, le transferí 15,000 pesos como 'apartado' para agilizar el trámite. Me está pidiendo otros 30,000 hoy 😭",
+                  timestamp: "14:08",
+                },
+                {
+                  turn: 8,
+                  role: "agent",
+                  text:
+                    "María Elena, entiendo tu preocupación. NO transfieras nada más. Esto es fraude y el club tiene un equipo especializado que te va a acompañar paso a paso para intentar recuperar el dinero y bloquear a la persona.\n\nTe estoy conectando en este momento con un agente de nuestro equipo de Fraudes de Customer Service. Ya vas con todo el contexto — no vas a tener que repetir nada. Un momento…",
+                  timestamp: "14:08",
+                  jobStoryIds: ["JS023"],
+                  validations: [
+                    "Detecta fraude materializado (transacción hecha)",
+                    "Detiene la conversación de orientación y ejecuta handoff",
+                    "Tono empático (evita re-victimizar) + directivo",
+                    "No cita SLAs ni plazos que no estén en el KB (anti-patrón KA-SEC-003 evitado)",
+                  ],
+                },
+                {
+                  turn: 9,
+                  role: "system",
+                  text:
+                    "🔀 *Handoff ejecutado*\n• Case creado — CASE-2026-11-26-8823\n• RT: Customer Service · Fraudes\n• Ruteo: Omni-Channel Queue 'CS-Fraudes'\n• Prioridad: Alta (fraude materializado con transacción confirmada)\n• Messaging Session transferida con transcripción completa\n• Sentiment Analysis: -0.72 (angustia/miedo)\n• Skills requeridos: Fraud Investigation, Customer Service Retention",
+                  timestamp: "14:08",
+                  handoff: "Customer Service · Fraudes (Omni-Channel Queue)",
+                  jobStoryIds: ["JS023"],
+                  validations: [
+                    "Case creado con RT específico de fraude",
+                    "Ruteo a cola de Customer Service (NO Reservaciones — regla dura del cliente)",
+                    "Sentiment Analysis calculado y adjunto",
+                    "Messaging Session con historial completo",
+                    "Priorización correcta por severidad",
+                  ],
+                },
+              ],
+              outcome:
+                "Phishing identificado y evitado. Fraude materializado detectado y escalado a la cola correcta (CS · Fraudes, no Reservaciones). Bot respetó reglas verbatim del KB sin inventar plazos ni procedimientos.",
+              jsChecklist: [
+                {
+                  jobStoryId: "JS024",
+                  name: "Phishing y Seguridad",
+                  validated: [
+                    "Cita dominios oficiales verbatim de KA-SEC-002",
+                    "Da checklist de acción concreto (no genérico)",
+                    "Aplica regla dura: si ya hizo clic o dio credencial → handoff inmediato",
+                  ],
+                },
+                {
+                  jobStoryId: "JS023",
+                  name: "Llamadas de Reventa Sospechosas",
+                  validated: [
+                    "Bifurca correctamente: sospecha (orientar) vs materializado (escalar)",
+                    "Ruteo a CS · Fraudes, NO Reservaciones",
+                    "Sentiment Analysis adjunto al handoff",
+                    "Sin invención de SLAs (evita KA-SEC-003 antipatrón)",
+                  ],
+                  residualRisk: "PAM (Yolanda) debe subir todos los formatos requeridos post-pago fraudulento a Knowledge",
+                },
+              ],
+            },
+            {
+              id: "scene-5",
+              order: 5,
+              title: "Escena 5 · Contingencias del viaje",
+              subtitle: "María Elena ya viajó — surge una alerta de huracán, un cambio de vuelo, una disputa por cobro y una necesidad de modificar la reservación",
+              contextDay: "Semana del 21 al 25 de diciembre — durante el viaje en Hard Rock Riviera Maya",
+              narrative:
+                "Concentración de escenarios críticos que estresan el agente: crisis climática, cambio de itinerario, disputa financiera con sentiment analysis, modificación de reserva (out-of-scope MVP → handoff), y handoff genérico con contexto para el resto de casos complejos.",
+              jobStoriesCovered: [
+                { jobStoryId: "JS018", label: "Cambio de Itinerario por Emergencia", description: "Automatiza si el checkout NO cambia; si sí cambia, handoff a agente humano" },
+                { jobStoryId: "JS021", label: "Política de Huracán y Clima Crítico", description: "Guía empática paso a paso, ofrece reubicación, escala a humano para retención" },
+                { jobStoryId: "JS028", label: "Escalamiento por Disputa de Cobro", description: "Bot detecta sentimiento y bifurca — calmo (recolecta) vs molesto (escala inmediato)" },
+                { jobStoryId: "JS030", label: "Escalamiento por Modificaciones", description: "Cualquier modificación/cancelación → handoff a Reservaciones (out-of-scope MVP)" },
+                { jobStoryId: "JS027", label: "Handoff a Contact Center con Contexto", description: "Todos los escalamientos transfieren Messaging Session completa + Sentiment" },
+              ],
+              turns: [
+                {
+                  turn: 1,
+                  role: "user",
+                  text: "URGENTE. Están diciendo en las noticias que viene un huracán a la Riviera Maya. ¿Qué hago? Estoy con mis hijos aquí 😰",
+                  timestamp: "Lunes 21 dic · 07:22",
+                },
+                {
+                  turn: 2,
+                  role: "agent",
+                  text:
+                    "María Elena, respira. 💚 El club tiene un protocolo específico para huracanes. Antes que nada, ¿ya hay una alerta oficial declarada por Protección Civil o autoridades? Con esa información activo tu política de flexibilidad.\n\nMientras me confirmas: tú y tu familia están seguros en el hotel — el equipo del resort tiene protocolo de refugio y contigencia bien establecido. No te preocupes por tu reservación, tienes opciones.",
+                  timestamp: "07:22",
+                  knowledgeRef: "Retriever 3 · KB-Policies · KA-POL-006 (Protocolo Huracán y Clima Crítico)",
+                  jobStoryIds: ["JS021"],
+                  validations: [
+                    "Tono empático, gestiona la ansiedad primero",
+                    "Verifica gatillo oficial (alerta declarada) antes de aplicar política",
+                    "Cita al protocolo específico de huracanes (no política regular)",
+                    "Tranquiliza sobre seguridad física antes de tocar reservación",
+                  ],
+                },
+                {
+                  turn: 3,
+                  role: "user",
+                  text: "Sí, Protección Civil declaró alerta amarilla hace 20 minutos",
+                  timestamp: "07:24",
+                },
+                {
+                  turn: 4,
+                  role: "agent",
+                  text:
+                    "Perfecto, con alerta oficial activada tienes 3 opciones bajo el protocolo de huracán del club:\n\n1️⃣ *Reubicación en propiedad segura* — te movemos a Hard Rock Los Cabos o Vallarta si hay disponibilidad, cubriendo la diferencia\n2️⃣ *Reprogramación* — mueves tus noches restantes a otra fecha (sin penalización)\n3️⃣ *Crédito para futuro* — el club te guarda las noches como crédito a 12 meses\n\nDado que estás en medio del viaje y los planes cambian rápido en huracán, te voy a conectar con un agente de Customer Service para que evalúe disponibilidad real y active la opción que te acomode. ¿Te parece?",
+                  timestamp: "07:24",
+                  knowledgeRef: "Retriever 3 · KB-Policies · KA-POL-006 (3 opciones verbatim)",
+                  jobStoryIds: ["JS021"],
+                  validations: [
+                    "Cita las 3 opciones verbatim desde KA-POL-006 (no inventadas)",
+                    "Ofrece reubicación como default para protección de cash flow",
+                    "Anticipa el handoff con justificación clara",
+                    "NO promete algo que dependa de disponibilidad",
+                  ],
+                },
+                {
+                  turn: 5,
+                  role: "user",
+                  text: "Sí, quiero moverme a Los Cabos, no quiero arriesgar a mis niños",
+                  timestamp: "07:25",
+                },
+                {
+                  turn: 6,
+                  role: "system",
+                  text:
+                    "🔀 *Handoff ejecutado*\n• Case creado — CASE-2026-12-21-9034\n• RT: Customer Service · Huracán\n• Contract owner asignado (David Ramírez)\n• Prioridad: Crítica (fenómeno meteorológico en curso)\n• Messaging Session transferida\n• Contexto: alerta amarilla Riviera Maya, socia con 2 menores in-house, preferencia = reubicación a Los Cabos\n• Sentiment: -0.55 (preocupación)",
+                  timestamp: "07:25",
+                  handoff: "Customer Service · Contract Owner + skill Retención (Omni-Channel)",
+                  jobStoryIds: ["JS021", "JS027"],
+                  validations: [
+                    "Case ruteado al contract owner (asesor asignado)",
+                    "RT específico de huracán (reporting stat)",
+                    "Prioridad crítica correctamente asignada",
+                    "Contexto completo transferido",
+                  ],
+                },
+                {
+                  turn: 7,
+                  role: "note",
+                  text:
+                    "▸ Se resuelve la reubicación fuera del bot (David Ramírez la mueve a HR Los Cabos). María Elena llega el 22 dic. Tres días después surge otro tema.",
+                  timestamp: "—",
+                },
+                {
+                  turn: 8,
+                  role: "user",
+                  text: "Buenos días, ya estamos en Los Cabos, todo bien. Rápido: acabo de ver un cargo de 2,450 dólares en mi tarjeta a nombre del hotel y NO reconozco ese cargo. Estoy muy molesta 😡. Nadie me dijo nada",
+                  timestamp: "Jueves 24 dic · 09:12",
+                },
+                {
+                  turn: 9,
+                  role: "agent",
+                  text:
+                    "María Elena, entiendo tu molestia y no queremos que esto opaque tus vacaciones. Un cargo no reconocido de esa magnitud es serio. Te voy a conectar de inmediato con un agente de Customer Service para que revise tu estado de cuenta contigo y aclare exactamente qué generó ese cobro. Un momento.",
+                  timestamp: "09:12",
+                  jobStoryIds: ["JS028"],
+                  validations: [
+                    "Sentiment analysis detecta frustración alta (>0.6 negatividad)",
+                    "Bot ejecuta handoff inmediato SIN intentar recabar más detalles (regla del cliente para clientes molestos)",
+                    "Tono empático que valida la emoción",
+                    "NO minimiza el problema",
+                  ],
+                },
+                {
+                  turn: 10,
+                  role: "system",
+                  text:
+                    "🔀 *Handoff ejecutado*\n• Case creado — CASE-2026-12-24-9187\n• RT: Customer Service · Disputa de Cobro\n• Ruteo: Omni-Channel Queue 'CS-Disputas'\n• Prioridad: Alta (in-house, sentiment fuerte)\n• Sentiment Analysis: -0.81 (frustración alta)\n• Messaging Session transferida\n• Skill requerido: Retention + Billing Dispute\n• Contexto: cliente in-house Los Cabos post-reubicación por huracán",
+                  timestamp: "09:12",
+                  handoff: "Customer Service · Disputas (Omni-Channel)",
+                  jobStoryIds: ["JS028", "JS027"],
+                  validations: [
+                    "Ruteo a CS · Disputas (NO Reservaciones, NO Cobranza)",
+                    "Sentiment Analysis adjunto",
+                    "Prioridad correlacionada con sentiment + in-house status",
+                    "Bot respeta regla dura: cliente molesto → handoff inmediato, no interrogatorio",
+                  ],
+                },
+                {
+                  turn: 11,
+                  role: "note",
+                  text:
+                    "▸ La disputa se aclara — era un pre-authorization hold por incidentales del cuarto, ya se liberó. Al día siguiente María Elena vuelve por otro tema.",
+                  timestamp: "—",
+                },
+                {
+                  turn: 12,
+                  role: "user",
+                  text: "Hola, cambio de planes: quiero extender 2 noches más mi estancia y adelantar la llegada de mi vuelo mañana a las 3 am por un tema familiar. ¿Puedes hacerlo?",
+                  timestamp: "Viernes 25 dic · 22:04",
+                },
+                {
+                  turn: 13,
+                  role: "agent",
+                  text:
+                    "Vamos por partes. Sobre el vuelo que llega a las 3 am — necesito confirmarte una cosa importante: ¿tu fecha de salida del hotel (checkout) se queda igual, o también cambia?",
+                  timestamp: "22:04",
+                  jobStoryIds: ["JS018"],
+                  validations: [
+                    "Aplica regla dura de JS018: pregunta explícitamente si checkout cambia",
+                    "NO automatiza antes de saberlo",
+                  ],
+                },
+                {
+                  turn: 14,
+                  role: "user",
+                  text: "El checkout sí lo tengo que mover — quiero extender 2 noches",
+                  timestamp: "22:05",
+                },
+                {
+                  turn: 15,
+                  role: "agent",
+                  text:
+                    "Entendido. Dado que ambos cambios afectan disponibilidad (llegada tardía + extensión de fechas), no los puedo procesar automáticamente — requieren revisión manual con el motor de reservas. Te voy a conectar con un agente de Reservaciones que te ajusta ambas cosas en una sola gestión. Ya te preparo el contexto.",
+                  timestamp: "22:05",
+                  jobStoryIds: ["JS018", "JS030"],
+                  validations: [
+                    "NO automatiza porque checkout cambia (regla JS018)",
+                    "Reconoce que modificación de reserva es out-of-scope MVP (regla JS030)",
+                    "Anticipa handoff a Reservaciones (NO CS — sub-área correcta)",
+                    "Consolida ambos temas en un solo handoff",
+                  ],
+                },
+                {
+                  turn: 16,
+                  role: "system",
+                  text:
+                    "🔀 *Handoff ejecutado*\n• Case creado — CASE-2026-12-25-9294\n• RT: Reservaciones · Modificación\n• Ruteo: Omni-Channel Queue 'RES-Modificaciones'\n• Prioridad: Media (in-house, misma noche)\n• Messaging Session transferida con todo el arco de la relación (Nov–Dic)\n• Sentiment: +0.15 (neutra/positiva)\n• Contexto consolidado: ETA vuelo 3am, extensión +2 noches, no automatizable",
+                  timestamp: "22:05",
+                  handoff: "Reservaciones · Modificaciones (Omni-Channel)",
+                  jobStoryIds: ["JS018", "JS030", "JS027"],
+                  validations: [
+                    "Ruteo a Reservaciones (NO Customer Service — regla dura)",
+                    "Messaging Session incluye TODA la historia (Nov-Dic), no solo el turno actual",
+                    "Case documenta ambos temas (llegada + extensión) para gestión unificada",
+                    "Sentiment adjunto — permite al agente humano modular tono",
+                  ],
+                },
+              ],
+              outcome:
+                "El bot resolvió las contingencias más críticas: crisis climática con protocolo verbatim, disputa de cobro con handoff inmediato por sentiment, y modificación de reserva ruteada correctamente. Cada handoff creó Case con RT correcto, ruteó a la cola operativa correcta y transfirió Messaging Session con contexto completo.",
+              jsChecklist: [
+                {
+                  jobStoryId: "JS018",
+                  name: "Cambio de Itinerario por Emergencia",
+                  validated: [
+                    "Aplica regla dura: pregunta si checkout cambia antes de decidir",
+                    "Si checkout NO cambia → automatiza; si cambia → handoff",
+                    "Consolida con otros cambios en el mismo handoff",
+                  ],
+                  residualRisk: "TI PAM debe identificar OWS específico para inyectar 'late check-in' a Opera",
+                },
+                {
+                  jobStoryId: "JS021",
+                  name: "Política de Huracán",
+                  validated: [
+                    "Verifica gatillo (alerta oficial) antes de activar política",
+                    "Cita 3 opciones verbatim desde KA-POL-006",
+                    "Tono empático + prioriza seguridad física",
+                    "Handoff al contract owner para retención (cash flow)",
+                  ],
+                },
+                {
+                  jobStoryId: "JS028",
+                  name: "Disputa de Cobro",
+                  validated: [
+                    "Sentiment Analysis detecta frustración >0.6",
+                    "Bot NO interroga — ejecuta handoff inmediato",
+                    "Ruteo a CS · Disputas (NO Cobranza)",
+                    "Prioridad correlacionada con severidad",
+                  ],
+                },
+                {
+                  jobStoryId: "JS030",
+                  name: "Escalamiento por Modificaciones",
+                  validated: [
+                    "Reconoce que modificación/cancelación es out-of-scope MVP",
+                    "Handoff a Reservaciones (NO CS)",
+                    "Consolida temas relacionados en un solo Case",
+                  ],
+                },
+                {
+                  jobStoryId: "JS027",
+                  name: "Handoff a Contact Center con Contexto",
+                  validated: [
+                    "TODOS los handoffs (5 en total) crearon Case tipificado",
+                    "TODOS transfirieron Messaging Session completa",
+                    "TODOS adjuntaron Sentiment Analysis",
+                    "Ruteo a colas específicas por sub-área (Reservaciones vs CS vs Fraudes)",
+                    "Agente humano recibe contexto completo — cliente no repite información",
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
         id: "casos-uso",
         label: "Casos de uso",
         title: "Conversaciones que el Concierge resuelve",

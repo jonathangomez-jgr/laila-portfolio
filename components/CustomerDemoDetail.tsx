@@ -24,6 +24,7 @@ import CustomRetrieverCards from "./CustomRetrieverCards";
 import KbArticlesCanvas from "./KbArticlesCanvas";
 import JobStoriesCanvas from "./JobStoriesCanvas";
 import TestScriptsCanvas from "./TestScriptsCanvas";
+import DemoGuionCanvas from "./DemoGuionCanvas";
 import Sprint3Canvas from "./Sprint3Canvas";
 import WorkPlanCanvas from "./WorkPlanCanvas";
 import ObjectiveInfographic from "./ObjectiveInfographic";
@@ -449,6 +450,10 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
 
               {activeTab.testScriptsData && (
                 <TestScriptsCanvas data={activeTab.testScriptsData} />
+              )}
+
+              {activeTab.demoGuionData && (
+                <DemoGuionCanvas data={activeTab.demoGuionData} />
               )}
             </section>
           </div>
