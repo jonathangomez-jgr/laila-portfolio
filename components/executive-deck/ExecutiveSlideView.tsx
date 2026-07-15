@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type {
   DeckProductLogo,
   ExecutiveSlide,
@@ -5,6 +6,7 @@ import type {
 } from "../../data/executiveDecks";
 import DeckBrandDecor, { DeckProductChips } from "./DeckBrandDecor";
 import DeckQRCode from "./DeckQRCode";
+import DeckQRExpand from "./DeckQRExpand";
 
 /* Maps the data accent token → SFDC 2026 brand palette classes */
 const pillarAccent: Record<
@@ -117,6 +119,23 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
             <p className="deck-section-subtitle mt-6 max-w-3xl">{slide.subtitle}</p>
           )}
           {productChips && <div className="mt-8">{productChips}</div>}
+          {slide.deckLink && (
+            <div className="deck-section-actions">
+              <Link
+                href={slide.deckLink.href}
+                className={`deck-jump-link ${
+                  slide.deckLink.direction === "back"
+                    ? "deck-jump-link-back"
+                    : "deck-jump-link-forward"
+                }`}
+              >
+                <span className="deck-jump-link-arrow" aria-hidden>
+                  {slide.deckLink.direction === "back" ? "←" : "→"}
+                </span>
+                <span>{slide.deckLink.label}</span>
+              </Link>
+            </div>
+          )}
         </div>
       );
 
@@ -390,6 +409,24 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
               <p className="deck-agenda-deliverable-text">{slide.deliverable}</p>
             </div>
           </div>
+
+          {slide.deckLink && (
+            <div className="deck-agenda-jump">
+              <Link
+                href={slide.deckLink.href}
+                className={`deck-jump-link ${
+                  slide.deckLink.direction === "back"
+                    ? "deck-jump-link-back"
+                    : "deck-jump-link-forward"
+                }`}
+              >
+                <span className="deck-jump-link-arrow" aria-hidden>
+                  {slide.deckLink.direction === "back" ? "←" : "→"}
+                </span>
+                <span>{slide.deckLink.label}</span>
+              </Link>
+            </div>
+          )}
         </div>
       );
     }
@@ -501,17 +538,13 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
                 )}
               </div>
               {slide.driveQrSrc && slide.driveUrl && (
-                <a
-                  className="deck-questionnaire-qr"
-                  href={slide.driveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Escanea para abrir la plantilla en Google Docs"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={slide.driveQrSrc} alt="QR — plantilla en Google Docs" />
-                  <span>Escanea para responder</span>
-                </a>
+                <DeckQRExpand
+                  qrSrc={slide.driveQrSrc}
+                  targetUrl={slide.driveUrl}
+                  caption="Escanea para responder"
+                  overlayTitle="Escanea para abrir la plantilla"
+                  overlaySubtitle="Google Docs · Conociendo a nuestro agente"
+                />
               )}
             </div>
           )}

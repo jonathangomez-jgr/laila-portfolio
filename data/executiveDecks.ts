@@ -72,6 +72,7 @@ export type ExecutiveSlide =
       eyebrow?: string;
       title: string;
       subtitle?: string;
+      deckLink?: { label: string; href: string; direction?: "forward" | "back" };
     } & SlideBrand)
   | ({
       layout: "bullets";
@@ -146,6 +147,7 @@ export type ExecutiveSlide =
       exercise: string;
       deliverable: string;
       accent?: SlideAccent;
+      deckLink?: { label: string; href: string; direction?: "forward" | "back" };
     } & SlideBrand)
   | ({
       layout: "agent-profile";
@@ -2155,6 +2157,11 @@ export const executiveDecks: ExecutiveDeck[] = [
         deliverable:
           "Contexto compartido y expectativas alineadas · el equipo entra a la sesión con la misma mirada.",
         accent: "indigo",
+        deckLink: {
+          label: "Abrir deck · Tendencias de IA",
+          href: "/customer-demos/jafra/deck/tendencias-ia",
+          direction: "forward",
+        },
       },
 
       // ── 5 · Bloque 2 · Conociendo al agente ──────────────────────────
@@ -2489,6 +2496,11 @@ export const executiveDecks: ExecutiveDeck[] = [
         title: "Ya vimos dónde estamos. Ahora, ¿cómo describimos al agente que ya tenemos?",
         subtitle:
           "Cinco personas · cinco miradas · una foto común del agente antes de decidir qué proteger y qué incrementar.",
+        deckLink: {
+          label: "Volver al deck de la agenda",
+          href: "/customer-demos/jafra/deck/valor-workshop",
+          direction: "back",
+        },
         brand: {
           astro: { variant: "agent-astro-flip-020", side: "right", bottom: "-40px", size: 240 },
           sparkles: [

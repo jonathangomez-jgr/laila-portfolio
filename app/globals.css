@@ -1770,7 +1770,7 @@ body.deck-mode {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.5rem 0.85rem 0.5rem 0.6rem;
+  padding: 0.5rem 0.9rem 0.5rem 0.55rem;
   border-radius: 0.85rem;
   background: #ffffff;
   border: 1.5px solid rgba(6, 106, 254, 0.25);
@@ -1794,9 +1794,219 @@ body.deck-mode {
   display: block;
   border-radius: 0.35rem;
 }
-.deck-questionnaire-qr span {
-  max-width: 8rem;
+.deck-questionnaire-qr > span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  max-width: 8.5rem;
   line-height: 1.25;
+  color: #022ac0;
+  text-align: left;
+}
+.deck-questionnaire-qr > span strong {
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+.deck-questionnaire-qr > span em {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: rgba(6, 106, 254, 0.75);
+}
+
+.deck-questionnaire-qr-btn {
+  cursor: pointer;
+  font-family: inherit;
+}
+.deck-questionnaire-qr-btn::after {
+  content: "⤢";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  margin-left: 0.25rem;
+  border-radius: 999px;
+  background: rgba(6, 106, 254, 0.12);
+  color: #066afe;
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+/* ── QR fullscreen overlay ─────────────────────────────────────────── */
+.deck-qr-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: radial-gradient(circle at center, rgba(6, 20, 60, 0.85), rgba(0, 8, 32, 0.96));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: deck-qr-fade 0.25s ease-out both;
+  backdrop-filter: blur(6px);
+}
+@keyframes deck-qr-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.deck-qr-overlay-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 2.5rem 3rem 2rem;
+  max-width: 640px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.4);
+  animation: deck-qr-pop 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes deck-qr-pop {
+  from { opacity: 0; transform: scale(0.92) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.deck-qr-overlay-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  border: 1.5px solid rgba(6, 106, 254, 0.25);
+  background: #ffffff;
+  color: #066afe;
+  font-size: 1.4rem;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  font-family: inherit;
+}
+.deck-qr-overlay-close:hover {
+  background: rgba(6, 106, 254, 0.08);
+  transform: scale(1.05);
+}
+
+.deck-qr-overlay-eyebrow {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #066afe;
+  margin-bottom: 0.4rem;
+}
+
+.deck-qr-overlay-title {
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #002775;
+  line-height: 1.2;
+  margin-bottom: 0.35rem;
+}
+
+.deck-qr-overlay-subtitle {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.deck-qr-overlay-frame {
+  display: inline-block;
+  padding: 1rem;
+  border-radius: 1.1rem;
+  background: #ffffff;
+  border: 3px solid rgba(6, 106, 254, 0.18);
+  box-shadow: 0 10px 34px rgba(6, 106, 254, 0.12);
+}
+.deck-qr-overlay-frame img {
+  display: block;
+  width: min(60vh, 380px);
+  height: min(60vh, 380px);
+  max-width: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.deck-qr-overlay-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.4rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  background: #066afe;
+  color: #ffffff;
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.deck-qr-overlay-link:hover {
+  background: #022ac0;
+  transform: translateY(-1px);
+}
+
+.deck-qr-overlay-hint {
+  margin-top: 0.9rem;
+  font-size: 0.72rem;
+  color: #9ca3af;
+  letter-spacing: 0.05em;
+}
+
+/* ── Jump-link (deck to deck) ──────────────────────────────────────── */
+.deck-agenda-jump {
+  margin-top: 1.1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.deck-section-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.deck-jump-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.25rem;
+  border-radius: 999px;
+  background: #066afe;
+  color: #ffffff;
+  font-family: 'Salesforce Sans', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(6, 106, 254, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.deck-jump-link:hover {
+  transform: translateY(-1px);
+  background: #022ac0;
+  box-shadow: 0 14px 30px rgba(6, 106, 254, 0.38);
+}
+.deck-jump-link-arrow {
+  font-size: 1rem;
+  line-height: 1;
+}
+.deck-jump-link-back {
+  background: #ffffff;
+  color: #066afe;
+  border: 1.5px solid rgba(6, 106, 254, 0.35);
+  box-shadow: 0 6px 18px rgba(6, 106, 254, 0.12);
+}
+.deck-jump-link-back:hover {
+  background: rgba(6, 106, 254, 0.08);
   color: #022ac0;
 }
 
