@@ -305,7 +305,7 @@ function SceneView({
   const next = idx < scenes.length - 1 ? scenes[idx + 1] : null;
 
   return (
-    <article className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+    <article className="rounded-3xl border border-gray-200 bg-white shadow-sm">
       {/* Scene header */}
       <header className="border-b border-gray-100 bg-gradient-to-b from-emerald-50/40 to-white px-6 py-6 sm:px-8">
         <div className="mb-2 flex flex-wrap items-center gap-2">
@@ -794,7 +794,7 @@ function JsBadge({
       {hasTooltip && (
         <span
           role="tooltip"
-          className="pointer-events-none absolute left-1/2 top-full z-50 mt-2 hidden w-80 -translate-x-1/2 rounded-lg bg-gray-900 px-4 py-3 text-left text-[12px] leading-5 text-white shadow-xl ring-1 ring-black/10 group-hover/js:block"
+          className="pointer-events-none absolute left-0 top-full z-[100] mt-2 hidden w-80 rounded-lg bg-gray-900 px-4 py-3 text-left text-[12px] leading-5 text-white shadow-xl ring-1 ring-black/10 group-hover/js:block"
         >
           <span className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-300">
             {id} · {info!.name}
