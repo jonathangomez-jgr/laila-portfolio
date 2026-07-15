@@ -5391,6 +5391,14 @@ export const customerDemos: CustomerDemo[] = [
               url: "/customer-demos/jafra/deck/valor-workshop",
             },
             {
+              name: "Tendencias de IA en la industria · Bloque 1",
+              description:
+                "Deck complementario orientado al cliente para cubrir el bloque 1 (10 min) · el momento agéntico de la IA, tres frentes en belleza y consumo (Sephora, L'Oréal, Estée Lauder), qué cambia en venta directa para la Consultora y la visión Salesforce Data + Agents + Trust — cerrando con un puente al bloque 2.",
+              available: true,
+              type: "deck",
+              url: "/customer-demos/jafra/deck/tendencias-ia",
+            },
+            {
               name: "«Conociendo a nuestro agente» · Plantilla imprimible",
               description:
                 "Formato imprimible en A4 con las 6 preguntas del ejercicio individual del bloque 2. Se comparte con cada participante antes o al inicio de la sesión. Descargable en HTML e imprimible como PDF desde el navegador (Cmd/Ctrl + P).",

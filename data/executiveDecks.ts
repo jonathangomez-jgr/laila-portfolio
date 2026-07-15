@@ -2333,6 +2333,172 @@ export const executiveDecks: ExecutiveDeck[] = [
       },
     ],
   },
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // JAFRA — Deck de contexto · Tendencias de IA en la industria (Bloque 1)
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    slug: "tendencias-ia",
+    customerSlug: "jafra",
+    title: "Tendencias de IA en la industria · JAFRA",
+    subtitle: "Contexto agéntico para el bloque 1 del workshop · Salesforce · JAFRA",
+    duration: "10 min",
+    slides: [
+      // ── 1 · Portada ──────────────────────────────────────────────────
+      {
+        layout: "title",
+        logo: "/sfdc-logos/corporate-logo.png",
+        eyebrow: "Bloque 1 · Introducción",
+        title: "La IA ya\nestá en el mostrador.",
+        subtitle:
+          "Cómo la industria de belleza y venta directa está usando IA hoy — y qué significa para JAFRA.",
+        footnote: "Salesforce México · Workshop JAFRA · Julio 2026",
+        brand: {
+          astro: { variant: "agent-astro-20-l", side: "right", bottom: "-30px", size: 360 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "8%",  size: 48, rotate: 12 },
+            { variant: "blue-inclined",   side: "left",  top: "88%", size: 30, rotate: -10 },
+            { variant: "yellow-inclined", side: "right", top: "4%",  size: 34, rotate: 22 },
+          ],
+        },
+      },
+
+      // ── 2 · Encuadre ─────────────────────────────────────────────────
+      {
+        layout: "section",
+        eyebrow: "Cómo miramos este bloque",
+        title: "Diez minutos para situarnos — no para asombrarnos.",
+        subtitle:
+          "Miramos qué está pasando en belleza, en venta directa y en el ecosistema Salesforce. Sin promesas de moda: solo los movimientos que ya cambian el negocio, para llegar al agente de JAFRA con la misma foto en la cabeza.",
+        brand: {
+          astro: { variant: "astro-7", side: "left", bottom: "-50px", size: 220 },
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "16%", size: 44, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
+          ],
+        },
+      },
+
+      // ── 3 · El momento — métricas globales ────────────────────────────
+      {
+        layout: "metrics",
+        eyebrow: "El momento de la IA · 2026",
+        title: "La IA agéntica dejó de ser una prueba piloto",
+        metrics: [
+          { value: "78%", label: "de las organizaciones usan IA en al menos una función de negocio · McKinsey State of AI 2025" },
+          { value: "$4.4T", label: "en productividad anual estimada de la IA generativa a nivel global · McKinsey Global Institute" },
+          { value: "1 de 3", label: "interacciones con clientes serán mediadas por un agente autónomo hacia 2028 · Gartner 2025" },
+          { value: "10×", label: "más rápido en resolver un caso de servicio con agente que con flujo tradicional · benchmark Salesforce Agentforce" },
+        ],
+      },
+
+      // ── 4 · IA en belleza y consumo · pillars ─────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "IA en belleza y consumo",
+        title: "Tres frentes donde la belleza ya vive con IA",
+        pillars: [
+          {
+            title: "Descubrimiento personalizado",
+            body: "Sephora, Ulta y L'Oréal usan probadores virtuales con visión por computadora y recomendaciones 1:1. La consumidora prueba tonos sin tocar el producto — y compra con más certeza.",
+            accent: "violet",
+          },
+          {
+            title: "Contenido generativo a escala",
+            body: "Estée Lauder y Coty producen textos, imágenes y videos de campaña con IA generativa. Un lanzamiento que antes tomaba semanas se prepara en días, con variantes por mercado.",
+            accent: "sky",
+          },
+          {
+            title: "Agentes de atención 24/7",
+            body: "Las marcas de belleza reemplazan los FAQ estáticos por agentes conversacionales que resuelven pedidos, cambios y consejos de rutina — con la voz de la marca — sin depender de horarios.",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // ── 5 · Antes y después en venta directa ──────────────────────────
+      {
+        layout: "comparison",
+        eyebrow: "IA en venta directa · Consultora + agente",
+        title: "Lo que cambia para la Consultora cuando la IA entra al modelo",
+        before: {
+          heading: "Modelo tradicional",
+          items: [
+            "La Consultora repite el mismo pitch a toda su red — sin datos de qué le funciona a cada clienta.",
+            "Consultas de precio, existencia o promoción llegan por WhatsApp fuera de horario y se pierden.",
+            "El catálogo digital es el mismo para todas — no aprende de patrones de compra.",
+            "El onboarding de una consultora nueva depende de la disposición de su líder y del papel impreso.",
+            "El seguimiento post-venta es manual — se cae en cuanto la Consultora atiende a otra clienta.",
+          ],
+        },
+        after: {
+          heading: "Con IA agéntica en el flujo",
+          items: [
+            "La Consultora recibe recomendaciones por clienta — qué producto, qué combo, qué promo activar.",
+            "El agente responde 24/7 en WhatsApp con la voz de la marca — la Consultora entra solo cuando aporta.",
+            "El catálogo se reordena por clienta según historial, temporada y rutina — sube ticket promedio.",
+            "Onboarding conversacional — la nueva Consultora aprende preguntándole al agente, no leyendo un PDF.",
+            "El agente detecta señales (silencio, cambio de patrón) y le sugiere a la Consultora cuándo tocar puerta.",
+          ],
+        },
+      },
+
+      // ── 6 · Visión Salesforce · pillars ───────────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "Cómo Salesforce compone la empresa agéntica",
+        title: "Datos + Agentes + Confianza — los tres pilares",
+        pillars: [
+          {
+            title: "Data 360",
+            body: "Los datos de la Consultora, la clienta, el pedido y el catálogo viven en una sola foto activa. El agente no adivina — actúa sobre datos reales, en tiempo real.",
+            accent: "sky",
+          },
+          {
+            title: "Agentforce",
+            body: "Del copiloto al colega. Agentes especializados que ejecutan tareas de negocio con reglas claras — no un chatbot más, sino un compañero de trabajo con permisos y responsabilidad.",
+            accent: "violet",
+          },
+          {
+            title: "Trust Layer",
+            body: "Cada respuesta del agente se apoya en fuentes trazables, con guardarraíles de marca y de privacidad. La conversación con la Consultora es segura, auditable y consistente.",
+            accent: "emerald",
+          },
+        ],
+        products: ["Data Cloud", "Agentforce", "Platform"],
+      },
+
+      // ── 7 · Bridge · qué significa para JAFRA ─────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Qué significa para JAFRA hoy",
+        title: "El agente de JAFRA ya está en esta ola — no llegando tarde",
+        bullets: [
+          "Belleza + venta directa + IA agéntica no es una promesa a futuro — es el estándar competitivo del 2026.",
+          "JAFRA ya tiene un agente en producción · el punto de partida no es «si empezamos», es «cómo lo llevamos a su mejor luz».",
+          "El resto de la sesión mira al agente actual con esos ojos — qué protege, qué incrementa, qué se puede acompañar mejor.",
+          "Salesforce entra como aliado estratégico — no como proveedor de plataforma — para acelerar la curva sin romper lo que funciona.",
+        ],
+        highlight: "La conversación de hoy no es sobre tecnología. Es sobre cuánto valor está listo el agente para entregar en los próximos 90 días.",
+      },
+
+      // ── 8 · Puente al bloque 2 ────────────────────────────────────────
+      {
+        layout: "section",
+        eyebrow: "Pasamos al bloque 2 · Conociendo al agente",
+        title: "Ya vimos dónde estamos. Ahora, ¿cómo describimos al agente que ya tenemos?",
+        subtitle:
+          "Cinco personas · cinco miradas · una foto común del agente antes de decidir qué proteger y qué incrementar.",
+        brand: {
+          astro: { variant: "agent-astro-flip-020", side: "right", bottom: "-40px", size: 240 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "18%", size: 44, rotate: -10 },
+            { variant: "blue-main",       side: "right", top: "22%", size: 32, rotate: 6 },
+          ],
+        },
+      },
+    ],
+  },
 ];
 
 export function getExecutiveDeck(
