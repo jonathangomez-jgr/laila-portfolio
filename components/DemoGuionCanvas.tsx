@@ -339,111 +339,95 @@ function SceneView({
         </div>
       </header>
 
-      {/* Chat + validations */}
-      <div className="grid gap-6 px-4 py-6 sm:px-8 sm:py-8 lg:grid-cols-[minmax(0,1fr)_360px]">
-        {/* WhatsApp-styled chat */}
-        <div className="overflow-hidden rounded-3xl bg-[#e5ddd5] shadow-inner">
-          {/* Chat header (WhatsApp-like) */}
-          <div className="flex items-center gap-3 bg-[#075e54] px-4 py-3 text-white">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 text-sm font-bold">
-              🤖
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold">Paradise Pass Concierge</p>
-              <p className="text-[11px] opacity-80">en línea</p>
-            </div>
-            <div className="flex gap-3 text-white/70">
-              <span>📞</span>
-              <span>⋮</span>
-            </div>
+      {/* Turn-by-turn thread */}
+      <div className="space-y-6 px-4 py-6 sm:px-8 sm:py-8">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+          Guion turno por turno
+        </p>
+        <ol className="space-y-5">
+          {scene.turns.map((turn) => (
+            <li key={turn.turn}>
+              <TurnCard turn={turn} />
+            </li>
+          ))}
+        </ol>
+
+        {/* Scene closing — outcome + consolidated checklist */}
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-5">
+            <p className="mb-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+              <svg
+                className="h-3.5 w-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Resultado esperado de la escena
+            </p>
+            <p className="text-sm leading-6 text-emerald-900">
+              {scene.outcome}
+            </p>
           </div>
 
-          {/* Messages */}
-          <div className="space-y-3 bg-[#e5ddd5] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.35)_1px,transparent_1px)] bg-[length:16px_16px] px-3 py-4 sm:px-5">
-            {scene.turns.map((turn) => (
-              <ChatBubble key={turn.turn} turn={turn} />
-            ))}
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-wider text-gray-500">
+              Checklist consolidado por Job Story
+            </p>
+            <ul className="space-y-4">
+              {scene.jsChecklist.map((js) => (
+                <li
+                  key={js.jobStoryId}
+                  className="border-l-2 border-emerald-500 pl-3"
+                >
+                  <div className="mb-1.5 flex items-center gap-1.5">
+                    <span className="rounded bg-gray-900 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
+                      {js.jobStoryId}
+                    </span>
+                    <span className="text-xs font-semibold text-gray-800">
+                      {js.name}
+                    </span>
+                  </div>
+                  <ul className="space-y-1">
+                    {js.validated.map((v) => (
+                      <li
+                        key={v}
+                        className="flex items-start gap-1.5 text-[12px] leading-5 text-gray-600"
+                      >
+                        <svg
+                          className="mt-0.5 h-3 w-3 shrink-0 text-emerald-500"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={3}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                        <span>{v}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {js.residualRisk && (
+                    <p className="mt-2 rounded bg-amber-50 px-2 py-1.5 text-[11px] leading-4 text-amber-800 ring-1 ring-amber-200">
+                      <span className="font-semibold">⚠ Riesgo residual:</span>{" "}
+                      {js.residualRisk}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-
-        {/* Validation sidebar */}
-        <aside className="space-y-4">
-          <div className="sticky top-6 space-y-4">
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-4">
-              <p className="mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
-                <svg
-                  className="h-3.5 w-3.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                Resultado esperado
-              </p>
-              <p className="text-sm leading-6 text-emerald-900">
-                {scene.outcome}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-gray-200 bg-white p-4">
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                Checklist de validación por Job Story
-              </p>
-              <ul className="space-y-4">
-                {scene.jsChecklist.map((js) => (
-                  <li
-                    key={js.jobStoryId}
-                    className="border-l-2 border-emerald-500 pl-3"
-                  >
-                    <div className="mb-1.5 flex items-center gap-1.5">
-                      <span className="rounded bg-gray-900 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
-                        {js.jobStoryId}
-                      </span>
-                      <span className="text-xs font-semibold text-gray-800">
-                        {js.name}
-                      </span>
-                    </div>
-                    <ul className="space-y-1">
-                      {js.validated.map((v) => (
-                        <li
-                          key={v}
-                          className="flex items-start gap-1.5 text-[12px] leading-5 text-gray-600"
-                        >
-                          <svg
-                            className="mt-0.5 h-3 w-3 shrink-0 text-emerald-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={3}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                          <span>{v}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    {js.residualRisk && (
-                      <p className="mt-2 rounded bg-amber-50 px-2 py-1.5 text-[11px] leading-4 text-amber-800 ring-1 ring-amber-200">
-                        <span className="font-semibold">⚠ Riesgo residual:</span>{" "}
-                        {js.residualRisk}
-                      </p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </aside>
       </div>
 
       {/* Scene footer navigation */}
@@ -522,130 +506,174 @@ function SceneView({
   );
 }
 
-function ChatBubble({ turn }: { turn: DemoGuionTurn }) {
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleCopy(e: React.MouseEvent) {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard unavailable — silent fail
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      aria-label={copied ? "Copiado" : "Copiar mensaje al portapapeles"}
+      title={copied ? "Copiado" : "Copiar"}
+      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-gray-400 transition hover:bg-white hover:text-gray-700 ${
+        copied ? "text-emerald-600 hover:text-emerald-600" : ""
+      }`}
+    >
+      {copied ? (
+        <svg
+          className="h-3.5 w-3.5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2.5}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M5 13l4 4L19 7"
+          />
+        </svg>
+      ) : (
+        <svg
+          className="h-3.5 w-3.5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m-7 7l3-3m0 0l-3-3m3 3H9"
+          />
+        </svg>
+      )}
+    </button>
+  );
+}
+
+function TurnCard({ turn }: { turn: DemoGuionTurn }) {
   if (turn.role === "note") {
     return (
-      <div className="mx-auto max-w-md rounded-lg bg-amber-100/80 px-3 py-2 text-center text-[11px] italic leading-5 text-amber-900 ring-1 ring-amber-200">
+      <div className="mx-auto max-w-2xl rounded-lg bg-amber-50 px-4 py-2.5 text-center text-[12px] italic leading-5 text-amber-900 ring-1 ring-amber-200">
         {turn.text}
+      </div>
+    );
+  }
+
+  const hasMetadata =
+    (turn.jobStoryIds && turn.jobStoryIds.length > 0) ||
+    turn.dataLookup ||
+    turn.knowledgeRef ||
+    turn.handoff ||
+    (turn.validations && turn.validations.length > 0) ||
+    turn.attachment;
+
+  if (turn.role === "user") {
+    return (
+      <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+        {/* Message box */}
+        <div className="flex items-start gap-3 border-b border-gray-100 bg-emerald-50/40 px-4 py-3 sm:px-5">
+          <span className="flex h-7 shrink-0 items-center rounded-md bg-emerald-600 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
+            {turn.turn.toString().padStart(2, "0")} · Socia
+          </span>
+          <div className="min-w-0 flex-1">
+            <pre className="whitespace-pre-wrap break-words font-sans text-[14px] leading-6 text-gray-900">
+              {turn.text}
+            </pre>
+            {turn.timestamp && (
+              <p className="mt-1 text-[10px] text-gray-500">{turn.timestamp}</p>
+            )}
+          </div>
+          <CopyButton text={turn.text} />
+        </div>
+
+        {hasMetadata && <TurnAnnotations turn={turn} />}
       </div>
     );
   }
 
   if (turn.role === "system") {
     return (
-      <div className="my-2 rounded-xl border border-orange-200 bg-orange-50 px-3 py-2.5 text-[12px] leading-5 text-orange-900">
-        <p className="mb-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-orange-700">
-          <svg
-            className="h-3 w-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2.5}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M13 5l7 7-7 7M5 12h15"
-            />
-          </svg>
-          Sistema · handoff
-        </p>
-        <pre className="whitespace-pre-wrap break-words font-sans text-[12px] leading-5">
-          {turn.text}
-        </pre>
-        <TurnMetadata turn={turn} />
+      <div className="rounded-2xl border border-orange-200 bg-white shadow-sm">
+        <div className="flex items-start gap-3 border-b border-orange-100 bg-orange-50/60 px-4 py-3 sm:px-5">
+          <span className="flex h-7 shrink-0 items-center rounded-md bg-orange-600 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
+            {turn.turn.toString().padStart(2, "0")} · Sistema
+          </span>
+          <div className="min-w-0 flex-1">
+            <pre className="whitespace-pre-wrap break-words font-sans text-[13px] leading-5 text-orange-900">
+              {turn.text}
+            </pre>
+            {turn.timestamp && (
+              <p className="mt-1 text-[10px] text-orange-700/70">
+                {turn.timestamp}
+              </p>
+            )}
+          </div>
+        </div>
+        {hasMetadata && <TurnAnnotations turn={turn} />}
       </div>
     );
   }
 
-  const isUser = turn.role === "user";
-  const showText = isUser;
-
+  // agent — no text shown, only annotations
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
-      <div
-        className={`relative max-w-[85%] rounded-2xl px-3.5 py-2 shadow-sm sm:max-w-[75%] ${
-          isUser
-            ? "rounded-br-sm bg-[#dcf8c6] text-gray-900"
-            : "rounded-bl-sm bg-white text-gray-900"
-        }`}
-      >
-        {showText ? (
-          <pre className="whitespace-pre-wrap break-words font-sans text-[13.5px] leading-[1.45]">
-            {turn.text}
-          </pre>
-        ) : (
-          <p className="flex items-center gap-1.5 text-[12px] italic leading-5 text-gray-400">
-            <svg
-              className="h-3 w-3 shrink-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-              />
-            </svg>
-            Respuesta del agente (en vivo)
-          </p>
-        )}
-
-        {turn.attachment && showText && (
-          <div
-            className={`mt-2 flex items-center gap-2 rounded-lg px-2.5 py-2 ring-1 ${
-              isUser
-                ? "bg-white/60 ring-emerald-200"
-                : "bg-gray-50 ring-gray-200"
-            }`}
+    <div className="rounded-2xl border border-indigo-200 bg-white shadow-sm">
+      <div className="flex items-center gap-3 border-b border-indigo-100 bg-indigo-50/40 px-4 py-3 sm:px-5">
+        <span className="flex h-7 shrink-0 items-center rounded-md bg-indigo-600 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
+          {turn.turn.toString().padStart(2, "0")} · Concierge
+        </span>
+        <p className="flex items-center gap-1.5 text-[12px] italic leading-5 text-gray-500">
+          <svg
+            className="h-3.5 w-3.5 shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
           >
-            <span className="text-lg">
-              {turn.attachment.type === "form"
-                ? "📄"
-                : turn.attachment.type === "pdf"
-                  ? "📕"
-                  : turn.attachment.type === "image"
-                    ? "🖼"
-                    : "🔗"}
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-semibold text-gray-800">
-                {turn.attachment.filename ?? turn.attachment.label}
-              </p>
-              <p className="text-[10px] text-gray-500">
-                {turn.attachment.label}
-              </p>
-            </div>
-          </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+            />
+          </svg>
+          Respuesta del agente en vivo — lo que sigue es lo que debe cumplir
+        </p>
+        {turn.timestamp && (
+          <span className="ml-auto text-[10px] text-gray-500">
+            {turn.timestamp}
+          </span>
         )}
-
-        <div className="mt-1 flex items-center justify-end gap-1">
-          {turn.timestamp && (
-            <span className="text-[10px] text-gray-500">{turn.timestamp}</span>
-          )}
-          {isUser && <span className="text-[10px] text-blue-500">✓✓</span>}
-        </div>
-
-        <TurnMetadata turn={turn} />
       </div>
+      {hasMetadata && <TurnAnnotations turn={turn} />}
     </div>
   );
 }
 
-function TurnMetadata({ turn }: { turn: DemoGuionTurn }) {
-  const hasPills =
-    turn.dataLookup || turn.knowledgeRef || turn.handoff || turn.jobStoryIds;
+function TurnAnnotations({ turn }: { turn: DemoGuionTurn }) {
+  const hasJs = turn.jobStoryIds && turn.jobStoryIds.length > 0;
+  const hasPills = turn.dataLookup || turn.knowledgeRef || turn.handoff;
   const hasValidations = turn.validations && turn.validations.length > 0;
 
-  if (!hasPills && !hasValidations) return null;
-
   return (
-    <div className="mt-2 space-y-2 border-t border-black/10 pt-2">
-      {turn.jobStoryIds && turn.jobStoryIds.length > 0 && (
-        <div className="flex flex-wrap gap-1">
-          {turn.jobStoryIds.map((js) => (
+    <div className="space-y-3 px-4 py-3.5 sm:px-5">
+      {hasJs && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+            Valida
+          </span>
+          {turn.jobStoryIds!.map((js) => (
             <span
               key={js}
               className="rounded bg-gray-900 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white"
@@ -657,34 +685,54 @@ function TurnMetadata({ turn }: { turn: DemoGuionTurn }) {
       )}
 
       {hasPills && (
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-1.5">
           {turn.dataLookup && (
-            <span className="inline-flex items-center gap-1 rounded bg-white/80 px-1.5 py-0.5 text-[10px] font-mono font-semibold text-gray-700 ring-1 ring-gray-300">
+            <span className="inline-flex items-center gap-1 rounded bg-gray-50 px-2 py-1 text-[11px] font-mono font-semibold text-gray-700 ring-1 ring-gray-200">
               🗂 {turn.dataLookup}
             </span>
           )}
           {turn.knowledgeRef && (
-            <span className="inline-flex items-center gap-1 rounded bg-white/80 px-1.5 py-0.5 text-[10px] font-mono font-semibold text-indigo-700 ring-1 ring-indigo-200">
+            <span className="inline-flex items-center gap-1 rounded bg-indigo-50 px-2 py-1 text-[11px] font-mono font-semibold text-indigo-700 ring-1 ring-indigo-200">
               📚 {turn.knowledgeRef}
             </span>
           )}
           {turn.handoff && (
-            <span className="inline-flex items-center gap-1 rounded bg-white/80 px-1.5 py-0.5 text-[10px] font-mono font-semibold text-orange-700 ring-1 ring-orange-200">
+            <span className="inline-flex items-center gap-1 rounded bg-orange-50 px-2 py-1 text-[11px] font-mono font-semibold text-orange-700 ring-1 ring-orange-200">
               👤 {turn.handoff}
             </span>
           )}
         </div>
       )}
 
+      {turn.attachment && (
+        <div className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2 ring-1 ring-gray-200">
+          <span className="text-lg">
+            {turn.attachment.type === "form"
+              ? "📄"
+              : turn.attachment.type === "pdf"
+                ? "📕"
+                : turn.attachment.type === "image"
+                  ? "🖼"
+                  : "🔗"}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs font-semibold text-gray-800">
+              {turn.attachment.filename ?? turn.attachment.label}
+            </p>
+            <p className="text-[10px] text-gray-500">{turn.attachment.label}</p>
+          </div>
+        </div>
+      )}
+
       {hasValidations && (
-        <ul className="space-y-1">
+        <ul className="space-y-1 border-t border-gray-100 pt-3">
           {turn.validations!.map((v) => (
             <li
               key={v}
-              className="flex items-start gap-1.5 text-[11px] leading-4 text-gray-600"
+              className="flex items-start gap-1.5 text-[12px] leading-5 text-gray-700"
             >
               <svg
-                className="mt-0.5 h-2.5 w-2.5 shrink-0 text-emerald-500"
+                className="mt-0.5 h-3 w-3 shrink-0 text-emerald-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -704,3 +752,4 @@ function TurnMetadata({ turn }: { turn: DemoGuionTurn }) {
     </div>
   );
 }
+
