@@ -829,6 +829,12 @@ export type QuestionBankData = {
   intro?: string;
   note?: string;
   items: QuestionBankItem[];
+  whatsappQr?: {
+    src: string;
+    href: string;
+    label: string;
+    caption?: string;
+  };
 };
 
 export type CustomerDemoTab = {

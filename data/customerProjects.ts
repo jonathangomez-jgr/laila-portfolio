@@ -4781,6 +4781,13 @@ export const customerProjects: CustomerProject[] = [
 
             { category: "Documentos legales", question: "Requiero RUT y Cámara de Comercio para crear como proveedor." },
           ],
+          whatsappQr: {
+            src: "/Customers/Corona/corona-whatsapp-qr.png",
+            href: "http://wa.me/5511917111888",
+            label: "Conversa con el agente por WhatsApp",
+            caption:
+              "Escanea el código o toca \"Abrir en WhatsApp\" para probar cada pregunta con el agente en tiempo real.",
+          },
         },
       },
       {

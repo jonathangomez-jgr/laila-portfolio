@@ -111,6 +111,55 @@ export default function QuestionBankCanvas({ data }: QuestionBankCanvasProps) {
           </div>
         ))}
       </div>
+
+      {data.whatsappQr && (
+        <div className="mt-12 flex flex-col items-center gap-5 rounded-3xl border border-emerald-200 bg-emerald-50/60 p-6 sm:flex-row sm:items-center sm:gap-6 sm:p-8">
+          <a
+            href={data.whatsappQr.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 rounded-2xl border border-emerald-200 bg-white p-3 shadow-sm transition hover:shadow-md"
+            aria-label={`Abrir WhatsApp — ${data.whatsappQr.label}`}
+          >
+            <img
+              src={data.whatsappQr.src}
+              alt={data.whatsappQr.label}
+              width={180}
+              height={180}
+              className="block h-40 w-40 sm:h-44 sm:w-44"
+            />
+          </a>
+          <div className="text-center sm:text-left">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+              Prueba el agente
+            </p>
+            <p className="mt-2 text-lg font-semibold text-gray-950">
+              {data.whatsappQr.label}
+            </p>
+            {data.whatsappQr.caption && (
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                {data.whatsappQr.caption}
+              </p>
+            )}
+            <a
+              href={data.whatsappQr.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+            >
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden
+              >
+                <path d="M20.5 3.5A11.9 11.9 0 0 0 12 0C5.4 0 .1 5.4.1 12c0 2.1.5 4.2 1.6 6L0 24l6.2-1.6c1.7.9 3.7 1.4 5.7 1.4h.1c6.6 0 11.9-5.4 11.9-12 0-3.2-1.2-6.2-3.4-8.3zM12 22c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.9 9.9 0 1 1 22 12c0 5.5-4.5 10-10 10zm5.5-7.5c-.3-.2-1.8-.9-2-1s-.5-.2-.7.2c-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.2.3-.4.5-.6.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6 0-.2-.7-1.7-.9-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1.1 1.1-1.1 2.6 0 1.6 1.1 3 1.3 3.3.2.2 2.2 3.4 5.3 4.7.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.7-.4z" />
+              </svg>
+              Abrir en WhatsApp
+            </a>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
