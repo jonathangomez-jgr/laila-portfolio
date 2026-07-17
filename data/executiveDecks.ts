@@ -2532,11 +2532,11 @@ export const executiveDecks: ExecutiveDeck[] = [
         footnote: "Presentación ejecutiva · Confidencial · Julio 2026",
       },
 
-      // ── 2 · Lo que le preocupa hoy a la Dirección ─────────────────────
+      // ── 2 · Punto de partida ──────────────────────────────────────────
       {
         layout: "bullets",
         eyebrow: "Punto de partida",
-        title: "Lo que hoy le quita el sueño a la Dirección del Centro de Experiencia",
+        title: "Lo que hoy le quita el sueño al Centro de Experiencia",
         bullets: [
           "El cliente escribe por WhatsApp fuera de horario y siente que Corona lo dejó esperando",
           "Cada asesor repite las mismas respuestas de horarios, canales y garantías decenas de veces al día",
@@ -2551,7 +2551,7 @@ export const executiveDecks: ExecutiveDeck[] = [
       // ── 3 · La promesa ────────────────────────────────────────────────
       {
         layout: "section",
-        eyebrow: "La promesa a la Dirección",
+        eyebrow: "La promesa",
         title: "Un asistente que atiende bien lo simple, y le pasa al equipo solo lo que sí requiere un humano",
         subtitle:
           "Estable, predecible y con una sola fuente de verdad: la misma base de conocimiento del Centro de Experiencia.",
@@ -2653,7 +2653,7 @@ export const executiveDecks: ExecutiveDeck[] = [
       {
         layout: "kpi-table",
         eyebrow: "Cómo mediremos el éxito",
-        title: "Indicadores que le van a interesar a la Dirección",
+        title: "Indicadores clave para seguir el desempeño del asistente",
         rows: [
           {
             label: "Satisfacción del cliente (CSAT WhatsApp)",
