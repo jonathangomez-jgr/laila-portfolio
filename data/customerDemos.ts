@@ -820,6 +820,17 @@ export type ValorWorkshopPlanData = {
   guidingPrinciples: string[];
 };
 
+export type QuestionBankItem = {
+  question: string;
+  category?: string;
+};
+
+export type QuestionBankData = {
+  intro?: string;
+  note?: string;
+  items: QuestionBankItem[];
+};
+
 export type CustomerDemoTab = {
   id: string;
   label: string;
@@ -856,6 +867,7 @@ export type CustomerDemoTab = {
   testScriptsData?: TestScriptsData;
   demoGuionData?: DemoGuionData;
   valorWorkshopPlanData?: ValorWorkshopPlanData;
+  questionBankData?: QuestionBankData;
 };
 
 export type CustomerDemoI18n = {

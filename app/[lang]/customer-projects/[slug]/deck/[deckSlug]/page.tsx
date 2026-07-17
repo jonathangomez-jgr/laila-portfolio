@@ -1,0 +1,89 @@
+import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { hasLocale, getDictionary } from "@/lib/i18n";
+import DemoAccessGate from "@/components/DemoAccessGate";
+import ExecutiveDeckPlayer from "@/components/executive-deck/ExecutiveDeckPlayer";
+import { customerProjects } from "@/data/customerProjects";
+import { getExecutiveDeck } from "@/data/executiveDecks";
+import { verifyProjectPasscode } from "../../actions";
+
+type ExecutiveDeckPageProps = {
+  params: Promise<{
+    lang: string;
+    slug: string;
+    deckSlug: string;
+  }>;
+};
+
+export default async function ExecutiveDeckPage({
+  params,
+}: ExecutiveDeckPageProps) {
+  const { lang, slug, deckSlug } = await params;
+
+  if (!hasLocale(lang)) notFound();
+
+  const dict = await getDictionary(lang);
+  const t = dict.customerDetail;
+
+  const project = customerProjects.find((item) => item.slug === slug);
+  const deck = getExecutiveDeck(slug, deckSlug);
+
+  if (!project) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-950 px-6 text-white">
+        <div className="max-w-md text-center">
+          <h1 className="text-2xl font-semibold">{t.demoNotFound}</h1>
+          <Link
+            href={`/${lang}/customer-projects`}
+            className="mt-6 inline-block text-indigo-400"
+          >
+            {t.backToCustomerDemos}
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  if (!deck) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-950 px-6 text-white">
+        <div className="max-w-md text-center">
+          <h1 className="text-2xl font-semibold">{t.deckNotFound}</h1>
+          <p className="mt-3 text-slate-400">{t.deckNotFoundDesc}</p>
+          <Link
+            href={`/${lang}/customer-projects/${slug}`}
+            className="mt-6 inline-block text-indigo-400"
+          >
+            {t.backTo} {project.customerName}
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  const cookieStore = await cookies();
+  const hasAccess =
+    cookieStore.get(`project-access-${slug}`)?.value === "granted";
+
+  if (!hasAccess) {
+    return (
+      <DemoAccessGate
+        slug={slug}
+        customerName={project.customerName}
+        logo={project.logo}
+        dict={dict}
+        verifyAction={verifyProjectPasscode}
+      />
+    );
+  }
+
+  return (
+    <ExecutiveDeckPlayer
+      deck={deck}
+      customerName={project.customerName}
+      logo={project.logo}
+      backHref={`/${lang}/customer-projects/${slug}`}
+    />
+  );
+}

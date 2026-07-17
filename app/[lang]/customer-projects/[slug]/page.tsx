@@ -60,7 +60,7 @@ export default async function CustomerProjectPage({
 
   return (
     <>
-      <CustomerDemoDetail demo={project} lang={lang} dict={dict} />
+      <CustomerDemoDetail demo={project} lang={lang} dict={dict} basePath="customer-projects" />
       {project.embeddedMessaging && (
         <EmbeddedMessaging config={project.embeddedMessaging} />
       )}

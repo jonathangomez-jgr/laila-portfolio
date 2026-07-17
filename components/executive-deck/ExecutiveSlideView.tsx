@@ -240,6 +240,25 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
           {slide.subtitle && (
             <p className="deck-hero-subtitle mt-6 max-w-3xl">{slide.subtitle}</p>
           )}
+          {slide.qrSrc && (
+            <div className="mt-12 flex flex-col items-center gap-3">
+              <div className="rounded-2xl bg-white p-5 shadow-2xl">
+                <img
+                  src={slide.qrSrc}
+                  alt={slide.qrLabel ?? "QR"}
+                  width={220}
+                  height={220}
+                  className="block"
+                />
+              </div>
+              {slide.qrLabel && (
+                <p className="text-base font-semibold text-white/90">{slide.qrLabel}</p>
+              )}
+              {slide.qrCaption && (
+                <p className="text-sm text-white/60">{slide.qrCaption}</p>
+              )}
+            </div>
+          )}
         </div>
       );
 

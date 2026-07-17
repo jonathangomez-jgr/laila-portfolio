@@ -136,6 +136,9 @@ export type ExecutiveSlide =
       eyebrow?: string;
       title: string;
       subtitle?: string;
+      qrSrc?: string;
+      qrLabel?: string;
+      qrCaption?: string;
     } & SlideBrand)
   | ({
       layout: "agenda-block";
@@ -2514,236 +2517,226 @@ export const executiveDecks: ExecutiveDeck[] = [
   {
     slug: "executive",
     customerSlug: "corona",
-    title: "Deck Ejecutivo — Corona Service Agent",
+    title: "Deck Ejecutivo — Centro de Experiencia B2B",
     subtitle:
-      "Agentforce sobre WhatsApp para atención al cliente — de canal manual a agente conversacional 24/7",
-    duration: "12 min",
+      "Atención al cliente por WhatsApp, 24/7 — sin sacrificar calidad, control ni tranquilidad operativa",
+    duration: "10 min",
     slides: [
       // ── 1 · Portada ────────────────────────────────────────────────────
       {
         layout: "title",
         eyebrow: "Corona · Centro de Experiencia B2B",
-        title: "Corona Service Agent\nAgentforce sobre WhatsApp",
+        title: "Un asistente virtual que atiende\nsin que tú pierdas el control",
         subtitle:
-          "Identifica al cliente, resuelve dudas con la base de conocimiento y arma casos en Salesforce — sin intervención humana en la primera línea",
-        footnote: "Sesión ejecutiva · Confidencial · Julio 2026",
-        showQr: true,
+          "Nuestros distribuidores hablan por WhatsApp, un asistente les responde de inmediato con la información del Centro de Experiencia, y solo llega al equipo lo que realmente necesita a una persona.",
+        footnote: "Presentación ejecutiva · Confidencial · Julio 2026",
       },
 
-      // ── 2 · Contexto ───────────────────────────────────────────────────
+      // ── 2 · Lo que le preocupa hoy a la Dirección ─────────────────────
       {
-        layout: "metrics",
-        eyebrow: "Ficha del agente",
-        title: "Qué hay hoy publicado en el sandbox",
-        metrics: [
-          { value: "1", label: "Agente activo — COR_afServiceAgent v3" },
-          { value: "6", label: "Acciones invocables (GenAiFunctions)" },
-          { value: "4", label: "Prompt Templates con KB grounding" },
-          { value: "1", label: "Configuración WhatsApp (WA-CONFIG-0000)" },
+        layout: "bullets",
+        eyebrow: "Punto de partida",
+        title: "Lo que hoy le quita el sueño a la Dirección del Centro de Experiencia",
+        bullets: [
+          "El cliente escribe por WhatsApp fuera de horario y siente que Corona lo dejó esperando",
+          "Cada asesor repite las mismas respuestas de horarios, canales y garantías decenas de veces al día",
+          "Los casos llegan al equipo sin datos completos y toca reprocesarlos antes de resolver",
+          "No hay trazabilidad clara de qué le respondió Corona a cada distribuidor",
+          "Si el volumen sube, la única palanca es contratar más asesores",
         ],
+        highlight:
+          "El reto no es tecnológico — es servir mejor, más rápido y con menos fricción, sin perder el control de la experiencia.",
       },
 
-      // ── 3 · Antes vs. Después ─────────────────────────────────────────
+      // ── 3 · La promesa ────────────────────────────────────────────────
+      {
+        layout: "section",
+        eyebrow: "La promesa a la Dirección",
+        title: "Un asistente que atiende bien lo simple, y le pasa al equipo solo lo que sí requiere un humano",
+        subtitle:
+          "Estable, predecible y con una sola fuente de verdad: la misma base de conocimiento del Centro de Experiencia.",
+      },
+
+      // ── 4 · Qué recibe el cliente ──────────────────────────────────────
       {
         layout: "comparison",
-        eyebrow: "El problema que resuelve",
-        title: "Atención al cliente B2B — antes vs. con el agente",
+        eyebrow: "Experiencia del cliente",
+        title: "Lo que cambia para el distribuidor cuando escribe por WhatsApp",
         before: {
-          heading: "Sin agente",
+          heading: "Hoy",
           items: [
-            "Cliente escribe fuera de horario (L–V 7am–6pm) y espera hasta el próximo día hábil",
-            "Distribuidor pierde tiempo en identificarse por teléfono cada vez que llama",
-            "Consultas repetidas de horarios, canales y estibas ocupan asesores humanos",
-            "Cada Case se arma manualmente — datos incompletos y re-trabajo del asesor",
-            "Sin trazabilidad conversacional en Salesforce (chat en WhatsApp queda huérfano)",
+            "Escribe y no sabe si alguien lo va a leer",
+            "Si es fuera de horario, espera hasta el siguiente día hábil",
+            "Cuando lo atienden, tiene que volver a explicarse y a identificarse",
+            "Consultas simples (horarios, canales, garantías) toman minutos",
+            "Percibe una atención inconsistente según qué asesor le tocó",
           ],
         },
         after: {
-          heading: "Con Corona Service Agent",
+          heading: "Con el asistente",
           items: [
-            "Atención 24/7 en WhatsApp — el agente responde inmediatamente",
-            "Identificación por correo + código SAP con consentimiento de datos personales",
-            "FAQs (horarios, canales, garantías, Uno a Uno) respondidas con KB grounding",
-            "Case creado automáticamente con Contact, Account, tipo y descripción prellenados",
-            "Cada mensaje queda en WhatsApp_Conversation__c + WhatsApp_Message__c — auditable",
+            "Recibe respuesta inmediata — el asistente saluda y lo identifica",
+            "Es atendido 24/7 — sábados, domingos y festivos sin excepción",
+            "Su información se conserva; no lo obligamos a repetir todo cada vez",
+            "Preguntas frecuentes se resuelven en segundos, con datos oficiales",
+            "Todos los clientes escuchan la misma respuesta correcta y actualizada",
           ],
         },
       },
 
-      // ── 4 · Tres palancas ──────────────────────────────────────────────
+      // ── 5 · Qué gana el equipo ────────────────────────────────────────
       {
         layout: "pillars",
-        eyebrow: "Tres palancas de valor",
-        title: "Por qué WhatsApp + Agentforce cambian el juego",
+        eyebrow: "Impacto interno",
+        title: "Qué gana el equipo del Centro de Experiencia",
         pillars: [
           {
-            title: "Escalabilidad 24/7",
-            body: "El agente atiende conversaciones en paralelo sin ampliar el equipo humano — la ventana de servicio pasa de horario laboral a permanente.",
+            title: "Foco en lo que sí requiere una persona",
+            body: "Los asesores dejan de repetir las mismas 8 preguntas y se concentran en los casos que sí requieren juicio humano: garantías complejas, escalamientos, retención.",
             accent: "indigo",
           },
           {
-            title: "Cases con datos correctos",
-            body: "El agente identifica al Contact, resuelve el Account, elige el tipo de caso del catálogo y genera Subject y Description antes de escalar — el asesor humano recibe el caso listo.",
+            title: "Casos que llegan listos",
+            body: "Cuando el asistente escala, el caso ya viene con el cliente identificado, la cuenta asociada, el tipo tipificado y una descripción del problema. Cero re-captura.",
             accent: "violet",
           },
           {
-            title: "Knowledge como fuente única",
-            body: "Consultas informativas se responden desde Salesforce Knowledge con grounding — la base de conocimiento del Centro de Experiencia B2B es la misma para el agente y para los asesores.",
+            title: "Capacidad que escala con el volumen",
+            body: "Si mañana entran el triple de mensajes por WhatsApp, el equipo humano no se satura — el asistente absorbe el pico y solo pasa lo relevante.",
             accent: "sky",
           },
         ],
       },
 
-      // ── 5 · Arquitectura de alto nivel ────────────────────────────────
-      {
-        layout: "split",
-        eyebrow: "Cómo funciona técnicamente",
-        title: "De WhatsApp al agente — puente Apex + Platform Events",
-        left: {
-          heading: "Recepción del mensaje",
-          items: [
-            "Meta Cloud API → REST Apex /whatsapp/webhook/{configId}",
-            "Validación HMAC opcional + parsing del payload",
-            "Publicación de Platform Event WhatsApp_Inbound_Event__e",
-            "Trigger + Handler crean WhatsApp_Conversation__c y WhatsApp_Message__c",
-          ],
-        },
-        right: {
-          heading: "Invocación del agente",
-          items: [
-            "Queueable con Database.AllowsCallouts para llamar Agent Runtime API",
-            "OAuth Client Credentials → token de Bearer",
-            "POST /einstein/ai-agent/v1/agents/{agentId}/sessions → sessionId",
-            "POST /einstein/ai-agent/v1/sessions/{sessionId}/messages → respuesta",
-          ],
-        },
-      },
-
-      // ── 6 · Acciones del agente ───────────────────────────────────────
+      // ── 6 · Cómo protegemos la calidad ────────────────────────────────
       {
         layout: "bullets",
-        eyebrow: "Qué sabe hacer hoy",
-        title: "Seis acciones invocables + cuatro plantillas de conocimiento",
+        eyebrow: "Estabilidad y control",
+        title: "Cómo garantizamos que sea confiable — no una caja negra",
         bullets: [
-          "COR_afIdentifyTheContactByEmailv2 — identifica al Contact por correo + código SAP + consentimiento de datos personales",
-          "COR_afgetRelatedAccountv2 — resuelve la Account asociada al Contact para amarrar el Case",
-          "COR_afGetCatalogOfCaseTypes — presenta el catálogo COR_afCaseType__c disponible en Salesforce",
-          "COR_afCreateCase — crea el Case con Contact, Account, tipo, subject generado y descripción libre",
-          "COR_afCreateContact — alta de contacto nuevo (firstName, lastName, email, phone) si no está registrado",
-          "COR_afAnswerQuestionsWithKnowledge_orAgentforce — responde consultas con grounding de Salesforce Knowledge",
-        ],
-        highlight:
-          "El planner v3 usa Atlas ConcurrentMultiAgentOrchestration — puede combinar acciones y respuestas KB en un mismo turno.",
-      },
-
-      // ── 7 · Rutas conversacionales ────────────────────────────────────
-      {
-        layout: "pillars",
-        eyebrow: "Cuatro rutas cubiertas por el planner v3",
-        title: "Qué le puede pedir un cliente hoy al agente",
-        pillars: [
-          {
-            title: "Identificación + Case",
-            body: "El cliente reporta un problema, el agente identifica, resuelve la cuenta, elige tipo de caso del catálogo, genera Subject y crea el Case con CaseNumber.",
-            accent: "indigo",
-          },
-          {
-            title: "Alta de contacto",
-            body: "Si no está registrado, el agente captura nombre, apellido, correo y teléfono, obtiene consentimiento y crea el Contact antes de continuar.",
-            accent: "violet",
-          },
-          {
-            title: "Consulta con Knowledge",
-            body: "Horarios, canales, garantías, Uno a Uno, estibas, RUT/Cámara de Comercio — respondidas con grounding y sin crear Case.",
-            accent: "sky",
-          },
-          {
-            title: "Escalamiento a humano",
-            body: "Cuando el cliente lo pide o el agente detecta un caso emocional/complejo, cede la conversación con contexto — la sesión WhatsApp continúa, no se recrea.",
-            accent: "emerald",
-          },
+          "El asistente responde SOLO con información de la base de conocimiento oficial del Centro de Experiencia. Nada inventado.",
+          "Antes de dar horarios pregunta el canal — porque cada canal (Almacenes, Puntos de venta, Distribuidores, Persona natural) tiene un horario distinto y nunca se puede equivocar.",
+          "Cada conversación queda registrada en Salesforce — auditable, exportable y visible para el equipo.",
+          "Cuando detecta un caso emocional o complejo, cede la conversación al asesor humano con todo el contexto.",
+          "La base de conocimiento se actualiza en un solo lugar: cambias el contenido en Corona y el asistente lo refleja al día siguiente.",
         ],
       },
 
-      // ── 8 · Regla operativa clave — horarios ──────────────────────────
+      // ── 7 · Regla no negociable ───────────────────────────────────────
       {
         layout: "quote",
         quote:
-          "Ante la pregunta abierta \"¿cuál es su horario de atención?\" el agente NO debe entregar horarios. Debe primero preguntar de qué canal — Almacenes Corona, Puntos de venta, Línea para distribuidores o Línea para persona natural.",
+          "El asistente nunca da un horario sin antes preguntar de qué canal — porque un horario equivocado es peor que un turno adicional para aclarar.",
         author: "Regla operativa del Centro de Experiencia B2B",
         context:
-          "Cada canal tiene un horario distinto — dar el equivocado es peor que pedir una aclaración de un turno.",
+          "Reglas como esta se configuran una vez y aplican a todas las conversaciones — control total sin depender de la memoria del asesor.",
       },
 
-      // ── 9 · KPIs propuestos ───────────────────────────────────────────
+      // ── 8 · Qué resuelve hoy ──────────────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Alcance del piloto",
+        title: "Qué preguntas ya responde correctamente el asistente",
+        bullets: [
+          "Horarios de atención por canal (Almacenes Corona, Puntos de venta, Distribuidores, Persona natural)",
+          "Canales disponibles para montar un caso siendo B2B (WhatsApp, correo, Uno a Uno)",
+          "Cómo solicitar un servicio técnico o una garantía, y qué documentos tener a la mano",
+          "Cómo montar un pedido, recuperar contraseña o escalar una novedad en Uno a Uno",
+          "Medidas de estibas por línea de producto",
+          "Descarga de RUT y Cámara de Comercio desde Uno a Uno",
+        ],
+        highlight:
+          "Cada respuesta viene con la redacción oficial aprobada por el Centro de Experiencia — misma calidad que atendería el mejor asesor.",
+      },
+
+      // ── 9 · Cómo mediremos el éxito ───────────────────────────────────
       {
         layout: "kpi-table",
-        eyebrow: "KPIs propuestos para el piloto",
-        title: "Cómo mediremos el impacto del Corona Service Agent",
+        eyebrow: "Cómo mediremos el éxito",
+        title: "Indicadores que le van a interesar a la Dirección",
         rows: [
           {
-            label: "Deflection en primer contacto",
-            baseline: "0% (no existe agente)",
-            goal6m: "40% de las consultas B2B",
-            goal12m: "65%+",
+            label: "Satisfacción del cliente (CSAT WhatsApp)",
+            baseline: "Sin medición sistemática",
+            goal6m: "≥ 4.2 / 5",
+            goal12m: "≥ 4.5 / 5",
             accent: "indigo",
           },
           {
-            label: "Ventana de atención efectiva",
-            baseline: "L–V 7am–6pm · Sáb 8am–1pm",
-            goal6m: "24/7 para FAQs y alta de caso",
-            goal12m: "24/7 con SLA respuesta <10 s",
+            label: "% consultas resueltas sin intervención humana",
+            baseline: "0%",
+            goal6m: "40% de las consultas B2B",
+            goal12m: "65%+",
             accent: "violet",
           },
           {
-            label: "Cases con datos completos al crearse",
-            baseline: "~55% completos manualmente",
-            goal6m: "90%+ con Contact + Account + Type",
-            goal12m: "98%+",
+            label: "Tiempo de primera respuesta en WhatsApp",
+            baseline: "Horas o hasta el día siguiente",
+            goal6m: "< 10 segundos, 24/7",
+            goal12m: "< 5 segundos, 24/7",
             accent: "sky",
           },
           {
-            label: "Tiempo de handoff al asesor humano",
-            baseline: "Recaptura completa del caso",
-            goal6m: "Handoff con transcript + Case Id",
-            goal12m: "AHT humano −40%",
+            label: "Casos que llegan al asesor con datos completos",
+            baseline: "~55%",
+            goal6m: "≥ 90%",
+            goal12m: "≥ 98%",
             accent: "emerald",
           },
         ],
       },
 
-      // ── 10 · Estado actual y siguiente paso ───────────────────────────
+      // ── 10 · Qué haremos si algo falla ────────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Tranquilidad operativa",
+        title: "Qué pasa si algo sale mal — plan de contingencia",
+        left: {
+          heading: "Lo que NUNCA pasa",
+          items: [
+            "Que el asistente responda algo que no está en la base de conocimiento",
+            "Que un cliente se quede sin respuesta — siempre hay un fallback conocido",
+            "Que se pierda una conversación — todo queda registrado en Salesforce",
+            "Que el equipo humano se entere tarde de un caso urgente",
+          ],
+        },
+        right: {
+          heading: "Lo que hacemos si algo no funciona",
+          items: [
+            "Alertas inmediatas al equipo técnico si el asistente deja de responder",
+            "Redireccionamiento automático al canal humano si algo se degrada",
+            "Panel de monitoreo con volumen, tiempos y satisfacción en vivo",
+            "Ventana de revisión semanal para ajustar respuestas que no fueron óptimas",
+          ],
+        },
+      },
+
+      // ── 11 · Estado y siguiente paso ──────────────────────────────────
       {
         layout: "bullets",
-        eyebrow: "Dónde estamos hoy",
-        title: "Estado real del piloto — julio 2026",
+        eyebrow: "Dónde estamos",
+        title: "Estado del piloto y siguiente paso",
         bullets: [
-          "Agente COR_afServiceAgent v3 publicado con planner Atlas ConcurrentMultiAgentOrchestration",
-          "Integración WhatsApp Apex end-to-end funcionando — webhook, Platform Events, Queueable listos",
-          "WA-CONFIG-0000 activo y apuntando al Agent Id 0XxhQ00000007vxSAA",
-          "Data Library Librería de datos AF PDF (COR_afDataLibraryAFPDF) cargada con FAQs del Centro de Experiencia B2B",
-          "Bloqueador identificado — Connected App Client Credentials sin poblar en WA-CONFIG-0000: las conversaciones caen al fallback local en inglés en lugar de invocar al agente real",
+          "El asistente ya está construido, publicado y conectado con WhatsApp",
+          "La base de conocimiento del Centro de Experiencia ya está cargada",
+          "Las reglas operativas críticas — como la de horarios por canal — ya están integradas",
+          "Falta un ajuste técnico de credenciales para pasar del ambiente de pruebas a producción real",
+          "Con ese ajuste listo, arrancamos con un piloto acotado de 2 semanas antes de escalar a toda la base de distribuidores",
         ],
         highlight:
-          "Con el Connected App configurado, el agente entra en producción end-to-end sin cambios adicionales de código.",
+          "No pedimos una decisión de tecnología — pedimos autorización para iniciar el piloto controlado y demostrar el valor con números reales.",
       },
 
-      // ── 11 · Cómo probarlo hoy ────────────────────────────────────────
-      {
-        layout: "section",
-        eyebrow: "Cómo lo pruebas hoy",
-        title: "Escanea el QR o entra a wa.me/5511917111888",
-        subtitle:
-          "Prompts sugeridos — \"tengo un reclamo\" · \"es la primera vez que escribo\" · \"¿cuál es su horario?\" · \"necesito hablar con una persona\"",
-      },
-
-      // ── 12 · Cierre ───────────────────────────────────────────────────
+      // ── 12 · Cierre con QR de WhatsApp ────────────────────────────────
       {
         layout: "thanks",
-        eyebrow: "Corona Service Agent · Agentforce",
-        title: "Gracias.",
+        eyebrow: "Corona · Centro de Experiencia B2B",
+        title: "Pruébalo tú misma.",
         subtitle:
-          "El agente ya está publicado. Falta solo el Connected App para que responda al 100% en producción.",
+          "Escanea el código para hablar directamente con el asistente por WhatsApp. Cero preparación, cero riesgo — es la misma experiencia que tendría un distribuidor real.",
+        qrSrc: "/Customers/Corona/corona-whatsapp-qr.png",
+        qrLabel: "Conversa con el asistente",
+        qrCaption: "WhatsApp · +55 11 91711-1888",
       },
     ],
   },

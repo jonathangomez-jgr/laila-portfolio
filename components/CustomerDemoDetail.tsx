@@ -25,6 +25,7 @@ import KbArticlesCanvas from "./KbArticlesCanvas";
 import JobStoriesCanvas from "./JobStoriesCanvas";
 import TestScriptsCanvas from "./TestScriptsCanvas";
 import DemoGuionCanvas from "./DemoGuionCanvas";
+import QuestionBankCanvas from "./QuestionBankCanvas";
 import Sprint3Canvas from "./Sprint3Canvas";
 import WorkPlanCanvas from "./WorkPlanCanvas";
 import ObjectiveInfographic from "./ObjectiveInfographic";
@@ -41,6 +42,7 @@ type CustomerDemoDetailProps = {
   demo: CustomerDemo;
   lang: string;
   dict: Dictionary;
+  basePath?: "customer-demos" | "customer-projects";
 };
 
 function getLocalizedTab(
@@ -55,7 +57,7 @@ function getLocalizedTab(
   return { ...tab, label: t.label, title: t.title, content: t.content };
 }
 
-export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDetailProps) {
+export default function CustomerDemoDetail({ demo, lang, dict, basePath = "customer-demos" }: CustomerDemoDetailProps) {
   const t = dict.customerDetail;
 
   const i18n = lang === "en" ? demo.translations?.en : lang === "pt" ? demo.translations?.pt : undefined;
@@ -89,7 +91,7 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
             <div className="mt-6 flex flex-wrap items-center gap-3">
               {hasExecutiveDeck(demo.slug) && (
                 <Link
-                  href={`/${lang}/customer-demos/${demo.slug}/deck/executive`}
+                  href={`/${lang}/${basePath}/${demo.slug}/deck/executive`}
                   className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(95,111,255,0.28)] transition hover:opacity-90"
                 >
                   <svg
@@ -407,7 +409,7 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                   data={activeTab.jtbdData}
                   deckHref={
                     hasExecutiveDeck(demo.slug, "jtbd")
-                      ? `/${lang}/customer-demos/${demo.slug}/deck/jtbd`
+                      ? `/${lang}/${basePath}/${demo.slug}/deck/jtbd`
                       : undefined
                   }
                 />
@@ -418,7 +420,7 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
                   data={activeTab.sprint3Data}
                   deckHref={
                     hasExecutiveDeck(demo.slug, "sprint-3")
-                      ? `/${lang}/customer-demos/${demo.slug}/deck/sprint-3`
+                      ? `/${lang}/${basePath}/${demo.slug}/deck/sprint-3`
                       : undefined
                   }
                 />
@@ -454,6 +456,10 @@ export default function CustomerDemoDetail({ demo, lang, dict }: CustomerDemoDet
 
               {activeTab.demoGuionData && (
                 <DemoGuionCanvas data={activeTab.demoGuionData} />
+              )}
+
+              {activeTab.questionBankData && (
+                <QuestionBankCanvas data={activeTab.questionBankData} />
               )}
             </section>
           </div>
