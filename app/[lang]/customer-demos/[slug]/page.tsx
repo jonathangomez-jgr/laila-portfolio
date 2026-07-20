@@ -25,7 +25,7 @@ export default async function CustomerDemoPage({
 
   if (!demo) {
     return (
-      <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
+      <main className="px-4 pb-16 pt-10 sm:px-6 sm:pt-12 md:px-8 md:pt-16">
         <section className="mx-auto max-w-4xl">
           <p className="eyebrow mb-4">{dict.customerDetail.eyebrow}</p>
 

@@ -14,10 +14,10 @@ export default async function LailaDemoPage({
   const d = dict.demo;
 
   return (
-    <main>
+    <main className="px-4 sm:px-6 md:px-8">
       <PageHero eyebrow={d.eyebrow} title={d.title} description={d.description} />
 
-      <section className="mx-auto w-[min(90%,1600px)] pb-16">
+      <section className="mx-auto w-full pb-16 sm:w-[min(90%,1600px)]">
         <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:gap-16">
           {/* QR Card — client component for QRCodeSVG */}
           <LailaDemoQR

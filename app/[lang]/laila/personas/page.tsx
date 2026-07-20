@@ -45,10 +45,10 @@ export default async function PersonasPage({
   const d = dict.personas;
 
   return (
-    <main>
+    <main className="px-4 sm:px-6 md:px-8">
       <PageHero eyebrow={d.eyebrow} title={d.title} description={d.description} />
 
-      <section className="mx-auto w-[min(90%,1600px)] pb-16 sm:pb-20">
+      <section className="mx-auto w-full pb-14 sm:w-[min(90%,1600px)] sm:pb-20">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {d.items.map((persona, idx) => {
             const accent = personaAccents[idx];

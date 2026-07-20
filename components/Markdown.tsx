@@ -41,7 +41,7 @@ export default function Markdown({ source, rewriteLink }: MarkdownProps) {
           ),
           li: ({ children }) => <li className="leading-7">{children}</li>,
           blockquote: ({ children }) => (
-            <blockquote className="my-5 rounded-xl border-l-4 border-[#5f6fff] bg-[#eef2ff]/60 px-5 py-3 text-gray-700">
+            <blockquote className="my-5 rounded-xl border-l-4 border-[#5f6fff] bg-[#eef2ff]/60 px-4 py-3 text-gray-700 sm:px-5">
               {children}
             </blockquote>
           ),
@@ -50,29 +50,29 @@ export default function Markdown({ source, rewriteLink }: MarkdownProps) {
             const isBlock = className?.startsWith("language-");
             if (isBlock) {
               return (
-                <code className="block whitespace-pre overflow-x-auto rounded-lg bg-gray-900 px-4 py-3 text-sm leading-6 text-gray-100">
+                <code className="block whitespace-pre overflow-x-auto rounded-none bg-gray-900 px-4 py-3 text-[12px] leading-6 text-gray-100 sm:rounded-lg sm:text-sm">
                   {children}
                 </code>
               );
             }
             return (
-              <code className="rounded bg-gray-100 px-1.5 py-0.5 text-[0.85em] font-mono text-gray-800">
+              <code className="break-words rounded bg-gray-100 px-1.5 py-0.5 text-[0.85em] font-mono text-gray-800">
                 {children}
               </code>
             );
           },
           pre: ({ children }) => (
-            <pre className="my-5 overflow-x-auto rounded-xl bg-gray-900 p-0 text-sm">
+            <pre className="-mx-4 my-5 overflow-x-auto rounded-none bg-gray-900 p-0 text-[13px] sm:mx-0 sm:rounded-xl sm:text-sm">
               {children}
             </pre>
           ),
           table: ({ children }) => (
-            <div className="my-6 overflow-x-auto rounded-xl border border-gray-200">
-              <table className="w-full border-collapse text-sm">{children}</table>
+            <div className="-mx-4 my-6 overflow-x-auto border-y border-gray-200 sm:mx-0 sm:rounded-xl sm:border">
+              <table className="w-full min-w-[560px] border-collapse text-xs sm:text-sm">{children}</table>
             </div>
           ),
           thead: ({ children }) => (
-            <thead className="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+            <thead className="bg-gray-50 text-left text-[10px] font-semibold uppercase tracking-wide text-gray-500 sm:text-xs">
               {children}
             </thead>
           ),
@@ -81,10 +81,10 @@ export default function Markdown({ source, rewriteLink }: MarkdownProps) {
           ),
           tr: ({ children }) => <tr className="align-top">{children}</tr>,
           th: ({ children }) => (
-            <th className="px-4 py-2.5 font-semibold">{children}</th>
+            <th className="px-3 py-2 font-semibold sm:px-4 sm:py-2.5">{children}</th>
           ),
           td: ({ children }) => (
-            <td className="px-4 py-2.5 text-gray-700">{children}</td>
+            <td className="px-3 py-2 text-gray-700 sm:px-4 sm:py-2.5">{children}</td>
           ),
           a: ({ href, children }) => {
             const url = href ?? "";

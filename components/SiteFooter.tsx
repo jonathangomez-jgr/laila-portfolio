@@ -18,9 +18,9 @@ export default function SiteFooter({
   lang: string;
 }) {
   return (
-    <footer className="px-6 pb-8 pt-2 md:px-8">
-      <div className="mx-auto w-[min(90%,1600px)]">
-        <div className="rounded-3xl border border-slate-200/60 bg-white/70 px-8 py-10 shadow-[0_8px_32px_rgba(99,102,241,0.07)] backdrop-blur-sm md:px-12 md:py-12">
+    <footer className="px-4 pb-8 pt-2 sm:px-6 md:px-8">
+      <div className="mx-auto w-full sm:w-[min(90%,1600px)]">
+        <div className="rounded-3xl border border-slate-200/60 bg-white/70 px-5 py-8 shadow-[0_8px_32px_rgba(99,102,241,0.07)] backdrop-blur-sm sm:px-8 sm:py-10 md:px-12 md:py-12">
           {/* Top grid */}
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
             {/* Brand + bio */}

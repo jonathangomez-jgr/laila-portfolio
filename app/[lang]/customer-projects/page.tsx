@@ -32,8 +32,8 @@ export default async function CustomerProjectsPage({
   }
 
   return (
-    <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
-      <section className="mx-auto w-[min(90%,1600px)]">
+    <main className="px-4 pb-16 pt-10 sm:px-6 sm:pt-12 md:px-8 md:pt-16">
+      <section className="mx-auto w-full sm:w-[min(90%,1600px)]">
         <div className="mb-10">
           <p className="eyebrow mb-4">{d.eyebrow}</p>
 

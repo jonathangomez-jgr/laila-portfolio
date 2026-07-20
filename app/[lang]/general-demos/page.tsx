@@ -15,10 +15,10 @@ export default async function GeneralDemosPage({
   const d = dict.generalDemos;
 
   return (
-    <main>
+    <main className="px-4 sm:px-6 md:px-8">
       <PageHero eyebrow={d.eyebrow} title={d.title} description={d.description} />
 
-      <section className="mx-auto w-[min(90%,1600px)] py-8">
+      <section className="mx-auto w-full py-6 sm:w-[min(90%,1600px)] sm:py-8">
         <a
           href={`/${lang}/general-demos/agentforce`}
           className="mb-8 block rounded-2xl border border-[#5f6fff]/30 bg-gradient-to-r from-[#eef2ff] via-white to-[#eaf5fe] p-6 transition hover:-translate-y-0.5 hover:shadow-md"

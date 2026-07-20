@@ -16,11 +16,11 @@ export default async function LailaArchitecturePage({
   const d = dict.architecture;
 
   return (
-    <main>
+    <main className="px-4 sm:px-6 md:px-8">
       <PageHero eyebrow={d.eyebrow} title={d.title} description={d.description} />
 
       {/* Laila en Números */}
-      <section className="mx-auto w-[min(90%,1600px)] py-12">
+      <section className="mx-auto w-full py-10 sm:w-[min(90%,1600px)] sm:py-12">
         <div className="mb-10">
           <p className="eyebrow mb-4">{d.metricsEyebrow}</p>
           <h2 className="section-title text-3xl font-semibold text-gray-950 sm:text-4xl">
@@ -38,7 +38,7 @@ export default async function LailaArchitecturePage({
       </section>
 
       {/* System Landscape */}
-      <section className="mx-auto w-[min(90%,1600px)] pb-12">
+      <section className="mx-auto w-full pb-10 sm:w-[min(90%,1600px)] sm:pb-12">
         <div className="mb-8">
           <p className="eyebrow mb-4">{d.infraEyebrow}</p>
           <h2 className="section-title text-3xl font-semibold text-gray-950 sm:text-4xl">
@@ -53,7 +53,7 @@ export default async function LailaArchitecturePage({
       </section>
 
       {/* Assets */}
-      <section className="mx-auto w-[min(90%,1600px)] pb-16">
+      <section className="mx-auto w-full pb-16 sm:w-[min(90%,1600px)]">
         <div className="mb-8">
           <p className="eyebrow mb-4">{d.assetsEyebrow}</p>
           <h2 className="section-title text-3xl font-semibold text-gray-950 sm:text-4xl">

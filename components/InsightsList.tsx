@@ -144,6 +144,8 @@ export default function InsightsList({
   const totalSelected =
     audience.size + industry.size + products.size + region.size;
 
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
   const filtered = useMemo(() => {
     return insights.filter((i) => {
       if (audience.size > 0 && !i.audience.some((a) => audience.has(a))) {
@@ -163,23 +165,51 @@ export default function InsightsList({
   }, [insights, audience, industry, products, region]);
 
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8">
       <aside className="lg:sticky lg:top-24 lg:self-start">
-        <div className="rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-[0_10px_30px_rgba(99,102,241,0.06)] backdrop-blur-sm">
-          <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-gray-500">
-              {dict.filters.title}
-            </h2>
+        <div className="rounded-3xl border border-slate-200/70 bg-white/80 p-4 shadow-[0_10px_30px_rgba(99,102,241,0.06)] backdrop-blur-sm sm:p-6">
+          <div className="mb-4 flex items-center justify-between gap-2 sm:mb-5">
+            <button
+              type="button"
+              onClick={() => setFiltersOpen((v) => !v)}
+              className="flex flex-1 items-center gap-2 text-left lg:pointer-events-none"
+              aria-expanded={filtersOpen}
+              aria-controls="insights-filter-body"
+            >
+              <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-gray-500">
+                {dict.filters.title}
+              </h2>
+              {totalSelected > 0 && (
+                <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-semibold text-indigo-600">
+                  {totalSelected}
+                </span>
+              )}
+              <svg
+                className={`ml-auto h-4 w-4 shrink-0 text-gray-400 transition lg:hidden ${filtersOpen ? "rotate-180" : ""}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+                aria-hidden
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
             {totalSelected > 0 && (
               <button
                 type="button"
                 onClick={clearAll}
-                className="text-xs font-semibold text-indigo-600 hover:text-indigo-700"
+                className="shrink-0 text-xs font-semibold text-indigo-600 hover:text-indigo-700"
               >
                 {dict.filters.clearAll}
               </button>
             )}
           </div>
+
+          <div
+            id="insights-filter-body"
+            className={`${filtersOpen ? "block" : "hidden"} lg:block`}
+          >
 
           <FilterSection title={dict.filters.sections.audience}>
             {availableAudience.map((a) => (
@@ -234,6 +264,7 @@ export default function InsightsList({
               );
             })}
           </FilterSection>
+          </div>
         </div>
       </aside>
 

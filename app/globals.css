@@ -2450,3 +2450,10 @@ body.deck-mode {
   .deck-questionnaire-scale-cell { font-size: 0.48rem; }
   .deck-hero-footer { font-size: 0.55rem; letter-spacing: 0.14em; }
 }
+
+/* ── Utility: hide scrollbar for horizontal scroll containers ─────────── */
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* ── Prevent horizontal overflow across the site ──────────────────────── */
+html, body { overflow-x: hidden; }

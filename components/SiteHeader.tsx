@@ -129,15 +129,15 @@ export default function SiteHeader({
       <header
         className={
           isHome
-            ? "fixed left-0 right-0 top-8 z-50 px-8 md:px-12 lg:px-20"
-            : "relative z-40 px-6 pt-6 md:px-8"
+            ? "fixed left-0 right-0 top-4 z-50 px-4 sm:top-8 sm:px-8 md:px-12 lg:px-20"
+            : "relative z-40 px-4 pt-4 sm:px-6 sm:pt-6 md:px-8"
         }
       >
         <div
           className={
             isHome
-              ? "mx-auto flex w-[min(90%,1600px)] items-center justify-between rounded-full border border-white/60 bg-white/45 px-5 py-3 shadow-[0_20px_60px_rgba(99,102,241,0.18)] backdrop-blur-2xl backdrop-saturate-150 md:px-6"
-              : "mx-auto flex w-[min(90%,1600px)] items-center justify-between rounded-full border border-white/70 bg-white/80 px-5 py-3 shadow-[0_14px_35px_rgba(99,102,241,0.10)] backdrop-blur-xl md:px-6"
+              ? "mx-auto flex w-full items-center justify-between rounded-full border border-white/60 bg-white/45 px-4 py-2.5 shadow-[0_20px_60px_rgba(99,102,241,0.18)] backdrop-blur-2xl backdrop-saturate-150 sm:w-[min(90%,1600px)] sm:px-5 sm:py-3 md:px-6"
+              : "mx-auto flex w-full items-center justify-between rounded-full border border-white/70 bg-white/80 px-4 py-2.5 shadow-[0_14px_35px_rgba(99,102,241,0.10)] backdrop-blur-xl sm:w-[min(90%,1600px)] sm:px-5 sm:py-3 md:px-6"
           }
         >
           <a href={`/${lang}`} className="flex items-center gap-3">

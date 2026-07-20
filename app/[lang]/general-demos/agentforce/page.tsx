@@ -19,14 +19,14 @@ export default async function AgentforceCatalogPage({
   const agents = await loadAgents();
 
   return (
-    <main>
+    <main className="px-4 sm:px-6 md:px-8">
       <PageHero
         eyebrow="General Demos · Agentforce"
         title="Agentforce Catalog"
         description="Documentación reutilizable de los agentes desplegados en la org de Laila — el agente, sus subagentes (topics) y las acciones que cada topic expone."
       />
 
-      <section className="mx-auto w-[min(90%,1600px)] py-8">
+      <section className="mx-auto w-full py-6 sm:w-[min(90%,1600px)] sm:py-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {agents.map((agent) => (
             <DemoCard

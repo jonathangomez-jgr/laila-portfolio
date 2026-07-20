@@ -415,7 +415,7 @@ export default function InsightArticle({
   );
 
   return (
-    <main className="px-6 pb-20 pt-10 md:px-8 md:pt-14">
+    <main className="px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-10 md:px-8 md:pt-14">
       <article className="mx-auto w-[min(96%,1600px)]">
         {/* Breadcrumbs */}
         <nav className="mb-6 text-xs text-gray-500">

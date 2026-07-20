@@ -70,21 +70,21 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
-      <section className="mx-auto w-[min(90%,1600px)]">
-        <div className="mb-10 grid gap-6 lg:grid-cols-[1fr_280px] lg:items-start">
-          <div>
-            <p className="eyebrow mb-4">{t.eyebrow}</p>
+    <main className="px-4 pb-16 pt-10 sm:px-6 sm:pt-12 md:px-8 md:pt-16">
+      <section className="mx-auto w-full sm:w-[min(90%,1600px)]">
+        <div className="mb-8 grid gap-6 sm:mb-10 lg:grid-cols-[1fr_280px] lg:items-start">
+          <div className="order-2 lg:order-1">
+            <p className="eyebrow mb-3 sm:mb-4">{t.eyebrow}</p>
 
-            <h1 className="section-title max-w-4xl text-3xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
+            <h1 className="section-title max-w-4xl text-2xl font-semibold tracking-tight text-gray-950 sm:text-4xl lg:text-5xl">
               {demo.customerName}
             </h1>
 
-            <p className="mt-3 text-lg font-semibold text-indigo-600">
+            <p className="mt-3 text-base font-semibold text-indigo-600 sm:text-lg">
               {demoTitle}
             </p>
 
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-gray-600">
+            <p className="mt-4 max-w-3xl text-base leading-7 text-gray-600 sm:mt-5 sm:text-lg sm:leading-8">
               {demoDescription}
             </p>
 
@@ -140,14 +140,14 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-3 py-4">
+          <div className="order-1 flex flex-col items-center gap-3 py-2 sm:py-4 lg:order-2">
             {demo.logo ? (
               <Image
                 src={demo.logo}
                 alt={`${demo.customerName} logo`}
                 width={280}
                 height={140}
-                className="h-auto max-h-36 w-auto object-contain"
+                className="h-auto max-h-20 w-auto object-contain sm:max-h-28 lg:max-h-36"
                 priority
               />
             ) : (
@@ -167,10 +167,10 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
           </div>
         </div>
 
-        <div className="glass-card overflow-hidden p-3 md:p-4">
+        <div className="glass-card overflow-hidden p-2 sm:p-3 md:p-4">
           {/* Top tab bar — visible on mobile/tablet always; on desktop only when sidebar is collapsed */}
           <div
-            className={`flex items-center gap-2 rounded-full bg-white/60 p-2 ${
+            className={`flex items-center gap-2 rounded-2xl bg-white/60 p-1.5 sm:rounded-full sm:p-2 ${
               sidebarCollapsed ? "lg:flex" : "lg:hidden"
             }`}
           >
@@ -200,7 +200,7 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
               </button>
             )}
 
-            <div className="flex flex-1 gap-2 overflow-x-auto">
+            <div className="scrollbar-hide flex flex-1 gap-1.5 overflow-x-auto sm:gap-2">
               {localizedTabs.map((tab) => {
                 const isActive = activeTab.id === tab.id;
 
@@ -209,7 +209,7 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab)}
-                    className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition ${
+                    className={`whitespace-nowrap rounded-full px-3 py-2 text-xs font-semibold transition sm:px-4 sm:text-sm ${
                       isActive
                         ? "bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-[0_10px_25px_rgba(95,111,255,0.28)]"
                         : "text-gray-600 hover:bg-white hover:text-gray-950"
@@ -290,15 +290,15 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
               </aside>
             )}
 
-            <section className="soft-card min-h-[280px] p-5 sm:min-h-[420px] sm:p-8 md:p-10">
-              <p className="eyebrow mb-4">{activeTab.label}</p>
+            <section className="soft-card min-h-[280px] p-4 sm:min-h-[420px] sm:p-8 md:p-10">
+              <p className="eyebrow mb-3 sm:mb-4">{activeTab.label}</p>
 
-              <h2 className="section-title text-2xl font-semibold text-gray-950 sm:text-4xl">
+              <h2 className="section-title text-xl font-semibold text-gray-950 sm:text-3xl md:text-4xl">
                 {activeTab.id === "customer" ? demo.customerName : activeTab.title}
               </h2>
 
               {activeTab.banner && (
-                <div className="mt-6 h-36 w-full overflow-hidden rounded-2xl sm:h-56">
+                <div className="mt-5 h-32 w-full overflow-hidden rounded-2xl sm:mt-6 sm:h-56">
                   <img
                     src={activeTab.banner}
                     alt=""
@@ -316,13 +316,13 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
                   /\*\*[^*]+\*\*/.test(c);
                 if (hasRichSyntax) {
                   return (
-                    <div className="mt-6 max-w-4xl">
+                    <div className="mt-5 max-w-4xl sm:mt-6">
                       <Markdown source={c} />
                     </div>
                   );
                 }
                 return (
-                  <p className="mt-6 max-w-3xl text-base leading-8 text-gray-600 sm:text-lg">
+                  <p className="mt-5 max-w-3xl text-base leading-7 text-gray-600 sm:mt-6 sm:text-lg sm:leading-8">
                     {c}
                   </p>
                 );

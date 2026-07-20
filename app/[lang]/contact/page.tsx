@@ -15,7 +15,7 @@ export default async function ContactPage({
   const a = dict.about;
 
   return (
-    <main className="px-6 pb-16 pt-10 md:px-8 md:pt-14">
+    <main className="px-4 pb-16 pt-8 sm:px-6 sm:pt-10 md:px-8 md:pt-14">
       <div className="mx-auto max-w-6xl">
 
         {/* ── Hero header ─────────────────────────────────────────────── */}

@@ -13,12 +13,12 @@ export default async function Home({
   const d = dict.home;
 
   return (
-    <main className="px-5 pb-10 pt-28 sm:px-6 sm:pt-36 md:px-8">
+    <main className="px-4 pb-10 pt-24 sm:px-6 sm:pt-36 md:px-8">
       <section className="grid gap-6 lg:grid-cols-[1.25fr_0.95fr]">
         <div className="glass-card p-6 sm:p-8 md:p-12">
           <p className="eyebrow mb-4">{d.eyebrow}</p>
 
-          <h1 className="section-title max-w-4xl text-4xl font-semibold leading-tight text-gray-900 sm:text-5xl md:text-6xl">
+          <h1 className="section-title max-w-4xl text-3xl font-semibold leading-tight text-gray-900 sm:text-5xl md:text-6xl">
             {d.headline1}
             <br />
             {d.headline2}

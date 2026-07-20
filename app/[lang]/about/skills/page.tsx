@@ -13,14 +13,14 @@ export default async function SkillsPage({
   const d = dict.skills;
 
   return (
-    <main>
+    <main className="px-4 sm:px-6 md:px-8">
       <PageHero
         eyebrow={d.eyebrow}
         title={d.title}
         description={d.description}
       />
 
-      <section className="mx-auto w-[min(90%,1600px)] py-8">
+      <section className="mx-auto w-full py-6 sm:w-[min(90%,1600px)] sm:py-8">
         <div className="grid gap-4 md:grid-cols-2">
           {d.items.map((skill) => (
             <div key={skill} className="rounded-2xl border border-gray-200 p-5">
