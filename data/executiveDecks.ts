@@ -2514,6 +2514,309 @@ export const executiveDecks: ExecutiveDeck[] = [
       },
     ],
   },
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // JAFRA — Deck ejecutivo · Resultados del Workshop
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    slug: "resultados-workshop",
+    customerSlug: "jafra",
+    title: "Resultados del Workshop · JAFRA",
+    subtitle: "Lectura ejecutiva de la sesión de dos horas · Salesforce · JAFRA",
+    duration: "8 min",
+    slides: [
+      // ── 1 · Portada ──────────────────────────────────────────────────
+      {
+        layout: "title",
+        logo: "/sfdc-logos/corporate-logo.png",
+        eyebrow: "Workshop JAFRA · Julio 2026",
+        title: "Janet ya entrega\nvalor — protejámoslo.",
+        subtitle:
+          "Resultados de la sesión de dos horas · una fricción eclipsa el resto · camino claro a la Convención de Septiembre.",
+        footnote: "Salesforce México · Confidencial · Julio 2026",
+        showQr: false,
+        brand: {
+          astro: { variant: "agent-astro-20-l", side: "right", bottom: "-30px", size: 360 },
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "6%",  size: 48, rotate: 12 },
+            { variant: "blue-inclined",   side: "left",  top: "92%", size: 30, rotate: -10 },
+            { variant: "yellow-inclined", side: "right", top: "4%",  size: 34, rotate: 22 },
+          ],
+        },
+      },
+
+      // ── 2 · Contexto de la sesión ─────────────────────────────────────
+      {
+        layout: "section",
+        eyebrow: "Contexto de la sesión",
+        title: "Dos horas · seis personas · una lectura común de Janet.",
+        subtitle:
+          "Reunimos negocio y tecnología en oficinas de Salesforce para revisar juntos al agente en producción. Dinámica fluida, orgánica y participativa. La pieza más valiosa: el ejercicio «Conociendo a nuestro agente».",
+        brand: {
+          astro: { variant: "astro-7", side: "left", bottom: "-50px", size: 230 },
+          sparkles: [
+            { variant: "yellow-main",     side: "right", top: "16%", size: 44, rotate: 12 },
+            { variant: "yellow-inclined", side: "right", top: "70%", size: 28, rotate: -18 },
+          ],
+        },
+      },
+
+      // ── 3 · Métricas de adopción ──────────────────────────────────────
+      {
+        layout: "metrics",
+        eyebrow: "Lo que Janet ya está entregando",
+        title: "Adopción orgánica creciente · sin lanzamiento oficial",
+        metrics: [
+          { value: "10K–11K", label: "interacciones a julio · vs 2K–3K previos" },
+          { value: "~20K", label: "usuarios únicos activos hoy · base 20K–25K" },
+          { value: "50K", label: "sesiones mensuales promedio" },
+          { value: "20–25%", label: "reducción estimada en llamadas al call center (por validar)" },
+        ],
+      },
+
+      // ── 4 · Cambio de percepción ──────────────────────────────────────
+      {
+        layout: "quote",
+        quote:
+          "Pasamos de «el agente no está funcionando» a «Janet ya resuelve, orienta y acompaña — el siguiente paso es proteger ese valor, resolver una fricción crítica y prepararla para el lanzamiento formal».",
+        author: "Conclusión de la sala",
+        context: "Después del ejercicio «Conociendo a nuestro agente»",
+        brand: {
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "14%", size: 44, rotate: -10 },
+            { variant: "yellow-inclined", side: "right", top: "72%", size: 28, rotate: 18 },
+          ],
+        },
+      },
+
+      // ── 5 · Ficha del agente ──────────────────────────────────────────
+      {
+        layout: "agent-profile",
+        eyebrow: "Ficha construida entre los seis",
+        title: "Janet · así la describe la sala hoy",
+        agentName: "Janet · «La Janet»",
+        agentRole: "Aliada de la Consultora · atiende por WhatsApp de manera conversacional",
+        traits: [
+          { label: "Atiende a", value: "Consultoras · Líderes · señoras", icon: "👥", accent: "indigo" },
+          { label: "Canal", value: "WhatsApp · conversacional", icon: "💬", accent: "violet" },
+          { label: "Fuentes", value: "AS/400 · Knowledge · SharePoint · Salesforce", icon: "📚", accent: "sky" },
+          { label: "Escala humano", value: "Pedidos y pagos sin información", icon: "🤝", accent: "emerald" },
+          { label: "Nivel de poder", value: "Aún aprendiendo · ya en producción", icon: "⚡", accent: "indigo" },
+          { label: "Diferencial", value: "Cercanía · aliada del negocio", icon: "❤️", accent: "violet" },
+        ],
+      },
+
+      // ── 6 · Capacidades reconocidas ───────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Lo que la sala reconoció que Janet ya sabe hacer",
+        title: "Seis capacidades entregadas hoy",
+        bullets: [
+          "Abre tickets sin necesidad de intervención humana",
+          "Resuelve al menos el 80% de las solicitudes (percepción interna)",
+          "Asesora sobre promociones, comisiones y puntos en segundos",
+          "Orienta a la consultora sobre el momento del ciclo comercial",
+          "Brinda indicadores e insights sobre la información de las consultoras",
+          "Es percibida como aliada del negocio · no solo canal de atención",
+        ],
+        highlight:
+          "Cinco de estas seis capacidades quedaban invisibles antes del taller · una sola fricción estaba tapando todo lo demás.",
+      },
+
+      // ── 7 · La fricción crítica ───────────────────────────────────────
+      {
+        layout: "comparison",
+        eyebrow: "Fricción crítica · pedidos incompletos",
+        title: "Un flujo tapa el valor de Janet — resolverlo desbloquea el anuncio oficial",
+        before: {
+          heading: "Hoy · lo que eclipsa el valor",
+          items: [
+            "Janet pide datos técnicos (llega a solicitar SKU) que la consultora no siempre tiene",
+            "Se genera un caso por cada producto faltante · fragmentación de la incidencia",
+            "La consultora invierte más esfuerzo del razonable para reportar el problema",
+            "Este incidente adquirió peso desproporcionado en la percepción interna",
+            "El anuncio oficial está condicionado a resolver esta experiencia",
+          ],
+        },
+        after: {
+          heading: "Deseado · un solo caso por incidencia",
+          items: [
+            "Captura simplificada · Janet deriva del pedido lo que puede sin pedirlo",
+            "Un caso único consolida faltantes, incorrectos y dañados de la misma entrega",
+            "Menor esfuerzo · la consultora reporta rápido y con confianza",
+            "La percepción se realinea con el valor real que Janet entrega",
+            "Se abre la puerta al lanzamiento oficial y a la comunicación masiva",
+          ],
+        },
+      },
+
+      // ── 8 · Formulación del hallazgo principal ────────────────────────
+      {
+        layout: "quote",
+        quote:
+          "Si simplificamos la captura de pedidos incompletos y consolidamos toda la incidencia en un solo caso, la consultora reportará con menor esfuerzo — y JAFRA eliminará una de las principales barreras para el lanzamiento y adopción de Janet.",
+        context: "Formulación del hallazgo principal · síntesis de la sesión, no una frase textual acordada.",
+      },
+
+      // ── 9 · Proteger vs mejorar ───────────────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Doble movimiento",
+        title: "Lo que protegemos · lo que mejoramos",
+        left: {
+          heading: "Proteger",
+          items: [
+            "Cercanía emocional con las consultoras",
+            "Capacidad de orientar y guiar en el momento del negocio",
+            "Información sobre productos y promociones",
+            "Apoyo para alcanzar metas · aliada del negocio",
+            "Resolución de dudas sin necesidad de llamada",
+            "Registro escrito de las interacciones",
+            "Adopción orgánica ya observada",
+          ],
+        },
+        right: {
+          heading: "Mejorar",
+          items: [
+            "Flujo de pedidos incompletos",
+            "Solicitud de información innecesariamente técnica",
+            "Consolidación de incidencias en un solo caso",
+            "Acceso a información histórica más allá de 3 meses",
+            "Integración del conocimiento de SharePoint",
+            "Proactividad y personalización",
+            "Medición formal del éxito",
+          ],
+        },
+      },
+
+      // ── 10 · Visión de evolución · tres capacidades ──────────────────
+      {
+        layout: "pillars",
+        eyebrow: "Visión de evolución",
+        title: "Tres capacidades que la sala imaginó para Janet",
+        pillars: [
+          {
+            title: "Anticipar dentro de la conversación",
+            body: "«Sé que normalmente consultas tu balance, aquí lo tienes antes de que me lo pidas». Señales: historial, momento del ciclo, estado de metas, pedidos recientes.",
+            accent: "indigo",
+          },
+          {
+            title: "Comunicar de forma proactiva",
+            body: "Balance periódico, avance a meta, alertas de vencimiento, promociones contextuales. No necesariamente por Janet · parte de una estrategia de omnicanalidad más amplia.",
+            accent: "violet",
+          },
+          {
+            title: "Autoconsultarse",
+            body: "Aprovechar el historial de conversación para personalizar las siguientes. Requiere diseño de memoria del agente · qué se guarda, cuánto tiempo, con qué consentimiento.",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // ── 11 · Primos de Janet ─────────────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "«Primos de Janet» · nuevos agentes esbozados",
+        title: "Dos candidatos aparecieron en la sala",
+        bullets: [
+          "**Agente para temas de crédito** · dudas recurrentes con sensibilidad regulatoria · problema y métrica por definir",
+          "**Agente para educación y capacitación** · hoy JAFRA no cuenta con una plataforma de formación para consultoras",
+          "Regla acordada implícitamente · Janet consolidada y anunciada antes de abrir presupuesto a un nuevo agente",
+          "Mismo estándar de aprobación · problema en una frase · métrica con umbral · dueño con nombre",
+        ],
+        highlight:
+          "Un agente consolidado vale más que tres a medio camino · el foco es demostrar valor en Convención primero.",
+      },
+
+      // ── 12 · Métricas para septiembre · KPI table ────────────────────
+      {
+        layout: "kpi-table",
+        eyebrow: "Hoja de ruta a la Convención Anual · Septiembre 2026",
+        title: "Cuatro indicadores clave para llegar con evidencia",
+        rows: [
+          {
+            label: "Reducción de llamadas al call center",
+            baseline: "20–25% estimado · sin validar",
+            goal6m: "Línea base validada con periodo y volumen",
+            goal12m: "Reducción sostenida ≥30% post-anuncio",
+            accent: "sky",
+          },
+          {
+            label: "Casos por conversación (pedidos incompletos)",
+            baseline: "1 caso por producto faltante",
+            goal6m: "1 caso consolidado por pedido",
+            goal12m: "Sin fragmentación reportada",
+            accent: "indigo",
+          },
+          {
+            label: "Adopción · interacciones y usuarios únicos",
+            baseline: "10K–11K interacciones · ~20K únicos",
+            goal6m: "Crecimiento sostenido tras anuncio",
+            goal12m: "Cobertura mayoritaria de la base 20K–25K",
+            accent: "violet",
+          },
+          {
+            label: "CSAT y esfuerzo de la consultora",
+            baseline: "Por capturar",
+            goal6m: "Baseline formal con muestra representativa",
+            goal12m: "CSAT superior al baseline humano en casos productivos",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // ── 13 · Pendientes por confirmar ─────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Pendientes que aún NO son acuerdos formales",
+        title: "Once puntos por convertir en tabla de acuerdos",
+        bullets: [
+          "Corregir el flujo de pedidos incompletos",
+          "Definir un solo caso por pedido o incidencia",
+          "Revisar qué datos realmente necesita la consultora",
+          "Validar la reducción reportada del 20–25% en llamadas",
+          "Confirmar la ventana histórica trasladada desde AS/400",
+          "Documentar el consumo de SharePoint (Data Cloud · versionado · permisos)",
+          "Definir casos de proactividad · dentro y fuera de la conversación",
+          "Aterrizar el significado funcional de «autoconsultarse»",
+          "Establecer métricas, línea base y mecanismo de seguimiento",
+          "Definir los criterios para autorizar el lanzamiento oficial de Janet",
+          "Confirmar responsables con nombre y fechas por cada punto",
+        ],
+        highlight:
+          "Nada de esto es aún un acuerdo firmado por Salesforce y JAFRA · es el insumo para la próxima sesión.",
+      },
+
+      // ── 14 · Cierre ejecutivo ─────────────────────────────────────────
+      {
+        layout: "closing",
+        title: "Un agente que ya brilla · acompañémoslo hasta su mejor luz.",
+        bullets: [
+          "Janet ya entrega valor · lo protegemos antes de agregarle nada",
+          "Resolver pedidos incompletos es el prerrequisito para el anuncio oficial",
+          "La Convención de Septiembre es el hito · toda métrica debe llegar con línea base",
+          "Los «primos de Janet» esperan · un agente consolidado vale más que tres a medio camino",
+        ],
+        cta: "Siguiente paso · convertir los once pendientes en la tabla de acuerdos firmada.",
+      },
+
+      // ── 15 · Gracias ──────────────────────────────────────────────────
+      {
+        layout: "thanks",
+        eyebrow: "Salesforce · Aliado estratégico de JAFRA",
+        title: "Gracias.",
+        subtitle:
+          "Del valor actual al valor que sigue — un paso a la vez, negocio y tecnología en la misma mesa.",
+        brand: {
+          sparkles: [
+            { variant: "yellow-main",     side: "left",  top: "16%", size: 44, rotate: -10 },
+            { variant: "yellow-inclined", side: "left",  top: "70%", size: 28, rotate: 18 },
+            { variant: "blue-main",       side: "right", top: "20%", size: 32, rotate: 6 },
+          ],
+        },
+      },
+    ],
+  },
   {
     slug: "executive",
     customerSlug: "corona",

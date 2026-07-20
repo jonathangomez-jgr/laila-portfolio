@@ -5394,7 +5394,511 @@ export const customerDemos: CustomerDemo[] = [
         ],
       },
 
-      // ── 7 · Assets ──────────────────────────────────────────────────────
+      // ── 7 · Resultados del Workshop ─────────────────────────────────────
+      {
+        id: "results",
+        label: "Resultados del Workshop",
+        title: "Resultados de la sesión · Janet ya entrega valor · resolvamos lo que eclipsa el resto",
+        content:
+          "La sesión de dos horas en oficinas de Salesforce reunió a seis personas de JAFRA y Salesforce para revisar juntos al agente Janet — hoy en producción sin lanzamiento oficial. La dinámica fluyó de forma orgánica y participativa, con el ejercicio «Conociendo a nuestro agente» como pieza más valiosa del taller. La conclusión de fondo cambió el tono de la conversación: pasamos de «el agente no está funcionando» a «Janet ya resuelve, orienta y acompaña — el siguiente paso es proteger ese valor, resolver una fricción crítica y prepararla para el lanzamiento formal».\n\n**Estado actual · lo que se sabe hoy**\n\n- Janet ya está en producción · disponible sin comunicación oficial\n- Adopción orgánica creciente · antes 2,000–3,000 interacciones · hoy 10,000–11,000 (julio)\n- Base activa aproximada · 20,000–25,000 consultoras · ~20,000 usuarios únicos actuales\n- Promedio de 50,000 sesiones mensuales\n- Reducción estimada del **20–25% en llamadas al call center** — observación preliminar por validar\n- Percepción interna aún negativa por una fricción específica en pedidos incompletos\n\n**Formulación del hallazgo principal**\n\n> Si simplificamos la captura de pedidos incompletos y consolidamos toda la incidencia en un solo caso, la consultora podrá reportar su problema con menor esfuerzo y JAFRA eliminará una de las principales barreras para el lanzamiento y adopción de Janet.\n\n_Nota: esta formulación es síntesis del hallazgo, no una frase textual acordada en la sesión. Los responsables, fechas y compromisos formales aún no fueron aceptados — se registran abajo como pendientes de confirmación._",
+        overviewData: {
+          stats: [
+            { value: "6", label: "Participantes en la sala · JAFRA + Salesforce" },
+            { value: "10K–11K", label: "Interacciones a julio · vs 2K–3K anteriores" },
+            { value: "~20K", label: "Usuarios únicos activos (adopción orgánica)" },
+            { value: "50K", label: "Sesiones mensuales promedio" },
+            { value: "20–25%", label: "Reducción estimada en llamadas al call center" },
+            { value: "1", label: "Fricción crítica que eclipsa el resto del valor" },
+          ],
+        },
+        contextData: {
+          groups: [
+            {
+              name: "Identidad y propósito de Janet · lo que la sala construyó",
+              findings: [
+                "Nombre acordado · **Janet** (apodo compartido «La Janet»)",
+                "Presentación colectiva · «Janet es un agente que atiende a Consultoras, Líderes y señoras a través de WhatsApp — se comunica de manera conversacional»",
+                "Rol actual · resolver dudas, dar información de productos y promociones, orientar y guiar en las actividades del negocio, ayudar a comprender cómo alcanzar metas",
+                "Aspiracional · guía cercana, amiga, confidente, apoyo constante en el camino hacia el liderazgo",
+                "Escala colectiva de poder · «aún aprendiendo, pero ya trabajando en producción»",
+                "Elemento a proteger · la cercanía emocional con la consultora es su activo diferencial",
+              ],
+            },
+            {
+              name: "Valor que Janet ya entrega · reconocido en la sala",
+              findings: [
+                "Abre tickets sin intervención humana",
+                "Resuelve al menos el 80% de las solicitudes según percepción del equipo",
+                "Asesora sobre promociones principales, comisiones y puntos en segundos",
+                "Orienta a la consultora en qué momento del ciclo comercial está",
+                "Brinda indicadores e insights sobre información de las consultoras",
+                "Es percibida como aliada del negocio · no solo canal de atención",
+                "Reduce potencialmente la necesidad de contactar al call center (indicador preliminar 20–25%)",
+              ],
+            },
+            {
+              name: "Fuentes de conocimiento actuales · qué consulta Janet",
+              findings: [
+                "**AS/400** · vía API punto a punto · ventana histórica ~3 meses trasladada a Salesforce · información anterior queda fuera de alcance",
+                "**Artículos de Knowledge** en Salesforce · base viva del agente",
+                "**Biblioteca en SharePoint** · integración por confirmar (conector Data Cloud, frecuencia, versionado)",
+                "**Salesforce** · consume y también genera información en la plataforma",
+                "Escalamiento humano · cuando no encuentra información específica (típicamente pagos o pedidos)",
+              ],
+            },
+            {
+              name: "La fricción que eclipsa el valor · pedidos incompletos",
+              findings: [
+                "Problema 1 · solicitud excesiva de información · Janet pide datos técnicos (llega a pedir SKU) que la consultora no siempre tiene",
+                "Problema 2 · fragmentación de casos · un caso por cada producto faltante en lugar de un caso consolidado por pedido",
+                "Impacto interno · este incidente ha adquirido peso desproporcionado y bloquea el anuncio oficial del agente",
+                "Experiencia deseada · un solo caso que consolide productos faltantes, incorrectos, dañados y evidencia de la misma entrega",
+                "Efecto de fondo · una experiencia crítica de servicio está tapando todo el valor que Janet ya genera",
+              ],
+            },
+          ],
+        },
+        objective: {
+          headline:
+            "Proteger el valor que Janet ya genera · resolver la fricción crítica de pedidos incompletos · habilitar el lanzamiento formal y una medición robusta con miras a la Convención Anual de septiembre.",
+          okrs: [
+            {
+              label: "P1 — Proteger lo que ya funciona",
+              description:
+                "Blindar la cercanía con la consultora, la orientación al negocio, el registro escrito de la conversación y la adopción orgánica ya observada. No tocar lo que hoy le da valor a Janet mientras corregimos la fricción.",
+              enabler: "Ejercicio «Conociendo a nuestro agente» · patrón repetible reconocido",
+              color: "indigo",
+            },
+            {
+              label: "P2 — Resolver pedidos incompletos",
+              description:
+                "Consolidar toda la incidencia de un pedido en un solo caso · revisar qué datos realmente necesita la consultora · eliminar la solicitud del SKU cuando la información puede derivarse del pedido.",
+              enabler: "Bloques 3 y 4 · caso de valor demostrado y oportunidad principal",
+              color: "violet",
+            },
+            {
+              label: "P3 — Prepararnos para septiembre",
+              description:
+                "Construir el conjunto de métricas necesarias para demostrar el impacto de Janet en la Convención Anual · definir línea base, tablero de adopción/efectividad/experiencia/valor y criterios para el lanzamiento formal.",
+              enabler: "Modelo de medición del bloque 6 · pendientes por confirmar registrados",
+              color: "sky",
+            },
+          ],
+        },
+        kpis: [
+          {
+            group: "Indicadores de adopción",
+            items: [
+              {
+                name: "Consultoras que utilizan Janet",
+                baseline: "~20,000 usuarios únicos (adopción orgánica)",
+                goal6m: "Crecimiento sostenido tras el lanzamiento oficial",
+                goal12m: "Cobertura mayoritaria de la base activa 20K–25K",
+              },
+              {
+                name: "Interacciones totales por mes",
+                baseline: "10,000–11,000 (julio) vs 2,000–3,000 previos",
+                goal6m: "Crecimiento sostenido con adopción anunciada",
+                goal12m: "Volumen estable con expansión a nuevos casos",
+              },
+              {
+                name: "Consultoras nuevas y recurrentes",
+                baseline: "Por capturar tras el lanzamiento oficial",
+                goal6m: "≥60% de recurrencia mensual",
+                goal12m: "≥75% de recurrencia mensual",
+              },
+              {
+                name: "Sesiones mensuales",
+                baseline: "~50,000 promedio",
+                goal6m: "Distribución balanceada por canal y momento",
+                goal12m: "Cobertura completa de casos priorizados",
+              },
+            ],
+          },
+          {
+            group: "Indicadores operativos",
+            items: [
+              {
+                name: "Reducción de llamadas al call center",
+                baseline: "20–25% estimado · por validar con periodo, volumen base y causal",
+                goal6m: "Reducción validada con línea base formal",
+                goal12m: "Reducción sostenida ≥30% con Janet anunciada",
+              },
+              {
+                name: "Contención (% resuelto sin transferencia)",
+                baseline: "Percepción interna ~80% · sin medición formal",
+                goal6m: "≥70% con criterio claro de transferencia",
+                goal12m: "≥85% en casos productivos",
+              },
+              {
+                name: "Casos por conversación (pedidos incompletos)",
+                baseline: "1 caso por producto faltante (fricción actual)",
+                goal6m: "1 caso consolidado por pedido/incidencia",
+                goal12m: "Estable · sin fragmentación reportada",
+              },
+              {
+                name: "Resolución en el primer contacto",
+                baseline: "Por capturar",
+                goal6m: "Baseline definido con línea de tiempo",
+                goal12m: "Óptimo por tipo de caso",
+              },
+            ],
+          },
+          {
+            group: "Indicadores de calidad y experiencia",
+            items: [
+              {
+                name: "CSAT post-interacción",
+                baseline: "Por capturar tras la sesión",
+                goal6m: "Baseline formal con muestra representativa",
+                goal12m: "Superar baseline humano en casos productivos",
+              },
+              {
+                name: "Esfuerzo requerido por la consultora",
+                baseline: "Alto en pedidos incompletos (pide SKU)",
+                goal6m: "Reducción tras corregir captura de pedidos",
+                goal12m: "Mínimo estructural con captura simplificada",
+              },
+              {
+                name: "Motivos de escalamiento",
+                baseline: "Pagos y pedidos identificados en la sala",
+                goal6m: "Taxonomía clara y accionable",
+                goal12m: "Escalamientos por diseño, no por brecha",
+              },
+              {
+                name: "Confianza en la información (uso del registro conversacional)",
+                baseline: "Percibido como valor · políticas por revisar",
+                goal6m: "Políticas de conservación y consulta definidas",
+                goal12m: "Registro utilizado como evidencia con consentimiento claro",
+              },
+            ],
+          },
+          {
+            group: "Indicadores de negocio (foco Convención Septiembre)",
+            items: [
+              {
+                name: "Impacto en ventas atribuible a Janet",
+                baseline: "Por definir modelo de atribución",
+                goal6m: "Uplift medible en cohortes usuarias",
+                goal12m: "Contribución consistente al ticket / permanencia",
+              },
+              {
+                name: "Cumplimiento de metas de la consultora",
+                baseline: "Por capturar tras la sesión",
+                goal6m: "Diferencial vs cohorte no usuaria",
+                goal12m: "Correlación estable con uso recurrente",
+              },
+              {
+                name: "Aprovechamiento de promociones",
+                baseline: "Por capturar",
+                goal6m: "Conversión medible tras recomendación",
+                goal12m: "Palanca activa del ciclo comercial",
+              },
+              {
+                name: "Reducción de costos de atención",
+                baseline: "Beneficio inferido de la reducción de llamadas",
+                goal6m: "Cuantificado con línea base formal",
+                goal12m: "Caso de valor consolidado para la Convención",
+              },
+            ],
+          },
+        ],
+        valorWorkshopPlanData: {
+          purpose:
+            "Consolidar en un solo lugar todo lo que salió de la sesión de dos horas — ficha del agente construida entre todos, valor demostrado, fricción crítica, oportunidades futuras, «primos de Janet» y pendientes que aún no son acuerdos formales. Es la memoria viva de la sala.",
+          guidingQuestion:
+            "¿Qué está entregando Janet hoy, qué está eclipsando ese valor y cómo llegamos a la Convención de Septiembre con evidencia?",
+          benchmarkNote:
+            "Ninguno de los puntos abajo tiene aún dueño con nombre, fecha o mecanismo de seguimiento firmado por Salesforce y JAFRA. La sesión abrió la conversación · los acuerdos formales son el siguiente paso.",
+          expectedOutcomes: [
+            "Percepción interna cambia · de «Janet no funciona» a «Janet ya entrega valor y tiene una fricción específica que resolver»",
+            "Ficha del agente construida entre los seis participantes · nombre, capacidades, fuentes y escalamiento",
+            "Fricción principal aislada · pedidos incompletos · con dos problemas concretos identificados",
+            "Visión de evolución hilada · anticipación en conversación, comunicación proactiva y capacidad de «autoconsultarse»",
+            "«Primos de Janet» esbozados · agentes para crédito y para educación/capacitación",
+            "Preparación para Convención Anual de septiembre · métricas por definir con línea base",
+            "Lista de pendientes registrados sin confundir con acuerdos formales",
+          ],
+          prework: [
+            {
+              key: "business",
+              title: "Lo que ya sabíamos entrar",
+              purpose: "Contexto que negocio y tecnología llevaban antes de la sesión.",
+              items: [
+                "Janet está en producción sin comunicación oficial",
+                "Hay percepción negativa concentrada en pedidos incompletos",
+                "La base activa es 20K–25K consultoras · adopción orgánica creciente",
+                "Hay una Convención Anual en septiembre que exige métricas robustas",
+              ],
+              note: "La sesión partió reconociendo que hay más valor entregado del que la percepción interna refleja.",
+            },
+            {
+              key: "consumption",
+              title: "Los números que aparecieron en la sala",
+              purpose: "Cifras compartidas en vivo durante el bloque 2 y 3 · anclan la conversación en evidencia.",
+              items: [
+                "10,000–11,000 interacciones a julio (vs 2K–3K previos)",
+                "~20,000 usuarios únicos activos actualmente",
+                "~50,000 sesiones mensuales promedio",
+                "Reducción estimada del 20–25% en llamadas al call center — observación preliminar",
+              ],
+              note: "Todos estos números deben validarse con periodo de medición, volumen base y relación causal antes de la Convención.",
+            },
+            {
+              key: "technical",
+              title: "Las dos conversaciones revisadas",
+              purpose: "Los casos que aterrizaron la conversación en material real.",
+              items: [
+                "Valor demostrado · Janet resuelve consultas frecuentes, orienta al negocio y comparte información de metas · patrón repetible reconocido",
+                "Fricción crítica · pedido incompleto donde Janet pide SKU y genera un caso por cada producto faltante · dos problemas concretos identificados",
+                "Elemento a proteger · registro escrito de la interacción como fuente de confianza para la consultora",
+                "Escalamiento humano · Janet lo hace en pagos y pedidos cuando no encuentra información",
+              ],
+              note: "El caso de la fricción tomó peso desproporcionado en la percepción · la sesión ayudó a devolverle su tamaño real.",
+            },
+            {
+              key: "conversations",
+              title: "Lo que quedó en la sala",
+              purpose: "Artefactos vivos que salen de la sesión y son la base para los acuerdos formales.",
+              items: [
+                "Ficha del agente construida entre los seis (ver tab «Ficha del agente»)",
+                "Ejercicio individual «Conociendo a nuestro agente» completado en la sala",
+                "Lista de pendientes con 11 puntos por confirmar",
+                "Marco de métricas alineado a la Convención de Septiembre",
+              ],
+              note: "Nada de esto sustituye la tabla de acuerdos firmada · es la materia prima para llegar a ella.",
+            },
+          ],
+          agenda: [
+            {
+              code: "1",
+              title: "Fricción crítica · pedidos incompletos",
+              duration: "Resolver antes del anuncio oficial",
+              objective:
+                "Simplificar la captura del reporte de pedido incompleto y consolidar toda la incidencia en un solo caso por pedido — eliminando la solicitud del SKU cuando el sistema puede derivarlo.",
+              content:
+                "Hoy Janet crea un caso por cada producto faltante y solicita datos técnicos que la consultora no siempre tiene. La experiencia deseada es un caso único que agrupe faltantes, incorrectos, dañados y evidencia asociada al mismo pedido.",
+              exercise:
+                "Revisar el flujo actual paso a paso · identificar los campos que realmente necesita la consultora · rediseñar la agrupación de casos.",
+              deliverable:
+                "Flujo corregido en piloto controlado · métrica de casos por conversación consolidada · desbloqueo del anuncio oficial.",
+              accent: "rose",
+            },
+            {
+              code: "2",
+              title: "Proteger la cercanía y la orientación de negocio",
+              duration: "Continuo",
+              objective:
+                "Blindar el patrón repetible que hace que Janet ya entregue valor a la consultora — cercanía, orientación al negocio, registro escrito y adopción orgánica.",
+              content:
+                "El diferencial de Janet no es solo funcional · es emocional. La consultora la percibe como aliada, guía y confidente. Este patrón debe protegerse en cada cambio siguiente.",
+              exercise:
+                "Definir criterios de aceptación que garanticen que ningún cambio degrade la cercanía ni el registro escrito de la conversación.",
+              deliverable:
+                "Guardarraíles documentados · aplicables a todo cambio en Janet · revisados en cada release.",
+              accent: "indigo",
+            },
+            {
+              code: "3",
+              title: "Servicio proactivo · dentro de la conversación",
+              duration: "Q4 2026",
+              objective:
+                "Habilitar la anticipación cuando la consultora ya está en conversación — Janet reconoce patrones y ofrece la información esperada sin que se la pidan.",
+              content:
+                "Ejemplo · «sé que normalmente consultas tu balance, aquí lo tienes antes de que me lo pidas». Señales a explorar: historial, momento del ciclo, estado de metas, balance, pedidos recientes.",
+              exercise:
+                "Definir las señales disponibles hoy y las que requieren integración · priorizar 1–2 anticipaciones de alto valor.",
+              deliverable:
+                "Lista corta de anticipaciones habilitadas · métrica de reducción de esfuerzo por conversación.",
+              accent: "violet",
+            },
+            {
+              code: "4",
+              title: "Comunicación proactiva · fuera de la conversación",
+              duration: "Requiere estrategia de omnicanalidad",
+              objective:
+                "Iniciar comunicaciones sin esperar que la consultora contacte · balance periódico, avance a meta, alertas de vencimiento, recomendaciones contextuales.",
+              content:
+                "El equipo aclaró que estos mensajes no necesariamente salen por Janet — es parte de una estrategia de omnicanalidad más amplia · Janet aporta contexto pero el canal puede variar.",
+              exercise:
+                "Definir consentimiento, frecuencia, relevancia y reglas por canal · alinear con la política de comunicaciones existente.",
+              deliverable:
+                "Marco de comunicación proactiva aprobado · canales asignados por tipo de mensaje.",
+              accent: "sky",
+            },
+            {
+              code: "5",
+              title: "Capacidad de «autoconsultarse»",
+              duration: "Requiere diseño de memoria del agente",
+              objective:
+                "Que Janet aproveche la información generada en conversaciones anteriores para personalizar las siguientes · acumular contexto por consultora.",
+              content:
+                "Aclarar qué se conserva, por cuánto tiempo, en qué modalidad (historial, memoria, atributos, conocimiento), qué se puede reutilizar, qué consentimiento se necesita y cómo se corrige.",
+              exercise:
+                "Diseñar la arquitectura de memoria del agente · políticas de privacidad, consentimiento y corrección.",
+              deliverable:
+                "Diseño de memoria de agente aprobado · casos permitidos y prohibidos claramente delimitados.",
+              accent: "emerald",
+            },
+            {
+              code: "6",
+              title: "«Primos de Janet» · nuevos agentes especializados",
+              duration: "Post-Convención Septiembre",
+              objective:
+                "Escalar el modelo de agentes a otros dominios donde JAFRA tiene brechas claras — sin quitar foco a Janet mientras ella no esté anunciada oficialmente.",
+              content:
+                "Dos candidatos surgieron en la sala · agente para temas de crédito · agente para educación y capacitación (hoy no hay plataforma de formación para consultoras).",
+              exercise:
+                "Aplicar los 5 criterios del bloque «Próximos agentes» de la agenda original · problema · métrica · madurez del actual · presupuesto · dueño.",
+              deliverable:
+                "Portafolio de agentes priorizado · Janet consolidada primero · siguiente candidato con dueño nombrado.",
+              accent: "amber",
+            },
+          ],
+          participants: {
+            client: {
+              heading: "JAFRA · lo que aportó a la sala",
+              roles: [
+                {
+                  role: "Sponsor / dueño del resultado de negocio",
+                  note: "Compartió la percepción interna sobre Janet y la presión del calendario hacia la Convención de Septiembre.",
+                },
+                {
+                  role: "Product Owner del agente (desde negocio)",
+                  note: "Aportó el conocimiento de la consultora y las historias reales que llevaron al hallazgo de pedidos incompletos.",
+                },
+                {
+                  role: "Equipo técnico presente",
+                  note: "Detalló la arquitectura AS/400 · ventana histórica · integración con SharePoint · flujos actuales de casos.",
+                },
+              ],
+            },
+            partner: {
+              heading: "Salesforce · lo que facilitó",
+              roles: [
+                {
+                  role: "Facilitación de la sesión",
+                  note: "Condujo la dinámica orgánica y participativa · aseguró que negocio y tecnología se turnaran explícitamente.",
+                },
+                {
+                  role: "Ejercicio «Conociendo a nuestro agente»",
+                  note: "Pieza más valiosa del taller · desbloqueó la ficha común y devolvió a Janet su tamaño real frente a la fricción.",
+                },
+                {
+                  role: "Marco de valor y métricas",
+                  note: "Trajo la referencia de las cuatro dimensiones (adopción · efectividad · experiencia · valor) para preparar la Convención.",
+                },
+              ],
+            },
+            note: "La sesión reunió a seis personas · dos horas de conversación fluida. Faltan por confirmar los nombres exactos, roles y el canal específico de Janet — se documentarán en la memoria formal de la sesión.",
+          },
+          materials: [
+            {
+              title: "Ejercicio «Conociendo a nuestro agente» respondido",
+              body: "Documento con las respuestas de la sala · nombre acordado (Janet · apodo «La Janet»), capacidades, fuentes de conocimiento, criterio de escalamiento, nivel de poder y apodo. Se preserva como memoria viva.",
+            },
+            {
+              title: "Notas de Paola Castaño",
+              body: "Registro contemporáneo de la sesión · adopción, impacto positivo, oportunidades de mejora (gestión de tickets), capacidades futuras deseadas, «primos de Janet» y objetivos de medición para septiembre.",
+            },
+            {
+              title: "Notas estructuradas de Jonathan Gómez",
+              body: "Síntesis con apoyo de IA · datos generales, resumen ejecutivo, identidad y propósito, valor entregado, fricción crítica, estado del despliegue, fuentes de conocimiento, visión de evolución, medición del éxito, proteger vs mejorar y pendientes.",
+            },
+            {
+              title: "Deck ejecutivo de resultados",
+              body: "Presentación puntual con la lectura ejecutiva de la sesión · un slide por bloque · pensada para llevar a comités de negocio y tecnología.",
+            },
+            {
+              title: "Marco de métricas · adopción · efectividad · experiencia · valor",
+              body: "Referencia consolidada en el tab «Cómo mediremos» y en el tab de resultados · para llegar a la Convención de Septiembre con línea base clara.",
+            },
+            {
+              title: "Lista de pendientes",
+              body: "Once puntos que aún no son acuerdos formales · registrados abajo para que la próxima sesión los convierta en tabla de acuerdos con dueño, mecanismo y fecha.",
+            },
+          ],
+          governance: [
+            {
+              cadence: "per-change",
+              title: "Antes de cualquier cambio en Janet",
+              bullets: [
+                "Documentar la hipótesis · «si cambio X, esperamos que Y mejore en Z»",
+                "Capturar el valor actual de la métrica antes de tocar nada",
+                "Aplicar el guardarraíl de cercanía · ningún cambio degrada la relación emocional con la consultora",
+                "Probar con muestra controlada antes del rollout",
+                "Comparar y documentar la decisión en la memoria del agente",
+              ],
+            },
+            {
+              cadence: "monthly",
+              title: "Cadencia mensual · camino a la Convención",
+              bullets: [
+                "Revisar avance de adopción · interacciones, usuarios únicos, recurrencia",
+                "Revisar la fricción de pedidos incompletos · % de casos consolidados vs fragmentados",
+                "Actualizar la línea base de reducción de llamadas al call center con evidencia validada",
+                "Revisar avance de las capacidades futuras (proactivo · autoconsultarse · primos)",
+                "Ajustar el tablero de septiembre con lo aprendido",
+              ],
+            },
+            {
+              cadence: "weekly",
+              title: "Cadencia operativa · seguimiento de pendientes",
+              bullets: [
+                "Estado de cada uno de los 11 pendientes (verde · amarillo · rojo)",
+                "Dependencias identificadas y obstáculos escalados",
+                "Fecha esperada de conversión en acuerdo formal con responsable nombrado",
+                "Duración corta · foco en avance, no en debate",
+              ],
+            },
+          ],
+          nextAgents: {
+            intro:
+              "Los «primos de Janet» aparecieron espontáneamente en la sesión. Ninguno está aún priorizado formalmente — se registran aquí para aplicar los criterios de aprobación cuando Janet esté consolidada y anunciada.",
+            criteria: [
+              {
+                title: "Agente para temas de crédito",
+                body: "Dominio donde hay dudas recurrentes y sensibilidad regulatoria. Requiere definir problema, métrica, dueño y presupuesto antes de construir.",
+              },
+              {
+                title: "Agente para educación y capacitación",
+                body: "Hoy JAFRA no cuenta con una plataforma de formación para consultoras. Un agente podría cubrir el vacío con conversación estructurada · alto potencial · dependiente del contenido disponible.",
+              },
+              {
+                title: "¿Janet ya está consolidada y anunciada?",
+                body: "Sin lanzamiento oficial ni fricción crítica resuelta, no se abre presupuesto para otro agente · el foco es demostrar valor en Convención primero.",
+              },
+              {
+                title: "¿Hay línea base y tablero para el nuevo agente?",
+                body: "Mismo estándar que Janet · problema en una frase · métrica con umbral · dueño con nombre y apellido del lado JAFRA.",
+              },
+              {
+                title: "¿Cabe en presupuesto y bandwidth?",
+                body: "Estimación gruesa de consumo revisada con finanzas · capacidad del equipo confirmada antes de comprometer construcción.",
+              },
+            ],
+          },
+          guidingPrinciples: [
+            "Janet ya entrega valor · lo protegemos antes de agregarle nada.",
+            "Resolver la fricción de pedidos incompletos es prerrequisito para el anuncio oficial.",
+            "Nada de lo escrito aquí es un acuerdo formal · son insumos para la siguiente sesión.",
+            "La Convención de Septiembre es el hito · toda métrica debe llegar con línea base a esa fecha.",
+            "Los «primos de Janet» esperan · un agente consolidado vale más que tres a medio camino.",
+            "El registro escrito de la conversación es un activo de confianza para la consultora · se protege desde el diseño.",
+          ],
+        },
+      },
+
+      // ── 8 · Ficha del agente construida en sala ─────────────────────────
+      {
+        id: "agent-card",
+        label: "Ficha del agente · Janet",
+        title: "Conociendo a Janet · ficha construida entre los seis participantes",
+        content:
+          "El ejercicio individual «Conociendo a nuestro agente» del bloque 2 fue la pieza más valiosa del taller. Cada participante respondió las seis preguntas y luego se construyó la ficha compartida. Esto es lo que quedó registrado en la sala — tal y como lo escribieron los participantes, sin edición posterior.\n\n### 1 · 👋 Preséntame al agente\n\n> «**Janet** es un agente que atiende a **Consultoras, Líderes, señoras** a través de **WhatsApp**. Se comunica de una manera **Conversacional**.»\n\n### 2 · 🛠 ¿Qué sabe hacer?\n\n1. Puede **abrir tickets sin necesidad de un humano**\n2. Puede **dar la solución al menos al 80% de las solicitudes**\n3. Puede **asesorar sobre las principales promociones y cómo ganar comisiones/puntos en segundos**\n4. Puede **ser una aliada del negocio**\n5. Puede **orientar y guiar en qué momento del negocio estás**\n6. Puede **brindar indicadores e insights sobre información de las Consultoras**\n\n### 3 · 📚 ¿Qué sabe? · fuentes de conocimiento\n\n- **AS/400** · API punto a punto (indirectamente · ventana histórica ~3 meses trasladada a Salesforce)\n- **Artículos de Knowledge** y **Biblioteca en SharePoint** (integración por confirmar)\n- **Información en Salesforce** (consume y también crea nueva información)\n\n### 4 · 🤝 ¿Cuándo pide ayuda humana?\n\n> «Cuando no encuentra info que está pidiendo (pedidos, pagos).»\n\n### 5 · ⚡ ¿Cuál es su nivel de poder? (0 a 10)\n\n> Escala colectiva · el equipo la posicionó en el rango de «**aún aprendiendo — pero ya trabajando en producción**» · más cerca del centro que de «lista para todo». La cifra exacta queda por confirmar de las hojas individuales.\n\n### 6 · 🏷 ¿Qué apodo le pondrías?\n\n> «**La Janet**»\n\n---\n\n### Elementos a proteger a partir de esta ficha\n\n| Aspecto | Cómo apareció en la sala |\n| --- | --- |\n| Cercanía emocional | «amiga · confidente · apoyo constante en el camino hacia el liderazgo» |\n| Rol de aliada del negocio | «orienta y guía en qué momento del negocio estás» |\n| Autoservicio efectivo | «abre tickets sin necesidad de un humano» · «resuelve al menos el 80%» |\n| Rapidez comercial | «asesora sobre promociones, comisiones y puntos en segundos» |\n| Registro escrito | Identificado como elemento de confianza post-lanzamiento |\n\n### Preguntas abiertas a raíz de la ficha\n\n- ¿Qué canal específico opera Janet hoy además de WhatsApp? · por confirmar\n- ¿La ventana de tres meses del AS/400 es limitación de arquitectura actual o decisión de diseño? · por documentar\n- ¿Cómo se incorpora hoy el contenido de SharePoint a la base de conocimiento? · por confirmar (Data Cloud, sincronización, versionado, permisos)\n- ¿Qué se conserva del historial de conversación · por cuánto tiempo · quién puede consultarlo? · por definir",
+      },
+
+      // ── 9 · Assets ──────────────────────────────────────────────────────
       {
         id: "assets",
         label: "Assets",
@@ -5418,6 +5922,14 @@ export const customerDemos: CustomerDemo[] = [
               available: true,
               type: "deck",
               url: "/customer-demos/jafra/deck/tendencias-ia",
+            },
+            {
+              name: "Resultados del Workshop · Deck ejecutivo",
+              description:
+                "Lectura ejecutiva de la sesión de dos horas · Janet ya entrega valor, la fricción de pedidos incompletos eclipsa la percepción, hallazgos consolidados con las notas de Paola y Jonathan, ficha del agente, hoja de ruta a la Convención de Septiembre y pendientes por confirmar.",
+              available: true,
+              type: "deck",
+              url: "/customer-demos/jafra/deck/resultados-workshop",
             },
             {
               name: "«Conociendo a nuestro agente» · Plantilla imprimible",
