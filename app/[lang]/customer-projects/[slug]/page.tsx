@@ -44,7 +44,8 @@ export default async function CustomerProjectPage({
 
   const cookieStore = await cookies();
   const hasAccess =
-    cookieStore.get(`project-access-${slug}`)?.value === "granted";
+    cookieStore.get(`project-access-${slug}`)?.value === "granted" ||
+    cookieStore.get("projects-section-access")?.value === "granted";
 
   if (!hasAccess) {
     return (

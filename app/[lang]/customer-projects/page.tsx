@@ -1,7 +1,10 @@
 import Image from "next/image";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "@/lib/i18n";
 import { customerProjects } from "@/data/customerProjects";
+import DemoAccessGate from "@/components/DemoAccessGate";
+import { verifyProjectsSectionPasscode } from "./actions";
 
 export default async function CustomerProjectsPage({
   params,
@@ -12,6 +15,21 @@ export default async function CustomerProjectsPage({
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
   const d = dict.customerProjects;
+
+  const cookieStore = await cookies();
+  const hasAccess =
+    cookieStore.get("projects-section-access")?.value === "granted";
+
+  if (!hasAccess) {
+    return (
+      <DemoAccessGate
+        slug="__section__"
+        customerName={d.title}
+        dict={dict}
+        verifyAction={verifyProjectsSectionPasscode}
+      />
+    );
+  }
 
   return (
     <main className="px-6 pb-16 pt-12 md:px-8 md:pt-16">
@@ -41,7 +59,7 @@ export default async function CustomerProjectsPage({
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {customerProjects.filter((project) => !project.hidden).map((project) => {
+          {customerProjects.map((project) => {
             const i18n = lang === "en" ? project.translations?.en : lang === "pt" ? project.translations?.pt : undefined;
             const title = i18n?.title ?? project.title;
             const description = i18n?.description ?? project.description;

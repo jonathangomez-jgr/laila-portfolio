@@ -5,6 +5,7 @@
     "laila": "Laila",
     "generalDemos": "General Demos",
     "customerSolutions": "Customer's Solutions",
+    "customerProjects": "Customer's Projects",
     "letsTalk": "Let's Talk",
     "insights": "Insights",
     "openMenu": "Open menu",
@@ -310,7 +311,21 @@
     "execDeckBtn": "Executive presentation",
     "execDeckHint": "Slide-by-slide version of the content — ideal to share or present.",
     "nextRead": "Coming soon",
-    "nextReadDesc": "We are preparing the next entries. If you'd like a heads-up when we publish, drop us a line."
+    "nextReadDesc": "We are preparing the next entries. If you'd like a heads-up when we publish, drop us a line.",
+    "filters": {
+      "title": "Filters",
+      "clearAll": "Clear filters",
+      "empty": "No insight matches the selected filters.",
+      "resultsSingular": "insight",
+      "resultsPlural": "insights",
+      "consultant": "For consultants",
+      "sections": {
+        "audience": "Audience",
+        "industry": "Industry",
+        "products": "Products",
+        "region": "Region"
+      }
+    }
   },
   "customerDetail": {
     "eyebrow": "Customer Solution",

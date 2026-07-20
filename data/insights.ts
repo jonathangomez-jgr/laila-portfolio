@@ -44,10 +44,15 @@ export type InsightSection = {
 
 export type InsightAudience = "executive" | "architect" | "deep";
 
+export type InsightRegion = "LATAM" | "Mexico" | "Colombia" | "Global";
+
 export type Insight = {
   slug: string;
   topic: string;
   audience: InsightAudience[];
+  industry: string[];
+  products: string[];
+  region: InsightRegion[];
   title: string;
   subtitle: string;
   summary: string;
@@ -75,6 +80,9 @@ const multiAgent: Insight = {
   slug: "salesforce-multi-agent-orchestrator",
   topic: "Arquitectura multiagente",
   audience: ["executive", "architect", "deep"],
+  industry: ["Cross-industry"],
+  products: ["Agentforce", "MuleSoft", "Data Cloud"],
+  region: ["Global"],
   heroEyebrow: "Postura técnica · Arquitectura empresarial",
   title:
     "Salesforce como actor principal en arquitecturas multiagente empresariales",
@@ -1096,6 +1104,9 @@ const customerFeedback: Insight = {
   slug: "customer-feedback-strategy-salesforce",
   topic: "Customer Feedback",
   audience: ["executive", "architect", "deep"],
+  industry: ["Cross-industry"],
+  products: ["Feedback Management", "Customer Signals", "Agentforce", "Data Cloud"],
+  region: ["Global"],
   heroEyebrow: "Postura técnica · Voz del cliente",
   title:
     "Estrategia de Customer Feedback con Salesforce: de la encuesta puntual al sistema continuo de voz del cliente",
@@ -1815,6 +1826,9 @@ const retailAiMexico: Insight = {
   slug: "retail-ia-mexico-salesforce",
   topic: "IA en Retail",
   audience: ["executive", "architect", "deep"],
+  industry: ["Retail"],
+  products: ["Agentforce", "Commerce Cloud", "Data Cloud", "Marketing Cloud", "Service Cloud"],
+  region: ["Mexico", "LATAM"],
   heroEyebrow: "Postura de industria · Retail & IA",
   title:
     "IA en la industria Retail: del mandato global a la oportunidad mexicana con Salesforce",
@@ -2892,6 +2906,9 @@ const retailAiColombia: Insight = {
   slug: "retail-ia-colombia-salesforce",
   topic: "IA en Retail",
   audience: ["executive", "architect", "deep"],
+  industry: ["Retail"],
+  products: ["Agentforce", "Commerce Cloud", "Data Cloud", "Marketing Cloud", "Service Cloud"],
+  region: ["Colombia", "LATAM"],
   heroEyebrow: "Postura de industria · Retail & IA · Colombia",
   title:
     "IA en la industria Retail de Colombia: del mandato global al momento colombiano con Salesforce",
