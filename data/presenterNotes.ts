@@ -381,9 +381,183 @@ const retailAiTedColombia: PresenterSlide[] = [
   },
 ];
 
+const headlessCioMexicoTed: PresenterSlide[] = [
+  {
+    index: 1,
+    title: "Portada · El cerebro invisible",
+    timing: "0:00 – 0:20",
+    role: "Inspiration",
+    goal: "Establecer autoridad y tono en 20 segundos. Que la sala deje de mirar el teléfono y se prepare para una conversación distinta.",
+    script:
+      "[Antes de hablar, mirar la sala 3 segundos completos]\n\n\"El software que va a decidir la próxima década de sus empresas… no tiene rostro.\"\n\n[Pausa de 2 segundos]\n\n\"En los próximos minutos vamos a hablar de por qué la ventaja competitiva ya no vive en la pantalla. Y de qué significa eso para quien decide arquitectura empresarial en México.\"",
+    tips: [
+      "No leer el subtítulo. Se lee solo.",
+      "No arrancar con 'buenas tardes, gracias por venir'. Eso lo hizo quien te presentó.",
+      "El QR queda visible — invita a escanear con: 'y para quienes quieran seguir la presentación desde su teléfono, ahí queda el QR.'",
+    ],
+  },
+  {
+    index: 2,
+    title: "Escena · La torre de control",
+    timing: "0:20 – 1:30",
+    role: "Inspiration",
+    goal: "Instalar la analogía maestra en 60 segundos. Que la sala visualice el eje conceptual antes de escuchar un solo dato.",
+    script:
+      "[Bajar el tono, casi contando una historia. Movimiento lento]\n\n\"Piensen en una torre de control de un aeropuerto grande. Ochenta millones de pasajeros al año. Cientos de vuelos por hora.\"\n\n[Pausa]\n\n\"La torre no vuela ningún avión. No embarca a ningún pasajero. No factura una sola maleta. Pero sin la torre… nada aterriza.\"\n\n[Un paso hacia la audiencia]\n\n\"La torre <em>sabe</em>: quién va llegando, qué pista está libre, qué avión tiene prioridad, cuál necesita combustible, cuál trae una emergencia. Coordina. Decide. Y es invisible para el pasajero.\"\n\n<b>El pivote:</b> \"El próximo salto de sus empresas es dejar de comprar 'aviones' — dejar de comprar apps y pantallas — y empezar a construir la torre de control. La capa que sabe, coordina y decide detrás de cada canal donde vive su cliente.\"",
+    tips: [
+      "La analogía es TODO el hilo conductor. Repítela literal en los slides 4, 9 y 15.",
+      "No mencionar Heathrow todavía — se cita en el slide de casos como el 'cierre' de la analogía.",
+      "Si la sala tiene muchos ejecutivos de manufactura/logística/aeronáutica, subraya 'coordina, no vuela'.",
+    ],
+  },
+  {
+    index: 3,
+    title: "El estándar se movió",
+    timing: "1:30 – 3:30",
+    role: "Information",
+    goal: "Fijar el marco global con fuentes primarias. La audiencia deja de dudar si 'esto está pasando' y entra al modo receptivo.",
+    script:
+      "[Tono ejecutivo, casi de brief. Sin adornos]\n\n\"Gartner encuestó a dos mil quinientos directores de tecnología con doscientos setenta y cuatro mil millones de dólares de gasto en TI. El resultado del CIO Agenda 2026: <em>noventa y cuatro por ciento</em> esperan cambios mayores a sus planes en los próximos veinticuatro meses.\"\n\n[Pausa]\n\n\"McKinsey — su reporte State of AI de este año — confirma la otra cara: ochenta y ocho por ciento de las organizaciones ya usa IA de forma regular. Pero <em>solo seis por ciento</em> se considera 'AI high performer'. El resto experimenta. Pilotea. Y no escala.\"\n\n<b>El punchline:</b> \"La conversación ya no es 'adoptar IA o no'. Es <em>por qué la mayoría no logra escalarla</em>. Y esa respuesta no está en el modelo — está en la arquitectura de abajo.\"",
+    tips: [
+      "Cita literal recomendada — mientras aparece en pantalla — de McKinsey: 'Systems are no longer organized around screens and forms but around machine-readable interfaces, autonomous workflows, and agent-led decision flows.' Léela pausado.",
+      "Es la única cita literal en inglés. Léela con ritmo, luego tradúcela: 'los sistemas dejaron de organizarse alrededor de pantallas y formularios; giran alrededor de interfaces legibles por máquina.'",
+      "Si preguntan la fuente exacta: 'Seizing the Agentic AI Advantage, McKinsey, junio 2025.'",
+    ],
+  },
+  {
+    index: 4,
+    title: "La otra cara · El 40% que se cancela",
+    timing: "3:30 – 5:00",
+    role: "Information",
+    goal: "Instalar humildad. Preventivamente desactivar el escepticismo del CIO — reconocer que la mayoría de proyectos fracasa, y decir por qué.",
+    script:
+      "[Cambio de tono: más franco, casi confesional]\n\n\"Aquí es donde me toca decir la parte incómoda. Gartner también publicó — en junio del año pasado — que <em>más del cuarenta por ciento</em> de los proyectos de IA agentic van a ser cancelados antes del cierre de 2027.\"\n\n[Pausa larga]\n\n\"Y quiero leer una frase textual de Anushree Verma, la analista responsable de esa predicción: 'La mayoría de las propuestas de IA agentic <em>carece</em> de valor significativo o de retorno de inversión.' Palabras de Gartner. No mías.\"\n\n<b>El giro:</b> \"El error no es adoptar IA. Es adoptarla sin arquitectura debajo. Sin fundación de datos. Sin gobernanza. Sin métrica dura desde el día uno. Y ese es el marco que quiero proponerles hoy — la torre de control, no los aviones.\"",
+    tips: [
+      "Reconocer la crítica sube credibilidad. No la ocultes — apoderátela.",
+      "'La torre de control, no los aviones' — repítela. Es el callback #1 al slide 2.",
+      "Si preguntan por 'agent washing', respuesta corta: 'exactamente por eso hablamos de arquitectura, no de agentes sueltos'.",
+    ],
+  },
+  {
+    index: 5,
+    title: "México · El terreno donde caemos",
+    timing: "5:00 – 7:00",
+    role: "Information",
+    goal: "Aterrizar. Dejar de hablar del mundo y empezar a hablar de la casa. La audiencia debe sentir que las cifras son suyas.",
+    script:
+      "\"México no es un mercado atrasado en tecnología empresarial. Es un mercado con reglas propias.\"\n\n[Pausa. Postura firme]\n\n\"Ciento cuatro punto nueve millones de internautas. Noventa y siete punto dos por ciento con smartphone. Noventa punto seis por ciento usa apps de mensajería como canal principal. Fuente: INEGI, ENDUTIH del año pasado.\"\n\n[Un paso hacia la audiencia]\n\n\"Sesenta y cinco por ciento de las organizaciones mexicanas alcanzó adopción sistemática de IA en 2025 según IDC. Pero <em>solo cuarenta y cuatro por ciento</em> reporta alto impacto — Select, mayo de este año. Es la <em>misma brecha</em> global. Y probablemente es la brecha que muchos de ustedes viven en su propia organización.\"\n\n<b>Cierre:</b> \"La pregunta ya no es si su cliente está listo para hablar por WhatsApp con su empresa. Es si su arquitectura está lista para <em>contestarle</em>.\"",
+    tips: [
+      "88.2% vs 90.6%: usar el 90.6% (INEGI ENDUTIH 2025, publicado junio 2026). Es el más reciente y verificable.",
+      "NO decir 'México top 3 mundial en WhatsApp'. Está en top 5–6. Si quieres cifra: '~77M usuarios activos'.",
+      "Si preguntan por el sucesor del INAI: 'Sus funciones migraron a un órgano bajo la Secretaría Anticorrupción — obligaciones vigentes, gobierno reconfigurándose.' No entres al debate político.",
+    ],
+  },
+  {
+    index: 6,
+    title: "El nombre correcto · Nomenclatura oficial",
+    timing: "7:00 – 9:00",
+    role: "Information",
+    goal: "Aterrizar la charla al lenguaje técnico oficial. Que el CIO se lleve el vocabulario preciso para su próxima reunión de arquitectura.",
+    script:
+      "[Cambio de tono: más didáctico, casi de arquitecto]\n\n\"Antes de seguir, permítanme fijar el vocabulario. Porque si compran 'algo headless' sin saber a qué se refiere Salesforce oficialmente, se van a exponer a ambigüedad contractual.\"\n\n[Con calma, señalando la tabla en pantalla]\n\n\"Uno: <em>Agent API</em>. Es el endpoint oficial. La documentación pública lo dice literal: 'headless agents to automate functionality without UI constraints'. Es la puerta que permite invocar el razonamiento de Agentforce desde <em>cualquier</em> canal — web, mobile, Slack, voz, un agente de otro proveedor.\"\n\n\"Dos: <em>MCP Servers hosted</em>. En general availability desde abril de este año. Cita textual de la documentación: 'un endpoint gestionado por Salesforce que expone la lógica y los activos de su organización — datos, flows, acciones Apex, queries'. Autenticación OAuth con PKCE. Cada transacción corre <em>como el usuario autenticado</em>, sin cuentas de servicio anónimas.\"\n\n\"Tres: <em>MuleSoft Agent Fabric</em>. La capa de gobernanza cuando su ecosistema tiene múltiples agentes.\"\n\n<b>La analogía de cierre:</b> \"Agent API es el idioma que hablan los canales con el cerebro. MCP es el idioma que habla el cerebro con los sistemas. MuleSoft Agent Fabric es la torre que los ordena a todos.\"",
+    tips: [
+      "El detalle técnico es intencional — para un CIO, precisión de nomenclatura = confianza en el proveedor.",
+      "Si algún asistente no técnico se pierde, cerrar con la analogía y seguir. Los que necesitan el detalle lo agradecerán.",
+      "GA de MCP Servers hosted: abril 2026. Fecha exacta si preguntan: 29 de abril de 2026.",
+    ],
+  },
+  {
+    index: 7,
+    title: "Los 6 casos · Evidencia pública",
+    timing: "9:00 – 12:00",
+    role: "Information",
+    goal: "Quitarle a la audiencia la objeción 'sí, pero eso no ha funcionado a escala'. Seis casos, seis métricas, seis fuentes públicas.",
+    script:
+      "\"Vamos a mirar seis casos donde esto ya no es teoría. Está en producción, con números publicados, con clientes reales.\"\n\n[Ritmo controlado, dejando que las tarjetas se lean]\n\n\"<b>Heathrow.</b> Ochenta y tres millones de pasajeros al año. Canal principal: WhatsApp. Concierge digital llamado 'Hallie'. Noventa por ciento de los chats se resuelven sin transferencia. Más treinta por ciento de ingreso digital en cuatro años. Peter Burns, su ejecutivo responsable, lo describió como 'un concierge digital que te toma de la mano por todo el aeropuerto'. Palabras textuales.\"\n\n\"<b>Wiley.</b> Editorial académica global. Más cuarenta por ciento de resolución de casos versus el bot anterior. Doscientos trece por ciento de ROI. Doscientos treinta mil dólares de ahorro anual. Onboarding de agentes estacionales cincuenta por ciento más rápido.\"\n\n\"<b>OpenTable.</b> Setenta y tres por ciento de resolución <em>en tres semanas</em> post-lanzamiento. Once mil conversaciones a la semana.\"\n\n\"<b>LY Corporation — Yahoo! Japón.</b> Ochenta por ciento de FAQs resueltos por Agentforce. El usuario nunca ve Salesforce. Ve Yahoo. Ése es el punto arquitectónico exacto.\"\n\n\"<b>Pandora.</b> Cuarenta y cinco mil conversaciones al mes. Sesenta por ciento resueltas sin humano. Diez puntos NPS arriba.\"\n\n[Cambio de tono — más cercano]\n\n\"Y el que quiero cerrar es mexicano. <b>Grupo Posadas.</b> Doscientos hoteles. Agentforce con WhatsApp y SMS como concierge digital. Quince puntos NPS acumulados. Diez puntos sobre benchmark. Leslie Gómez, su responsable, lo dijo así: 'Al integrar toda esta información a través de Agentforce, logramos construir una visión integral de cada huésped.' Aquí. En México. En producción.\"",
+    tips: [
+      "Pandora, Wiley, Heathrow y OpenTable son casos globales. Grupo Posadas es la referencia local — remátalo con orgullo.",
+      "NO citar Home Depot ni Williams-Sonoma como casos headless commerce Salesforce — no lo son públicamente.",
+      "Si alguien pregunta por métricas independientes: 'Todas estas cifras las publican las propias compañías o Salesforce con fuente rastreable. HFS Research las cataloga como vendor-reported — es honesto reconocerlo. La decisión no se toma sobre logos, se toma sobre patrón arquitectónico.'",
+      "El patrón común es LO IMPORTANTE — no los logos. Deletréalo: 'el cliente nunca ve Salesforce. Ve el aeropuerto, el hotel, la joyería. Detrás — invisible — está la torre.'",
+    ],
+  },
+  {
+    index: 8,
+    title: "Reconocer la crítica · HFS Research",
+    timing: "12:00 – 12:45",
+    role: "Information",
+    goal: "Instalar honestidad consultiva. Reconocer proactivamente el contraargumento antes de que la audiencia lo tenga en la cabeza.",
+    script:
+      "[Tono más serio, mirar a los ojos]\n\n\"Antes de seguir. Todas las métricas que acaban de ver son publicadas por las propias compañías, o por Salesforce con fuente rastreable. HFS Research — un analista independiente serio — lo señala públicamente: son <em>vendor-reported</em>, no auditadas por tercero.\"\n\n[Pausa]\n\n\"Lo reconozco porque es cierto. Y porque la decisión que ustedes toman no se debería tomar sobre logos. Se toma sobre el <em>patrón arquitectónico</em>. Y ese patrón es reproducible: canal donde vive el cliente, agente que razona, datos gobernados, procesos auditables. Cada pieza es verificable en su propia realidad.\"",
+    tips: [
+      "Esta es la slide 'de credibilidad'. Es corta a propósito. No te extiendas — el reconocimiento vale por sí solo.",
+      "Si alguien del comité pregunta por benchmarks independientes: 'Forrester Wave, Gartner Magic Quadrant y HFS son las tres referencias. Y todas coinciden en la <em>categoría</em>, aunque discutan el ranking.'",
+    ],
+  },
+  {
+    index: 9,
+    title: "Los tres takeaways · El marco de decisión",
+    timing: "12:45 – 15:00",
+    role: "Information",
+    goal: "Entregar el marco de decisión en tres frases. Que el CIO se las lleve y las use en su comité el lunes.",
+    script:
+      "[Postura firme, tono de conclusión]\n\n\"Si de estos minutos solo se llevan tres frases… que sean estas.\"\n\n[Pausa. Dejar que la primera tarjeta respire]\n\n\"<b>Uno. El CRM ya no es una app. Es una API con juicio.</b> El valor dejó la pantalla y se mudó al modelo de datos gobernado, la lógica auditable y el contexto que se entrega por API a cualquier canal. La métrica que traigan al consejo se llama <em>cost-per-channel-added</em>: cuánto cuesta habilitar un canal nuevo. Bajarla de meses y millones a semanas y decenas de miles. Ése es el mensaje al consejo.\"\n\n[Pausa]\n\n\"<b>Dos. Un agente sin gobernanza no es innovación. Es pasivo contingente.</b> Cada agente debe poder mostrar a auditoría <em>quién</em> lo autorizó, <em>qué</em> datos tocó, <em>qué</em> acción ejecutó. Sin ese trazo, es un empleado sin contrato. Trust Layer, Command Center, Data 360: el equivalente de SOX para agentes. IDC lo dice: hasta veinte por ciento de organizaciones globales van a enfrentar multas o despidos de CIOs por mala gobernanza de agentes para 2030.\"\n\n[Pausa]\n\n\"<b>Tres. La ventaja no es tener el dato. Es tener el dato listo para razonar.</b> El dato ya vive en su SAP, en su Oracle, en su mainframe, en su WMS. Lo que le falta es una capa que lo sirva a cualquier canal con latencia sub-segundo y derechos aplicados por registro. Data 360 con Zero Copy resuelve exactamente eso: el dato puede quedarse en su Snowflake, en su BigQuery, en su Databricks, en AWS — y Salesforce lo consulta sin duplicarlo.\"",
+    tips: [
+      "Léelas pausado. Deja 3 segundos entre frases.",
+      "Si el consejo es mayoritariamente CFO/CIO técnico → énfasis en #2 (gobernanza).",
+      "Si es mayoritariamente comercial/CMO → énfasis en #1 (cost-per-channel-added).",
+      "Si es un CIO con inversión legacy grande (SAP/Oracle) → énfasis en #3 (Zero Copy no duplica).",
+    ],
+  },
+  {
+    index: 10,
+    title: "Las cinco objeciones del lunes",
+    timing: "15:00 – 17:30",
+    role: "Information",
+    goal: "Preparar al CIO para el comité del lunes. Cinco preguntas que le van a hacer y las cinco respuestas consultivas.",
+    script:
+      "\"En las próximas setenta y dos horas su comité les va a hacer estas cinco preguntas. Este es el guion para responderlas — no defensivo, no vendedor. Consultivo.\"\n\n[Ritmo ejecutivo. Sin dramatismo]\n\n\"<b>Uno: 'Ya invertimos millones en SAP y Oracle, ¿lo tiramos?'</b> Respuesta: al contrario. Su core es la fuente de verdad transaccional. Salesforce Headless 360 no lo reemplaza, lo expone. Zero Copy, MuleSoft, agentes consumiendo esas APIs. El ROI de su core acaba de subir, no de bajar.\"\n\n\"<b>Dos: '¿Cómo confío que un agente no rompa mi core?'</b> Los agentes no ejecutan acciones libremente. Trabajan contra acciones declarativas — flows, Apex, APIs — con parámetros validados y logs por ejecución. Es <em>least-privilege</em> aplicado a razonamiento.\"\n\n\"<b>Tres: '¿Data residency? ¿Soberanía?'</b> Tres capas. Hyperforce elige región. Zero Copy: el dato puede quedarse en su lakehouse. Trust Layer: los prompts no persisten datos del cliente.\"\n\n\"<b>Cuatro: '¿Mi equipo actual se vuelve obsoleto?'</b> Al contrario. Sus admins de Salesforce ya saben construir esto. Un flow es un flow — invocado por humano o agente. Upskill de seis a ocho semanas. En un mercado donde el sesenta y siete por ciento de empresas mexicanas no puede cubrir sus vacantes de TI, su equipo actual es su activo escaso.\"\n\n\"<b>Cinco: '¿ROI defendible en 12 meses?'</b> Sí, con un principio: no empiecen por el caso más sexy — empiecen por el más medible. Servicio L1 en un canal digital de alto volumen. Regla noventa-ciento ochenta-noventa: piloto acotado noventa días, despliegue ciento ochenta, medición dura noventa más.\"",
+    tips: [
+      "Estas cinco objeciones también están impresas en la guía del presentador — la audiencia se lleva el material.",
+      "Objeción bonus si preguntan: '¿Y si mi cliente no usa WhatsApp?' Respuesta: 'noventa punto seis por ciento de internautas mexicanos usa mensajería. La pregunta real es si su operación está lista para recibirlo por ahí.'",
+      "NO responder ninguna con 'confía en nosotros'. Cada respuesta debe tener un mecanismo técnico concreto.",
+    ],
+  },
+  {
+    index: 11,
+    title: "Hoja de ruta · 12 meses",
+    timing: "17:30 – 19:00",
+    role: "Information",
+    goal: "Convertir los mensajes en un plan defendible ante el consejo. Tres trimestres, tres hitos, una métrica visible.",
+    script:
+      "[Tono operativo]\n\n\"El plan no es de 5 años. Es de 12 meses. Y se defiende trimestre a trimestre.\"\n\n\"<b>Primer semestre — Fundación.</b> Un solo canal. Un solo dominio. Un solo KPI. Servicio L1 sobre canal digital de alto volumen. Data 360 con Zero Copy sobre una fuente ancla. Trust Layer y auditoría desde el día cero. Métrica dura, publicada semanalmente al comité.\"\n\n\"<b>Segundo y tercer trimestre — Escala controlada.</b> Habilitar el segundo canal — WhatsApp, app propia, portal — sobre el <em>mismo</em> agente por Agent API. Cero rewrites. Y aquí es donde publican el número que convence al consejo: el <em>cost-per-channel-added</em> — cuánto costó habilitar el segundo canal versus el primero. Esa curva bajando trimestre a trimestre es el mensaje al inversionista.\"\n\n\"<b>Cuarto trimestre — Interoperabilidad.</b> Si su ecosistema tiene múltiples agentes — de Salesforce y de otros proveedores — es cuando entra MuleSoft Agent Fabric. Registry, discovery, policy, observabilidad. <em>Si solo tienen Salesforce, esperen.</em> No es un patrón que se compre 'por si acaso'.\"",
+    tips: [
+      "'No es un patrón que se compre por si acaso' — es una frase que credibiliza. Los CIOs escuchan mucho el opuesto.",
+      "'Cost-per-channel-added' es la métrica que se lleva el CIO al consejo. Repítela en el cierre del slide 15.",
+      "Si preguntan cuánto cuesta la fase 1: 'Depende radicalmente del punto de partida. Un piloto real de 6 meses en México se calibra 5-10% de una implementación completa.'",
+    ],
+  },
+  {
+    index: 12,
+    title: "Cierre · La ventana",
+    timing: "19:00 – 20:30",
+    role: "Inspiration",
+    goal: "Dejar a la audiencia con una emoción — ilusión, no urgencia. La urgencia ya se instaló en la slide de McKinsey y Gartner. Ahora toca esperanza técnica.",
+    script:
+      "[Bajar el volumen. Bajar el ritmo. Postura relajada. Contacto visual con 3 personas]\n\n\"Cuando empezamos les propuse imaginar una torre de control.\"\n\n[Pausa larga]\n\n\"El próximo salto no lo van a ganar las empresas que compren más IA. Lo van a ganar las que construyan la torre correcta debajo. La capa de datos gobernados. La lógica auditable. El razonamiento accesible por API. Servido donde ya vive el cliente.\"\n\n[Un paso hacia la audiencia]\n\n\"En México tienen la ventana abierta hoy. En veinticuatro meses, la brecha entre quienes construyeron y quienes esperaron va a ser estructural. No es un cliché — es lo que Gartner, McKinsey e IDC dicen al mismo tiempo, cada uno con su lenguaje.\"\n\n<b>Última frase:</b> \"El software que va a decidir la próxima década no tiene rostro. Tiene juicio. Y hoy, aquí, en esta sala, hay una decisión que se puede tomar: construir la torre — o seguir comprando aviones.\"",
+    tips: [
+      "Callback perfecto al slide 2: 'la torre de control' y 'construir la torre / comprar aviones' cierran el arco.",
+      "Contacto visual con al menos 3 personas antes de la última frase. Los ojos que buscas son los del CIO más silencioso — normalmente el que va a decidir.",
+      "Silencio de 3 segundos después de la última frase. Antes del aplauso.",
+      "Después del cierre, si hay Q&A, apuntar a que las primeras dos preguntas conecten con las cinco objeciones que ya se cubrieron. Se responde rápido y se pasa a lo nuevo.",
+    ],
+  },
+];
+
 const byInsight: Record<string, PresenterSlide[]> = {
   "retail-ia-mexico-salesforce": retailAiTed,
   "retail-ia-colombia-salesforce": retailAiTedColombia,
+  "salesforce-headless-cio-mexico": headlessCioMexicoTed,
 };
 
 export function getPresenterNotes(slug: string): PresenterSlide[] | null {

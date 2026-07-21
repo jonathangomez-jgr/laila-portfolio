@@ -3509,4 +3509,541 @@ const retailAiColombia: Insight = {
   ],
 };
 
-export const insights: Insight[] = [multiAgent, customerFeedback, retailAiMexico, retailAiColombia];
+const headlessCioMexico: Insight = {
+  slug: "salesforce-headless-cio-mexico",
+  topic: "Salesforce Headless 360",
+  audience: ["executive", "architect"],
+  industry: ["Cross-industry"],
+  products: ["Agentforce", "Data Cloud", "MuleSoft", "Commerce Cloud", "Platform"],
+  region: ["Mexico", "Global"],
+  heroEyebrow: "Charla ejecutiva · Headless & Agentic AI",
+  title: "El cerebro invisible: por qué la próxima ventaja competitiva no vive en la pantalla",
+  subtitle:
+    "Salesforce dejó de ser una interfaz para volverse una API con juicio: la capa de datos, gobernanza y razonamiento que alimenta cualquier canal — WhatsApp, apps propias, kioscos, voz, agentes de terceros. Charla dirigida a quien decide arquitectura empresarial en México, con foco en el mandato agentic API-first, casos verificables y objeciones prácticas del CIO.",
+  summary:
+    "El estándar de la arquitectura empresarial acaba de moverse. Gartner (CIO Agenda 2026, encuesta a 2,500 CIOs con USD 274B de gasto) reporta que 94% de los CIOs esperan cambios mayores a sus planes en los próximos 24 meses y proyecta que 33% de las aplicaciones empresariales incluirán IA agentic para 2028. McKinsey (State of AI 2025) documenta que sólo 6% de organizaciones son AI high performers — el resto experimenta sin escalar. En México, la brecha es la misma: Select reporta que 65% de organizaciones alcanzó adopción sistemática de IA en 2025 pero sólo 44% ve alto impacto, y IDC ya advierte que hasta 20% de organizaciones G1000 enfrentarán multas o despidos de CIOs por mala gobernanza de agentes para 2030. En ese contexto, Salesforce empaquetó su respuesta bajo tres capas API-first hoy vigentes: Agent API (Agentforce headless, GA), Salesforce Hosted MCP Servers (GA abril 2026) y MuleSoft Agent Fabric (Agent Registry + Broker + Governance + Visualizer). Los casos verificables — Heathrow (90% deflection en WhatsApp), Wiley (+40% resolución, 213% ROI), OpenTable (73% deflection en 3 semanas), LY Corporation (80% FAQ resueltos), Grupo Posadas México (+15 pts NPS con Agentforce + WhatsApp) — muestran el patrón: el CRM ya no es una app; es la torre de control detrás de cada 'hola' que recibe la empresa.",
+  author: "VP de Solutions · Salesforce",
+  authorRole: "Charla dirigida a responsables de arquitectura empresarial · México",
+  publishedAt: "2026-07-21",
+  updatedAt: "2026-07-21",
+  readingMinutes: 22,
+  tags: [
+    "Salesforce Headless 360",
+    "Agentforce API",
+    "Agent API",
+    "MCP",
+    "Data 360",
+    "MuleSoft Agent Fabric",
+    "México",
+    "Gobernanza de IA",
+    "Arquitectura empresarial",
+  ],
+  coverImage: {
+    src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
+    alt: "Plataforma agentic completa: Agentforce, Data 360 y Customer 360 como capa API-first detrás de cualquier canal.",
+    source: {
+      label: "Salesforce · Agentforce platform overview",
+      url: "https://www.salesforce.com/agentforce/",
+    },
+  },
+  externalDeckUrl: "/presentations/salesforce-headless-cio-mexico.html",
+  externalDeckLabel: "Presentación ejecutiva",
+  presenterDeckRoute: "deck-ted",
+  presenterDeckLabel: "Modo presentador",
+  sections: [
+    {
+      id: "tesis",
+      eyebrow: "Statement ejecutivo",
+      title: "La tesis en una página",
+      blocks: [
+        {
+          type: "statement",
+          text: "La próxima década no la van a ganar las empresas que compren más IA. La van a ganar las que compran la arquitectura correcta detrás de sus canales. Salesforce lo llama, en su documentación oficial, 'headless agents' y 'Agent API': la plataforma dejó de ser una pantalla de CRM para volverse la capa de datos gobernados, procesos auditables y razonamiento que alimenta cualquier superficie — WhatsApp, apps propias, kioscos, voz, agentes de terceros. El CIO deja de comprar 'otra UI' y empieza a comprar capacidad reutilizable: el mismo dato, el mismo proceso, la misma política — servidos en el canal donde ya vive el cliente. Los casos ya publicados (Heathrow, Wiley, OpenTable, LY Corporation, Grupo Posadas) muestran que quien construye esa fundación con gobernanza captura la ventana antes de que se cierre. Los que no, van a pagar la factura en 24 meses.",
+        },
+        {
+          type: "paragraph",
+          text: "Este documento acompaña la charla ejecutiva homónima. Está escrito para quien decide arquitectura empresarial en México — el responsable de tecnología con acceso al consejo, presión de talento, un core que ya funciona y una carrera que no se resuelve pilotando IA sin métrica. No busca defender una plataforma; busca abrir tres decisiones que hoy no pueden posponerse: cómo tratar al CRM como API y no como pantalla, cómo poner gobernanza antes de agentes y cómo activar el dato que ya está en su casa sin duplicarlo.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Formatos disponibles",
+          text: "Este insight tiene dos formatos complementarios. (1) La presentación ejecutiva — impartida por el VP de Solutions, disponible pública en /presentations/salesforce-headless-cio-mexico.html o en modo presentador con guion y timing embebidos. (2) Este documento extenso sirve como material de referencia para el comité — con fuentes primarias, matriz de decisión, hoja de ruta y objeciones anticipadas. La guía del presentador está en /presentations/salesforce-headless-cio-mexico-guia-presentador.html.",
+        },
+      ],
+    },
+    {
+      id: "contexto-global",
+      eyebrow: "Parte 1 · El mandato global",
+      title: "Qué cambió en el estándar de arquitectura empresarial",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "El terreno del CIO se movió más en los últimos 18 meses que en la década anterior. La conversación pasó de 'nube o no nube' a 'agentes o no agentes' — y la respuesta ya no admite ambigüedad. Los datos que siguen son la lectura consolidada de las fuentes primarias que cualquier consejo mexicano puede verificar: Gartner CIO Agenda 2026, Forrester Predictions 2026, McKinsey State of AI 2025, IDC FutureScape y publicaciones oficiales de Salesforce.",
+        },
+        {
+          type: "kpis",
+          items: [
+            { value: "94%", label: "de CIOs esperan cambios mayores a sus planes en los próximos 24 meses (Gartner CIO Agenda 2026, n=2,500)" },
+            { value: "33%", label: "de aplicaciones empresariales tendrán IA agentic embebida para 2028 (vs <1% en 2024) — Gartner" },
+            { value: "88%", label: "de organizaciones reportan uso regular de IA en 2025 (vs 78% año anterior) — McKinsey State of AI 2025" },
+            { value: "6%", label: "de organizaciones son 'AI high performers' — el resto experimenta sin escalar (McKinsey)" },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "El nuevo lenguaje de arquitectura",
+        },
+        {
+          type: "quote",
+          text: "Systems are no longer organized around screens and forms but around machine-readable interfaces, autonomous workflows, and agent-led decision flows.",
+          author: "McKinsey · 'Seizing the Agentic AI Advantage', junio 2025",
+        },
+        {
+          type: "paragraph",
+          text: "Esta frase es el eje. El diseño de sistemas dejó de girar alrededor de pantallas y formularios; gira alrededor de interfaces legibles por máquina, procesos autónomos y decisiones tomadas por agentes. Traducido a un CIO: el software que compra hoy debe poder ser invocado sin que un humano abra una interfaz. Si no puede, se convierte en un legado antes de tiempo.",
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "La otra cara: 40% de proyectos agentic se cancelará",
+          text: "Gartner advirtió (junio 2025) que más del 40% de los proyectos de IA agentic serán cancelados antes de fin de 2027, no por la tecnología sino por costos escalantes, ROI no probado y controles de riesgo insuficientes. Anushree Verma (Gartner) fue directa: 'Most agentic AI propositions lack significant value or return on investment'. El error no es adoptar IA; es adoptarla sin marco de decisión — sin fundación de datos, sin gobernanza y sin métrica dura desde el día uno. Este documento propone el marco.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Tres señales que un CIO no puede ignorar",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              eyebrow: "Señal 1 · Forrester Predictions 2026",
+              title: "Un tercio de los proyectos de marketplace se abandonará",
+              description:
+                "Emily Pfeiffer (Forrester, oct 2025): 'One-third of retail marketplace projects will be deserted as answer engines steal traffic'. Los motores conversacionales — no la búsqueda tradicional — se están comiendo el descubrimiento. El sitio web ya no es el punto de entrada.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Señal 2 · IDC FutureScape 2026",
+              title: "El pricing por asiento se vuelve obsoleto para 2028",
+              description:
+                "IDC proyecta que 70% de proveedores deberán rehacer su value proposition. Y para 2030, hasta 20% de organizaciones G1000 enfrentarán multas, demandas o despidos de CIOs por mala gobernanza de agentes.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "Señal 3 · Gartner",
+              title: "El contexto es el diferenciador crítico",
+              description:
+                "Tori Paulman (Gartner, nov 2025): 'Context is emerging as one of the most critical differentiators for successful agent deployments'. El modelo ya no es la ventaja — el contexto sí lo es. El dato limpio, unificado y consultable en tiempo real gana la carrera.",
+              tone: "success",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "mexico",
+      eyebrow: "Parte 2 · Aterrizaje México",
+      title: "El terreno mexicano: lo que sí, lo que no y lo que se cierra",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "México no es un mercado atrasado en tecnología empresarial. Es un mercado con reglas propias — presión de talento, digitalización defensiva, canal conversacional dominante y regulación en reconfiguración. El CIO mexicano tiene menos margen de error que el promedio: si acierta la arquitectura, captura ventaja competitiva regional; si falla, paga con productividad, cumplimiento y reputación.",
+        },
+        {
+          type: "kpis",
+          items: [
+            { value: "MX$547B", label: "mercado TIC México 2026, +4.1% vs 2025 — Select · Infochannel" },
+            { value: "65%", label: "de organizaciones mexicanas alcanzó adopción sistemática de IA en 2025 — IDC · Lenovo CIO Playbook 2026" },
+            { value: "44%", label: "de organizaciones reporta alto impacto de IA — el resto experimenta sin escalar — Select · mayo 2026" },
+            { value: "67%", label: "de empresas MX reporta dificultades para cubrir vacantes TI — mayor escasez en 10 años (ManpowerGroup)" },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "El canal conversacional en México",
+        },
+        {
+          type: "list",
+          items: [
+            "104.9 millones de internautas mexicanos con 97.2% de penetración de smartphone (INEGI ENDUTIH 2025).",
+            "90.6% usa apps de mensajería como canal principal de interacción (INEGI ENDUTIH 2025, publicado junio 2026).",
+            "México está entre los top 5–6 mundiales de WhatsApp con ~77M de usuarios activos.",
+            "Más del 75% de empresas mexicanas ya usa business messaging (Meta + BCG).",
+            "69% de mexicanos prefiere mensajería como canal principal para negocios (Kantar/Meta).",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "El insight tácito para el CIO",
+          text: "El canal donde su cliente ya prefiere hablar con su empresa (WhatsApp, apps propias, IVR) no es donde vive su CRM. La pregunta ya no es 'cómo llevo al cliente a mi CRM' — es 'cómo llevo mi CRM a donde ya vive el cliente'. Esa inversión de flecha define si su arquitectura de próxima generación se piensa headless o queda atada a pantallas.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Tres realidades regulatorias y operativas",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              eyebrow: "Gobernanza de datos",
+              title: "El INAI ya no existe",
+              description:
+                "El INAI concluyó operaciones en marzo 2025. Sus funciones migraron a un órgano bajo la Secretaría Anticorrupción y Buen Gobierno. Las obligaciones de protección de datos personales siguen vigentes bajo la LFPDPPP — el CIO debe estar listo para auditoría del sucesor sin haberlo probado antes.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "Talento",
+              title: "La escasez es el nuevo cuello de botella",
+              description:
+                "67% de empresas mexicanas reporta dificultades para cubrir vacantes TI, mayor escasez de talento tecnológico en 10 años (ManpowerGroup, feb 2026). Concentrada en IA, ciberseguridad, cloud y arquitectura de datos. Su equipo actual es su activo escaso, no su pasivo.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Nearshoring maduro",
+              title: "IED récord, pero es reinversión",
+              description:
+                "IED 2025: USD 40.9B (+10.8%) pero 67.7% fue reinversión. Greenfield cayó ~50% (UNCTAD 2026); nuevas inversiones Q1 2026 -26.6%. El framing 2026 es 'digitalización defensiva bajo presión de talento', no 'boom'. La productividad del equipo actual pesa más que ampliar plantilla.",
+              tone: "success",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "La brecha real en México",
+          text: "20% de organizaciones LATAM tiene gobernanza sólida de IA; 61% sigue desarrollando políticas (IDC LATAM). En un mercado donde el sucesor del INAI recién arma sus procesos y donde los incidentes de datos del último ciclo instalaron un estándar de exigencia más alto, empezar con agentes sin gobernanza es una decisión que se paga en corte, no en tecnología.",
+        },
+      ],
+    },
+    {
+      id: "que-es-headless",
+      eyebrow: "Parte 3 · Nomenclatura oficial",
+      title: "Qué es exactamente 'Salesforce Headless 360' (y por qué el nombre importa)",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Antes de discutir estrategia conviene fijar el vocabulario oficial. Un CIO que compra 'algo headless' sin saber a qué se refiere Salesforce internamente se expone a ambigüedad contractual y a pilotos mal alcanzados. Aquí desglosamos, con fuentes primarias, qué existe hoy y con qué nombre.",
+        },
+        {
+          type: "table",
+          headers: ["Componente", "Nombre oficial en documentación", "Estado", "Función"],
+          rows: [
+            [
+              "Agent API",
+              "Chat with Agents Using Agent API — 'headless agents to automate functionality without UI constraints'",
+              "GA",
+              "Endpoint REST que permite iniciar sesión, enviar mensajes (sync o streaming SSE) y cerrar sesión de un agente Agentforce desde cualquier canal externo — web, mobile, Slack, voz, agente de terceros.",
+            ],
+            [
+              "Headless 360 development",
+              "Página oficial en developer.salesforce.com/docs/ai/agentforce/guide/headless.html",
+              "GA",
+              "Patrón de referencia para construir, desplegar y operar agentes Agentforce sin la UI de Agentforce Builder ni Setup — puramente por API/CLI.",
+            ],
+            [
+              "Salesforce Hosted MCP Servers",
+              "GA anunciado 29-abr-2026 — 'Salesforce-managed endpoint that exposes your org's logic and assets'",
+              "GA",
+              "Servidores MCP gestionados por Salesforce que exponen datos, flows, Apex, queries. Autenticación OAuth con PKCE, scope dedicado 'mcp_api'. Cada transacción corre como el usuario autenticado, sin cuentas de servicio anónimas.",
+            ],
+            [
+              "Salesforce DX MCP Server",
+              "Repositorio @salesforce/mcp (Developer Preview, jun 2025)",
+              "Developer Preview",
+              "Servidor MCP local para el ciclo de desarrollo — stdio, para asistentes de código.",
+            ],
+            [
+              "Agentforce MCP Client",
+              "Cliente MCP nativo dentro de Agentforce (Pilot desde jul 2025)",
+              "Pilot",
+              "Permite que un agente Salesforce llame servidores MCP externos sin custom code — habilita interoperabilidad con ecosistemas externos.",
+            ],
+            [
+              "MuleSoft Agent Fabric",
+              "Anunciado 25-sep-2025 · Ampliado 29-jun-2026 (Connect AI NYC)",
+              "GA (Governance) · Componentes en distintas etapas",
+              "Cuatro capas: Agent Registry (catálogo), Agent Broker (enrutamiento), Agent Governance (políticas), Agent Visualizer (observabilidad). Agent Script GA jul-2026. A2A Bridge Agentforce + Microsoft Copilot Studio.",
+            ],
+            [
+              "Data 360 con Zero Copy",
+              "Anteriormente 'Data Cloud'. Zero Copy Partner Network GA desde abril 2024",
+              "GA",
+              "Perfil unificado del cliente. Zero Copy: el dato puede quedarse en Snowflake / Databricks / BigQuery / AWS / Azure / IBM y Salesforce lo consulta sin duplicarlo.",
+            ],
+            [
+              "Composable Storefront",
+              "PWA Kit + Managed Runtime + SCAPI",
+              "GA",
+              "Frontend de commerce desacoplado del backend Commerce Cloud. 99.99% uptime histórico.",
+            ],
+            [
+              "Experience Cloud Headless",
+              "LWR (Lightning Web Runtime)",
+              "GA",
+              "Experiencia digital construida con LWC, desacoplada del render tradicional de Experience Cloud.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Cómo se articulan estas piezas",
+          text: "Agent API es la puerta hacia el razonamiento de Agentforce desde cualquier canal. MCP Server hosted es la puerta hacia los datos, flows y acciones de la organización — para que cualquier agente (Salesforce o de terceros) los consuma con auth de usuario y política aplicada. MuleSoft Agent Fabric es la capa de gobierno cuando el ecosistema tiene múltiples agentes. Data 360 con Zero Copy resuelve la duda de residencia del dato. Y Composable Storefront y Experience Cloud headless resuelven las superficies digitales de commerce y comunidad.",
+        },
+      ],
+    },
+    {
+      id: "casos",
+      eyebrow: "Parte 4 · Evidencia pública verificable",
+      title: "Casos donde Salesforce ya opera como cerebro invisible",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Cinco casos en producción con métricas publicadas por las propias compañías o por Salesforce en documentos con fuente rastreable. Ninguno es piloto; todos superaron el umbral que Gartner señala como el fracaso más común: llegar a producción con ROI defendible y gobernanza aplicada. El foco no es el logo — es el patrón de arquitectura que comparten.",
+        },
+        {
+          type: "table",
+          headers: ["Empresa", "Configuración headless / API-first", "Métrica pública verificable"],
+          rows: [
+            [
+              "Heathrow Airport (83M+ pasajeros/año)",
+              "Agentforce + Service + Marketing/Commerce + Data 360. Canal: WhatsApp como canal principal — 'Hallie' concierge digital.",
+              "90% de chats resueltos sin transferencia · +40% eficiencia de contacto digital · +30% ingreso digital en 4 años · 800 artículos KB · 'It's effectively a digital concierge that holds your hand through your end-to-end airport experience' — Peter Burns.",
+            ],
+            [
+              "Wiley (editorial académica)",
+              "Agentforce Service Agent — canal self-service web.",
+              "+40% en resolución de casos vs bot anterior · 213% ROI · USD 230,000 ahorro anual · Onboarding de agentes estacionales 50% más rápido. Caso canónico Dreamforce 2024.",
+            ],
+            [
+              "OpenTable (reservas restaurantes)",
+              "Agentforce + Data 360 + Service + Voice.",
+              "73% resolución de casos en 3 semanas post-lanzamiento · +40% vs bot previo · ~11,000 conversaciones/semana · POC a producción en <3 semanas.",
+            ],
+            [
+              "LY Corporation (Yahoo! JAPAN)",
+              "Agentforce + MuleSoft. Canal: portal Yahoo! JAPAN — UI no-Salesforce, arquitectura headless pura.",
+              "80% de FAQ resueltos por Agentforce · 25,000 FAQ/mes · 48K emails/mes. El caso más limpio de 'cerebro invisible' — el usuario nunca ve Salesforce.",
+            ],
+            [
+              "Pandora Jewelry (~2,600 tiendas, 100+ países)",
+              "Agentforce + Data 360 + Commerce/Service + MuleSoft. Chat en pandora.net bajo marca Pandora — Salesforce invisible.",
+              "~40K–45K conversaciones/mes · 60% deflection autónomo · +10 puntos NPS · 22% de ventas por Commerce Cloud.",
+            ],
+            [
+              "Grupo Posadas (200+ hoteles · México)",
+              "Agentforce + Data Cloud + Service + Marketing Cloud CDP. Canal: WhatsApp + SMS como concierge digital, check-in digital.",
+              "+15 puntos NPS acumulados · +10 puntos sobre benchmark · 17,000 colaboradores con contexto en tiempo real · 'Al integrar toda esta información a través de Agentforce, logramos construir una visión integral de cada huésped' — Leslie Gómez.",
+            ],
+            [
+              "1-800Accountant",
+              "Agentforce self-service 24/7 en sitio.",
+              "50% de consultas resueltas autónomamente en primera temporada de impuestos · 1,000+ interacciones en primeras 24h · objetivo 70%.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "El patrón común de los seis casos",
+          text: "El cliente final nunca ve Salesforce. Ve un portal de aeropuerto, un chat de joyería, WhatsApp del hotel, un formulario de reserva, el sitio de Yahoo! JAPAN. Detrás — invisible — hay Agent API + Data 360 + MuleSoft + Trust Layer trabajando. Ése es el punto arquitectónico. Salesforce no compite por la pantalla del cliente; compite por el cerebro que responde detrás de ella.",
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Honestidad consultiva",
+          text: "Las métricas anteriores son publicadas por Salesforce y por las compañías involucradas. HFS Research (Fersht/Filippone, diciembre 2024) señala públicamente que estas métricas son vendor-reported y que existen brechas verticales (salud, banca, farma) donde Agentforce aún tiene menos madurez que competidores como Microsoft. Reconocerlo es parte de la conversación honesta con un CIO: la evidencia es real, pero el rigor de auditoría de tercero está evolucionando. La decisión no se toma sobre logos — se toma sobre patrón arquitectónico defendible.",
+        },
+      ],
+    },
+    {
+      id: "tres-takeaways",
+      eyebrow: "Parte 5 · Los tres mensajes",
+      title: "Tres decisiones que un CIO no puede posponer",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Si de todo lo anterior debe quedar un marco de decisión, son estas tres frases. Están diseñadas para durar más allá de una charla — para que el CIO las repita en su comité, las lleve al consejo y las use como filtro cuando reciba la próxima propuesta de proveedor.",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              eyebrow: "01 · Estratégico",
+              title: "El CRM ya no es una app. Es una API con juicio.",
+              description:
+                "El valor deja la pantalla y se muda al modelo de datos gobernado, la lógica auditable y el contexto entregado por API a cualquier canal. Métrica sugerida: cost-per-channel-added — bajar el costo marginal de habilitar un canal nuevo de meses/millones a semanas/decenas de miles.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "02 · Riesgo",
+              title: "Un agente sin gobernanza no es innovación — es pasivo contingente.",
+              description:
+                "Cada agente debe poder mostrar a auditoría quién lo autorizó, qué datos tocó y qué acción ejecutó. Trust Layer + Command Center + Data 360 son el equivalente de SOX para agentes. Métrica sugerida: % de acciones críticas ejecutadas con log auditable end-to-end.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "03 · Fundación",
+              title: "La ventaja no es tener el dato. Es tener el dato listo para razonar.",
+              description:
+                "El dato ya vive en SAP, Oracle, mainframe, WMS. Lo que falta es una capa que lo sirva con latencia sub-segundo y derechos aplicados por registro. Data 360 con Zero Copy resuelve esa duda sin duplicar el dato ni mover soberanía. Métrica sugerida: time-to-context <2s.",
+              tone: "success",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "objeciones",
+      eyebrow: "Parte 6 · Objeciones",
+      title: "Cinco objeciones que su equipo va a levantar el lunes",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "El comité ejecutivo va a hacer estas cinco preguntas dentro de las 72 horas de la charla. Este es el guion de respuesta para el CIO — no defensivo, no vendedor, consultivo.",
+        },
+        {
+          type: "table",
+          headers: ["Objeción probable", "Respuesta consultiva", "Cómo no responder"],
+          rows: [
+            [
+              "'Ya invertimos millones en SAP/Oracle. ¿Lo tiramos?'",
+              "Al contrario. El core es la fuente de verdad transaccional. Salesforce Headless 360 no lo reemplaza — lo expone. Zero Copy en Data 360, MuleSoft en transacciones, agentes que consumen esas APIs. El ROI del core acaba de subir, no de bajar.",
+              "'Con nosotros ya no necesita SAP.' Falso, condescendiente y arriesgado. Nadie migra un core por una demo.",
+            ],
+            [
+              "'¿Cómo confío que un agente no rompa mi core?'",
+              "Los agentes no ejecutan acciones libremente. Trabajan contra acciones declarativas — flows, Apex, APIs — con parámetros validados, permisos por perfil, logs por ejecución. El agente decide cuándo invocar; usted controla qué puede invocar. Es least-privilege aplicado a razonamiento.",
+              "'El modelo es muy bueno, no se equivoca.' El CIO mexicano ya vio esa película. Perderá credibilidad al instante.",
+            ],
+            [
+              "'¿Data residency? ¿Soberanía?'",
+              "Tres capas. Hyperforce permite elegir región. Zero Copy en Data 360: el dato puede quedarse en su lakehouse (Snowflake, BigQuery, Databricks, AWS) y Salesforce lo consulta sin replicar. Einstein Trust Layer: los prompts a LLMs no persisten datos del cliente.",
+              "'Todo está en la nube, no se preocupe.' El CIO no está preocupado — está haciendo su trabajo. Merece una respuesta técnica.",
+            ],
+            [
+              "'¿Mi equipo actual se vuelve obsoleto?'",
+              "Su equipo Salesforce ya sabe construir esto. Un flow es un flow, invocado por humano o agente. Los admins dejan de escribir pantallas y empiezan a diseñar tools y guardrails. Upskill de 6–8 semanas, no layoff. En un mercado con 67% de empresas MX sin poder cubrir vacantes TI, su equipo actual es su activo escaso.",
+              "'El agente reemplaza al 40% del equipo.' Titular incendiario, RH descontenta, tres años de mala prensa interna.",
+            ],
+            [
+              "'¿ROI defendible en 12 meses?'",
+              "Sí, con un principio: no empiece por el caso más sexy — empiece por el más medible. Servicio L1 en un canal digital de alto volumen (deflection rate, AHT, CSAT). Regla 90-180-90: piloto acotado 90 días, despliegue 180, medición dura 90 más. Anclas: Wiley +40%, Heathrow 90% deflection, OpenTable 73% en 3 semanas, 1-800Accountant 50%.",
+              "'El ROI se ve en 3 años cuando toda la empresa esté agentizada.' Ningún CFO firma eso — mucho menos con contexto macro incierto.",
+            ],
+          ],
+        },
+      ],
+    },
+    {
+      id: "roadmap",
+      eyebrow: "Parte 7 · Hoja de ruta",
+      title: "Un plan realista para 12 meses",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Este es un plan tipo. No es una propuesta comercial — es un marco para que su equipo lo adapte. Está diseñado para que el CIO pueda defender cada trimestre ante el consejo con evidencia dura antes de escalar al siguiente.",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              eyebrow: "Q1–Q2 · Fundación",
+              title: "Elegir el caso más medible, no el más sexy",
+              description:
+                "Un solo canal, un solo dominio, un solo KPI. Servicio L1 sobre canal digital de alto volumen. Data 360 con Zero Copy sobre una fuente ancla (perfil + historial de interacción). Trust Layer y auditoría desde el día cero. Métrica dura semanal.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Q2–Q3 · Escala controlada",
+              title: "Segundo canal, mismo cerebro",
+              description:
+                "Habilitar WhatsApp o app propia sobre el mismo agente por Agent API. Cero rewrites — la lógica está en el agente, no en el canal. Publicar internamente el 'cost-per-channel-added' — la métrica que convence al consejo de que la arquitectura es correcta.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Q3–Q4 · Interoperabilidad",
+              title: "MCP y Agent Fabric si el ecosistema lo pide",
+              description:
+                "Si la organización tiene múltiples agentes (Salesforce + terceros), introducir MCP Servers y MuleSoft Agent Fabric para governance, registry y observabilidad. Si sólo tiene Salesforce, esperar. No es un patrón que se compre 'por si acaso'.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "El KPI que hace que el consejo firme",
+          text: "El CIO que llega al consejo con una gráfica de 'cost-per-channel-added' cayendo trimestre a trimestre, con auditoría verde y con satisfacción de cliente subiendo, no está vendiendo un proyecto de IA. Está mostrando que su arquitectura escala. Ése es el mensaje que separa a un CIO que sobrevive a la próxima ronda de cambios en el consejo del que no.",
+        },
+      ],
+    },
+    {
+      id: "conclusion",
+      eyebrow: "Cierre",
+      title: "Conclusión",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La foto grande cabe en una idea. La próxima década no la van a ganar las empresas que compren más IA — la van a ganar las que compren la arquitectura correcta debajo de sus canales. Y la arquitectura correcta hoy es headless: datos gobernados, procesos auditables y razonamiento accesible por API, servidos donde ya vive el cliente. Salesforce lleva 18 meses moviendo su plataforma hacia ese eje, con la documentación, los productos y los casos para respaldarlo. La ventana para actuar existe hoy; en 24 meses la brecha entre quienes construyeron y quienes esperaron será estructural.",
+        },
+        {
+          type: "statement",
+          text: "El CRM ya no es una app: es una API con juicio. Un agente sin gobernanza no es innovación: es pasivo contingente. La ventaja no es tener el dato: es tener el dato listo para razonar. Tres frases. Un marco. Una ventana.",
+        },
+      ],
+    },
+    {
+      id: "fuentes",
+      eyebrow: "Referencias",
+      title: "Fuentes primarias verificables",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Todas las cifras y afirmaciones anteriores están respaldadas en fuentes primarias. Este bloque es la biblioteca de referencia para que su equipo o su comité puedan validar cada dato antes de repetirlo.",
+        },
+        {
+          type: "sources",
+          items: [
+            { label: "Salesforce · Agent API (headless agents) documentation", url: "https://developer.salesforce.com/docs/einstein/genai/guide/agent-api.html" },
+            { label: "Salesforce · Headless 360 · Agentforce", url: "https://developer.salesforce.com/docs/ai/agentforce/guide/headless.html" },
+            { label: "Salesforce · Hosted MCP Servers GA (abril 2026)", url: "https://developer.salesforce.com/blogs/2026/04/salesforce-hosted-mcp-servers-are-now-generally-available" },
+            { label: "Salesforce News · Agentforce 3 (junio 2025)", url: "https://www.salesforce.com/news/press-releases/2025/06/23/agentforce-3-announcement/" },
+            { label: "Salesforce News · MuleSoft Agent Fabric", url: "https://www.salesforce.com/news/stories/salesforce-advances-agent-fabric/" },
+            { label: "Salesforce · Data 360 Zero Copy Partner Network", url: "https://www.salesforce.com/data/partners/" },
+            { label: "Salesforce · Composable Storefront (PWA Kit + Managed Runtime)", url: "https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/" },
+            { label: "Salesforce · Experience Cloud LWR", url: "https://developer.salesforce.com/docs/atlas.en-us.exp_cloud_lwr.meta/exp_cloud_lwr/intro.htm" },
+            { label: "Gartner · CIO Agenda 2026 (encuesta a 2,500 CIOs)", url: "https://www.gartner.com/en/articles/cio-agenda" },
+            { label: "Gartner · Top Strategic Technology Trends 2025 & 2026", url: "https://www.gartner.com/en/newsroom/press-releases/2024-10-21-gartner-identifies-the-top-10-strategic-technology-trends-for-2025" },
+            { label: "Forrester · Predictions 2026", url: "https://www.forrester.com/predictions/" },
+            { label: "McKinsey · State of AI 2025", url: "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" },
+            { label: "McKinsey · Seizing the Agentic AI Advantage (junio 2025)", url: "https://www.mckinsey.com/capabilities/quantumblack/our-insights/seizing-the-agentic-ai-advantage" },
+            { label: "IDC FutureScape · Worldwide AI & Automation 2026 Predictions", url: "https://www.idc.com/research/viewtoc.jsp?containerId=US52588125" },
+            { label: "Select · Estudio Anual de Tecnologías de Información en México 2026", url: "https://www.select.com.mx/" },
+            { label: "INEGI · ENDUTIH 2025 (uso de TIC en hogares México)", url: "https://www.inegi.org.mx/programas/dutih/2025/" },
+            { label: "Meta · WhatsApp Business messaging (Kantar/Meta studies)", url: "https://about.fb.com/news/2024/12/whatsapp-business-messaging/" },
+            { label: "Salesforce Customer Stories · Heathrow", url: "https://www.salesforce.com/customer-stories/heathrow-airport/" },
+            { label: "Salesforce Customer Stories · Wiley", url: "https://www.salesforce.com/customer-stories/wiley/" },
+            { label: "Salesforce Customer Stories · OpenTable", url: "https://www.salesforce.com/customer-stories/opentable/" },
+            { label: "Salesforce Customer Stories · LY Corporation", url: "https://www.salesforce.com/customer-stories/ly-corporation" },
+            { label: "Salesforce Customer Stories · Pandora", url: "https://www.salesforce.com/customer-stories/pandora" },
+            { label: "Salesforce Customer Stories · Grupo Posadas (México)", url: "https://www.salesforce.com/mx/customer-stories/grupo-posadas/" },
+            { label: "HFS Research · Análisis independiente de Agentforce", url: "https://www.horsesforsources.com/will-agentforce-2-0-replace-traditional-jobs-and-outsourcing_121824/" },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+export const insights: Insight[] = [multiAgent, customerFeedback, retailAiMexico, retailAiColombia, headlessCioMexico];

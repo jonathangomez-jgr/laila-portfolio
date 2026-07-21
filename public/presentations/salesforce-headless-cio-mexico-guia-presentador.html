@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Guía del presentador · El cerebro invisible · Salesforce Headless 360 CIO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#181614;
+    --ink-soft:#3a3733;
+    --ink-mute:#7c7770;
+    --paper:#f5f4ef;
+    --paper-2:#ece9e0;
+    --accent:#066afe;
+    --gold:#c99a2f;
+    --teal:#0d7a6b;
+    --warn:#c94a2f;
+    --line:rgba(24,22,20,.12);
+    --line-strong:rgba(24,22,20,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:'Inter',-apple-system,sans-serif;
+    font-size:15.5px;line-height:1.6;
+    font-feature-settings:"ss01","cv11";
+  }
+  .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto;letter-spacing:-.02em}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+
+  .container{max-width:960px;margin:0 auto;padding:80px 40px 120px}
+
+  .eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-mute);font-weight:600}
+  .eyebrow .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:12px;vertical-align:middle}
+
+  h1{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(40px,5vw,64px);line-height:1.02;letter-spacing:-.03em;margin:24px 0 20px}
+  h1 em{font-style:normal;color:var(--accent)}
+  h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(28px,3.5vw,40px);line-height:1.15;letter-spacing:-.02em;margin:64px 0 18px;color:var(--ink)}
+  h2 .num{color:var(--accent);font-weight:400;margin-right:14px}
+  h3{font-family:'Fraunces',serif;font-weight:500;font-size:22px;line-height:1.3;letter-spacing:-.01em;margin:36px 0 12px}
+  h4{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;margin:28px 0 8px}
+
+  p{margin:0 0 16px;max-width:65ch}
+  p.lead{font-size:19px;line-height:1.55;color:var(--ink-soft);max-width:60ch;margin-bottom:24px}
+
+  ul,ol{margin:0 0 20px 24px;max-width:64ch}
+  ul li,ol li{margin:6px 0;line-height:1.55}
+
+  hr{border:none;border-top:1px solid var(--line);margin:60px 0}
+
+  .callout{margin:24px 0;padding:22px 26px;border-left:3px solid var(--accent);background:rgba(6,106,254,.06);border-radius:0 10px 10px 0}
+  .callout.warn{border-color:var(--warn);background:rgba(201,74,47,.06)}
+  .callout.ok{border-color:var(--teal);background:rgba(13,122,107,.06)}
+  .callout.gold{border-color:var(--gold);background:rgba(201,154,47,.08)}
+  .callout b{font-weight:600}
+
+  .slide-card{margin:36px 0;padding:32px 34px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 2px 8px rgba(24,22,20,.03)}
+  .slide-card .head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;margin-bottom:18px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .slide-card .head .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.14em;font-weight:600}
+  .slide-card .head .tm{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-mute)}
+  .slide-card .head h3{margin:0;font-size:26px}
+  .slide-card .head .role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);font-weight:600}
+
+  .slide-card .goal{font-size:13.5px;color:var(--ink-soft);margin-bottom:20px;padding:10px 14px;background:rgba(24,22,20,.03);border-radius:8px}
+  .slide-card .goal b{color:var(--ink)}
+
+  .slide-card .script{background:rgba(24,22,20,.02);border-radius:10px;padding:18px 22px;margin:16px 0;border-left:2px solid var(--ink)}
+  .slide-card .script p{margin:0 0 10px}
+  .slide-card .script p:last-child{margin:0}
+  .slide-card .script .stage{font-size:12px;color:var(--ink-mute);font-style:italic;font-family:'Fraunces',serif;letter-spacing:0}
+
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+  .tag{font-size:11px;letter-spacing:.06em;padding:4px 10px;border:1px solid var(--line);border-radius:100px;color:var(--ink-mute);background:#fff}
+  .tag.warn{border-color:rgba(201,74,47,.4);color:var(--warn);background:rgba(201,74,47,.06)}
+  .tag.ok{border-color:rgba(13,122,107,.3);color:var(--teal);background:rgba(13,122,107,.05)}
+  .tag.gold{border-color:rgba(201,154,47,.4);color:var(--gold);background:rgba(201,154,47,.06)}
+
+  .meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:32px 0 12px}
+  .meta-grid .cell{padding:18px 20px;background:#fff;border:1px solid var(--line);border-radius:12px}
+  .meta-grid .cell .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;margin-bottom:6px}
+  .meta-grid .cell .v{font-family:'Fraunces',serif;font-size:24px;font-weight:500;letter-spacing:-.01em;line-height:1.1}
+
+  .toc{margin:32px 0;padding:24px 28px;border:1px solid var(--line);border-radius:14px;background:#fff}
+  .toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
+  .toc li{counter-increment:t;padding:8px 0;display:flex;gap:14px;align-items:baseline;font-size:14.5px;border-top:1px solid var(--line)}
+  .toc li:first-child{border-top:none}
+  .toc li::before{content:counter(t,decimal-leading-zero);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);width:32px;flex-shrink:0;font-weight:600}
+  .toc li .t{flex:1}
+  .toc li .m{color:var(--ink-mute);font-family:'JetBrains Mono',monospace;font-size:11.5px}
+
+  .checklist{margin:24px 0;padding:0;list-style:none}
+  .checklist li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+  .checklist li:first-child{border-top:none}
+  .checklist li::before{content:"";width:14px;height:14px;border:1.5px solid var(--ink-mute);border-radius:3px;flex-shrink:0;margin-top:5px}
+
+  .qa{margin:20px 0;padding:18px 22px;border-radius:10px;background:rgba(13,122,107,.05);border:1px solid rgba(13,122,107,.15)}
+  .qa .q{font-weight:600;color:var(--ink);margin-bottom:6px;font-size:14.5px}
+  .qa .a{font-size:14px;color:var(--ink-soft)}
+
+  .kbd{font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:2px 7px;border:1px solid var(--line-strong);border-radius:4px;background:#fff;color:var(--ink)}
+
+  .analogia-box{margin:32px 0;padding:32px 36px;background:linear-gradient(160deg,rgba(6,106,254,.06) 0%,rgba(6,106,254,.02) 100%);border:1px solid rgba(6,106,254,.2);border-radius:16px}
+  .analogia-box .k{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+  .analogia-box h3{margin:0 0 12px;font-size:28px}
+  .analogia-box p{font-family:'Fraunces',serif;font-size:19px;line-height:1.4;letter-spacing:-.01em;color:var(--ink);max-width:60ch}
+
+  @media print{
+    body{background:#fff}
+    .container{padding:20px}
+    .slide-card{page-break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+    h2{page-break-after:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <p class="eyebrow"><span class="dot"></span>Guía del presentador · Uso interno · VP de Solutions</p>
+  <h1>El cerebro invisible.<br/><em>Guía para presentar los 25 minutos.</em></h1>
+  <p class="lead">Esta guía acompaña al deck <span class="mono">salesforce-headless-cio-mexico.html</span>. Está pensada para ensayar, no para leerse en vivo. Incluye guion sugerido, tiempos por slide, movimientos de escena, señales de audiencia y respuestas anticipadas a preguntas probables del CIO mexicano.</p>
+
+  <div class="meta-grid">
+    <div class="cell"><div class="k">Duración interna</div><div class="v">25 min</div></div>
+    <div class="cell"><div class="k">Audiencia</div><div class="v">40 CIOs</div></div>
+    <div class="cell"><div class="k">Estructura</div><div class="v">I → I → I</div></div>
+    <div class="cell"><div class="k">Slides</div><div class="v">12</div></div>
+  </div>
+
+  <div class="callout warn">
+    <b>Regla dura — nunca declarar duración en pantalla ni en voz alta.</b> El objetivo consciente son 25 minutos para dejar 5 de Q&A intervenciones. La audiencia no debe escuchar el número. Si se agota tiempo, sacrificar slide 10 (objeciones) antes que slide 12 (cierre).
+  </div>
+
+  <hr/>
+
+  <h2><span class="num">01</span>La tesis en una frase</h2>
+  <p class="lead">La próxima década no la van a ganar las empresas que compren más IA. La van a ganar las que compren la arquitectura correcta detrás de sus canales — y esa arquitectura hoy es <em>headless</em>: datos gobernados, procesos auditables y razonamiento accesible por API, servidos donde ya vive el cliente.</p>
+
+  <p>Todo lo que decimos gira alrededor de ese eje. Si en cualquier momento la audiencia hace una pregunta que no cabe ahí, se acepta y se estaciona: <em>"Vale la pena en la conversación posterior — sigamos con el marco"</em>. No se desvía el hilo.</p>
+
+  <div class="callout">
+    <b>Explícito vs. implícito.</b> Explícitamente decimos: hay un mandato global (Gartner, McKinsey), hay un contexto local exigente (México), hay nombre oficial (Agent API, MCP, Agent Fabric), hay evidencia pública (6 casos), hay marco (3 takeaways). Implícitamente decimos: Salesforce ya construyó esa arquitectura — porque cada pieza que mostramos existe con documentación pública y estado GA. El cierre lo hace la conversación posterior o la demo, no la charla.
+  </div>
+
+  <div class="analogia-box">
+    <div class="k">La analogía maestra · Repetir literal en slides 2, 4, 9 y 12</div>
+    <h3>La torre de control del aeropuerto</h3>
+    <p>La torre no vuela ningún avión. Coordina. Sabe quién llega, qué pista está libre, cuál avión tiene prioridad, cuál trae emergencia. Es <b>invisible para el pasajero</b> — y sin ella nada aterriza. Salesforce Headless 360 es la torre; los aviones son los canales (WhatsApp, apps, kiosco, voz, agentes de terceros). El próximo salto es <b>construir la torre, no comprar más aviones</b>.</p>
+  </div>
+
+  <h2><span class="num">02</span>Estructura Inspiration → Information → Inspiration</h2>
+  <div class="toc">
+    <ol>
+      <li><span class="t"><b>Portada:</b> "El cerebro invisible."</span><span class="m">0:00 · Inspiration</span></li>
+      <li><span class="t"><b>Torre de control:</b> analogía maestra.</span><span class="m">0:20 · Inspiration</span></li>
+      <li><span class="t"><b>El estándar se movió:</b> Gartner + McKinsey.</span><span class="m">1:30 · Information</span></li>
+      <li><span class="t"><b>El 40%:</b> Gartner sobre proyectos cancelados.</span><span class="m">3:30 · Information</span></li>
+      <li><span class="t"><b>México:</b> mensajería, adopción, talento.</span><span class="m">5:00 · Information</span></li>
+      <li><span class="t"><b>Nomenclatura oficial:</b> Agent API · MCP · Fabric.</span><span class="m">7:00 · Information</span></li>
+      <li><span class="t"><b>6 casos:</b> Heathrow, Wiley, OpenTable, LY, Pandora, Posadas.</span><span class="m">9:00 · Information</span></li>
+      <li><span class="t"><b>Honestidad:</b> HFS · patrón vs. logos.</span><span class="m">12:00 · Information</span></li>
+      <li><span class="t"><b>3 takeaways:</b> API con juicio · pasivo · Zero Copy.</span><span class="m">12:45 · Information</span></li>
+      <li><span class="t"><b>5 objeciones:</b> el guion del lunes.</span><span class="m">15:00 · Information</span></li>
+      <li><span class="t"><b>Hoja de ruta 12 meses:</b> Q1 → Q4.</span><span class="m">17:30 · Information</span></li>
+      <li><span class="t"><b>Cierre:</b> "El software no tiene rostro. Tiene juicio."</span><span class="m">19:00 · Inspiration</span></li>
+    </ol>
+  </div>
+
+  <hr/>
+
+  <h2><span class="num">03</span>Guion detallado por slide</h2>
+
+  <!-- SLIDE 1 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">01 · PORTADA</div><h3>El cerebro invisible.</h3></div>
+      <div><div class="tm">0:00 – 0:20</div><div class="role">Inspiration · Hook</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> establecer autoridad y tono en 20 segundos. Que la sala deje de mirar el teléfono y se prepare para una conversación distinta.</div>
+    <div class="tags"><span class="tag">Silencio inicial</span><span class="tag">Contacto visual</span><span class="tag ok">Postura firme</span></div>
+    <div class="script">
+      <p class="stage">[Antes de hablar, mirar la sala 3 segundos completos]</p>
+      <p>"El software que va a decidir la próxima década de sus empresas… <em>no tiene rostro</em>."</p>
+      <p class="stage">[Pausa de 2 segundos]</p>
+      <p>"En los próximos minutos vamos a hablar de por qué la ventaja competitiva ya no vive en la pantalla. Y qué significa eso para quien decide arquitectura empresarial en México."</p>
+    </div>
+    <h4>Señales que buscar</h4>
+    <ul>
+      <li>Los teléfonos regresan a la mesa. Si no, repite la primera frase con más lentitud.</li>
+      <li>Miradas cruzadas cuando dices "no tiene rostro". Buena señal — te compraron la provocación.</li>
+    </ul>
+    <h4>Trampas a evitar</h4>
+    <ul>
+      <li>No leer el subtítulo. Se lee solo.</li>
+      <li>No arrancar con "buenas tardes, gracias por venir". Eso lo hizo quien te presentó. Arranca con la frase.</li>
+      <li>El QR queda visible — invita en 5 segundos: <em>"y para quienes quieran seguir la presentación desde su teléfono, ahí queda el QR."</em></li>
+    </ul>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">02 · TORRE DE CONTROL</div><h3>La torre no vuela ningún avión.</h3></div>
+      <div><div class="tm">0:20 – 1:30</div><div class="role">Inspiration · Analogía maestra</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> instalar la analogía maestra en 60 segundos. La sala debe visualizar el eje conceptual <em>antes</em> de escuchar un solo dato.</div>
+    <div class="tags"><span class="tag">Ritmo lento</span><span class="tag">Un paso adelante</span><span class="tag ok">Analogía maestra</span></div>
+    <div class="script">
+      <p class="stage">[Bajar el tono. Movimiento lento]</p>
+      <p>"Piensen en una torre de control de un aeropuerto grande. Ochenta millones de pasajeros al año. Cientos de vuelos por hora."</p>
+      <p class="stage">[Pausa]</p>
+      <p>"La torre no vuela ningún avión. No embarca a ningún pasajero. No factura una sola maleta. Pero sin la torre… <em>nada aterriza</em>."</p>
+      <p class="stage">[Un paso hacia la audiencia]</p>
+      <p>"La torre <em>sabe</em>: quién va llegando, qué pista está libre, qué avión tiene prioridad, cuál necesita combustible, cuál trae una emergencia. Coordina. Decide. Y es invisible para el pasajero."</p>
+      <p><b>El pivote:</b> "El próximo salto de sus empresas es dejar de comprar 'aviones' — dejar de comprar apps y pantallas — y empezar a construir la torre de control. La capa que sabe, coordina y decide detrás de cada canal donde vive su cliente."</p>
+    </div>
+    <div class="callout gold">
+      <b>Esta analogía es TODO el hilo conductor.</b> Repítela literal en el slide 4 ("la torre, no los aviones"), en el slide 9 (el marco) y en el cierre. Cada mención refuerza la memoria. Si la audiencia pierde el hilo técnico en algún momento, la analogía los devuelve al eje.
+    </div>
+    <h4>Si hay ejecutivos de manufactura/logística/aeronáutica</h4>
+    <p>Subraya "<em>coordina, no vuela</em>". Ellos entenderán inmediatamente la separación de roles — es lo mismo que MES vs. planta, TMS vs. flota, MRO vs. hangar.</p>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">03 · EL ESTÁNDAR SE MOVIÓ</div><h3>Gartner + McKinsey · Contexto global</h3></div>
+      <div><div class="tm">1:30 – 3:30</div><div class="role">Information · Marco global</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> fijar el marco global con fuentes primarias. La audiencia deja de dudar si "esto está pasando" y entra en modo receptivo. Es el slide donde se establece autoridad de fuente.</div>
+    <div class="tags"><span class="tag">Cita fuentes</span><span class="tag">Tono ejecutivo</span><span class="tag ok">Cita literal en pantalla</span></div>
+    <div class="script">
+      <p>"Gartner encuestó a <em>dos mil quinientos</em> directores de tecnología con <em>doscientos setenta y cuatro mil millones</em> de dólares de gasto en TI. Resultado del CIO Agenda 2026: noventa y cuatro por ciento esperan cambios mayores a sus planes en los próximos veinticuatro meses."</p>
+      <p class="stage">[Pausa]</p>
+      <p>"McKinsey — su State of AI de este año — confirma la otra cara: <em>ochenta y ocho por ciento</em> de las organizaciones ya usa IA de forma regular. Pero solo <em>seis por ciento</em> se considera 'AI high performer'. El resto experimenta. Pilotea. Y no escala."</p>
+      <p class="stage">[Señalar la cita en pantalla y leerla pausado]</p>
+      <p><b>Cita literal — léela en inglés y luego tradúcela:</b></p>
+      <p><em>"Systems are no longer organized around screens and forms but around machine-readable interfaces, autonomous workflows, and agent-led decision flows."</em> — McKinsey, junio 2025.</p>
+      <p>"Los sistemas ya no se organizan alrededor de pantallas y formularios. Giran alrededor de interfaces legibles por máquina, procesos autónomos y decisiones tomadas por agentes."</p>
+      <p><b>Punchline / puente:</b> "La conversación ya no es 'adoptar IA o no'. Es <em>por qué la mayoría no logra escalarla</em>. Y esa respuesta no está en el modelo — está en la arquitectura de abajo."</p>
+    </div>
+    <h4>Datos citables si te preguntan</h4>
+    <ul>
+      <li>94% de CIOs — Gartner CIO Agenda 2026, publicada 25-nov-2025.</li>
+      <li>6% de AI high performers — McKinsey State of AI 2025, publicada 5-nov-2025.</li>
+      <li>Cita McKinsey exacta: reporte "Seizing the Agentic AI Advantage", junio 2025.</li>
+      <li>Si alguien pregunta por Forrester: Emily Pfeiffer (oct 2025) — "One-third of retail marketplace projects will be deserted as answer engines steal traffic".</li>
+    </ul>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">04 · EL 40%</div><h3>El error no es adoptar IA. Es adoptarla sin arquitectura.</h3></div>
+      <div><div class="tm">3:30 – 5:00</div><div class="role">Information · Humildad</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> instalar humildad. Reconocer proactivamente el contraargumento antes de que la audiencia lo tenga en la cabeza. Este slide previene el escepticismo del resto de la charla.</div>
+    <div class="tags"><span class="tag">Tono franco</span><span class="tag warn">Callback #1 a torre</span></div>
+    <div class="script">
+      <p class="stage">[Cambio de tono: más franco, casi confesional]</p>
+      <p>"Aquí es donde me toca decir la parte incómoda. Gartner también publicó — en junio del año pasado — que <em>más del cuarenta por ciento</em> de los proyectos de IA agentic van a ser cancelados antes del cierre de 2027."</p>
+      <p class="stage">[Pausa larga]</p>
+      <p>"Y quiero leer una frase textual de Anushree Verma, la analista responsable de esa predicción: <em>'La mayoría de las propuestas de IA agentic carece de valor significativo o de retorno de inversión.'</em> Palabras de Gartner. No mías."</p>
+      <p><b>El giro (callback maestro):</b> "El error no es adoptar IA. Es adoptarla <em>sin arquitectura debajo</em>. Sin fundación de datos. Sin gobernanza. Sin métrica dura desde el día uno. Y ése es el marco que quiero proponerles hoy — <b>la torre de control, no los aviones</b>."</p>
+    </div>
+    <div class="callout">
+      <b>Reconocer la crítica sube credibilidad.</b> No la escondas — apropiátela. El CIO mexicano ya sabe que la mitad de los pilotos de IA se murió. Si tú lo dices primero, ganas la conversación. Si esperas a que te lo digan, la pierdes.
+    </div>
+    <h4>Si preguntan por 'agent washing'</h4>
+    <p>Respuesta corta: <em>"Exactamente por eso hablamos de arquitectura, no de agentes sueltos. Agent washing es rebrandear un RPA como agente. La prueba es simple: ¿razona sobre datos vivos o corre reglas estáticas? ¿escala a humano con contexto o solo redirige? ¿publica métrica de negocio o solo métrica técnica?"</em></p>
+  </div>
+
+  <!-- SLIDE 5 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">05 · MÉXICO</div><h3>El mercado tiene reglas propias. Y ventana propia.</h3></div>
+      <div><div class="tm">5:00 – 7:00</div><div class="role">Information · Aterrizaje local</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> aterrizar. Dejar de hablar del mundo y empezar a hablar de la casa. La audiencia debe sentir que las cifras son suyas.</div>
+    <div class="tags"><span class="tag">Baja el tono</span><span class="tag">Habla más lento</span><span class="tag warn">NO decir 'top 3 WhatsApp'</span></div>
+    <div class="script">
+      <p>"México no es un mercado atrasado en tecnología empresarial. Es un mercado con reglas propias."</p>
+      <p class="stage">[Pausa. Postura firme]</p>
+      <p>"Ciento cuatro punto nueve millones de internautas. Noventa y siete punto dos por ciento con smartphone. <em>Noventa punto seis por ciento</em> usa apps de mensajería como canal principal. Fuente: INEGI, ENDUTIH del año pasado."</p>
+      <p class="stage">[Un paso hacia la audiencia]</p>
+      <p>"<em>Sesenta y cinco por ciento</em> de las organizaciones mexicanas alcanzó adopción sistemática de IA en 2025 según IDC. Pero <em>solo cuarenta y cuatro por ciento</em> reporta alto impacto — Select, mayo de este año. Es la misma brecha global. Y probablemente es la brecha que muchos de ustedes viven en su propia organización."</p>
+      <p><b>El punchline:</b> "La pregunta ya no es si su cliente está listo para hablar por WhatsApp con su empresa. Es si su arquitectura está lista para <em>contestarle</em>."</p>
+    </div>
+    <div class="callout warn">
+      <b>Regla dura de cifras.</b> NO decir "México top 3 mundial en WhatsApp" — está en top 5–6 (~77M usuarios). Meta no desagrega por país. Si quieres cifra, di "top 6 mundial con 77M usuarios activos" o simplemente subraya el 90.6% de INEGI, que es más citable en México.
+    </div>
+    <h4>Si preguntan por el sucesor del INAI</h4>
+    <p>Respuesta neutra: <em>"Sus funciones migraron a un órgano bajo la Secretaría Anticorrupción — las obligaciones de protección de datos siguen vigentes, el gobierno se reconfigura. El punto para arquitectura es que la exigencia auditora <em>subió</em>, no bajó. Y eso favorece a plataformas con gobernanza nativa."</em> No entres al debate político.</p>
+    <h4>Si preguntan por nearshoring</h4>
+    <p>"IED récord 2025 — USD 40.9B — pero 67.7% fue reinversión. Greenfield cayó cerca de 50%. Q1 2026 nuevas inversiones -26.6%. Nuestra lectura es 'digitalización defensiva bajo presión de talento', no 'boom'. Y eso hace más urgente elevar productividad del equipo actual — no ampliar plantilla."</p>
+  </div>
+
+  <!-- SLIDE 6 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">06 · NOMENCLATURA OFICIAL</div><h3>Agent API · MCP · Fabric</h3></div>
+      <div><div class="tm">7:00 – 9:00</div><div class="role">Information · Vocabulario técnico</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> aterrizar al lenguaje técnico oficial. Que el CIO se lleve el vocabulario preciso para su próxima reunión de arquitectura — y que sienta que quien habla tiene control técnico, no solo narrativa.</div>
+    <div class="tags"><span class="tag">Tono didáctico</span><span class="tag">Cita documentación</span><span class="tag ok">Analogía de cierre</span></div>
+    <div class="script">
+      <p class="stage">[Cambio de tono: más didáctico, casi de arquitecto]</p>
+      <p>"Antes de seguir, permítanme fijar el vocabulario. Porque si compran 'algo headless' sin saber a qué se refiere Salesforce oficialmente, se van a exponer a ambigüedad contractual."</p>
+      <p class="stage">[Con calma, señalando la tabla en pantalla]</p>
+      <p>"<b>Uno: Agent API.</b> Es el endpoint oficial. La documentación pública lo dice literal: <em>'headless agents to automate functionality without UI constraints'</em>. Es la puerta que permite invocar el razonamiento de Agentforce desde <em>cualquier</em> canal — web, mobile, Slack, voz, un agente de otro proveedor."</p>
+      <p>"<b>Dos: MCP Servers hosted.</b> En general availability desde abril de este año. Cita textual de la documentación: <em>'un endpoint gestionado por Salesforce que expone la lógica y los activos de su organización — datos, flows, acciones Apex, queries'</em>. Autenticación OAuth con PKCE. <em>Cada transacción corre como el usuario autenticado</em>, sin cuentas de servicio anónimas."</p>
+      <p>"<b>Tres: MuleSoft Agent Fabric.</b> La capa de gobernanza cuando su ecosistema tiene múltiples agentes."</p>
+      <p><b>Cierre con analogía:</b> "Agent API es el idioma que hablan los canales con el cerebro. MCP es el idioma que habla el cerebro con los sistemas. MuleSoft Agent Fabric es la torre que los ordena a todos."</p>
+    </div>
+    <h4>Fechas exactas si preguntan</h4>
+    <ul>
+      <li>Salesforce Hosted MCP Servers · <b>GA · 29 de abril de 2026</b>.</li>
+      <li>Agentforce 3 (que estrenó MCP client nativo) · <b>23 de junio de 2025</b>.</li>
+      <li>MuleSoft Agent Fabric · Anunciado <b>25 de septiembre de 2025</b>. Governance en GA. Ampliaciones en Connect AI NYC <b>29 de junio de 2026</b>.</li>
+    </ul>
+    <div class="callout warn">
+      <b>Si un asistente no técnico se pierde en el detalle</b> — cierra con la analogía y sigue. Los CIOs con arquitectura fuerte agradecerán la precisión. Los que buscan lenguaje ejecutivo se quedarán con "Agent API = idioma de canales, MCP = idioma de sistemas".
+    </div>
+  </div>
+
+  <!-- SLIDE 7 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">07 · SEIS CASOS</div><h3>Evidencia pública verificable</h3></div>
+      <div><div class="tm">9:00 – 12:00</div><div class="role">Information · Prueba dura</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> quitarle a la audiencia la objeción "sí, pero eso no ha funcionado a escala". Seis casos, seis métricas, seis fuentes públicas. Cerrar con Grupo Posadas para aterrizar en México.</div>
+    <div class="tags"><span class="tag warn">3:00 min · slide más denso</span><span class="tag">Baja el ritmo</span><span class="tag ok">Cierra con Posadas</span></div>
+    <div class="script">
+      <p><b>Apertura:</b> "Vamos a mirar seis casos donde esto ya no es teoría. Está en producción, con números publicados, con clientes reales."</p>
+      <p><b>Heathrow (30 seg):</b> "Heathrow. Ochenta y tres millones de pasajeros al año. Canal principal: WhatsApp. Concierge digital llamado 'Hallie'. <em>Noventa por ciento</em> de los chats se resuelven sin transferencia. Más treinta por ciento de ingreso digital en cuatro años. Peter Burns, su ejecutivo responsable, lo describió como <em>'un concierge digital que te toma de la mano por todo el aeropuerto'</em>. Palabras textuales."</p>
+      <p><b>Wiley (20 seg):</b> "Wiley. Editorial académica global. Más cuarenta por ciento de resolución de casos versus el bot anterior. <em>Doscientos trece por ciento</em> de ROI. Doscientos treinta mil dólares de ahorro anual."</p>
+      <p><b>OpenTable (15 seg):</b> "OpenTable. <em>Setenta y tres por ciento</em> de resolución en tres semanas post-lanzamiento. Once mil conversaciones a la semana."</p>
+      <p><b>LY Corporation (20 seg):</b> "LY Corporation — Yahoo! Japón. Ochenta por ciento de FAQs resueltos por Agentforce. El usuario nunca ve Salesforce. Ve Yahoo. <em>Ése es el punto arquitectónico exacto</em>."</p>
+      <p><b>Pandora (15 seg):</b> "Pandora. Cuarenta y cinco mil conversaciones al mes. Sesenta por ciento resueltas sin humano. Diez puntos NPS arriba."</p>
+      <p class="stage">[Cambio de tono — más cercano, orgullo local]</p>
+      <p><b>Grupo Posadas (30 seg · el cierre):</b> "Y el que quiero cerrar es mexicano. <em>Grupo Posadas.</em> Doscientos hoteles. Agentforce con WhatsApp y SMS como concierge digital. <em>Quince puntos NPS acumulados. Diez puntos sobre benchmark.</em> Leslie Gómez, su responsable, lo dijo así: <em>'Al integrar toda esta información a través de Agentforce, logramos construir una visión integral de cada huésped.'</em> Aquí. En México. En producción."</p>
+      <p><b>El patrón (el clincher):</b> "En todos estos casos el cliente <em>nunca</em> ve Salesforce. Ve WhatsApp del aeropuerto, el chat de Yahoo, el concierge del hotel, la joyería. Detrás — invisible — está la torre. Ése es el patrón. No los logos."</p>
+    </div>
+    <div class="callout warn">
+      <b>Casos que NO son citables aquí</b> — aunque la audiencia pueda esperarlos: Home Depot y Williams-Sonoma NO son casos públicos de headless commerce Salesforce. Amazon y Walmart son buenos como referencia macro (torre operativa), pero <em>no citarlos como comparables directos</em> — la audiencia puede tener a Bimbo, FEMSA, Coppel o Liverpool en la sala.
+    </div>
+  </div>
+
+  <!-- SLIDE 8 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">08 · HONESTIDAD · HFS</div><h3>Compran el patrón, no la promesa.</h3></div>
+      <div><div class="tm">12:00 – 12:45</div><div class="role">Information · Credibilidad</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> instalar honestidad consultiva. Reconocer proactivamente el contraargumento del análisis independiente antes de que la audiencia lo tenga en la cabeza. Slide corto a propósito — el reconocimiento vale por sí solo.</div>
+    <div class="tags"><span class="tag">Tono serio</span><span class="tag">Contacto visual</span><span class="tag ok">Corto · 45 seg</span></div>
+    <div class="script">
+      <p class="stage">[Tono más serio, mirar a los ojos]</p>
+      <p>"Antes de seguir. Todas las métricas que acaban de ver son publicadas por las propias compañías, o por Salesforce con fuente rastreable. HFS Research — un analista independiente serio — lo señala públicamente: son <em>vendor-reported</em>, no auditadas por tercero."</p>
+      <p class="stage">[Pausa]</p>
+      <p>"Lo reconozco porque es cierto. Y porque la decisión que ustedes toman no se debería tomar sobre logos. Se toma sobre el <em>patrón arquitectónico</em>. Y ese patrón es reproducible: canal donde vive el cliente, agente que razona, datos gobernados, procesos auditables. Cada pieza es verificable en su propia realidad."</p>
+    </div>
+    <div class="callout">
+      <b>Este slide es intencionalmente corto.</b> No te extiendas. El reconocimiento vale por sí solo. Si alguien del comité pregunta por benchmarks independientes: <em>"Forrester Wave, Gartner Magic Quadrant y HFS son las tres referencias. Y todas coinciden en la categoría, aunque discutan el ranking."</em>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">09 · TRES TAKEAWAYS</div><h3>El marco de decisión en 3 frases</h3></div>
+      <div><div class="tm">12:45 – 15:00</div><div class="role">Information · Anclaje</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> entregar el marco de decisión en tres frases. Que el CIO se las lleve y las use en su comité el lunes. Tres, no cinco. Menos es más memorable.</div>
+    <div class="tags"><span class="tag">Léelas pausadas</span><span class="tag ok">3 segundos entre frases</span></div>
+    <div class="script">
+      <p class="stage">[Postura firme, tono de conclusión]</p>
+      <p>"Si de estos minutos solo se llevan tres frases… que sean estas."</p>
+      <p class="stage">[Pausa. Dejar que la primera tarjeta respire]</p>
+      <p><b>Frase 1:</b> "<em>El CRM ya no es una app. Es una API con juicio.</em> El valor dejó la pantalla y se mudó al modelo de datos gobernado, la lógica auditable y el contexto que se entrega por API a cualquier canal. La métrica que traigan al consejo se llama <em>cost-per-channel-added</em>: cuánto cuesta habilitar un canal nuevo. Bajarla de meses y millones a semanas y decenas de miles. Ése es el mensaje al consejo."</p>
+      <p class="stage">[Pausa]</p>
+      <p><b>Frase 2:</b> "<em>Un agente sin gobernanza no es innovación. Es pasivo contingente.</em> Cada agente debe poder mostrar a auditoría <em>quién</em> lo autorizó, <em>qué</em> datos tocó, <em>qué</em> acción ejecutó. Sin ese trazo, es un empleado sin contrato. Trust Layer, Command Center, Data 360: el equivalente de SOX para agentes. IDC lo dice: hasta veinte por ciento de organizaciones globales van a enfrentar multas o despidos de CIOs por mala gobernanza de agentes para 2030."</p>
+      <p class="stage">[Pausa]</p>
+      <p><b>Frase 3:</b> "<em>La ventaja no es tener el dato. Es tener el dato listo para razonar.</em> El dato ya vive en su SAP, en su Oracle, en su mainframe, en su WMS. Lo que le falta es una capa que lo sirva a cualquier canal con latencia sub-segundo y derechos aplicados por registro. <em>Data 360 con Zero Copy</em> resuelve exactamente eso: el dato puede quedarse en su Snowflake, en su BigQuery, en su Databricks, en AWS — y Salesforce lo consulta sin duplicarlo."</p>
+    </div>
+    <h4>Elige la frase de énfasis según la sala</h4>
+    <ul>
+      <li>Consejo mayoritariamente <b>CFO / CIO técnico</b> → énfasis en <b>#2 (gobernanza)</b>.</li>
+      <li>Consejo mayoritariamente <b>comercial / CMO</b> → énfasis en <b>#1 (cost-per-channel-added)</b>.</li>
+      <li>CIO con <b>inversión legacy grande</b> (SAP/Oracle) → énfasis en <b>#3 (Zero Copy no duplica)</b>.</li>
+      <li>Sala mixta → énfasis en <b>#1</b> (aplica a todos).</li>
+    </ul>
+  </div>
+
+  <!-- SLIDE 10 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">10 · CINCO OBJECIONES</div><h3>El guion del lunes en el comité</h3></div>
+      <div><div class="tm">15:00 – 17:30</div><div class="role">Information · Preparación</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> preparar al CIO para el comité del lunes. Cinco preguntas que le van a hacer y las cinco respuestas consultivas — con mecanismo técnico concreto detrás de cada una. Es el slide que el CIO fotografía.</div>
+    <div class="tags"><span class="tag">Ritmo ejecutivo</span><span class="tag">Sin defender</span><span class="tag ok">Cada resp. con mecanismo</span></div>
+    <div class="script">
+      <p>"En las próximas setenta y dos horas su comité les va a hacer estas cinco preguntas. Este es el guion para responderlas — no defensivo, no vendedor. Consultivo."</p>
+      <p class="stage">[Ritmo ejecutivo. Sin dramatismo. Cada objeción con su mecanismo]</p>
+      <p><b>1) 'Ya invertimos millones en SAP/Oracle, ¿lo tiramos?'</b> — Al contrario. Su core es la fuente de verdad transaccional. Salesforce Headless 360 no lo reemplaza, <em>lo expone</em>. Zero Copy, MuleSoft, agentes consumiendo esas APIs. El ROI de su core acaba de subir, no de bajar.</p>
+      <p><b>2) '¿Cómo confío que un agente no rompa mi core?'</b> — Los agentes no ejecutan libremente. Trabajan contra acciones declarativas — flows, Apex, APIs — con parámetros validados y logs por ejecución. <em>Least-privilege</em> aplicado a razonamiento.</p>
+      <p><b>3) '¿Data residency? ¿Soberanía?'</b> — Tres capas. Hyperforce elige región. Zero Copy: el dato se queda en su lakehouse. Trust Layer: los prompts no persisten datos del cliente.</p>
+      <p><b>4) '¿Mi equipo actual se vuelve obsoleto?'</b> — Al contrario. Sus admins ya saben construir esto. Un flow es un flow — invocado por humano o agente. Upskill de seis a ocho semanas. En un mercado donde el sesenta y siete por ciento de empresas mexicanas no puede cubrir sus vacantes de TI, su equipo actual es su activo escaso.</p>
+      <p><b>5) '¿ROI defendible en 12 meses?'</b> — Sí, con un principio: no empiecen por el caso más sexy — empiecen por el más medible. Servicio L1 en un canal digital de alto volumen. Regla noventa-ciento ochenta-noventa: piloto acotado noventa días, despliegue ciento ochenta, medición dura noventa más.</p>
+    </div>
+    <div class="callout ok">
+      <b>Estas cinco objeciones también están impresas en el material.</b> La audiencia se lleva el guion. Es el activo más útil que salgan con ella.
+    </div>
+    <h4>Objeción bonus (si preguntan)</h4>
+    <p><b>'¿Y si mi cliente no usa WhatsApp?'</b> — 90.6% de internautas mexicanos usa mensajería. La pregunta real es si su operación está lista para recibirlo por ahí.</p>
+    <div class="callout warn">
+      <b>Regla dura.</b> NO responder ninguna objeción con "confía en nosotros". Cada respuesta debe tener un mecanismo técnico concreto (Zero Copy, least-privilege, Hyperforce, Trust Layer, upskill 6–8 semanas). Sin mecanismo, se pierde credibilidad al instante.
+    </div>
+  </div>
+
+  <!-- SLIDE 11 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">11 · HOJA DE RUTA</div><h3>12 meses defendibles trimestre a trimestre</h3></div>
+      <div><div class="tm">17:30 – 19:00</div><div class="role">Information · Operativa</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> convertir los mensajes en un plan defendible ante el consejo. Tres trimestres, tres hitos, una métrica visible. El CIO debe salir con la sensación de que ya puede empezar el próximo trimestre.</div>
+    <div class="tags"><span class="tag">Tono operativo</span><span class="tag ok">'No es por si acaso'</span></div>
+    <div class="script">
+      <p class="stage">[Tono operativo]</p>
+      <p>"El plan no es de cinco años. Es de doce meses. Y se defiende trimestre a trimestre."</p>
+      <p><b>Primer semestre — Fundación:</b> "Un solo canal. Un solo dominio. Un solo KPI. Servicio L1 sobre canal digital de alto volumen. Data 360 con Zero Copy sobre una fuente ancla. Trust Layer y auditoría desde el día cero. Métrica dura, publicada semanalmente al comité."</p>
+      <p><b>Segundo y tercer trimestre — Escala controlada:</b> "Habilitar el segundo canal — WhatsApp, app propia, portal — sobre el <em>mismo</em> agente por Agent API. Cero rewrites. Y aquí es donde publican el número que convence al consejo: el <em>cost-per-channel-added</em> — cuánto costó habilitar el segundo canal versus el primero. Esa curva bajando trimestre a trimestre es el mensaje al inversionista."</p>
+      <p><b>Cuarto trimestre — Interoperabilidad:</b> "Si su ecosistema tiene múltiples agentes — de Salesforce y de otros proveedores — es cuando entra MuleSoft Agent Fabric. Registry, discovery, policy, observabilidad. <em>Si solo tienen Salesforce, esperen.</em> No es un patrón que se compre 'por si acaso'."</p>
+    </div>
+    <div class="callout gold">
+      <b>La frase 'no es un patrón que se compre por si acaso'</b> credibiliza más que cualquier promesa. Los CIOs escuchan mucho el opuesto. Cuando el propio VP dice "esperen a que lo necesiten", se abre confianza.
+    </div>
+    <h4>Si preguntan cuánto cuesta la fase 1</h4>
+    <p><em>"Depende radicalmente del punto de partida. Un piloto real de seis meses en México se calibra alrededor del cinco al diez por ciento de una implementación completa. La conversación de números específica la tenemos en la sesión posterior — porque depende de qué canal, qué dominio y qué madurez de datos tenga hoy."</em></p>
+  </div>
+
+  <!-- SLIDE 12 -->
+  <div class="slide-card">
+    <div class="head">
+      <div><div class="num">12 · CIERRE</div><h3>El software no tiene rostro. Tiene juicio.</h3></div>
+      <div><div class="tm">19:00 – 20:30</div><div class="role">Inspiration · Emocional</div></div>
+    </div>
+    <div class="goal"><b>Objetivo:</b> dejar a la audiencia con una emoción — <em>ilusión</em>, no urgencia. La urgencia ya se instaló en los slides 3, 4 y 5. Ahora toca esperanza técnica y callback perfecto al slide 2.</div>
+    <div class="tags"><span class="tag">Voz baja</span><span class="tag">Contacto visual final</span><span class="tag ok">Callback a torre</span></div>
+    <div class="script">
+      <p class="stage">[Bajar el volumen. Bajar el ritmo. Postura relajada. Contacto visual con 3 personas]</p>
+      <p>"Cuando empezamos les propuse imaginar una torre de control."</p>
+      <p class="stage">[Pausa larga]</p>
+      <p>"El próximo salto no lo van a ganar las empresas que compren más IA. Lo van a ganar las que construyan la torre correcta debajo. La capa de datos gobernados. La lógica auditable. El razonamiento accesible por API. Servido donde ya vive el cliente."</p>
+      <p class="stage">[Un paso hacia la audiencia]</p>
+      <p>"En México tienen la ventana abierta hoy. En veinticuatro meses, la brecha entre quienes construyeron y quienes esperaron va a ser estructural. No es un cliché — es lo que Gartner, McKinsey e IDC dicen al mismo tiempo, cada uno con su lenguaje."</p>
+      <p><b>Última frase:</b> "El software que va a decidir la próxima década <em>no tiene rostro</em>. Tiene <em>juicio</em>. Y hoy, aquí, en esta sala, hay una decisión que se puede tomar: <b>construir la torre — o seguir comprando aviones</b>."</p>
+      <p class="stage">[Silencio de 3 segundos antes del aplauso. Contacto visual con el CIO más silencioso.]</p>
+    </div>
+    <div class="callout ok">
+      <b>El callback maestro cierra el arco.</b> "Torre" y "construir la torre / comprar aviones" son las frases que enlazan el slide 2 con el 12. Cada persona que salga con esas frases repetibles se lleva la charla.
+    </div>
+  </div>
+
+  <hr/>
+
+  <!-- ─────── PREGUNTAS ANTICIPADAS ─────── -->
+  <h2><span class="num">04</span>Preguntas anticipadas · Biblioteca de respuestas</h2>
+  <p class="lead">La sesión no debería tener Q&amp;A antes del cierre. Pero si alguien interrumpe con una pregunta durante los minutos de charla, ésta es la biblioteca de respuestas cortas para no romper el hilo.</p>
+
+  <div class="qa">
+    <div class="q">"¿Esto no es lo mismo que ya hace Microsoft Copilot Studio / Google Vertex AI / AWS Bedrock?"</div>
+    <div class="a">"Los tres tienen piezas — modelos, orquestación, gobernanza básica. La pregunta arquitectónica es dónde vive <em>el contexto del cliente</em>. Si su CRM, servicio, comercio y datos van a hablar con esos modelos, alguien tiene que ser el <em>system of context</em> — ese es el rol de Data 360 y de Agentforce, invocables por Copilot, Vertex, Bedrock — o directamente. En 2026 la conversación ya no es de suites cerradas; es de interoperabilidad por MCP y A2A. Salesforce cubre las dos superficies."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Y OpenAI ChatGPT que ya usamos?"</div>
+    <div class="a">"ChatGPT es un modelo. Lo que hablamos hoy es una arquitectura para poner ese modelo — u otros — a trabajar sobre sus datos, con reglas duras, con auditoría y con métrica de negocio. Pueden traer el modelo que prefieran; lo que cambia es la fundación."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Qué tan probado está Zero Copy con Snowflake / Databricks a escala productiva?"</div>
+    <div class="a">"Zero Copy Partner Network entró en general availability en abril de 2024. Los proveedores con página oficial dedicada hoy son Snowflake, Databricks, Google BigQuery, AWS y Microsoft. La página pública de Salesforce lista casos productivos con cada uno. La duda razonable es la latencia por query complejo — se resuelve con caché de perfil en Data 360 y con contratos de query. Los casos como PepsiCo usan esta configuración."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Cuánto cuesta esto?"</div>
+    <div class="a">"El pricing es outcome-based en el módulo de servicio, y depende del caso. Después de esta sesión tenemos espacio para números concretos con contexto de canal, volumen y dominio. Un piloto real de seis meses en México se calibra en 5–10% de una implementación completa."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Cuánto tiempo tomó Heathrow / Wiley / OpenTable?"</div>
+    <div class="a">"Wiley implementó su Agent en semanas con roll-out gradual (Dreamforce 2024). OpenTable llegó a 73% de deflection en tres semanas post-lanzamiento. Heathrow es un despliegue multianual — el WhatsApp 'Hallie' actual es el cierre de cuatro años de arquitectura. El tiempo depende más de qué tan limpio esté el dato que del stack tecnológico."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"El CIO Agenda de Gartner también advirtió sobre 'agent washing'. ¿Cómo se prueba que esto no lo es?"</div>
+    <div class="a">"Excelente pregunta. Agent washing es cuando alguien rebrandea un RPA, un chatbot o una automatización estática como 'agente'. La prueba es simple: (1) ¿razona sobre datos vivos o corre reglas fijas?, (2) ¿escala a humano con contexto completo o solo redirige?, (3) ¿publica métrica de negocio o solo métrica técnica? En una sesión posterior podemos aplicar la prueba a cualquier caso concreto."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Salesforce en gobierno federal / banca CNBV / salud regulada?"</div>
+    <div class="a">"Hyperforce ofrece controles de residencia y auditoría certificados. Trust Layer aplica masking de PII antes de enviar al LLM. La conversación con CNBV, CONDUSEF o el sucesor del INAI se resuelve caso por caso — porque cada regulador quiere ver el diagrama de flujo del dato. Salesforce lo publica; les puedo mostrar el diagrama en una sesión de arquitectura si es el paso siguiente."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Qué pasa si Salesforce sube el precio de la plataforma? Quedamos amarrados."</div>
+    <div class="a">"La respuesta honesta es: sí, es una consideración de vendor lock-in que aplica a <em>cualquier</em> plataforma. Lo que mitiga en el caso de arquitectura headless es que sus datos pueden quedarse en su lakehouse por Zero Copy, sus canales pueden estar bajo su control (WhatsApp, app propia), y las capacidades expuestas por MCP siguen estándares abiertos. Reduce el amarre a la lógica de agentes — que sigue siendo replicable. No lo elimina; lo baja."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"¿Puedo empezar con un canal WhatsApp sin migrar mi CRM?"</div>
+    <div class="a">"Sí. Es exactamente el patrón headless. Agent API se invoca desde su canal existente. Data 360 puede consumir su fuente actual por Zero Copy. No requiere reemplazar el CRM de origen — requiere que la conversación tenga un cerebro coordinado. Es el atajo más frecuente para empezar con métrica visible en 90 días."</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">"Métricas independientes de Agentforce — ¿alguna fuera de Salesforce y HFS?"</div>
+    <div class="a">"Forrester Wave y Gartner Magic Quadrant cubren categorías adyacentes (customer service, CDP, PaaS). En agentic empresarial específico, es una categoría joven — la primera Wave de Forrester para Agent Platforms se publicó en 2026. Todos los analistas coinciden en la <em>categoría de líder</em>; el ranking exacto varía. Es honesto decir que el mercado aún está estableciendo benchmarks auditados."</div>
+  </div>
+
+  <hr/>
+
+  <!-- ─────── CHECKLIST ─────── -->
+  <h2><span class="num">05</span>Checklist del día</h2>
+
+  <h4>90 minutos antes</h4>
+  <ol class="checklist">
+    <li>Deck cargado y probado en el equipo del venue (no en tu laptop).</li>
+    <li>Modo pantalla completa. Notas ocultas.</li>
+    <li>Clicker o control probado — con teclas <span class="kbd">←</span> <span class="kbd">→</span> como fallback.</li>
+    <li>Micrófono ajustado. Prefiere solapa a diadema para poder gesticular.</li>
+    <li>Vaso de agua en el atril.</li>
+    <li>Si hay un equipo de solutions engineer en la sala para la sesión posterior, alinear la línea de handoff: "…seguimos la conversación con detalle técnico específico".</li>
+  </ol>
+
+  <h4>15 minutos antes</h4>
+  <ol class="checklist">
+    <li>Deck en slide 1. No en el 2.</li>
+    <li>Notebook cerrado — nada de "por si acaso"; el guion ya está en la memoria.</li>
+    <li>Respiración: 4 inhalar / 6 exhalar × 5 veces.</li>
+    <li>Última mirada al slide 7: los seis casos con sus seis cifras principales. Que salgan sin dudar.</li>
+    <li>Última mirada al slide 10: las cinco objeciones con su mecanismo técnico. Ninguna se responde con "confía en nosotros".</li>
+  </ol>
+
+  <h4>Durante</h4>
+  <ol class="checklist">
+    <li>Slide 1: silencio de 3 segundos antes de hablar.</li>
+    <li>Slide 2: instalar la analogía con calma. Es el eje del resto.</li>
+    <li>Slide 4: cambio de tono a "franco / confesional". Es donde se instala la humildad.</li>
+    <li>Slide 6: si un asistente se pierde en el detalle técnico, cierra con la analogía y sigue.</li>
+    <li>Slide 7: baja el ritmo. Es el más denso.</li>
+    <li>Slide 9: 3 segundos de silencio entre las tres frases takeaway.</li>
+    <li>Slide 12: contacto visual con 3 personas antes de la última frase. Silencio de 3 segundos después.</li>
+  </ol>
+
+  <h4>Si el tiempo se acorta</h4>
+  <ol class="checklist">
+    <li>Sacrificar Slide 10 (objeciones) — el contenido queda impreso y se cubre en Q&A.</li>
+    <li>Sacrificar Slide 8 (honestidad HFS) — cortar a 15 seg de mención verbal, sin proyectar el slide completo.</li>
+    <li><b>Nunca</b> sacrificar Slide 2 (torre), Slide 9 (takeaways) ni Slide 12 (cierre). Son la memoria de la audiencia.</li>
+  </ol>
+
+  <hr/>
+
+  <!-- ─────── CONTROLES DECK ─────── -->
+  <h2><span class="num">06</span>Controles del deck</h2>
+  <ul>
+    <li><span class="kbd">→</span> · <span class="kbd">Space</span> · <span class="kbd">PageDown</span> — siguiente slide.</li>
+    <li><span class="kbd">←</span> · <span class="kbd">PageUp</span> — slide anterior.</li>
+    <li><span class="kbd">Home</span> · <span class="kbd">End</span> — primero / último.</li>
+    <li><span class="kbd">1</span>–<span class="kbd">9</span>, <span class="kbd">0</span> — salto directo a slide 1–10.</li>
+    <li>Clic en la mitad derecha / izquierda del slide — avanza / retrocede.</li>
+    <li>Swipe (touch) — avanza / retrocede.</li>
+  </ul>
+
+  <div class="callout ok">
+    <b>Setup de dos pantallas.</b> Si tu laptop soporta modo mirror, puedes ver las notas y la audiencia solo verá el deck. Para asegurarlo: (1) abre el deck a pantalla completa en el proyector, (2) abre <span class="mono">salesforce-headless-cio-mexico-guia-presentador.html</span> en tu laptop y mantenla en tu monitor.
+  </div>
+
+  <hr/>
+
+  <!-- ─────── COLABORACIÓN ─────── -->
+  <h2><span class="num">07</span>Materiales a producir · placeholders del deck</h2>
+  <p class="lead">El deck se sostiene con la infografía SVG generada — sin embargo, hay tres puntos donde una pieza visual producida por el equipo elevaría la charla a otro nivel. Están señalados como placeholders opcionales.</p>
+
+  <ol>
+    <li><b>Slide 2 · Torre de control.</b> Hoy usa un SVG estilizado. Una foto real de una torre de control moderna (Heathrow Terminal 5, Charles de Gaulle, o AICM) en tratamiento monocromático azul con overlay de líneas de flujo llevaría la analogía a nivel cinematográfico. Formato sugerido: 16:9, alto contraste, sin marca de agua visible.</li>
+    <li><b>Slide 7 · Casos.</b> Cada caso podría tener el logotipo real de la compañía (Heathrow, Wiley, OpenTable, LY Corporation, Pandora, Grupo Posadas) para elevar la credibilidad visual. Hoy usa solo tipografía. Formato: PNG transparente, 240px de ancho, alineado en el pie de cada tarjeta.</li>
+    <li><b>Slide 12 · Cierre.</b> Un video corto de 8–12 segundos de una torre de control iluminada en la noche, con overlay tenue de la frase "no tiene rostro / tiene juicio", cerraría el arco emocional. Es opcional — el cierre en texto sostiene bien la charla sin él.</li>
+    <li><b>Video atmosférico opcional para apertura (antes de slide 1).</b> Si el evento tiene tiempo para un video de 90 segundos de contexto, un montaje que muestre "cerebros invisibles" en la vida cotidiana (torre de control, red eléctrica, ATC, semáforos inteligentes, motores de aviones sin operador visible) prepararía a la audiencia. Formato: MP4 1920×1080, sin audio dominante.</li>
+  </ol>
+
+  <div class="callout">
+    <b>Todos los placeholders son opcionales.</b> El deck funciona hoy sin producción adicional. La producción los llevaría de "muy sólido" a "memorable". Prioridad de producción sugerida: 1) foto torre (mayor impacto por costo), 2) logotipos casos, 3) video cierre.
+  </div>
+
+  <hr/>
+
+  <div style="margin-top:60px;padding:32px 36px;background:#fff;border:1px solid var(--line);border-radius:16px">
+    <p class="eyebrow" style="margin-bottom:14px"><span class="dot"></span>Último recordatorio</p>
+    <p style="font-family:'Fraunces',serif;font-size:26px;line-height:1.25;letter-spacing:-.015em;color:var(--ink);max-width:60ch">La audiencia no se acuerda de los datos. Se acuerda de <b>cómo se sintió</b> cuando escuchó los datos. Los tres momentos emocionales del deck son <b>slide 2 (la torre)</b>, <b>slide 9 (los tres takeaways)</b> y <b>slide 12 (el cierre)</b>. Todo lo demás sostiene esos tres.</p>
+  </div>
+
+</div>
+</body>
+</html>
