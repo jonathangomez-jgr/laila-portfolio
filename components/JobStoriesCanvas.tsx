@@ -475,37 +475,7 @@ export default function JobStoriesCanvas({ data }: { data: JobStoriesData }) {
                           </details>
                         )}
 
-                      {/* pending */}
-                      {story.pending && story.pending.length > 0 && (
-                        <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50/60 p-3">
-                          <p className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-700">
-                            <svg
-                              className="h-3 w-3"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2.5}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-                              />
-                            </svg>
-                            Pendiente
-                          </p>
-                          <ul className="space-y-1">
-                            {story.pending.map((p) => (
-                              <li
-                                key={p}
-                                className="text-xs leading-5 text-amber-900"
-                              >
-                                • {p}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                      {/* pending block hidden for client view */}
                     </div>
                   </article>
                 );
@@ -581,71 +551,9 @@ export default function JobStoriesCanvas({ data }: { data: JobStoriesData }) {
           </div>
         </div>
 
-        {/* notes */}
-        {data.summary.notes.length > 0 && (
-          <div className="mb-6 rounded-2xl border border-indigo-200 bg-indigo-50/50 p-5">
-            <p className="mb-3 flex items-center gap-2 text-sm font-bold text-indigo-900">
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              Lectura del análisis
-            </p>
-            <ul className="space-y-2">
-              {data.summary.notes.map((n) => (
-                <li
-                  key={n}
-                  className="flex items-start gap-2 text-sm leading-6 text-indigo-900"
-                >
-                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-indigo-500" />
-                  <span>{n}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {/* notes block hidden for client view */}
 
-        {/* pending artifacts */}
-        {data.summary.pendingArtifacts.length > 0 && (
-          <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-5">
-            <p className="mb-3 flex items-center gap-2 text-sm font-bold text-amber-800">
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-                />
-              </svg>
-              Por recibir del cliente
-            </p>
-            <ul className="space-y-2">
-              {data.summary.pendingArtifacts.map((p) => (
-                <li
-                  key={p}
-                  className="flex items-start gap-2 text-sm leading-6 text-amber-900"
-                >
-                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-amber-500" />
-                  <span>{p}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {/* pending artifacts block hidden for client view */}
       </section>
     </div>
   );

@@ -31,13 +31,6 @@ export const customerProjects: CustomerProject[] = [
       "Hospitalidad",
       "All-Inclusive",
     ],
-    visibleTabs: [
-      "job-stories",
-      "data-libraries",
-      "data-categories",
-      "kb-articles",
-      "demo-guion",
-    ],
     tabs: [
       {
         id: "overview",
@@ -312,7 +305,8 @@ export const customerProjects: CustomerProject[] = [
         id: "data-libraries",
         label: "Custom Retrievers",
         title: "Arquitectura de conocimiento — 5 Custom Retrievers",
-        content: "",
+        content:
+          "Cambio de paradigma respecto a la propuesta inicial: el Concierge NO usa Agentforce Data Libraries. Se diseñan 5 Custom Retrievers especializados por intent, cada uno conectado al backend que mejor sirva a su contenido — Salesforce Knowledge (artículos curados, citables, versionados, reutilizables por agentes humanos) o UDMO Files en Data Cloud (documentos ricos en formato original, ideales para RAG). El BrandVoice queda fuera del retriever — vive en el system prompt. La gobernanza se hace con 4 Data Categories ortogonales (Audience · Topic · Property · Lifecycle).",
         customRetrieverData: {
           intro:
             "Cada tarjeta lista los KB Articles que el retriever consume, el backend donde viven y los filtros exactos que se aplican en la query. Los IDs de artículo son los que se usarán al crearlos en Salesforce Knowledge (ver tab KB Articles).",
@@ -467,7 +461,6 @@ export const customerProjects: CustomerProject[] = [
             },
           ],
         },
-        /* contextData hidden for client view — preserve for reactivation
         contextData: {
           groups: [
             {
@@ -561,7 +554,6 @@ export const customerProjects: CustomerProject[] = [
             },
           ],
         },
-        */
       },
       {
         id: "archivos-por-dl",
@@ -2312,7 +2304,7 @@ export const customerProjects: CustomerProject[] = [
                 "Fortalece la confianza, protege al socio y mitiga riesgos de fraude",
               priority: "High",
               package: "MVP",
-              coverage: "covered",
+              coverage: "partial",
               resolution: "knowledge",
               knowledgeSources: [
                 {
@@ -2352,7 +2344,7 @@ export const customerProjects: CustomerProject[] = [
                 "Mejora la percepción de seguridad y reduce riesgos reputacionales",
               priority: "High",
               package: "MVP",
-              coverage: "covered",
+              coverage: "partial",
               resolution: "knowledge",
               knowledgeSources: [
                 {
@@ -2446,8 +2438,8 @@ export const customerProjects: CustomerProject[] = [
           summary: {
             totalStories: 13,
             byCoverage: {
-              covered: 6,
-              partial: 0,
+              covered: 4,
+              partial: 2,
               missing: 0,
               outOfScope: 7,
             },
@@ -2459,9 +2451,9 @@ export const customerProjects: CustomerProject[] = [
             },
             notes: [
               "Backlog MVP del Concierge: 13 Job Stories — las únicas con paquete = MVP en el backlog v2.1 de PAM. Las 17 restantes del backlog original quedaron como TBD, NA, Bloqueado o 'Va a backlog' para fases posteriores.",
-              "Cambio mayor de junio–julio 2026: la entrega del cliente subió de 51 a ~74 documentos y las cargas incrementales de reventa y phishing quedaron reflejadas en los KB Articles de Security del sandbox. Las 3 políticas críticas (huracán, reventa, phishing) hoy están covered.",
+              "Cambio mayor de junio 2026: la entrega del cliente subió de 51 a ~74 documentos. Las 3 políticas que estaban 'missing' (huracán, reventa, phishing) ahora tienen documentación oficial (covered/partial). Coverage agregada subió de 23% a 46% sobre el total MVP.",
               "JS003 (Programa de Referidos): regla oficial confirmada es USD 100 por cada referido confirmado, máximo 5 referidos por contrato (USD 500 tope). REEMPLAZA la versión anterior que decía '$100 por pareja, máx 4 beneficiarios directos' — era de un programa LVC histórico diferente.",
-              "6 de 13 stories (46%) involucran Knowledge y las 6 están cubiertas (JS001, JS003, JS005, JS021, JS023, JS024). Los artículos de reventa y phishing ya viven en Salesforce Knowledge (Security · KA-SEC-001/002/003) y se sirven vía Retriever 3 · KB-Security.",
+              "6 de 13 stories (46%) involucran Knowledge — 4 cubiertas (JS001, JS005, JS021, JS003) y 2 parciales (JS023, JS024) por carpetas internas aún vacías (Llamada Sospechosa/, Phishing/).",
               "7 stories (54%) NO requieren Knowledge: se resuelven con datos de Salesforce/Vaclubity (Account → Contract BCL_PPAS → Benefit) o con handoff humano.",
               "El cuello de botella ya NO es el contenido de Knowledge; ahora es (a) la migración de Vaclubity (beneficiarios, identificación de programa de referidos por contrato), (b) la configuración de Omni-Channel para los 3 handoffs MVP (JS027, JS028, JS030) y el Lead de referidos (JS003), y (c) la implementación de los 5 Custom Retrievers + Data Categories en la org PAM-Sandbox.",
             ],
@@ -3232,7 +3224,7 @@ export const customerProjects: CustomerProject[] = [
         label: "Demo · Guion WhatsApp",
         title: "Demo end-to-end — María Elena vive los 15 Job Stories MVP por WhatsApp",
         content:
-          "Guion de demostración diseñado para probar en un solo hilo narrativo que el Concierge de Paradise Pass cumple las 15 Job Stories del MVP. Una socia real (María Elena Torres) interactúa por WhatsApp durante 4 semanas mientras planea, viaja y resuelve contingencias. Cada mensaje del Agentforce Agent lleva anotaciones inline con el ID de la Job Story que valida, las integraciones que ejerce (lookup Salesforce, Retriever KB, handoff Omni-Channel) y los criterios de aceptación puntuales que se verifican en ese turno.",
+          "Guion de demostración diseñado para probar en un solo hilo narrativo que el Concierge de Paradise Pass cumple las 15 Job Stories del MVP. Una socia real (María Elena Torres) interactúa por WhatsApp durante 4 semanas mientras planea, viaja y resuelve contingencias. Cada mensaje del bot lleva anotaciones inline con el ID de la Job Story que valida, las integraciones que ejerce (lookup Salesforce, Retriever KB, handoff Omni-Channel) y los criterios de aceptación puntuales que se verifican en ese turno.",
         demoGuionData: {
           intro:
             "5 escenas cronológicas que arman una narrativa continua: onboarding y consulta de contrato → planeación de un viaje familiar → trámites financieros → detección de fraude → contingencias durante el viaje. En total: 15 Job Stories del MVP validadas, con anotaciones inline por turno y checklist de cierre por escena. Los handoffs se muestran hasta el punto de transferencia (creación de Case + Messaging Session con contexto).",
@@ -3384,7 +3376,7 @@ export const customerProjects: CustomerProject[] = [
               name: "Handoff a Contact Center con Contexto",
               category: "Handoff",
               sceneId: "scene-5",
-              cuando: "tengo un problema o queja compleja que el Agentforce Agent no puede entender",
+              cuando: "tengo un problema o queja compleja que el bot no puede entender",
               yoQuiero: "ser transferido a un agente humano del Contact Center con todo el historial de mi plática",
               paraPoder: "no tener que repetir mi número de socio ni explicar mi situación desde cero",
             },
@@ -3394,12 +3386,12 @@ export const customerProjects: CustomerProject[] = [
               id: "scene-1",
               order: 1,
               title: "Escena 1 · Reconociendo al socio y su contrato",
-              subtitle: "María Elena inicia contacto por primera vez en WhatsApp — el Agentforce Agent la identifica, atiende preferencia de idioma y le muestra su membresía",
+              subtitle: "María Elena inicia contacto por primera vez en WhatsApp — el bot la identifica, atiende preferencia de idioma y le muestra su membresía",
               contextDay: "Martes 3 de noviembre, 21:14 — María Elena guarda al hijo, se sienta con el celular, quiere planear diciembre",
               narrative:
                 "Primer contacto por WhatsApp Business. El agente debe identificarla por número de teléfono, respetar su idioma de conversación, mostrar los detalles del contrato Paradise Pass (no confundir con LVC/Privé) y responder consultas sobre beneficiarios. Aquí se valida el fundamento: identidad, idioma, contract lookup, beneficiary lookup, y el límite del MVP (no crea/edita beneficiarios, envía formulario).",
               jobStoriesCovered: [
-                { jobStoryId: "JS010", label: "Cambio de Idioma Preferido", description: "El Agentforce Agent detecta idioma de entrada y ofrece registrarlo como preferencia" },
+                { jobStoryId: "JS010", label: "Cambio de Idioma Preferido", description: "El bot detecta idioma de entrada y ofrece registrarlo como preferencia" },
                 { jobStoryId: "JS001", label: "Consulta de Membresía y Contrato", description: "Lookup Account → Contract(BCL_PPAS) → Benefit__c[] con fechas y estados" },
                 { jobStoryId: "JS002", label: "Gestión de Beneficiarios", description: "Lookup Contract_Beneficiary__c y envío de formulario PDF vía sendForm()" },
               ],
@@ -3555,11 +3547,11 @@ export const customerProjects: CustomerProject[] = [
               subtitle: "María Elena quiere usar sus semanas antes de que expiren, entender su programa de referidos e invitar a su hermana, y buscar la mejor propiedad para viajar en familia",
               contextDay: "Sábado 7 de noviembre, 10:32 — desayuno familiar, revisando calendario del cierre de año",
               narrative:
-                "El Agentforce Agent debe alertar sobre semanas por expirar (regla: ventana de 12 meses, incluso las 'expiradas' se pueden usar), explicar el programa de referidos con la regla oficial 2026 ($100 USD × 5, no la vieja regla LVC), y hacer un pre-filtrado de destinos capturando preferencias para escalar el detalle a un agente humano.",
+                "El bot debe alertar sobre semanas por expirar (regla: ventana de 12 meses, incluso las 'expiradas' se pueden usar), explicar el programa de referidos con la regla oficial 2026 ($100 USD × 5, no la vieja regla LVC), y hacer un pre-filtrado de destinos capturando preferencias para escalar el detalle a un agente humano.",
               jobStoriesCovered: [
                 { jobStoryId: "JS004", label: "Semanas Vacacionales por Expirar", description: "Alerta 12 meses antes y regla 'flexibilidad': Certificate Expired NO significa perdido" },
                 { jobStoryId: "JS003", label: "Programa de Referidos", description: "Regla 2026: USD 100 × 5 referidos, Lead en Vaclubity, penalización si cancela" },
-                { jobStoryId: "JS005", label: "Búsqueda de Destinos con Mejor Valor", description: "Agentforce Agent captura preferencias, crea Case y escala a agente humano para búsqueda real" },
+                { jobStoryId: "JS005", label: "Búsqueda de Destinos con Mejor Valor", description: "Bot captura preferencias, crea Case y escala a agente humano para búsqueda real" },
               ],
               turns: [
                 {
@@ -3667,12 +3659,12 @@ export const customerProjects: CustomerProject[] = [
                     "Case documenta certificado, fechas, viajeros, preferencias, filtros aplicados",
                     "Transfiere Messaging Session completa (agente humano no arranca de cero)",
                     "Ruteo a la cola de Reservaciones (no Customer Service — sub-área correcta)",
-                    "Agentforce Agent NO cierra el chat, sigue disponible",
+                    "Bot NO cierra el chat, sigue disponible",
                   ],
                 },
               ],
               outcome:
-                "Semana por expirar contextualizada sin miedo al cliente, referido creado como Lead ligado al Contract, viaje pre-documentado y escalado a Reservaciones con contexto completo. El Agentforce Agent no invade el rol del agente humano y no aluciona reglas de referidos.",
+                "Semana por expirar contextualizada sin miedo al cliente, referido creado como Lead ligado al Contract, viaje pre-documentado y escalado a Reservaciones con contexto completo. Bot no invade el rol del agente humano y no aluciona reglas de referidos.",
               jsChecklist: [
                 {
                   jobStoryId: "JS004",
@@ -3714,10 +3706,10 @@ export const customerProjects: CustomerProject[] = [
               subtitle: "María Elena pide su estado de cuenta y aprovecha para actualizar su tarjeta antes de que expire",
               contextDay: "Miércoles 18 de noviembre, 08:47 — de camino a la oficina, revisando pagos del mes",
               narrative:
-                "Dos self-services del MVP: el Agentforce Agent genera y envía el estado de cuenta consolidando balances a nivel Benefit (no Contract), y ante actualización de tarjeta respeta PCI — nunca captura datos de tarjeta en WhatsApp, envía Pay Token URL segura.",
+                "Dos self-services del MVP: el bot genera y envía el estado de cuenta consolidando balances a nivel Benefit (no Contract), y ante actualización de tarjeta respeta PCI — nunca captura datos de tarjeta en WhatsApp, envía Pay Token URL segura.",
               jobStoriesCovered: [
                 { jobStoryId: "JS013", label: "Estado de Cuenta por Email", description: "Envío desde Salesforce Core (no MC), consolidando balances por Benefit" },
-                { jobStoryId: "JS011", label: "Actualización de Método de Pago (PCI)", description: "Agentforce Agent NUNCA captura tarjeta en chat; envía Pay Token URL" },
+                { jobStoryId: "JS011", label: "Actualización de Método de Pago (PCI)", description: "Bot NUNCA captura tarjeta en chat; envía Pay Token URL" },
               ],
               turns: [
                 {
@@ -3834,12 +3826,12 @@ export const customerProjects: CustomerProject[] = [
               id: "scene-4",
               order: 4,
               title: "Escena 4 · Comunicaciones sospechosas",
-              subtitle: "María Elena recibe un correo raro y una llamada extraña — el Agentforce Agent valida canales oficiales y detecta fraude materializado",
+              subtitle: "María Elena recibe un correo raro y una llamada extraña — el bot valida canales oficiales y detecta fraude materializado",
               contextDay: "Jueves 26 de noviembre, 14:03 — hora de comida, María Elena revisa la bandeja de spam por si algo se coló",
               narrative:
-                "Dos flujos de seguridad del MVP. En JS024 el Agentforce Agent da los dominios oficiales para que el socio valide. En JS023 el flujo bifurca: si es sospecha, se explica; si es fraude materializado (pagó a un tercero), se escala directo a Customer Service con creación de Case y transferencia de la Messaging Session.",
+                "Dos flujos de seguridad del MVP. En JS024 el bot da los dominios oficiales para que el socio valide. En JS023 el flujo bifurca: si es sospecha, se explica; si es fraude materializado (pagó a un tercero), se escala directo a Customer Service con creación de Case y transferencia de la Messaging Session.",
               jobStoriesCovered: [
-                { jobStoryId: "JS024", label: "Phishing y Seguridad de Comunicaciones", description: "Agentforce Agent cita canales oficiales; si el usuario ya hizo clic/dio pass, escala inmediato" },
+                { jobStoryId: "JS024", label: "Phishing y Seguridad de Comunicaciones", description: "Bot cita canales oficiales; si el usuario ya hizo clic/dio pass, escala inmediato" },
                 { jobStoryId: "JS023", label: "Llamadas de Reventa Sospechosas", description: "Rama orientativa vs rama de fraude materializado → handoff a CS con Case" },
               ],
               turns: [
@@ -3942,7 +3934,7 @@ export const customerProjects: CustomerProject[] = [
                 },
               ],
               outcome:
-                "Phishing identificado y evitado. Fraude materializado detectado y escalado a la cola correcta (CS · Fraudes, no Reservaciones). El Agentforce Agent respetó reglas verbatim del KB sin inventar plazos ni procedimientos.",
+                "Phishing identificado y evitado. Fraude materializado detectado y escalado a la cola correcta (CS · Fraudes, no Reservaciones). Bot respetó reglas verbatim del KB sin inventar plazos ni procedimientos.",
               jsChecklist: [
                 {
                   jobStoryId: "JS024",
@@ -3977,7 +3969,7 @@ export const customerProjects: CustomerProject[] = [
               jobStoriesCovered: [
                 { jobStoryId: "JS018", label: "Cambio de Itinerario por Emergencia", description: "Automatiza si el checkout NO cambia; si sí cambia, handoff a agente humano" },
                 { jobStoryId: "JS021", label: "Política de Huracán y Clima Crítico", description: "Guía empática paso a paso, ofrece reubicación, escala a humano para retención" },
-                { jobStoryId: "JS028", label: "Escalamiento por Disputa de Cobro", description: "Agentforce Agent detecta sentimiento y bifurca — calmo (recolecta) vs molesto (escala inmediato)" },
+                { jobStoryId: "JS028", label: "Escalamiento por Disputa de Cobro", description: "Bot detecta sentimiento y bifurca — calmo (recolecta) vs molesto (escala inmediato)" },
                 { jobStoryId: "JS030", label: "Escalamiento por Modificaciones", description: "Cualquier modificación/cancelación → handoff a Reservaciones (out-of-scope MVP)" },
                 { jobStoryId: "JS027", label: "Handoff a Contact Center con Contexto", description: "Todos los escalamientos transfieren Messaging Session completa + Sentiment" },
               ],
@@ -4049,7 +4041,7 @@ export const customerProjects: CustomerProject[] = [
                   turn: 7,
                   role: "note",
                   text:
-                    "▸ Se resuelve la reubicación fuera del Agentforce Agent (David Ramírez la mueve a HR Los Cabos). María Elena llega el 22 dic. Tres días después surge otro tema.",
+                    "▸ Se resuelve la reubicación fuera del bot (David Ramírez la mueve a HR Los Cabos). María Elena llega el 22 dic. Tres días después surge otro tema.",
                   timestamp: "—",
                 },
                 {
@@ -4067,7 +4059,7 @@ export const customerProjects: CustomerProject[] = [
                   jobStoryIds: ["JS028"],
                   validations: [
                     "Sentiment analysis detecta frustración alta (>0.6 negatividad)",
-                    "Agentforce Agent ejecuta handoff inmediato SIN intentar recabar más detalles (regla del cliente para clientes molestos)",
+                    "Bot ejecuta handoff inmediato SIN intentar recabar más detalles (regla del cliente para clientes molestos)",
                     "Tono empático que valida la emoción",
                     "NO minimiza el problema",
                   ],
@@ -4084,7 +4076,7 @@ export const customerProjects: CustomerProject[] = [
                     "Ruteo a CS · Disputas (NO Reservaciones, NO Cobranza)",
                     "Sentiment Analysis adjunto",
                     "Prioridad correlacionada con sentiment + in-house status",
-                    "Agentforce Agent respeta regla dura: cliente molesto → handoff inmediato, no interrogatorio",
+                    "Bot respeta regla dura: cliente molesto → handoff inmediato, no interrogatorio",
                   ],
                 },
                 {
@@ -4149,7 +4141,7 @@ export const customerProjects: CustomerProject[] = [
                 },
               ],
               outcome:
-                "El Agentforce Agent resolvió las contingencias más críticas: crisis climática con protocolo verbatim, disputa de cobro con handoff inmediato por sentiment, y modificación de reserva ruteada correctamente. Cada handoff creó Case con RT correcto, ruteó a la cola operativa correcta y transfirió Messaging Session con contexto completo.",
+                "El bot resolvió las contingencias más críticas: crisis climática con protocolo verbatim, disputa de cobro con handoff inmediato por sentiment, y modificación de reserva ruteada correctamente. Cada handoff creó Case con RT correcto, ruteó a la cola operativa correcta y transfirió Messaging Session con contexto completo.",
               jsChecklist: [
                 {
                   jobStoryId: "JS018",
@@ -4176,7 +4168,7 @@ export const customerProjects: CustomerProject[] = [
                   name: "Disputa de Cobro",
                   validated: [
                     "Sentiment Analysis detecta frustración >0.6",
-                    "Agentforce Agent NO interroga — ejecuta handoff inmediato",
+                    "Bot NO interroga — ejecuta handoff inmediato",
                     "Ruteo a CS · Disputas (NO Cobranza)",
                     "Prioridad correlacionada con severidad",
                   ],

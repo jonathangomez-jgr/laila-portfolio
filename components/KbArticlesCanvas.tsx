@@ -209,73 +209,7 @@ export default function KbArticlesCanvas({ data }: { data: KbArticlesData }) {
         );
       })}
 
-      {data.pending && data.pending.items.length > 0 && (
-        <section className="space-y-4 pt-4">
-          <header className="border-b border-gray-200 pb-3">
-            <div className="flex flex-wrap items-baseline gap-3">
-              <h3 className="text-2xl font-semibold text-gray-950">
-                Pendientes para revisar con el cliente
-              </h3>
-              <span className="text-sm font-semibold text-gray-500">
-                {data.pending.items.length} temas abiertos
-              </span>
-            </div>
-            {data.pending.intro && (
-              <p className="mt-2 max-w-4xl text-sm leading-6 text-gray-600">
-                {data.pending.intro}
-              </p>
-            )}
-          </header>
-          <div className="space-y-4">
-            {data.pending.items.map((item) => {
-              const s = severityStyles[item.severity];
-              return (
-                <article
-                  key={item.id}
-                  className={`overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm ${s.accent} border-l-4`}
-                >
-                  <div className="flex flex-col gap-4 p-5 sm:p-6">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <code className="rounded bg-gray-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-gray-600">
-                        {item.id}
-                      </code>
-                      <span
-                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${s.badge}`}
-                      >
-                        {s.label}
-                      </span>
-                      {item.articles?.map((a) => (
-                        <span
-                          key={a}
-                          className="inline-flex items-center rounded-md bg-gray-50 px-2 py-0.5 font-mono text-[10px] font-semibold text-gray-700 ring-1 ring-gray-200"
-                        >
-                          {a}
-                        </span>
-                      ))}
-                    </div>
-                    <h4 className="text-lg font-semibold leading-6 text-gray-950">
-                      {item.title}
-                    </h4>
-                    <p className="whitespace-pre-line text-sm leading-6 text-gray-700">
-                      {item.description}
-                    </p>
-                    {item.askOfClient && (
-                      <div className="rounded-xl border border-gray-200 bg-gray-50/70 p-4">
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                          Petición al cliente
-                        </p>
-                        <p className="mt-1.5 text-sm leading-6 text-gray-800">
-                          {item.askOfClient}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-      )}
+      {/* Pendientes block hidden for client view — preserved in data for reactivation */}
     </div>
   );
 }

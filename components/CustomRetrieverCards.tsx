@@ -182,39 +182,47 @@ export default function CustomRetrieverCards({
                     </ul>
                   </div>
 
-                  <div>
-                    <p className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-500">
-                      <svg
-                        className={`h-3.5 w-3.5 ${tone.iconColor}`}
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                        />
-                      </svg>
-                      Filtros aplicados en la query
-                    </p>
-                    <ul className="space-y-1.5">
-                      {r.filters.map((f) => (
-                        <li
-                          key={f}
-                          className="flex items-start gap-2 text-sm leading-6 text-gray-700"
-                        >
-                          <span
-                            className={`mt-2 h-1 w-1 shrink-0 rounded-full ${tone.bullet.replace("text-", "bg-")}`}
-                          />
-                          <code className="font-mono text-[12px] text-gray-700">
-                            {f}
-                          </code>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  {(() => {
+                    const dataCategoryFilters = r.filters.filter((f) =>
+                      f.trim().startsWith("DataCategoryGroup.")
+                    );
+                    if (dataCategoryFilters.length === 0) return null;
+                    return (
+                      <div>
+                        <p className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-500">
+                          <svg
+                            className={`h-3.5 w-3.5 ${tone.iconColor}`}
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                            />
+                          </svg>
+                          Filtros aplicados en la query
+                        </p>
+                        <ul className="space-y-1.5">
+                          {dataCategoryFilters.map((f) => (
+                            <li
+                              key={f}
+                              className="flex items-start gap-2 text-sm leading-6 text-gray-700"
+                            >
+                              <span
+                                className={`mt-2 h-1 w-1 shrink-0 rounded-full ${tone.bullet.replace("text-", "bg-")}`}
+                              />
+                              <code className="font-mono text-[12px] text-gray-700">
+                                {f}
+                              </code>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             </article>

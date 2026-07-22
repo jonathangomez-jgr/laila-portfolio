@@ -44,6 +44,39 @@ export default function DemoGuionCanvas({ data }: { data: DemoGuionData }) {
         </p>
       </div>
 
+      {/* Nota aclaratoria */}
+      <aside className="rounded-3xl border border-amber-200 bg-amber-50/50 p-6 sm:p-8">
+        <div className="flex items-start gap-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700">
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+              aria-hidden
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <div className="space-y-2">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-amber-800">
+              Nota aclaratoria
+            </p>
+            <p className="text-sm leading-6 text-amber-950">
+              María Elena Torres es una <strong>socia de ejemplo</strong> creada para ilustrar el hilo completo del MVP. Al probar el Concierge en el Sandbox, se puede reemplazar por cualquier <strong>registro real</strong> ya cargado en la org — el flujo, las integraciones y las reglas son las mismas.
+            </p>
+            <p className="text-sm leading-6 text-amber-950">
+              Los turnos que siguen muestran <strong>de manera ilustrativa</strong> el comportamiento esperado del Agentforce Agent: qué contesta, qué consulta en Salesforce, qué cita del Knowledge y cuándo escala a un humano. No son transcripciones textuales — son el contrato conversacional que valida el UAT.
+            </p>
+          </div>
+        </div>
+      </aside>
+
       {/* Persona card */}
       <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="mb-4 flex items-center gap-3">
@@ -427,12 +460,7 @@ function SceneView({
                       </li>
                     ))}
                   </ul>
-                  {js.residualRisk && (
-                    <p className="mt-2 rounded bg-amber-50 px-2 py-1.5 text-[11px] leading-4 text-amber-800 ring-1 ring-amber-200">
-                      <span className="font-semibold">⚠ Riesgo residual:</span>{" "}
-                      {js.residualRisk}
-                    </p>
-                  )}
+                  {/* Riesgo residual hidden for client view — preserved in data for reactivation */}
                 </li>
               ))}
             </ul>

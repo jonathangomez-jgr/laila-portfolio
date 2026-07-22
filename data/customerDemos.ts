@@ -902,6 +902,7 @@ export type CustomerDemo = {
   qrCode?: string;
   tags: string[];
   tabs: CustomerDemoTab[];
+  visibleTabs?: string[];
   passcode: string;
   hidden?: boolean;
   embeddedMessaging?: EmbeddedMessagingConfig;
