@@ -912,6 +912,385 @@ export const insightDecks: InsightDeck[] = [
       },
     ],
   },
+  {
+    slug: "deck",
+    customerSlug: "insight",
+    insightSlug: "digital-engagement-agentforce-flujo-conversacional",
+    title: "Digital Engagement + Agentforce + Humano",
+    subtitle:
+      "Cómo viaja una conversación dentro de Salesforce, de extremo a extremo",
+    duration: "14 min",
+    slides: [
+      // 1 · Portada
+      {
+        layout: "title",
+        eyebrow: "Insights · Postura técnica",
+        title:
+          "Digital Engagement, Agentforce\ny el agente humano",
+        subtitle:
+          "Zero-to-Hero: canal → sesión → Agentforce → handoff. Cómo se conecta cada capa y qué toca configurar un admin.",
+        footnote: "Postura técnica · Laila Portfolio · 2026",
+      },
+
+      // 2 · Statement
+      {
+        layout: "quote",
+        quote:
+          "Un canal externo no habla con Agentforce: habla con Digital Engagement, que traduce ese mensaje a MessagingSession, lo entrega a Omni-Channel y — según la política — lo pone en manos del agente conversacional o del humano. Handoff, contexto e historial se preservan porque los tres actores viven sobre el mismo hilo de objetos Salesforce.",
+        context: "Statement técnico · Postura completa",
+      },
+
+      // 3 · Sección panorama
+      {
+        layout: "section",
+        eyebrow: "Parte 1 · Panorama",
+        title: "Qué es Digital Engagement",
+        subtitle:
+          "Tres capas: provider externo, la traducción de Salesforce y el consumidor de la sesión.",
+      },
+
+      // 4 · Tres capas
+      {
+        layout: "pillars",
+        eyebrow: "Tres capas, un solo circuito",
+        title: "Cada capa tiene una responsabilidad clara",
+        pillars: [
+          {
+            title: "Provider externo",
+            body: "Meta (WhatsApp / Messenger), Apple, operadores SMS, telefonía. Es quien realmente se conecta con el cliente. Salesforce nunca habla con el celular.",
+            accent: "indigo",
+          },
+          {
+            title: "Digital Engagement",
+            body: "Traduce a objetos: MessagingChannel, MessagingEndUser, MessagingSession, ConversationEntry. Aplica plantillas HSM. Mantiene la sesión viva y auditable.",
+            accent: "violet",
+          },
+          {
+            title: "Consumidor de la sesión",
+            body: "Agentforce Agent, humano vía Omni-Channel, o bot legacy. Ninguno habla directo con el provider — todos pasan por Digital Engagement.",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // 5 · Vocabulario clave
+      {
+        layout: "kpi-table",
+        eyebrow: "Parte 2 · Vocabulario mínimo",
+        title: "Los seis objetos que un admin debe reconocer",
+        rows: [
+          {
+            label: "MessagingChannel",
+            baseline: "Puente",
+            goal6m: "Provider externo",
+            goal12m: "Un canal por línea WhatsApp, deployment MIAW, ID Apple.",
+            accent: "indigo",
+          },
+          {
+            label: "MessagingEndUser",
+            baseline: "Cliente",
+            goal6m: "Identidad por canal",
+            goal12m: "Puede o no matchear a un Contact real.",
+            accent: "violet",
+          },
+          {
+            label: "MessagingSession",
+            baseline: "Conversación viva",
+            goal6m: "Status + owner",
+            goal12m: "Es el registro que Omni-Channel rutea.",
+            accent: "sky",
+          },
+          {
+            label: "ConversationEntry",
+            baseline: "Cada mensaje",
+            goal6m: "Ligado a la sesión",
+            goal12m: "Texto, media, botones, eventos de sistema.",
+            accent: "emerald",
+          },
+          {
+            label: "Omni-Channel Flow",
+            baseline: "Conmutador",
+            goal6m: "Agentforce vs cola humana",
+            goal12m: "Aquí se decide el destino de cada sesión.",
+            accent: "indigo",
+          },
+        ],
+      },
+
+      // 6 · Sección canales
+      {
+        layout: "section",
+        eyebrow: "Parte 3 · Canales",
+        title: "Todos los canales que convergen en el mismo objeto",
+        subtitle:
+          "WhatsApp, MIAW Web/App, Apple Messages, Facebook Messenger, SMS y Service Cloud Voice.",
+      },
+
+      // 7 · Tabla canales
+      {
+        layout: "kpi-table",
+        eyebrow: "Reglas propias de cada canal",
+        title: "Qué necesita saber un admin por canal",
+        rows: [
+          {
+            label: "WhatsApp Business",
+            baseline: "Meta Cloud API / BSP",
+            goal6m: "Ventana 24h + HSM",
+            goal12m: "Buttons, lists, media, ubicación.",
+            accent: "emerald",
+          },
+          {
+            label: "Messaging for Web/App (MIAW)",
+            baseline: "Salesforce nativo",
+            goal6m: "JWT + Embedded Deployment",
+            goal12m: "Rich content + persistencia entre recargas.",
+            accent: "indigo",
+          },
+          {
+            label: "Apple Messages for Business",
+            baseline: "Solo inbound",
+            goal6m: "Apple Register",
+            goal12m: "Apple Pay, list picker, time picker, form.",
+            accent: "violet",
+          },
+          {
+            label: "SMS",
+            baseline: "Partner connector",
+            goal6m: "Opt-in obligatorio",
+            goal12m: "Solo texto — ideal OTP y alertas.",
+            accent: "sky",
+          },
+          {
+            label: "Service Cloud Voice",
+            baseline: "Amazon Connect / BYOT",
+            goal6m: "Transcript en vivo",
+            goal12m: "Agentforce Voice + handoff a humano.",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // 8 · Sección viaje
+      {
+        layout: "section",
+        eyebrow: "Parte 4 · Viaje del mensaje",
+        title: "Del ‘hola’ del cliente al primer objeto en Salesforce",
+        subtitle:
+          "Cinco pasos que un admin debe conocer de memoria — son el 80% del troubleshooting.",
+      },
+
+      // 9 · Cinco pasos
+      {
+        layout: "bullets",
+        eyebrow: "Los cinco pasos",
+        title: "Del provider hasta la respuesta al cliente",
+        bullets: [
+          "01 · Provider recibe el mensaje y valida su propio contrato (número activo, ventana vigente).",
+          "02 · Dispara webhook firmado a Salesforce — Digital Engagement rechaza cualquier request sin firma válida.",
+          "03 · Digital Engagement crea/reanuda MessagingEndUser + MessagingSession + ConversationEntry.",
+          "04 · Omni-Channel Flow (Route Work) decide destino: Agentforce, cola humana o skill específica.",
+          "05 · Outbound: la respuesta se persiste como ConversationEntry y Digital Engagement la empuja al provider.",
+        ],
+        highlight:
+          "Si algo falla, el 80% de las veces está en los pasos 2 o 3 — no en Agentforce. Revise MessagingChannel y Channel Health antes que Topics.",
+      },
+
+      // 10 · Sección Agentforce
+      {
+        layout: "section",
+        eyebrow: "Parte 5 · Agentforce entra",
+        title: "Cuándo entra Agentforce y qué hace en cada turno",
+        subtitle:
+          "Reasoning Engine + Topics + Actions + Data Cloud grounding — decide el turno completo.",
+      },
+
+      // 11 · Ciclo del turno
+      {
+        layout: "pillars",
+        eyebrow: "Un solo turno, cuatro salidas posibles",
+        title: "Qué decide el Reasoning Engine",
+        pillars: [
+          {
+            title: "Responder directo",
+            body: "Prompt Template con contexto del CRM y del canal. Ideal para preguntas informativas resueltas por conocimiento del agente.",
+            accent: "indigo",
+          },
+          {
+            title: "Invocar una Action",
+            body: "Flow, Apex, External Service, MCP tool o Data Cloud Query. Es cómo el agente ejecuta operaciones reales.",
+            accent: "violet",
+          },
+          {
+            title: "Pedir más información",
+            body: "Cuando la intención es ambigua o falta un dato crítico. Evita ejecutar Actions con supuestos.",
+            accent: "sky",
+          },
+          {
+            title: "Handoff a humano",
+            body: "Invoca Agent Handoff Action con summary. Cambia el owner de la MessagingSession y rutea vía Omni-Channel.",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // 12 · Convivencia con DE
+      {
+        layout: "comparison",
+        eyebrow: "Convivencia clara",
+        title: "Digital Engagement vs Agentforce — no compiten",
+        before: {
+          heading: "Digital Engagement responsabilidad",
+          items: [
+            "Traducir provider ↔ objetos Salesforce.",
+            "Mantener sesiones vivas y expirarlas.",
+            "Aplicar plantillas HSM y ventanas de canal.",
+            "Persistir cada ConversationEntry.",
+            "Serializar outbound al canal correcto.",
+          ],
+        },
+        after: {
+          heading: "Agentforce responsabilidad",
+          items: [
+            "Razonar sobre la intención del cliente.",
+            "Elegir topic y action pertinente.",
+            "Grounding con Data Cloud en vivo.",
+            "Componer la respuesta con contexto.",
+            "Decidir cuándo escalar al humano.",
+          ],
+        },
+      },
+
+      // 13 · Sección handoff
+      {
+        layout: "section",
+        eyebrow: "Parte 6 · Handoff",
+        title: "Cómo se transfiere al humano sin perder contexto",
+        subtitle:
+          "El paso donde más despliegues fallan — no por tecnología, sino por diseño del momento humano.",
+      },
+
+      // 14 · Qué se preserva
+      {
+        layout: "bullets",
+        eyebrow: "Qué recibe el humano",
+        title: "Todo el contexto llega con la sesión",
+        bullets: [
+          "Historial completo de ConversationEntry — cada mensaje textual del cliente y del agente.",
+          "Summary generado por Prompt Template — 2–3 frases con el problema y motivo del handoff.",
+          "Contexto CRM enlazado — Contact, Cases, Orders, actividad de Data Cloud.",
+          "Archivos adjuntos compartidos durante la conversación con el agente.",
+          "Mismo canal — el cliente sigue en WhatsApp/Web/Voz sin percibir la transición.",
+        ],
+        highlight:
+          "Regla: la Handoff Action siempre publica un summary. Handoff sin summary = 90 segundos de silencio + cliente escribiendo ‘¿hay alguien ahí?’.",
+      },
+
+      // 15 · Bot-back
+      {
+        layout: "quote",
+        quote:
+          "El handoff no siempre es unidireccional. Un humano puede devolver la sesión al Agentforce Agent — bot-back — después de resolver el punto que requería criterio humano. El agente continúa con la misma sesión, mismo canal, mismo historial. El humano gasta minutos donde aporta valor; el agente cierra el resto.",
+        context: "Bot-back · Diseño responsable del tiempo humano",
+      },
+
+      // 16 · Sección arquitectura
+      {
+        layout: "section",
+        eyebrow: "Parte 7 · Arquitectura",
+        title: "Todo el sistema en una sola vista",
+        subtitle:
+          "Canales, Digital Engagement, Omni-Channel, Agentforce, Data Cloud y humano — en un solo hilo.",
+      },
+
+      // 17 · Roles
+      {
+        layout: "pillars",
+        eyebrow: "Roles claros, fronteras claras",
+        title: "Quién hace qué",
+        pillars: [
+          {
+            title: "Captura",
+            body: "Canales convergen en Digital Engagement. Todo se traduce a MessagingSession + ConversationEntry sin excepciones.",
+            accent: "indigo",
+          },
+          {
+            title: "Ruteo",
+            body: "Omni-Channel Flow decide Agentforce, bot legacy o cola humana. Es el conmutador único.",
+            accent: "violet",
+          },
+          {
+            title: "Atención",
+            body: "Agentforce razona y actúa; el humano toma cuando corresponde. Cambia el owner de la sesión — no se duplica.",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // 18 · Checklist admin
+      {
+        layout: "bullets",
+        eyebrow: "Parte 8 · Checklist",
+        title: "Lo que un admin activa, en orden",
+        bullets: [
+          "01 · Digital Engagement habilitado + permission sets (Service, DE, Agent).",
+          "02 · Service Channels + Queues + Presence Configurations definidos.",
+          "03 · MessagingChannel creado y validado con Channel Health.",
+          "04 · Omni-Channel Flow con ramas Agentforce vs cola humana.",
+          "05 · Agentforce Agent publicado con Topics, Actions y Handoff Action.",
+          "06 · Enhanced Messaging Component en el Service Console (no chat viejo).",
+          "07 · Wrap-up + retención + consent configurados según regulación.",
+          "08 · Session Analytics + Agent Metrics activos desde el día uno.",
+        ],
+        highlight:
+          "Encienda un canal, estabilice 3 semanas, después el segundo. Multiplicar canales en paralelo multiplica los tickets internos.",
+      },
+
+      // 19 · Trampas
+      {
+        layout: "bullets",
+        eyebrow: "Parte 9 · Trampas comunes",
+        title: "Los cinco errores más frecuentes",
+        bullets: [
+          "01 · Confundir Embedded Chat con MIAW — el chat viejo no crea MessagingSession.",
+          "02 · Handoff sin summary — el humano tarda 90 segundos leyendo mientras el cliente se impacienta.",
+          "03 · Ignorar la ventana 24h de WhatsApp — outbound fuera de ventana requiere plantilla HSM.",
+          "04 · Presence con capacidad irreal — 2 a 4 chats simultáneos por humano es lo sostenible.",
+          "05 · Agentforce sin Data Cloud — respuestas genéricas, pérdida de confianza del cliente.",
+        ],
+      },
+
+      // 20 · Conclusión
+      {
+        layout: "quote",
+        quote:
+          "La calidad de un despliegue no se ve en el diagrama, se ve en tres momentos: cuando el cliente escribe y ve respuesta en menos de tres segundos, cuando Agentforce reconoce su límite e invoca handoff con summary claro, y cuando el humano toma la sesión sin que el cliente perciba la transición. Si esos tres momentos funcionan, el resto es iteración fina.",
+        context: "Conclusión · Tres momentos que definen calidad",
+      },
+
+      // 21 · Cierre
+      {
+        layout: "closing",
+        title: "Próximos pasos",
+        bullets: [
+          "Mapee los canales prioritarios y las plantillas HSM que necesita para operar en cada uno.",
+          "Diseñe el Omni-Channel Flow — ramas Agentforce vs humano — antes que los topics del agente.",
+          "Configure Handoff Action con Prompt Template de summary desde el primer sprint.",
+          "Habilite Session Analytics y Agent Metrics antes del piloto — sin telemetría no hay iteración.",
+          "Encienda un canal, estabilice tres semanas, después el siguiente.",
+        ],
+        cta: "¿Conversamos sobre el despliegue de Digital Engagement con Agentforce?",
+      },
+
+      // 22 · Gracias
+      {
+        layout: "thanks",
+        eyebrow: "Insights · Laila Portfolio",
+        title: "Gracias",
+        subtitle:
+          "Digital Engagement traduce, Agentforce razona, el humano interviene donde aporta. Tres capas, un solo hilo.",
+      },
+    ],
+  },
 ];
 
 export function getInsightDeck(insightSlug: string): InsightDeck | undefined {

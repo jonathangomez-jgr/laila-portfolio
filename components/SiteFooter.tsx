@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { key: "generalDemos", href: "/general-demos" },
   { key: "customerSolutions", href: "/customer-demos" },
   { key: "customerProjects", href: "/customer-projects" },
+  { key: "buildRecipes", href: "/build-recipes" },
   { key: "insights", href: "/insights" },
 ] as const;
 

@@ -8,11 +8,12 @@
     "customerProjects": "Customer's Projects",
     "letsTalk": "Let's Talk",
     "insights": "Insights",
+    "buildRecipes": "Build Recipes",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
   },
   "footer": {
-    "tagline": "Principal Solution Engineer at Salesforce. I design solutions, build demos, and develop narratives that bridge technology and business.",
+    "tagline": "Agentforce Enterprise Architect at Salesforce. I design solutions, build demos, and develop narratives that bridge technology and business.",
     "navTitle": "Navigation",
     "connectTitle": "Connect",
     "contactPageLabel": "Go to Contact",
@@ -76,10 +77,10 @@
     "approachDesc2": "My work usually lives at the intersection of solution design, executive narrative, digital experience, AI and all within Salesforce.",
     "profileEyebrow": "Profile Snapshot",
     "profileName": "Jonathan Gomez",
-    "profileRole": "Principal Solution Engineer",
+    "profileRole": "Agentforce Enterprise Architect",
     "profileTagline": "Crafting stories of business transformation through AI-powered experiences — designed to captivate, inspire, and make possibilities feel real.",
     "highlights": [
-      { "label": "Current Role", "value": "Principal Solution Engineer" },
+      { "label": "Current Role", "value": "Agentforce Enterprise Architect" },
       { "label": "Focus", "value": "AI, Agentforce, Data Cloud, Service Cloud" },
       { "label": "Specialty", "value": "Solution Design & Stunning Demos" },
       { "label": "Core Project", "value": "Laila" },
@@ -256,7 +257,7 @@
     "description": "About technology, Salesforce, artificial intelligence, solution design, the future of business, or about life, the weather, and why owls fly in complete silence.",
     "aboutEyebrow": "Who I am",
     "aboutTitle": "Mindset drives results",
-    "aboutDesc": "I'm Jonathan Gomez, Principal Solution Engineer at Salesforce. I specialize in solution design, executive storytelling, and building demos that bridge business and technology. Laila is the project where I consolidate that vision.",
+    "aboutDesc": "I'm Jonathan Gomez, Agentforce Enterprise Architect at Salesforce. I specialize in solution design, executive storytelling, and building demos that bridge business and technology. Laila is the project where I consolidate that vision.",
     "channelsEyebrow": "Contact channels",
     "whatsappTitle": "WhatsApp",
     "whatsappSub": "Scan the QR or tap to open chat",
@@ -324,6 +325,73 @@
         "industry": "Industry",
         "products": "Products",
         "region": "Region"
+      }
+    }
+  },
+  "buildRecipes": {
+    "eyebrow": "Build Recipes",
+    "title": "Concrete recipes for solving problems — from standard to custom.",
+    "description": "A collection of implementable solutions on Salesforce and Agentforce. Each recipe explains the problem, how it's solved, why it works, and what you trade off. Written from a technical stance, structured so an Admin can also follow.",
+    "readingTime": "min read",
+    "tableOfContents": "Contents",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "expandSection": "Expand",
+    "collapseSection": "Collapse",
+    "backToRecipes": "Back to Build Recipes",
+    "notFound": "Recipe not found",
+    "notFoundDesc": "The recipe you're looking for doesn't exist or has been moved. Head back to the listing to explore the available ones.",
+    "updated": "Updated",
+    "author": "Author",
+    "problemLabel": "The Challenge",
+    "tldrLabel": "In short",
+    "execDeckBtn": "Executive presentation",
+    "execDeckHint": "Slide-by-slide version of the recipe — ideal for sharing or presenting.",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "approach": {
+      "standard": "Standard",
+      "hybrid": "Hybrid",
+      "custom": "Custom"
+    },
+    "audience": {
+      "admin": "Admin",
+      "developer": "Developer",
+      "architect": "Architect"
+    },
+    "block": {
+      "symptomLabel": "Symptom",
+      "rootCauseLabel": "Root cause",
+      "impactLabel": "Impact",
+      "prosLabel": "Pros",
+      "consLabel": "Cons",
+      "whenToUseLabel": "When to use",
+      "whenNotToUseLabel": "When NOT to use",
+      "commandLabel": "Command",
+      "issueHeader": "Symptom",
+      "solutionHeader": "Solution",
+      "purposeLabel": "Purpose",
+      "fieldsLabel": "Key fields",
+      "methodsLabel": "Key methods",
+      "sharingLabel": "Sharing",
+      "endpointLabel": "Endpoint",
+      "requestBodyLabel": "Request body",
+      "responseLabel": "Response",
+      "headersLabel": "Headers",
+      "legendLabel": "Legend",
+      "screenshotPending": "Screenshot pending",
+      "conceptExpertNote": "Theory · skip if you already know it"
+    },
+    "filters": {
+      "title": "Filters",
+      "clearAll": "Clear filters",
+      "empty": "No recipes match the selected filters.",
+      "resultsSingular": "recipe",
+      "resultsPlural": "recipes",
+      "sections": {
+        "approach": "Approach",
+        "tags": "Tags",
+        "audience": "Audience"
       }
     }
   },
