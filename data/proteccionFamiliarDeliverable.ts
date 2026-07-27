@@ -563,7 +563,7 @@ export const proteccionFamiliarDeliverable: AgentDeliverable = {
             {
               title: "Un canal de voz que aprende contigo",
               description:
-                "La misma infraestructura de Agentforce Voice y ElevenLabs que hoy atiende consultas informativas puede, mañana, ejecutar transacciones completas. La voz, el tono y la marca se preservan a través de cada evolución.",
+                "La misma infraestructura de Agentforce Voice que hoy atiende consultas informativas puede, mañana, ejecutar transacciones completas. La voz, el tono y la marca se preservan a través de cada evolución.",
             },
           ],
           closing:
@@ -832,9 +832,9 @@ export const proteccionFamiliarDeliverable: AgentDeliverable = {
           {
             order: 7,
             phase: "Pre-Go Live",
-            title: "Activar el Voice ID de ElevenLabs en producción",
+            title: "Configurar la voz en el ambiente productivo",
             description:
-              "Confirmar contrato/licencia ElevenLabs para la voz iDEmt5MnqUotdwCIVplo (o su equivalente productivo) y validar parámetros speed/stability/similarity acordados con el cliente.",
+              "Replicar en producción la voz seleccionada (Enrique, Spanish Mexico) con el tuning acordado (Speed 1.00, Similarity 0.75, Stability 0.80). Validar en pruebas piloto que la percepción de calidad y latencia coincide con lo probado en sandbox.",
             owner: "Ambos",
             status: "critical",
           },
