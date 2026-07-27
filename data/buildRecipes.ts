@@ -268,6 +268,208 @@ const whatsappAttachmentsCustom: Recipe = {
       ],
     },
     {
+      id: "flow-side-by-side",
+      eyebrow: "Paso a paso — estándar vs custom",
+      title: "Cómo funciona cada camino, sin dar nada por sentado",
+      peek: "Dos caminos, del mismo mensaje de WhatsApp hasta la respuesta del Agent. Con analogías para perfil de negocio y detalle técnico verificable en fuentes oficiales.",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Antes del detalle, la idea en una frase: en el camino estándar Salesforce actúa como recepcionista con contrato firmado con Meta — recibe, guarda y clasifica todo por ti; en el camino custom tú montas tu propia recepción, tus propias reglas, y una banda transportadora de IA que traduce cada adjunto a texto antes de entregarlo al agente. El camino estándar es más simple; el custom procesa lo que el estándar hoy no procesa.",
+        },
+        {
+          type: "concept",
+          title: "Lenguaje común antes de arrancar",
+          peek: "Cinco términos que se repiten. Con analogía en una línea para que cualquiera pueda seguir el flujo.",
+          blocks: [
+            {
+              type: "list",
+              items: [
+                "Webhook — es un timbre. En vez de que Salesforce pregunte cada rato '¿llegó algo nuevo?', Meta le toca el timbre cada vez que llega un mensaje. La URL del timbre es pública.",
+                "HMAC-SHA256 — es el sello con firma del mensajero. Meta firma cada paquete con un secreto que solo comparte con Salesforce; si la firma no coincide, el paquete se descarta como sospechoso.",
+                "Platform Event — es el intercomunicador del edificio. Alguien lo pulsa (publica) y todos los suscritos oyen a la vez, sin que quien pulsó tenga que esperar respuesta. Sirve para no bloquear el hilo del webhook.",
+                "Queueable / Async Apex — es una lista de pendientes. En vez de hacer todo en el momento (y arriesgarse a que el timbre suene ocupado), Salesforce apunta la tarea y la ejecuta cuando puede, respetando límites de plataforma.",
+                "Prompt Template — es una receta guardada. Le decimos al modelo de IA con qué instrucciones tratar el archivo (una imagen, un PDF), y siempre la sigue igual. Vive en Prompt Builder, se activa desde Setup.",
+                "JWT (JSON Web Token) — es un pasaporte con foto y sellos. Lo emite Salesforce, lo firma criptográficamente, y el Agent API solo acepta ese formato — no un boleto ordinario.",
+                "Multimodal — que el modelo entiende más de un tipo de dato. Un modelo multimodal puede leer texto, mirar una imagen y sacar conclusiones sobre ambos.",
+              ],
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "Camino estándar — cómo funciona hoy en Salesforce",
+          peek: "Enhanced WhatsApp Channel + Omni-Channel Flow + Agentforce Service Agent. Todo lo pesado lo mantiene Salesforce; tú configuras el ruteo y el agente.",
+          blocks: [
+            {
+              type: "paragraph",
+              text: "El path estándar se llama Enhanced WhatsApp Channel. Se levanta desde Setup → Messaging Settings, se vincula al Meta Business Account vía embedded signup, y a partir de ahí Salesforce se encarga de la relación técnica con Meta (endpoint, tokens, firma). El cliente responsable solo configura el ruteo hacia el agente y el consentimiento del canal.",
+            },
+            {
+              type: "pipeline",
+              title: "Flujo estándar paso a paso",
+              steps: [
+                {
+                  component: "Setup del canal",
+                  action:
+                    "Un admin va a Setup → Messaging Settings → New Channel → WhatsApp → Enhanced → Connect to WhatsApp. Se abre el 'embedded signup' de Meta (login con la cuenta Business), se elige la WABA y el número.",
+                  note: "Crea un registro MessagingChannel + un MessagingChannelUsage con deploymentType (ej. DigitalEngagementConversation) y channelConsentType (ImplicitOptIn / ExplicitOptIn / DoubleOptIn). Fuente: MessagingChannel Metadata API — developer.salesforce.com.",
+                },
+                {
+                  component: "Meta Cloud API",
+                  action:
+                    "Cuando un cliente le escribe al número, Meta manda el evento HTTP al endpoint receptor que hostea Salesforce. El cliente responsable no ve esa URL — Salesforce la administra internamente como parte del canal Enhanced.",
+                  note: "Tokens y verificación de firma del lado Salesforce ↔ Meta son gestionados por Salesforce en el canal Enhanced; el admin no los maneja.",
+                },
+                {
+                  component: "Persistencia en Salesforce",
+                  action:
+                    "Salesforce crea o reutiliza tres registros por conversación: MessagingEndUser (el contacto por su canal), MessagingSession (la sesión con estado y ruteo) y ConversationEntry (una fila por cada turno del hilo).",
+                  note: "ConversationEntry.entry_payload puede ser MESSAGE, PARTICIPANT_CHANGED, ROUTING_RESULT, SESSION_STATUS_CHANGED, entre otros. Ref oficial: docs/service/messaging-object-model.",
+                },
+                {
+                  component: "Ruteo por Omni-Channel Flow",
+                  action:
+                    "El MessagingChannel apunta a un Omni-Channel Flow con Routing Type = Omni-Flow. Ese flow usa el elemento Route Work y decide a qué recurso enviar el trabajo — en este caso, a un Agentforce Service Agent (uno por inbound flow).",
+                  note: "Salesforce Help — ai.agent_parent_deploy.htm confirma: 'each inbound flow can be connected to one agent only'.",
+                },
+                {
+                  component: "Turno inbound al Agent",
+                  action:
+                    "El texto del mensaje llega al agente a través del runtime de Agentforce (Atlas Reasoning Engine). El agente clasifica el topic, planifica y ejecuta acciones (invocable actions, prompt templates, flows).",
+                },
+                {
+                  component: "Adjunto en canal Enhanced",
+                  action:
+                    "Si el cliente manda una imagen o PDF, Salesforce guarda el archivo como ContentDocument / ContentVersion y lo enlaza al MessagingSession vía ContentDocumentLink (aparece en la Files Related List de la sesión).",
+                  note: "Referencia: help.salesforce.com — service.livemessage_agent_send_files.htm. El agente recibe la referencia al archivo, no el binario.",
+                },
+                {
+                  component: "Procesar el binario del adjunto",
+                  action:
+                    "Para que el agente 'entienda' la imagen o el PDF, hay que construir una acción custom que llame a un Flex Prompt Template con File Input. El agente invoca esa acción; el prompt corre sobre GPT-4o Mini o Gemini 2.0 Flash. Formatos soportados por el prompt: PNG, JPEG, PDF.",
+                  note: "developer.salesforce.com/blogs/2025/05/unlock-multi-modal-ai-with-file-inputs-in-prompt-builder + .../2025/07/how-to-build-a-multimodal-agent-in-salesforce. Nota: audio, video, .docx, .xlsx no aparecen en la matriz oficial.",
+                },
+                {
+                  component: "Respuesta outbound",
+                  action:
+                    "La respuesta del agente se publica como un ConversationEntry de tipo MESSAGE en la MessagingSession. Salesforce se encarga de enviarlo a Meta Cloud API y de vuelta al WhatsApp del cliente.",
+                  note: "Dentro de la ventana de 24 h del cliente se envía como mensaje libre; fuera de ella, se requiere un WhatsApp Message Template pre-aprobado por Meta.",
+                },
+              ],
+            },
+            {
+              type: "callout",
+              tone: "info",
+              title: "En una analogía de negocio",
+              text: "Enhanced WhatsApp es como contratar una empresa de recepción llave-en-mano: te ponen el mostrador, el guardia, el sistema de correo interno y el archivo. Tú decides a qué asesor va cada llamada (Omni-Channel Flow) y qué se le contesta al cliente (el agente). Si llega un paquete de un tipo que la empresa no procesa hoy — por ejemplo, una nota de voz —, la recepcionista lo archiva pero no lo abre; hay que contratar aparte a alguien que lo abra.",
+            },
+            {
+              type: "callout",
+              tone: "warning",
+              title: "Lo que el estándar NO cubre hoy (2026-07)",
+              text: "Multimodal nativo del canal cubre imagen (PNG/JPEG) y PDF vía Flex Prompt Template + acción custom. No hay capability oficial de canal Enhanced que procese audio (nota de voz), video, ni documentos Office (.docx, .xlsx) automáticamente sin código adicional del cliente responsable.",
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "Camino custom — cómo funciona esta receta",
+          peek: "Force.com Site + HMAC + Platform Event + pipeline de IA + Agent API con JWT. Tú administras la relación con Meta; tú decides cómo se procesa cada adjunto.",
+          blocks: [
+            {
+              type: "paragraph",
+              text: "En el camino custom, la 'recepcionista' es tuya. Meta no entrega el paquete a un mostrador de Salesforce — te lo entrega directo a la puerta pública que tú expones desde Force.com Sites. Todo lo demás (validar, guardar, descargar el archivo, correr la IA, llamar al agente y responder) es orquestación asíncrona que corre dentro del org y que tú controlas.",
+            },
+            {
+              type: "pipeline",
+              title: "Flujo custom paso a paso",
+              steps: [
+                {
+                  component: "Meta Cloud API",
+                  action:
+                    "Meta hace POST a la URL pública del Force.com Site (Guest User). El path incluye el configId del número — así el mismo org atiende varios números en paralelo, uno por WhatsApp_Configuration__c.",
+                  note: "Un Force.com Site expone endpoints anónimos protegidos por Guest User Profile con FLS explícito.",
+                },
+                {
+                  component: "WhatsAppWebhookHandler (Apex REST)",
+                  action:
+                    "Valida la firma HMAC-SHA256 del header X-Hub-Signature-256 sobre el body recibido usando el Webhook_Verify_Token__c. Si la firma no coincide, descarta. Si coincide, publica un WhatsApp_Inbound_Event__e y responde 200 en milisegundos.",
+                  note: "El handler es without sharing porque el Guest User no tiene sesión de usuario. HMAC evita spoofing del endpoint público.",
+                },
+                {
+                  component: "WhatsApp_Inbound_Event__e (Platform Event)",
+                  action:
+                    "El evento carga el payload de Meta y el configId. Es HighVolume y se publica con PublishAfterCommit — decouplea la recepción síncrona del procesamiento.",
+                  note: "Analogía: el webhook toca el intercomunicador y cuelga. Los suscritos (subscribers) reaccionan a su ritmo.",
+                },
+                {
+                  component: "WhatsAppInboundEventHandler",
+                  action:
+                    "Deduplica por Message_ID__c (External ID indexado) — Meta reintenta si no ve un 200, y esto evita procesar el mismo mensaje dos veces. Crea o reutiliza WhatsApp_Conversation__c + WhatsApp_Message__c.",
+                  note: "Si el mensaje es texto, salta directo al Agent. Si es media (imagen/audio/video/documento), crea WhatsApp_Media__c en estado Pending y encola descarga.",
+                },
+                {
+                  component: "WhatsAppMediaDownloadQueueable",
+                  action:
+                    "Descarga el binario desde el CDN de Meta (graph.facebook.com → lookaside.fbsbx.com) y lo guarda como ContentVersion + ContentDocumentLink en Salesforce Files. Calcula SHA-256 para integridad.",
+                  note: "Las URLs de Meta expiran en ~5 minutos. La descarga tiene que ser inmediata.",
+                },
+                {
+                  component: "Trigger + Queueable de análisis por tipo",
+                  action:
+                    "Cuando ContentVersion_ID__c queda poblado, un trigger encola el queueable correcto: WhatsAppImageAnalysisQueueable, WhatsAppAudioTranscriptionQueueable, WhatsAppVideoAnalysisQueueable o WhatsAppFileProcessingQueueable.",
+                },
+                {
+                  component: "Flow + Prompt Template",
+                  action:
+                    "El queueable invoca un Flow admin-configurable (Image_Analysis_Flow_API_Name__c, File_Processing_Flow_API_Name__c, Audio_Transcription_Flow_API_Name__c). El Flow llama a un Prompt Template en Prompt Builder — GPT-4o vision para imagen/documento, Whisper para audio, GPT-4o-mini + Whisper para video.",
+                  note: "El admin puede editar el Flow y el Prompt Template sin tocar Apex — el criterio de análisis vive fuera del código.",
+                },
+                {
+                  component: "Mensaje sintético al Agent",
+                  action:
+                    "El resultado del análisis se envuelve como un WhatsApp_Message__c inbound con prefijo — [IMAGE CONTEXT] / [AUDIO CONTEXT] / [DOCUMENT CONTEXT] / [VIDEO CONTEXT]. El Agent lo recibe como si el usuario hubiera escrito ese texto.",
+                  note: "El Agent nunca ve el binario. Solo ve texto ya interpretado por la IA.",
+                },
+                {
+                  component: "WhatsAppAgentforceService → Agent API (JWT)",
+                  action:
+                    "Crea o reutiliza sesión contra api.salesforce.com/einstein/ai-agent/v1/agents/{agentId}/sessions con Bearer JWT. Envía el mensaje al endpoint /sessions/{sessionId}/messages. Parsea la respuesta (messages[type=='Inform'].message).",
+                  note: "El Connected App debe tener isNamedUserJwtEnabled=true — sin ese flag, el Agent API responde 404. Es el error más difícil de diagnosticar.",
+                },
+                {
+                  component: "WhatsAppAPIService.sendTextMessage",
+                  action:
+                    "Callout a Meta Graph API con el texto (o audio TTS de OpenAI si Response_Mode__c='audio'). El cliente recibe la respuesta en WhatsApp — texto, o nota de voz si pidió audio.",
+                  note: "Cada paso queda registrado en WhatsApp_Log__c con action code, source, payload, timestamps y relaciones — trazabilidad end-to-end para debugging asíncrono.",
+                },
+              ],
+            },
+            {
+              type: "callout",
+              tone: "info",
+              title: "En la misma analogía",
+              text: "El camino custom es como abrir tu propia recepción: pones el timbre en la puerta (webhook), le enseñas al mensajero un sello secreto (HMAC), pones un intercomunicador para no dejarlo esperando (Platform Event), tienes tu propio equipo de traducción que abre cada paquete y lo transcribe (pipeline de IA), y tú vas al asesor con el paquete ya traducido (mensaje sintético al Agent). Más piezas — pero cada una es tuya, y cada tipo de paquete tiene traducción.",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Ventajas concretas de la solución custom",
+          text: "1) Procesa todo tipo de adjunto (imagen, audio, video, documento .pdf/.docx/.xlsx) hoy, sin esperar release nativo. 2) Multi-tenant nativo: varios números de WhatsApp en el mismo org, cada uno ruteado a su propio agente. 3) Criterio de análisis editable por Admin — Flows y Prompt Templates viven fuera del código Apex. 4) TTS opcional: responder por nota de voz cuando el cliente lo pide. 5) Trazabilidad total en WhatsApp_Log__c (INFO/WARN/ERROR por acción y fuente). 6) Evoluciona al ritmo del negocio — no depende del roadmap de Digital Engagement.",
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Riesgos y elementos a tomar en cuenta",
+          text: "1) Cost of ownership alto: ~30 clases Apex, 6 objetos custom, 2 Platform Events, Guest User Profile con FLS en 67+ campos y Remote Site Settings. 2) Requiere developer para mantenimiento — deploys, permisos, monitoreo asíncrono. 3) La relación con Meta la administras tú: rotación de tokens del System User, monitoreo del rate limit de Graph API, actualización de HMAC secret. 4) Costos recurrentes de OpenAI (vision, Whisper, TTS) que no existen en el path estándar. 5) Se pierde la integración nativa con Omni-Channel routing — reconstruirla es esfuerzo adicional. 6) Templates de WhatsApp se sincronizan manualmente desde Meta — no hay embedded signup. 7) Si Salesforce libera capability nativa que cubra tu caso, hay que evaluar migración. 8) Un endpoint público mal configurado (HMAC apagado, Guest User con permisos de más) es superficie de ataque real — la seguridad se diseña desde el día uno.",
+        },
+      ],
+    },
+    {
       id: "how-it-works",
       eyebrow: "Cómo funciona",
       title: "Flujo end-to-end",

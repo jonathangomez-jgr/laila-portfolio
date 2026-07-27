@@ -5,6 +5,7 @@ import type {
   SlideAccent,
 } from "../../data/executiveDecks";
 import DeckBrandDecor, { DeckProductChips } from "./DeckBrandDecor";
+import DeckDiagramsSlide from "./DeckDiagramsSlide";
 import DeckQRCode from "./DeckQRCode";
 import DeckQRExpand from "./DeckQRExpand";
 
@@ -227,6 +228,25 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
               );
             })}
           </div>
+        </div>
+      );
+
+    /* ── Diagrams (light) — clickable, opens in-slide lightbox ──────── */
+    case "diagrams":
+      return (
+        <div className="deck-slide-inner">
+          {brandDecor}
+          {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
+          <SlideTitle>{slide.title}</SlideTitle>
+          {slide.subtitle && (
+            <p className="mt-3 max-w-4xl text-base leading-relaxed text-slate-600">
+              {slide.subtitle}
+            </p>
+          )}
+          <DeckDiagramsSlide diagrams={slide.diagrams} />
+          {slide.footnote && (
+            <p className="mt-6 text-sm italic text-slate-500">{slide.footnote}</p>
+          )}
         </div>
       );
 

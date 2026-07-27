@@ -178,6 +178,19 @@ export type ExecutiveSlide =
       }[];
     } & SlideBrand)
   | ({
+      layout: "diagrams";
+      eyebrow?: string;
+      title: string;
+      subtitle?: string;
+      diagrams: {
+        caption: string;
+        src: string;
+        alt?: string;
+        accent?: SlideAccent;
+      }[];
+      footnote?: string;
+    } & SlideBrand)
+  | ({
       layout: "agent-questionnaire";
       eyebrow?: string;
       title: string;

@@ -25,37 +25,54 @@ export const recipeDecks: RecipeDeck[] = [
         footnote: "Build Recipes · Laila Portfolio · 2026",
       },
 
-      // 2 · Statement ejecutivo
-      {
-        layout: "quote",
-        quote:
-          "El archivo llega a Salesforce, pero Agentforce no puede procesarlo. La receta reemplaza el canal por un webhook público conectado directo a Meta, y un pipeline de IA que convierte cada adjunto en texto entendible por el agente. El cliente sigue mandando fotos, notas de voz y documentos — el agente responde como si los hubiera leído.",
-        context: "Statement técnico · Postura completa",
-      },
-
-      // 3 · Sección: El Reto
-      {
-        layout: "section",
-        eyebrow: "Parte 1 · El Reto",
-        title: "Por qué falla el path estándar",
-        subtitle:
-          "El adjunto se guarda como ContentDocument. El Agent recibe la referencia — pero no procesa el binario. Responde con error y el caso de uso muere ahí.",
-      },
-
-      // 4 · Contexto del problema
+      // 2 · Contexto — postura y reto en una sola diapositiva
       {
         layout: "bullets",
-        eyebrow: "Síntomas observados",
-        title: "Qué pasa hoy con Digital Engagement estándar",
+        eyebrow: "Contexto",
+        title: "Por qué existe esta solución",
         bullets: [
-          "El cliente envía una foto, audio o documento por WhatsApp.",
-          "El archivo llega a Salesforce y se relaciona al Messaging Session como ContentDocument.",
-          "Agentforce recibe el mensaje con la referencia al media — no invoca un modelo multimodal sobre el binario.",
-          "El agente responde 'no pude procesar el archivo'.",
+          "El cliente envía foto, audio o documento por WhatsApp; el archivo llega a Salesforce como ContentDocument en el Messaging Session.",
+          "Agentforce recibe la referencia — no procesa el binario — y responde 'no pude procesar el archivo'.",
           "Casos con comprobantes, evidencia visual o notas de voz quedan bloqueados.",
+          "La receta reemplaza el canal: webhook público conectado directo a Meta + pipeline de IA que convierte cada adjunto en texto entendible por el agente.",
+          "El cliente sigue mandando fotos, notas de voz y documentos — el agente responde como si los hubiera leído.",
         ],
         highlight:
-          "Impacto: en servicios financieros, retail o seguros, esto elimina buena parte del valor de tener un canal conversacional.",
+          "En servicios financieros, retail o seguros, procesar adjuntos no es un lujo: es lo que hace que el canal conversacional entregue valor.",
+      },
+
+      // 3 · Sección: alto nivel de la solución
+      {
+        layout: "section",
+        eyebrow: "Parte 1 · La solución a alto nivel",
+        title: "Dos caminos, un mismo mensaje",
+        subtitle:
+          "Cómo funciona el path estándar de Salesforce y cómo se ve el workaround custom — antes de entrar al detalle técnico.",
+      },
+
+      // 4 · Diagramas comparativos
+      {
+        layout: "diagrams",
+        eyebrow: "Vista de arquitectura",
+        title: "Estándar vs Workaround — de un vistazo",
+        subtitle:
+          "El estándar entrega la sesión al Agent y depende de Flex Prompt Templates para adjuntos (hoy: imagen y PDF). El workaround introduce objetos custom que capturan el mensaje y el media, y una capa de análisis que traduce el binario a texto antes de llegar al Agent.",
+        diagrams: [
+          {
+            caption: "Solución Estándar",
+            src: "/recipes/Custom%20Whatsapp%20%20channel/flow-estandar-transparent.png",
+            alt: "Diagrama de la solución estándar: WhatsApp Business → Messaging Session → Agentforce Session con acciones de Flow, Prompt Builder y Apex.",
+            accent: "indigo",
+          },
+          {
+            caption: "Workaround Custom",
+            src: "/recipes/Custom%20Whatsapp%20%20channel/flow-workaround-transparent.png",
+            alt: "Diagrama del workaround: WhatsApp Business → WhatsApp_Conversation__c + WhatsApp_Message__c + WhatsApp_Media__c → capa de análisis (Flow + Prompt) → Agentforce Session.",
+            accent: "emerald",
+          },
+        ],
+        footnote:
+          "Diagramas comparativos — los detalles de cada paso viven en las siguientes secciones del deck.",
       },
 
       // 5 · Sección: comparativa
