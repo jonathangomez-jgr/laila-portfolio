@@ -781,7 +781,7 @@ export const proteccionFamiliarDeliverable: AgentDeliverable = {
             title: "Migración de metadata del agente (bot, planner, actions)",
             description:
               "Desplegar el paquete SFDX que contiene el Bot, GenAiPlanner v5, GenAiPlugins, GenAiFunctions, Flows del template Service Agent y permsets custom. Requiere retrieve dirigido y un delta package para no arrastrar componentes no relacionados.",
-            owner: "Salesforce",
+            owner: "Partner de Salesforce",
             status: "critical",
           },
           {
@@ -808,7 +808,7 @@ export const proteccionFamiliarDeliverable: AgentDeliverable = {
             title: "Creación del bot user en producción",
             description:
               "Provisionar el usuario integrado (EinsteinServiceAgent User) con el perfil Einstein Agent User y los cinco permsets exactos que hoy tiene en sandbox. Validar que el username productivo siga el patrón .ext.",
-            owner: "Salesforce",
+            owner: "Partner de Salesforce",
             status: "critical",
           },
           {
@@ -862,7 +862,7 @@ export const proteccionFamiliarDeliverable: AgentDeliverable = {
             title: "Estrategia de rampa (canary)",
             description:
               "Habilitar tráfico gradual: 5% de llamadas informativas → 25% → 50% → 100% en ventanas de 48 horas. En cada corte se revisan métricas de contención, escalación y CSAT.",
-            owner: "Salesforce",
+            owner: "Partner de Salesforce",
             status: "recommended",
           },
           {
@@ -871,7 +871,7 @@ export const proteccionFamiliarDeliverable: AgentDeliverable = {
             title: "Ventana de rollback preparada",
             description:
               "Mantener el enrutamiento humano previo activo en paralelo. En caso de degradación, el toggle del flow Voice_Call redirige el 100% de las llamadas al asesor humano en menos de 5 minutos.",
-            owner: "Salesforce",
+            owner: "Partner de Salesforce",
             status: "critical",
           },
           {
@@ -898,7 +898,7 @@ export const proteccionFamiliarDeliverable: AgentDeliverable = {
             title: "Monitoreo continuo",
             description:
               "Dashboards de Agentforce en Setup + reportes custom sobre VoiceCall e Interaction Summary. Alertas sobre picos de escalación, respuestas “no puedo confirmar” y drops de contención.",
-            owner: "Salesforce",
+            owner: "Partner de Salesforce",
             status: "recommended",
           },
         ],

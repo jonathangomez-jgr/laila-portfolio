@@ -25,7 +25,7 @@ const ownerStyles: Record<
   ProductionStep["owner"],
   { chip: string }
 > = {
-  Salesforce: { chip: "bg-indigo-50 text-indigo-700" },
+  "Partner de Salesforce": { chip: "bg-indigo-50 text-indigo-700" },
   Cliente: { chip: "bg-violet-50 text-violet-700" },
   Ambos: { chip: "bg-emerald-50 text-emerald-700" },
 };

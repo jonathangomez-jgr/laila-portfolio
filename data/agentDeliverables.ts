@@ -117,7 +117,7 @@ export type ProductionStep = {
   phase: string;
   title: string;
   description: string;
-  owner: "Salesforce" | "Cliente" | "Ambos";
+  owner: "Partner de Salesforce" | "Cliente" | "Ambos";
   status: "critical" | "recommended" | "optional";
 };
 
