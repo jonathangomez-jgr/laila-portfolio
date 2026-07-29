@@ -180,5 +180,11 @@ export type AgentDeliverable = {
     role: string;
     email: string;
   };
+  testPhone?: {
+    number: string;
+    display: string;
+    label?: string;
+    helper?: string;
+  };
   tabs: DeliverableTab[];
 };

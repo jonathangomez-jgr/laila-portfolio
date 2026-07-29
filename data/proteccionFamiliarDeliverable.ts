@@ -17,6 +17,12 @@ export const proteccionFamiliarDeliverable: AgentDeliverable = {
     role: "Agentforce Enterprise Architect · Salesforce",
     email: "jonathan.gomez@salesforce.com",
   },
+  testPhone: {
+    number: "+13185281482",
+    display: "+1 (318) 528-1482",
+    label: "Probar el agente",
+    helper: "Llama al número de prueba y conversa con el agente de Voz.",
+  },
 
   tabs: [
     // ─────────────────────────────────────────────────────────────

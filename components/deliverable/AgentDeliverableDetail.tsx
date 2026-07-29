@@ -120,6 +120,64 @@ export default function AgentDeliverableDetail({
           </div>
         </header>
 
+        {deliverable.testPhone && (
+          <div className="mb-8 overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 shadow-sm sm:mb-10">
+            <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-6">
+              <div className="flex items-start gap-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white shadow-[0_10px_25px_rgba(16,185,129,0.35)]">
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 5.75A2.75 2.75 0 015.75 3h1.44a2 2 0 011.94 1.515l.7 2.8a2 2 0 01-.52 1.905L8.06 10.44a12.06 12.06 0 005.5 5.5l1.22-1.25a2 2 0 011.905-.52l2.8.7A2 2 0 0121 16.81v1.44A2.75 2.75 0 0118.25 21h-.5C9.6 21 3 14.4 3 6.25v-.5z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-700">
+                    {deliverable.testPhone.label ?? "Probar el agente"}
+                  </p>
+                  <p className="mt-1 text-lg font-semibold text-gray-950 sm:text-xl">
+                    Marca al número de prueba
+                  </p>
+                  {deliverable.testPhone.helper && (
+                    <p className="mt-1 max-w-xl text-sm text-gray-600">
+                      {deliverable.testPhone.helper}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <a
+                href={`tel:${deliverable.testPhone.number}`}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(16,185,129,0.35)] transition hover:bg-emerald-600 sm:text-base"
+              >
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 5.75A2.75 2.75 0 015.75 3h1.44a2 2 0 011.94 1.515l.7 2.8a2 2 0 01-.52 1.905L8.06 10.44a12.06 12.06 0 005.5 5.5l1.22-1.25a2 2 0 011.905-.52l2.8.7A2 2 0 0121 16.81v1.44A2.75 2.75 0 0118.25 21h-.5C9.6 21 3 14.4 3 6.25v-.5z"
+                  />
+                </svg>
+                {deliverable.testPhone.display}
+              </a>
+            </div>
+          </div>
+        )}
+
         {/* Chrome with tabs */}
         <div className="glass-card overflow-hidden p-2 sm:p-3 md:p-4">
           <div
