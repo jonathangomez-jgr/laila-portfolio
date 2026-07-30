@@ -35,7 +35,7 @@ import WorkshopResult from "./WorkshopResult";
 import JafraValorPlanCanvas from "./JafraValorPlanCanvas";
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
-import type { CustomerDemo } from "../data/customerDemos";
+import type { CustomerDemo, DeliverableCta } from "../data/customerDemos";
 import { hasExecutiveDeck } from "../data/executiveDecks";
 import type { Dictionary } from "@/lib/i18n";
 
@@ -337,6 +337,10 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
                 </div>
               )}
 
+              {activeTab.deliverableCta && (
+                <DeliverableCtaCard cta={activeTab.deliverableCta} lang={lang} />
+              )}
+
               {(() => {
                 const c = activeTab.content ?? "";
                 if (!c.trim()) return null;
@@ -525,5 +529,120 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
         </div>
       )}
     </main>
+  );
+}
+
+function DeliverableCtaCard({
+  cta,
+  lang,
+}: {
+  cta: DeliverableCta;
+  lang: string;
+}) {
+  const isExternal = /^https?:/.test(cta.href);
+  const localizedHref = isExternal
+    ? cta.href
+    : cta.href.startsWith(`/${lang}/`) || cta.href === `/${lang}`
+      ? cta.href
+      : `/${lang}${cta.href.startsWith("/") ? cta.href : `/${cta.href}`}`;
+
+  const content = (
+    <span className="inline-flex items-center gap-2 rounded-full bg-white/95 px-5 py-2.5 text-sm font-semibold text-indigo-700 shadow-[0_10px_25px_rgba(95,111,255,0.28)] transition group-hover:bg-white group-hover:shadow-[0_14px_32px_rgba(95,111,255,0.36)] sm:text-base">
+      {cta.ctaLabel}
+      <svg
+        className="h-4 w-4 transition group-hover:translate-x-0.5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        aria-hidden
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M13 5l7 7-7 7M5 12h14"
+        />
+      </svg>
+    </span>
+  );
+
+  const inner = (
+    <div className="relative flex flex-col gap-5 overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-600 p-6 shadow-[0_20px_45px_rgba(95,111,255,0.35)] sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:p-7">
+      <div
+        className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10 blur-2xl"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -bottom-24 -left-10 h-48 w-48 rounded-full bg-white/5 blur-2xl"
+        aria-hidden
+      />
+
+      <div className="relative flex items-start gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-white ring-1 ring-inset ring-white/20 backdrop-blur">
+          <svg
+            className="h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            aria-hidden
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 12h6m-6 4h4m5-12H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-4z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M14 4v4a1 1 0 001 1h4"
+            />
+          </svg>
+        </div>
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            {cta.eyebrow && (
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
+                {cta.eyebrow}
+              </p>
+            )}
+            {cta.badge && (
+              <span className="rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white ring-1 ring-inset ring-white/25">
+                {cta.badge}
+              </span>
+            )}
+          </div>
+          <p className="mt-1.5 text-lg font-semibold leading-snug text-white sm:text-xl">
+            {cta.title}
+          </p>
+          {cta.description && (
+            <p className="mt-1.5 max-w-xl text-sm leading-6 text-white/85">
+              {cta.description}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="relative shrink-0 sm:self-center">{content}</div>
+    </div>
+  );
+
+  return (
+    <div className="mt-6 sm:mt-8">
+      {isExternal ? (
+        <a
+          href={localizedHref}
+          target="_blank"
+          rel="noreferrer"
+          className="group block"
+        >
+          {inner}
+        </a>
+      ) : (
+        <Link href={localizedHref} className="group block">
+          {inner}
+        </Link>
+      )}
+    </div>
   );
 }

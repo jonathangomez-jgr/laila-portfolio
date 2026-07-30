@@ -1236,7 +1236,780 @@ sf agent activate --json --api-name WhatsApp_Assistant`,
   ],
 };
 
-export const buildRecipes: Recipe[] = [whatsappAttachmentsCustom];
+const whatsappV2Handoff: Recipe = {
+  slug: "whatsapp-attachments-custom-channel-v2-handoff",
+  title: "WhatsApp + Agentforce v2 · Handoff completo bot → cola → humano, ownership real y visibilidad de adjuntos en el Case",
+  problemOneLiner:
+    "La V1 ya recibe adjuntos y responde por Agentforce. Falta: escalar a un humano cuando el cliente lo pide, saber quién está atendiendo, cerrar conversaciones inactivas y que los adjuntos aparezcan también en el Case.",
+  approach: "custom",
+  tags: [
+    "Handoff",
+    "Agentforce",
+    "WhatsApp",
+    "Queue",
+    "Bot User",
+    "Timeout Scheduler",
+    "Custom Notifications",
+    "Platform Events",
+    "empApi",
+    "ContentDocumentLink",
+    "GenAiFunction",
+    "Custom Permission",
+    "LWC Record Page",
+    "Invocable Apex",
+    "Prompt Templates",
+  ],
+  audiences: ["admin", "developer", "architect"],
+  author: "Jonathan Gomez",
+  authorRole: "Agentforce Enterprise Architect",
+  publishedAt: "2026-07-30",
+  updatedAt: "2026-07-30",
+  readingMinutes: 32,
+  tldr: [
+    "V2 se apoya en toda la infraestructura de la V1 (webhook Meta, objetos custom, pipelines de adjuntos) y agrega el layer que faltaba: gestión de conversaciones cuando el bot NO puede resolver.",
+    "El cliente puede pedir 'hablar con una persona' y una GenAiFunction (FDE_afEscalateToHuman) reasigna la conversación a una cola configurable, opcionalmente crea Case, dispara Custom Notifications a los miembros y bloquea al bot de responder.",
+    "El bot ahora se muestra como owner de la conversación (Bot User real, no 'Automated Process'). Al aceptar un asesor, el owner cambia al User. Reports y list views nativos por owner cuentan la historia.",
+    "Nuevo tab Administración en el LWC (gated por Custom Permission) donde el admin configura por línea: cola destino, crear caso o no, mensajes al cliente y timeouts bot/humano.",
+    "Timeout Scheduler cierra conversaciones inactivas cada 5 minutos, con umbrales distintos para modo bot y modo humano.",
+    "3 acciones invocables nuevas conectan puntos: FDE_afEscalateToHuman (escalar), FDE_LinkContactToConversation (persistir el contact identificado en la conversación) y las dos que resuelven el 'hueco' de los adjuntos históricos que no se vinculaban al Case cuando llegaba después.",
+    "Toda la fase queda detrás de un feature flag Handoff_Enabled__c por línea. Rollback es un checkbox, sin redeploy.",
+  ],
+  sections: [
+    {
+      id: "what-is-new",
+      eyebrow: "Qué cambia respecto a la V1",
+      title: "El resumen que necesitas antes de leer nada más",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La V1 dejó al bot conversando con el cliente y procesando adjuntos. La V2 responde a la pregunta que nadie contestaba: y cuando el bot NO puede, ¿qué? Antes, la conversación quedaba huérfana — sin owner claro, sin ruta al asesor humano, sin cierre automático, y con los adjuntos previos invisibles cuando alguien creaba el Case después. La V2 cierra esos cuatro huecos con piezas mínimas y compostables.",
+        },
+        {
+          type: "list",
+          items: [
+            "Handoff a humano — cuando el cliente lo pide o el bot lo decide, una GenAiFunction transfiere ownership de la conversación a una cola, notifica a los miembros y bloquea al bot para que no responda encima del humano.",
+            "Ownership del bot visible — mientras el bot atiende, el owner es un Bot User real con nombre propio (no 'Automated Process'). Reports, list views y auditoría dicen la verdad.",
+            "Cierre automático por inactividad — un scheduler cada 5 minutos cierra conversaciones idle. Timeout distinto para modo bot y modo humano.",
+            "Adjuntos vinculados al Case y a la conversación — dos acciones invocables Apex hacen el linking bidireccional: cuando llega un adjunto nuevo se enlaza forward al Case si ya existe; cuando el Case se crea después, se hace backfill de los adjuntos históricos.",
+            "Contact auto-linked a la conversación — una acción invocable persiste el ContactId que el agente ya resolvió, sin duplicar lookups.",
+            "Tab de administración en el LWC — un admin con Custom Permission configura la política de handoff por línea de WhatsApp: cola, checkbox de crear Case, mensajes al cliente, timeouts. Sin código.",
+            "Feature flag por línea (Handoff_Enabled__c) — todo lo nuevo vive detrás de un checkbox por WhatsApp_Configuration__c. Se activa por línea de forma independiente. Rollback = destildar.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "V1 y V2 conviven",
+          text: "Nada de la V2 rompe la V1. Si un cliente en V1 quiere quedarse ahí, puede. La V2 es opt-in por línea. Un mismo org puede tener líneas V1 (bot puro) y líneas V2 (bot + handoff) al mismo tiempo.",
+        },
+      ],
+    },
+    {
+      id: "v1-vs-v2",
+      eyebrow: "Comparativa",
+      title: "V1 vs V2 — qué es nuevo, qué se conservó",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "comparison",
+          standardLabel: "V1 · Bot atiende adjuntos y responde",
+          customLabel: "V2 · V1 + handoff, ownership, timeouts, backfill",
+          rows: [
+            {
+              dimension: "Rol del bot",
+              standard: "Responde texto, procesa imagen/audio/documento vía prompt templates, y genera Case cuando el planner lo pide.",
+              custom: "Todo lo de V1 + puede invocar FDE_afEscalateToHuman cuando el cliente pide humano o cuando el propio planner detecta que no puede continuar.",
+            },
+            {
+              dimension: "Owner de la conversación",
+              standard: "Automated Process (User de sistema para contextos async). Impide reports por owner útiles.",
+              custom: "Bot User real durante modo bot; Queue durante handoff pending; User cuando un asesor acepta. Todos los list views y reports nativos por owner cuentan la historia real.",
+            },
+            {
+              dimension: "Cuando el bot no puede resolver",
+              standard: "El bot responde con su fallback textual o pide reintentar. Cliente queda sin escalamiento real.",
+              custom: "Cliente pide humano → GenAiFunction escalona → cola → notificaciones a asesores → primer asesor que acepta se lleva la conversación. Bot bloqueado de responder mientras humano atiende.",
+            },
+            {
+              dimension: "Vida de la conversación",
+              standard: "Session_Expiry_Time__c controla reutilización de conversación (para nuevas sesiones Agentforce). Sin cierre automático.",
+              custom: "Session_Expiry_Time__c conservado como está. Se agrega Idle_Expiry_Time__c que un scheduler evalúa cada 5 min con umbrales distintos según owner (Bot_Idle_Timeout_Minutes__c vs Human_Idle_Timeout_Minutes__c).",
+            },
+            {
+              dimension: "Adjuntos vs Case",
+              standard: "Adjuntos quedan vinculados solo al WhatsApp_Message__c. Si el Case se crea después, esos adjuntos no aparecen en el Case.",
+              custom: "Dos acciones invocables cierran el hueco: forward al Case cuando el adjunto llega y ya existe Case; backfill cuando el Case se crea y hay adjuntos previos.",
+            },
+            {
+              dimension: "Contact ↔ Conversation",
+              standard: "El agente identifica al Contact vía lookup pero no persiste el vínculo en WhatsApp_Conversation__c.Contact__c.",
+              custom: "Una acción invocable (FDE_LinkContactToConversation) persiste el vínculo idempotentemente después de que el planner resuelve el Contact.",
+            },
+            {
+              dimension: "Administración",
+              standard: "Configuración vía metadata de WhatsApp_Configuration__c y setup manual. Cambios requieren edit del registro por developer.",
+              custom: "Nuevo tab Administración en el LWC dashboard, gated por Custom Permission WhatsApp_Admin. El admin configura cola, crear-caso, mensajes al cliente y timeouts sin código.",
+            },
+            {
+              dimension: "Notificación al equipo",
+              standard: "No hay señal al equipo cuando el bot no puede continuar. La conversación queda en la lista general.",
+              custom: "Custom Notifications al bell de cada miembro del queue al escalar. Custom Notifications al owner cuando llega mensaje nuevo en modo humano. LWC actualiza en vivo vía empApi + Platform Event dedicado.",
+            },
+            {
+              dimension: "Ubicación del chat en la UI",
+              standard: "Un solo LWC dashboard con lista + panel de chat.",
+              custom: "Mismo dashboard + un LWC nuevo standalone (whatsappConversationRecord) para embed en el record page de WhatsApp_Conversation__c. Altura configurable desde App Builder.",
+            },
+            {
+              dimension: "Feature flag",
+              standard: "Sin flag. Todo prendido siempre.",
+              custom: "Handoff_Enabled__c por WhatsApp_Configuration__c. Deploy no cambia comportamiento de ninguna línea hasta que el admin la enciende. Rollback = destildar.",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Regla que respetamos en toda la V2",
+          text: "Todo cambio a código existente está gated por Handoff_Enabled__c. Con la flag apagada, el flujo es idéntico al de la V1. Esto lo probamos en producción: mismo binary, dos líneas, comportamiento distinto según el checkbox.",
+        },
+      ],
+    },
+    {
+      id: "handoff-topology",
+      eyebrow: "Handoff",
+      title: "Cómo fluye una conversación de bot a humano",
+      peek: "El ciclo completo: cliente pide humano, cola recibe, humano acepta, humano cierra. Con los eventos, actores y salvaguardas.",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "El handoff no es un flag mágico. Es una secuencia disciplinada: el LLM decide, invoca una acción Apex, la acción cambia ownership de la conversación, dispara notificaciones, publica un Platform Event para el LWC en vivo, y el gate en el InboundEventHandler impide que el bot responda encima del humano cuando llegue el próximo mensaje.",
+        },
+        {
+          type: "pipeline",
+          title: "Ciclo bot → cola → humano",
+          steps: [
+            {
+              component: "Cliente en WhatsApp",
+              action: "Manda 'necesito hablar con una persona' o similar",
+            },
+            {
+              component: "WhatsAppInboundEventHandler",
+              action: "Procesa el mensaje como de costumbre y encola a Agentforce Queueable",
+            },
+            {
+              component: "Agentforce (planner)",
+              action: "El topic 'Escalamiento a asesor humano' se activa y decide invocar FDE_afEscalateToHuman",
+              note: "Requiere que la Context Variable conversationId tenga visibility=external en Studio",
+            },
+            {
+              component: "GenAiFunction FDE_afEscalateToHuman",
+              action: "Bridge al Apex WhatsAppEscalateAction",
+            },
+            {
+              component: "WhatsAppEscalateAction (Apex)",
+              action: "Lee la config, respeta o crea Case, reasigna conv.OwnerId al Queue, nullea Agentforce_Session_Id__c",
+              note: "Idempotente frente a re-invocaciones",
+            },
+            {
+              component: "Messaging.CustomNotification",
+              action: "Envía notificación de bell a todos los User members del Queue",
+            },
+            {
+              component: "WhatsApp_Message_Notification__e",
+              action: "Platform Event publicado para que el LWC de cada miembro refresque en vivo",
+            },
+            {
+              component: "WhatsAppAPIService.sendTextMessage",
+              action: "Manda al cliente el mensaje configurado en Escalation_Notify_Message__c",
+            },
+            {
+              component: "Humano #1 acepta desde el LWC",
+              action: "acceptConversation reasigna owner al User con optimistic locking",
+              note: "Si dos humanos aceptan simultáneamente, solo uno gana",
+            },
+            {
+              component: "Cliente responde por WhatsApp",
+              action: "InboundEventHandler evalúa gate: Owner.Type=User real → skipAgentforce=true, no encola bot",
+              note: "El bot NO responde porque la conv está con humano",
+            },
+            {
+              component: "Humano responde desde el LWC",
+              action: "sendMessage vía WhatsAppSendMessageQueueable dispara la API de Meta",
+            },
+            {
+              component: "Humano cierra desde el LWC",
+              action: "closeConversationById marca Status=Closed, opcionalmente manda mensaje de cierre",
+            },
+          ],
+        },
+        {
+          type: "architecture",
+          title: "Actores y objetos que participan",
+          diagram: `
+Cliente WhatsApp
+     │
+     ▼
+Meta Cloud API  ──►  WhatsAppWebhookHandler (Site público)
+                            │
+                            ▼
+                    WhatsApp_Inbound_Event__e  ──►  WhatsAppInboundEventHandler
+                                                            │
+                                                            │  [gate: Handoff_Enabled__c + Owner.Type]
+                                                            │
+                                            ┌───────────────┴───────────────┐
+                                            │                               │
+                                            ▼                               ▼
+                                WhatsAppAgentforceQueueable        (SKIP — humano atiende)
+                                            │
+                                            ▼
+                                Agentforce Runtime API
+                                            │  (planner decide escalar)
+                                            ▼
+                                FDE_afEscalateToHuman
+                                            │
+                                            ▼
+                                WhatsAppEscalateAction
+                                    ├─► Case (opcional, respeta existente)
+                                    ├─► WhatsApp_Conversation__c
+                                    │      OwnerId = Queue
+                                    │      Agentforce_Session_Id__c = null
+                                    │
+                                    ├─► Messaging.CustomNotification → miembros del Queue
+                                    ├─► Platform Event → LWC (empApi)
+                                    └─► WhatsAppAPIService.sendTextMessage → cliente
+`,
+          legend: [
+            { label: "gate", description: "Antes de encolar Agentforce, el handler consulta OwnerId de la conversación. Si owner es User real (no bot user ni Automated Process), no encola." },
+            { label: "Queue", description: "Grupo Salesforce tipo Queue. Debe soportar WhatsApp_Conversation__c y Case como sobject types." },
+            { label: "empApi", description: "El LWC del dashboard y del record page se suscriben a WhatsApp_Message_Notification__e para refresh sin polling." },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "El LLM a veces no invoca la acción",
+          text: "En pruebas descubrimos que ~10-15% de las veces el LLM produce la despedida textual pero no invoca FDE_afEscalateToHuman. Es un fenómeno documentado de function-calling con context largo. La mitigación es prompt engineering imperativo en el topic ('DEBES invocar la acción; sin ella no hay escalamiento') y validación humana desde el LWC como respaldo.",
+        },
+      ],
+    },
+    {
+      id: "admin-config",
+      eyebrow: "Administración sin código",
+      title: "El tab Administración del LWC — 9 campos que gobiernan la política de handoff",
+      peek: "Configuración por línea de WhatsApp, gated por Custom Permission. Cero deploys para cambiar el comportamiento.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Todo lo que hace la V2 configurable — desde el checkbox de si crear Case, hasta los timeouts de cierre — vive en 9 campos nuevos sobre WhatsApp_Configuration__c. El LWC del dashboard trae un tab nuevo (Administración) que solo aparece si el user tiene la Custom Permission WhatsApp_Admin. El admin edita esos campos ahí, sin abrir el registro directamente.",
+        },
+        {
+          type: "table",
+          headers: ["Campo", "Tipo", "Propósito"],
+          rows: [
+            ["Handoff_Enabled__c", "Checkbox", "Feature flag. Con esto en false, la V2 duerme y la línea se comporta como V1."],
+            ["Escalation_Target_Queue_DeveloperName__c", "Text(80)", "DeveloperName de la Queue destino del escalamiento. Debe soportar WhatsApp_Conversation__c y Case."],
+            ["Escalation_Create_Case__c", "Checkbox", "Si true y la conversación no tiene Case aún, la acción de escalar crea uno. Si ya tiene Case, respeta el existente."],
+            ["Reassign_Case_Owner_On_Escalation__c", "Checkbox", "Si true, al escalar cambia el OwnerId del Case también al Queue. Si false, respeta las assignment rules del Case."],
+            ["Escalation_Notify_Message__c", "LongTextArea(1000)", "Mensaje que se envía al cliente por WhatsApp al momento de escalar. Vacío = no manda mensaje."],
+            ["Human_Accept_Message__c", "LongTextArea(1000)", "Mensaje al cliente cuando el humano acepta. Soporta merge token {!User.FirstName}."],
+            ["Timeout_Close_Message__c", "LongTextArea(1000)", "Reservado. Hoy el scheduler cierra silenciosamente."],
+            ["Bot_Idle_Timeout_Minutes__c", "Number(3,0)", "Minutos de inactividad para cerrar conversación en modo bot. Null o 0 = no cerrar automáticamente."],
+            ["Human_Idle_Timeout_Minutes__c", "Number(3,0)", "Minutos de inactividad para cerrar en modo humano. Típicamente mayor que bot."],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Por qué en WhatsApp_Configuration__c y no un Custom Setting",
+          text: "Cada línea de WhatsApp tiene su propia política. Un mismo org con líneas B2B y B2C puede tener queue, timeouts y mensajes distintos por línea. Un Custom Setting global no lo permite. La config por registro también hereda el sharing model del objeto sin custom code.",
+        },
+        {
+          type: "concept",
+          title: "Custom Permission WhatsApp_Admin",
+          peek: "Cómo se gate el tab de administración.",
+          blocks: [
+            {
+              type: "paragraph",
+              text: "El LWC del dashboard evalúa @salesforce/customPermission/WhatsApp_Admin. Si es truthy, muestra el 5to tab. Si es falsy, el tab no aparece siquiera. La Custom Permission se asigna vía un Permission Set (WhatsApp_Admin_Access) que también trae acceso al objeto y FLS de los campos nuevos.",
+            },
+            {
+              type: "list",
+              items: [
+                "Ventaja frente a chequear profile: cualquier user puede tener el permission set sin cambiar de profile.",
+                "Ventaja frente a hardcode del username: cualquier persona nueva del equipo lo hereda al asignársele el permission set.",
+                "Rollback: quitar el permission set → el tab desaparece → no puede tocar más la config.",
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "ownership-model",
+      eyebrow: "Ownership",
+      title: "Quién es dueño de la conversación en cada momento",
+      peek: "El OwnerId cuenta la historia: bot atendiendo, en cola pendiente, humano trabajando.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "En V1 el OwnerId era siempre 'Automated Process' — el user de sistema que Salesforce usa para contextos async. Funcional pero opaco. En V2 el OwnerId refleja el estado real del ciclo:",
+        },
+        {
+          type: "table",
+          headers: ["Estado", "OwnerId", "Comportamiento del bot"],
+          rows: [
+            ["Conversación fresh, sin sesión Agentforce guardada", "Automated Process (compat V1)", "Bot procesa mensajes normalmente"],
+            ["Bot atendiendo (sesión Agentforce activa)", "Bot User configurado en Bot_User_Id__c", "Bot procesa mensajes normalmente"],
+            ["Escalada a la cola, sin asesor todavía", "Queue (Escalation_Target_Queue_DeveloperName__c)", "Bot bloqueado (gate del InboundEventHandler)"],
+            ["Asesor humano aceptó", "User (el que aceptó primero)", "Bot bloqueado. Solo el owner puede responder desde el LWC"],
+            ["Cerrada", "Último owner al cerrar", "Bot bloqueado. La conv no aparece en list views activas"],
+          ],
+        },
+        {
+          type: "concept",
+          title: "El gate del InboundEventHandler",
+          peek: "Cómo el sistema decide si el bot puede responder o no.",
+          audience: ["developer", "architect"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Antes de encolar el WhatsAppAgentforceQueueable para responder al mensaje entrante, el InboundEventHandler consulta OwnerId de la conversación. La lógica es sencilla pero tuvo dos iteraciones importantes durante el desarrollo:",
+            },
+            {
+              type: "list",
+              ordered: true,
+              items: [
+                "V1 del gate — no existía. El bot respondía siempre.",
+                "V2 primera iteración — 'si OwnerId es un User que no sea Automated Process, saltar bot'. Falló porque el Bot User configurado (UserType=Standard) era interpretado como humano y bloqueaba al bot con sus propias conversaciones.",
+                "V2 final — 'si OwnerId es un User que NO sea Automated Process, NO sea EinsteinAgent, Y NO sea el Bot_User_Id__c configurado en la Configuration, entonces bloquear'. El bot user configurado es whitelist explícita.",
+              ],
+            },
+            {
+              type: "callout",
+              tone: "note",
+              title: "Detalle técnico del comparador",
+              text: "El comparador contra Bot_User_Id__c usa startsWith(substring(0,15)) para tolerar tanto Ids de 15 como de 18 caracteres. Salesforce puede devolver cualquiera de los dos formatos según el contexto.",
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "Bot User setup",
+          peek: "Qué usuario poner en Bot_User_Id__c y qué permisos necesita.",
+          audience: ["admin", "developer"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "El Bot User es el usuario bajo cuya identidad corre Agentforce cuando invoca acciones Apex. Se descubre haciendo query al metadata del Bot (BotDefinition tiene un campo botUser con el username). Ese user necesita permisos amplios pero acotados:",
+            },
+            {
+              type: "list",
+              items: [
+                "Apex class access — a WhatsAppEscalateAction y todas las clases que ésta invoca (WhatsAppConfigService, WhatsAppLogService, WhatsAppAPIService, WhatsAppConstants).",
+                "Object CRUD — Case (Create/Read/Edit), WhatsApp_Conversation__c (Read/Edit con viewAll), WhatsApp_Log__c (Create), Contact (Read).",
+                "FLS — todos los campos de handoff en WhatsApp_Configuration__c (los 9 nuevos) + Agentforce_Session_Id__c y Idle_Expiry_Time__c en WhatsApp_Conversation__c.",
+                "No requiere viewAllRecords sobre Account/Contact — la licencia Einstein Agent la rechaza y con record sharing normal alcanza.",
+              ],
+            },
+            {
+              type: "callout",
+              tone: "warning",
+              title: "Fallback defensivo por si el bot user no ve el Contact",
+              text: "En algunos orgs, aunque el Permission Set le da Read sobre Contact, el sharing model bloquea el registro específico que el Case referencia. WhatsAppEscalateAction intercepta el INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY y reintenta el insert de Case SIN ContactId, loggeando ESCALATE_CASE_RETRY_NO_CONTACT como warning. El escalamiento se completa; el humano puede vincular el Contact manualmente después.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "timeout-scheduler",
+      eyebrow: "Cierre automático",
+      title: "El scheduler que cierra conversaciones inactivas",
+      peek: "Cada 5 minutos revisa y cierra lo que pasó el timeout. Timeouts distintos para bot y humano.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "En cualquier canal conversacional, la mayor deuda operativa son las conversaciones que nadie cierra. El cliente se olvida, el asesor pasa a otra cosa, la conversación queda en 'Active' para siempre. El scheduler resuelve eso con un contrato simple: cada mensaje empuja hacia adelante el Idle_Expiry_Time__c; si nadie escribe, el scheduler la cierra.",
+        },
+        {
+          type: "pipeline",
+          title: "Cómo funciona el ciclo",
+          steps: [
+            {
+              component: "Cliente o humano manda mensaje",
+              action: "InboundEventHandler o SendMessageQueueable llama a WhatsAppConversationService.updateConversationOnMessage",
+            },
+            {
+              component: "updateConversationOnMessage",
+              action: "Consulta config para saber el timeout aplicable según owner actual",
+            },
+            {
+              component: "Idle_Expiry_Time__c",
+              action: "Se actualiza a NOW() + timeout aplicable (bot o humano)",
+              note: "Solo si Handoff_Enabled__c=true en la config",
+            },
+            {
+              component: "WhatsAppTimeoutScheduler (cada 5 min)",
+              action: "Query: SELECT Id FROM WhatsApp_Conversation__c WHERE Idle_Expiry_Time__c < NOW() AND Status__c != 'Closed'",
+            },
+            {
+              component: "WhatsAppTimeoutQueueable",
+              action: "Para cada conversación encontrada: Status = Closed, Agentforce_Session_Id__c = null, publish event al LWC",
+              note: "Cierre silencioso — no manda mensaje al cliente por default",
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "12 jobs paralelos, uno por slot de 5 min",
+          peek: "Por qué el scheduler necesita 12 CronTriggers en vez de uno solo.",
+          audience: ["developer", "architect"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Salesforce Schedulable no soporta granularidad menor que 1 hora en un solo trigger. La solución estándar es programar 12 CronTriggers, uno por cada slot de 5 min dentro de la hora: 0, 5, 10, ..., 55. Todos ejecutan la misma clase (WhatsAppTimeoutScheduler). Efecto neto: scan cada 5 min, 288 veces al día.",
+            },
+            {
+              type: "callout",
+              tone: "info",
+              title: "scripts/apex/schedule-timeout-scanner.apex (extracto)",
+              text: "List<Integer> minuteSlots = new List<Integer>{ 0, 5, 10, ..., 55 };\nfor (Integer min : minuteSlots) {\n    String jobName = 'WhatsApp Timeout Scanner - ' + ...;\n    String cronExpr = '0 ' + min + ' * * * ?';\n    System.schedule(jobName, cronExpr, new WhatsAppTimeoutScheduler());\n}",
+            },
+            {
+              type: "callout",
+              tone: "info",
+              title: "Cancelar",
+              text: "El script scripts/apex/cancel-timeout-scanner.apex hace lo inverso: query CronTrigger WHERE Name LIKE 'WhatsApp Timeout Scanner%' y System.abortJob para cada uno.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "agentforce-integration",
+      eyebrow: "Agentforce",
+      title: "Cómo se enlaza la GenAiFunction con el Apex",
+      peek: "3 piezas: la GenAiFunction FDE_afEscalateToHuman, la Context Variable conversationId y las instrucciones del topic.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Que el agente pueda 'invocar' la acción de escalar depende de 3 elementos coordinados. Uno solo mal configurado y la acción no dispara, aunque el LLM entienda perfectamente la intención del cliente.",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "GenAiFunction FDE_afEscalateToHuman — declara los inputs/outputs y apunta a WhatsAppEscalateAction como invocationTarget=apex. Vive versionada en el repo (force-app/main/default/genAiFunctions/FDE_afEscalateToHuman/).",
+            "Context Variable conversationId — variable custom del bot, tipo Text. CRÍTICO: debe tener 'Allow value to be set by API' activo (visibility=external). Sin ese flag, cuando Apex inyecta el conversationId al crear la sesión, Salesforce responde HTTP 400 con InternalVariableMutationAttemptException.",
+            "Instrucciones del topic — texto imperativo en las Reasoning Instructions del topic 'Escalamiento a asesor humano'. Debe forzar la invocación ('DEBES invocar la acción antes de responder al cliente'), mapear inputs explícitamente ('conversationId = {!$Context.conversationId}'), y prohibir textos de despedida pre-escritos que hacen que el LLM produzca la respuesta sin invocar.",
+          ],
+        },
+        {
+          type: "concept",
+          title: "Cómo pasa Apex el conversationId al bot",
+          peek: "El payload que le manda al Agent Runtime API.",
+          audience: ["developer", "architect"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Cuando WhatsAppAgentforceService.createAgentSession() llama al Agent Runtime, además del externalSessionKey y el instanceConfig manda un array variables con el conversationId. Esto se activa solo cuando la constante INJECT_CONVERSATION_ID_VAR está en true.",
+            },
+            {
+              type: "callout",
+              tone: "info",
+              title: "WhatsAppAgentforceService.cls (extracto)",
+              text: "Map<String, Object> requestBody = new Map<String, Object>{\n    'externalSessionKey' => generateSessionKey(),\n    'instanceConfig' => new Map<String, Object>{ 'endpoint' => instanceUrl },\n    'bypassUser' => true\n};\n\nfinal Boolean INJECT_CONVERSATION_ID_VAR = true;\nif (INJECT_CONVERSATION_ID_VAR && conversationId != null) {\n    requestBody.put('variables', new List<Object>{\n        new Map<String, Object>{\n            'name' => 'conversationId',\n            'type' => 'Text',\n            'value' => String.valueOf(conversationId)\n        }\n    });\n}",
+            },
+            {
+              type: "callout",
+              tone: "warning",
+              title: "El orden importa",
+              text: "El flag INJECT_CONVERSATION_ID_VAR debe estar en false hasta que la Context Variable conversationId exista en la versión ACTIVA del bot. Si se activa el flag antes, cada creación de sesión falla y el bot responde con el fallback textual local. Aprendimos esto en producción — está documentado en la sección 'Learned the hard way'.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "attachments-lifecycle",
+      eyebrow: "Adjuntos",
+      title: "Vincular archivos al Case en ambas direcciones",
+      peek: "Dos acciones invocables Apex complementarias — una forward, una backfill.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "En V1, cuando el cliente mandaba un archivo, éste quedaba vinculado al WhatsApp_Message__c vía ContentDocumentLink. Pero si después alguien creaba un Case relacionado a esa conversación, los adjuntos no aparecían en el Case. Y viceversa: si el Case ya existía cuando llegaba un archivo nuevo, tampoco se vinculaba automáticamente. La V2 cierra ambos huecos con dos acciones invocables complementarias.",
+        },
+        {
+          type: "table",
+          headers: ["Cuándo se dispara", "Acción", "Input", "Efecto"],
+          rows: [
+            ["Llega un archivo nuevo por WhatsApp", "FDE_LinkDocumentToWhatsAppEntities", "ContentDocumentId", "Sube desde el Message hasta la Conversation, y si hay Case, también lo enlaza al Case"],
+            ["Se crea Case y se vincula a la Conversation", "FDE_BackfillDocumentsToCase", "conversationId + caseId", "Busca todos los WhatsApp_Media__c históricos con ContentDocumentId poblado y los enlaza al Case y a la Conversation (por completitud)"],
+          ],
+        },
+        {
+          type: "concept",
+          title: "Por qué WhatsApp_Media__c y no WhatsApp_Message__c como fuente",
+          peek: "El modelo de datos permite un camino más limpio.",
+          audience: ["developer"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Cada mensaje con media tiene un WhatsApp_Media__c child. Ese objeto guarda directamente el ContentDocumentId__c cuando el archivo se termina de descargar. Buscar por WhatsApp_Media__c.Message__r.Conversation__c es una sola relación, sin necesidad de filtrar por Message_Type__c (que podría dejar afuera tipos raros como stickers o reactions). Además, filtrar por ContentDocumentId__c IS NOT NULL descarta automáticamente los mensajes que aún se están descargando.",
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "Idempotencia",
+          peek: "Cómo no crear ContentDocumentLinks duplicados si el flow corre dos veces.",
+          audience: ["developer"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Ambas acciones hacen bulk query de los ContentDocumentLinks existentes (Conv + Case) antes de decidir qué insertar. Comparan el par (ContentDocumentId, LinkedEntityId) contra un Set de keys. Si ya existe, skip silencioso. Si no, insert con Database.insert(list, false) para partial success — un fallo en un link no bloquea los demás.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "contact-auto-link",
+      eyebrow: "Contact",
+      title: "Persistir el Contact identificado en la conversación",
+      peek: "Después de que el agente resuelve el Contact, una acción invocable lo pega en WhatsApp_Conversation__c.Contact__c.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Corona ya tenía COR_afIdentifyTheContactByEmail — un flow que hace lookup del Contact por correo + código SAP. El agente lo llama y obtiene el ContactId. Pero ese Id se usaba solo en memoria durante la sesión del bot; nadie lo persistía en WhatsApp_Conversation__c.Contact__c. Consecuencia: al día siguiente, si alguien abría la conversación en Salesforce, no sabía quién era el cliente sin re-parsear los mensajes.",
+        },
+        {
+          type: "paragraph",
+          text: "La V2 agrega FDE_LinkContactToConversation — una acción invocable independiente que respeta el trabajo previo del equipo COR y solo hace el 'último kilómetro': recibe el ContactId y el conversationId, y actualiza el campo Contact__c en la conversación si estaba vacío. Si ya había Contact vinculado, respeta el existente sin sobrescribir.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "FDE_LinkContactToConversation.cls (comportamiento)",
+          text: "// Skip silencioso si el Contact ya existe\nif (conv.Contact__c != null) {\n    r.success = true;\n    r.wasUpdated = false;\n    continue;\n}\n\n// Solo escribe si el campo está vacío\nconvsToUpdate.add(new WhatsApp_Conversation__c(\n    Id = convId,\n    Contact__c = contactId\n));",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Inputs como String, no Id",
+          text: "Los inputs de la acción son String, no Id, porque Agentforce Studio no permite mapear Context Variables (tipo Text) a inputs de tipo Id directamente. Internamente la Apex hace cast con try/catch para reportar Ids inválidos como error de request específico sin bloquear los otros.",
+        },
+      ],
+    },
+    {
+      id: "lwc-experience",
+      eyebrow: "UI",
+      title: "Un LWC compartido que sirve al dashboard y al record page",
+      peek: "Refactor en 2 wrappers para reusar el mismo chat en ambos contextos.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "En V1 el chat de conversaciones vivía dentro de whatsappConversationPanel (el dashboard). Para poner el mismo chat en el record page de WhatsApp_Conversation__c sin duplicar código, la V2 hizo un refactor: extrae el chat a whatsappConversationChat (child, recibe conversationId como @api) y crea 2 wrappers finos que lo consumen.",
+        },
+        {
+          type: "table",
+          headers: ["LWC", "Rol", "Dónde vive"],
+          rows: [
+            ["whatsappConversationChat", "Child. Contiene toda la lógica del chat (mensajes, input, botones Aceptar/Cerrar, empApi refresh, hyperlink al record).", "Interno — usado por los wrappers"],
+            ["whatsappConversationPanel", "Wrapper del dashboard. Sidebar de conversaciones + chat delegado al child.", "Tab Conversations del whatsappDashboard"],
+            ["whatsappConversationRecord", "Wrapper del record page. Sólo pasa el recordId al child.", "App Builder → Record Page de WhatsApp_Conversation__c"],
+            ["whatsappAdminSettings", "Tab de administración. Custom Permission gate, form de 9 campos, dropdown de queues.", "Tab Administración del whatsappDashboard"],
+            ["whatsappDashboard", "Padre. 5 tabs: Configurations, Conversations (default), Templates, Analytics, Administración (gated).", "App WhatsApp Dashboard"],
+          ],
+        },
+        {
+          type: "concept",
+          title: "Elementos nuevos en la UI del chat",
+          peek: "Owner visible, botones contextuales, refresh en vivo.",
+          audience: ["admin", "developer"],
+          blocks: [
+            {
+              type: "list",
+              items: [
+                "Header muestra Owner con ícono según tipo (utility:user, utility:groups, utility:info) y badges 'En cola' o 'Tú' según corresponda.",
+                "Hyperlink CONV-XXXX al lado del nombre del cliente — abre el record page como tab del workspace en Console App, o en misma pestaña en Standard App. Se oculta cuando el LWC ya está EN el record page.",
+                "Botón Aceptar visible sólo si Owner.Type=Queue.",
+                "Botón Cerrar visible cuando la conversación no está cerrada.",
+                "Input de mensaje deshabilitado si no eres el owner, con banner explicativo ('Esta conversación está asignada a X. Solo el owner puede responder').",
+                "Suscripción empApi a /event/WhatsApp_Message_Notification__e para refresh en vivo del chat y de la lista de conversaciones.",
+                "Botón manual de refresh como fallback si empApi falla.",
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "migration-from-v1",
+      eyebrow: "Migración",
+      title: "Cómo pasar una línea de V1 a V2 sin romper nada",
+      peek: "6 pasos ordenados. Cero downtime.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La V2 fue diseñada para ser opt-in por línea. El código y la metadata se despliegan sin activar nada. La línea sigue comportándose como V1 hasta que el admin prende el checkbox. Este es el orden seguro:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "Deploy de código y metadata — 9 campos nuevos en Configuration, campo Idle_Expiry_Time__c en Conversation, Custom Permission, Custom Notification Type, Platform Event, 3 clases Apex nuevas (WhatsAppEscalateAction extendido, WhatsAppTimeoutScheduler, WhatsAppTimeoutQueueable), 3 acciones invocables FDE_*, 3 LWCs (whatsappAdminSettings, whatsappConversationChat, whatsappConversationRecord) + modificaciones a los existentes. Handoff_Enabled__c queda en false por default.",
+            "Configuración del Bot User — encontrar el Bot User del planner (query a User WHERE Username LIKE 'cor_afagent%' o similar), asignarle el Permission Set WhatsApp_Agent extendido (con Contact Read, Case CRUD, y los nuevos campos FLS).",
+            "Configuración de la Queue destino — crear la Queue con WhatsApp_Conversation__c y Case como sobject types, agregar miembros users.",
+            "Configuración del Agentforce Studio — crear la Context Variable custom conversationId (tipo Text) en el bot, ACTIVAR 'Allow value to be set by API', crear el topic 'Escalamiento a asesor humano' con FDE_afEscalateToHuman asignada y las Reasoning Instructions imperativas, publicar nueva versión del bot y activarla.",
+            "Llenar la configuración de la línea — en el tab Administración del LWC, o directamente en el registro de WhatsApp_Configuration__c, poblar los 9 campos: Bot_User_Id__c con el Id del bot user, Handoff_Enabled__c en TRUE, Queue DeveloperName, checkbox de crear Case, mensajes, timeouts.",
+            "Activar el Timeout Scheduler — ejecutar scripts/apex/schedule-timeout-scanner.apex una sola vez. Programa 12 jobs paralelos que ya no necesitan atención.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Rollback",
+          text: "Si algo se comporta raro, destildar Handoff_Enabled__c en la config de la línea. Todo el código nuevo se salta y la línea vuelve al comportamiento V1 instantáneamente. Sin redeploy.",
+        },
+      ],
+    },
+    {
+      id: "learned-the-hard-way",
+      eyebrow: "Lo aprendimos peleando",
+      title: "Los golpes en la cabeza que valieron la lección",
+      peek: "Confesión honesta de los issues que encontramos durante el desarrollo y cómo los resolvimos. Léelo antes de implementar en otro cliente.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Esta sección existe para que quien implemente esto en otro cliente sepa los tropezones antes de encontrarlos. Cada uno de estos issues nos costó tiempo y confusión. Los documentamos con detalle porque la mayoría no salen en la documentación oficial de Salesforce.",
+        },
+        {
+          type: "problem",
+          symptom: "El deploy del PermissionSet falla con 'The user license doesn't allow the permission: View All Account'.",
+          rootCause: "El Bot User tiene licencia Einstein Agent, que restringe viewAllRecords sobre objetos estándar como Account y Contact aunque el Permission Set intente concederlo.",
+          impact: "Fix: bajar viewAllRecords=false en el Permission Set. El bot user obtiene Read normal y hereda el sharing del org. En la mayoría de casos alcanza. Si un Case referencia un Contact que el sharing no le comparte al bot, cae al fallback defensivo del EscalateAction.",
+        },
+        {
+          type: "problem",
+          symptom: "El agente responde 'te transfiero con un asesor humano' pero el owner de la conversación no cambia y no se crea Case.",
+          rootCause: "En 10-15% de los casos, el LLM genera la respuesta textual sin invocar la GenAiFunction. Es el fenómeno de 'grounding failure' documentado en function-calling LLMs. Empeora si el prompt del topic tiene la respuesta pre-escrita como plantilla ('responde con: te transfiero...').",
+          impact: "Mitigación: instrucciones imperativas en el topic. 'DEBES invocar la acción antes de responder. Sin invocarla no hay escalamiento. Repetir la despedida sin invocar es un error grave.' Adicionalmente, el humano puede aceptar manualmente desde el LWC como respaldo.",
+        },
+        {
+          type: "problem",
+          symptom: "createAgentSession devuelve HTTP 400 con 'InternalVariableMutationAttemptException: 1cvhQ0000...' y el bot cae al fallback textual local.",
+          rootCause: "La Context Variable custom conversationId en el Bot fue creada por default como internal/read-only. Cuando Apex intenta setearla vía el array variables del payload, el Agent Runtime API la rechaza.",
+          impact: "Fix: en Agentforce Studio → Variables → conversationId → activar 'Allow value to be set by API' (visibility=external), publicar nueva versión del bot y activarla. Sin ese flag, cualquier intento de inyectar la variable destruye la sesión completa.",
+        },
+        {
+          type: "problem",
+          symptom: "El insert de Case falla con INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY apuntando a un Contact Id.",
+          rootCause: "El Bot User tiene Read sobre Contact pero el sharing model del org no le comparte el Contact específico referenciado. La licencia Einstein Agent no permite viewAllRecords=true sobre Contact.",
+          impact: "Fix: WhatsAppEscalateAction intercepta el error específicamente (StatusCode.INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY), loggea ESCALATE_CASE_RETRY_NO_CONTACT como warning, y reintenta el insert de Case SIN ContactId. El escalamiento se completa; el humano vincula el Contact manualmente después.",
+        },
+        {
+          type: "problem",
+          symptom: "Después de configurar el Bot User como owner (Bot_User_Id__c en la Config), el bot deja de responder el segundo mensaje de la misma conversación.",
+          rootCause: "El gate del InboundEventHandler estaba comparando OwnerId contra AutomatedProcess y EinsteinAgent solamente. El Bot User real (UserType=Standard) caía en 'humano' y el bot se auto-bloqueaba.",
+          impact: "Fix: ampliar el gate para reconocer también el Bot_User_Id__c configurado en la Configuration. Comparación startsWith(substring(0,15)) para tolerar Ids de 15 y 18 chars.",
+        },
+        {
+          type: "problem",
+          symptom: "Después de deployar la Fase 1 con dry-run, los campos nuevos no existen en la org.",
+          rootCause: "sf project deploy start --dry-run valida pero NO persiste metadata. Es una diferencia sutil pero crítica frente a otros comandos que sí muestran el efecto real. El dry-run es solo linting.",
+          impact: "Fix: correr el deploy real (sin --dry-run) después del dry-run exitoso. Escribimos un script check-fields.apex para verificar rápidamente qué campos ya existen antes de asumir.",
+        },
+        {
+          type: "problem",
+          symptom: "El LWC no refresca en vivo cuando llega un mensaje o cambia el owner, aunque el Platform Event server-side se publica correctamente.",
+          rootCause: "Múltiples causas simultáneas: getConversationMessages estaba marcado como cacheable=true (cache del cliente sin invalidar), doble subscribe al empApi (connectedCallback corría 2 veces al cambiar de tab), y el InboundEventHandler no publicaba WhatsApp_Message_Notification__e (solo publicaba WhatsApp_Inbound_Event__e que es PublishAfterCommit).",
+          impact: "Fix: quitar cacheable=true del método que trae mensajes, agregar guard contra double-subscribe, y publicar explícitamente WhatsApp_Message_Notification__e en cada mensaje inbound. Además, en cada outbound del ejecutivo desde el LWC.",
+        },
+        {
+          type: "problem",
+          symptom: "La campanita del bell no muestra el toast desktop siempre, aunque en el bell tray sí aparece la notificación.",
+          rootCause: "Chrome tiene un comportamiento de 'quiet notifications' — si el user desecha muchas notificaciones seguidas del mismo origen, deja de mostrar el toast pero SÍ crea la entrada en el sistema. No es un bug de Salesforce.",
+          impact: "No accionable server-side. Documentar que en uso real diario los usuarios verán la campanita bien; solo se pierde el toast después de dozens de repeticiones durante testing.",
+        },
+        {
+          type: "problem",
+          symptom: "Los tests de la V2 pasan al 100% en aislamiento, pero al correr RunLocalTests el org-wide coverage está en 53%.",
+          rootCause: "El proyecto original tenía deuda técnica preexistente — muchas clases sin tests, tests que fallan por config drift (validation rules, campos que no existen, flows con INVALID_INPUT). No es responsabilidad de la V2, pero sí bloquea el deploy a producción con RunLocalTests.",
+          impact: "Fix pendiente: escribir tests adicionales para las 3-5 clases modificadas con menos coverage. Alternativa: usar --tests con selección explícita de los tests de WhatsApp al deployar a producción.",
+        },
+      ],
+    },
+    {
+      id: "references",
+      eyebrow: "Referencias",
+      title: "Documentación oficial de las piezas de Salesforce usadas",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "sources",
+          items: [
+            {
+              label: "Agent Runtime API — Start Session",
+              url: "https://developer.salesforce.com/docs/einstein/genai/references/agent-api",
+            },
+            {
+              label: "Custom Notifications — Messaging.CustomNotification",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_class_Messaging_CustomNotification.htm",
+            },
+            {
+              label: "Custom Permissions",
+              url: "https://help.salesforce.com/s/articleView?id=sf.custom_perms_overview.htm",
+            },
+            {
+              label: "Queues",
+              url: "https://help.salesforce.com/s/articleView?id=sf.setting_up_queues.htm",
+            },
+            {
+              label: "Scheduled Apex",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_scheduler.htm",
+            },
+            {
+              label: "empApi Wire Adapter (LWC)",
+              url: "https://developer.salesforce.com/docs/component-library/bundle/lightning-emp-api/documentation",
+            },
+            {
+              label: "ContentDocumentLink",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_contentdocumentlink.htm",
+            },
+            {
+              label: "InvocableMethod / InvocableVariable",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_classes_annotation_InvocableMethod.htm",
+            },
+            {
+              label: "GenAiFunction metadata",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_genaifunction.htm",
+            },
+            {
+              label: "Bot metadata — contextVariables",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_bot.htm",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+export const buildRecipes: Recipe[] = [whatsappAttachmentsCustom, whatsappV2Handoff];
 
 export function getRecipe(slug: string): Recipe | undefined {
   return buildRecipes.find((r) => r.slug === slug);

@@ -837,11 +837,21 @@ export type QuestionBankData = {
   };
 };
 
+export type DeliverableCta = {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  href: string;
+  ctaLabel: string;
+  badge?: string;
+};
+
 export type CustomerDemoTab = {
   id: string;
   label: string;
   title: string;
   content: string;
+  deliverableCta?: DeliverableCta;
   banner?: string;
   videoUrl?: string;
   kpis?: KpiGroup[];
