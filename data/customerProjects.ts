@@ -4866,4 +4866,324 @@ export const customerProjects: CustomerProject[] = [
       },
     ],
   },
+  {
+    slug: "lomas-hospitality",
+    title: "Lomas Hospitality — Discovery de cuenta para Salesforce y Agentforce",
+    customerName: "Lomas Hospitality",
+    industry: "Hospitalidad · All-Inclusive de lujo · Riviera Maya, México",
+    description:
+      "Ficha de descubrimiento de Lomas Hospitality — la división hotelera de Grupo Lomas (holding 100% mexicano fundado en 1981) que opera 8 resorts oceanfront en el Caribe mexicano bajo el concepto propietario More Inclusive® más el hotel boutique Maison México Roma en CDMX. Compila quiénes son, qué operan, cómo venden, con qué tecnología, y dónde Salesforce — con Data Cloud, Service Cloud, Marketing Cloud, Loyalty Management y Agentforce — puede acompañar el siguiente salto de experiencia del huésped, la Consultora comercial B2B y el equipo interno.",
+    passcode: "lomas2026",
+    hidden: false,
+    tags: [
+      "Discovery",
+      "Agentforce",
+      "Data Cloud",
+      "Service Cloud",
+      "Marketing Cloud",
+      "Loyalty Management",
+      "Experience Cloud",
+      "Hospitalidad · All-Inclusive",
+      "México · Riviera Maya",
+    ],
+    visibleTabs: [
+      "overview",
+      "customer",
+      "context",
+      "brands",
+      "commercial",
+      "objective",
+      "agentforce",
+      "roadmap",
+      "sources",
+    ],
+    tabs: [
+      // ── 1 · Overview ──────────────────────────────────────────────────────
+      {
+        id: "overview",
+        label: "Overview",
+        title: "Resumen ejecutivo · quién es Lomas Hospitality y por qué nos importa",
+        content:
+          "Lomas Hospitality es la división de hoteles y resorts de **Grupo Lomas**, una empresa 100% mexicana fundada en 1981 en la Riviera Maya por **Dolores López Lira e Hinojo** y **José Luis Martínez Alday**. Opera 8 resorts oceanfront de todo incluido de lujo — bajo las marcas El Dorado Spa Resorts, Palafitos Overwater Bungalows, Hidden Beach Au Naturel y Generations — más el hotel boutique urbano Maison México Roma en la Ciudad de México, todos anclados en el concepto propietario **More Inclusive®** que combina hospedaje, gastronomía, actividades fuera del resort y transportación en un solo pase.\n\nEl grupo se apalanca en varias empresas hermanas — **Lomas Travel** (DMC · flota propia), **Lomas Agent Portal** (B2B para agencias), Lomas Wedding y su brazo social **Fundación Lomas** — y ya publica su **Informe de Sostenibilidad 2024** con certificaciones Earth Check, ESR y adhesión al Pacto Global de las Naciones Unidas desde 2022.\n\nPara Salesforce esto se traduce en un cliente con **volumen relevante de huéspedes internacionales (MX · US · Canadá), múltiples audiencias diferenciadas** (parejas adults-only, familias, naturistas, luxury, weddings, MICE), un **contact center 24/7 bilingüe**, portales B2B ya en producción y un programa de lealtad propio (**LH Rewards**) — todo hoy operado sobre un stack heterogéneo con **Roiback** como motor de reservas y sin un CRM/Data Cloud unificado visible en el sitio público. El upside está en unificar el perfil del huésped y activar Agentforce en los momentos de mayor fricción del journey.",
+        overviewData: {
+          stats: [
+            { value: "1981", label: "Año de fundación del Grupo Lomas — Riviera Maya" },
+            { value: "8", label: "Resorts oceanfront en la Riviera Maya · Playa del Carmen · Puerto Aventuras" },
+            { value: "5", label: "Marcas hoteleras (El Dorado · Palafitos · Hidden Beach · Generations · Maison México Roma)" },
+            { value: "3", label: "Idiomas comerciales activos (ES · EN — potencial PT)" },
+            { value: "24/7", label: "Contact center con líneas MX 998 5280558 · US/CA 888 2011913" },
+            { value: "1,001–5,000", label: "Empleados declarados en LinkedIn (Lomas Hospitality Services)" },
+            { value: "2022", label: "Adhesión al Pacto Global de las Naciones Unidas" },
+            { value: "3", label: "Certificaciones vigentes — Earth Check · ESR · HSBC" },
+            { value: "2026", label: "Nominación Travvy Awards — Best All-Inclusive Brand Mexico" },
+          ],
+        },
+      },
+
+      // ── 2 · Cliente / industria ───────────────────────────────────────────
+      {
+        id: "customer",
+        label: "Cliente / industria",
+        title: "Cliente e industria",
+        content:
+          "Lomas Hospitality opera dentro de **Grupo Lomas**, holding turístico mexicano con más de cuatro décadas en la Riviera Maya. El grupo integra hotelería (Lomas Hospitality), DMC y transportación (Lomas Travel), bodas destino (Lomas Wedding), portal B2B para agencias (Lomas Agent Portal), programas de lealtad propios (LH Rewards) y brazo social (Fundación Lomas). El core de negocio es all-inclusive de lujo en el Caribe mexicano, con público emisor principalmente de México, Estados Unidos y Canadá.",
+        customerProfile: {
+          stats: [
+            { label: "Razón social del grupo", value: "Grupo Lomas · 100% mexicana · fundada 1981" },
+            { label: "Fundadores", value: "Dolores López Lira e Hinojo · José Luis Martínez Alday" },
+            { label: "División analizada", value: "Lomas Hospitality Services (hoteles y resorts)" },
+            { label: "Sede operativa", value: "Riviera Maya · Quintana Roo · México" },
+            { label: "Empleados declarados", value: "1,001–5,000 (LinkedIn corporativo)" },
+            { label: "Propiedades", value: "8 resorts oceanfront + 1 hotel boutique CDMX" },
+            { label: "Destinos donde opera", value: "Riviera Maya · Puerto Aventuras · Playa del Carmen · Ciudad de México · Baja California (Grupo Lomas)" },
+            { label: "Mercados emisores", value: "México · Estados Unidos · Canadá · Latinoamérica" },
+            { label: "Idiomas comerciales", value: "Español · Inglés" },
+            { label: "Contacto reservas MX", value: "+52 998 5280558 · bookwithus@lomashospitality.com" },
+            { label: "Contacto reservas US/CA", value: "+1 888 2011913" },
+            { label: "Contacto grupos", value: "+52 998 387 1644 · +1 130 5590 8432 · groups@lomashospitality.com" },
+            { label: "Contacto bodas", value: "+52 998 387 1730 · +1 888 248 4995 · weddings@lomashospitality.com" },
+            { label: "Reconocimientos 2026", value: "Travvy Awards nominado · Tripadvisor Travelers' Choice (El Dorado Maroma)" },
+          ],
+          segments: [
+            {
+              name: "Huésped B2C directo — Parejas adults-only (romance)",
+              description:
+                "Público objetivo principal de las 5 propiedades El Dorado Spa Resorts y de Palafitos Overwater Bungalows. Busca privacidad, romance, gastronomía y experiencias premium. Alto ticket, viaje de aniversarios, lunas de miel y escapadas. Emisor: US, Canadá, México.",
+            },
+            {
+              name: "Huésped B2C directo — Familias multi-generacional",
+              description:
+                "Atendido por Generations Riviera Maya. Requiere kids club, entretenimiento, actividades intergeneracionales, habitaciones amplias y flexibilidad de alimentos. Sensibilidad al precio pero disposición a upsell en experiencias.",
+            },
+            {
+              name: "Huésped B2C directo — Naturista adults-only",
+              description:
+                "Nicho de alto valor atendido por Hidden Beach Au Naturel Resort — único au naturel del grupo. Comunidad internacional muy fidelizada, con demanda de discreción, comunidad y programación temática. Requiere segmentación y comunicación muy diferenciada.",
+            },
+            {
+              name: "Weddings — Bodas destino",
+              description:
+                "Línea comercial dedicada con planners propios, brochure, tabla comparativa de paquetes y locaciones específicas (rooftops, cenote, capillas frente al mar, gazebos, muelles, terraza acuática). Marcas foco: El Dorado Royale, El Dorado Maroma, Generations. Ciclo de venta largo (6–18 meses), alta implicación emocional, gran oportunidad de journey orquestado.",
+            },
+            {
+              name: "MICE — Grupos, incentivos y eventos corporativos",
+              description:
+                "Espacios formales — outdoor lounge, auditorio, ballroom — y el diferencial More Inclusive® aplicado a grupos con traslados y actividades incluidas. Contactos dedicados MX/US. Alto ticket, ciclo de venta B2B con múltiples decisores.",
+            },
+            {
+              name: "B2B — Agencias de viajes y turoperadores",
+              description:
+                "Portal de agencias dedicado (`/es/bookcore/agency/login/`) integrado al motor Roiback. Socios de agencia como Exotic Travelers y programas de recompensas cruzados con Bluma Rewards. Requiere co-op marketing, tarifas negociadas, comisiones y visibilidad de producción por agencia.",
+            },
+            {
+              name: "B2B — Empresas corporativas",
+              description:
+                "Portal empresarial dedicado (`/es/bookcore/partempresas/login-empresa/`) para acuerdos corporativos. Segmento con potencial de convenios de negocios y viajes de incentivo.",
+            },
+            {
+              name: "Miembros LH Rewards — programa de lealtad propio",
+              description:
+                "Programa activo con descuentos 5–10% sobre tarifa pública, Resort Credits escalonados por noches (USD 120/180/250 con reparto SPA 50% · vinos 25% · cenas privadas 25%), check-in privado y early/late check-in-out. Solo aplica a reservas directas (web y contact center) — palanca clara para desintermediar y capturar demanda propia.",
+            },
+          ],
+          techStack: [
+            { category: "Motor de reservas y marketing online", tool: "Roiback (booking engine + campañas + widgets)" },
+            { category: "Paquetes dinámicos", tool: "paquetes.lomashospitality.com (Hotel + Vuelo)" },
+            { category: "Portales B2B", tool: "Bookcore agency login + Bookcore corporate login" },
+            { category: "Contact center", tool: "Operación 24/7 propia · MX / US-CA (tecnología no declarada públicamente)" },
+            { category: "Programa de lealtad", tool: "LH Rewards propio + integraciones con Bluma Rewards y Exotic Travelers" },
+            { category: "Renta de autos", tool: "Alianza con Hertz México (subdominio dedicado hertzmexico.com/lomas)" },
+            { category: "DMC y transportación", tool: "Lomas Travel (flota propia · empresa hermana)" },
+            { category: "Reporting ESG", tool: "Informe de Sostenibilidad 2024 · Earth Check · ESR · Pacto Global ONU" },
+            { category: "Presencia digital", tool: "Sitio ES/EN · Facebook · Instagram · LinkedIn @lomas-hospitality-services" },
+            { category: "CRM / Data Cloud", tool: "No declarado públicamente — oportunidad clara de unificación" },
+          ],
+        },
+      },
+
+      // ── 3 · Contexto ──────────────────────────────────────────────────────
+      {
+        id: "context",
+        label: "Contexto de industria y cliente",
+        title: "Dinámicas del sector y señales operativas relevantes",
+        content:
+          "El posicionamiento de Lomas se apoya en tres apuestas explícitas — More Inclusive®, hospitalidad mexicana auténtica y sostenibilidad — mientras compite en un destino (Riviera Maya) saturado de marcas globales all-inclusive (Palladium, Bahia Principe, Iberostar, RIU, Karisma, AMResorts, Palace Resorts, Xcaret). Estos son los vectores donde el discovery sí ilumina oportunidad para Salesforce.",
+        contextData: {
+          groups: [
+            {
+              name: "1 · La experiencia del huésped es multi-canal pero no multi-canal orquestado",
+              findings: [
+                "Contact center 24/7 bilingüe MX/US expuesto en cada página — canal principal de conversión asistida",
+                "Motor Roiback + landing pages promocionales por marca (El Dorado hasta 45% + 15% extra, Generations 35% + 15%, Hidden Beach 25% + 15%) — orquestación probablemente manual",
+                "WhatsApp corporativo mencionado en anuncios sociales, pero sin canal conversacional 24/7 declarado en el sitio",
+                "Sin single sign-on visible entre reservas, LH Rewards, bodas, grupos y renta de auto — el huésped repite datos en cada línea",
+              ],
+            },
+            {
+              name: "2 · Diversidad de audiencias exige segmentación fina",
+              findings: [
+                "Naturistas (Hidden Beach) · familias (Generations) · romance (El Dorado / Palafitos) · urbanos (Maison México Roma) — cada uno con lenguaje, canal y ciclo distintos",
+                "Las promociones actuales son por marca, no por audiencia — riesgo de sobrecomunicar y desalinear expectativas",
+                "El programa More Inclusive® permite bundling de experiencias externas (catamarán, wave runner, cenote, rancho, parque acuático) — cada actividad es un data point de preferencia no capturado",
+                "Palafitos Overwater Bungalows tiene beneficios diferenciados (acceso ilimitado a parque acuático) — patrón de ‘super-fan tier’ que hoy no vive en un CRM",
+              ],
+            },
+            {
+              name: "3 · El programa de lealtad es simple — el potencial de sofisticación es alto",
+              findings: [
+                "LH Rewards otorga descuento 5–10% + Resort Credits USD 120/180/250 según noches, sin niveles/tiers/puntos",
+                "Solo aplica a reservas directas — palanca para desintermediar de OTAs si se activa journey de captura de datos y remarketing",
+                "Cuenta con integraciones cruzadas con Bluma Rewards y Exotic Travelers — potencial de red de coalición",
+                "No hay evidencia pública de mecánica gamificada, personalización de créditos por preferencia (spa vs vinos vs cena) ni recomendaciones",
+              ],
+            },
+            {
+              name: "4 · Negocio B2B con portales propios pero sin visibilidad de datos consolidada",
+              findings: [
+                "Portal para agencias y portal para empresas ya en producción (bookcore) — flujos separados con login dedicado",
+                "Socios estratégicos: Exotic Travelers, Bluma Rewards, Hertz México",
+                "Grupos y bodas tienen contactos, emails y teléfonos dedicados — ciclos largos que se benefician de pipeline en Sales Cloud",
+                "Sin evidencia de portal partner con librería de assets, calculadora de comisiones o co-op marketing",
+              ],
+            },
+            {
+              name: "5 · Compromiso ESG maduro — palanca reputacional y de retención de talento",
+              findings: [
+                "Adhesión al Pacto Global de la ONU desde 2022 · Earth Check · Empresa Socialmente Responsable · HSBC",
+                "Programa ‘Evolución Responsable’ con 3 ejes: Planeta · Personas · Prosperidad — alineado a ODS",
+                "Iniciativa ‘Viajero Lomas’ con 7 principios (comunidad, naturaleza, infancias, seguridad, vida marina, huella ecológica, respeto) — inspirada en Código Ético Mundial para el Turismo",
+                "Fundación Lomas — impacto educativo y de bienestar para jóvenes vulnerables — donaciones abiertas en el sitio",
+              ],
+            },
+            {
+              name: "6 · Reconocimientos recientes que sostienen posicionamiento premium",
+              findings: [
+                "Nominado a Travvy Awards 2026 — Best All-Inclusive Hotel Brand Mexico + Best All-Inclusive Brand for Weddings/Honeymoons",
+                "El Dorado Maroma reconocido en Tripadvisor Travelers' Choice Best of the Best 2026",
+                "Reconocimientos previos del grupo: AAA Four Diamond · Wine Spectator · I Prefer",
+                "Presencia orgánica sólida en LinkedIn (3,247 seguidores Lomas Hospitality · 11,888 seguidores Grupo Lomas)",
+              ],
+            },
+          ],
+        },
+      },
+
+      // ── 4 · Marcas y propiedades ──────────────────────────────────────────
+      {
+        id: "brands",
+        label: "Marcas y propiedades",
+        title: "Portafolio de marcas y propiedades — el detalle que define audiencias",
+        content:
+          "El portafolio se estructura en 5 marcas hoteleras — cada una con un público objetivo, tono y set de servicios propios. Para Salesforce la lectura clave es que cada marca es un **segmento de audiencia con journey, KPI y personalización diferenciados** — y por lo tanto un contenedor natural para modelos de datos, journeys y agentes específicos.\n\n## El Dorado Spa Resorts · Adults-only romance (5 propiedades)\n\n| Propiedad | Ubicación | Posicionamiento |\n|---|---|---|\n| **El Dorado Royale** | Riviera Maya | Elegancia · romance · privacidad · propiedad estelar del grupo |\n| **El Dorado Casitas Royale** | Riviera Maya | Cabañas con techos de palma · exclusividad + tradición |\n| **El Dorado Maroma** | Playa del Carmen | Refugio de tranquilidad · playa incomparable · Travelers' Choice 2026 |\n| **El Dorado Seaside Palms** | Puerto Aventuras | Serenidad + aventura · Bahía de Kantenah |\n| **El Dorado Seaside Suites** | Puerto Aventuras | Oasis de sofisticación · balance calma-aventura |\n\n## Palafitos Overwater Bungalows · Luxury exclusivo\n\n- **Ubicación:** Playa del Carmen — únicos overwater bungalows del Caribe mexicano\n- **Diferencial:** Acceso ilimitado al parque acuático More Inclusive® · bungalows sobre el agua · gastronomía firmada\n- **Audiencia:** Luna de miel high-ticket, aniversarios, hi-net-worth\n\n## Hidden Beach Au Naturel Resort · Adults-only naturista\n\n- **Ubicación:** Puerto Aventuras\n- **Diferencial:** Único au naturel del portafolio · comunidad internacional muy fidelizada\n- **Audiencia:** Nicho premium con alto LTV, comunidad recurrente y programación temática\n\n## Generations Riviera Maya · Familiar multi-generacional\n\n- **Ubicación:** Riviera Maya\n- **Diferencial:** Suites amplias · programación intergeneracional · locaciones para eventos familiares\n- **Audiencia:** Familias US/Canadá/MX con niños, celebraciones familiares y bodas familiares\n\n## Maison México Roma · Boutique urbano CDMX\n\n- **Ubicación:** Colonia Roma · Ciudad de México\n- **Diferencial:** Fusiona encanto histórico con lujo moderno · pre/post estancia para huéspedes del Caribe\n- **Audiencia:** Viajero urbano premium, ejecutivo, extensión de trip Riviera Maya\n\n> 💡 **Lectura Salesforce:** cada marca justifica un `Business Unit` distinto en Marketing Cloud + segmentos independientes en Data Cloud, pero **una sola identidad de huésped** (Individual) que permita cross-selling controlado — por ejemplo, ofrecer Maison México Roma como pre-estancia a un huésped confirmado en Palafitos.",
+      },
+
+      // ── 5 · Journeys comerciales y operativos ─────────────────────────────
+      {
+        id: "commercial",
+        label: "Journeys y operación",
+        title: "Journeys comerciales, canales y momentos operativos",
+        content:
+          "El discovery del sitio revela **al menos 6 journeys diferenciados** que hoy conviven sin orquestación unificada. Para Salesforce cada uno es una oportunidad de agente conversacional + automatización + medición.\n\n## Journey 1 · Reserva directa B2C — el corazón del negocio\n\n**Flujo hoy:** landing por marca → motor Roiback → contact center 24/7 asistido → confirmación → email de pre-arrival → arribo → check-in → estancia → post-stay email.\n\n**Fricciones detectadas:**\n- No hay canal conversacional 24/7 (WhatsApp / chatbot) declarado — todo asistido pasa por teléfono/email\n- Pre-arrival, in-stay y post-stay parecen desconectados del contact center — riesgo de repreguntar al huésped\n- La promoción de descuentos escalonados (hasta 45% + 15% extra) sugiere alta sensibilidad al precio — journey de recuperación de carrito abandonado es probablemente subóptimo\n\n**Oportunidad Salesforce:** Agentforce web + WhatsApp para consulta de disponibilidad, best rate, upsell de habitación y activación de LH Rewards en el mismo turno. Journey de Marketing Cloud desde la abandonment hasta el 5-day-after-stay.\n\n## Journey 2 · Bodas destino — ciclo largo, alta implicación\n\n**Flujo hoy:** formulario web ‘Planifica tu boda’ → email weddings@ → teléfono con planner → brochure PDF + tabla comparativa PDF → cotización → firma → itinerario → boda → post-boda.\n\n**Fricciones detectadas:**\n- El brochure y la tabla son PDF estáticos → sin interactividad ni segmentación\n- Los planners atienden por teléfono/email → sin visibilidad de pipeline compartida\n- El proceso de personalización (locación, colores, banquete, pastel, flores) es artesanal → sin configurador\n\n**Oportunidad Salesforce:** Sales Cloud con pipeline Bodas + Experience Cloud para pareja/wedding planners + Agentforce para respuesta 24/7 a consultas frecuentes + configurador de paquete + integración con inventario de salones.\n\n## Journey 3 · Grupos y MICE — B2B con múltiples decisores\n\n**Flujo hoy:** formulario ‘Solicitar presupuesto’ → email groups@ → planner corporativo → cotización → firma → coordinación → evento → follow-up.\n\n**Fricciones detectadas:**\n- Sin CRM de pipeline visible — dificulta forecast\n- Sin catálogo público de capacidades por salón (outdoor lounge, auditorio, ballroom) con dimensiones y aforo\n- Sin RFP tool estándar\n\n**Oportunidad Salesforce:** Sales Cloud + Configure-Price-Quote + Agentforce B2B para primera respuesta 24/7 + Experience Cloud para wedding/event planners externos.\n\n## Journey 4 · Agencias y empresas — canales B2B ya en producción\n\n**Flujo hoy:** portal `bookcore/agency/login` y `bookcore/partempresas/login-empresa` → reservas con tarifas negociadas → comisiones/facturación.\n\n**Fricciones detectadas:**\n- Portales heredados del motor Roiback — probablemente limitados en co-op marketing, biblioteca de assets y capacitación\n- Socios como Exotic Travelers y Bluma Rewards viven en ecosistemas separados\n\n**Oportunidad Salesforce:** Experience Cloud + PRM (Partner Relationship Management) + Agentforce para asistir a agencias en cotización, comisiones y disponibilidad.\n\n## Journey 5 · LH Rewards — lealtad simple con margen de sofisticación\n\n**Flujo hoy:** afiliación en booking → descuento aplicado → Resort Credits repartidos 50/25/25 en resort → sin comunicación ongoing declarada.\n\n**Fricciones detectadas:**\n- No hay comunicación de valor entre estancias — el miembro no percibe pertenencia\n- No hay personalización de créditos según preferencia real (spa vs vino vs cena)\n- No hay tiering — el heavy user recibe lo mismo que el estreno\n\n**Oportunidad Salesforce:** Loyalty Management + Data Cloud + Marketing Cloud + Agentforce para asistente de lealtad conversacional que resuelva canjes, saldo y sugiera próxima escapada.\n\n## Journey 6 · In-stay — activación de experiencias More Inclusive®\n\n**Flujo hoy:** mesa de hospitalidad en el resort → reserva presencial de catamarán, wave runner, brunch en Maroma, parque acuático, rancho ecoturístico, cenote.\n\n**Fricciones detectadas:**\n- Reservas manuales en mesa física — colas y disponibilidad opaca\n- Sin app o WhatsApp para reservar desde la habitación\n- Sin capture de preferencias que alimente próximas visitas\n\n**Oportunidad Salesforce:** Agentforce in-stay conversacional (WhatsApp o app) + Field Service para operación de actividades + Data Cloud para alimentar preferencias del huésped que activen recomendación en futuras estancias.",
+      },
+
+      // ── 6 · Objetivo ──────────────────────────────────────────────────────
+      {
+        id: "objective",
+        label: "Objetivo del discovery",
+        title: "Qué queremos lograr posicionando Salesforce y Agentforce",
+        content:
+          "El discovery se ordena en tres ambiciones — cada una atada a un OKR concreto — que traducen lo aprendido en la conversación que Salesforce puede abrir con el sponsor comercial y tecnológico de Lomas.",
+        objective: {
+          headline:
+            "Convertir Lomas Hospitality en un cliente de plataforma completa de Salesforce — con Agentforce como puerta de entrada operativa y Data Cloud como columna vertebral — pasando de un stack fragmentado alrededor de Roiback a una arquitectura unificada de experiencia del huésped, del socio B2B y del staff.",
+          okrs: [
+            {
+              label: "O1 — Un solo perfil del huésped y del socio",
+              description:
+                "Unificar identidad y consentimiento del huésped B2C (parejas, familias, naturistas, luxury), del asistente a bodas y grupos, y del socio B2B (agencia, empresa) en Data Cloud — con Marketing Cloud, Loyalty Management y el motor Roiback conectados por MuleSoft o eventos.",
+              enabler: "Data Cloud · MuleSoft · Loyalty Management · Marketing Cloud Growth",
+              color: "indigo",
+            },
+            {
+              label: "O2 — Agentforce como primer punto de contacto 24/7",
+              description:
+                "Poner en producción una familia de agentes Agentforce que hoy atiende el contact center bilingüe — reservas, LH Rewards, bodas, grupos, in-stay activities y B2B agency — con handoff a humano cuando el valor lo requiere, medición de contención y capacidad de crear casos, oportunidades y reservas en Salesforce.",
+              enabler: "Agentforce · Service Cloud · Sales Cloud · Experience Cloud · WhatsApp Business API",
+              color: "violet",
+            },
+            {
+              label: "O3 — Programa de lealtad de siguiente generación",
+              description:
+                "Evolucionar LH Rewards de descuento fijo + Resort Credits a un programa tierizado, personalizado (spa vs vinos vs cena según preferencia), con recomendaciones next-best-offer y comunicación cross-marca — desintermediando OTAs y aumentando la reserva directa.",
+              enabler: "Loyalty Management · Data Cloud · Einstein · Marketing Cloud · Agentforce Loyalty Assistant",
+              color: "sky",
+            },
+          ],
+        },
+      },
+
+      // ── 7 · Agentforce landscape (propuesta) ──────────────────────────────
+      {
+        id: "agentforce",
+        label: "Agentes propuestos",
+        title: "Familia de agentes Agentforce recomendados para Lomas",
+        content:
+          "A partir del discovery, la propuesta es un **portafolio de 7 agentes Agentforce especializados** — cada uno con dueño de negocio, canal de exposición, alcance y KPI de contención. La estrategia recomendada es lanzar dos agentes en el primer wave (Reservas + LH Rewards) porque cubren el journey más denso y tienen impacto directo en revenue.\n\n## Agente 1 · Concierge Digital de Reservas (B2C · MVP recomendado)\n\n- **Canal:** Sitio web (Embedded Messaging) + WhatsApp Business API + Instagram DM\n- **Alcance:** Consulta de disponibilidad · comparación de marcas · aplicación de LH Rewards · abandonment recovery · upsell de habitación · handoff a contact center para cierre asistido\n- **Fuentes de contexto:** Salesforce Knowledge (políticas, marcas, propiedades) · Data Cloud (perfil de huésped) · Roiback (disponibilidad y tarifas vía MuleSoft) · Loyalty Management (beneficios activos)\n- **KPI:** % de sesiones que terminan en reserva confirmada · % de contención sin handoff · uplift de LH Rewards enrollments · lift de tarifas directas vs OTA\n\n## Agente 2 · Asistente LH Rewards (MVP recomendado)\n\n- **Canal:** WhatsApp + Sitio web + área privada del miembro\n- **Alcance:** Consulta de beneficios activos · saldo de Resort Credits · sugerencia personalizada de canje (spa/vino/cena) · recomendación de próxima estancia · gestión de perfil y consentimientos\n- **Fuentes:** Loyalty Management · Data Cloud · Knowledge · Marketing Cloud journeys\n- **KPI:** Reservas repeat · redención de créditos · NPS del miembro · retención año a año\n\n## Agente 3 · Wedding Concierge\n\n- **Canal:** Sitio web ‘Planifica tu boda’ + WhatsApp\n- **Alcance:** Responder consultas 24/7 sobre paquetes · configurar boda por locación (rooftop, cenote, capilla, muelle) · cotización preliminar · agendar llamada con planner humano · seguimiento post-boda\n- **Fuentes:** Knowledge de paquetes · Sales Cloud (Opportunity Wedding) · Experience Cloud pareja + planner\n- **KPI:** Leads calificados · velocity de pipeline · reducción de tiempo de primera respuesta\n\n## Agente 4 · Groups & MICE Agent\n\n- **Canal:** Sitio web + Email inbound + LinkedIn DM\n- **Alcance:** Primera respuesta a RFP · configurador de salones (outdoor lounge, auditorio, ballroom) · cotización preliminar · calendarización de site visit · handoff a planner\n- **Fuentes:** Knowledge de espacios y capacidades · Sales Cloud pipeline B2B · CPQ\n- **KPI:** Tiempo de respuesta a RFP · win rate B2B · pipeline generado\n\n## Agente 5 · In-Stay Guest Agent (More Inclusive® Activation)\n\n- **Canal:** WhatsApp con huésped registrado · App móvil futura\n- **Alcance:** Reserva de catamarán, wave runner, brunch Maroma, parque acuático, rancho, cenote · consulta de horarios · butler service · pedidos de room service · resolución de incidencias in-house\n- **Fuentes:** Data Cloud (preferencias) · Field Service (agenda de actividades) · Service Cloud (incidencias)\n- **KPI:** % huéspedes que activan al menos 1 experiencia More Inclusive · NPS in-stay · resolución en primer contacto\n\n## Agente 6 · B2B Agency Agent\n\n- **Canal:** Portal Bookcore + Email + WhatsApp\n- **Alcance:** Consulta de tarifas negociadas · estado de comisiones · disponibilidad para clientes · material co-op marketing · capacitación\n- **Fuentes:** Experience Cloud PRM · Data Cloud · Roiback\n- **KPI:** Producción por agencia · tickets resueltos sin humano · NPS de la agencia\n\n## Agente 7 · Copiloto del Staff (interno)\n\n- **Canal:** Slack + Service Cloud Console + WhatsApp interno\n- **Alcance:** Consulta de políticas · resumen de conversaciones previas del huésped · redacción sugerida de respuesta · escalamiento a supervisor · knowledge search\n- **Fuentes:** Knowledge interno · Data Cloud · Service Cloud\n- **KPI:** AHT del contact center · % consultas resueltas en primer contacto · satisfacción del staff\n\n---\n\n## Cómo compone la solución\n\n| Capa | Producto Salesforce | Rol |\n|---|---|---|\n| **Interacción** | Agentforce · Embedded Messaging · WhatsApp Business API · Voice Cloud | Puerta de entrada 24/7 en cada canal |\n| **Conversación** | Service Cloud · Digital Engagement · Omnichannel | Handoff a humano y colas de espera |\n| **Ventas** | Sales Cloud + CPQ | Bodas · Grupos · Cuentas B2B |\n| **Datos** | Data Cloud + MuleSoft | Unificación de huésped y socio · integración con Roiback y sistemas de operación de resort |\n| **Contenido** | Salesforce Knowledge · UDMO Files en Data Cloud | Grounding de agentes con políticas y catálogos citables |\n| **Marketing** | Marketing Cloud Growth + Journeys | Pre-arrival · in-stay · post-stay · recuperación de carrito |\n| **Lealtad** | Loyalty Management | LH Rewards de siguiente generación |\n| **Portales** | Experience Cloud | Bodas · agencias · empresas · miembros LH Rewards |\n| **Servicio de campo** | Field Service | Operación de actividades More Inclusive® |\n| **Confianza** | Einstein Trust Layer | Enmascarado de PII · audit trail · Consent en Data Cloud |",
+      },
+
+      // ── 8 · Roadmap de posicionamiento ────────────────────────────────────
+      {
+        id: "roadmap",
+        label: "Roadmap sugerido",
+        title: "Roadmap de posicionamiento en 3 waves",
+        content:
+          "El roadmap propone tres olas incrementales — cada una entrega valor por sí sola, prepara la siguiente y minimiza el shock de cambio. La lectura para el equipo de cuenta: **empezar por la wave 1 permite validar Agentforce en el journey más denso (reservas + LH Rewards) antes de expandir a bodas, grupos e in-stay**.",
+        contextData: {
+          groups: [
+            {
+              name: "Wave 1 — Foundation + MVP conversacional (0–4 meses)",
+              findings: [
+                "Data Cloud stand-up · ingesta inicial desde Roiback y contact center · perfil unificado del huésped",
+                "MuleSoft para exposición del inventory de Roiback · consent management",
+                "Agentforce · agente Concierge de Reservas (web + WhatsApp) en ES/EN",
+                "Loyalty Management · migración de LH Rewards con tiering básico",
+                "Marketing Cloud Growth · journey de pre-arrival, in-stay comm y post-stay",
+                "KPI foco: % de reservas asistidas por agente · % de sesiones LH Rewards activadas · uplift de reserva directa vs OTA",
+              ],
+            },
+            {
+              name: "Wave 2 — Expansión a Bodas, Grupos y B2B (4–9 meses)",
+              findings: [
+                "Sales Cloud + CPQ · pipeline Bodas y Grupos con roles wedding/event planner",
+                "Experience Cloud · portal pareja + wedding planners · biblioteca de assets B2B para agencias",
+                "Agentforce · Wedding Concierge + Groups & MICE Agent + B2B Agency Agent",
+                "Integración con Bluma Rewards y Exotic Travelers vía MuleSoft para visión de miembro coalicionado",
+                "KPI foco: tiempo de primera respuesta B2B · win rate · leads Bodas → oportunidad firmada",
+              ],
+            },
+            {
+              name: "Wave 3 — In-stay + Staff Copilot + Personalización avanzada (9–18 meses)",
+              findings: [
+                "Agentforce In-Stay para activación de experiencias More Inclusive® vía WhatsApp del huésped",
+                "Field Service para operación de actividades (catamarán, wave runner, cenote, parque acuático, rancho, brunch)",
+                "Agente Copiloto del Staff en Service Cloud Console + Slack",
+                "Einstein Predictions · propensión de reserva, churn de miembro LH, recomendación next-best-offer por segmento",
+                "Data Cloud · onboarding de fuentes ESG e Impacto (Fundación Lomas, Earth Check) para reporting integrado",
+                "KPI foco: % huéspedes que activan ≥1 experiencia More Inclusive · AHT contact center · NPS in-stay · reservas repeat de miembros LH",
+              ],
+            },
+          ],
+        },
+      },
+
+      // ── 9 · Fuentes ───────────────────────────────────────────────────────
+      {
+        id: "sources",
+        label: "Fuentes del discovery",
+        title: "Fuentes públicas consultadas · julio 2026",
+        content:
+          "Toda la información de esta ficha proviene del sitio corporativo de Lomas Hospitality, del sitio institucional de Grupo Lomas y de la página de LinkedIn de Lomas Hospitality Services — consultada durante el discovery. Cifras corporativas específicas (habitaciones totales, empleados exactos, ingresos, EBITDA) no se publican y requieren confirmación durante la conversación con el cliente.\n\n## Fuentes primarias\n\n| Fuente | Uso en la ficha |\n|---|---|\n| [lomashospitality.com](https://www.lomashospitality.com/) — home ES/EN | Portafolio de marcas · canales · promociones · contactos |\n| lomashospitality.com/es/marcas | Descripción de cada marca y propiedad |\n| lomashospitality.com/es/landing-pro/more-inclusive | Concepto More Inclusive® · experiencias externas incluidas |\n| lomashospitality.com/es/landing-pro/lh-rewards | Mecánica de LH Rewards · descuentos · Resort Credits |\n| lomashospitality.com/es/eventos | Espacios y contactos de grupos/MICE |\n| lomashospitality.com/es/bodas | Locaciones · paquetes · contactos wedding |\n| lomashospitality.com/es/sostenibilidad | Programa Evolución Responsable · certificaciones · adhesiones ONU |\n| [grupolomas.com](https://www.grupolomas.com/) | Fundación 1981 · fundadores · empresas hermanas · presencia geográfica |\n| LinkedIn — Lomas Hospitality Services | Tamaño de empresa · reconocimientos · empresas hermanas |\n\n## Datos NO disponibles públicamente — a validar con cliente\n\n- Número exacto de habitaciones por propiedad y total del portafolio\n- Facturación anual y EBITDA del grupo\n- Estructura accionaria detallada más allá de los fundadores\n- CEO, CFO, CIO/CDO actuales · organigrama ejecutivo\n- Stack tecnológico real (PMS, RMS, CDP, CRM, ESB, iPaaS)\n- Volumen anual de contact center (llamadas, chats, emails)\n- Volumen anual de bodas y grupos ejecutados\n- Base activa de miembros LH Rewards y penetración vs total de huéspedes\n- Mix de canal (directa vs OTA vs turoperador vs corporativo)\n- Retorno de las inversiones actuales en Roiback y en portales B2B\n\n> 🎯 **Siguiente paso recomendado:** conversar con **VP Comercial, Director de Marketing Digital y Director de TI** de Lomas Hospitality para validar los journeys detectados, calibrar el orden de olas del roadmap y priorizar el MVP conversacional (Concierge de Reservas + LH Rewards) como puerta de entrada de Salesforce.",
+      },
+    ],
+  },
 ];
