@@ -3056,6 +3056,373 @@ export const executiveDecks: ExecutiveDeck[] = [
       },
     ],
   },
+
+  // ── LOMAS HOSPITALITY · Deck ejecutivo — Introducción a Agentforce ────────
+  {
+    slug: "executive",
+    customerSlug: "lomas-hospitality",
+    title: "Hospitalidad que se anticipa",
+    subtitle:
+      "Cómo Agentforce lleva la experiencia More Inclusive® del huésped, la pareja que se casa y la agencia aliada a un nuevo estándar — 24/7, en cada idioma, con la esencia de Lomas intacta",
+    duration: "20 min",
+    slides: [
+      // ── 1 · Portada ──────────────────────────────────────────────────────
+      {
+        layout: "title",
+        eyebrow: "Lomas Hospitality · Presentación ejecutiva",
+        title: "Hospitalidad que se anticipa.\nExperiencias que dejan huella.",
+        subtitle:
+          "Un vistazo a cómo la nueva generación de agentes inteligentes de Salesforce puede llevar la esencia de Lomas — hospitalidad mexicana auténtica — a cada punto de contacto del viaje, sin diluirla.",
+        footnote: "Presentación ejecutiva · Confidencial · 2026",
+        brand: {
+          sparkles: [
+            { variant: "yellow-main", side: "left", top: "12%", size: 96, rotate: -8 },
+            { variant: "blue-inclined", side: "right", top: "58%", size: 120, rotate: 12 },
+          ],
+          astro: { variant: "astro-2", side: "right", bottom: "6%", size: 220 },
+          cloudLogo: "top-right",
+        },
+        products: ["Agentforce", "Data Cloud", "Service", "Marketing"],
+      },
+
+      // ── 2 · El momento actual ───────────────────────────────────────────
+      {
+        layout: "quote",
+        quote:
+          "Los huéspedes de hoy no comparan a Lomas con otro all-inclusive. Lo comparan con la mejor experiencia digital que tuvieron ayer — la que resolvió su duda en 3 segundos, en su idioma, sin fricción.",
+        author: "El nuevo estándar de la hospitalidad",
+        context:
+          "La conversación con el huésped se movió a los canales digitales, y la ventana de paciencia se redujo a segundos. Ahí es donde nace la oportunidad.",
+        brand: {
+          sparkles: [
+            { variant: "yellow-inclined", side: "left", top: "18%", size: 80, opacity: 0.7 },
+          ],
+        },
+      },
+
+      // ── 3 · Panorama global ─────────────────────────────────────────────
+      {
+        layout: "metrics",
+        eyebrow: "El mundo ya se movió",
+        title: "Tres señales que están redefiniendo la industria en 2026",
+        metrics: [
+          { value: "78%", label: "de las empresas ya opera IA en al menos una función crítica de negocio" },
+          { value: "<5 s", label: "es el tiempo que un huésped acepta esperar en un canal digital antes de rebotar" },
+          { value: "3×", label: "más conversión en canales conversacionales vs. formularios tradicionales" },
+          { value: "24/7", label: "es el nuevo horario por defecto — no un diferencial" },
+        ],
+        brand: {
+          sparkles: [
+            { variant: "blue-main", side: "right", top: "22%", size: 90 },
+          ],
+        },
+      },
+
+      // ── 4 · Referencias globales — hoteleros que ya lo hicieron ─────────
+      {
+        layout: "pillars",
+        eyebrow: "Referencias globales · hospitalidad en Salesforce + IA",
+        title: "Lo que la industria ya está haciendo — y el listón que marca",
+        pillars: [
+          {
+            title: "Marriott — Hilton — Hyatt",
+            body: "Marriott corrió su transformación digital con Salesforce como plataforma unificada de huésped y lealtad. Hilton apoya Hilton Honors — 158M de miembros — sobre Salesforce y Data Cloud. Hyatt personaliza mensajes 1:1 a más de 40M de miembros World of Hyatt con Marketing Cloud y Data Cloud.",
+            accent: "indigo",
+          },
+          {
+            title: "Wyndham & AccorHotels",
+            body: "Wyndham Hotels & Resorts atiende reservaciones y servicio con Service Cloud desde 2018 — miles de propiedades en un solo modelo. Accor unificó a 40+ marcas y 5,700 hoteles en Salesforce para tener una vista 360 del huésped ALL — Accor Live Limitless.",
+            accent: "violet",
+          },
+          {
+            title: "La ola actual · Agentes con IA",
+            body: "IHG, Four Seasons y las marcas líderes de resort all-inclusive del Caribe están lanzando en 2025–2026 agentes de IA para reservas, concierge in-stay y lealtad — sobre la misma plataforma Agentforce que se propone hoy para Lomas.",
+            accent: "sky",
+          },
+        ],
+        brand: {
+          cloudLogo: "bottom-right",
+        },
+      },
+
+      // ── 5 · La punta de lanza · Agentforce ──────────────────────────────
+      {
+        layout: "section",
+        eyebrow: "La nueva capa de la experiencia",
+        title: "Agentforce — la plataforma de agentes de Salesforce que ya opera en producción para miles de marcas",
+        subtitle:
+          "No es un chatbot. Es un empleado digital que razona, decide, ejecuta acciones sobre datos reales y sabe cuándo llamar a un humano.",
+        brand: {
+          astro: { variant: "agent-astro-10-l", side: "left", bottom: "8%", size: 240 },
+        },
+        products: ["Agentforce"],
+      },
+
+      // ── 6 · Qué es Agentforce · en palabras simples ─────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "Qué es Agentforce",
+        title: "Cuatro cosas que hay que saber — y no una más",
+        pillars: [
+          {
+            title: "Razona sobre datos reales",
+            body: "Agentforce lee el perfil unificado del huésped en Data Cloud — reservas, preferencias, canjes, historial de conversaciones — y decide la mejor respuesta con contexto completo. No inventa: fundamenta.",
+            accent: "indigo",
+          },
+          {
+            title: "Ejecuta acciones, no solo responde",
+            body: "Confirma una reserva, aplica un beneficio de LH Rewards, agenda una experiencia More Inclusive®, escala a un planner de bodas. Trabaja de verdad — no solo conversa.",
+            accent: "violet",
+          },
+          {
+            title: "Vive en el canal del huésped",
+            body: "Web, WhatsApp, correo, teléfono, portal de agencias, app interna del staff. Un mismo cerebro, muchas voces — todas alineadas al tono de Lomas.",
+            accent: "sky",
+          },
+          {
+            title: "Confianza integrada de fábrica",
+            body: "Einstein Trust Layer, enmascarado de datos personales, audit trail y controles de contenido sensible desde el día uno. Lo que se dice y lo que se hace queda registrado y auditable.",
+            accent: "emerald",
+          },
+        ],
+        products: ["Agentforce", "Data Cloud"],
+      },
+
+      // ── 7 · Objetivo de la sesión ───────────────────────────────────────
+      {
+        layout: "section",
+        eyebrow: "Objetivo",
+        title: "Identificar los 2 casos de uso prioritarios para Lomas y trazar el plan que los lleva a producción",
+        subtitle:
+          "Salir con un MVP acotado, con dueño, con métrica y con fecha. Nada de teoría — evidencia en 90 días.",
+        brand: {
+          sparkles: [
+            { variant: "darkblue-main", side: "right", top: "20%", size: 100 },
+          ],
+        },
+      },
+
+      // ── 8 · Hipótesis · Concierge de reservas ───────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Hipótesis 1 · Concierge Digital de Reservas",
+        title: "El anfitrión que responde al huésped en 3 segundos, en su idioma, y lo lleva a la reserva",
+        left: {
+          heading: "Qué hace el agente",
+          items: [
+            "Recibe al huésped en la web y en WhatsApp — en español o inglés — con el tono de Lomas",
+            "Compara marcas (El Dorado · Palafitos · Hidden Beach · Generations · Maison México Roma) según lo que busca la persona",
+            "Aplica beneficios LH Rewards en el mismo turno — Resort Credits, mejor tarifa, check-in privado",
+            "Recupera carritos abandonados con contexto personalizado y ofrece la habitación exacta que el huésped miró",
+            "Escala al contact center humano cuando el valor lo pide — con todo el contexto ya listo",
+          ],
+        },
+        right: {
+          heading: "Resultado esperado en 90 días",
+          items: [
+            "+18 a 25% de conversión en la web vs baseline actual",
+            "Contención autónoma ≥ 55% de las consultas — el equipo humano se enfoca en el cierre de valor",
+            "Tiempo de primera respuesta < 5 segundos, 24/7",
+            "Lift de reserva directa vs OTA — más margen recuperado al canal propio",
+            "Doblar la tasa de alta en LH Rewards por su asistencia proactiva",
+          ],
+        },
+        products: ["Agentforce", "Service", "Data Cloud"],
+      },
+
+      // ── 9 · Hipótesis · Wedding & MICE Concierge ────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Hipótesis 2 · Wedding & MICE Concierge",
+        title: "El planner virtual que abre el pipeline de bodas y grupos, y no lo suelta hasta el evento",
+        left: {
+          heading: "Qué hace el agente",
+          items: [
+            "Atiende la primera pregunta de la pareja o del organizador — a cualquier hora, en cualquier canal",
+            "Configura paquete de boda o RFP de grupo con locación (rooftop · cenote · muelle · ballroom), aforo y fecha",
+            "Entrega cotización preliminar y agenda la llamada con el planner humano al mejor momento",
+            "Hace nurture personalizado durante el ciclo de venta largo — el prospecto nunca se enfría",
+            "Da seguimiento post-evento con encuesta, upsell y activación de referidos",
+          ],
+        },
+        right: {
+          heading: "Resultado esperado en 90 días",
+          items: [
+            "Tiempo de primera respuesta de bodas y grupos: de horas a < 2 minutos, 24/7",
+            "Lift ≥ 30% en leads calificados que llegan al planner humano",
+            "Reducción de 40% del ciclo de venta desde primer contacto a firma",
+            "Win rate B2B +8 a 12 puntos — la competencia sigue respondiendo con emails a 24h",
+            "Pipeline visible por primera vez en un CRM — forecast confiable para Comercial",
+          ],
+        },
+        products: ["Agentforce", "Sales", "Service"],
+      },
+
+      // ── 10 · Hipótesis · LH Rewards & In-stay ───────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Hipótesis 3 · Amplificador · LH Rewards + In-stay",
+        title: "El asistente que hace sentir a cada miembro que Lomas lo conoce — antes, durante y después de la estancia",
+        left: {
+          heading: "Qué hace el agente",
+          items: [
+            "Personaliza Resort Credits (50% spa / 25% vinos / 25% cena) según preferencia real del huésped, no default",
+            "Activa experiencias More Inclusive® por WhatsApp desde la habitación — catamarán, cenote, wave runner, parque acuático",
+            "Recomienda la próxima escapada cross-marca (Palafitos → Maison México Roma como pre-estancia)",
+            "Convierte la estancia en referidos activos con incentivo dirigido a Rewards",
+            "Recupera al miembro dormido con oferta relevante — no genérica",
+          ],
+        },
+        right: {
+          heading: "Resultado esperado en 90 días",
+          items: [
+            "Redención de Resort Credits > 80% — hoy queda valor sin usar en cada estancia",
+            "Reservas repeat de miembros LH Rewards +15 a 20%",
+            "Activación de al menos 1 experiencia More Inclusive® por huésped ≥ 65%",
+            "NPS in-stay +6 a 10 puntos en las propiedades piloto",
+            "Alta orgánica en LH Rewards por recomendación de un miembro activo × 2",
+          ],
+        },
+        products: ["Agentforce", "Marketing", "Data Cloud"],
+      },
+
+      // ── 11 · Cómo se ve por dentro ─────────────────────────────────────
+      {
+        layout: "comparison",
+        eyebrow: "El cambio operativo",
+        title: "Cómo se ve un día en Lomas — antes y después",
+        before: {
+          heading: "Hoy",
+          items: [
+            "El huésped en Toronto pregunta a las 2 AM y espera hasta las 9 AM MX para respuesta",
+            "La pareja que se casa recibe un PDF genérico y compara con 3 competidores durante el silencio",
+            "La agencia aliada llama al ejecutivo para confirmar disponibilidad — a veces sí, a veces no",
+            "El miembro de LH Rewards ve un descuento uniforme — sin sentir que Lomas lo conoce",
+            "El staff resuelve las mismas 12 preguntas cada día, sin capacidad de personalizar",
+          ],
+        },
+        after: {
+          heading: "Con Agentforce",
+          items: [
+            "El huésped recibe respuesta en 3 segundos, con el nombre de la marca que mejor le encaja, en su idioma",
+            "La pareja cierra su boda en un configurador conversacional que sabe qué locación pidió y cuánto vale",
+            "La agencia consulta disponibilidad y comisiones al agente, sin llamar — el ejecutivo ve un pipeline vivo",
+            "El miembro recibe Resort Credits repartidos según su preferencia real y ve el vuelo de vuelta ya reservado",
+            "El staff trabaja con un copiloto que le prepara la respuesta y le sugiere el próximo paso",
+          ],
+        },
+      },
+
+      // ── 12 · Cómo se ve en 90 días ─────────────────────────────────────
+      {
+        layout: "kpi-table",
+        eyebrow: "Indicadores clave · MVP de 90 días",
+        title: "El tablero que se abre con los primeros dos agentes en producción",
+        rows: [
+          {
+            label: "Contención autónoma en canales digitales (web + WhatsApp)",
+            baseline: "N/A",
+            goal6m: "≥ 55%",
+            goal12m: "≥ 70%",
+            accent: "indigo",
+          },
+          {
+            label: "Conversión reserva directa desde canal conversacional",
+            baseline: "Baseline actual del motor",
+            goal6m: "+18–25%",
+            goal12m: "+30–40%",
+            accent: "violet",
+          },
+          {
+            label: "Tiempo de primera respuesta 24/7",
+            baseline: "Horas (fuera de horario)",
+            goal6m: "< 5 segundos",
+            goal12m: "< 3 segundos",
+            accent: "sky",
+          },
+          {
+            label: "Bodas y grupos — leads → oportunidad calificada",
+            baseline: "Sin visibilidad",
+            goal6m: "+30% velocity",
+            goal12m: "+50% velocity · +10 pts win rate",
+            accent: "emerald",
+          },
+          {
+            label: "Miembros LH Rewards activos con redención",
+            baseline: "% actual",
+            goal6m: "+15–20%",
+            goal12m: "Programa tierizado con NBO por segmento",
+            accent: "indigo",
+          },
+        ],
+      },
+
+      // ── 13 · Plan de trabajo ────────────────────────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "El plan",
+        title: "Tres olas — cada una entrega valor por sí sola, prepara la siguiente y minimiza el shock de cambio",
+        pillars: [
+          {
+            title: "Ola 1 · Cimientos + MVP conversacional",
+            body: "Meses 0–4 · Data Cloud stand-up con perfil unificado del huésped · MuleSoft para exponer inventario del motor · Agentforce con el Concierge de Reservas (web + WhatsApp) en ES/EN · Loyalty Management con LH Rewards tierizado · journeys base en Marketing Cloud.",
+            accent: "indigo",
+          },
+          {
+            title: "Ola 2 · Bodas · Grupos · B2B",
+            body: "Meses 4–9 · Sales Cloud + CPQ con pipeline Bodas y MICE · Experience Cloud para pareja, planners y agencias · Agentforce Wedding Concierge · MICE Agent · B2B Agency Agent · integración con Bluma Rewards y Exotic Travelers.",
+            accent: "violet",
+          },
+          {
+            title: "Ola 3 · In-stay · Copiloto del staff · Personalización avanzada",
+            body: "Meses 9–18 · Agentforce In-stay para More Inclusive® · Field Service para la operación de actividades · Copiloto del staff en Service Cloud + Slack · Einstein Predictions para churn y next-best-offer · Data Cloud extendida a ESG y Fundación Lomas.",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // ── 14 · Por qué ahora ──────────────────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Por qué ahora",
+        title: "Cuatro razones que hacen del 2026 la ventana correcta",
+        bullets: [
+          "El huésped ya opera en modo conversacional — quien no está en su canal, no está en su decisión",
+          "La tecnología está madura — Agentforce ya opera en producción para miles de marcas globales, no es un experimento",
+          "Los competidores directos del Caribe están lanzando ahora — moverse antes es capitalizar la ventaja del posicionamiento premium",
+          "La inversión en Data Cloud se paga con el primer agente en producción — cada agente adicional cuesta menos y entrega más",
+        ],
+        highlight:
+          "El costo de esperar no es cero — cada mes sin agente son huéspedes ganados por otro, y datos perdidos que no vuelven.",
+      },
+
+      // ── 15 · Lo que se pide ─────────────────────────────────────────────
+      {
+        layout: "closing",
+        title: "Elegir los 2 casos de uso prioritarios y arrancar la Ola 1 este trimestre",
+        bullets: [
+          "Nombrar un sponsor ejecutivo y un dueño de producto — negocio + tecnología, no uno solo",
+          "Confirmar los dos casos prioritarios entre las tres hipótesis presentadas — Concierge · Wedding & MICE · LH Rewards In-stay",
+          "Abrir la ventana de 4 semanas para el discovery técnico y firmar el MVP con métrica y fecha",
+          "Comprometer un piloto acotado en 2 propiedades del portafolio — evidencia real antes de escalar al grupo",
+        ],
+        cta: "Salir de la sala con los dos casos elegidos, el sponsor nombrado y la fecha del kickoff en el calendario.",
+        brand: {
+          astro: { variant: "agent-astro-flip-020", side: "right", bottom: "6%", size: 220 },
+          cloudLogo: "top-right",
+        },
+      },
+
+      // ── 16 · Cierre ─────────────────────────────────────────────────────
+      {
+        layout: "thanks",
+        eyebrow: "Lomas Hospitality · Salesforce",
+        title: "La hospitalidad de Lomas — amplificada, no reemplazada.",
+        subtitle:
+          "La tecnología no cuenta la historia. Solo la cuenta más veces, en más idiomas, a más huéspedes, sin que la esencia se pierda. Gracias.",
+      },
+    ],
+  },
 ];
 
 export function getExecutiveDeck(
