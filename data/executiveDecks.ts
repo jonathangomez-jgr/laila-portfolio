@@ -3417,9 +3417,9 @@ export const executiveDecks: ExecutiveDeck[] = [
       {
         layout: "thanks",
         eyebrow: "Lomas Hospitality · Salesforce",
-        title: "La hospitalidad de Lomas — amplificada, no reemplazada.",
+        title: "Gracias.",
         subtitle:
-          "La tecnología no cuenta la historia. Solo la cuenta más veces, en más idiomas, a más huéspedes, sin que la esencia se pierda. Gracias.",
+          "La hospitalidad de Lomas — amplificada, no reemplazada. La tecnología no cuenta la historia: la cuenta más veces, en más idiomas y a más huéspedes, sin que la esencia se pierda.",
       },
     ],
   },
