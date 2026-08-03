@@ -2009,7 +2009,508 @@ Meta Cloud API  ──►  WhatsAppWebhookHandler (Site público)
   ],
 };
 
-export const buildRecipes: Recipe[] = [whatsappAttachmentsCustom, whatsappV2Handoff];
+const whatsappLightweightInterception: Recipe = {
+  slug: "whatsapp-attachments-lightweight-interception",
+  title: "Intercepción liviana de adjuntos en WhatsApp + Agentforce — PROTOTIPO",
+  problemOneLiner:
+    "Cuando el usuario envía un archivo por WhatsApp mid-conversación, Agentforce responde error. Este approach intercepta en el punto sync disponible en el path estándar, sin reemplazar el canal Enhanced.",
+  approach: "hybrid",
+  tags: [
+    "Adjuntos",
+    "Agentforce",
+    "WhatsApp",
+    "Digital Engagement",
+    "ContentDocumentLink",
+    "Prompt Builder",
+    "Prototipo",
+  ],
+  audiences: ["developer", "architect"],
+  author: "Jonathan Gomez",
+  authorRole: "Agentforce Enterprise Architect",
+  publishedAt: "2026-08-01",
+  updatedAt: "2026-08-01",
+  readingMinutes: 15,
+  hidden: false,
+  tldr: [
+    "El path estándar Enhanced WhatsApp no expone un hook post-agent — descartado empíricamente después de probar 10 candidatos (ConversationEntry no es triggerable, Message vacío, Sensitive Data Rules son del stack Live Chat legado, no hay 'post-response flow', el Trust Layer no acepta filtros custom, action sequencing es no-determinístico).",
+    "El único punto sync-observable en el path estándar es ContentDocumentLink.BEFORE_INSERT cuando LinkedEntityType=MessagingSession — dispara en el AutomatedProcess user context antes de que Agentforce procese el turno con el adjunto.",
+    "Desde ese trigger podemos publicar un Platform Event y encolar un Queueable que llama a Prompt Builder (GPT-4o vision para imagen/PDF, Whisper para audio) — todo dentro de Salesforce, sin credenciales externas.",
+    "El resultado del análisis se puede escribir en campos custom de MessagingSession (AI_Issue__c, AI_Resolution__c, AI_Summary__c ya existen en la org Laila) o inyectar como mensaje sintético al canal.",
+    "Prototipo no verificado — falta construir y probar el pipeline completo. El write-back al canal (cómo entregar el mensaje sintético al usuario) es la parte más incierta.",
+  ],
+  sections: [
+    {
+      id: "status-warning",
+      eyebrow: "Estado — actualizado 2026-08-01",
+      title: "Diagnóstico definitivo — approach NO viable en el path estándar",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "callout",
+          tone: "critical",
+          title: "Este approach NO es implementable con el path estándar Enhanced WhatsApp",
+          text: "Update 2026-08-01: después de probar empíricamente 10+ hipótesis de write-back en la org Laila (incluidas 4 rutas técnicas específicas: LiveChatSensitiveDataRule, ConnectApi.EnhancedMessaging, ConvMessageSendRequest, y ConversationEntry DML insert con ActorType=Bot y ActorType=EndUser), se confirma que NO existe una API pública Apex/REST/Metadata para inyectar mensajes al canal Enhanced desde afuera del agente. El punto de detección (CDL BEFORE_INSERT) funciona, pero no hay canal outbound utilizable. Las únicas rutas viables son: (a) Flex Prompt Template + acción custom para imagen/PDF, (b) bypass total Corona-style (ver whatsappAttachmentsCustom / whatsappV2Handoff), (c) BYOC (reemplazar el canal Enhanced por uno custom). Esta receta se conserva como diagnóstico con evidencia empírica reproducible.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Qué sí sirvió del research",
+          text: "Confirmamos que aiplatform.ModelsAPI funciona (GPT-4o texto con Trust Layer aplicado). Descubrimos que AutomatedProcess es el user que ejecuta el pipeline Enhanced Messaging — crítico para debugging futuro. Mapeamos los 10 candidatos de intercepción con evidencia de por qué cada uno falla. Estos aprendizajes son reusables para futuros research de messaging.",
+        },
+      ],
+    },
+    {
+      id: "problem",
+      eyebrow: "El problema, otra vez",
+      title: "Por qué las dos opciones anteriores no cierran el caso",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "problem",
+          symptom:
+            "El usuario envía un archivo por WhatsApp mid-conversación. Agentforce responde 'no pude procesar el archivo' o similar. Las dos primeras 'soluciones' probadas (instruir al agente para omitir el error, o reemplazar todo el canal con webhook custom) tienen problemas: la primera es no-determinística, la segunda es cara.",
+          rootCause:
+            "En Enhanced WhatsApp, ConversationEntry vive off-platform y el campo Message está vacío en 100% de los registros consultables. El texto del agente nunca es visible on-platform. Ver hallazgos empíricos.",
+          impact:
+            "Cualquier caso donde el cliente adjunta evidencia (comprobantes, fotos, notas de voz) durante una conversación activa queda bloqueado.",
+        },
+      ],
+    },
+    {
+      id: "empirical-findings",
+      eyebrow: "Hallazgos empíricos",
+      title: "Qué encontramos el 2026-08-01 desplegando triggers de solo-debug",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "El 2026-08-01 se desplegaron 3 triggers de solo-debug en la org Laila (jgr@laila.demo) para mapear qué objetos disparan y bajo qué user context durante flujos reales de WhatsApp. La tabla siguiente resume la matriz observada.",
+        },
+        {
+          type: "table",
+          headers: [
+            "Objeto",
+            "Triggerable en describe",
+            "Dispara en test real",
+            "User context observado",
+            "Utilidad",
+          ],
+          rows: [
+            [
+              "ConversationEntry",
+              "false",
+              "N/A",
+              "N/A",
+              "Descartado — no permite trigger. Field 'Message' además está siempre vacío.",
+            ],
+            [
+              "MessagingSession",
+              "true",
+              "Sí — insert + updates de Status/Owner",
+              "AutomatedProcess (05K...002DT8JYAW)",
+              "Útil para reaccionar a cambios de sesión, no a turnos individuales.",
+            ],
+            [
+              "MessagingEndUser",
+              "true",
+              "No en este test (MEU pre-existente)",
+              "N/A",
+              "Dispararía solo en primer contacto de un teléfono nuevo.",
+            ],
+            [
+              "ContentDocumentLink",
+              "true",
+              "Sí — BEFORE_INSERT sync con LinkedEntityType=MessagingSession",
+              "AutomatedProcess",
+              "PUNTO DE INTERCEPCIÓN CLAVE.",
+            ],
+          ],
+        },
+        {
+          type: "codeRef",
+          name: "JGR_ExperimentB_ContentDocumentLink",
+          kind: "trigger",
+          purpose:
+            "Trigger de solo-debug que confirmó empíricamente que ContentDocumentLink.BEFORE_INSERT dispara sync con LinkedEntityType=MessagingSession cuando llega un archivo por WhatsApp. Este es el hook que el approach lightweight explota.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Timeline capturada en el test",
+          text: "11:32:51.245 CDL BEFORE_INSERT — Doc 069KY00000GY97ZYAT linked a MessagingSession 0MwKY000001t4nq0AA. La sesión ya estaba Active desde 11:31:39 (bot procesando). El archivo se enlazó a la sesión existente 72 segundos después de que empezó. Nuestro código correría antes de que Agentforce procese el turno con ese adjunto.",
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Lo que NO pudimos observar",
+          text: "El texto de la respuesta del agente ('no pude procesar el archivo') nunca aparece on-platform. Los ConversationEntry de la sesión de hoy no fueron consultables ni siquiera post-cierre en la ventana del test — los últimos consultables eran de febrero 2026. Cualquier estrategia de 'leer lo que dijo el agente para reemplazarlo' es inviable.",
+        },
+      ],
+    },
+    {
+      id: "poc-attempts",
+      eyebrow: "Intentos de PoC 2026-08-01",
+      title: "Qué probamos después del mapeo — y qué falló",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Con el punto de detección (CDL BEFORE_INSERT) confirmado, la pregunta abierta era: ¿cómo hacemos write-back al canal para entregar un texto útil al usuario? Se probaron 4 rutas concretas en Apex ejecutado directamente contra la org.",
+        },
+        {
+          type: "table",
+          headers: ["Ruta probada", "Comportamiento observado", "Veredicto"],
+          rows: [
+            [
+              "aiplatform.ModelsAPI.createChatGenerations con content multi-part (image_url embed base64)",
+              "El wrapper Apex rechaza content como JSON serializado — sólo acepta String plano. Sin API multimodal en la clase nativa.",
+              "Descartado — para imagen se requiere Flex Prompt Template invocado con ConnectApi.EinsteinLLM.generateMessagesForPromptTemplate. Texto sí funciona (respuesta real de GPT-4o obtenida).",
+            ],
+            [
+              "Insert ConversationEntry con ActorType=Bot, Message poblado, MessageStatus=Sent",
+              "DML success. Registro persiste (Id 0ZyKY000009QuNB0A0). Pero MessageStatusCode=null, MessageSendTime=null, MessageDeliverTime=null. El usuario NO recibe el mensaje por WhatsApp.",
+              "Descartado — el registro es cosmético, no dispara pipeline outbound a Meta.",
+            ],
+            [
+              "Insert ConversationEntry con ActorType=EndUser (imitando el approach Corona de 'turno sintético del usuario')",
+              "DML success (Id 0ZyKY000009QuNG0A0). Se probó en una sesión ACTIVA de WhatsApp. El bot NO reaccionó al insert. Los contadores EndUserMessageCount/AgentMessageCount no cambiaron. Cero notificación al usuario, cero turno de Agentforce.",
+              "Descartado — el pipeline inbound del agente vive off-platform. Insertar CE on-platform no lo activa.",
+            ],
+            [
+              "ConvMessageSendRequest — probable candidato por nombre",
+              "createable=false, updateable=false. TODOS los fields con create=false. Es read-only para clientes.",
+              "Descartado — es un log del sistema, no un vector de write-back.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "critical",
+          title: "El bloqueante definitivo",
+          text: "No existe una API pública Apex/REST/Metadata para inyectar mensajes al canal Enhanced desde afuera del agente. El agente de Agentforce es el único emisor válido hacia Meta. Todo lo demás son registros contables que Salesforce persiste pero no propaga al pipeline off-platform. La única vía oficial para tener control outbound arbitrario es BYOC (reemplazar el canal Enhanced por uno custom con Interaction Service APIs).",
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Nota sobre el bot Valeria en la org Laila",
+          text: "Como camino alternativo se consideró modificar el bot para leer un campo custom de MessagingSession (por ejemplo AI_Summary__c) como Context Variable. Requiere editar el botVersion metadata, agregar la contextVariable, redeployar, y modificar el role prompt. Es factible pero regresa al problema del no-determinismo del LLM (la instrucción 'usa AI_Summary si está poblado' es una instrucción de prompt, no un contrato duro). Este approach queda documentado como opción para ejercicio futuro con expectativas ajustadas.",
+        },
+      ],
+    },
+    {
+      id: "descartados",
+      eyebrow: "Opciones descartadas",
+      title: "10 candidatos evaluados antes de aterrizar en CDL",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Antes de aterrizar en CDL, se evaluaron 10 candidatos de intercepción. La siguiente tabla documenta por qué se descartaron con fuente autoritativa.",
+        },
+        {
+          type: "table",
+          headers: ["Candidato", "Por qué se descartó", "Fuente"],
+          rows: [
+            [
+              "Trigger before/after sobre ConversationEntry",
+              "triggerable=false en describe de la org. Además Message vacío en 100% de registros consultables (2010 revisados).",
+              "Object Reference v67 + describe empírico en jgr@laila.demo",
+            ],
+            [
+              "Platform Event ConversationEvent como mutador",
+              "Los subscribers Apex son observadores post-commit, nunca mutadores.",
+              "Platform Events Developer Guide",
+            ],
+            [
+              "Omni-Channel 'Post-Response Flow'",
+              "No existe. El único outbound flow documentado es del programa BYOC para escalación humano-agente, no interceptación de contenido.",
+              "developer.salesforce.com/docs/service/messaging-partner",
+            ],
+            [
+              "LiveChatSensitiveDataRule con Replace",
+              "Es del stack Live Chat legado. No hay MessagingChannelSensitiveDataRule en Enhanced.",
+              "Object Reference Summer '26",
+            ],
+            [
+              "Einstein Trust Layer custom filters",
+              "Trust Layer es managed por Salesforce, sin extension points públicos.",
+              "Agentforce Developer Guide",
+            ],
+            [
+              "Agentforce Guardrails post-response",
+              "Los guardrails son controles de diseño (Topic Scope, instructions, filters, Instruction Adherence), no runtime callbacks.",
+              "Trailhead — Understanding Agentforce Guardrails and Trust Patterns",
+            ],
+            [
+              "Composite Invocable Action forzada por prompt",
+              "Action sequencing es explícitamente no-determinístico. Además output no se emite verbatim — Atlas reformula.",
+              "Salesforce Developer Blog 29-jul-2025",
+            ],
+            [
+              "Trigger MessagingSession before/after update para leer Message",
+              "Dispara pero MessagingSession no expone texto del turno — solo cambia Status/Owner/counters.",
+              "Empírico 2026-08-01",
+            ],
+            [
+              "MessagingEndUser trigger",
+              "Solo dispara en primer contacto de un teléfono nuevo. No sirve mid-conversación.",
+              "Empírico 2026-08-01",
+            ],
+            [
+              "ContentDocumentLink after-insert para leer texto del agente",
+              "Solo tiene el binario del usuario, no la respuesta del agente. Sirve para intercepción proactiva del adjunto entrante, no para reescribir salida del agente.",
+              "Empírico 2026-08-01",
+            ],
+          ],
+        },
+      ],
+    },
+    {
+      id: "architecture-hypothesis",
+      eyebrow: "Arquitectura propuesta",
+      title: "Cómo se vería el pipeline si se construyera (HIPÓTESIS)",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Diseño propuesto",
+          text: "Todo lo siguiente es diseño propuesto, NO implementado ni probado.",
+        },
+        {
+          type: "architecture",
+          title: "Pipeline lightweight — sin reemplazar el canal Enhanced",
+          diagram: `
+Meta Cloud API  ──►  Enhanced WhatsApp Channel  (path estándar, sin cambios)
+                              │
+                              ▼
+                     ContentDocument creado  (por AutomatedProcess)
+                              │
+                              ▼
+                     ContentDocumentLink insert
+                     (LinkedEntityType=MessagingSession)
+                              │
+                              ▼   [TRIGGER ANTES DE QUE AGENTFORCE PROCESE EL TURNO]
+        WhatsApp_MediaIntercept_Event__e publica  (Platform Event)
+                              │
+                              ▼
+                     WhatsApp_MediaProcess_Queueable
+                              │
+                              ▼
+                     ConnectApi.EinsteinLLM.generateMessages
+                     (Prompt Template: WhatsApp_Image_Analysis o similar,
+                      GPT-4o vision / Whisper — todo dentro de Salesforce)
+                              │
+                              ▼
+                     Update MessagingSession.AI_Summary__c
+                              │
+                              ▼
+                     [PENDIENTE: cómo hacer que Agentforce vea el resumen
+                      antes de responder, o cómo enviar mensaje sintético
+                      al usuario]
+`,
+          legend: [
+            {
+              label: "AutomatedProcess",
+              description:
+                "User system que Salesforce usa para persistir el flujo de Enhanced Messaging. userId 005KY000002DT8JYAW en la org Laila.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "prompt-builder-in-salesforce",
+      eyebrow: "Modelo dentro de la plataforma",
+      title: "Todo dentro de Salesforce — Prompt Builder + Trust Layer",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Punto de diseño importante — este approach no llama a OpenAI directamente. Prompt Builder de Salesforce ya expone GPT-4o vision (para imágenes y PDFs) y Whisper (para audio) via ConnectApi.EinsteinLLM o via Flow con Prompt Template Action. Trust Layer se aplica automáticamente. Named Credentials no son necesarios para este path.",
+        },
+        {
+          type: "list",
+          items: [
+            "Prompt Template en Prompt Builder — se crea desde Setup → Einstein → Prompt Builder. Soporta 'Sales Email', 'Field Generation', 'Record Summary', 'Flex' — usaremos Flex para input=file.",
+            "Model — se elige entre los conectados a la org via Model Playground. GPT-4o (multimodal) y Whisper son los defaults; también aplican modelos custom si están registrados.",
+            "Invocación — desde Apex con ConnectApi.EinsteinLLM.generateMessages, desde Flow con acción 'Get Response from a Prompt Template', o desde otro topic Agentforce.",
+            "Costo — se contabiliza contra el consumo de créditos Einstein de la org, no contra billing OpenAI directo.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "components-hipotesis",
+      eyebrow: "Componentes",
+      title: "Piezas por construir — pendientes",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "list",
+          items: [
+            "Trigger: WhatsAppMediaInterceptTrigger on ContentDocumentLink (before insert). Detecta LinkedEntityType=MessagingSession, publica Platform Event, retorna sin bloquear.",
+            "Platform Event: WhatsApp_MediaIntercept__e con campos ContentDocumentId__c, MessagingSessionId__c, DetectedAt__c.",
+            "Apex handler: WhatsAppMediaInterceptHandler — suscrito al PE, encola WhatsAppMediaProcessQueueable.",
+            "Apex Queueable: WhatsAppMediaProcessQueueable — descarga ContentVersion, decide tipo (imagen/PDF/audio), invoca Prompt Template via ConnectApi.EinsteinLLM.generateMessages.",
+            "Prompt Templates: WhatsApp_Image_Analysis (Flex), WhatsApp_File_Processing (Flex) — same names as Corona receipes for consistency.",
+            "Write-back opciones (aún por decidir): (a) update MessagingSession.AI_Summary__c y esperar a que Agentforce lo lea via context vars, (b) ConnectApi.EnhancedMessaging.sendMessage para inyectar mensaje sintético directamente al canal, (c) publicar otro PE que dispare un Flow que escale al agente humano.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "tradeoffs-vs-corona",
+      eyebrow: "Comparativa",
+      title: "Lightweight vs bypass completo Corona",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "comparison",
+          standardLabel: "Corona (bypass completo)",
+          customLabel: "Lightweight interception (este approach)",
+          rows: [
+            {
+              dimension: "Cambios al canal",
+              standard:
+                "Reemplaza Enhanced WhatsApp Channel con webhook + Meta directo",
+              custom: "Ninguno — sigue usando Enhanced Channel",
+            },
+            {
+              dimension: "Componentes construidos",
+              standard:
+                "6 objetos custom + ~30 Apex classes + 4 Flows + 2 Platform Events",
+              custom:
+                "1 trigger + 1 Platform Event + 1 Apex handler + 1 Queueable + 2 Prompt Templates",
+            },
+            {
+              dimension: "Compatibilidad con Digital Engagement",
+              standard: "N/A (bypass)",
+              custom: "100% — no interfiere",
+            },
+            {
+              dimension: "Manejo de firma HMAC con Meta",
+              standard: "Cliente responsable la maneja",
+              custom: "Salesforce la maneja (inalterada)",
+            },
+            {
+              dimension: "Escalación a humano",
+              standard: "Custom Apex + custom LWC console",
+              custom: "Omni-Channel Flow estándar sigue funcionando",
+            },
+            {
+              dimension: "Rollback",
+              standard: "Complejo — desactivar múltiples piezas coordinadas",
+              custom: "Simple — desactivar 1 trigger",
+            },
+            {
+              dimension: "Riesgo de romper demos existentes",
+              standard: "Alto durante migración",
+              custom: "Bajo — no toca el path del agente ni Meta",
+            },
+            {
+              dimension: "Estado",
+              standard: "Verificado en producción (Corona)",
+              custom: "Prototipo — NO verificado",
+            },
+            {
+              dimension: "Casos que cubre",
+              standard:
+                "Todos los tipos de adjunto + escalamiento humano avanzado",
+              custom:
+                "Solo el adjunto entrante — la respuesta del agente sigue siendo la que Atlas decide",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "unknowns",
+      eyebrow: "Riesgos",
+      title: "Preguntas abiertas del prototipo",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "list",
+          items: [
+            "¿El trigger CDL BEFORE_INSERT tiene tiempo suficiente para publicar el PE antes de que Agentforce procese el turno? La ventana observada es ~milisegundos. Necesita medición empírica en múltiples cargas.",
+            "¿Actualizar MessagingSession.AI_Summary__c hace que Agentforce lo vea antes de responder al turno? Depende de si Agentforce refresca contexto entre turnos.",
+            "¿Existe API pública para inyectar un mensaje sintético al canal Enhanced sin pasar por el agente? ConnectApi.EnhancedMessaging tiene métodos como sendMessage pero su comportamiento en sesiones con bot activo no está documentado.",
+            "¿El AutomatedProcess user tiene los permisos necesarios para publicar Platform Events y hacer callouts internos (ConnectApi.EinsteinLLM)? Probable que sí para PE, dudoso para EinsteinLLM.",
+            "¿Latencia total del pipeline (CDL insert → PE → Queueable → Prompt Template → write-back)? Meta espera respuesta rápida — si el pipeline toma >2 seg, el usuario ve el error del agente antes de que llegue el resumen.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "next-steps",
+      eyebrow: "Verificación",
+      title: "Qué falta antes de marcar esta receta como verificada",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "Construir el Trigger + Platform Event + Queueable + Prompt Template en sandbox (no en jgr@laila.demo directo).",
+            "Medir latencia end-to-end con 20+ archivos de prueba mixtos (imagen/PDF/audio).",
+            "Probar las 3 opciones de write-back y comparar cuál llega al usuario primero.",
+            "Si el approach funciona: actualizar esta receta a status 'verified' y documentar la solución final. Si falla: documentar por qué y volver al bypass Corona para casos críticos.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "sources",
+      eyebrow: "Fuentes",
+      title: "Referencias consultadas",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "sources",
+          items: [
+            {
+              label:
+                "ConversationEntry Object Reference — 'Message field is blank in enhanced channels'",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_conversationentry.htm",
+            },
+            {
+              label: "Enhanced Messaging schema off-platform",
+              url: "https://developer.salesforce.com/docs/service/messaging-object-model/references/messaging-object-model-conversationEntry/messaging-object-model-conversationentry.html",
+            },
+            {
+              label: "BYOC outbound flow (solo escalación humano)",
+              url: "https://developer.salesforce.com/docs/service/messaging-partner/guide/create-agentforce-service-agent.html",
+            },
+            {
+              label:
+                "Best practices for building Agentforce Apex Actions (action ordering is non-deterministic)",
+              url: "https://developer.salesforce.com/blogs/2025/07/best-practices-for-building-agentforce-apex-actions",
+            },
+            {
+              label: "Understanding Agentforce Guardrails and Trust Patterns",
+              url: "https://trailhead.salesforce.com/content/learn/modules/trusted-agentic-ai/explore-agentforce-guardrails-and-trust-patterns",
+            },
+            {
+              label: "ConnectApi.EinsteinLLM (Prompt Builder invocation)",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_ConnectAPI_EinsteinLLM_static_methods.htm",
+            },
+            {
+              label: "LiveChatSensitiveDataRule (legacy Live Chat only)",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_livechatsensitivedatarule.htm",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+export const buildRecipes: Recipe[] = [
+  whatsappAttachmentsCustom,
+  whatsappV2Handoff,
+  whatsappLightweightInterception,
+];
 
 export function getRecipe(slug: string): Recipe | undefined {
   return buildRecipes.find((r) => r.slug === slug);
