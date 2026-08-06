@@ -30,13 +30,14 @@ type Dict = {
 };
 
 const REGION_HIERARCHY: Record<string, InsightRegion[]> = {
-  LATAM: ["Mexico", "Colombia"],
+  LATAM: ["Mexico", "Colombia", "Centroamérica"],
 };
 
 const REGION_LABEL: Record<InsightRegion, Record<Lang, string>> = {
   LATAM: { es: "LATAM", en: "LATAM", pt: "LATAM" },
   Mexico: { es: "México", en: "Mexico", pt: "México" },
   Colombia: { es: "Colombia", en: "Colombia", pt: "Colômbia" },
+  "Centroamérica": { es: "Centroamérica", en: "Central America", pt: "América Central" },
   Global: { es: "Global", en: "Global", pt: "Global" },
 };
 

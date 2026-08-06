@@ -299,6 +299,11 @@ export const proteccionFamiliarDeliverable: AgentDeliverable = {
             label: "Mensaje de transferencia (verbatim)",
             value: "Espera un momento, te estoy transfiriendo con un humano.",
           },
+          {
+            label: "Receta de handoff",
+            value: "Ver receta paso a paso · Handoff en Agentforce Voice",
+            href: "/es/build-recipes/agentforce-voice-handoff-humano",
+          },
         ],
         topics: [
           {

@@ -5,11 +5,14 @@ function FieldRow({
   label,
   value,
   monospace,
+  href,
 }: {
   label: string;
   value: string;
   monospace?: boolean;
+  href?: string;
 }) {
+  const isExternal = href?.startsWith("http");
   return (
     <div className="grid grid-cols-1 gap-1 border-b border-gray-100 py-3 last:border-b-0 sm:grid-cols-[220px_1fr] sm:items-baseline sm:gap-4">
       <dt className="text-xs font-bold uppercase tracking-[0.16em] text-gray-500">
@@ -20,7 +23,19 @@ function FieldRow({
           monospace ? "font-mono text-[13px] break-all" : ""
         }`}
       >
-        {value}
+        {href ? (
+          <a
+            href={href}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
+            className="inline-flex items-center gap-1.5 rounded-md bg-indigo-50 px-2 py-1 font-medium text-indigo-700 no-underline hover:bg-indigo-100 hover:text-indigo-900"
+          >
+            {value}
+            <span aria-hidden className="text-xs">↗</span>
+          </a>
+        ) : (
+          value
+        )}
       </dd>
     </div>
   );
@@ -68,6 +83,7 @@ export default function AgentSpecPanel({ spec }: { spec: AgentSpecSection }) {
                 label={f.label}
                 value={f.value}
                 monospace={f.monospace}
+                href={f.href}
               />
             ))}
           </dl>
@@ -89,6 +105,7 @@ export default function AgentSpecPanel({ spec }: { spec: AgentSpecSection }) {
                 label={f.label}
                 value={f.value}
                 monospace={f.monospace}
+                href={f.href}
               />
             ))}
           </dl>
@@ -165,6 +182,7 @@ export default function AgentSpecPanel({ spec }: { spec: AgentSpecSection }) {
                 label={f.label}
                 value={f.value}
                 monospace={f.monospace}
+                href={f.href}
               />
             ))}
           </dl>
@@ -245,6 +263,7 @@ export default function AgentSpecPanel({ spec }: { spec: AgentSpecSection }) {
                 label={f.label}
                 value={f.value}
                 monospace={f.monospace}
+                href={f.href}
               />
             ))}
           </dl>

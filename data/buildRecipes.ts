@@ -2506,10 +2506,613 @@ Meta Cloud API  ──►  Enhanced WhatsApp Channel  (path estándar, sin cambi
   ],
 };
 
+const agentforceVoiceHandoffHumano: Recipe = {
+  slug: "agentforce-voice-handoff-humano",
+  title: "Handoff a asesor humano en Agentforce Voice — enrutamiento end-to-end desde el bot hasta la cola",
+  problemOneLiner:
+    "Cuando el bot de Voz llega a su límite, la llamada debe transferirse a un humano sin cortar, sin perder contexto y con enrutamiento por skills.",
+  approach: "hybrid",
+  tags: [
+    "Agentforce Voice",
+    "Handoff",
+    "OmniChannel",
+    "Route Work",
+    "Queue",
+    "Service Presence",
+    "End Action",
+    "Contact Center",
+    "SIP Transfer",
+  ],
+  audiences: ["admin", "developer", "architect"],
+  author: "Jonathan Gomez",
+  authorRole: "Agentforce Enterprise Architect",
+  publishedAt: "2026-08-05",
+  updatedAt: "2026-08-05",
+  readingMinutes: 24,
+  tldr: [
+    "En Agentforce Voice el handoff no es un solo botón: es un contrato entre el .agent (End Action tipo Escalate), un OmniChannelFlow (Route Work) y la operación humana (Service Presence + Queue + Skills).",
+    "Existen dos rutas de transferencia: OmniChannelFlow — se queda dentro de Salesforce, respeta skills y enruta a un Service Agent con la Voice Call cargada; Transfer to Number — sale por SIP a un número o IVR externo y el contexto solo viaja si el trunk lo soporta.",
+    "El path recomendado para casos donde el asesor debe ver la conversación y la Voice Call en Salesforce es OmniChannelFlow con Route Work. La transferencia por número queda reservada para overflow legacy o rutas externas.",
+    "El bot no decide el skill ni el queue: los declara. El OmniChannelFlow es el único punto donde vive la lógica de enrutamiento — routing type, skill matching, priority, fallback queue.",
+    "La receta cubre la configuración completa: Service Presence Status → Presence Configuration → Queue con canal Voice → Skills → OmniChannelFlow → End Action en el .agent → prueba end-to-end. Cada paso lleva placeholder de screenshot.",
+  ],
+  sections: [
+    {
+      id: "problem",
+      eyebrow: "El problema",
+      title: "Por qué el handoff en Voz merece receta propia",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "problem",
+          symptom:
+            "El agente de Voz llega a un punto donde debe transferir. El cliente termina en un beep, la llamada cae al IVR general, o el asesor humano contesta sin ver el registro de la Voice Call ni la transcripción parcial. En algunos casos, la llamada se cuelga silenciosamente porque no hay agente disponible con el skill correcto y no se definió fallback.",
+          rootCause:
+            "En Agentforce Voice, la escalación es una coreografía de tres piezas que trabajan por separado: (a) el .agent debe declarar el End Action correcto y pasar el contexto adecuado, (b) el OmniChannelFlow debe existir y estar publicado con la lógica de Route Work, (c) la operación humana (Presence Status, Presence Configuration, Queue, Skills, licencias) debe estar lista para aceptar la llamada. Si cualquiera falla, la llamada muere.",
+          impact:
+            "Sin un handoff limpio, el ROI del agente de Voz colapsa: cada caso que no puede contener genera una segunda llamada del cliente o un ticket manual, más el costo de reputación de cortar la conversación. Además pierde la promesa central del canal: escalación con contexto, no reinicio.",
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "A quién le sirve esta receta",
+          text: "Admins que configuran Agentforce Voice por primera vez, developers que deben conectar el .agent con un OmniChannelFlow existente, y arquitectos que necesitan decidir entre OmniChannelFlow vs Transfer to Number para un cliente específico. Cubre la ruta principal (OmniChannelFlow) paso a paso y documenta la alternativa (Transfer to Number) para el caso legacy.",
+        },
+      ],
+    },
+
+    {
+      id: "conceptos",
+      eyebrow: "Conceptos",
+      title: "Las piezas que juegan en un handoff de Voz",
+      peek: "Antes del step-by-step: qué es cada pieza, qué hace, y por qué no puedes saltártela.",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Un handoff limpio en Agentforce Voice no lo resuelve una sola configuración. Es una cadena de siete piezas — algunas del bot, otras del canal, otras de la operación humana. Si entiendes lo que hace cada una, el step-by-step se vuelve mecánico.",
+        },
+        {
+          type: "concept",
+          title: "1. El .agent y el End Action tipo Escalate",
+          peek: "El bot no transfiere; declara que quiere transferir. La ejecución vive fuera.",
+          blocks: [
+            {
+              type: "paragraph",
+              text: "En Agent Script (DSL v2 de los .agent) existen los End Actions: acciones terminales que un topic puede invocar para cerrar la interacción. Escalate es uno de ellos, y su semántica es única en Voz: no responde texto al cliente y no cierra sesión — le entrega el control al canal (Voice) para que resuelva la transferencia según el routing configurado.",
+            },
+            {
+              type: "list",
+              items: [
+                "El End Action Escalate se declara en un topic (por ejemplo, 'Escalación a humano') y se ejecuta cuando el planner decide que ese topic aplica.",
+                "El .agent puede pasar variables de contexto (intent detectado, sentimiento, campos capturados) que el OmniChannelFlow lee vía CurrentSession o via el Voice Call record.",
+                "El mensaje verbatim que se le da al cliente antes de transferir (‘Espera un momento, te estoy transfiriendo con un humano’) NO va en el End Action — va como respuesta previa del bot dentro del mismo turn.",
+              ],
+            },
+            {
+              type: "callout",
+              tone: "warning",
+              title: "El End Action no es opcional",
+              text: "Si el bot solamente dice 'te voy a transferir' sin invocar el End Action, la llamada se queda con el bot esperando input del cliente. La transferencia solo ocurre cuando Escalate se ejecuta en el runtime del agente.",
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "2. OmniChannelFlow — Route Work",
+          peek: "El único lugar donde vive la lógica de enrutamiento: routing type, skills, priority, fallback.",
+          audience: ["admin", "developer", "architect"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Un OmniChannelFlow es un Flow con trigger OmniChannel. Recibe el work item (en Voz, una Voice Call en curso), evalúa condiciones y usa la Route Work action (Standard Action del Flow) para enrutar a un Queue, User o Skill Set. Es el reemplazo moderno de las Routing Configurations manuales.",
+            },
+            {
+              type: "list",
+              items: [
+                "Routing Type: 'Queue-Based Routing' (más común), 'Skill-Based Routing' (matching por skills), o 'Direct to Agent'.",
+                "Priority: número que compite contra otros items en la misma cola. Menor = más urgente.",
+                "Fallback: si no hay agente con match en X segundos, se puede rerroutear a otra Queue o notificar. Se implementa con branches del Flow.",
+                "Context: el Flow tiene acceso al RecordId de la Voice Call. Desde ahí puede leer transcripción, campos captados por el bot, y datos del Contact/Case relacionado.",
+              ],
+            },
+            {
+              type: "callout",
+              tone: "info",
+              title: "Un solo flow, N agents",
+              text: "Un mismo OmniChannelFlow puede ser reutilizado por varios agentes de Voz. La escalación en el .agent lo referencia por API Name. Recomendamos un flow por producto/vertical (ej. 'Voice_Escalate_Proteccion_Familiar'), no uno por agente.",
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "3. Service Presence Status",
+          peek: "Estados de presencia que declaran qué canales atiende un asesor en cada momento.",
+          audience: ["admin"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Antes de que un asesor pueda recibir una llamada de Voice, necesita un Presence Status habilitado que incluya el Service Channel ‘Voice Call’. Sin eso, aunque esté logueado y en la cola, OmniChannel no le enrutará la llamada porque no la considera 'disponible para Voz'.",
+            },
+            {
+              type: "list",
+              items: [
+                "Se crean desde Setup → Service Presence Statuses → New.",
+                "Cada Status declara qué Service Channels acepta. Para Voz debe incluir el channel ‘sfdc_voice’ (o el custom equivalente si el Contact Center usa uno propio).",
+                "Los Presence Statuses se asocian al usuario vía Permission Set — no directamente al User.",
+              ],
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "4. Presence Configuration",
+          peek: "Cuántas conversaciones/llamadas paralelas puede atender un asesor y su Capacity.",
+          audience: ["admin"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "La Presence Configuration define la capacidad de un asesor: cuántos work items puede atender simultáneamente y cuánto pesa cada uno. Para Voz, la práctica estándar es capacity 100 con la Voice Call pesando 100 — es decir, mientras está en llamada no recibe nada más.",
+            },
+            {
+              type: "list",
+              items: [
+                "Setup → Presence Configurations → New.",
+                "Capacity total (por default 100). Voice Call debe pesar suficiente para bloquear otras asignaciones mientras habla — típicamente 100.",
+                "Asigna Users o Profiles a la Configuration. Los cambios impactan a las próximas asignaciones, no a las activas.",
+              ],
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "5. Queue con canal Voice Call",
+          peek: "La cola destino. Debe tener 'Voice Call' declarado como Supported Object.",
+          audience: ["admin"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Una Queue en Salesforce es un grupo de usuarios que puede recibir work items compartidos. Para que un OmniChannelFlow pueda hacer Route Work → Queue en Voz, la Queue debe declarar 'Voice Call' como Supported Object.",
+            },
+            {
+              type: "list",
+              items: [
+                "Setup → Queues → New. Nombre visible (Queue_ProteccionFamiliar_Voice), DeveloperName sin espacios, agregar Voice Call en Supported Objects.",
+                "Agregar Members: Users individuales, Public Groups, Roles, Roles y Subordinados. Para Voz normalmente son Users individuales del contact center.",
+                "Asignar Skills a la Queue si vas a usar Skill-Based Routing (opcional, pero recomendado en operaciones grandes).",
+              ],
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "6. Skills (opcional pero recomendado)",
+          peek: "Etiquetas por asesor que permiten routing por match, no solo por queue.",
+          audience: ["admin", "architect"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Los Skills son etiquetas asignables a Users. En un Skill-Based Routing, el OmniChannelFlow declara los skills requeridos y OmniChannel busca al asesor disponible con match. Es especialmente útil cuando la cola tiene asesores generalistas y especialistas, o cuando el idioma/vertical importa.",
+            },
+            {
+              type: "list",
+              items: [
+                "Setup → Skills → New. Ejemplos: 'Español', 'Producto Protección Familiar', 'Escalación Nivel 2'.",
+                "Asignar skills a los Users desde el registro del User (Related List: Skills).",
+                "En el OmniChannelFlow, la Route Work action acepta un input 'Requested Skills' (una List de Skill Ids) y un 'Skill Matching Type' (All / Any).",
+              ],
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "7. Contact Center y Voice Configuration",
+          peek: "El paraguas donde vive todo lo de Voz: número, IVR, integración con proveedor.",
+          audience: ["admin", "architect"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "El Contact Center es la unidad organizativa que agrupa toda la configuración de Voz de un tenant: SIP trunk o proveedor (Amazon Connect, Service Cloud Voice provider partner), números asignados, agentes, y la Flow de arranque de llamada. El agente de Voz de Agentforce se despliega dentro de un Contact Center y su handoff termina llegando a asesores del mismo Contact Center.",
+            },
+            {
+              type: "list",
+              items: [
+                "El Contact Center debe estar creado y activo. Setup → Contact Centers.",
+                "Los asesores humanos deben estar asignados al Contact Center para recibir llamadas.",
+                "El número asignado al agente de Voz apunta a un Voice Call flow que — en la primera etapa — invoca al bot. Cuando el bot ejecuta End Action Escalate, el mismo canal enruta con el OmniChannelFlow declarado en el agente.",
+              ],
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: "comparison",
+      eyebrow: "Comparativa",
+      title: "OmniChannelFlow vs Transfer to Number — cuándo cada uno",
+      peek: "Dos caminos posibles. Los diferencia dónde vive el contexto y quién controla el enrutamiento.",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "comparison",
+          standardLabel: "OmniChannelFlow (Route Work)",
+          customLabel: "Transfer to Number (SIP)",
+          rows: [
+            {
+              dimension: "Dónde vive la llamada después de la transferencia",
+              standard:
+                "Dentro de Salesforce. El asesor recibe la Voice Call en OmniChannel Widget con todo el contexto: Voice Call record, transcripción parcial del bot, Contact/Case relacionado.",
+              custom:
+                "Sale por SIP al número/IVR externo. Salesforce pierde control de la llamada — el contexto solo viaja si el trunk soporta SIP headers custom o el proveedor destino puede consumir un webhook previo.",
+            },
+            {
+              dimension: "Contexto para el asesor humano",
+              standard:
+                "Completo. El asesor abre el registro Voice Call y ve todo: transcripción del bot, campos capturados, sentimiento detectado, timeline del turno.",
+              custom:
+                "Prácticamente nulo. El asesor recibe una llamada 'de la nada' y debe re-preguntar todo. Rompe la promesa de handoff limpio.",
+            },
+            {
+              dimension: "Lógica de enrutamiento",
+              standard:
+                "Visual — vive en el OmniChannelFlow. Condiciones, skills, priority, fallback, tudo declarativo.",
+              custom:
+                "Hardcoded — el número destino queda embebido en la config. Cambiarlo requiere edit del agente. No hay skill matching.",
+            },
+            {
+              dimension: "Reintentos y fallback",
+              standard:
+                "Nativos. Si no hay agente en X segundos, un branch del Flow puede rerroutear a otra Queue, mandar notification, o pasar a IVR.",
+              custom:
+                "Depende del PBX destino. Salesforce ya no orquesta después de completar la transferencia.",
+            },
+            {
+              dimension: "Reportes y trazabilidad",
+              standard:
+                "Nativos en Salesforce. La Voice Call queda con owner=User asignado, tiempo de espera, hold time, IsAcceptedByAgent.",
+              custom:
+                "Salesforce solo registra 'transferida a número X hh:mm'. El resto vive en el sistema del PBX destino.",
+            },
+            {
+              dimension: "Skill Matching",
+              standard:
+                "Sí — Route Work acepta Requested Skills y matching type All/Any.",
+              custom:
+                "No aplica. El match depende del ACD del destino.",
+            },
+            {
+              dimension: "Casos donde tiene sentido",
+              standard:
+                "El default. Cualquier operación que quiera capitalizar el contexto del bot y tener reportes/dashboards de handoff dentro de Salesforce.",
+              custom:
+                "Overflow a IVR legacy que no está en Salesforce, redirección a un partner externo, o fallback de última milla cuando la operación interna está saturada.",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Regla de decisión rápida",
+          text: "¿El asesor humano vive en Salesforce y quieres que vea la conversación del bot? OmniChannelFlow. ¿El destino es un IVR o PBX externo? Transfer to Number. La receta cubre OmniChannelFlow en detalle; para Transfer to Number el patrón general es idéntico salvo el paso 6 (End Action) — donde el .agent declara el número destino en vez del OmniChannelFlow.",
+        },
+      ],
+    },
+
+    {
+      id: "architecture",
+      eyebrow: "Arquitectura",
+      title: "El ciclo completo — de la llamada del cliente al asesor conectado",
+      peek: "Diagrama de las piezas y sus mensajes. Léelo antes del step-by-step.",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "architecture",
+          title: "Handoff Agentforce Voice → OmniChannel → Asesor",
+          diagram: `
+Cliente marca al número del Contact Center
+                │
+                ▼
+       Voice Call flow inicial ──►  Agentforce Voice Bot
+                                          │
+                                          │  (planner evalúa turno)
+                                          │
+                                    ┌─────┴─────┐
+                                    │           │
+                        (bot puede resolver)   (escalar)
+                                    │           │
+                                    ▼           ▼
+                            Continúa turno   Topic "Escalación a humano"
+                                                │
+                                                ▼
+                                         End Action · Escalate
+                                                │
+                                                ▼
+                                     OmniChannelFlow (Route Work)
+                                                │
+                                    ┌───────────┴───────────┐
+                                    │                       │
+                          Queue destino               (fallback branch)
+                          + Requested Skills          si no hay match
+                                    │                       │
+                                    ▼                       ▼
+                        Presence Configuration       Otra Queue / IVR
+                        + Presence Status
+                                    │
+                          Asesor disponible con
+                          Presence Status "Available for Voice"
+                          y skill match
+                                    │
+                                    ▼
+                          OmniChannel Widget · alerta al asesor
+                                    │
+                          (asesor Accept)
+                                    │
+                                    ▼
+                          Voice Call reasignada
+                          Owner = User (asesor)
+                          Asesor ve: transcripción parcial,
+                          campos capturados, Contact, Voice Call record
+`,
+          legend: [
+            {
+              label: "End Action · Escalate",
+              description:
+                "Acción terminal declarada en el topic del .agent. No responde texto — invoca el runtime del canal Voice para que ejecute el OmniChannelFlow declarado.",
+            },
+            {
+              label: "OmniChannelFlow",
+              description:
+                "Flow con trigger OmniChannel. Único punto donde vive la lógica de routing (Queue/Skill/Priority/Fallback).",
+            },
+            {
+              label: "Presence Status + Configuration",
+              description:
+                "Combinación que decide si un asesor puede recibir una Voice Call en un momento dado. Ambas deben incluir el canal Voice.",
+            },
+            {
+              label: "Owner reasignado",
+              description:
+                "Al aceptar, la Voice Call queda con OwnerId = asesor. A partir de ese momento el reporting nativo dice la verdad.",
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: "step-by-step",
+      eyebrow: "Guía paso a paso",
+      title: "Cómo configurar el handoff — 9 pasos secuenciales",
+      peek: "Orden importa: la operación humana antes que el flow, el flow antes que el agente.",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "callout",
+          tone: "info",
+          title: "Prerrequisitos",
+          text: "Org con Agentforce habilitado + Service Cloud Voice + Contact Center activo con proveedor configurado. Licencias: Service Cloud Voice para asesores, Einstein Agent User para el bot. Agente de Voz ya publicado y accesible por número de prueba.",
+        },
+        {
+          type: "setupStep",
+          number: 1,
+          title: "Crear el Service Presence Status para Voz",
+          instructions:
+            "Setup → Service Presence Statuses → New. Label: 'Disponible para Voz'. Developer Name: 'Available_For_Voice'. Status Option: Online. En Service Channels agregar 'Voice Call' (channel developer name: sfdc_voice). Guardar.",
+          screenshotPlaceholder: {
+            caption:
+              "Setup → Service Presence Statuses → new status 'Available for Voice' con channel Voice Call agregado (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 2,
+          title: "Crear la Presence Configuration",
+          instructions:
+            "Setup → Presence Configurations → New. Label: 'Contact Center Voice'. Capacity: 100. En Assigned Users agregar los Users (o Profiles) del contact center. Guardar. Luego editar y en Assigned Presence Statuses agregar 'Disponible para Voz'.",
+          screenshotPlaceholder: {
+            caption:
+              "Presence Configuration 'Contact Center Voice' con capacidad 100 y Presence Status asignado (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 3,
+          title: "Crear (o preparar) la Queue destino con canal Voice",
+          instructions:
+            "Setup → Queues → New. Label: 'Cola Protección Familiar Voz'. Developer Name: 'Queue_ProteccionFamiliar_Voice'. En Supported Objects agregar 'Voice Call'. En Queue Members agregar los Users que deben recibir escalaciones de este agente. Guardar.",
+          screenshotPlaceholder: {
+            caption:
+              "Queue con Voice Call declarado como Supported Object y Users agregados (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 4,
+          title: "Crear Skills (opcional, si vas a usar Skill-Based Routing)",
+          instructions:
+            "Setup → Skills → New. Ejemplos: 'Español', 'Producto Protección Familiar', 'Escalación N2'. Luego, en cada User que debe recibir handoff, ir al registro y agregar los Skills en la related list.",
+          screenshotPlaceholder: {
+            caption:
+              "Skills creados y asignados a Users del contact center (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 5,
+          title: "Construir el OmniChannelFlow",
+          instructions:
+            "Flow Builder → New Flow → OmniChannel Flow. Object: Voice Call. En el start element se recibe implícitamente el RecordId de la Voice Call. Agregar action 'Route Work': Routing Type = Queue-Based (o Skill-Based), Queue Id = Id de 'Queue_ProteccionFamiliar_Voice', Priority = 1, Push Timeout = 30 segundos. Opcional: agregar branch de fallback para rerroutear si no hay agente en X segundos. Guardar como 'Voice_Escalate_ProteccionFamiliar' y activar.",
+          screenshotPlaceholder: {
+            caption:
+              "Flow Builder mostrando el OmniChannelFlow con Route Work configurado (Queue + Priority + Push Timeout) (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 6,
+          title: "Declarar el End Action Escalate en el .agent",
+          instructions:
+            "Abrir el bundle del .agent en VS Code (Agent Script DSL v2). En el topic de escalación (ej. 'Escalación a humano') agregar el End Action: endAction: escalate con parameter omniFlowApiName='Voice_Escalate_ProteccionFamiliar'. Antes del End Action, el bot debe emitir el mensaje verbatim al cliente ('Espera un momento, te estoy transfiriendo con un humano'). Guardar. Publicar y activar el bundle.",
+          command: `sf agent validate authoring-bundle --json --api-name ProteccionFamiliarVoice
+sf agent publish authoring-bundle --json --api-name ProteccionFamiliarVoice --skip-retrieve
+sf agent activate --json --api-name ProteccionFamiliarVoice`,
+          screenshotPlaceholder: {
+            caption:
+              "Vista del .agent en Agent Builder mostrando el topic 'Escalación a humano' con End Action Escalate y el OmniChannelFlow referenciado (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 7,
+          title: "Asignar el Permission Set / Presence al asesor",
+          instructions:
+            "Cada asesor humano necesita: (a) licencia Service Cloud Voice asignada, (b) el Permission Set del Contact Center, (c) acceso a la Presence Configuration (asignada al Profile o directamente al User), (d) el Presence Status 'Disponible para Voz' habilitado. Verificar login al Service Console con OmniChannel Widget visible y estado 'Disponible para Voz' seleccionable.",
+          screenshotPlaceholder: {
+            caption:
+              "Service Console con OmniChannel Widget abierto y el asesor en estado 'Disponible para Voz' (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 8,
+          title: "Prueba end-to-end del handoff",
+          instructions:
+            "Con al menos un asesor logueado en el Service Console y en estado 'Disponible para Voz': marcar al número del agente desde un teléfono de prueba. Conversar hasta forzar el topic de escalación. Verificar (a) el bot dice el mensaje verbatim de transferencia, (b) el asesor recibe alerta en OmniChannel Widget en menos de los segundos configurados en Push Timeout, (c) al aceptar, el asesor recibe la llamada y ve el Voice Call record con transcripción parcial y campos capturados.",
+          screenshotPlaceholder: {
+            caption:
+              "Timeline de la Voice Call con turno del bot, escalación, y aceptación del asesor humano (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 9,
+          title: "Instrumentar métricas de handoff",
+          instructions:
+            "Crear reportes sobre Voice Call filtrando IsAcceptedByAgent, TimeToRoute, TimeInQueue, HoldTime. Recomendamos KPIs: 'Tasa de handoff exitoso' (aceptado / escalados), 'Tiempo promedio hasta aceptación', 'Tasa de fallback' (llamadas que cayeron en branch de fallback por no encontrar agente).",
+          screenshotPlaceholder: {
+            caption:
+              "Dashboard con métricas de handoff (tasa de aceptación, TTA, fallback) (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+      ],
+    },
+
+    {
+      id: "troubleshoot",
+      eyebrow: "Troubleshooting",
+      title: "Los errores más comunes y cómo diagnosticarlos",
+      peek: "Si algo se rompe, generalmente es uno de estos 6 escenarios.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "troubleshoot",
+          rows: [
+            {
+              issue:
+                "El bot dice 'te estoy transfiriendo' pero la llamada se queda muda, luego cuelga.",
+              solution:
+                "El End Action Escalate no está declarado en el topic, o el bundle .agent no está publicado con la última versión. Verificar en Agent Builder que el topic activo incluye el End Action; publicar y activar de nuevo.",
+            },
+            {
+              issue:
+                "El End Action se ejecuta pero la llamada nunca llega al asesor.",
+              solution:
+                "El OmniChannelFlow no está activo o el API Name declarado en el .agent no coincide. Verificar en Setup → Flows que el Flow está en estado 'Active'. Confirmar en el .agent que omniFlowApiName es idéntico al Flow API Name.",
+            },
+            {
+              issue:
+                "El Flow existe y está activo pero la Route Work falla con 'No agents available'.",
+              solution:
+                "Ningún asesor tiene Presence Status compatible con el channel Voice Call. Revisar: (a) la Queue tiene 'Voice Call' en Supported Objects, (b) los Users son Members de la Queue, (c) los Users tienen el Presence Status 'Disponible para Voz' habilitado y seleccionado en el OmniChannel Widget.",
+            },
+            {
+              issue:
+                "El asesor recibe la llamada pero el registro Voice Call viene vacío, sin transcripción.",
+              solution:
+                "El Contact Center no tiene habilitada la Voice Transcription en tiempo real, o el proveedor de Voice no la soporta. Verificar en la configuración del Contact Center la sección 'Transcription' y la licencia del proveedor.",
+            },
+            {
+              issue:
+                "El match por skills no funciona — la llamada la agarra cualquier asesor.",
+              solution:
+                "Skill-Based Routing requiere que la Route Work action tenga (a) Routing Type='Skills-Based', (b) Requested Skills poblado con Ids de Skill, y (c) los Users deben tener esos Skills asignados. Si la Queue tiene skills asignados pero el Flow usa Queue-Based Routing, los skills se ignoran.",
+            },
+            {
+              issue:
+                "La llamada se transfiere pero el Owner del Voice Call sigue siendo el bot user.",
+              solution:
+                "Se completó Route Work pero el asesor no le hizo Accept. Verificar en el OmniChannel Widget que la alerta apareció y que el asesor la aceptó. Sin Accept, OmniChannel no cambia el Owner.",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Logs para investigar",
+          text: "Para el .agent: Agent Trace (Setup → Agent Studio → Agent → Traces). Para el Flow: Debug Logs con la categoría Workflow en FINE. Para OmniChannel: Setup → OmniChannel → OmniChannel Debug Log. Los tres juntos cuentan el ciclo completo cuando algo falla.",
+        },
+      ],
+    },
+
+    {
+      id: "sources",
+      eyebrow: "Fuentes",
+      title: "Documentación oficial y referencias",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "sources",
+          items: [
+            {
+              label: "Agentforce Service Agent Setup — Voice",
+              url: "https://help.salesforce.com/s/articleView?id=service.miaw_agent_setup.htm",
+            },
+            {
+              label: "Agent Script DSL — End Actions (Escalate)",
+              url: "https://developer.salesforce.com/docs/einstein/genai/guide/agent-dsl-end-actions.html",
+            },
+            {
+              label: "OmniChannel Flow — Route Work Standard Action",
+              url: "https://help.salesforce.com/s/articleView?id=service.omnichannel_flow_route_work.htm",
+            },
+            {
+              label: "Service Presence Statuses",
+              url: "https://help.salesforce.com/s/articleView?id=service.presence_statuses_create.htm",
+            },
+            {
+              label: "Presence Configurations",
+              url: "https://help.salesforce.com/s/articleView?id=service.presence_configurations_create.htm",
+            },
+            {
+              label: "Skill-Based Routing in OmniChannel",
+              url: "https://help.salesforce.com/s/articleView?id=service.omnichannel_skills_routing.htm",
+            },
+            {
+              label: "Service Cloud Voice — Contact Center Setup",
+              url: "https://help.salesforce.com/s/articleView?id=service.voice_setup_contact_center.htm",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 export const buildRecipes: Recipe[] = [
   whatsappAttachmentsCustom,
   whatsappV2Handoff,
   whatsappLightweightInterception,
+  agentforceVoiceHandoffHumano,
 ];
 
 export function getRecipe(slug: string): Recipe | undefined {

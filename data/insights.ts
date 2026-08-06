@@ -44,7 +44,7 @@ export type InsightSection = {
 
 export type InsightAudience = "executive" | "architect" | "deep";
 
-export type InsightRegion = "LATAM" | "Mexico" | "Colombia" | "Global";
+export type InsightRegion = "LATAM" | "Mexico" | "Colombia" | "Centroamérica" | "Global";
 
 export type Insight = {
   slug: string;
@@ -3509,6 +3509,607 @@ const retailAiColombia: Insight = {
   ],
 };
 
+const retailAiCentroamerica: Insight = {
+  slug: "retail-ia-centroamerica-salesforce",
+  topic: "IA en Retail",
+  audience: ["executive", "architect", "deep"],
+  industry: ["Retail"],
+  products: ["Agentforce", "Commerce Cloud", "Data Cloud", "Marketing Cloud", "Service Cloud"],
+  region: ["Centroamérica", "LATAM"],
+  heroEyebrow: "Postura de industria · Retail & IA · Centroamérica",
+  title:
+    "IA en la industria Retail de Centroamérica: del mandato global al momento CA-6 con Salesforce",
+  subtitle:
+    "Hacia dónde va la industria retail bajo la ola de agentic AI, cómo se está redistribuyendo el liderazgo entre los retailers que adoptaron IA a tiempo y qué debe hacer un retailer centroamericano hoy para capitalizar una región de USD 388B con inclusión financiera despegando y consumo digital acelerando. Escrito desde la mirada de un especialista en CG Cloud & Retail para CA-6.",
+  summary:
+    "Entramos a 2026 con la IA agentica como prioridad ejecutiva #1 del retail global — 91% de los CIOs de la industria (Gartner) y 75% de los retailers (Salesforce Connected Shoppers Report) la consideran esencial. Amazon superó a Walmart como #1 retailer de EE.UU. por primera vez en décadas gracias a su stack de IA y datos. Centroamérica llega a este punto como una región de USD 388B de PIB combinado (Banco Mundial 2024) con dinámicas propias: 952 tiendas Walmart operando en CA-5 (Walmart Corp, abril 2026), PriceSmart con 57 clubes multi-país y una brecha estructural de bancarización (Costa Rica y Panamá cerca del 65–72% de adultos con cuenta, mientras Nicaragua sigue en 23% y Guatemala en 38% — WB Findex 2024). Panamá saltó de 45% a 64% de adultos bancarizados en tres años, el mayor salto de inclusión financiera de la región. WhatsApp sigue siendo el canal transaccional dominante en toda la región. En ese contexto, Salesforce empaquetó su respuesta bajo Agentforce 360 for Retail: un stack unificado — Commerce, Service, Marketing, Data 360, Retail Cloud con Modern POS — con métricas duras verificables en Pandora (60% deflection, +10 NPS), SharkNinja (+6% conversión, 20K chats/sem), Williams-Sonoma (7,5 meses, 21M suscriptores) y Fisher & Paykel (+33% conversión).",
+  author: "Pablo Hernández",
+  authorRole: "Sales Specialist CG Cloud & Retail Centroamérica",
+  publishedAt: "2026-08-06",
+  updatedAt: "2026-08-06",
+  readingMinutes: 30,
+  tags: [
+    "Retail",
+    "IA generativa",
+    "Agentic AI",
+    "Centroamérica",
+    "CA-6",
+    "LATAM",
+    "Agentforce",
+    "Commerce Cloud",
+    "Data 360",
+    "Omnicanalidad",
+    "WhatsApp Commerce",
+  ],
+  coverImage: {
+    src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
+    alt: "Agentforce 360 sobre Data 360 y Customer 360: el stack agentico completo aplicado a retail.",
+    source: {
+      label: "Salesforce · Agentforce platform overview",
+      url: "https://www.salesforce.com/agentforce/",
+    },
+  },
+  externalDeckUrl: "/presentations/retail-ia-centroamerica-ted.html",
+  externalDeckLabel: "Presentación ejecutiva · 20 min",
+  presenterDeckRoute: "deck-ted",
+  presenterDeckLabel: "Modo presentador",
+  sections: [
+    {
+      id: "resumen-ejecutivo",
+      eyebrow: "Statement ejecutivo",
+      title: "La tesis en una página",
+      blocks: [
+        {
+          type: "statement",
+          text: "La industria retail entró en la fase donde la IA dejó de ser diferenciador y pasó a ser condición de supervivencia. El 91% de los CIOs de retail (Gartner) y el 75% de los retailers (Salesforce Connected Shoppers Report) declaran que los agentes de IA son esenciales para 2026. Amazon superó a Walmart como #1 retailer de EE.UU. gracias a su stack de IA y datos. En Centroamérica, con una economía combinada de USD 388B (Banco Mundial 2024), 952 tiendas Walmart en CA-5 (Walmart Corp, abr-2026), PriceSmart consolidado en la región y un salto de bancarización sin precedentes en Panamá (45% → 64% en tres años, WB Findex 2024), la ventana para adoptar IA con retorno claro se acaba de abrir — y la brecha entre los que se movieron (multinacionales operando Walmart CA, PriceSmart, cadenas regionales de Unicomer y Grupo Q) y el resto se ensancha cada trimestre. Salesforce respondió con Agentforce 360 for Retail: Commerce + Service + Marketing + Data 360 + Modern POS sobre un solo modelo de datos, con Trust Layer nativo, Zero Copy hacia el data lake que el retailer ya tiene y agentes retail-tuned (Personal Shopper, Merchandiser, Buyer, Service, Help). Los casos con métricas duras públicas — Pandora, SharkNinja, Williams-Sonoma — muestran que la promesa se materializa cuando el stack está unificado, no cuando la IA se compra por piezas.",
+        },
+        {
+          type: "paragraph",
+          text: "Este documento está escrito desde la mirada de un Sales Specialist en CG Cloud & Retail para Centroamérica y dirigido a usted como responsable de la decisión — CEO, CIO, CDO, VP Comercial, Director de CX o de Tecnología. No es una defensa de una plataforma: es una lectura consultiva del momento que vive la industria, con datos verificables de fuentes de primera confiabilidad (Gartner, Forrester, McKinsey, Banco Mundial, WB Global Findex 2024, Walmart Corporate, PriceSmart Investor Relations, BCCR, SIECA, cartas al accionista de Amazon y Walmart, y páginas oficiales de Salesforce) y una postura clara sobre qué debe hacer hoy un retailer centroamericano — sea de Guatemala, El Salvador, Honduras, Nicaragua, Costa Rica o Panamá — para capitalizar la ola de IA con retorno defendible en 12–24 meses.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Formatos disponibles",
+          text: "Este insight tiene dos formatos complementarios. (1) La presentación ejecutiva de 20 min — charla estilo TED para audiencias de CEO / CMO / CFO — construida con Inspiration → Information → Inspiration y transición a demo conducida por el mismo speaker. Se puede abrir pública (para la audiencia y para descargar) o en modo presentador con notas embebidas. (2) Este documento extenso funciona como material de referencia — el deep dive con desglose de soluciones, casos verificables y hoja de ruta para comité ejecutivo.",
+        },
+      ],
+    },
+    {
+      id: "estado-global",
+      eyebrow: "Parte 1 · Estado global",
+      title: "Dónde está la industria retail hoy y por qué la IA ya no espera",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La industria retail vive un punto de inflexión. Después de dos años de pilotos de IA generativa, 2026 es el año donde los retailers que adoptaron temprano están cosechando ventaja competitiva medible — y donde los que se quedaron mirando empiezan a pagar la factura. Los datos que siguen no son marketing: son la lectura consolidada de Gartner, Forrester, McKinsey, Salesforce Connected Shoppers Report, cartas al accionista de Amazon y Walmart, y comunicados oficiales.",
+        },
+        {
+          type: "kpis",
+          items: [
+            { value: "91%", label: "CIOs de retail que priorizan IA como su tecnología #1 para 2026 (Gartner)" },
+            { value: "75%", label: "Retailers que consideran los AI agents esenciales para 2026 (Salesforce)" },
+            { value: "88%", label: "Retailers que dicen que unified commerce impactará significativamente sus objetivos" },
+            { value: "$234B", label: "Gasto en software empresarial en riesgo por disrupción de agentic AI (Gartner)" },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Cinco frentes donde la IA está generando ventaja hoy",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Frente 1",
+              title: "Personalización hiper-contextual",
+              description:
+                "El descubrimiento migra de la búsqueda tradicional a la conversación: 53% de los consumidores ya descubre productos en canales sociales y agénticos (vs 46% en 2023). Los retailers ganadores unifican perfil, contexto de sesión, historial de compra y stock en tiempo real para servir la oferta correcta en el canal correcto.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Frente 2",
+              title: "Servicio al cliente autónomo",
+              description:
+                "Gartner proyecta que para 2029 el 80% de las consultas comunes de servicio se resolverán con agentes AI sin humano, con -30% en costos operativos. Los casos ya en producción hoy (Pandora 60% deflection, SharkNinja 20K chats/semana automatizados) muestran que la promesa es real cuando el agente está grounded en datos de negocio.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Frente 3",
+              title: "Forecasting, precios y merchandising",
+              description:
+                "Amazon Same-Day de perishables creció 40x apoyado en forecasting AI. Home Depot desplegó Magic Apron (DIY) y Blueprint Takeoffs (Pros). Walmart desplegó AI copilots a 750,000 asociados. La IA se corre profundo en la operación, no solo en la vitrina.",
+              tone: "violet",
+            },
+            {
+              eyebrow: "Frente 4",
+              title: "Operaciones de tienda y última milla",
+              description:
+                "Amazon opera 1 millón+ de robots en fulfillment centers, superó a USPS/FedEx/UPS como mayor carrier de EE.UU. en 2025 con ~13,000 millones de paquetes/año, y Sam's Club eliminó el checkout de salida con computer vision. La ventaja física ahora se construye con IA.",
+              tone: "neutral",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "La otra cara: >40% de los proyectos agentic se cancelarán",
+          text: "Gartner alertó (junio 2025) que más del 40% de los proyectos agentic AI serán cancelados antes de fin de 2027 por costos escalantes, ROI no probado y controles de riesgo insuficientes. Esta cifra no debería frenar la adopción — debería obligarla a diseñarse con métricas de negocio desde el día uno, arquitectura de gobernanza clara y un plan de retiro para casos que no muestren valor en 6 meses. El error no es adoptar IA: es adoptarla sin marco de decisión.",
+        },
+      ],
+    },
+    {
+      id: "latam",
+      eyebrow: "Parte 2 · Latinoamérica",
+      title: "Cómo aterriza esta ola en Latinoamérica",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Latinoamérica no es una versión atrasada del mercado norteamericano — es un mercado distinto con dinámicas propias. Aquí la IA se adopta bajo condiciones que en EE.UU. no existen: informalidad económica alta, bancarización parcial, WhatsApp como canal transaccional dominante y una red de comercio de proximidad (bodegas, pulperías, tiendas de conveniencia, farmacia regional) sin paralelo. Entender esas diferencias es lo que separa una estrategia con retorno de una réplica costosa que no aterriza.",
+        },
+        {
+          type: "kpis",
+          items: [
+            { value: "USD 232B", label: "E-commerce LATAM proyectado 2028 (vs USD 151B en 2023, +54%)" },
+            { value: "USD 28.9B", label: "Ingresos Mercado Libre 2025 (+39% YoY), 174M+ usuarios" },
+            { value: "83M", label: "MAU de Mercado Pago (54.5% lo tuvieron como primer método digital)" },
+            { value: "1M+", label: "Empresas usando un agente comercial de Meta en WhatsApp/Messenger (junio 2026)" },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Tres dinámicas que definen la adopción de IA en la región",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              title: "WhatsApp como canal primario",
+              description:
+                "Meta reporta 1M+ empresas ya usando un agente comercial en WhatsApp/Messenger. En Centroamérica WhatsApp es el canal de servicio B2C dominante para prácticamente cualquier retailer con presencia local. Cualquier estrategia de comercio conversacional en CA que no arranque por WhatsApp está mal diseñada.",
+              tone: "primary",
+            },
+            {
+              title: "Retail-as-a-Bank y billeteras digitales",
+              description:
+                "La brecha entre acceso financiero y crédito bajo abre una oportunidad única. En CA-6 la bancarización varía brutalmente: Costa Rica 71%, Panamá 64%, Honduras 42%, Guatemala 38%, Nicaragua 23% (WB Findex 2024). Las billeteras nacionales (SINPE Móvil en CR, Yappy en PA, Tigo Money en toda la región, Chivo Wallet en SV) llenan el hueco. El retailer con red física es la financiera más cercana al consumidor sin cuenta bancaria.",
+              tone: "success",
+            },
+            {
+              title: "Retail media subpenetrado",
+              description:
+                "Penetración regional 'mid-teens' vs 22% global. Mercado Libre proyecta duplicar retail media a USD 6B para 2029. Mercado Ads y Rappi Ads capturan buena parte del crecimiento — con IA como palanca clave de activación de 1P data. En CA, ningún retailer local ha lanzado una red publicitaria de escala pública todavía.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "El diferencial regional real",
+          text: "En LATAM, y particularmente en Centroamérica, un agente de IA que no habla WhatsApp, no maneja crédito informal y no entiende el modelo de tiendas de proximidad tiene un techo de valor muy bajo. Los ganadores serán quienes integren IA sobre esas tres realidades — no quienes copien la arquitectura de un retailer norteamericano.",
+        },
+      ],
+    },
+    {
+      id: "centroamerica",
+      eyebrow: "Parte 3 · Centroamérica",
+      title: "Centroamérica CA-6: el mercado retail y su ventana de adopción de IA",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Centroamérica no es un mercado — son seis mercados que comparten historia, cadenas regionales y una integración comercial creciente vía SIECA, pero que operan con reglas macro y digitales muy distintas. El PIB combinado de CA-6 alcanzó USD 388 mil millones en 2024 (Banco Mundial) con un crecimiento promedio simple de 3,4%. Costa Rica lidera con 4,08% de crecimiento anual; Panamá se desplomó de 7,17% a 2,75% en un año por el cierre de la mina Cobre Panamá. Y la brecha digital dentro de CA-6 es de 29 puntos: 87% de adultos usan Internet en Costa Rica, 59% en Honduras (WB, 2024). Ese contraste explica por qué una sola estrategia regional 'unificada' no funciona — y por qué la IA es justamente la palanca que permite servir seis mercados con un solo cerebro sin duplicar operación.",
+        },
+        {
+          type: "kpis",
+          items: [
+            { value: "USD 388B", label: "PIB nominal CA-6 combinado 2024 (Banco Mundial)" },
+            { value: "952", label: "Tiendas Walmart en CA-5 al 30-abr-2026 (Walmart Corp)" },
+            { value: "+19pp", label: "Salto de bancarización de Panamá 2021 → 2024 (Global Findex)" },
+            { value: "23%", label: "Adultos bancarizados en Nicaragua — el más bajo de CA-6 (Findex 2024)" },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Macro CA-6 · país por país (fuente: Banco Mundial 2024)",
+        },
+        {
+          type: "table",
+          headers: ["País", "PIB nominal 2024", "Crecimiento 2024", "Bancarización (15+)", "Internet"],
+          rows: [
+            ["Costa Rica", "USD 96,7B", "+4,08%", "71,4%", "87,2%"],
+            ["Panamá", "USD 86,5B", "+2,75%", "64,1% (era 45% en 2021)", "72,8%"],
+            ["Guatemala", "USD 113,2B", "+3,72%", "38,3%", "60,2%"],
+            ["Honduras", "USD 37,0B", "+3,63%", "42,4%", "58,6%"],
+            ["El Salvador", "USD 34,9B", "+2,59%", "43,4%", "66,5%"],
+            ["Nicaragua", "USD 19,7B", "+3,58%", "23,5%", "61,4%"],
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Segmentación del retail centroamericano por vertical y madurez digital",
+        },
+        {
+          type: "table",
+          headers: ["Segmento", "Actores clave", "Escala CA-6", "Madurez digital / IA"],
+          rows: [
+            [
+              "Autoservicio y grocery formal",
+              "Walmart Centroamérica (Walmart Supercenter, Paiz, Despensa Familiar, Maxi Despensa, Pali, Maxi Pali, Mas x Menos, La Unión), PriceSmart, Súper Selectos (SV), Grupo La Colonia (HN), Automercado (CR), Riba Smith y Super 99 (PA).",
+              "Walmart Centroamérica opera 952 tiendas en CA-5 con HQ en San José (Walmart Corp, abr-2026). PriceSmart consolidado a 57 clubes en 12 países con LTM revenue USD 5,7B.",
+              "Walmart es la referencia operativa. PriceSmart consolida datos por país pero no publica caso público de IA en CA. Cadenas locales con adopción heterogénea — algunas todavía sin comercio digital consolidado.",
+            ],
+            [
+              "Club de precios y wholesale",
+              "PriceSmart en los 6 países (Guatemala, El Salvador, Honduras, Nicaragua, Costa Rica, Panamá), Makro (PA).",
+              "PriceSmart Costa Rica y Panamá son los mercados más maduros del club. 2,14M cuentas de membresía globales (mayo-2026).",
+              "PriceSmart tiene stack digital publicado (app propia, marketplace) pero sin caso público de IA agentica. Oportunidad estructural.",
+            ],
+            [
+              "Departamentales y electrónica",
+              "Grupo Unicomer (La Curacao, Tropigas), Grupo Q, Distribuidora Rapidísimo, tiendas de línea blanca regionales.",
+              "Unicomer tiene presencia en más de 20 países y las 6 economías de CA-6 con esquemas de crédito propio muy fuertes.",
+              "Modelo retail-fintech maduro (crédito propio, cobranza en tienda). Perfecto candidato para agente conversacional con scoring alternativo.",
+            ],
+            [
+              "Convenience y proximidad",
+              "Pulperías/tiendas de barrio, Fresh Market (CR), Aliss (SV), OXXO en Costa Rica (Q-Retail), 7-Eleven en Guatemala.",
+              "El comercio informal y de proximidad representa una porción muy alta del consumo masivo en toda la región, particularmente en Guatemala, Honduras y Nicaragua.",
+              "Sub-utilizados para retail media y datos. Sin caso público de IA en el segmento.",
+            ],
+            [
+              "Farmacia",
+              "Farmacias Sucre (CR), Farmacia Fischel (CR), Farmacias Kielsa (HN), Farmacias San Nicolás (SV), Farmacias del Ahorro (CA), Farmacias Metro (PA), Farmacias Arrocha (PA).",
+              "Farmacia regional consolidada por adquisiciones cross-border. Volumen de recetas y adherencia sin activar con IA.",
+              "Segmento con mayor upside de IA en LATAM: triage clínico + adherencia + consulta remota. Poca adopción pública hasta 2026.",
+            ],
+            [
+              "Home, ferretería y mejoramiento",
+              "EPA (CR/PA), Do it Center (PA), Sears Centroamérica, Ferretería EPA, MegaCentro.",
+              "Concentración regional creciente. Modelo de retail-fintech con crédito propio.",
+              "Segmento con oportunidad clara de asistente conversacional para proyectos DIY (Home Depot Magic Apron como benchmark).",
+            ],
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Necesidades puntuales del retail centroamericano frente a la IA",
+        },
+        {
+          type: "list",
+          items: [
+            "Servir seis mercados con un solo cerebro — no seis pilotos aislados. La regionalidad CA es el argumento arquitectónico central: un stack multi-país donde catálogos, promociones y agentes se configuran por país sin rehacer la fundación.",
+            "Servicio conversacional en WhatsApp — Centroamérica es un mercado móvil-primero. WhatsApp es el canal dominante para servicio B2C — no la app propia del retailer.",
+            "Crédito embebido con scoring alternativo — la bancarización varía brutalmente por país (71% CR, 64% PA, 42% HN, 38% GT, 43% SV, 23% NI). Las billeteras nacionales (SINPE Móvil, Yappy, Tigo Money, Chivo Wallet) son la vía práctica. El retailer con red física es la financiera más cercana al no-bancarizado.",
+            "Personalización sobre tenderos y comercio informal — porción muy alta del consumo que hoy no se activa con datos primarios. Oportunidad estructural para retailers con visibilidad multi-canal.",
+            "Última milla en geografías fragmentadas — CA-6 tiene ciudades secundarias con altísima densidad urbana pero cobertura de courier heterogénea. Optimización logística con IA es palanca directa de conversión.",
+            "Cumplimiento datos personales — cada país tiene su marco: Costa Rica Ley 8968, Panamá Ley 81/2019, El Salvador Ley de Protección de Datos 2024, Nicaragua Ley 787, Honduras Ley de Transparencia, Guatemala en discusión legislativa. La IA sin trust layer y sin gobierno de datos es un riesgo legal y reputacional real — con seis marcos regulatorios distintos.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Oportunidades claras según el contexto local",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Oportunidad 1",
+              title: "Comercio conversacional WhatsApp-first",
+              description:
+                "El retailer centroamericano promedio puede construir un agente de compra-servicio-crédito en WhatsApp más rápido que un e-commerce con app propia — y con mejor tasa de adopción. Es la oportunidad más grande y menos aprovechada de la región.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Oportunidad 2",
+              title: "Servicio autónomo en contact center",
+              description:
+                "Los benchmarks internacionales (Pandora 60% deflection, SharkNinja 20K chats/semana) muestran que se puede automatizar 50–70% del contact center en 6–12 meses con retorno directo en costo por interacción. En CA el ROI es aún más competitivo por la relación costo/hora vs volumen.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Oportunidad 3",
+              title: "Stack regional multi-país",
+              description:
+                "Un retailer con presencia en 3+ países de CA (Unicomer, PriceSmart, Walmart CA, Grupo Q, farmacias regionales) tiene el caso más fuerte para consolidar sobre un stack único de comercio + servicio + datos. La IA amplifica la ventaja del retailer regional sobre el nacional.",
+              tone: "violet",
+            },
+            {
+              eyebrow: "Oportunidad 4",
+              title: "Retail media network CA-6",
+              description:
+                "Ningún retailer local ha lanzado una red publicitaria pública de escala en CA. La primera empresa con audiencias primarias monetizables (Walmart CA, PriceSmart, Unicomer, cadenas regionales) que active retail media captura margen que hoy se fuga a Meta y Google. IA + Data 360 + Advertising Sales Management es el trío que lo habilita.",
+              tone: "neutral",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "critical",
+          title: "La ventana se abre y se cierra rápido",
+          text: "Las multinacionales que operan en CA (Walmart Centroamérica, PriceSmart, Meta, MercadoLibre en su expansión regional) llevan datos unificados y equipos internos ejecutando desde 2024. El retailer regional o nacional tiene 12–24 meses para reaccionar antes de que la brecha se vuelva estructural. Los que esperen 'a que madure el mercado' descubrirán que el mercado ya maduró — sin ellos.",
+        },
+      ],
+    },
+    {
+      id: "salesforce-general",
+      eyebrow: "Parte 4 · Postura Salesforce",
+      title: "Cómo Salesforce acompaña al retail centroamericano en esta transición",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Antes de entrar al detalle producto por producto, conviene fijar la postura. La ventaja de Salesforce para retail no es un modelo de IA propietario ni un algoritmo particular — es la arquitectura vertical que integra los cuatro elementos que hoy separan una implementación con retorno de un piloto costoso: (1) una capa de confianza nativa que resuelve gobierno, PII y auditabilidad de fábrica; (2) un data layer con zero-copy que ancla los agentes en la verdad operativa del retailer sin obligar a mover el data lake; (3) una plataforma de agentes retail-tuned con motor de razonamiento y agent script para composición híbrida; y (4) comercio + servicio + marketing + operaciones de tienda sobre un solo modelo de metadatos.",
+        },
+        {
+          type: "statement",
+          text: "En una industria donde el 40% de los proyectos agentic AI se cancelará antes de 2027 (Gartner), lo que importa no es qué modelo se usa — es qué tan rápido pasa un caso de uso de piloto a producción con métricas duras. Salesforce compite en esa dimensión con evidencia pública: Pandora 60% de casos deflectados y +10 NPS; SharkNinja 14 países en vivo con +6% conversión; Williams-Sonoma implementación en 7.5 meses y 21M nuevos suscriptores.",
+        },
+        {
+          type: "image",
+          src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
+          alt: "Plataforma agentic empresarial completa de Salesforce: Agentforce sobre Data 360 y Customer 360.",
+          caption:
+            "La promesa nativa de Salesforce para retail: una sola plataforma donde agentes, datos, comercio, servicio y marketing comparten contexto, seguridad y observabilidad. Esa unidad es la que reduce el time-to-value de meses a semanas — y hace posible operar seis países desde un solo stack.",
+          source: {
+            label: "Salesforce · Agentforce platform overview",
+            url: "https://www.salesforce.com/agentforce/",
+          },
+          maxWidth: "wide",
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Reconocimientos que importan",
+          text: "Salesforce es Leader en Gartner MQ Digital Commerce por 10 años consecutivos, Leader en Gartner MQ Multichannel Marketing Hubs por 8 años, Leader en Gartner CDP por 3 años, IDC MarketScape Leader B2C/B2B/Mobile POS Fashion Retail, IHL Tier 1 para Order Management y Forrester TEI de 289% ROI con 6 meses de payback en B2B Commerce. Es la única plataforma que puede reclamar liderazgo simultáneo en las cuatro grillas que un retailer evalúa para consolidar stack.",
+        },
+      ],
+    },
+    {
+      id: "recomendaciones",
+      eyebrow: "Parte 5 · Recomendaciones consultivas",
+      title: "Diez movimientos para un retailer centroamericano en los próximos 12–24 meses",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Estas recomendaciones no son una lista de compras — son un marco de decisión. Si su plan actual rompe tres o más, vale la pena pausarlo y revisarlo antes de aprobar la siguiente ronda de inversión, sea cual sea la plataforma o el proveedor que la presente.",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "01",
+              title: "Empiece por servicio, no por comercio",
+              description:
+                "El servicio autónomo tiene el ROI más rápido y menor superficie de riesgo. Pandora y SharkNinja lo probaron. Un caso piloto de 6 meses con Agentforce Service sobre WhatsApp o web chat entrega números duros al comité en el primer trimestre — y funciona en el país de menor complejidad regulatoria de su portafolio.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "02",
+              title: "Diseñe WhatsApp-first, no app-first",
+              description:
+                "En Centroamérica WhatsApp es el canal dominante para servicio B2C. Salesforce lo trata como canal de primera clase en Agentforce; la mayoría de plataformas competidoras lo tratan como integración de terceros.",
+              tone: "success",
+            },
+            {
+              eyebrow: "03",
+              title: "Piense multi-país desde el día uno",
+              description:
+                "Un retailer con presencia en 3+ países CA no puede darse el lujo de seis pilotos aislados. Data 360 y Commerce Cloud permiten configuración por país (moneda, catálogo, promociones, idioma técnico, marco legal) sobre una sola fundación. Esa es la ventaja arquitectónica más grande del retailer regional.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "04",
+              title: "Aplique Trust Layer desde el primer piloto",
+              description:
+                "PII, marcos regulatorios distintos por país (CR Ley 8968, PA Ley 81/2019, SV LPDP 2024, NI Ley 787), datos de programas de lealtad — no son 'add-ons de compliance'. Un incidente de datos borra el ROI de 3 años de IA. Trust Layer nativo, no bolt-on.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "05",
+              title: "Active loyalty existente antes de rediseñar el programa",
+              description:
+                "Los programas de puntos de PriceSmart, Walmart, Grupo Unicomer, farmacias regionales ya tienen datos abundantes. Falta la IA que los active — next-best-offer, disengagement risk, tier upgrades disparados. No hace falta rediseñar el programa: hace falta cablearle un cerebro.",
+              tone: "violet",
+            },
+            {
+              eyebrow: "06",
+              title: "Piense el POS como plataforma, no como caja registradora",
+              description:
+                "Modern POS + clienteling + endless aisle + BOPIS es la ventaja competitiva estructural que un retailer con red física tiene sobre marketplaces puros. Centroamérica, con densidad urbana concentrada y ciudades secundarias fuertes, hace esta oportunidad más grande, no más pequeña.",
+              tone: "neutral",
+            },
+            {
+              eyebrow: "07",
+              title: "Construya retail media sobre su 1P data",
+              description:
+                "Ningún retailer local ha lanzado una red publicitaria de escala pública en CA. Para Walmart Centroamérica, PriceSmart, Unicomer, cadenas locales y farmacias es la oportunidad de captar margen que hoy se fuga a Meta y Google. IA + Data 360 + Advertising Sales Management es el trío que lo habilita.",
+              tone: "success",
+            },
+            {
+              eyebrow: "08",
+              title: "Elija el modelo, no lo case",
+              description:
+                "Bring Your Own Model (OpenAI, Anthropic, Google) e interoperabilidad MCP evitan lock-in. Cualquier plataforma que le obligue a un único proveedor de LLM va a envejecer mal — la industria de modelos se está moviendo demasiado rápido.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "09",
+              title: "Métrica de negocio en cada caso, o cancele",
+              description:
+                "Gartner: >40% de proyectos agentic se cancelarán antes de 2027. La mejor prevención es la métrica de negocio desde el día uno: costo por interacción, conversión, forecast accuracy, tiempo a resolución. Sin métrica, no hay caso.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "10",
+              title: "No espere a 2027 para empezar",
+              description:
+                "Walmart Centroamérica, PriceSmart y las multinacionales que operan en la región ya están capitalizando su ventaja de escala global. La ventana para el retailer regional o nacional es 12–24 meses. Después, cerrar la brecha se vuelve un problema de M&A, no de tecnología.",
+              tone: "warn",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "modelo-madurez",
+      eyebrow: "Parte 6 · Modelo de madurez",
+      title: "Ruta de tres niveles para el retailer centroamericano",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Este modelo es operativo, no de marketing. Le ayuda a ubicar en qué nivel está hoy su organización, qué capacidades necesita para subir y cuáles son los riesgos de saltar etapas.",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              eyebrow: "Nivel 1 · Foundational",
+              title: "Servicio y comercio digital unificados",
+              description:
+                "Data 360 en producción con las fuentes core (ecommerce, POS, loyalty, servicio) del país piloto. Agentforce Service en un canal (WhatsApp o web chat). Commerce Cloud con Cimulate y product recommendations. Trust Layer activo. KPIs de línea base establecidos.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Nivel 2 · Composable",
+              title: "Multi-país + loyalty + retail media",
+              description:
+                "Modern POS en tiendas piloto. Agentforce Personal Shopper en producción. Configuración multi-país sobre la misma fundación (2+ países CA activos). Loyalty Management activa disengagement risk y next-best-offer. Retail media network lanzada con 1P data. Agentic Order Routing gestionando excepciones.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Nivel 3 · Autonomous",
+              title: "Ecosistema agentico gobernado CA-6",
+              description:
+                "Agentes de merchandising, pricing, forecasting y planning en producción en 3+ países. MCP + AgentExchange abren interoperabilidad con socios (bancos, telcos, marketplaces regionales). Governance transversal con métricas de negocio y evaluación continua. Voice + WhatsApp + web + tienda como un solo canal.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Salto típico mal hecho",
+          text: "Saltar de Nivel 1 directo a Nivel 3 'porque el CEO leyó un informe de McKinsey'. Resultado: agentes desplegados sobre datos fragmentados, control plane sin agentes maduros que gobernar, gasto sin ROI y un equipo abrumado. El Nivel 2 — composabilidad sólida con multi-país, loyalty y retail media activos — es donde la mayoría de los retailers centroamericanos debe vivir 12–24 meses antes de pensar en ecosistema agentico completo.",
+        },
+      ],
+    },
+    {
+      id: "conclusion",
+      eyebrow: "Cierre",
+      title: "Conclusión",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La industria retail vive un cambio de era, no una moda tecnológica. Amazon superó a Walmart en EE.UU. gracias a su stack de IA y datos. El 75% de los retailers globales declara que los agentes son esenciales para 2026. En Centroamérica, con una economía combinada de USD 388B, 952 tiendas Walmart operando en CA-5, PriceSmart como referencia regional y un salto de bancarización sin precedentes en Panamá (+19 pp en tres años), la ventana para adoptar IA con retorno claro se acaba de abrir. Las multinacionales ya se movieron; el resto tiene 12–24 meses para reaccionar antes de que la brecha se vuelva estructural.",
+        },
+        {
+          type: "paragraph",
+          text: "Salesforce responde con Agentforce 360 for Retail: no un modelo de IA propietario, sino la arquitectura vertical que integra Trust Layer nativo, Data 360 con Zero Copy, agentes retail-tuned y comercio + servicio + marketing + operaciones de tienda sobre un solo modelo de metadatos — con capacidad nativa de configuración multi-país. Los casos con métricas duras públicas — Pandora, SharkNinja, Williams-Sonoma, Fisher & Paykel, Janie and Jack — muestran que el retorno es real cuando el stack está unificado, no cuando la IA se compra por piezas.",
+        },
+        {
+          type: "statement",
+          text: "La IA en retail dejó de ser diferenciador y pasó a ser condición de supervivencia. En Centroamérica, con USD 388B de economía combinada, seis mercados con dinámicas propias y una ventana estructural de 12–24 meses, el retailer que quiera seguir compitiendo en cinco años tiene que construir tres cosas ya: fundación de datos unificada, un primer agente en producción con métrica de negocio, y una arquitectura que le permita escalar sin recomprarse a sí mismo cada vez que abre un país. Ese es el marco. Todo lo demás es ejecución.",
+        },
+      ],
+    },
+    {
+      id: "fuentes",
+      eyebrow: "Referencias",
+      title: "Fuentes oficiales y de alta confiabilidad",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Este documento está construido sobre reportes de industria, comunicados oficiales, cartas al accionista, páginas oficiales de Salesforce y estadísticas de organismos regionales (Banco Mundial, WB Global Findex, SIECA, bancos centrales de cada país CA-6). Las cifras y capacidades evolucionan rápido — se recomienda revisar la fuente primaria antes de decisiones de inversión.",
+        },
+        {
+          type: "sources",
+          items: [
+            {
+              label: "World Bank · Open Data (PIB, crecimiento, cuentas financieras, Internet)",
+              url: "https://data.worldbank.org/",
+            },
+            {
+              label: "World Bank · Global Findex Database 2025 (base 2024)",
+              url: "https://www.worldbank.org/en/publication/globalfindex",
+            },
+            {
+              label: "Walmart Corporate · Central America markets",
+              url: "https://corporate.walmart.com/about/international/markets/central-america",
+            },
+            {
+              label: "PriceSmart · Investor Relations",
+              url: "https://investors.pricesmart.com/",
+            },
+            {
+              label: "SIECA · Secretaría de Integración Económica Centroamericana",
+              url: "https://www.sieca.int/",
+            },
+            {
+              label: "Banco Central de Costa Rica · Sistemas de Pagos (SINPE Móvil)",
+              url: "https://www.bccr.fi.cr/sistema-de-pagos/estadísticas",
+            },
+            {
+              label: "Salesforce · Sixth Edition Connected Shoppers Report",
+              url: "https://www.salesforce.com/resources/research-reports/connected-shoppers-report/",
+            },
+            {
+              label: "Salesforce for Retail (Agentforce 360 for Retail)",
+              url: "https://www.salesforce.com/industries/retail/",
+            },
+            {
+              label: "Salesforce · Agentforce platform overview",
+              url: "https://www.salesforce.com/agentforce/",
+            },
+            {
+              label: "Salesforce · Einstein Trust Layer",
+              url: "https://www.salesforce.com/artificial-intelligence/trusted-ai/",
+            },
+            {
+              label: "Pandora + Salesforce (customer story oficial)",
+              url: "https://www.salesforce.com/customer-stories/pandora/",
+            },
+            {
+              label: "SharkNinja + Salesforce (customer story oficial)",
+              url: "https://www.salesforce.com/customer-stories/sharkninja/",
+            },
+            {
+              label: "Williams-Sonoma + Salesforce (customer story oficial)",
+              url: "https://www.salesforce.com/customer-stories/williams-sonoma/",
+            },
+            {
+              label: "Gartner · Retail Industry Insights",
+              url: "https://www.gartner.com/en/industries/retail",
+            },
+            {
+              label: "Forrester · Predictions 2026 · Retail",
+              url: "https://www.forrester.com/predictions/",
+            },
+            {
+              label: "Andy Jassy · Amazon 2024 & 2025 Letters to Shareholders",
+              url: "https://www.aboutamazon.com/news/company-news/amazon-ceo-andy-jassy-2025-letter-to-shareholders",
+            },
+            {
+              label: "CEPAL · Panorama económico y social de Centroamérica",
+              url: "https://www.cepal.org/es/subsedes/mexico/publicaciones",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 const headlessCioMexico: Insight = {
   slug: "salesforce-headless-cio-mexico",
   topic: "Salesforce Headless 360",
@@ -5219,4 +5820,4 @@ const digitalEngagement: Insight = {
   ],
 };
 
-export const insights: Insight[] = [multiAgent, customerFeedback, digitalEngagement, retailAiMexico, retailAiColombia, headlessCioMexico];
+export const insights: Insight[] = [multiAgent, customerFeedback, digitalEngagement, retailAiMexico, retailAiColombia, retailAiCentroamerica, headlessCioMexico];

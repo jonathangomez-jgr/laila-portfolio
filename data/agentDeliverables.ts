@@ -41,6 +41,7 @@ export type AgentField = {
   value: string;
   copyable?: boolean;
   monospace?: boolean;
+  href?: string;
 };
 
 export type PermissionSetRow = {
