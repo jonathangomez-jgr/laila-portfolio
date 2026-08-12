@@ -3423,6 +3423,323 @@ export const executiveDecks: ExecutiveDeck[] = [
       },
     ],
   },
+  {
+    slug: "avances-adjuntos",
+    customerSlug: "bicevida",
+    title: "Adjuntos en Agentforce por WhatsApp — Presentación de avances",
+    subtitle:
+      "4 caminos técnicamente viables · 4 semanas de investigación · sin recomendación cerrada",
+    duration: "20 min",
+    slides: [
+      // ── SLIDE 1 · Portada ────────────────────────────────────────────
+      {
+        layout: "title",
+        eyebrow: "BICE Vida · Salesforce",
+        title: "Adjuntos en Agentforce por WhatsApp",
+        subtitle:
+          "Presentación de avances — 4 caminos técnicamente viables explorados entre el 15 de julio y el 12 de agosto de 2026.",
+        footnote: "Sesión de avances · Confidencial · Agosto 2026",
+      },
+
+      // ── SLIDE 2 · El problema en una frase ────────────────────────────
+      {
+        layout: "quote",
+        quote:
+          "El path estándar de Digital Engagement recibe el archivo, pero Agentforce falla al procesarlo. El error viene del sistema — no del razonamiento del agente. No se resuelve con prompt engineering.",
+        context: "Diagnóstico técnico consolidado · Agosto 2026",
+      },
+
+      // ── SLIDE 3 · El recorrido en números ─────────────────────────────
+      {
+        layout: "metrics",
+        eyebrow: "El recorrido, 15 jul → 12 ago",
+        title: "4 semanas de investigación con evidencia empírica en cada paso",
+        metrics: [
+          { value: "15-jul", label: "Solicitud original de BICE Vida" },
+          { value: "4", label: "Caminos técnicamente viables explorados" },
+          { value: "2", label: "Recetas publicadas · V1 y V2 handoff" },
+          { value: "1", label: "Camino descartado con evidencia empírica" },
+          { value: "10+", label: "Hipótesis de write-back probadas y falladas" },
+          { value: "6", label: "Variantes UX que la solución debe manejar" },
+        ],
+      },
+
+      // ── SLIDE 4 · Por qué esto importa ────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Por qué esto importa para BICE Vida",
+        title: "En una aseguradora de vida, el adjunto es evidencia — no un ornamento",
+        bullets: [
+          "Reclamos y siniestros: certificado de defunción, exámenes médicos, comprobantes de gasto — el cliente está en un momento de alta vulnerabilidad.",
+          "Vida individual con evaluación médica: exámenes de salud detienen la emisión cuando el canal no procesa adjuntos.",
+          "Contratación digital / APV: copia de cédula, comprobante de domicilio e ingresos — rompe el intento de contratación 100% digital.",
+          "Colectivos y empresas: nóminas y planillas — empeora la experiencia del broker corporativo.",
+          "Actualización de datos y beneficiarios: documentación probatoria — genera casos manuales y aumenta backlog de back-office.",
+        ],
+        highlight:
+          "Sin manejo de adjuntos en canal, el intento de conversación por WhatsApp se rompe en los momentos que más valor generan al negocio.",
+      },
+
+      // ── SLIDE 5 · Las 6 variantes UX ─────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Las 6 variantes UX",
+        title: "La solución final debe manejar estas 6 formas reales en que el usuario adjunta",
+        bullets: [
+          "1 · Usuario anuncia: “te quiero enviar mi comprobante” → luego adjunta.",
+          "2 · Agente pide: “envía por favor una foto del documento” → usuario adjunta.",
+          "3 · Sin anuncio: usuario adjunta directo, sin decir nada. Es la variante MÁS frecuente.",
+          "4 · Post-handoff: adjunto llega después de que la conversación pasó a un agente humano.",
+          "5 · Tipo no soportado: video, sticker, ubicación → degradación con mensaje claro.",
+          "6 · Ráfaga múltiple: 4 archivos en 30 segundos → agrupar por sesión, no bucle.",
+        ],
+      },
+
+      // ── SLIDE 6 · Sección de caminos ──────────────────────────────────
+      {
+        layout: "section",
+        eyebrow: "Los 4 caminos",
+        title: "Todo lo técnicamente viable — probado, descartado o hipotético",
+        subtitle:
+          "1. Custom · 2. Híbrido · 3. Standard + Bot legado · 4. Sitio externo de carga",
+      },
+
+      // ── SLIDE 7 · Camino 1 · Custom ──────────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Camino 1 · Custom",
+        title: "Reemplazo total del canal — probado en producción con un cliente en Colombia",
+        left: {
+          heading: "En qué consiste",
+          items: [
+            "Se registra el número en Meta Business y un webhook público recibe directo de la Graph API.",
+            "Pipeline propio descarga el archivo y lo procesa: GPT-4o vision para imagen/PDF, Whisper para audio.",
+            "El Agent recibe texto interpretado — nunca ve el binario, así que no falla.",
+            "V2 agrega handoff bot → cola humana, timeouts y feature flag por línea.",
+          ],
+        },
+        right: {
+          heading: "Estado y fortalezas",
+          items: [
+            "✅ Probado en producción — cliente de referencia en Colombia atendiendo tráfico real.",
+            "✅ Cubre las 6 variantes UX de manera nativa.",
+            "✅ Estable: el path del adjunto NO depende del razonamiento del LLM.",
+            "🔴 Alto costo inicial: ~6 objetos custom, ~30 clases Apex, 4 pipelines.",
+            "🔴 Reemplaza el canal Enhanced Messaging — se pierde el nativo.",
+          ],
+        },
+      },
+
+      // ── SLIDE 8 · Camino 2 · Híbrido ─────────────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Camino 2 · Híbrido",
+        title: "Intercepción en el path estándar — descartado empíricamente el 1 de agosto",
+        left: {
+          heading: "Qué se intentó",
+          items: [
+            "Detectar el adjunto en el único punto sync-observable del estándar: ContentDocumentLink BEFORE_INSERT.",
+            "Procesar el binario con aiplatform.ModelsAPI (Trust Layer aplicado, funciona).",
+            "Inyectar el resultado al canal como si fuera texto del usuario, sin salir del estándar.",
+            "El punto de detección funciona — el paso siguiente no.",
+          ],
+        },
+        right: {
+          heading: "Por qué NO funciona",
+          items: [
+            "10+ hipótesis de write-back probadas, todas fallidas.",
+            "LiveChatSensitiveDataRule, ConnectApi, ConvMessageSendRequest, ConversationEntry insert — ninguna acepta inyección externa al canal Enhanced.",
+            "Confirmado: no existe API pública Apex/REST/Metadata para inyectar mensajes al canal desde afuera del agente.",
+            "❌ Descartado como solución para BICE Vida — preservado como diagnóstico reproducible.",
+          ],
+        },
+      },
+
+      // ── SLIDE 9 · Camino 3 · Standard + Bot legado ────────────────────
+      {
+        layout: "split",
+        eyebrow: "Camino 3 · Standard + Bot legado",
+        title: "Transferir a un Einstein Bot legado que sí soporta media — con fricciones documentadas",
+        left: {
+          heading: "Qué se intentó",
+          items: [
+            "El Agent detecta el adjunto y dispara una GenAiFunction que reasigna la conversación a un Bot legado.",
+            "El Bot legado procesa el archivo y devuelve el hilo al Agent con el resumen como context variable.",
+            "Se probó individualmente y en pruebas conjuntas con el equipo, con múltiples variantes de routing.",
+          ],
+        },
+        right: {
+          heading: "Los 3 hallazgos observados",
+          items: [
+            "⚠️ La GenAiFunction de handoff NO siempre se dispara — el modelo decide de forma no-determinística.",
+            "⚠️ Cuando SÍ se dispara, la conversación cae en fallback queue en lugar de llegar al Bot.",
+            "⚠️ La UX resultante sería un handoff visible con cambio de estilo — va contra el requisito de fluidez.",
+            "❓ No hay conclusión definitiva; requiere ~10-15 días adicionales solo para aislar la causa.",
+          ],
+        },
+      },
+
+      // ── SLIDE 10 · Camino 4 · Sitio externo ──────────────────────────
+      {
+        layout: "split",
+        eyebrow: "Camino 4 · Sitio externo",
+        title: "Sitio externo de carga con amarre por sesión — hipótesis, aún no explorada",
+        left: {
+          heading: "La idea",
+          items: [
+            "El Agent envía un link único (Experience Cloud o formulario público) al usuario.",
+            "El usuario sube el archivo desde el browser; el sitio amarra por MessagingSessionId.",
+            "El backend procesa el archivo y lo enlaza al Case, Contact y sesión de mensajería.",
+            "Reutiliza el pipeline de procesamiento probado del Camino 1.",
+          ],
+        },
+        right: {
+          heading: "Riesgos abiertos por revisar",
+          items: [
+            "🟡 Posible falla en la variante UX más frecuente (adjunto sin anuncio) — a validar en la revisión.",
+            "🟡 Podría romper la UX de “WhatsApp puro” — cliente sale a browser, sube, vuelve.",
+            "🟡 El write-back al hilo comparte gap con el Camino 2 — o requiere template HSM.",
+            "❓ Aún no probado con BICE Vida ni con ningún otro cliente — pendiente de exploración.",
+          ],
+        },
+      },
+
+      // ── SLIDE 11 · Comparativa condensada ────────────────────────────
+      {
+        layout: "comparison",
+        eyebrow: "Matriz condensada — solo lo esencial",
+        title: "Qué gana y qué pierde cada camino en las 3 dimensiones que BICE Vida pidió",
+        before: {
+          heading: "Camino 1 · Custom",
+          items: [
+            "Estable ✅ · Escalable ✅ · UX fluida ✅",
+            "Cobertura de las 6 variantes: 6 / 6",
+            "Riesgo de descubrimiento tardío: BAJO — camino ya probado",
+            "Costo: ALTO · Tiempo a piloto: 4–6 semanas",
+            "Pierde: canal Enhanced nativo y features nuevas de Salesforce",
+          ],
+        },
+        after: {
+          heading: "Caminos 2 / 3 / 4",
+          items: [
+            "Camino 2 · Descartado con evidencia (write-back imposible)",
+            "Camino 3 · Estable? No — no-determinismo del LLM · UX rota por handoff",
+            "Camino 4 · Falla en la variante UX más frecuente · write-back sin resolver",
+            "Preservan el canal Enhanced — sí, todos",
+            "Riesgo de descubrimientos negativos tardíos: alto en 3 y 4",
+          ],
+        },
+      },
+
+      // ── SLIDE 12 · Cronograma tentativo ──────────────────────────────
+      {
+        layout: "kpi-table",
+        eyebrow: "Cronograma tentativo por camino",
+        title: "Semanas al piloto según lo que BICE Vida elija profundizar",
+        rows: [
+          {
+            label: "Camino 1 · Custom",
+            baseline: "4–6 semanas",
+            goal6m: "Arquitectura de referencia lista para adaptar",
+            goal12m: "Bajo riesgo de descubrimiento tardío",
+            accent: "indigo",
+          },
+          {
+            label: "Camino 3 · Bot legado",
+            baseline: "3–4 sem. solo para cerrar diagnóstico",
+            goal6m: "+6–8 semanas si el diagnóstico es positivo",
+            goal12m: "Alto riesgo — puede no ser viable",
+            accent: "violet",
+          },
+          {
+            label: "Camino 4 · Sitio externo",
+            baseline: "4–5 sem. de prototipo",
+            goal6m: "Requiere resolver antes el write-back al hilo",
+            goal12m: "Riesgo alto — repite el problema del Camino 2",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // ── SLIDE 13 · Sección de decisiones ─────────────────────────────
+      {
+        layout: "section",
+        eyebrow: "Este documento no cierra el trabajo — abre la conversación",
+        title: "5 decisiones que necesitamos alinear con BICE Vida",
+        subtitle:
+          "Sin una respuesta a estas 5 preguntas, la elección del camino queda arbitraria.",
+      },
+
+      // ── SLIDE 14 · Las 5 decisiones ──────────────────────────────────
+      {
+        layout: "pillars",
+        eyebrow: "Preguntas abiertas para BICE Vida",
+        title: "La respuesta a estas 5 preguntas determina de facto qué camino profundizar",
+        pillars: [
+          {
+            title: "1 · Prioridad relativa entre dimensiones",
+            body: "¿Optimizamos por estabilidad + UX aunque el costo suba (favorece Camino 1)? ¿O por costo + velocidad aceptando UX comprometida (favorece 3 o 4)?",
+            accent: "indigo",
+          },
+          {
+            title: "2 · Apetito por reemplazar el canal Enhanced",
+            body: "Camino 1 reemplaza el canal nativo. Camino 3 y 4 lo preservan. ¿Es un requisito duro conservar Enhanced Messaging o negociable?",
+            accent: "violet",
+          },
+          {
+            title: "3 · Infraestructura disponible hoy",
+            body: "¿Existe Experience Cloud en producción? ¿Se puede exponer un webhook público sin conflicto con el área de seguridad?",
+            accent: "sky",
+          },
+          {
+            title: "4 · Volumen esperado",
+            body: "¿Cuántos adjuntos por conversación y por día se esperan? Camino 1 escala mejor a volúmenes altos; Camino 4 puede bastar para volúmenes bajos.",
+            accent: "emerald",
+          },
+          {
+            title: "5 · Ventana de tiempo",
+            body: "¿Hay una fecha objetivo (release, campaña, evento) que condicione la elección? Camino 1 arranca con arquitectura ya probada; 3 y 4 aún requieren investigación.",
+            accent: "indigo",
+          },
+        ],
+      },
+
+      // ── SLIDE 15 · Compromiso ────────────────────────────────────────
+      {
+        layout: "bullets",
+        eyebrow: "Compromiso del equipo",
+        title: "Sea cual sea la decisión, esto es lo que asumimos",
+        bullets: [
+          "Transparencia total — no vendemos lo que no funciona. Este mismo documento lo demuestra.",
+          "Evidencia empírica — cada afirmación técnica tiene una prueba reproducible detrás.",
+          "Piezas reusables — el pipeline de procesamiento de adjuntos se aprovecha en cualquier camino elegido.",
+          "Rollback plan — todo lo que se construya queda detrás de feature flags para revertir sin redeploy.",
+        ],
+      },
+
+      // ── SLIDE 16 · Próximo paso concreto ─────────────────────────────
+      {
+        layout: "closing",
+        title: "Próximo paso concreto",
+        bullets: [
+          "Sesión de 60 min con BICE Vida — negocio + tecnología en la misma mesa.",
+          "Recoger las 5 decisiones alineadas en esta presentación.",
+          "Salir con un plan de trabajo específico según el camino elegido.",
+          "Definir cadencia de seguimiento y responsables de ambos lados.",
+        ],
+        cta: "¿Agendamos esa sesión para la próxima semana?",
+      },
+
+      // ── SLIDE 17 · Gracias ───────────────────────────────────────────
+      {
+        layout: "thanks",
+        eyebrow: "Salesforce · BICE Vida",
+        title: "Gracias",
+        subtitle:
+          "Cuatro semanas de investigación transparente — el camino correcto lo elegimos juntos.",
+      },
+    ],
+  },
 ];
 
 export function getExecutiveDeck(

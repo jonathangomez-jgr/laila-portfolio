@@ -4867,332 +4867,13 @@ export const customerProjects: CustomerProject[] = [
     ],
   },
   {
-    slug: "lomas-hospitality",
-    title: "Lomas Hospitality — Discovery de cuenta para Salesforce y Agentforce",
-    customerName: "Lomas Hospitality",
-    industry: "Hospitalidad · All-Inclusive de lujo · Riviera Maya, México",
-    description:
-      "Ficha de descubrimiento de Lomas Hospitality — la división hotelera de Grupo Lomas (holding 100% mexicano fundado en 1981) que opera 8 resorts oceanfront en el Caribe mexicano bajo el concepto propietario More Inclusive® más el hotel boutique Maison México Roma en CDMX. Compila quiénes son, qué operan, cómo venden, con qué tecnología, y dónde Salesforce — con Data Cloud, Service Cloud, Marketing Cloud, Loyalty Management y Agentforce — puede acompañar el siguiente salto de experiencia del huésped, la Consultora comercial B2B y el equipo interno.",
-    passcode: "lomas2026",
-    hidden: false,
-    tags: [
-      "Discovery",
-      "Agentforce",
-      "Data Cloud",
-      "Service Cloud",
-      "Marketing Cloud",
-      "Loyalty Management",
-      "Experience Cloud",
-      "Hospitalidad · All-Inclusive",
-      "México · Riviera Maya",
-    ],
-    visibleTabs: [
-      "overview",
-      "customer",
-      "context",
-      "brands",
-      "commercial",
-      "objective",
-      "agentforce",
-      "roadmap",
-      "sources",
-    ],
-    tabs: [
-      // ── 1 · Overview ──────────────────────────────────────────────────────
-      {
-        id: "overview",
-        label: "Overview",
-        title: "Resumen ejecutivo · quién es Lomas Hospitality y por qué nos importa",
-        content:
-          "Lomas Hospitality es la división de hoteles y resorts de **Grupo Lomas**, una empresa 100% mexicana fundada en 1981 en la Riviera Maya por **Dolores López Lira e Hinojo** y **José Luis Martínez Alday**. Opera 8 resorts oceanfront de todo incluido de lujo — bajo las marcas El Dorado Spa Resorts, Palafitos Overwater Bungalows, Hidden Beach Au Naturel y Generations — más el hotel boutique urbano Maison México Roma en la Ciudad de México, todos anclados en el concepto propietario **More Inclusive®** que combina hospedaje, gastronomía, actividades fuera del resort y transportación en un solo pase.\n\nEl grupo se apalanca en varias empresas hermanas — **Lomas Travel** (DMC · flota propia), **Lomas Agent Portal** (B2B para agencias), Lomas Wedding y su brazo social **Fundación Lomas** — y ya publica su **Informe de Sostenibilidad 2024** con certificaciones Earth Check, ESR y adhesión al Pacto Global de las Naciones Unidas desde 2022.\n\nPara Salesforce esto se traduce en un cliente con **volumen relevante de huéspedes internacionales (MX · US · Canadá), múltiples audiencias diferenciadas** (parejas adults-only, familias, naturistas, luxury, weddings, MICE), un **contact center 24/7 bilingüe**, portales B2B ya en producción y un programa de lealtad propio (**LH Rewards**) — todo hoy operado sobre un stack heterogéneo con **Roiback** como motor de reservas y sin un CRM/Data Cloud unificado visible en el sitio público. El upside está en unificar el perfil del huésped y activar Agentforce en los momentos de mayor fricción del journey.",
-        overviewData: {
-          stats: [
-            { value: "1981", label: "Año de fundación del Grupo Lomas — Riviera Maya" },
-            { value: "8", label: "Resorts oceanfront en la Riviera Maya · Playa del Carmen · Puerto Aventuras" },
-            { value: "5", label: "Marcas hoteleras (El Dorado · Palafitos · Hidden Beach · Generations · Maison México Roma)" },
-            { value: "3", label: "Idiomas comerciales activos (ES · EN — potencial PT)" },
-            { value: "24/7", label: "Contact center con líneas MX 998 5280558 · US/CA 888 2011913" },
-            { value: "1,001–5,000", label: "Empleados declarados en LinkedIn (Lomas Hospitality Services)" },
-            { value: "2022", label: "Adhesión al Pacto Global de las Naciones Unidas" },
-            { value: "3", label: "Certificaciones vigentes — Earth Check · ESR · HSBC" },
-            { value: "2026", label: "Nominación Travvy Awards — Best All-Inclusive Brand Mexico" },
-          ],
-        },
-      },
-
-      // ── 2 · Cliente / industria ───────────────────────────────────────────
-      {
-        id: "customer",
-        label: "Cliente / industria",
-        title: "Cliente e industria",
-        content:
-          "Lomas Hospitality opera dentro de **Grupo Lomas**, holding turístico mexicano con más de cuatro décadas en la Riviera Maya. El grupo integra hotelería (Lomas Hospitality), DMC y transportación (Lomas Travel), bodas destino (Lomas Wedding), portal B2B para agencias (Lomas Agent Portal), programas de lealtad propios (LH Rewards) y brazo social (Fundación Lomas). El core de negocio es all-inclusive de lujo en el Caribe mexicano, con público emisor principalmente de México, Estados Unidos y Canadá.",
-        customerProfile: {
-          stats: [
-            { label: "Razón social del grupo", value: "Grupo Lomas · 100% mexicana · fundada 1981" },
-            { label: "Fundadores", value: "Dolores López Lira e Hinojo · José Luis Martínez Alday" },
-            { label: "División analizada", value: "Lomas Hospitality Services (hoteles y resorts)" },
-            { label: "Sede operativa", value: "Riviera Maya · Quintana Roo · México" },
-            { label: "Empleados declarados", value: "1,001–5,000 (LinkedIn corporativo)" },
-            { label: "Propiedades", value: "8 resorts oceanfront + 1 hotel boutique CDMX" },
-            { label: "Destinos donde opera", value: "Riviera Maya · Puerto Aventuras · Playa del Carmen · Ciudad de México · Baja California (Grupo Lomas)" },
-            { label: "Mercados emisores", value: "México · Estados Unidos · Canadá · Latinoamérica" },
-            { label: "Idiomas comerciales", value: "Español · Inglés" },
-            { label: "Contacto reservas MX", value: "+52 998 5280558 · bookwithus@lomashospitality.com" },
-            { label: "Contacto reservas US/CA", value: "+1 888 2011913" },
-            { label: "Contacto grupos", value: "+52 998 387 1644 · +1 130 5590 8432 · groups@lomashospitality.com" },
-            { label: "Contacto bodas", value: "+52 998 387 1730 · +1 888 248 4995 · weddings@lomashospitality.com" },
-            { label: "Reconocimientos 2026", value: "Travvy Awards nominado · Tripadvisor Travelers' Choice (El Dorado Maroma)" },
-          ],
-          segments: [
-            {
-              name: "Huésped B2C directo — Parejas adults-only (romance)",
-              description:
-                "Público objetivo principal de las 5 propiedades El Dorado Spa Resorts y de Palafitos Overwater Bungalows. Busca privacidad, romance, gastronomía y experiencias premium. Alto ticket, viaje de aniversarios, lunas de miel y escapadas. Emisor: US, Canadá, México.",
-            },
-            {
-              name: "Huésped B2C directo — Familias multi-generacional",
-              description:
-                "Atendido por Generations Riviera Maya. Requiere kids club, entretenimiento, actividades intergeneracionales, habitaciones amplias y flexibilidad de alimentos. Sensibilidad al precio pero disposición a upsell en experiencias.",
-            },
-            {
-              name: "Huésped B2C directo — Naturista adults-only",
-              description:
-                "Nicho de alto valor atendido por Hidden Beach Au Naturel Resort — único au naturel del grupo. Comunidad internacional muy fidelizada, con demanda de discreción, comunidad y programación temática. Requiere segmentación y comunicación muy diferenciada.",
-            },
-            {
-              name: "Weddings — Bodas destino",
-              description:
-                "Línea comercial dedicada con planners propios, brochure, tabla comparativa de paquetes y locaciones específicas (rooftops, cenote, capillas frente al mar, gazebos, muelles, terraza acuática). Marcas foco: El Dorado Royale, El Dorado Maroma, Generations. Ciclo de venta largo (6–18 meses), alta implicación emocional, gran oportunidad de journey orquestado.",
-            },
-            {
-              name: "MICE — Grupos, incentivos y eventos corporativos",
-              description:
-                "Espacios formales — outdoor lounge, auditorio, ballroom — y el diferencial More Inclusive® aplicado a grupos con traslados y actividades incluidas. Contactos dedicados MX/US. Alto ticket, ciclo de venta B2B con múltiples decisores.",
-            },
-            {
-              name: "B2B — Agencias de viajes y turoperadores",
-              description:
-                "Portal de agencias dedicado (`/es/bookcore/agency/login/`) integrado al motor Roiback. Socios de agencia como Exotic Travelers y programas de recompensas cruzados con Bluma Rewards. Requiere co-op marketing, tarifas negociadas, comisiones y visibilidad de producción por agencia.",
-            },
-            {
-              name: "B2B — Empresas corporativas",
-              description:
-                "Portal empresarial dedicado (`/es/bookcore/partempresas/login-empresa/`) para acuerdos corporativos. Segmento con potencial de convenios de negocios y viajes de incentivo.",
-            },
-            {
-              name: "Miembros LH Rewards — programa de lealtad propio",
-              description:
-                "Programa activo con descuentos 5–10% sobre tarifa pública, Resort Credits escalonados por noches (USD 120/180/250 con reparto SPA 50% · vinos 25% · cenas privadas 25%), check-in privado y early/late check-in-out. Solo aplica a reservas directas (web y contact center) — palanca clara para desintermediar y capturar demanda propia.",
-            },
-          ],
-          techStack: [
-            { category: "Motor de reservas y marketing online", tool: "Roiback (booking engine + campañas + widgets)" },
-            { category: "Paquetes dinámicos", tool: "paquetes.lomashospitality.com (Hotel + Vuelo)" },
-            { category: "Portales B2B", tool: "Bookcore agency login + Bookcore corporate login" },
-            { category: "Contact center", tool: "Operación 24/7 propia · MX / US-CA (tecnología no declarada públicamente)" },
-            { category: "Programa de lealtad", tool: "LH Rewards propio + integraciones con Bluma Rewards y Exotic Travelers" },
-            { category: "Renta de autos", tool: "Alianza con Hertz México (subdominio dedicado hertzmexico.com/lomas)" },
-            { category: "DMC y transportación", tool: "Lomas Travel (flota propia · empresa hermana)" },
-            { category: "Reporting ESG", tool: "Informe de Sostenibilidad 2024 · Earth Check · ESR · Pacto Global ONU" },
-            { category: "Presencia digital", tool: "Sitio ES/EN · Facebook · Instagram · LinkedIn @lomas-hospitality-services" },
-            { category: "CRM / Data Cloud", tool: "No declarado públicamente — oportunidad clara de unificación" },
-          ],
-        },
-      },
-
-      // ── 3 · Contexto ──────────────────────────────────────────────────────
-      {
-        id: "context",
-        label: "Contexto de industria y cliente",
-        title: "Dinámicas del sector y señales operativas relevantes",
-        content:
-          "El posicionamiento de Lomas se apoya en tres apuestas explícitas — More Inclusive®, hospitalidad mexicana auténtica y sostenibilidad — mientras compite en un destino (Riviera Maya) saturado de marcas globales all-inclusive (Palladium, Bahia Principe, Iberostar, RIU, Karisma, AMResorts, Palace Resorts, Xcaret). Estos son los vectores donde el discovery sí ilumina oportunidad para Salesforce.",
-        contextData: {
-          groups: [
-            {
-              name: "1 · La experiencia del huésped es multi-canal pero no multi-canal orquestado",
-              findings: [
-                "Contact center 24/7 bilingüe MX/US expuesto en cada página — canal principal de conversión asistida",
-                "Motor Roiback + landing pages promocionales por marca (El Dorado hasta 45% + 15% extra, Generations 35% + 15%, Hidden Beach 25% + 15%) — orquestación probablemente manual",
-                "WhatsApp corporativo mencionado en anuncios sociales, pero sin canal conversacional 24/7 declarado en el sitio",
-                "Sin single sign-on visible entre reservas, LH Rewards, bodas, grupos y renta de auto — el huésped repite datos en cada línea",
-              ],
-            },
-            {
-              name: "2 · Diversidad de audiencias exige segmentación fina",
-              findings: [
-                "Naturistas (Hidden Beach) · familias (Generations) · romance (El Dorado / Palafitos) · urbanos (Maison México Roma) — cada uno con lenguaje, canal y ciclo distintos",
-                "Las promociones actuales son por marca, no por audiencia — riesgo de sobrecomunicar y desalinear expectativas",
-                "El programa More Inclusive® permite bundling de experiencias externas (catamarán, wave runner, cenote, rancho, parque acuático) — cada actividad es un data point de preferencia no capturado",
-                "Palafitos Overwater Bungalows tiene beneficios diferenciados (acceso ilimitado a parque acuático) — patrón de ‘super-fan tier’ que hoy no vive en un CRM",
-              ],
-            },
-            {
-              name: "3 · El programa de lealtad es simple — el potencial de sofisticación es alto",
-              findings: [
-                "LH Rewards otorga descuento 5–10% + Resort Credits USD 120/180/250 según noches, sin niveles/tiers/puntos",
-                "Solo aplica a reservas directas — palanca para desintermediar de OTAs si se activa journey de captura de datos y remarketing",
-                "Cuenta con integraciones cruzadas con Bluma Rewards y Exotic Travelers — potencial de red de coalición",
-                "No hay evidencia pública de mecánica gamificada, personalización de créditos por preferencia (spa vs vinos vs cena) ni recomendaciones",
-              ],
-            },
-            {
-              name: "4 · Negocio B2B con portales propios pero sin visibilidad de datos consolidada",
-              findings: [
-                "Portal para agencias y portal para empresas ya en producción (bookcore) — flujos separados con login dedicado",
-                "Socios estratégicos: Exotic Travelers, Bluma Rewards, Hertz México",
-                "Grupos y bodas tienen contactos, emails y teléfonos dedicados — ciclos largos que se benefician de pipeline en Sales Cloud",
-                "Sin evidencia de portal partner con librería de assets, calculadora de comisiones o co-op marketing",
-              ],
-            },
-            {
-              name: "5 · Compromiso ESG maduro — palanca reputacional y de retención de talento",
-              findings: [
-                "Adhesión al Pacto Global de la ONU desde 2022 · Earth Check · Empresa Socialmente Responsable · HSBC",
-                "Programa ‘Evolución Responsable’ con 3 ejes: Planeta · Personas · Prosperidad — alineado a ODS",
-                "Iniciativa ‘Viajero Lomas’ con 7 principios (comunidad, naturaleza, infancias, seguridad, vida marina, huella ecológica, respeto) — inspirada en Código Ético Mundial para el Turismo",
-                "Fundación Lomas — impacto educativo y de bienestar para jóvenes vulnerables — donaciones abiertas en el sitio",
-              ],
-            },
-            {
-              name: "6 · Reconocimientos recientes que sostienen posicionamiento premium",
-              findings: [
-                "Nominado a Travvy Awards 2026 — Best All-Inclusive Hotel Brand Mexico + Best All-Inclusive Brand for Weddings/Honeymoons",
-                "El Dorado Maroma reconocido en Tripadvisor Travelers' Choice Best of the Best 2026",
-                "Reconocimientos previos del grupo: AAA Four Diamond · Wine Spectator · I Prefer",
-                "Presencia orgánica sólida en LinkedIn (3,247 seguidores Lomas Hospitality · 11,888 seguidores Grupo Lomas)",
-              ],
-            },
-          ],
-        },
-      },
-
-      // ── 4 · Marcas y propiedades ──────────────────────────────────────────
-      {
-        id: "brands",
-        label: "Marcas y propiedades",
-        title: "Portafolio de marcas y propiedades — el detalle que define audiencias",
-        content:
-          "El portafolio se estructura en 5 marcas hoteleras — cada una con un público objetivo, tono y set de servicios propios. Para Salesforce la lectura clave es que cada marca es un **segmento de audiencia con journey, KPI y personalización diferenciados** — y por lo tanto un contenedor natural para modelos de datos, journeys y agentes específicos.\n\n## El Dorado Spa Resorts · Adults-only romance (5 propiedades)\n\n| Propiedad | Ubicación | Posicionamiento |\n|---|---|---|\n| **El Dorado Royale** | Riviera Maya | Elegancia · romance · privacidad · propiedad estelar del grupo |\n| **El Dorado Casitas Royale** | Riviera Maya | Cabañas con techos de palma · exclusividad + tradición |\n| **El Dorado Maroma** | Playa del Carmen | Refugio de tranquilidad · playa incomparable · Travelers' Choice 2026 |\n| **El Dorado Seaside Palms** | Puerto Aventuras | Serenidad + aventura · Bahía de Kantenah |\n| **El Dorado Seaside Suites** | Puerto Aventuras | Oasis de sofisticación · balance calma-aventura |\n\n## Palafitos Overwater Bungalows · Luxury exclusivo\n\n- **Ubicación:** Playa del Carmen — únicos overwater bungalows del Caribe mexicano\n- **Diferencial:** Acceso ilimitado al parque acuático More Inclusive® · bungalows sobre el agua · gastronomía firmada\n- **Audiencia:** Luna de miel high-ticket, aniversarios, hi-net-worth\n\n## Hidden Beach Au Naturel Resort · Adults-only naturista\n\n- **Ubicación:** Puerto Aventuras\n- **Diferencial:** Único au naturel del portafolio · comunidad internacional muy fidelizada\n- **Audiencia:** Nicho premium con alto LTV, comunidad recurrente y programación temática\n\n## Generations Riviera Maya · Familiar multi-generacional\n\n- **Ubicación:** Riviera Maya\n- **Diferencial:** Suites amplias · programación intergeneracional · locaciones para eventos familiares\n- **Audiencia:** Familias US/Canadá/MX con niños, celebraciones familiares y bodas familiares\n\n## Maison México Roma · Boutique urbano CDMX\n\n- **Ubicación:** Colonia Roma · Ciudad de México\n- **Diferencial:** Fusiona encanto histórico con lujo moderno · pre/post estancia para huéspedes del Caribe\n- **Audiencia:** Viajero urbano premium, ejecutivo, extensión de trip Riviera Maya\n\n> 💡 **Lectura Salesforce:** cada marca justifica un `Business Unit` distinto en Marketing Cloud + segmentos independientes en Data Cloud, pero **una sola identidad de huésped** (Individual) que permita cross-selling controlado — por ejemplo, ofrecer Maison México Roma como pre-estancia a un huésped confirmado en Palafitos.",
-      },
-
-      // ── 5 · Journeys comerciales y operativos ─────────────────────────────
-      {
-        id: "commercial",
-        label: "Journeys y operación",
-        title: "Journeys comerciales, canales y momentos operativos",
-        content:
-          "El discovery del sitio revela **al menos 6 journeys diferenciados** que hoy conviven sin orquestación unificada. Para Salesforce cada uno es una oportunidad de agente conversacional + automatización + medición.\n\n## Journey 1 · Reserva directa B2C — el corazón del negocio\n\n**Flujo hoy:** landing por marca → motor Roiback → contact center 24/7 asistido → confirmación → email de pre-arrival → arribo → check-in → estancia → post-stay email.\n\n**Fricciones detectadas:**\n- No hay canal conversacional 24/7 (WhatsApp / chatbot) declarado — todo asistido pasa por teléfono/email\n- Pre-arrival, in-stay y post-stay parecen desconectados del contact center — riesgo de repreguntar al huésped\n- La promoción de descuentos escalonados (hasta 45% + 15% extra) sugiere alta sensibilidad al precio — journey de recuperación de carrito abandonado es probablemente subóptimo\n\n**Oportunidad Salesforce:** Agentforce web + WhatsApp para consulta de disponibilidad, best rate, upsell de habitación y activación de LH Rewards en el mismo turno. Journey de Marketing Cloud desde la abandonment hasta el 5-day-after-stay.\n\n## Journey 2 · Bodas destino — ciclo largo, alta implicación\n\n**Flujo hoy:** formulario web ‘Planifica tu boda’ → email weddings@ → teléfono con planner → brochure PDF + tabla comparativa PDF → cotización → firma → itinerario → boda → post-boda.\n\n**Fricciones detectadas:**\n- El brochure y la tabla son PDF estáticos → sin interactividad ni segmentación\n- Los planners atienden por teléfono/email → sin visibilidad de pipeline compartida\n- El proceso de personalización (locación, colores, banquete, pastel, flores) es artesanal → sin configurador\n\n**Oportunidad Salesforce:** Sales Cloud con pipeline Bodas + Experience Cloud para pareja/wedding planners + Agentforce para respuesta 24/7 a consultas frecuentes + configurador de paquete + integración con inventario de salones.\n\n## Journey 3 · Grupos y MICE — B2B con múltiples decisores\n\n**Flujo hoy:** formulario ‘Solicitar presupuesto’ → email groups@ → planner corporativo → cotización → firma → coordinación → evento → follow-up.\n\n**Fricciones detectadas:**\n- Sin CRM de pipeline visible — dificulta forecast\n- Sin catálogo público de capacidades por salón (outdoor lounge, auditorio, ballroom) con dimensiones y aforo\n- Sin RFP tool estándar\n\n**Oportunidad Salesforce:** Sales Cloud + Configure-Price-Quote + Agentforce B2B para primera respuesta 24/7 + Experience Cloud para wedding/event planners externos.\n\n## Journey 4 · Agencias y empresas — canales B2B ya en producción\n\n**Flujo hoy:** portal `bookcore/agency/login` y `bookcore/partempresas/login-empresa` → reservas con tarifas negociadas → comisiones/facturación.\n\n**Fricciones detectadas:**\n- Portales heredados del motor Roiback — probablemente limitados en co-op marketing, biblioteca de assets y capacitación\n- Socios como Exotic Travelers y Bluma Rewards viven en ecosistemas separados\n\n**Oportunidad Salesforce:** Experience Cloud + PRM (Partner Relationship Management) + Agentforce para asistir a agencias en cotización, comisiones y disponibilidad.\n\n## Journey 5 · LH Rewards — lealtad simple con margen de sofisticación\n\n**Flujo hoy:** afiliación en booking → descuento aplicado → Resort Credits repartidos 50/25/25 en resort → sin comunicación ongoing declarada.\n\n**Fricciones detectadas:**\n- No hay comunicación de valor entre estancias — el miembro no percibe pertenencia\n- No hay personalización de créditos según preferencia real (spa vs vino vs cena)\n- No hay tiering — el heavy user recibe lo mismo que el estreno\n\n**Oportunidad Salesforce:** Loyalty Management + Data Cloud + Marketing Cloud + Agentforce para asistente de lealtad conversacional que resuelva canjes, saldo y sugiera próxima escapada.\n\n## Journey 6 · In-stay — activación de experiencias More Inclusive®\n\n**Flujo hoy:** mesa de hospitalidad en el resort → reserva presencial de catamarán, wave runner, brunch en Maroma, parque acuático, rancho ecoturístico, cenote.\n\n**Fricciones detectadas:**\n- Reservas manuales en mesa física — colas y disponibilidad opaca\n- Sin app o WhatsApp para reservar desde la habitación\n- Sin capture de preferencias que alimente próximas visitas\n\n**Oportunidad Salesforce:** Agentforce in-stay conversacional (WhatsApp o app) + Field Service para operación de actividades + Data Cloud para alimentar preferencias del huésped que activen recomendación en futuras estancias.",
-      },
-
-      // ── 6 · Objetivo ──────────────────────────────────────────────────────
-      {
-        id: "objective",
-        label: "Objetivo del discovery",
-        title: "Qué queremos lograr posicionando Salesforce y Agentforce",
-        content:
-          "El discovery se ordena en tres ambiciones — cada una atada a un OKR concreto — que traducen lo aprendido en la conversación que Salesforce puede abrir con el sponsor comercial y tecnológico de Lomas.",
-        objective: {
-          headline:
-            "Convertir Lomas Hospitality en un cliente de plataforma completa de Salesforce — con Agentforce como puerta de entrada operativa y Data Cloud como columna vertebral — pasando de un stack fragmentado alrededor de Roiback a una arquitectura unificada de experiencia del huésped, del socio B2B y del staff.",
-          okrs: [
-            {
-              label: "O1 — Un solo perfil del huésped y del socio",
-              description:
-                "Unificar identidad y consentimiento del huésped B2C (parejas, familias, naturistas, luxury), del asistente a bodas y grupos, y del socio B2B (agencia, empresa) en Data Cloud — con Marketing Cloud, Loyalty Management y el motor Roiback conectados por MuleSoft o eventos.",
-              enabler: "Data Cloud · MuleSoft · Loyalty Management · Marketing Cloud Growth",
-              color: "indigo",
-            },
-            {
-              label: "O2 — Agentforce como primer punto de contacto 24/7",
-              description:
-                "Poner en producción una familia de agentes Agentforce que hoy atiende el contact center bilingüe — reservas, LH Rewards, bodas, grupos, in-stay activities y B2B agency — con handoff a humano cuando el valor lo requiere, medición de contención y capacidad de crear casos, oportunidades y reservas en Salesforce.",
-              enabler: "Agentforce · Service Cloud · Sales Cloud · Experience Cloud · WhatsApp Business API",
-              color: "violet",
-            },
-            {
-              label: "O3 — Programa de lealtad de siguiente generación",
-              description:
-                "Evolucionar LH Rewards de descuento fijo + Resort Credits a un programa tierizado, personalizado (spa vs vinos vs cena según preferencia), con recomendaciones next-best-offer y comunicación cross-marca — desintermediando OTAs y aumentando la reserva directa.",
-              enabler: "Loyalty Management · Data Cloud · Einstein · Marketing Cloud · Agentforce Loyalty Assistant",
-              color: "sky",
-            },
-          ],
-        },
-      },
-
-      // ── 7 · Agentforce landscape (propuesta) ──────────────────────────────
-      {
-        id: "agentforce",
-        label: "Agentes propuestos",
-        title: "Familia de agentes Agentforce recomendados para Lomas",
-        content:
-          "A partir del discovery, la propuesta es un **portafolio de 7 agentes Agentforce especializados** — cada uno con dueño de negocio, canal de exposición, alcance y KPI de contención. La estrategia recomendada es lanzar dos agentes en el primer wave (Reservas + LH Rewards) porque cubren el journey más denso y tienen impacto directo en revenue.\n\n## Agente 1 · Concierge Digital de Reservas (B2C · MVP recomendado)\n\n- **Canal:** Sitio web (Embedded Messaging) + WhatsApp Business API + Instagram DM\n- **Alcance:** Consulta de disponibilidad · comparación de marcas · aplicación de LH Rewards · abandonment recovery · upsell de habitación · handoff a contact center para cierre asistido\n- **Fuentes de contexto:** Salesforce Knowledge (políticas, marcas, propiedades) · Data Cloud (perfil de huésped) · Roiback (disponibilidad y tarifas vía MuleSoft) · Loyalty Management (beneficios activos)\n- **KPI:** % de sesiones que terminan en reserva confirmada · % de contención sin handoff · uplift de LH Rewards enrollments · lift de tarifas directas vs OTA\n\n## Agente 2 · Asistente LH Rewards (MVP recomendado)\n\n- **Canal:** WhatsApp + Sitio web + área privada del miembro\n- **Alcance:** Consulta de beneficios activos · saldo de Resort Credits · sugerencia personalizada de canje (spa/vino/cena) · recomendación de próxima estancia · gestión de perfil y consentimientos\n- **Fuentes:** Loyalty Management · Data Cloud · Knowledge · Marketing Cloud journeys\n- **KPI:** Reservas repeat · redención de créditos · NPS del miembro · retención año a año\n\n## Agente 3 · Wedding Concierge\n\n- **Canal:** Sitio web ‘Planifica tu boda’ + WhatsApp\n- **Alcance:** Responder consultas 24/7 sobre paquetes · configurar boda por locación (rooftop, cenote, capilla, muelle) · cotización preliminar · agendar llamada con planner humano · seguimiento post-boda\n- **Fuentes:** Knowledge de paquetes · Sales Cloud (Opportunity Wedding) · Experience Cloud pareja + planner\n- **KPI:** Leads calificados · velocity de pipeline · reducción de tiempo de primera respuesta\n\n## Agente 4 · Groups & MICE Agent\n\n- **Canal:** Sitio web + Email inbound + LinkedIn DM\n- **Alcance:** Primera respuesta a RFP · configurador de salones (outdoor lounge, auditorio, ballroom) · cotización preliminar · calendarización de site visit · handoff a planner\n- **Fuentes:** Knowledge de espacios y capacidades · Sales Cloud pipeline B2B · CPQ\n- **KPI:** Tiempo de respuesta a RFP · win rate B2B · pipeline generado\n\n## Agente 5 · In-Stay Guest Agent (More Inclusive® Activation)\n\n- **Canal:** WhatsApp con huésped registrado · App móvil futura\n- **Alcance:** Reserva de catamarán, wave runner, brunch Maroma, parque acuático, rancho, cenote · consulta de horarios · butler service · pedidos de room service · resolución de incidencias in-house\n- **Fuentes:** Data Cloud (preferencias) · Field Service (agenda de actividades) · Service Cloud (incidencias)\n- **KPI:** % huéspedes que activan al menos 1 experiencia More Inclusive · NPS in-stay · resolución en primer contacto\n\n## Agente 6 · B2B Agency Agent\n\n- **Canal:** Portal Bookcore + Email + WhatsApp\n- **Alcance:** Consulta de tarifas negociadas · estado de comisiones · disponibilidad para clientes · material co-op marketing · capacitación\n- **Fuentes:** Experience Cloud PRM · Data Cloud · Roiback\n- **KPI:** Producción por agencia · tickets resueltos sin humano · NPS de la agencia\n\n## Agente 7 · Copiloto del Staff (interno)\n\n- **Canal:** Slack + Service Cloud Console + WhatsApp interno\n- **Alcance:** Consulta de políticas · resumen de conversaciones previas del huésped · redacción sugerida de respuesta · escalamiento a supervisor · knowledge search\n- **Fuentes:** Knowledge interno · Data Cloud · Service Cloud\n- **KPI:** AHT del contact center · % consultas resueltas en primer contacto · satisfacción del staff\n\n---\n\n## Cómo compone la solución\n\n| Capa | Producto Salesforce | Rol |\n|---|---|---|\n| **Interacción** | Agentforce · Embedded Messaging · WhatsApp Business API · Voice Cloud | Puerta de entrada 24/7 en cada canal |\n| **Conversación** | Service Cloud · Digital Engagement · Omnichannel | Handoff a humano y colas de espera |\n| **Ventas** | Sales Cloud + CPQ | Bodas · Grupos · Cuentas B2B |\n| **Datos** | Data Cloud + MuleSoft | Unificación de huésped y socio · integración con Roiback y sistemas de operación de resort |\n| **Contenido** | Salesforce Knowledge · UDMO Files en Data Cloud | Grounding de agentes con políticas y catálogos citables |\n| **Marketing** | Marketing Cloud Growth + Journeys | Pre-arrival · in-stay · post-stay · recuperación de carrito |\n| **Lealtad** | Loyalty Management | LH Rewards de siguiente generación |\n| **Portales** | Experience Cloud | Bodas · agencias · empresas · miembros LH Rewards |\n| **Servicio de campo** | Field Service | Operación de actividades More Inclusive® |\n| **Confianza** | Einstein Trust Layer | Enmascarado de PII · audit trail · Consent en Data Cloud |",
-      },
-
-      // ── 8 · Roadmap de posicionamiento ────────────────────────────────────
-      {
-        id: "roadmap",
-        label: "Roadmap sugerido",
-        title: "Roadmap de posicionamiento en 3 waves",
-        content:
-          "El roadmap propone tres olas incrementales — cada una entrega valor por sí sola, prepara la siguiente y minimiza el shock de cambio. La lectura para el equipo de cuenta: **empezar por la wave 1 permite validar Agentforce en el journey más denso (reservas + LH Rewards) antes de expandir a bodas, grupos e in-stay**.",
-        contextData: {
-          groups: [
-            {
-              name: "Wave 1 — Foundation + MVP conversacional (0–4 meses)",
-              findings: [
-                "Data Cloud stand-up · ingesta inicial desde Roiback y contact center · perfil unificado del huésped",
-                "MuleSoft para exposición del inventory de Roiback · consent management",
-                "Agentforce · agente Concierge de Reservas (web + WhatsApp) en ES/EN",
-                "Loyalty Management · migración de LH Rewards con tiering básico",
-                "Marketing Cloud Growth · journey de pre-arrival, in-stay comm y post-stay",
-                "KPI foco: % de reservas asistidas por agente · % de sesiones LH Rewards activadas · uplift de reserva directa vs OTA",
-              ],
-            },
-            {
-              name: "Wave 2 — Expansión a Bodas, Grupos y B2B (4–9 meses)",
-              findings: [
-                "Sales Cloud + CPQ · pipeline Bodas y Grupos con roles wedding/event planner",
-                "Experience Cloud · portal pareja + wedding planners · biblioteca de assets B2B para agencias",
-                "Agentforce · Wedding Concierge + Groups & MICE Agent + B2B Agency Agent",
-                "Integración con Bluma Rewards y Exotic Travelers vía MuleSoft para visión de miembro coalicionado",
-                "KPI foco: tiempo de primera respuesta B2B · win rate · leads Bodas → oportunidad firmada",
-              ],
-            },
-            {
-              name: "Wave 3 — In-stay + Staff Copilot + Personalización avanzada (9–18 meses)",
-              findings: [
-                "Agentforce In-Stay para activación de experiencias More Inclusive® vía WhatsApp del huésped",
-                "Field Service para operación de actividades (catamarán, wave runner, cenote, parque acuático, rancho, brunch)",
-                "Agente Copiloto del Staff en Service Cloud Console + Slack",
-                "Einstein Predictions · propensión de reserva, churn de miembro LH, recomendación next-best-offer por segmento",
-                "Data Cloud · onboarding de fuentes ESG e Impacto (Fundación Lomas, Earth Check) para reporting integrado",
-                "KPI foco: % huéspedes que activan ≥1 experiencia More Inclusive · AHT contact center · NPS in-stay · reservas repeat de miembros LH",
-              ],
-            },
-          ],
-        },
-      },
-
-      // ── 9 · Fuentes ───────────────────────────────────────────────────────
-      {
-        id: "sources",
-        label: "Fuentes del discovery",
-        title: "Fuentes públicas consultadas · julio 2026",
-        content:
-          "Toda la información de esta ficha proviene del sitio corporativo de Lomas Hospitality, del sitio institucional de Grupo Lomas y de la página de LinkedIn de Lomas Hospitality Services — consultada durante el discovery. Cifras corporativas específicas (habitaciones totales, empleados exactos, ingresos, EBITDA) no se publican y requieren confirmación durante la conversación con el cliente.\n\n## Fuentes primarias\n\n| Fuente | Uso en la ficha |\n|---|---|\n| [lomashospitality.com](https://www.lomashospitality.com/) — home ES/EN | Portafolio de marcas · canales · promociones · contactos |\n| lomashospitality.com/es/marcas | Descripción de cada marca y propiedad |\n| lomashospitality.com/es/landing-pro/more-inclusive | Concepto More Inclusive® · experiencias externas incluidas |\n| lomashospitality.com/es/landing-pro/lh-rewards | Mecánica de LH Rewards · descuentos · Resort Credits |\n| lomashospitality.com/es/eventos | Espacios y contactos de grupos/MICE |\n| lomashospitality.com/es/bodas | Locaciones · paquetes · contactos wedding |\n| lomashospitality.com/es/sostenibilidad | Programa Evolución Responsable · certificaciones · adhesiones ONU |\n| [grupolomas.com](https://www.grupolomas.com/) | Fundación 1981 · fundadores · empresas hermanas · presencia geográfica |\n| LinkedIn — Lomas Hospitality Services | Tamaño de empresa · reconocimientos · empresas hermanas |\n\n## Datos NO disponibles públicamente — a validar con cliente\n\n- Número exacto de habitaciones por propiedad y total del portafolio\n- Facturación anual y EBITDA del grupo\n- Estructura accionaria detallada más allá de los fundadores\n- CEO, CFO, CIO/CDO actuales · organigrama ejecutivo\n- Stack tecnológico real (PMS, RMS, CDP, CRM, ESB, iPaaS)\n- Volumen anual de contact center (llamadas, chats, emails)\n- Volumen anual de bodas y grupos ejecutados\n- Base activa de miembros LH Rewards y penetración vs total de huéspedes\n- Mix de canal (directa vs OTA vs turoperador vs corporativo)\n- Retorno de las inversiones actuales en Roiback y en portales B2B\n\n> 🎯 **Siguiente paso recomendado:** conversar con **VP Comercial, Director de Marketing Digital y Director de TI** de Lomas Hospitality para validar los journeys detectados, calibrar el orden de olas del roadmap y priorizar el MVP conversacional (Concierge de Reservas + LH Rewards) como puerta de entrada de Salesforce.",
-      },
-    ],
-  },
-  {
     slug: "paquetexpress",
     title: "Agentforce Paquete Express — Documentación y evaluación del agente conversacional",
     customerName: "Paquetexpress",
     industry: "Logística y paquetería · México · 40+ años",
     description:
       "Documentación completa y auditoría del agente Agentforce_Paquete_Express (Bot Id 0XxVn00000001CDKAY, versión v12) que atiende clientes de Paquetexpress en Messaging (WhatsApp, Facebook, EmbeddedMessaging, Email, Text, Line, Apple Business Chat, Custom). Incluye contexto del cliente (portafolio de servicios de paquetería y carga, cobertura nacional e internacional a +240 países, segmentos B2C/B2B/e-commerce), inventario detallado de 5 tópicos, 17 GenAiFunctions y evaluación crítica con 17 hallazgos priorizados (3 críticos, 6 altos, 8 medios) y plan de acción en 4 olas.",
+    logo: "/Customers/Paquetexpress/paquetexpress-logo.png",
     passcode: "paquete2026",
     hidden: false,
     tags: [
@@ -5277,6 +4958,153 @@ export const customerProjects: CustomerProject[] = [
         title: "Cómo se obtuvo esta información",
         content:
           "> 🧰 Auditoría reproducible. Toda esta ficha se produjo a partir de metadata retrievada directamente del sandbox — sin capturas ni suposiciones.\n\n## Comandos ejecutados\n\n```bash\n# 1 · Autenticar sandbox\nsf org login web --alias paquetexpress-sandbox \\\n  --instance-url https://test.salesforce.com --set-default\n\n# 2 · Listar Bots existentes\nsf org list metadata --metadata-type Bot \\\n  --target-org paquetexpress-sandbox\n\n# 3 · Retrieve del agente + planner + plugins + funciones\ncat > manifest/agentforce.xml <<'EOF'\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <types><members>Agentforce_Paquete_Express</members><name>Bot</name></types>\n  <types><members>Agentforce_Paquete_Express</members><name>GenAiPlanner</name></types>\n  <types><members>*</members><name>GenAiPlugin</name></types>\n  <types><members>*</members><name>GenAiFunction</name></types>\n  <version>62.0</version>\n</Package>\nEOF\n\nsf project retrieve start --manifest manifest/agentforce.xml \\\n  --target-org paquetexpress-sandbox\n```\n\n## Artefactos retrievados\n\n| Ruta | Contenido |\n|---|---|\n| `force-app/main/default/bots/Agentforce_Paquete_Express/Agentforce_Paquete_Express.bot-meta.xml` | Bot definition con context variables y canales |\n| `force-app/main/default/bots/Agentforce_Paquete_Express/v12.botVersion-meta.xml` | Versión activa |\n| `force-app/main/default/genAiPlanners/Agentforce_Paquete_Express.genAiPlanner-meta.xml` | Planner ReAct con 5 plugins + `EmployeeCopilot__AnswerQuestionsWithKnowledge` |\n| `force-app/main/default/genAiPlugins/General_Information_Management.genAiPlugin-meta.xml` | Tópico 1 |\n| `force-app/main/default/genAiPlugins/Orden_Management.genAiPlugin-meta.xml` | Tópico 2 |\n| `force-app/main/default/genAiPlugins/Quote_Management.genAiPlugin-meta.xml` | Tópico 3 |\n| `force-app/main/default/genAiFunctions/*` | 17 funciones con `<Nombre>.genAiFunction-meta.xml` + `input/schema.json` + `output/schema.json` |\n\n## Bots relacionados en la org *(no auditados aquí)*\n\nDurante `sf org list metadata --metadata-type Bot` aparecieron otros agentes históricos del cliente — deuda operativa que conviene revisar en un ciclo aparte para decidir cuáles retirar:\n\n| Bot | Creado | Última mod | Estado sugerido |\n|---|---|---|---|\n| `Paquebot_Express` | 2021-08-26 | 2024-10-12 | Legacy — evaluar retiro |\n| `Agentforce_Paquete_Express` | 2025-01-29 | 2026-07-29 | **Activo — auditado** |\n| `PaqueteBotWhatsAppMejorado` | 2025-07-23 | 2025-09-20 | Revisar overlap con activo |\n| `PaqueteBotFacebook` | 2021-07-05 | 2024-10-12 | Legacy — evaluar retiro |\n| `PaquetexpressMejorado` | 2025-09-22 | 2025-09-24 | Revisar si es sucesor previsto |\n| `PruebaPaquete` | 2021-02-05 | 2024-10-12 | Prueba — retirar |\n| `PaqueteBotWhatsAppCopia` | 2022-10-06 | 2022-10-06 | Copia — retirar |\n| `PaquetexpressEnhanced` | 2025-10-02 | 2025-10-02 | Revisar si es rama de mejora |\n| `Copilot_for_Salesforce` | 2024-12-16 | 2024-12-16 | Copilot estándar |\n\n> 🎯 **Recomendación de gobierno:** un solo agente por caso de uso, con nomenclatura clara y ciclo de retiro documentado. Tener 9 bots en la org es una señal de que faltó gobernanza histórica.",
+      },
+    ],
+  },
+  {
+    slug: "bicevida",
+    title: "BICE Vida — Adjuntos en Agentforce por WhatsApp · Avances 15-jul → 12-ago 2026",
+    customerName: "BICE Vida Compañía de Seguros",
+    industry: "Seguros de vida y rentas vitalicias · Chile",
+    description:
+      "Entregable de avances sobre la solicitud del 15 de julio de 2026: cómo habilitar el manejo de adjuntos dentro de una conversación de Agentforce por WhatsApp. En 4 semanas se exploraron los 4 caminos técnicamente viables — uno custom probado en producción con un cliente de referencia en Colombia, uno híbrido descartado empíricamente, uno estándar con transferencia a Bot con fricciones documentadas, y uno de sitio externo aún no explorado. Este documento consolida hallazgos, evidencia y decisiones pendientes.",
+    logo: "/Customers/BiceVida/bice-vida-logo.png",
+    passcode: "bicevida2026",
+    hidden: true,
+    tags: [
+      "Agentforce",
+      "WhatsApp",
+      "Adjuntos",
+      "Digital Engagement",
+      "Seguros de vida",
+      "Chile",
+      "Grupo BICE",
+      "Avances",
+    ],
+    tabs: [
+      {
+        id: "overview",
+        label: "Overview",
+        title: "Entregable de avances — adjuntos en Agentforce por WhatsApp",
+        deliverableCta: {
+          eyebrow: "Presentación ejecutiva",
+          badge: "Nuevo",
+          title: "Ver deck de avances — 17 slides",
+          description:
+            "Versión resumida y compelling de este entregable para presentar a BICE Vida: problema, 4 caminos, matriz, 5 decisiones abiertas y próximo paso. 20 minutos.",
+          href: "/customer-projects/bicevida/deck/avances-adjuntos",
+          ctaLabel: "Abrir deck",
+        },
+        content:
+          "## TL;DR\n\n> **BICE Vida** solicitó el **15 de julio de 2026** una solución para manejar **adjuntos dentro de una conversación de Agentforce por WhatsApp**. En 4 semanas exploramos los **4 caminos técnicamente viables**. Este documento consolida lo aprendido, la evidencia empírica de cada camino y las decisiones que quedan abiertas para elegir con el cliente.\n\n### El problema, en una frase\n\nEl path estándar de Digital Engagement recibe el archivo pero **Agentforce no puede procesar el binario** — el error viene del sistema, no del razonamiento del agente. Cualquier caso de uso donde el cliente adjunta evidencia (comprobante de pago, foto de un documento, nota de voz) queda bloqueado.\n\n### Los 4 caminos explorados\n\n| # | Camino | Estado | Referencia |\n|---|---|---|---|\n| **1** | **Custom total** — reemplazar el canal estándar por webhook a Meta + pipeline propio | ✅ Probado en producción con un cliente de referencia en Colombia | Recetas `whatsapp-attachments-custom-channel` (V1) y `-v2-handoff` (V2) |\n| **2** | **Híbrido** — interceptar en el path estándar en el único punto sync-observable (`ContentDocumentLink BEFORE_INSERT`) | ❌ Descartado empíricamente el 2026-08-01 tras probar 10+ hipótesis de write-back al canal | Receta `whatsapp-attachments-lightweight-interception` |\n| **3** | **Standard + Bot legado** — transferir la conversación a un Einstein Bot que sí soporta media, procesar el archivo, retornar a Agentforce | ⚠️ Explorado con fricciones: la transferencia no siempre se dispara desde Agentforce, cuando se dispara cae en fallback queue | Pruebas propias + conjuntas (jul-ago 2026) |\n| **4** | **Sitio externo de carga** — enviar al usuario a un formulario / Experience Cloud que sube el archivo y lo amarra por `MessagingSessionId` | 🔬 Documentado como workaround; **aún no explorado con BICE Vida** | Hipótesis · sin pruebas específicas para este caso |\n\n### Qué es esta presentación y qué NO es\n\n- **Es** un informe de avances que muestra el recorrido de 4 semanas, la evidencia de cada camino y las variantes UX que la solución final debe manejar.\n- **NO es** una recomendación cerrada. La decisión sobre qué camino profundizar depende de que BICE Vida priorice entre estabilidad, escalabilidad, experiencia y costo/tiempo de implementación.\n\n### Qué debe satisfacer la solución final\n\n1. **Estable** — el path del adjunto no puede depender del razonamiento del LLM.\n2. **Escalable** — comportamiento predecible con volumen creciente.\n3. **UX fluida** — el cliente no debería tener que aprender un flujo especial para adjuntar.\n\n### Variantes UX que la solución debe manejar\n\n1. El usuario **dice explícito** *\"quiero enviarte un archivo\"* → el agente lo invita y espera.\n2. El **agente pide** *\"por favor adjunta tu comprobante\"* → el usuario responde con archivo.\n3. El usuario **manda el archivo sin contexto**, sin anunciarlo, mid-conversación.\n4. El usuario manda el archivo **después de haber sido escalado a humano** (bandwidth compartido con el agente humano).\n5. El usuario envía **un tipo no soportado** (video, sticker, ubicación) — degradación con mensaje claro.\n6. El usuario envía **múltiples archivos en ráfaga** — la solución debe agruparlos por sesión, no duplicar cargas.",
+        overviewData: {
+          stats: [
+            { value: "15-jul", label: "Solicitud original de BICE Vida (2026)" },
+            { value: "4", label: "Caminos técnicamente viables explorados" },
+            { value: "2", label: "Recetas publicadas en el portfolio (V1 + V2)" },
+            { value: "1", label: "Camino descartado con evidencia empírica" },
+            { value: "10+", label: "Hipótesis de write-back probadas en el híbrido" },
+            { value: "6", label: "Variantes UX que la solución debe manejar" },
+            { value: "0", label: "Recomendaciones cerradas — decisión abierta con el cliente" },
+            { value: "28 días", label: "Ventana de investigación 15-jul → 12-ago 2026" },
+          ],
+        },
+      },
+      {
+        id: "cliente",
+        label: "Cliente e industria",
+        title: "BICE Vida — quién es y por qué esto importa",
+        content:
+          "## La compañía\n\n**BICE Vida Compañía de Seguros S.A.** es la filial de seguros de vida del **Grupo BICE**, uno de los conglomerados financieros de Chile controlado por el **Grupo Matte**. Opera productos de vida individual, vida colectivo, rentas vitalicias, APV, desgravamen y productos con componente de inversión, y se apoya en un ecosistema de canales que incluye bancaseguro (Banco BICE), corredores independientes, fuerza de venta directa y ventas digitales.\n\n**Regulador principal:** CMF (Comisión para el Mercado Financiero). Rentas vitalicias además bajo Superintendencia de Pensiones. Ley 21.719 de datos personales (2024) impone estándares GDPR-like con vigencia progresiva.\n\n## Por qué el manejo de adjuntos es crítico para el negocio\n\nEn una aseguradora de vida, **el adjunto es evidencia** — no es un ornamento. Ejemplos que salen todos los días:\n\n| Escenario | Adjunto típico | Impacto si no puede procesarse en canal |\n|---|---|---|\n| Reclamo / siniestro de vida | Certificado de defunción, exámenes médicos, comprobante de gastos | Bloquea el trámite, obliga a abrir canal alterno (email/portal), cliente en momento de alta vulnerabilidad |\n| Cotización de vida individual con evaluación médica | Exámenes de salud, historial clínico | Ralentiza la emisión (que ya suele durar semanas en el ramo) |\n| Contratación digital / APV | Copia de cédula, comprobante de domicilio, comprobante de ingreso | Rompe el intento de contratación 100% digital |\n| Actualización de datos / beneficiarios | Documentación probatoria | Genera casos manuales, aumenta backlog de back-office |\n| Colectivos / empresas | Nóminas, altas/bajas masivas | Empeora la experiencia del broker corporativo |\n\n## Situación desde el 15 de julio\n\n- **15-jul-2026** — BICE Vida solicita solución para adjuntos en Agentforce+WhatsApp.\n- **Referencia inicial** — un cliente de referencia en Colombia tenía el mismo problema y se resolvió con un canal custom completo. Se plantea usar esa arquitectura como base.\n- **Descubrimiento clave del recorrido** — el error de Agentforce con adjuntos es **de sistema**, no del razonamiento. Eso descarta cualquier workaround puramente de instrucciones/prompt.\n- **12-ago-2026** — entrega de este documento con los 4 caminos evaluados.\n\n## Ítems del cliente aún pendientes de validar\n\n> Datos comerciales, tecnológicos y de negocio que están abiertos y que impactan la elección del camino:\n\n- Volumen actual de adjuntos por conversación de WhatsApp y tipos predominantes.\n- Stack real de Salesforce en BICE Vida (Financial Services Cloud / Service Cloud / Insurance / Data Cloud, versiones).\n- Existencia de Experience Cloud activo (relevante para Camino 4).\n- Roadmap 2026 de digitalización y prioridades del negocio (impacta cuánto se puede invertir).\n- Compliance del área de seguridad frente a un webhook público en Force.com Sites (relevante para Camino 1).",
+        customerProfile: {
+          stats: [
+            { label: "Nombre legal", value: "BICE Vida Compañía de Seguros S.A." },
+            { label: "País", value: "Chile" },
+            { label: "Grupo controlador", value: "Grupo BICE (Grupo Matte)" },
+            { label: "Ramo", value: "Seguros de vida y rentas vitalicias" },
+            { label: "Regulador", value: "CMF · Superintendencia de Pensiones" },
+            { label: "Solicitud abierta", value: "Adjuntos en Agentforce por WhatsApp (15-jul-2026)" },
+          ],
+          segments: [
+            {
+              name: "Personas — vida individual y APV",
+              description:
+                "Cliente natural del canal bancaseguro y de corredores. Adjuntos típicos: exámenes médicos, comprobante de domicilio, comprobante de ingreso, cédula.",
+            },
+            {
+              name: "Rentas vitalicias — segmento previsional",
+              description:
+                "Afiliados AFP en decisión de jubilación. Adjuntos típicos: certificado de saldo AFP, cédula, historial de salud.",
+            },
+            {
+              name: "Empresas — colectivos y beneficios",
+              description:
+                "Empleadores contratando pólizas grupales. Adjuntos: nóminas, altas/bajas masivas, planillas.",
+            },
+            {
+              name: "Reclamos / siniestros",
+              description:
+                "Segmento transversal a todo el portafolio. Adjuntos críticos: certificado de defunción, exámenes, comprobantes de gasto. Momento de alta sensibilidad y expectativa de trato humano.",
+            },
+          ],
+          techStack: [
+            { category: "Plataforma CRM", tool: "Salesforce (a confirmar edición y clouds activos)" },
+            { category: "Canal en discusión", tool: "WhatsApp — vía Digital Engagement estándar" },
+            { category: "IA conversacional", tool: "Agentforce (Einstein Service Agent · nuevo stack)" },
+            { category: "Sitio externo", tool: "Experience Cloud — por confirmar si está desplegado" },
+            { category: "Firma / documentos", tool: "TBD — habitual en industria (DocuSign / Adobe Sign / e-Cert)" },
+            { category: "Core asegurador", tool: "TBD — pendiente confirmar" },
+          ],
+        },
+      },
+      {
+        id: "problema",
+        label: "El problema",
+        title: "Por qué el path estándar falla y qué debe manejar la solución",
+        content:
+          "## El problema, con precisión\n\n> Cuando un usuario envía un archivo por WhatsApp mid-conversación con un Agent de Agentforce, **Agentforce falla al procesarlo**. El error es de **sistema, no del razonamiento del agente** — es decir, no se puede resolver con instrucciones al agente, con prompt engineering, ni con un tópico nuevo. La falla ocurre antes de que el agente razone.\n\n### Qué pasa técnicamente\n\n1. Meta entrega el archivo al canal estándar de Digital Engagement.\n2. Salesforce guarda el binario como `ContentDocument` y lo relaciona al `MessagingSession`.\n3. El evento le llega al Agent como *turno con adjunto*, pero **el binario no es interpretado** — el Agent recibe una referencia, no el contenido.\n4. El Agent no invoca automáticamente un modelo multimodal sobre ese binario, así que devuelve un error genérico al usuario (*\"no pude procesar el archivo\"*).\n5. Cualquier intento de \"enseñarle al Agent a manejar el error\" es superficial — el error ya viajó al usuario antes de que el Agent decida qué contestar.\n\n### Por qué esto NO es un problema de configuración\n\nSe descartaron empíricamente:\n\n- Cambios de instrucciones en el tópico del Agent → el error se dispara antes de que el tópico razone.\n- Sensitive Data Rules → pertenecen al stack Live Chat legado, no aplican a Enhanced Messaging.\n- Trust Layer con filtros custom → no acepta filtros externos.\n- Action sequencing con acción custom que \"detecte adjunto\" → el modelo decide de forma no-determinística cuándo llamar la acción; con volumen se dispara falso-positivos / falso-negativos.\n\n---\n\n## Variantes UX que la solución debe manejar\n\nLa solución no puede optimizar solo un flujo — debe cubrir el conjunto real de comportamientos del usuario en WhatsApp. Modelamos 6 variantes con nivel de dificultad creciente.\n\n### 1 · Usuario anuncia el envío\n\n> *\"Hola, te quiero enviar mi comprobante de pago.\"* → luego adjunta.\n\n- El agente puede responder invitando la carga: *\"claro, adjúntalo aquí mismo\"*.\n- La solución tiene contexto para vincular el archivo al hilo de conversación.\n- **Es la variante más fácil** — el agente puede anticipar la llegada.\n\n### 2 · Agente pide el archivo\n\n> Agente: *\"Para procesar tu reclamo necesito una foto del comprobante.\"* → usuario adjunta.\n\n- El agente sabe qué tipo de archivo espera.\n- La solución puede validar formato/tamaño contra el pedido explícito.\n- Fallback si el usuario no adjunta en X minutos (recordatorio o cierre).\n\n### 3 · Usuario adjunta sin anuncio\n\n> Sin decir nada, envía una foto o PDF a media conversación.\n\n- **Variante más frecuente en la práctica** y la más difícil para el estándar.\n- La solución debe detectar el archivo, procesarlo y reincorporar el resultado al turno del agente sin romper el hilo.\n\n### 4 · Adjunto después del handoff a humano\n\n> El bot ya escaló a un asesor humano y el cliente sigue mandando archivos.\n\n- El humano debe ver el archivo en su bandeja del Case (visibilidad on-record).\n- La solución no puede \"apagar\" el pipeline cuando ya no hay bot activo.\n- Cubierto en la V2 handoff del Camino 1 con `FDE_LinkDocumentToWhatsAppEntities` y `FDE_BackfillDocumentsToCase`.\n\n### 5 · Tipo no soportado\n\n> Usuario envía video, sticker, ubicación, contacto vCard.\n\n- La solución responde con mensaje claro: *\"por ahora no puedo procesar este tipo de contenido\"*.\n- Alternativa: sugerir foto / PDF / texto.\n- Sin caídas silenciosas.\n\n### 6 · Ráfaga de múltiples archivos\n\n> El usuario envía 4 fotos seguidas en 30 segundos.\n\n- La solución debe agruparlos por sesión, no procesarlos como 4 turnos independientes.\n- El agente debe responder una sola vez a la ráfaga (por ejemplo, *\"recibí 4 archivos, dame un segundo para revisarlos\"*).\n- Sin duplicación de cargas ni bucles.\n\n---\n\n## Requisitos no funcionales del entregable final\n\n| Dimensión | Umbral esperado |\n|---|---|\n| **Estabilidad** | El path del adjunto NO puede depender del razonamiento del LLM |\n| **Escalabilidad** | Comportamiento predecible con volumen creciente (1 → 1000 conversaciones/día) |\n| **UX fluida** | El cliente no aprende un flujo especial — WhatsApp funciona como espera |\n| **Trazabilidad** | Cada adjunto queda enlazado al Case, al Contact y al MessagingSession |\n| **Compliance** | Ley 21.719 de datos personales de Chile · retención y acceso auditables |",
+      },
+      {
+        id: "timeline",
+        label: "Timeline",
+        title: "Cronología de avances · 15-jul → 12-ago 2026",
+        content:
+          "## Los hitos, en orden\n\n### 15 de julio · Solicitud original\n\nBICE Vida escribe pidiendo una solución para adjuntos en Agentforce por WhatsApp. Se toma como referencia inicial el trabajo hecho con un cliente en Colombia, que había resuelto un problema idéntico algunos meses antes con un canal custom completo.\n\n### 16–22 de julio · Análisis de la arquitectura de referencia y validación del alcance\n\nSe revisa la arquitectura del cliente en Colombia:\n\n- Webhook público en Force.com Sites que recibe directo de Meta Cloud API.\n- Platform Events para desacoplar recepción y procesamiento.\n- Pipeline asíncrono que descarga el archivo, lo procesa con un Flow + Prompt Template (GPT-4o para imagen/PDF, Whisper para audio) y entrega el resultado como mensaje sintético al Agent.\n- Objetos custom `WhatsApp_Configuration__c`, `WhatsApp_Conversation__c`, `WhatsApp_Message__c`, `WhatsApp_Log__c`, `WhatsApp_Media__c`.\n- ~16 clases Apex, 4 pipelines por tipo de medio.\n\n### 23 de julio · Publicación de la Receta V1 (custom-channel)\n\nSe publica en el portfolio Laila la receta `whatsapp-attachments-custom-channel` — approach custom estable, con evidencia de producción en el cliente de referencia en Colombia.\n\n### 24–29 de julio · Trabajo del layer de handoff\n\nSobre la base V1 se identifica que faltan cuatro piezas para un despliegue en producción real:\n\n- Handoff a cola humana con owner visible del bot user (no `Automated Process`).\n- Cierre de conversaciones inactivas por timeout.\n- Feature flag por línea (`Handoff_Enabled__c`) para rollback sin redeploy.\n- Backfill de adjuntos históricos al Case cuando este se crea después.\n\n### 30 de julio · Publicación de la Receta V2 (handoff)\n\nSe publica `whatsapp-attachments-custom-channel-v2-handoff` con las nuevas piezas: 9 campos nuevos en `WhatsApp_Configuration__c`, GenAiFunction `FDE_afEscalateToHuman`, Timeout Scheduler, LWC `whatsappAdminSettings`, y Custom Permission `WhatsApp_Admin`.\n\n### 31 jul – 1 ago · Exploración del Camino Híbrido\n\nSe intenta un middle ground: **no reemplazar el canal**, sólo interceptar en el único punto sync-observable del path estándar (`ContentDocumentLink BEFORE_INSERT`). El objetivo es procesar el adjunto en Salesforce (con `aiplatform.ModelsAPI` — GPT-4o texto con Trust Layer) y **inyectar** el resultado al canal sin salir del estándar.\n\nSe despliegan 3 triggers de solo-debug en la org Laila (jgr@laila.demo). Se mapea qué objetos disparan y bajo qué user context. Se prueban **10+ hipótesis** de write-back — todas confirman lo mismo: **no existe una API pública Apex/REST/Metadata para inyectar mensajes al canal Enhanced desde afuera del agente**.\n\n### 1 de agosto · Receta híbrida publicada como diagnóstico\n\nSe publica `whatsapp-attachments-lightweight-interception` como **diagnóstico reproducible**, no como solución. El aprendizaje queda documentado con evidencia empírica para futuros research de messaging.\n\n### 2–10 de agosto · Exploración del Camino Standard + Bot\n\nSe evalúa: transferir la conversación desde Agentforce hacia un Einstein Bot legado (que sí soporta media messages), procesar el adjunto ahí, y devolver el hilo a Agentforce.\n\n- Pruebas propias del arquitecto: **no logra transferir correctamente al Bot** — la transferencia se dispara en algunos casos y no en otros.\n- Pruebas conjuntas con el equipo: **la transferencia custom no siempre se ejecuta desde Agentforce** — el agente mismo indica en algunos turnos que *\"no puede recibir adjuntos\"*, pero la GenAiFunction de handoff no se dispara. Cuando la transferencia sí ocurre, la conversación **cae en el fallback queue**, sin llegar al Bot destino.\n- Estado: **explorado con evidencia de fricciones**, sin cierre positivo y sin cierre negativo definitivo. No hay conclusión.\n\n### 11 de agosto · Diseño del Camino Sitio Externo (hipótesis)\n\nSe formula el cuarto camino como workaround documental: enviar al usuario a un sitio externo (Experience Cloud o formulario público) que reciba el archivo y lo vincule por `MessagingSessionId`. **No se prueba con BICE Vida** — queda como hipótesis a validar.\n\n### 12 de agosto · Presentación de avances (este documento)\n\nSe consolida el recorrido, la evidencia de cada camino y las decisiones pendientes. Sin recomendación cerrada — se abre el diálogo con BICE Vida sobre qué camino profundizar.\n\n---\n\n## Ventana total\n\n**28 días** de investigación distribuidos así:\n\n| Fase | Días | Peso relativo |\n|---|---|---|\n| Análisis de la arquitectura de referencia | 7 | 25% |\n| Diseño y documentación de V1 + V2 | 8 | 29% |\n| Exploración híbrido + descarte empírico | 3 | 11% |\n| Exploración standard + bot | 9 | 32% |\n| Diseño hipótesis sitio externo + consolidación | 1 | 3% |",
+      },
+      {
+        id: "camino-1-custom",
+        label: "Camino 1 · Custom",
+        title: "Camino 1 — Reemplazo total del canal (approach del cliente de referencia)",
+        content:
+          "## En una frase\n\n> Reemplazar el canal estándar de Digital Engagement por un canal custom que recibe directo de Meta, procesa los adjuntos con un pipeline propio y entrega al Agent el **contenido interpretado**, no el binario. **Probado en producción con un cliente de referencia en Colombia.**\n\n## Cómo funciona\n\n1. El número de WhatsApp se registra en **Meta Business** directamente (no en Digital Engagement).\n2. Un **webhook público** en Force.com Sites recibe los mensajes de Meta, valida HMAC-SHA256 y publica un `WhatsApp_Inbound_Event__e`.\n3. Un `WhatsAppInboundEventHandler` encola un Queueable que descarga el archivo desde la Graph API de Meta.\n4. Según el tipo del archivo, se dispara un pipeline: **GPT-4o vision** para imagen/PDF, **Whisper** para audio.\n5. El resultado se inyecta al Agent como **mensaje sintético** — el Agent ve un texto interpretado (\"El comprobante muestra un pago de $150.000 al beneficiario X con fecha Y\"), nunca ve el binario.\n6. El Agent responde con base en ese texto → **UX fluida, sin errores**.\n\n## Cobertura de las 6 variantes UX\n\n| Variante | ¿Cubierta? |\n|---|---|\n| 1 · Usuario anuncia el envío | ✅ Nativa — el pipeline procesa cualquier adjunto entrante |\n| 2 · Agente pide el archivo | ✅ Nativa |\n| 3 · Adjunto sin anuncio | ✅ Nativa — es el caso base del canal |\n| 4 · Adjunto post-handoff | ✅ V2 cubre con `FDE_LinkDocumentToWhatsAppEntities` y `FDE_BackfillDocumentsToCase` |\n| 5 · Tipo no soportado | ✅ Configurable en la configuración por línea |\n| 6 · Ráfaga múltiple | ✅ Los Platform Events desacoplan recepción y procesamiento; agrupables por `MessagingSession` |\n\n## Piezas técnicas (V1 + V2)\n\n### Objetos custom (6)\n\n- `WhatsApp_Configuration__c` — configuración por línea (23 campos totales con V2)\n- `WhatsApp_Conversation__c` — conversación en curso, con owner real y expiración\n- `WhatsApp_Message__c` — turnos individuales\n- `WhatsApp_Media__c` — binarios interpretados\n- `WhatsApp_Log__c` — traza técnica\n- `WhatsApp_Template__c` — plantillas HSM\n\n### Platform Events (2)\n\n- `WhatsApp_Inbound_Event__e` — mensaje entrante desde webhook\n- `WhatsApp_Outbound_Event__e` — mensaje saliente hacia Meta\n\n### Clases Apex (~30 con V2)\n\n- Handler REST del webhook + validación HMAC\n- Auth (Named Credential a Graph API con OAuth token refresh)\n- Service + Queueable de agente\n- Escalation invocable (`WhatsAppEscalateAction`)\n- Timeout Scheduler + Queueable\n- Link + Backfill de adjuntos hacia Case\n\n### GenAiFunctions\n\n- V1 · 6 funciones (identificación, casos, catálogo, knowledge)\n- V2 · +1 `FDE_afEscalateToHuman`\n\n### LWC\n\n- `whatsappConversationChat` (child)\n- `whatsappConversationRecord` (wrapper para record page)\n- `whatsappAdminSettings` (tab admin gated por Custom Permission)\n- `whatsappDashboard`\n\n## Fortalezas\n\n- ✅ **Estable** — el path del adjunto NO depende del razonamiento del LLM.\n- ✅ **Escalable** — Platform Events desacoplan recepción y procesamiento; pipelines paralelos por tipo de medio.\n- ✅ **UX fluida** — el usuario no aprende nada nuevo; el agente responde con contexto del archivo.\n- ✅ **Trazable** — cada adjunto queda enlazado a MessagingSession, Case y Contact.\n- ✅ **Producción real** — funcionando hoy en la cuenta del cliente de referencia en Colombia, atendiendo tráfico real por WhatsApp con adjuntos.\n\n## Costos y consideraciones\n\n- 🔴 **Alto costo de construcción inicial** — ~6 objetos custom, ~30 clases Apex, 4 pipelines por tipo de medio, permission sets dedicados, Guest User Profile para el webhook.\n- 🟡 **Doble canal** — se pierde el canal nativo de Digital Engagement (routing, HSM templates, features nuevas de Salesforce Enhanced Messaging).\n- 🟡 **Compliance de webhook público** — requiere revisión con área de seguridad (aunque valida HMAC-SHA256).\n- 🟡 **Owning de OAuth tokens de Meta** — token refresh, rotación, monitoreo (resuelto en la implementación de referencia con Named Credentials y clases dedicadas).\n\n## Evidencia\n\n### Recetas publicadas\n\n- [`whatsapp-attachments-custom-channel`](/build/whatsapp-attachments-custom-channel) — V1, publicada 2026-07-23, ~22 min de lectura.\n- [`whatsapp-attachments-custom-channel-v2-handoff`](/build/whatsapp-attachments-custom-channel-v2-handoff) — V2, publicada 2026-07-30, ~32 min de lectura.\n\n### Referencia de cliente\n\n- **Cliente en Colombia** · Centro de Experiencia B2B con Agentforce sobre WhatsApp, atendiendo tráfico real. Planner Atlas ConcurrentMultiAgentOrchestration. La arquitectura, objetos custom y pipeline de adjuntos que describimos arriba están vivos hoy en esa cuenta.",
+      },
+      {
+        id: "camino-2-hibrido",
+        label: "Camino 2 · Híbrido",
+        title: "Camino 2 — Intercepción en el path estándar (descartado empíricamente)",
+        content:
+          "## En una frase\n\n> Sin reemplazar el canal Enhanced Messaging, interceptar el evento del adjunto en el único punto sync-observable del path estándar (`ContentDocumentLink BEFORE_INSERT` con `LinkedEntityType=MessagingSession`) y procesarlo antes de que el Agent responda. **Descartado empíricamente el 1 de agosto de 2026 tras probar 10+ hipótesis de write-back al canal.**\n\n## La idea inicial\n\n1. El path estándar recibe el archivo y lo guarda como `ContentDocument`.\n2. Un trigger custom en `ContentDocumentLink BEFORE_INSERT` detecta el evento.\n3. Un Queueable descarga el binario, lo procesa con `aiplatform.ModelsAPI` (GPT-4o texto con Trust Layer aplicado — sí funciona) y prepara un mensaje sintético con el resultado.\n4. Se inyecta el mensaje sintético al canal para que el Agent lo tome como si hubiera sido texto del usuario → **sin construir nada custom**.\n\n**Si funcionaba, era el camino más barato.**\n\n## Por qué NO funciona · evidencia empírica\n\nEl 2026-08-01 se desplegaron 3 triggers de solo-debug en la org Laila (`jgr@laila.demo`) para mapear qué objetos disparan y bajo qué user context durante flujos reales de WhatsApp.\n\n### Matriz de objetos triggerables\n\n| Objeto | Triggerable en describe | Dispara en test real | User context observado | Utilidad |\n|---|---|---|---|---|\n| `ConversationEntry` | false | N/A | N/A | Descartado — no permite trigger. El campo `Message` además está siempre vacío. |\n| `MessagingSession` | true | Sí — insert + updates de Status/Owner | AutomatedProcess (`05K...002DT8JYAW`) | Útil para reaccionar a cambios de sesión, no a turnos individuales. |\n| `MessagingEndUser` | true | No en este test (MEU pre-existente) | N/A | Dispararía solo en primer contacto de un teléfono nuevo. |\n| `ContentDocumentLink` | true | Sí — BEFORE_INSERT sync con `LinkedEntityType=MessagingSession` | AutomatedProcess | ⭐ **PUNTO DE INTERCEPCIÓN CLAVE** — sí sirve para detectar. |\n\n**Detección: sí funciona.** El punto crítico era el paso siguiente.\n\n### 10+ hipótesis de write-back probadas — todas fallidas\n\n| Hipótesis | Cómo | Resultado |\n|---|---|---|\n| `LiveChatSensitiveDataRule` | Regla de reemplazo aplicada al canal | Pertenece al stack Live Chat legado — no aplica a Enhanced Messaging |\n| `ConnectApi.EnhancedMessaging` | API pública para enviar mensajes | No expone método para inyectar como si fuera el usuario |\n| `ConvMessageSendRequest` | Send request desde Apex | No acepta ser invocado con `ActorType=EndUser` |\n| `ConversationEntry` DML insert con `ActorType=Bot` | Insert directo del turno | Objeto no es triggerable ni insertable desde Apex |\n| `ConversationEntry` con `ActorType=EndUser` | Simular turno del usuario | Bloqueado por sistema — `Automated Process` no puede impersonar |\n| Prompt Template + custom action orquestada | Que el Agent llame la acción cuando ve el adjunto | Non-determinístico — el modelo decide cuándo llamar, no siempre lo hace |\n| Flex Prompt Template desde ContentDocument | Que el Prompt Template lea el CD y responda | El Trust Layer no permite invocar templates fuera del Agent |\n| Platform Event que dispare Prompt Template | Bridge asíncrono | El Prompt Template no puede escribir al canal por sí solo |\n| Escritura en `MessagingSession` custom fields | Poner el resumen en `AI_Summary__c` para que el Agent lo lea | El Agent no reevalúa el session context mid-turno |\n| Flow autolaunched post-CDL | Flow que continúa la conversación | Mismo problema — no hay canal outbound Apex hacia Enhanced |\n\n### Conclusión del diagnóstico\n\n> **NO existe una API pública Apex/REST/Metadata para inyectar mensajes al canal Enhanced desde afuera del agente.** El punto de detección (`CDL BEFORE_INSERT`) funciona, pero no hay canal outbound utilizable.\n\n## Qué queda como aprendizaje reusable\n\n- Confirmamos que **`aiplatform.ModelsAPI` funciona** (GPT-4o texto con Trust Layer aplicado) — útil para futuros casos donde SÍ tengamos un canal outbound custom.\n- Descubrimos que **`AutomatedProcess` es el user que ejecuta el pipeline Enhanced Messaging** — crítico para debugging futuro de otros integraciones.\n- Los 10 candidatos de intercepción quedan mapeados con evidencia de por qué cada uno falla — sirve de checklist para futuros research de messaging.\n\n## Estado\n\n- ❌ **Descartado como solución** para BICE Vida (y para cualquier otro cliente sobre Enhanced Messaging).\n- ✅ **Preservado como diagnóstico** — la receta `whatsapp-attachments-lightweight-interception` queda en el portfolio como documentación reproducible.\n\n## Evidencia\n\n- [`whatsapp-attachments-lightweight-interception`](/build/whatsapp-attachments-lightweight-interception) — publicada 2026-08-01, ~15 min de lectura. Aviso crítico en el TL;DR.",
+      },
+      {
+        id: "camino-3-bot",
+        label: "Camino 3 · Bot legado",
+        title: "Camino 3 — Transferencia a Einstein Bot legado (explorado, con fricciones)",
+        content:
+          "## En una frase\n\n> Cuando el Agent de Agentforce detecta un adjunto, **transferir la conversación a un Einstein Bot legado** (que sí soporta `MessagingSession` con media messages nativamente), procesar el archivo en ese Bot, y **devolver la conversación al Agent** una vez extraída la información. **Explorado durante 9 días con fricciones documentadas — sin conclusión definitiva.**\n\n## La idea\n\n1. El Agent recibe un turno con adjunto → dispara una GenAiFunction custom `TransferToLegacyBotForAttachment`.\n2. La conversación se reasigna al Bot legado (`Einstein Bot v1`).\n3. El Bot legado procesa el adjunto (o lo pasa a un Flow que lo procesa).\n4. Una vez procesado, el Bot devuelve la conversación al Agent con el resumen como context variable.\n5. El Agent retoma con el contexto enriquecido → responde al usuario.\n\n**Ventajas teóricas:**\n\n- Se reutilizan capacidades nativas del Bot legado (que sí sabe manejar media).\n- No requiere reemplazar el canal.\n- Menos código custom que el Camino 1.\n\n## Qué se probó · pruebas propias\n\nSe intentó configurar la transferencia desde el arquitecto de forma individual antes de involucrar al equipo:\n\n- Se creó una GenAiFunction custom con `invocationTarget=flow` y un Flow que hace `Update MessagingSession.Owner` hacia el `BotDefinitionId` del Bot legado.\n- Se probó también con `Route Work` + `PendingServiceRouting`.\n- **Resultado:** la transferencia **no se ejecuta correctamente**. La conversación queda en un estado inconsistente — el Agent no responde más, pero el Bot legado tampoco toma el hilo.\n\n## Qué se probó · pruebas conjuntas con el equipo\n\nSe reintentó con distintas configuraciones de routing:\n\n### Hallazgo 1 · La transferencia custom NO siempre se dispara\n\nLa GenAiFunction que hace el handoff **no siempre es invocada** por el Agent cuando llega un turno con adjunto. En algunos casos el Agent devuelve directamente al usuario un mensaje del tipo *\"no puedo recibir este tipo de archivos\"* sin llamar la función.\n\n> Este comportamiento confirma un patrón observado también en Camino 2: **el modelo decide de forma no-determinística cuándo llamar una función custom** — no se puede confiar en que la llame en el 100% de los turnos con adjunto.\n\n### Hallazgo 2 · Cuando SÍ se dispara, cae en fallback queue\n\nCuando la GenAiFunction sí se ejecuta y solicita la reasignación al Bot legado, la conversación **no llega al Bot** — cae en el **fallback queue** de Omni-Channel. El asesor humano de esa cola queda con la conversación sin contexto y sin el adjunto procesado.\n\n> Sospecha técnica: el routing rule que apunta al Bot legado tiene una condición que no matchea cuando la conversación viene desde un Agent (posiblemente porque el `OwnerType` es Bot User de Agentforce y no Automated Process). Aún no se ha aislado la causa raíz con certeza.\n\n### Hallazgo 3 · UX rota antes de resolver\n\nAsumiendo que se resolvieran los dos hallazgos anteriores, la UX resultante tendría un salto notorio:\n\n- El usuario adjunta un archivo.\n- El agente le dice *\"un momento, te transfiero para procesar tu archivo\"* (o similar).\n- Cambia el estilo/tono de las respuestas (Bot legado tiene otro system prompt).\n- Se procesa el archivo.\n- Regresa al Agent → el usuario percibe otra vez cambio de \"persona\".\n\n**Es una UX de handoff, no una UX de conversación continua.** Va contra el requisito de fluidez.\n\n## Estado\n\n- ⚠️ **Explorado con evidencia de fricciones reales**, sin cierre positivo.\n- ⚠️ **Sin cierre negativo definitivo** — no probamos exhaustivamente todas las combinaciones de routing rules, ni el impacto de mover el Bot legado a un canal separado.\n- ❓ **Sin conclusión** — es una línea que podría seguir investigándose pero requiere invertir más tiempo con retornos inciertos.\n\n## Preguntas abiertas si se profundizara\n\n1. ¿Es viable un Bot legado \"invisible\" que reciba el adjunto sin cambiar el estilo del agente (mismo `Message Bot Message` prompt o mismo persona)?\n2. ¿Se puede hacer el handoff round-trip **sin que el usuario perciba el cambio** (sin mensajes intermedios de sistema)?\n3. ¿La incidencia del hallazgo 1 (Agent no dispara la función) baja con volumen y afinamiento del tópico?\n4. ¿El fallback queue es evitable con una omni-channel routing rule específica para el `BotDefinitionId` destino?\n\n## Costo estimado si se profundizara\n\n- Tiempo adicional de investigación: **~10–15 días laborales** solo para aislar la causa del hallazgo 2 y probar 3–4 variantes de routing.\n- Sin garantía de que resuelva el hallazgo 1 (no-determinismo del modelo al llamar funciones).",
+      },
+      {
+        id: "camino-4-sitio",
+        label: "Camino 4 · Sitio externo",
+        title: "Camino 4 — Sitio externo de carga con amarre por sesión (no explorado aún)",
+        content:
+          "## En una frase\n\n> Cuando el usuario necesita adjuntar un archivo, el Agent le envía un **link único** que abre una página externa (Experience Cloud o formulario público) donde el archivo se sube, se amarra al `MessagingSessionId` y se procesa. El resultado regresa al hilo de WhatsApp como mensaje del Agent. **Documentado como workaround; NO explorado con BICE Vida a la fecha de este documento.**\n\n## La idea\n\n1. El Agent detecta la intención de adjuntar (usuario dice *\"quiero enviarte un archivo\"* o adjunta directamente y falla).\n2. El Agent responde con un link único: `https://bice.example.com/subir-archivo?token={hash(MessagingSessionId + expiry)}`.\n3. El usuario abre el link en el browser de su celular → ve un formulario simple con drag & drop.\n4. El archivo se sube al backend (Experience Cloud site o Force.com Sites), se decodifica el token para obtener el `MessagingSessionId` y se crea un `ContentDocument` vinculado.\n5. Un trigger sobre ese `ContentDocument` dispara el pipeline de procesamiento (mismo pipeline que en Camino 1, pero sin necesidad de reemplazar el canal).\n6. El resultado se inyecta al hilo de WhatsApp como mensaje del Agent (aquí regresa el problema del Camino 2, ver caveat abajo).\n\n## Cobertura tentativa de las 6 variantes UX\n\n| Variante | ¿Cubierta? | Nota |\n|---|---|---|\n| 1 · Usuario anuncia el envío | 🟡 Parcial | El agente puede mandar el link como respuesta. Añade 1 paso al flujo. |\n| 2 · Agente pide el archivo | 🟡 Parcial | Igual — link como respuesta al pedido. |\n| 3 · Adjunto sin anuncio | 🔴 No | El usuario adjuntó directo en WhatsApp — Agentforce ya falló antes de que el agente pueda ofrecer el link. |\n| 4 · Adjunto post-handoff | 🟡 Parcial | Depende de que el humano tenga cómo generar el link. |\n| 5 · Tipo no soportado | 🟢 Sí | El sitio puede validar tipos permitidos con UI clara. |\n| 6 · Ráfaga múltiple | 🟢 Sí | El sitio permite subir varios archivos en una sesión. |\n\n> ⚠️ La **variante 3 (adjunto sin anuncio)** es la más frecuente en la práctica y este camino no la resuelve — el error ya se disparó al usuario antes de que el agente pueda ofrecer el link.\n\n## Fortalezas\n\n- ✅ **No reemplaza el canal** — se preserva Digital Engagement estándar.\n- ✅ **Aisla el compliance del archivo** — el archivo vive en la infraestructura de BICE Vida, no pasa por Meta como binario.\n- ✅ **UI dedicada al upload** — mejor control de tipo, tamaño, preview, cancelación.\n- ✅ **Reutiliza el pipeline de procesamiento** del Camino 1 sin el resto del stack de canal custom.\n\n## Riesgos y preguntas abiertas\n\n### 1 · Rompe la UX de \"WhatsApp puro\"\n\nEl usuario sale de WhatsApp, abre un browser, sube el archivo, vuelve a WhatsApp. Son 4 saltos de contexto. Para un cliente en un momento de alta emocionalidad (siniestro, reclamo) es fricción real.\n\n### 2 · El write-back al hilo tiene el mismo problema del Camino 2\n\nUna vez procesado el archivo, ¿cómo se inyecta el resultado al hilo del Agent? Si el Agent está en Enhanced Messaging, el problema del write-back sigue vigente (Camino 2 lo demuestra empíricamente).\n\n**Posibles rutas:**\n\n- Escribir en un campo custom de `MessagingSession` y **esperar a que el usuario mande el próximo turno** para que el Agent lea el contexto (fricciona: agrega latencia percibida).\n- Enviar una **template HSM** de WhatsApp desde afuera (mensaje proactivo con el resumen del archivo). Legalmente válido si hay opt-in explícito y ventana 24h abierta.\n- Escalar a un **humano** que empuje el mensaje manualmente (destruye la UX).\n\n### 3 · Seguridad del token\n\nEl token del link debe:\n\n- Expirar rápido (minutos).\n- Ser resistente a replay attacks.\n- No revelar `MessagingSessionId` como texto plano.\n- Idealmente amarrar al número de teléfono del usuario para evitar reuso.\n\n### 4 · Infraestructura\n\n- ¿Existe Experience Cloud desplegado en BICE Vida hoy?\n- ¿Aplica el compliance del área de seguridad de subir archivos desde un sitio público?\n- ¿Qué antivirus / DLP corre sobre esos uploads?\n\n### 5 · Casos donde el usuario simplemente NO abre el link\n\nUna proporción real de usuarios no abrirá el link — se queda en WhatsApp esperando poder adjuntar. La solución no puede depender de que el usuario cambie de contexto.\n\n## Estado\n\n- 🔬 **Hipótesis técnica documentada.**\n- ❌ **NO probado con BICE Vida.**\n- ❌ **NO probado en ninguna otra cuenta.**\n- ✅ Reutiliza el pipeline de procesamiento del Camino 1 — si BICE Vida elige este camino, gran parte del trabajo de procesamiento ya está probado.\n\n## Costo estimado si se profundizara\n\n- **Descubrimiento con área de seguridad y arquitectura de BICE Vida:** ~5 días laborales.\n- **Prototipo de sitio con carga + amarre por token:** ~10–15 días laborales.\n- **Diseño del write-back al hilo (aquí está el mayor riesgo):** indeterminado — puede reutilizarse investigación del Camino 2, pero el gap sigue abierto.",
+      },
+      {
+        id: "matriz-decision",
+        label: "Matriz y próximos pasos",
+        title: "Matriz comparativa · decisiones pendientes con BICE Vida",
+        content:
+          "## Matriz comparativa de los 4 caminos\n\n> La matriz califica cada camino en las **dimensiones que BICE Vida pidió expresamente** (estabilidad, escalabilidad, UX fluida) más 3 dimensiones operativas (costo, tiempo, riesgo). **Sin recomendación cerrada** — la decisión depende de la ponderación que BICE Vida haga entre estas dimensiones.\n\n### Escala\n\n- ✅ Alto / bueno\n- 🟡 Medio / con caveats\n- 🔴 Bajo / con problemas\n- ❓ Incierto — no probado con evidencia\n\n### Matriz\n\n| Dimensión | Camino 1 · Custom | Camino 2 · Híbrido | Camino 3 · Bot legado | Camino 4 · Sitio externo |\n|---|---|---|---|---|\n| **Estabilidad del path del adjunto** | ✅ Alto — no depende del LLM | 🔴 N/A — descartado | 🔴 No-determinismo del LLM al llamar la función de handoff | 🟡 Medio — write-back al hilo sigue siendo el gap |\n| **Escalabilidad** | ✅ Alto — Platform Events, pipelines paralelos | 🔴 N/A | ❓ Incierto — fallback queue observado | ✅ Alto para la carga; ❓ para el write-back |\n| **UX fluida** | ✅ Alto — cliente no aprende nada | 🔴 N/A | 🔴 Handoff visible, cambia el estilo del agente | 🔴 Cliente sale de WhatsApp → sube → vuelve |\n| **Cobertura de las 6 variantes UX** | ✅ 6 / 6 | 🔴 N/A | 🟡 3–4 / 6 estimadas | 🟡 3–4 / 6 (falla en \"adjunto sin anuncio\") |\n| **Costo de construcción** | 🔴 Alto — 6 objetos, ~30 clases, 4 pipelines | 🟢 Habría sido bajo | 🟡 Medio — depende de qué tanto haya que afinar el routing | 🟡 Medio — sitio + pipeline + write-back |\n| **Tiempo hasta piloto** | 🟡 4–6 semanas si se toma la arquitectura de referencia como base | 🟢 N/A | 🔴 Indefinido — dos hallazgos sin resolver | 🟡 4–5 semanas |\n| **Riesgo de descubrimientos negativos tardíos** | ✅ Bajo — camino ya probado en producción | 🔴 Ya materializado (descarte empírico) | 🔴 Alto — no hay evidencia de que funcione end-to-end | 🔴 Alto — write-back al hilo puede repetir el problema del Camino 2 |\n| **Preserva el canal Enhanced nativo** | 🔴 No — se reemplaza el canal | 🟢 Sí | 🟢 Sí | 🟢 Sí |\n| **Preserva features nuevas de Salesforce (Enhanced Messaging)** | 🔴 No | 🟢 Sí | 🟢 Sí | 🟢 Sí |\n| **Deuda técnica de OAuth con Meta** | 🟡 Sí — token refresh, monitoreo | 🟢 No | 🟢 No | 🟢 No |\n\n---\n\n## Decisiones que le pedimos a BICE Vida\n\nEste documento no cierra el trabajo — abre la conversación sobre qué camino profundizar. Necesitamos alinear con BICE Vida en cinco decisiones:\n\n### 1 · Prioridad relativa entre las dimensiones\n\n¿La solución final debe optimizar por **estabilidad/UX** aunque el costo suba (favorece Camino 1)? ¿O por **costo/velocidad** aceptando UX comprometida (favorece 3 o 4)? La respuesta a esta pregunta determina de facto la elección.\n\n### 2 · Apetito por reemplazar el canal Enhanced\n\nCamino 1 reemplaza el canal Enhanced Messaging. Eso implica renunciar (o al menos convivir en paralelo) con las features nuevas que Salesforce publica sobre ese canal. Camino 3 y 4 preservan el canal. ¿Este es un requisito duro para BICE Vida o negociable?\n\n### 3 · Infraestructura disponible\n\n- ¿Existe **Experience Cloud** en producción hoy en BICE Vida? (Relevante para Camino 4.)\n- ¿Se puede exponer un **webhook público** en Force.com Sites sin conflicto con el área de seguridad? (Relevante para Camino 1.)\n\n### 4 · Volumen esperado\n\n¿Cuántos adjuntos por conversación / día se esperan? Camino 1 escala mejor a volúmenes altos; Camino 4 puede ser suficiente para volúmenes bajos.\n\n### 5 · Ventana de tiempo\n\n¿Hay una fecha objetivo (release, campaña, evento) que condicione la elección? Camino 1 tiene la ventaja de arrancar con la arquitectura de referencia ya probada; Camino 3 y 4 aún requieren investigación adicional.\n\n---\n\n## Cronograma tentativo por camino elegido\n\n| Si BICE Vida elige... | Semanas al piloto | Nota |\n|---|---|---|\n| **Camino 1 (Custom)** | 4–6 | Se toma la arquitectura de referencia ya probada como base, se adapta a la marca y al core de BICE Vida |\n| **Camino 3 (Bot legado)** | 3–4 solo para cerrar el diagnóstico + 6–8 si funciona | Alto riesgo de que la investigación adicional confirme que no es viable |\n| **Camino 4 (Sitio externo)** | 4–5 para prototipo | Requiere resolver antes cómo se hace el write-back al hilo |\n\n---\n\n## Compromiso de este equipo\n\nSea cual sea la decisión de BICE Vida, este equipo se compromete a:\n\n1. **Transparencia total** sobre lo que sabemos y no sabemos de cada camino.\n2. **Evidencia empírica** en cada afirmación técnica — nada de \"esto debería funcionar\".\n3. **Piezas reusables** — cualquier camino elegido reutilizará el pipeline de procesamiento de adjuntos que ya está probado.\n4. **Rollback plan** — todo lo que se construya queda detrás de feature flags para poder revertir sin redeploy.\n\n---\n\n## Próximo paso concreto\n\nProponemos una sesión de 60 min con BICE Vida para:\n\n- Presentar este documento en vivo.\n- Recoger las 5 decisiones anteriores.\n- Alinear un plan de trabajo específico según el camino elegido.\n- Definir cadencia de seguimiento (semanal / quincenal) y responsables de ambos lados.",
       },
     ],
   },

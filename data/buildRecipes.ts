@@ -2521,20 +2521,24 @@ const agentforceVoiceHandoffHumano: Recipe = {
     "Service Presence",
     "End Action",
     "Contact Center",
+    "Amazon Connect",
+    "Quick Connect",
+    "Transfer to Number",
     "SIP Transfer",
   ],
   audiences: ["admin", "developer", "architect"],
   author: "Jonathan Gomez",
   authorRole: "Agentforce Enterprise Architect",
   publishedAt: "2026-08-05",
-  updatedAt: "2026-08-05",
-  readingMinutes: 24,
+  updatedAt: "2026-08-11",
+  readingMinutes: 32,
   tldr: [
     "En Agentforce Voice el handoff no es un solo botón: es un contrato entre el .agent (End Action tipo Escalate), un OmniChannelFlow (Route Work) y la operación humana (Service Presence + Queue + Skills).",
-    "Existen dos rutas de transferencia: OmniChannelFlow — se queda dentro de Salesforce, respeta skills y enruta a un Service Agent con la Voice Call cargada; Transfer to Number — sale por SIP a un número o IVR externo y el contexto solo viaja si el trunk lo soporta.",
-    "El path recomendado para casos donde el asesor debe ver la conversación y la Voice Call en Salesforce es OmniChannelFlow con Route Work. La transferencia por número queda reservada para overflow legacy o rutas externas.",
-    "El bot no decide el skill ni el queue: los declara. El OmniChannelFlow es el único punto donde vive la lógica de enrutamiento — routing type, skill matching, priority, fallback queue.",
-    "La receta cubre la configuración completa: Service Presence Status → Presence Configuration → Queue con canal Voice → Skills → OmniChannelFlow → End Action en el .agent → prueba end-to-end. Cada paso lleva placeholder de screenshot.",
+    "Existen dos rutas fundamentalmente distintas — no son alternativas del mismo punto: (a) Handoff interno — OmniChannelFlow con Route Work enruta a agent/queue/flow ID dentro de Salesforce. (b) Transferencia externa — el .agent invoca una GenAiFunction → Apex → Toolkit API que setea un contact attribute en Amazon Connect y dispara un Quick Connect cuyo Contact Flow ejecuta el bloque 'Transfer to phone number'.",
+    "El OmniChannelFlow no acepta números telefónicos como target (verificado en voice_rest_route_call.htm). El Agent Script DSL v2 no expone un End Action 'TransferToNumber'. La transferencia externa vive en el motor del proveedor de telefonía, no en Salesforce.",
+    "El path recomendado por default es OmniChannelFlow — mantiene contexto, skill matching, reporting nativo y warm transfer. Transfer to Number se reserva para overflow legacy, partners externos sin acceso a Salesforce, callbacks específicos o números de emergencia — el contexto no viaja y la VoiceCall se cierra al transferir.",
+    "La receta cubre paso a paso ambas rutas — 9 pasos para OmniChannelFlow (Service Presence → Configuration → Queue → Skills → OmniChannelFlow → End Action → prueba → métricas) y 8 pasos para Transfer to Number (verificar service quota AWS → Contact Flow → Quick Connect → habilitación en Queue → Apex invocable → GenAiFunction → activar .agent → prueba end-to-end).",
+    "Solo Amazon Connect está verificado end-to-end en docs oficiales. Genesys Cloud CX, NICE CXone y BYOC resuelven Transfer to Number dentro de su propio flow engine — requieren consulta con el partner.",
   ],
   sections: [
     {
@@ -2730,71 +2734,91 @@ const agentforceVoiceHandoffHumano: Recipe = {
     {
       id: "comparison",
       eyebrow: "Comparativa",
-      title: "OmniChannelFlow vs Transfer to Number — cuándo cada uno",
-      peek: "Dos caminos posibles. Los diferencia dónde vive el contexto y quién controla el enrutamiento.",
+      title: "Handoff interno (OmniChannelFlow) vs transferencia a número externo — no son alternativas del mismo punto",
+      peek: "Aclaración crítica: OmniChannelFlow NO transfiere a números externos. Son dos rutas con distintas piezas.",
       defaultOpen: true,
       blocks: [
         {
+          type: "callout",
+          tone: "critical",
+          title: "El error de framing más común",
+          text: "Al empezar a diseñar handoff en Agentforce Voice es tentador plantear 'OmniChannelFlow para interno, Transfer to Number para externo' como dos configs alternas del mismo punto. NO lo son. El OmniChannelFlow (Route Work action) solo acepta como target un agent ID, queue ID o flow ID — nunca un número telefónico (verificado en voice_rest_route_call.htm, 2026-08). La transferencia a número externo es una acción del Contact Flow del proveedor de telefonía (Amazon Connect en Service Cloud Voice), no de Salesforce. Requiere una cadena distinta de piezas.",
+        },
+        {
           type: "comparison",
-          standardLabel: "OmniChannelFlow (Route Work)",
-          customLabel: "Transfer to Number (SIP)",
+          standardLabel: "Handoff interno · OmniChannelFlow → Queue/Skill",
+          customLabel: "Transferencia externa · Amazon Connect 'Transfer to phone number'",
           rows: [
             {
-              dimension: "Dónde vive la llamada después de la transferencia",
+              dimension: "Dónde vive la lógica de ruteo",
               standard:
-                "Dentro de Salesforce. El asesor recibe la Voice Call en OmniChannel Widget con todo el contexto: Voice Call record, transcripción parcial del bot, Contact/Case relacionado.",
+                "OmniChannelFlow en Salesforce (Route Work action). Declarativo, visual, con skill matching y branches de fallback.",
               custom:
-                "Sale por SIP al número/IVR externo. Salesforce pierde control de la llamada — el contexto solo viaja si el trunk soporta SIP headers custom o el proveedor destino puede consumir un webhook previo.",
+                "Contact Flow de Amazon Connect (bloque 'Transfer to phone number'). Vive fuera de Salesforce, en la consola del proveedor de telefonía.",
             },
             {
-              dimension: "Contexto para el asesor humano",
+              dimension: "Cómo se dispara desde el .agent",
               standard:
-                "Completo. El asesor abre el registro Voice Call y ve todo: transcripción del bot, campos capturados, sentimiento detectado, timeline del turno.",
+                "End Action tipo Escalate con parameter omniFlowApiName. El runtime de Voice pasa la Voice Call al OmniFlow al ejecutarse.",
               custom:
-                "Prácticamente nulo. El asesor recibe una llamada 'de la nada' y debe re-preguntar todo. Rompe la promesa de handoff limpio.",
+                "No hay End Action nativo para transferir a número (Agent Script DSL v2, verificado hasta 2026-08). Hay que exponer una GenAiFunction → Apex invocable que llame la Toolkit API de Amazon Connect para setear un contact attribute y disparar un Quick Connect predefinido.",
             },
             {
-              dimension: "Lógica de enrutamiento",
+              dimension: "Destino que acepta",
               standard:
-                "Visual — vive en el OmniChannelFlow. Condiciones, skills, priority, fallback, tudo declarativo.",
+                "Agent ID, Queue ID o Flow ID. Solo destinos dentro de Salesforce.",
               custom:
-                "Hardcoded — el número destino queda embebido en la config. Cambiarlo requiere edit del agente. No hay skill matching.",
+                "Cualquier número telefónico en formato E.164. Sujeto al service quota de países permitidos en Amazon Connect (allowlist por país).",
             },
             {
-              dimension: "Reintentos y fallback",
+              dimension: "Contexto que viaja al destino",
               standard:
-                "Nativos. Si no hay agente en X segundos, un branch del Flow puede rerroutear a otra Queue, mandar notification, o pasar a IVR.",
+                "Completo. Transcripción, Voice Call record, Contact, campos capturados. El asesor humano abre el registro y lo ve todo.",
               custom:
-                "Depende del PBX destino. Salesforce ya no orquesta después de completar la transferencia.",
+                "Nulo por default. Transcripción y campos capturados NO viajan por SIP. Si el destino es otro Amazon Connect / SF Voice, el contact attribute puede persistir vía CTR sync — cualquier otro caso, el destino recibe la llamada 'a ciegas'.",
             },
             {
-              dimension: "Reportes y trazabilidad",
+              dimension: "Vida de la VoiceCall record",
               standard:
-                "Nativos en Salesforce. La Voice Call queda con owner=User asignado, tiempo de espera, hold time, IsAcceptedByAgent.",
+                "Sigue viva. Se reasigna OwnerId al asesor, se puebla IsAcceptedByAgent, TimeToRoute, HoldTime. Reporting nativo cuenta la historia.",
               custom:
-                "Salesforce solo registra 'transferida a número X hh:mm'. El resto vive en el sistema del PBX destino.",
+                "Se cierra cuando el bot cuelga su rama. En Salesforce solo sobreviven TotalHoldDuration y campos del CTR sync. El leg externo vive en Amazon Connect, no en Salesforce.",
             },
             {
-              dimension: "Skill Matching",
+              dimension: "Cold vs warm",
               standard:
-                "Sí — Route Work acepta Requested Skills y matching type All/Any.",
+                "Warm por naturaleza. El asesor acepta con contexto visible antes de escuchar la llamada.",
               custom:
-                "No aplica. El match depende del ACD del destino.",
+                "Cold por default. El bloque 'Transfer to phone number' es un bridge inmediato. Warm transfer solo se implementa con Consult desde un softphone humano — no desde el bot.",
+            },
+            {
+              dimension: "Fallback si el destino no contesta",
+              standard:
+                "Branch del OmniChannelFlow puede rerroutear a otra Queue, mandar notification, o pasar a IVR.",
+              custom:
+                "Branches nativos del bloque de Amazon Connect: Success | Call Failed | Timeout | Error. La lógica de fallback vive en el Contact Flow del proveedor.",
+            },
+            {
+              dimension: "Proveedores de telefonía soportados",
+              standard:
+                "Amazon Connect (SCV HVCC) + cualquier Service Cloud Voice partner telephony y Bring Your Own Channel — la Route Work action es agnóstica al proveedor.",
+              custom:
+                "Amazon Connect verificado end-to-end en docs oficiales. Genesys Cloud CX, NICE CXone y BYOC resuelven la transferencia externa dentro de su propio flow engine — sin path oficial de Salesforce documentado. Verificar con el partner respectivo.",
             },
             {
               dimension: "Casos donde tiene sentido",
               standard:
-                "El default. Cualquier operación que quiera capitalizar el contexto del bot y tener reportes/dashboards de handoff dentro de Salesforce.",
+                "El default. Cualquier caso donde el asesor humano vive en Salesforce y debe ver la conversación del bot.",
               custom:
-                "Overflow a IVR legacy que no está en Salesforce, redirección a un partner externo, o fallback de última milla cuando la operación interna está saturada.",
+                "Overflow a IVR legacy, redirección a un partner externo sin acceso a Salesforce, número de emergencia, o cierre de llamada a un número de callback específico del cliente.",
             },
           ],
         },
         {
           type: "callout",
           tone: "success",
-          title: "Regla de decisión rápida",
-          text: "¿El asesor humano vive en Salesforce y quieres que vea la conversación del bot? OmniChannelFlow. ¿El destino es un IVR o PBX externo? Transfer to Number. La receta cubre OmniChannelFlow en detalle; para Transfer to Number el patrón general es idéntico salvo el paso 6 (End Action) — donde el .agent declara el número destino en vez del OmniChannelFlow.",
+          title: "Regla de decisión",
+          text: "Por default, handoff interno vía OmniChannelFlow. Solo elige Transfer to Number cuando el destino no puede vivir en Salesforce — típicamente un IVR legacy o un partner externo. Nunca uses Transfer to Number si el contexto de la conversación es importante para el destino; asume que no viaja nada más allá del número del cliente y (si configuras Caller ID) del identificador que declares.",
         },
       ],
     },
@@ -3008,10 +3032,286 @@ sf agent activate --json --api-name ProteccionFamiliarVoice`,
     },
 
     {
+      id: "transfer-to-number-conceptos",
+      eyebrow: "Transfer to Number · Conceptos",
+      title: "Cómo funciona realmente la transferencia a un número externo",
+      peek: "No hay End Action nativo. Es una cadena indirecta que pasa por el Contact Flow del proveedor.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Cuando en Agentforce Voice el objetivo es transferir la llamada a un número telefónico externo (por ejemplo, un IVR legacy, un partner que no vive en Salesforce, un callback específico del cliente), no existe un mecanismo directo desde el .agent ni desde el OmniChannelFlow. La transferencia ocurre en el motor del proveedor de telefonía. Esta receta documenta el patrón verificado end-to-end para Amazon Connect (Service Cloud Voice HVCC); para Genesys Cloud CX, NICE CXone o BYOC hay que consultar la documentación del partner respectivo.",
+        },
+        {
+          type: "concept",
+          title: "El patrón de 4 saltos",
+          peek: "La cadena real que ejecuta una transferencia a número desde el .agent.",
+          blocks: [
+            {
+              type: "paragraph",
+              text: "No es un solo botón. Es una secuencia disciplinada donde el .agent declara intención, un Apex invocable traduce esa intención en un contact attribute de Amazon Connect, y un Quick Connect predefinido dispara el bloque 'Transfer to phone number' del Contact Flow.",
+            },
+            {
+              type: "list",
+              ordered: true,
+              items: [
+                "El .agent invoca un Topic (ej. 'Transferir a número externo') que ejecuta una GenAiFunction con input phoneNumber en formato E.164.",
+                "La GenAiFunction llama a un Apex invocable custom que a su vez invoca la Toolkit API de Amazon Connect (vía Lambda InvokeTelephonyIntegrationApiFunction) para setear un contact attribute — por ejemplo sfdc-TargetE164__c — sobre el contact activo.",
+                "El bot ejecuta un Quick Connect predefinido cuyo Contact Flow lee ese atributo con el bloque 'Get customer input' o 'Check contact attributes' y bifurca hacia el bloque 'Transfer to phone number'.",
+                "Amazon Connect hace el bridge SIP al destino. La VoiceCall record de Salesforce se cierra cuando el bot cuelga su rama.",
+              ],
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "El bloque 'Transfer to phone number' en Amazon Connect",
+          peek: "Qué inputs acepta, qué branches devuelve, qué restricciones tiene.",
+          audience: ["admin", "developer", "architect"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Documentado oficialmente en docs.aws.amazon.com/connect/latest/adminguide/transfer-to-phone-number.html (verificado 2026-08). Es un bloque nativo del Contact Flow Designer, solo válido para canal Voice.",
+            },
+            {
+              type: "table",
+              headers: ["Propiedad", "Descripción", "Notas"],
+              rows: [
+                ["Country code", "Prefijo del país destino", "E.164 obligatorio. Debe estar en el service quota allowlist del instance de Amazon Connect."],
+                ["Set timeout", "Segundos de espera antes de considerar Timeout", "Si expira, cae por el branch Timeout."],
+                ["Send DTMF", "Tonos a mandar tras contestar", "Ej. '1,,,2' navega opciones de IVR. La coma equivale a 750 ms de pausa."],
+                ["Caller ID number", "Número que ve el destino", "Si vacío, se pasa el número original del cliente. UK requiere E.164 válido. Australia requiere DID de Amazon Connect."],
+                ["Caller ID name", "Nombre que ve el destino (si el trunk soporta CNAM)", "Usualmente cortesía; muchos destinos lo ignoran."],
+                ["Resume flow after disconnect", "Si el flow sigue tras colgar el destino", "Solo aplica si cuelga el externo primero. Si cuelga el cliente, cae toda la llamada."],
+              ],
+            },
+            {
+              type: "callout",
+              tone: "warning",
+              title: "Branches del bloque",
+              text: "Success | Call Failed | Timeout | Error. El diseño del Contact Flow debe manejar los cuatro. Si solo cableas Success, cualquier fallo del destino termina la llamada sin dar aviso al cliente ni loguear nada útil en Salesforce.",
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "El Quick Connect como puente",
+          peek: "El artefacto que le da al bot un 'destino' invocable sin exponer el número directamente.",
+          audience: ["admin", "architect"],
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Un Quick Connect en Amazon Connect es un identificador nombrado que un flow puede usar como destino. Existen tres tipos: Agent, Queue, External (Phone Number). Para este patrón, se crea un Quick Connect que dispara un Contact Flow custom — no se apunta al número directamente — para que la lógica de qué número marcar viva en el atributo dinámico seteado por Salesforce.",
+            },
+            {
+              type: "list",
+              items: [
+                "El Quick Connect apunta a un Contact Flow tipo 'Transfer to Agent Flow' que a su vez lee el atributo dinámico y ejecuta 'Transfer to phone number'.",
+                "El .agent nunca conoce el número real — solo el DeveloperName del Quick Connect. Cambiar destinos por vertical o cliente se hace en Amazon Connect, sin redeploy del .agent.",
+                "Permite auditoría: los reportes de Amazon Connect muestran quién invocó cada Quick Connect y con qué frecuencia.",
+              ],
+            },
+          ],
+        },
+        {
+          type: "architecture",
+          title: "Ciclo completo — Agentforce Voice → número externo",
+          diagram: `
+Cliente en llamada activa con el bot
+                │
+                ▼
+Bot detecta intent "transferir a número externo"
+                │
+                ▼
+Topic invoca GenAiFunction TransferToExternalNumber(phoneNumber)
+                │
+                ▼
+GenAiFunction ──► Apex invocable (SFDC)
+                        │
+                        ▼
+                Toolkit API / Lambda helper
+                (InvokeTelephonyIntegrationApiFunction)
+                        │
+                        ▼
+                Amazon Connect · UpdateContactAttributes
+                sfdc-TargetE164__c = "+525512345678"
+                        │
+                        ▼
+Bot invoca Quick Connect "SFDC_ExternalTransfer"
+                │
+                ▼
+Quick Connect ──► Contact Flow (Transfer to Agent Flow type)
+                        │
+                        │  1. Check contact attributes → sfdc-TargetE164__c
+                        │
+                        ▼
+                Bloque 'Transfer to phone number'
+                    ├─ Success  → llamada bridged, bot cuelga
+                    ├─ Timeout  → play prompt + reintento o fallback OmniFlow
+                    ├─ CallFailed  → play prompt "no pudimos conectar"
+                    └─ Error    → notification + close call
+                        │
+                        ▼
+                Salesforce VoiceCall
+                    Status = Closed cuando el bot cuelga
+                    TotalHoldDuration se puebla vía CTR sync
+                    Reporting del leg externo NO existe en SF
+`,
+          legend: [
+            {
+              label: "GenAiFunction",
+              description:
+                "Bridge entre Agent Script y Apex. Recibe el phoneNumber como input tipado, se conecta al Apex invocable.",
+            },
+            {
+              label: "Toolkit API",
+              description:
+                "APIs cliente/servidor que Service Cloud Voice expone para hablar con la telefonía del proveedor. La Lambda InvokeTelephonyIntegrationApiFunction es el broker documentado para Amazon Connect.",
+            },
+            {
+              label: "Contact Attribute",
+              description:
+                "Variable de sesión del contact en Amazon Connect. Persiste hasta el fin de la llamada. Es la variable que el Contact Flow lee para saber a qué número transferir.",
+            },
+            {
+              label: "CTR sync",
+              description:
+                "Contact Trace Record. Es el bulk sync que Salesforce hace después de la llamada para consolidar datos operativos de Amazon Connect. Es lo único que sobrevive del leg externo en Salesforce.",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Límites duros que hay que aceptar de antemano",
+          text: "El contexto conversacional NO viaja al destino externo. Transcripción, campos capturados por el bot, sentimiento — nada de eso cruza el SIP. Si el destino necesita saber quién llama y por qué, hay que planear un mecanismo out-of-band (SMS previo, webhook al partner con el contexto, o registrar el número de referencia del case en Salesforce y que el partner haga lookup). La VoiceCall record de Salesforce se cierra en el momento de transferir; el reporting del leg externo vive en Amazon Connect. Y el país destino debe estar en el service quota allowlist de Amazon Connect — no lo está por default para todos los países.",
+        },
+      ],
+    },
+
+    {
+      id: "transfer-to-number-step",
+      eyebrow: "Transfer to Number · Guía paso a paso",
+      title: "Configurar transferencia a número externo en Amazon Connect — 8 pasos",
+      peek: "Solo Amazon Connect. Genesys / NICE / BYOC requieren consultar docs del partner.",
+      defaultOpen: false,
+      blocks: [
+        {
+          type: "callout",
+          tone: "info",
+          title: "Prerrequisitos específicos",
+          text: "Instance de Amazon Connect asociado al Contact Center de SCV. Acceso admin al instance. Números destino en formato E.164 y en el service quota allowlist del instance (revisar 'Countries you can call' en la consola de AWS). Lambda InvokeTelephonyIntegrationApiFunction desplegada como parte del setup base de SCV (viene con el paquete de deployment de Amazon Connect + Salesforce).",
+        },
+        {
+          type: "setupStep",
+          number: 1,
+          title: "Verificar el service quota de países en Amazon Connect",
+          instructions:
+            "AWS Console → Service Quotas → Amazon Connect. Revisar 'Countries you can call' o el quota específico del instance. Si el país destino no está permitido, abrir ticket de aumento con AWS Support ANTES de continuar — la habilitación puede tardar 24-72 horas.",
+          screenshotPlaceholder: {
+            caption:
+              "AWS Console — Service Quotas de Amazon Connect mostrando países permitidos (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 2,
+          title: "Crear el Contact Flow que ejecuta el transfer",
+          instructions:
+            "Amazon Connect Console → Routing → Contact flows → Create contact flow → Type: 'Transfer to Agent Flow'. Name: 'SFDC_ExternalTransfer_Flow'. Bloques mínimos: (a) 'Set logging behavior' Enable, (b) 'Set contact attributes' — copiar sfdc-TargetE164__c a una variable local si querés facilitar debug, (c) 'Transfer to phone number' con Country code obtenido del atributo (dinámico) y Timeout=30s, (d) rama Success termina, (e) ramas Timeout/CallFailed/Error → 'Play prompt' con mensaje de fallback y opción de rerroutear a OmniFlow. Guardar y publicar.",
+          screenshotPlaceholder: {
+            caption:
+              "Contact Flow Designer con el bloque 'Transfer to phone number' y las 4 branches cableadas (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 3,
+          title: "Crear el Quick Connect",
+          instructions:
+            "Amazon Connect Console → Routing → Quick connects → Add new. Name: 'SFDC_ExternalTransfer'. Type: 'External' NO — usar 'Agent' o 'Queue' según la topología, PERO apuntando al Contact Flow del paso 2. Nota: para este patrón se recomienda tipo Queue apuntando a una Queue placeholder con el Contact Flow custom, lo que permite reasignar el destino sin cambiar el Quick Connect referenciado por el bot.",
+          screenshotPlaceholder: {
+            caption:
+              "Quick Connect 'SFDC_ExternalTransfer' con referencia al Contact Flow SFDC_ExternalTransfer_Flow (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 4,
+          title: "Habilitar el Quick Connect en la Queue del bot",
+          instructions:
+            "Amazon Connect Console → Routing → Queues → abrir la Queue asignada al bot Agentforce → Quick connects → agregar 'SFDC_ExternalTransfer'. Sin este paso, el bot no podrá invocar el Quick Connect aunque exista.",
+          screenshotPlaceholder: {
+            caption:
+              "Queue del bot con Quick Connect agregado en la lista habilitada (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 5,
+          title: "Crear el Apex invocable en Salesforce",
+          instructions:
+            "Nueva Apex class 'TransferToExternalNumberAction' con método @InvocableMethod. Input: List<Request> con phoneNumber (Text, E.164) y voiceCallId (Text). Lógica: (a) validar formato E.164 con regex; (b) llamar VoiceCallToolkitApi o hacer HTTP callout autenticado a la Lambda InvokeTelephonyIntegrationApiFunction con action='UpdateContactAttributes' y payload {sfdc-TargetE164__c: phoneNumber}; (c) retornar success/error. Deploy con test class que mockea el HTTP callout.",
+          command: `sf apex generate class --name TransferToExternalNumberAction --api-version 62.0
+sf project deploy start --source-dir force-app/main/default/classes/TransferToExternalNumberAction.cls`,
+          screenshotPlaceholder: {
+            caption:
+              "Vista de la Apex class TransferToExternalNumberAction con @InvocableMethod (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 6,
+          title: "Registrar la GenAiFunction en el .agent",
+          instructions:
+            "En el bundle authoring del .agent (Agent Script DSL v2), crear una GenAiFunction 'TransferToExternalNumber' con InputParameter phoneNumber (String, description clara del formato E.164). Bindear la function al Apex invocable TransferToExternalNumberAction. Crear un Topic 'Transferencia a número externo' con instrucciones imperativas: cuando el usuario pide ser transferido a un número específico O el flujo lo determina, invocar TransferToExternalNumber con el número extraído. Después de la función, emitir mensaje verbatim al cliente ('Te estoy conectando ahora') y luego invocar el Quick Connect via End Action de transfer (referenciando SFDC_ExternalTransfer como target).",
+          screenshotPlaceholder: {
+            caption:
+              "Agent Builder mostrando la GenAiFunction TransferToExternalNumber y el topic asociado (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "setupStep",
+          number: 7,
+          title: "Publicar y activar el .agent",
+          instructions:
+            "Validar, publicar y activar el bundle. Verificar en Agent Trace que la GenAiFunction se resuelve y que el phoneNumber se pasa correctamente al Apex.",
+          command: `sf agent validate authoring-bundle --json --api-name ProteccionFamiliarVoice
+sf agent publish authoring-bundle --json --api-name ProteccionFamiliarVoice --skip-retrieve
+sf agent activate --json --api-name ProteccionFamiliarVoice`,
+        },
+        {
+          type: "setupStep",
+          number: 8,
+          title: "Prueba end-to-end de la transferencia externa",
+          instructions:
+            "Marcar al número del bot. Conversar hasta forzar el topic de transferencia (ej. 'necesito hablar con proveedor X al 555-1234'). Verificar: (a) Agent Trace muestra invocación de TransferToExternalNumber, (b) Amazon Connect Contact Trace Record muestra el atributo sfdc-TargetE164__c seteado, (c) el bloque 'Transfer to phone number' ejecuta y sale por Success, (d) el número destino recibe la llamada, (e) el VoiceCall record en Salesforce queda con Status=Closed y CTR sync poblado.",
+          screenshotPlaceholder: {
+            caption:
+              "Diagnóstico end-to-end: Agent Trace + Amazon Connect CTR + Voice Call record cerrado en Salesforce (placeholder — reemplazar).",
+            aspect: "wide",
+          },
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Sobre otros proveedores de telefonía",
+          text: "Genesys Cloud CX, NICE CXone y BYOC (Bring Your Own Channel) resuelven la transferencia externa dentro de su propio flow engine — sin path oficial de Salesforce documentado al 2026-08. El patrón general se mantiene (bot declara intención → capa de proveedor ejecuta transfer), pero la implementación del paso 2, 3, 4 y del broker de atributos cambia radicalmente. Consultar la documentación del partner respectivo antes de comprometerse a Transfer to Number con esos stacks.",
+        },
+      ],
+    },
+
+    {
       id: "troubleshoot",
       eyebrow: "Troubleshooting",
       title: "Los errores más comunes y cómo diagnosticarlos",
-      peek: "Si algo se rompe, generalmente es uno de estos 6 escenarios.",
+      peek: "Si algo se rompe, generalmente es uno de estos escenarios.",
       defaultOpen: false,
       blocks: [
         {
@@ -3019,39 +3319,69 @@ sf agent activate --json --api-name ProteccionFamiliarVoice`,
           rows: [
             {
               issue:
-                "El bot dice 'te estoy transfiriendo' pero la llamada se queda muda, luego cuelga.",
+                "[Handoff interno] El bot dice 'te estoy transfiriendo' pero la llamada se queda muda, luego cuelga.",
               solution:
                 "El End Action Escalate no está declarado en el topic, o el bundle .agent no está publicado con la última versión. Verificar en Agent Builder que el topic activo incluye el End Action; publicar y activar de nuevo.",
             },
             {
               issue:
-                "El End Action se ejecuta pero la llamada nunca llega al asesor.",
+                "[Handoff interno] El End Action se ejecuta pero la llamada nunca llega al asesor.",
               solution:
                 "El OmniChannelFlow no está activo o el API Name declarado en el .agent no coincide. Verificar en Setup → Flows que el Flow está en estado 'Active'. Confirmar en el .agent que omniFlowApiName es idéntico al Flow API Name.",
             },
             {
               issue:
-                "El Flow existe y está activo pero la Route Work falla con 'No agents available'.",
+                "[Handoff interno] El Flow existe y está activo pero la Route Work falla con 'No agents available'.",
               solution:
                 "Ningún asesor tiene Presence Status compatible con el channel Voice Call. Revisar: (a) la Queue tiene 'Voice Call' en Supported Objects, (b) los Users son Members de la Queue, (c) los Users tienen el Presence Status 'Disponible para Voz' habilitado y seleccionado en el OmniChannel Widget.",
             },
             {
               issue:
-                "El asesor recibe la llamada pero el registro Voice Call viene vacío, sin transcripción.",
+                "[Handoff interno] El asesor recibe la llamada pero el registro Voice Call viene vacío, sin transcripción.",
               solution:
                 "El Contact Center no tiene habilitada la Voice Transcription en tiempo real, o el proveedor de Voice no la soporta. Verificar en la configuración del Contact Center la sección 'Transcription' y la licencia del proveedor.",
             },
             {
               issue:
-                "El match por skills no funciona — la llamada la agarra cualquier asesor.",
+                "[Handoff interno] El match por skills no funciona — la llamada la agarra cualquier asesor.",
               solution:
                 "Skill-Based Routing requiere que la Route Work action tenga (a) Routing Type='Skills-Based', (b) Requested Skills poblado con Ids de Skill, y (c) los Users deben tener esos Skills asignados. Si la Queue tiene skills asignados pero el Flow usa Queue-Based Routing, los skills se ignoran.",
             },
             {
               issue:
-                "La llamada se transfiere pero el Owner del Voice Call sigue siendo el bot user.",
+                "[Handoff interno] La llamada se transfiere pero el Owner del Voice Call sigue siendo el bot user.",
               solution:
                 "Se completó Route Work pero el asesor no le hizo Accept. Verificar en el OmniChannel Widget que la alerta apareció y que el asesor la aceptó. Sin Accept, OmniChannel no cambia el Owner.",
+            },
+            {
+              issue:
+                "[Transfer to Number] El Apex invocable ejecuta pero la llamada no se transfiere.",
+              solution:
+                "El contact attribute no llegó a Amazon Connect. Revisar en Amazon Connect → Contact search → detalle del contact → Attributes: si sfdc-TargetE164__c está vacío, la Lambda InvokeTelephonyIntegrationApiFunction no está llegando o no se está invocando con el contactId correcto. Verificar los CloudWatch logs de la Lambda.",
+            },
+            {
+              issue:
+                "[Transfer to Number] La transferencia falla con 'Call Failed' branch inmediato, incluso a un número válido.",
+              solution:
+                "El país destino no está en el service quota allowlist de Amazon Connect. Revisar Service Quotas en la consola AWS. Cada país requiere solicitud explícita a AWS Support para habilitarse. También validar que el número está en E.164 correcto (+ prefijo país, sin espacios ni guiones).",
+            },
+            {
+              issue:
+                "[Transfer to Number] La transferencia sale por Timeout aunque el destino contesta.",
+              solution:
+                "El Set timeout del bloque puede ser demasiado bajo para el ring pattern del destino (ej. IVR con prompt largo antes de contestar). Subir a 45-60 segundos. Alternativamente, el destino puede estar rechazando el Caller ID declarado — probar con Caller ID vacío para pasar el número original del cliente.",
+            },
+            {
+              issue:
+                "[Transfer to Number] El destino recibe la llamada pero el cliente cuelga porque cree que se cortó.",
+              solution:
+                "El bot no le comunicó al cliente que iba a haber transferencia. Debe haber un mensaje verbatim ANTES de ejecutar la GenAiFunction ('Te estoy conectando ahora con...'). Además, si el destino tiene un ring o un mensaje de bienvenida largo, considerar mandar DTMF automático inicial para skipear IVR.",
+            },
+            {
+              issue:
+                "[Transfer to Number] El VoiceCall record en Salesforce no muestra la transferencia externa.",
+              solution:
+                "Comportamiento esperado. La VoiceCall se cierra cuando el bot cuelga. Solo TotalHoldDuration y campos del CTR sync sobreviven. Para trazabilidad del leg externo, usar el CTR de Amazon Connect (Contact search → Contact ID) o el reporting del proveedor destino.",
             },
           ],
         },
@@ -3059,7 +3389,7 @@ sf agent activate --json --api-name ProteccionFamiliarVoice`,
           type: "callout",
           tone: "note",
           title: "Logs para investigar",
-          text: "Para el .agent: Agent Trace (Setup → Agent Studio → Agent → Traces). Para el Flow: Debug Logs con la categoría Workflow en FINE. Para OmniChannel: Setup → OmniChannel → OmniChannel Debug Log. Los tres juntos cuentan el ciclo completo cuando algo falla.",
+          text: "Handoff interno — Agent Trace (Setup → Agent Studio → Agent → Traces), Debug Logs con categoría Workflow=FINE, OmniChannel Debug Log. Transfer to Number — mismos logs de Salesforce + CloudWatch Logs de la Lambda InvokeTelephonyIntegrationApiFunction + Amazon Connect Contact Trace Record (Contact search por ContactId).",
         },
       ],
     },
@@ -3071,15 +3401,47 @@ sf agent activate --json --api-name ProteccionFamiliarVoice`,
       defaultOpen: false,
       blocks: [
         {
+          type: "paragraph",
+          text: "URLs verificadas al 2026-08-11. Las páginas de help.salesforce.com con renderizado dinámico pueden devolver 'CSS Error' al primer fetch — están linkeadas de todas formas para consulta manual. Las de developer.salesforce.com y docs.aws.amazon.com fueron confirmadas con contenido en el momento del research.",
+        },
+        {
           type: "sources",
           items: [
             {
-              label: "Agentforce Service Agent Setup — Voice",
-              url: "https://help.salesforce.com/s/articleView?id=service.miaw_agent_setup.htm",
+              label: "Handoff interno · Voice — Enable Voice Call Transfers with Omni-Channel Flow (developer.salesforce.com, verificado)",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_example_omni_amazon_enable_voice_call_transfers.htm",
             },
             {
-              label: "Agent Script DSL — End Actions (Escalate)",
-              url: "https://developer.salesforce.com/docs/einstein/genai/guide/agent-dsl-end-actions.html",
+              label: "Handoff interno · Voice REST API — Route a Voice Call (Spring '26, verificado)",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_rest_route_call.htm",
+            },
+            {
+              label: "Voice Contact Flows — restricciones y patrones (developer.salesforce.com, verificado)",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_contact_flows.htm",
+            },
+            {
+              label: "Voice CTR Sync — comportamiento post-transferencia",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_ctr_sync.htm",
+            },
+            {
+              label: "Voice — SMS Transfer to IVR (patrón que valida el uso de contact attributes)",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_example_sms_transfer_ivr.htm",
+            },
+            {
+              label: "Transfer to Number · Amazon Connect Admin Guide — 'Transfer to phone number' block (AWS, verificado)",
+              url: "https://docs.aws.amazon.com/connect/latest/adminguide/transfer-to-phone-number.html",
+            },
+            {
+              label: "Service Cloud Voice — Contact Flow examples (GitHub oficial)",
+              url: "https://github.com/service-cloud-voice/examples-from-doc/tree/main/ContactFlows",
+            },
+            {
+              label: "Voice Release Notes — cambios por versión",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_release_notes.htm",
+            },
+            {
+              label: "Agentforce Service Agent Setup — Voice",
+              url: "https://help.salesforce.com/s/articleView?id=service.miaw_agent_setup.htm",
             },
             {
               label: "OmniChannel Flow — Route Work Standard Action",
@@ -3102,6 +3464,12 @@ sf agent activate --json --api-name ProteccionFamiliarVoice`,
               url: "https://help.salesforce.com/s/articleView?id=service.voice_setup_contact_center.htm",
             },
           ],
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Gaps documentales identificados",
+          text: "Al momento del research (2026-08-11), los endpoints de developer.salesforce.com/docs/service/agent-script/* y agentforce-service-agent/* devolvieron 404 en múltiples ocasiones — la doc parece estar en migración. Esto impidió confirmar por escrito que Agent Script DSL v2 no expone un End Action nativo tipo TransferToNumber. La afirmación se sostiene sobre inferencia fuerte (repos GitHub oficiales, patrones documentados, ausencia en release notes) pero merece verificación cuando la doc se estabilice.",
         },
       ],
     },
