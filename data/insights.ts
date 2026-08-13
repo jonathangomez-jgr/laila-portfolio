@@ -6918,7 +6918,13 @@ GET    /api/surveys/{surveyDeveloperName}/state
       blocks: [
         {
           type: "paragraph",
-          text: "Ningún approach técnico es completo sin sus zonas grises. Esta tabla clasifica cada aspecto contra la documentación oficial vigente. Los estados usan cuatro niveles: soportado (afirmación oficial verificada), parcialmente soportado (docs contienen matices que hay que respetar), requiere validación (evidencia circunstancial pero sin confirmación explícita), no soportado (contradice la documentación o excede el contrato).",
+          text: "Ningún approach técnico es completo sin sus zonas grises. Esta tabla clasifica cada aspecto contra la documentación oficial vigente y los hallazgos empíricos del POC de campo. Los estados usan cuatro niveles: soportado (afirmación oficial verificada o probada), parcialmente soportado (docs contienen matices que hay que respetar), requiere validación (evidencia circunstancial pero sin confirmación explícita), no soportado (contradice la documentación o excede el contrato).",
+        },
+        {
+          type: "callout",
+          tone: "critical",
+          title: "Hallazgos empíricos del POC de agosto 2026 — restricciones que la doc pública no anticipa",
+          text: "El POC de referencia (implementado sobre una org Enterprise real con Feedback Management Growth) reveló restricciones importantes del path unAuth que la documentación no deja claras. (1) SurveyType: la unAuth Response API rechaza Standard Survey con INVALID_INPUT_COMBINATION — solo acepta Basic y una variante 'Conversational' que aparece en el mensaje de error pero NO está en las docs públicas ni en el picklist SurveyType de orgs estándar (parece feature en pilot/EA). (2) Basic Survey no soporta page branching ni question display logic — es lineal por diseño según la Object Reference verbatim; usarla para headless web anula esos dos features del insight original. (3) surveyPageResponses.name es requerido en cada PATCH aunque el brief lo describe como 'reserved for future use'. (4) questionResponses[] debe incluir una entrada por cada pregunta de la página incluso las no contestadas — Salesforce responde 'Specify the same number of questions in the survey and the input representation' si falta alguna. (5) La sesión (invitationId + invitationUuid + flowInterviewState) no cabe en una cookie (~4.8KB comprimida vs ~4KB de límite del browser) — hay que usar session store server-side con solo un ID corto en la cookie.",
         },
         {
           type: "table",
@@ -6946,13 +6952,38 @@ GET    /api/surveys/{surveyDeveloperName}/state
             ],
             [
               "Page branching logic",
-              "Soportado",
-              "Server evalúa al recibir PATCH con navigationAction: Next. Feature table confirma 'Apply branching logic' y 'Page branching logic based on merge fields'.",
+              "Parcialmente soportado",
+              "Server evalúa server-side EN Standard Survey. Pero: Standard es rechazado por la unAuth API — el path unAuth solo acepta Basic, y Basic explícitamente NO soporta page branching (verbatim en Object Reference). Vía: usar path autenticado con Standard, o esperar activación de Conversational Survey.",
             ],
             [
               "Question display logic",
-              "Requiere validación",
-              "Muy probablemente server-side (el schema del cliente no expone reglas), pero sin frase textual en docs. Confirmar en POC observando qué preguntas llegan en surveyQuestions[].",
+              "Parcialmente soportado",
+              "Igual que branching: Standard lo soporta, Basic no. La Object Reference lista display logic entre lo que Basic excluye explícitamente. En path autenticado con Standard debería funcionar server-side (schema del cliente no expone reglas — inferencia fuerte).",
+            ],
+            [
+              "SurveyType compatible con unAuth API",
+              "Parcialmente soportado",
+              "unAuth Response API responde 'Specify a basic or conversational survey' — solo Basic y Conversational aceptados. Standard rechazado. Conversational no está en docs públicas ni en el picklist SurveyType estándar (parece pilot/EA). El path autenticado sí acepta Standard.",
+            ],
+            [
+              "surveyPageResponses.name en PATCH",
+              "Soportado — pero doc engañoso",
+              "El campo aparece en docs como 'Reserved for future use' pero en la práctica es REQUERIDO en cada PATCH. Debe llevar el nombre de la página actual (el 'name' que devolvió el surveyPage previo). Confirmado empíricamente en el POC.",
+            ],
+            [
+              "questionResponses[] count enforcement",
+              "Soportado",
+              "El array debe tener una entrada por cada pregunta de la página, incluso las no contestadas. Para no contestadas: 'responses: []' en selection types o omitir 'responseValue' en NPS/Text. Salesforce rechaza con 'Specify the same number of questions in the survey and the input representation'.",
+            ],
+            [
+              "Sesión completa en cookie httpOnly",
+              "No soportado",
+              "El flowInterviewState pesa ~3.8 KB y la sesión JSON serializada (+ base64 + firma HMAC + gzip) queda ~4.8 KB — por encima del límite ~4096 bytes del browser, que rechaza la cookie silenciosamente. Diseño obligado: session store server-side, cookie solo lleva un ID corto.",
+            ],
+            [
+              "Labels/choices HTML-encoded",
+              "Soportado",
+              "Salesforce Survey Builder devuelve labels con entities HTML ('Tecnolog&iacute;a' vs 'Tecnología'). El BFF debe decodificarlos server-side antes de mandar al cliente. No es dificultad técnica pero sí sorpresa.",
             ],
             [
               "Required questions",
@@ -7033,109 +7064,114 @@ GET    /api/surveys/{surveyDeveloperName}/state
         },
         {
           type: "callout",
-          tone: "warning",
-          title: "Todos los 'requiere validación' se cierran en el POC",
-          text: "El POC descrito en la siguiente sección está diseñado precisamente para dejar sin ambigüedades cada punto marcado como 'requiere validación'. Un sprint de dos semanas basta para tener certeza empírica sobre display logic, tipos de pregunta menos comunes y comportamiento de CORS con su BFF real.",
+          tone: "info",
+          title: "El POC cerró varios puntos — y abrió otros",
+          text: "Un sprint bastó para cerrar branching/display logic (respuesta: solo en Standard, y Standard no funciona con unAuth), CORS (resuelto por diseño con BFF), tipos comunes (funcionan). Los items marcados 'requiere validación' que siguen abiertos son: tipos raros (Ranking, Slider, Date, Picklist, Scoring), Matrix, Attachment — todos por fuera del alcance del POC actual. Antes de recomendar Basic para producción, exige empíricamente el subset de tipos que necesitas.",
         },
       ],
     },
     {
       id: "recomendacion",
-      eyebrow: "Parte 12 · Recomendación · POC",
-      title: "Qué implementaría yo — y el POC que lo prueba",
+      eyebrow: "Parte 12 · Recomendación · POC comprobado",
+      title: "Qué implementaría yo — y el POC que efectivamente se comprobó",
       blocks: [
         {
           type: "statement",
-          text: "Sí — Salesforce Feedback Management puede operar como un motor de encuesta headless. La respuesta es Opción B: use la Business API oficial (Connect REST autenticada o unAuth Response API según el tipo de participante), interpónga un BFF, deje al frontend hacer solo rendering y validación de UI. Ese patrón produce una experiencia visual completamente propia mientras Salesforce sigue siendo dueño de la definición, la ramificación y la persistencia. Es sostenible, versionable y no requiere reimplementar el motor.",
+          text: "Sí — Salesforce Feedback Management puede operar como un motor de encuesta headless. La respuesta es Opción B: use la Business API oficial (Connect REST autenticada o unAuth Response API según el tipo de participante), interpónga un BFF, deje al frontend hacer solo rendering y validación de UI. Ese patrón produce una experiencia visual completamente propia mientras Salesforce sigue siendo dueño de la definición y la persistencia. Es sostenible, versionable y no requiere reimplementar el motor. Con un matiz que solo salió en el POC: por el path unAuth solo funciona Basic Survey — que no soporta page branching ni question display logic. Si necesita esos dos features, va por el path autenticado con Standard.",
         },
         {
           type: "heading",
           level: 3,
-          text: "Diseño del POC — cuatro páginas, dos caminos, todo probado",
+          text: "Dos POCs — uno comprobado, uno de referencia",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "POC A · unAuth · Comprobado 2026-08",
+              title: "Basic Survey lineal · web sin login",
+              description:
+                "5 páginas · 10 preguntas · 7 tipos · flujo lineal · sin branching · sin display logic. Persiste en SurveyResponse + SurveyQuestionResponse. Recorre POST /accessToken → POST /survey-response → PATCH loop → Thank You Page. Es el que sirve para web pública anónima. Implementado y publicado como receta en el portfolio.",
+              tone: "success",
+            },
+            {
+              eyebrow: "POC B · Autenticado · Referencia",
+              title: "Standard Survey con branching + display logic",
+              description:
+                "Diseño ideal de 4-6 páginas con dos rutas por Q1 y display logic Q → Q. Salesforce evalúa branching server-side. Requiere path autenticado (usuario logueado, invitación asociada a Contact/Lead/User) — el unAuth lo rechaza. Diseño de referencia para casos con identidad conocida (portal de clientes, empleados, agente Agentforce in-org).",
+              tone: "primary",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "POC A · La encuesta que sí probamos",
         },
         {
           type: "ascii",
-          title: "Estructura del POC",
-          content: String.raw`Encuesta "Post-visita" · v1 · publicada
-
-┌─────────────────────────────────────────────────────────────────────┐
+          title: "Descubrimiento Agentforce · Basic Survey · v1 publicada",
+          content: String.raw`┌─────────────────────────────────────────────────────────────────────┐
 │  Página 1 · Perfil                                                  │
-│                                                                     │
-│    Q1  ¿Ya eres cliente?                                            │
-│        [ ] Sí                                                       │
-│        [ ] No                                                       │
-│        RadioButton · isResponseRequired = true                      │
-│                                                                     │
-│    Page branching:                                                  │
-│        Q1 = Sí  →  Página 2                                         │
-│        Q1 = No  →  Página 3                                         │
+│    Q1  Industria           · Single selection  · Requerida          │
+│    Q2  Rol                 · Single selection  · Requerida          │
 └─────────────────────────────────────────────────────────────────────┘
-
+                                    │  Next
+                                    ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│  Página 2 · Camino "cliente"                                        │
-│                                                                     │
-│    Q2  ¿Qué productos usas actualmente?                             │
-│        [ ] A   [ ] B   [ ] C   [ ] D                                │
-│        MultiChoice · isResponseRequired = true                      │
-│                                                                     │
-│    Q3  Del 0 al 10, ¿qué tan probable es que nos recomiendes?       │
-│        0 1 2 3 4 5 6 7 8 9 10                                       │
-│        NPS · isResponseRequired = true                              │
-│                                                                     │
-│    Q4  Cuéntanos qué te gustaría mejorar (opcional)                 │
-│        FreeText · isResponseRequired = false                        │
-│                                                                     │
-│    Question display logic:                                          │
-│        Muestra Q4 solo si Q3 ≤ 6                                    │
-│                                                                     │
-│    →  Página 4                                                      │
+│  Página 2 · Estado actual                                           │
+│    Q3  ¿Ya usan Agentforce?  · Sí/No           · Requerida          │
+│    Q4  Canales desplegados   · Multi-select    · Opcional           │
+│    Q5  Satisfacción actual   · Rating 1-5      · Opcional           │
 └─────────────────────────────────────────────────────────────────────┘
-
+                                    │  Next
+                                    ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│  Página 3 · Camino "no cliente"                                     │
-│                                                                     │
-│    Q5  ¿Cómo escuchaste de nosotros?                                │
-│        Opción única (RadioButton)                                   │
-│        Redes · Recomendación · Búsqueda · Otro                      │
-│        isResponseRequired = true                                    │
-│                                                                     │
-│    Q6  ¿Podemos enviarte información?                               │
-│        ShortText  ·  isResponseRequired = false                     │
-│                                                                     │
-│    →  Página 4                                                      │
+│  Página 3 · Priorización                                            │
+│    Q6  Probabilidad IA este año · NPS 0-10     · Requerida          │
+│    Q7  ¿Qué te frena?           · Single sel.  · Requerida          │
+│    Q8  Cuéntanos más            · Long text    · Opcional           │
 └─────────────────────────────────────────────────────────────────────┘
-
+                                    │  Next
+                                    ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│  Página 4 · Confirmación (Thank You)                                │
-│                                                                     │
-│    Thank You Page  ·  thankYouMessage + redirectUrl                 │
-│    Response.Status → Completed                                      │
+│  Página 4 · Contacto                                                │
+│    Q9  ¿Sesión con arquitecto?  · Sí/No        · Requerida          │
+│    Q10 Email                    · Short text   · Opcional           │
+└─────────────────────────────────────────────────────────────────────┘
+                                    │  Next
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  Página 5 · Thank You                                               │
+│    thankYouMessage: "Gracias por tu tiempo."                        │
+│    redirectUrl:  /es/insights/headless-feedback-management-…        │
+│    SurveyResponse.Status → Completed                                │
 └─────────────────────────────────────────────────────────────────────┘
 `,
         },
         {
           type: "heading",
           level: 3,
-          text: "Objetivos técnicos del POC — qué queda demostrado al final",
+          text: "Objetivos técnicos — qué quedó demostrado",
         },
         {
           type: "list",
-          ordered: true,
           items: [
-            "Iniciar una respuesta con la Business API oficial (autenticada, con SurveyInvitation existente) y recibir la Página 1 renderable.",
-            "Enviar PATCH con navigationAction: Next y verificar que Salesforce dirija a Página 2 o Página 3 según Q1 — sin código de branching en el frontend.",
-            "Renderizar los cinco tipos de pregunta del POC (RadioButton, MultiChoice, NPS, FreeText, ShortText) con un dispatcher por questionType.",
-            "Validar isResponseRequired en la UI antes de habilitar 'Next'.",
-            "Comprobar empíricamente si Q4 aparece o no en surveyQuestions[] según el valor de Q3 — confirma la hipótesis de display logic server-side.",
-            "Ejecutar 'Back' desde la Página 2 → Página 1 y comprobar que el estado se preserva.",
-            "Finalizar la respuesta y verificar que Salesforce devuelve Survey Thank You Page Output y que la fila en SurveyResponse queda como Completed con las SurveyQuestionResponse correspondientes.",
-            "Ejecutar la variante unAuth con la misma encuesta compartida al Guest User, probando el flujo completo desde /surveys/v1/accessToken hasta la Thank You Page.",
+            "✅ Iniciar una respuesta anónima vía POST /surveys/v1/survey-response con invitationSettings.collectAnonymousResponse: true — Salesforce devuelve Survey Description Output con la Página 1 renderable.",
+            "✅ Renderizar los 7 tipos de pregunta (RadioButton, MultiChoice, Boolean, Rating, NPS, ShortText, FreeText) con un solo switch(questionType) — cero condicionales por página.",
+            "✅ Validar isResponseRequired en la UI antes de habilitar 'Next' — el flag viene por pregunta desde la API.",
+            "✅ Navegar página a página vía PATCH /survey-response con navigationAction: 'Next' y 'Back' — se preservan las respuestas al regresar.",
+            "✅ Detectar finalización por polimorfía del surveyPage devuelto (thankYouMessage vs surveyQuestions[]) — no hay un booleano isFinished.",
+            "✅ Persistir en objetos estándar: SurveyResponse.Status = Completed y una SurveyQuestionResponse por pregunta contestada — dashboards y Data Mapper heredados siguen funcionando.",
+            "❌ Comprobar branching server-side — NO se pudo con el path unAuth: SurveyType 'Survey' (Standard) rechazado con INVALID_INPUT_COMBINATION. Basic no lo soporta. Queda como POC B pendiente por autenticado o Conversational.",
+            "❌ Comprobar display logic server-side — misma razón. Basic no expone reglas condicionales. Pendiente para POC B.",
           ],
         },
         {
           type: "heading",
           level: 3,
-          text: "Stack recomendado",
+          text: "Stack efectivamente implementado",
         },
         {
           type: "cards",
@@ -7143,23 +7179,23 @@ GET    /api/surveys/{surveyDeveloperName}/state
           items: [
             {
               eyebrow: "Frontend",
-              title: "Next.js (App Router) + TypeScript",
+              title: "Next.js 16 (App Router) + TypeScript",
               description:
-                "Un solo repositorio con Route Handlers actuando como BFF nativo. Componentes de encuesta en /app/(survey), llamadas al BFF en /app/api/surveys/*. Testing con Vitest + Playwright end-to-end.",
+                "Componentes de encuesta en components/survey/ (SurveyRunner + QuestionInputs). Un dispatcher por questionType. Client component con estado de máquina idle → running → error → thankyou. Sin dependencias adicionales.",
               tone: "primary",
             },
             {
               eyebrow: "BFF",
-              title: "Route Handlers de Next.js (mismo repo)",
+              title: "Route Handlers de Next.js + Session Store",
               description:
-                "Cliente OAuth con jsforce o fetch nativo. Sesión con iron-session firmada. Manejo de retries con exponential backoff. Logging estructurado con pino.",
+                "POST /api/surveys/[name]/start y PATCH /api/surveys/[name]/navigate. Cliente unAuth con cache in-memory del accessToken. Session store en Map anclado a globalThis (sobrevive HMR) — la cookie solo lleva un ID de 64 bytes. Decoder de HTML entities server-side.",
               tone: "success",
             },
             {
               eyebrow: "Salesforce",
-              title: "Sandbox Developer o Partial + Feedback Management",
+              title: "Org Enterprise + Feedback Management Growth",
               description:
-                "Encuesta armada en Survey Builder con las 4 páginas y las reglas de branching y display logic. Named Credential para el BFF. Guest User configurado para el camino unAuth.",
+                "Encuesta como Basic Survey (5 páginas lineales). Setup → Survey Settings → Unauthenticated Survey Participation habilitado (con propagación de ~30s). Sharing manual al Guest User Profile del Experience Cloud site elegido.",
               tone: "violet",
             },
           ],
@@ -7167,23 +7203,41 @@ GET    /api/surveys/{surveyDeveloperName}/state
         {
           type: "heading",
           level: 3,
-          text: "Criterios de éxito medibles del POC",
+          text: "Trampas empíricas — hallazgos no documentados por Salesforce",
         },
         {
           type: "list",
           items: [
-            "Cero líneas de código de branching o display logic en el frontend — auditable buscando 'goToPage', 'if(answer', 'visibleIf' u otras señales.",
-            "El mismo dispatcher renderiza los cinco tipos sin condicionales por página — un solo switch(questionType).",
-            "Tiempo de renderizado desde POST /start hasta primera página interactiva < 400 ms sobre red simulada 3G rápida.",
-            "Persistencia verificable en SurveyResponse y SurveyQuestionResponse con la SurveyVersion correcta, sin filas huérfanas.",
-            "Cobertura del flujo autenticado y del flujo unAuth con el mismo componente SurveyContainer — solo cambia el endpoint del BFF.",
+            "SurveyType 'Survey' (Standard) es rechazado por la unAuth API — solo acepta Basic o 'Conversational' (feature no publicada). Docs no lo dicen; el error INVALID_INPUT_COMBINATION lo revela.",
+            "SurveyType no se puede modificar por DML después de crear la encuesta — hay que borrar y recrear si se eligió el tipo equivocado.",
+            "surveyPageResponses.name es REQUERIDO en cada PATCH aunque el brief lo describe como 'reserved for future use'. Sin él: 400 'Invalid request content'.",
+            "questionResponses[] debe incluir una entrada por cada pregunta de la página, incluso las no contestadas. Sin eso: 'Specify the same number of questions in the survey and the input representation'.",
+            "El flowInterviewState comprimido pesa ~4.8 KB — se pasa del límite ~4096 bytes de cookie del browser. Diseño obligado: session store server-side con solo un ID corto en la cookie.",
+            "Labels llegan HTML-encoded ('Tecnolog&iacute;a'). Debe decodificarse en el BFF antes de mandar al cliente.",
+            "El toggle 'Unauthenticated Survey Participation' tiene ~30 segundos de propagación después de guardarse. Reintentos inmediatos siguen fallando con el mismo error de 'API isn't enabled'.",
+            "El DeveloperName de la encuesta lo Salesforce normaliza a minúsculas — hay que guardar el valor case-sensitive real (no el que se escribió en el UI).",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Criterios de éxito — qué se cumplió",
+        },
+        {
+          type: "list",
+          items: [
+            "✅ Cero líneas de código de flujo condicional en el frontend — auditable buscando 'if(answer' o 'goToPage'. El único condicional es 'page.kind === thankyou'.",
+            "✅ Un solo switch(questionType) en QuestionRenderer resuelve los 7 tipos de pregunta.",
+            "✅ Persistencia verificada en SurveyResponse (Status=Completed) y SurveyQuestionResponse — filas anclada a la SurveyVersion activa.",
+            "✅ El mismo SurveyRunner sirve para cualquier encuesta Basic — cambia el env SF_LAILA_SURVEY_DEV_NAME, cambia todo. Zero redeploy.",
+            "❌ Cobertura del flujo autenticado — queda pendiente (POC B).",
           ],
         },
         {
           type: "callout",
           tone: "success",
-          title: "Después del POC",
-          text: "Una vez validados los ocho objetivos técnicos anteriores y los cinco criterios de éxito, el siguiente paso natural es publicarlo como receta reutilizable dentro del portfolio — pasar del POC 'esto sí funciona' al patrón 'esto es cómo se hace'. Con ese cimiento, cualquier cliente puede llevarse la implementación completa en horas, no en semanas.",
+          title: "Del POC a la receta reutilizable",
+          text: "El POC A quedó publicado como receta en el portfolio: 'Headless Feedback Management · unAuth'. Documenta el stack completo (Route Handlers + session store + dispatcher), el diseño lineal en Survey Builder, la configuración del path unAuth (toggle + Guest User sharing), los 8 hallazgos empíricos con sus errores textuales, y un troubleshoot table con las 10 fallas más frecuentes. Cualquier cliente con Feedback Management Growth puede reproducir el POC en horas siguiendo la receta.",
         },
       ],
     },

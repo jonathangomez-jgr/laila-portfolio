@@ -55,7 +55,7 @@ export default function SurveyRunner({ surveyName, intro }: Props) {
     url: string,
     init: RequestInit,
   ): Promise<ApiPageResponse> {
-    const res = await fetch(url, init);
+    const res = await fetch(url, { ...init, credentials: "same-origin" });
     if (!res.ok) {
       const errBody = await res.json().catch(() => ({}));
       throw new Error(
@@ -183,7 +183,6 @@ export default function SurveyRunner({ surveyName, intro }: Props) {
   }
 
   const canGoNext = state.navigationActions.includes("Next");
-  const canGoBack = state.navigationActions.includes("Back");
   const busy = state.navigationActions.length === 0;
   const requiredMissing = state.page.surveyQuestions
     .filter((q) => q.isResponseRequired)
@@ -221,15 +220,7 @@ export default function SurveyRunner({ surveyName, intro }: Props) {
         ))}
       </div>
 
-      <div className="mt-8 flex items-center justify-between border-t border-gray-100 pt-6">
-        <button
-          type="button"
-          disabled={!canGoBack || busy}
-          onClick={() => handleNavigate("Back")}
-          className="rounded-md border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          ← Atrás
-        </button>
+      <div className="mt-8 flex items-center justify-end border-t border-gray-100 pt-6">
         <button
           type="button"
           disabled={!canGoNext || busy || requiredMissing}
@@ -333,6 +324,9 @@ function isAnswered(q: SurveyQuestion, value: AnswerValue): boolean {
   }
 }
 
+// Salesforce requires an entry per question on the current page — including
+// unanswered ones. For selection types, `responses: []` marks unanswered.
+// For NPS/Text, we omit responseValue.
 function buildAnswersPayload(
   questions: SurveyQuestion[],
   answers: AnswerMap,
@@ -340,7 +334,7 @@ function buildAnswersPayload(
   const out: QuestionAnswerInput[] = [];
   for (const q of questions) {
     const v = answers[q.name];
-    if (!isAnswered(q, v)) continue;
+    const answered = isAnswered(q, v);
     switch (q.questionType) {
       case "RadioButton":
       case "Boolean":
@@ -348,36 +342,50 @@ function buildAnswersPayload(
         out.push({
           name: q.name,
           questionType: q.questionType,
-          responses: [{ name: v as string }],
+          responses: answered ? [{ name: v as string }] : [],
         });
         break;
       case "MultiChoice":
         out.push({
           name: q.name,
           questionType: "MultiChoice",
-          responses: (v as string[]).map((n) => ({ name: n })),
+          responses: answered
+            ? (v as string[]).map((n) => ({ name: n }))
+            : [],
         });
         break;
       case "NPS":
-        out.push({
-          name: q.name,
-          questionType: "NPS",
-          responseValue: v as number,
-        });
+        out.push(
+          answered
+            ? {
+                name: q.name,
+                questionType: "NPS",
+                responseValue: v as number,
+              }
+            : { name: q.name, questionType: "NPS" },
+        );
         break;
       case "ShortText":
-        out.push({
-          name: q.name,
-          questionType: "ShortText",
-          responseValue: v as string,
-        });
+        out.push(
+          answered
+            ? {
+                name: q.name,
+                questionType: "ShortText",
+                responseValue: v as string,
+              }
+            : { name: q.name, questionType: "ShortText" },
+        );
         break;
       case "FreeText":
-        out.push({
-          name: q.name,
-          questionType: "FreeText",
-          responseValue: v as string,
-        });
+        out.push(
+          answered
+            ? {
+                name: q.name,
+                questionType: "FreeText",
+                responseValue: v as string,
+              }
+            : { name: q.name, questionType: "FreeText" },
+        );
         break;
     }
   }

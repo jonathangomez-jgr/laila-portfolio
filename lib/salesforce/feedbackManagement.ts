@@ -99,6 +99,7 @@ export type SurveySession = {
   flowInterviewState: string;
   responseId: string;
   languageCode: string;
+  currentPageName: string;
 };
 
 export type StartResult = {
@@ -115,6 +116,73 @@ export type NavigateResult = {
   navigationActions: string[];
 };
 
+// Salesforce Survey Builder guarda labels/choices HTML-encoded (ej: "Tecnolog&iacute;a").
+// Los desescapamos server-side para que el cliente no tenga que preocuparse.
+const HTML_ENTITIES: Record<string, string> = {
+  amp: "&",
+  lt: "<",
+  gt: ">",
+  quot: '"',
+  apos: "'",
+  nbsp: " ",
+  iacute: "í",
+  aacute: "á",
+  eacute: "é",
+  oacute: "ó",
+  uacute: "ú",
+  Iacute: "Í",
+  Aacute: "Á",
+  Eacute: "É",
+  Oacute: "Ó",
+  Uacute: "Ú",
+  ntilde: "ñ",
+  Ntilde: "Ñ",
+  uuml: "ü",
+  Uuml: "Ü",
+  iexcl: "¡",
+  iquest: "¿",
+  ordf: "ª",
+  ordm: "º",
+  laquo: "«",
+  raquo: "»",
+  hellip: "…",
+  mdash: "—",
+  ndash: "–",
+  lsquo: "‘",
+  rsquo: "’",
+  ldquo: "“",
+  rdquo: "”",
+};
+
+function decodeEntities(input: string): string {
+  return input
+    .replace(/&#(\d+);/g, (_m, code) => String.fromCharCode(parseInt(code, 10)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_m, code) =>
+      String.fromCharCode(parseInt(code, 16)),
+    )
+    .replace(/&([a-zA-Z]+);/g, (m, name) => HTML_ENTITIES[name] ?? m);
+}
+
+function decodeMaybe(v: unknown): string | undefined {
+  return typeof v === "string" ? decodeEntities(v) : undefined;
+}
+
+function decodeQuestion(q: unknown): SurveyQuestion {
+  const raw = q as Record<string, unknown>;
+  const rawChoices = Array.isArray(raw.questionChoices)
+    ? (raw.questionChoices as Array<Record<string, unknown>>)
+    : undefined;
+  return {
+    ...(raw as SurveyQuestion),
+    label: decodeEntities(String(raw.label ?? "")),
+    description: decodeMaybe(raw.description),
+    questionChoices: rawChoices?.map((c) => ({
+      name: String(c.name ?? ""),
+      label: decodeEntities(String(c.label ?? "")),
+    })),
+  };
+}
+
 function normalizePage(payload: {
   surveyPage?: Record<string, unknown>;
   surveyDetail?: { surveyPage?: Record<string, unknown> };
@@ -122,15 +190,19 @@ function normalizePage(payload: {
   const raw = payload.surveyPage ?? payload.surveyDetail?.surveyPage;
   if (!raw) throw new Error("Response missing surveyPage");
 
-  const label = String(raw.label ?? "");
+  const label = decodeEntities(String(raw.label ?? ""));
   const name = String(raw.name ?? "");
 
-  if ("surveyQuestions" in raw && Array.isArray(raw.surveyQuestions)) {
+  const isThankYou =
+    raw.pageType === "ThankYouPage" ||
+    ("thankYouMessage" in raw && !("surveyQuestions" in raw));
+
+  if (!isThankYou && Array.isArray(raw.surveyQuestions)) {
     return {
       kind: "question",
       label,
       name,
-      surveyQuestions: raw.surveyQuestions as SurveyQuestion[],
+      surveyQuestions: raw.surveyQuestions.map(decodeQuestion),
     };
   }
 
@@ -138,16 +210,15 @@ function normalizePage(payload: {
     kind: "thankyou",
     label,
     name,
-    thankYouMessage:
-      typeof raw.thankYouMessage === "string" ? raw.thankYouMessage : undefined,
-    messageDescription:
-      typeof raw.messageDescription === "string"
-        ? raw.messageDescription
-        : undefined,
+    thankYouMessage: decodeMaybe(raw.thankYouMessage),
+    messageDescription: decodeMaybe(raw.messageDescription),
     redirectUrl:
       typeof raw.redirectUrl === "string" ? raw.redirectUrl : undefined,
     urlButtons: Array.isArray(raw.urlButtons)
-      ? (raw.urlButtons as Array<{ label: string; url: string }>)
+      ? (raw.urlButtons as Array<{ label: string; url: string }>).map((b) => ({
+          label: decodeEntities(b.label),
+          url: b.url,
+        }))
       : undefined,
   };
 }
@@ -196,42 +267,42 @@ export async function startSurvey(languageCode = "es"): Promise<StartResult> {
     };
   };
 
+  const page = normalizePage(json);
   const session: SurveySession = {
     invitationId: json.invitationId,
     invitationUuid: json.invitationUuid,
     flowInterviewState: json.flowInterviewState,
     responseId: json.responseId,
     languageCode: json.languageCode ?? languageCode,
+    currentPageName: page.name,
   };
   return {
     session,
-    page: normalizePage(json),
+    page,
     navigationActions: json.navigationActions ?? ["Next"],
     surveyLabel: json.surveyDetail.label,
     surveyName: json.surveyDetail.name,
   };
 }
 
+// Salesforce requires an entry in questionResponses[] for every question on the current
+// page — including unanswered ones. For selection types, `responses: []` means "not
+// answered". For NPS/Text, omitting `responseValue` means "not answered".
 export type QuestionAnswerInput =
   | {
       name: string;
-      questionType: "RadioButton" | "Boolean" | "Rating";
-      responses: [{ name: string }];
-    }
-  | {
-      name: string;
-      questionType: "MultiChoice";
+      questionType: "RadioButton" | "Boolean" | "Rating" | "MultiChoice";
       responses: Array<{ name: string }>;
     }
   | {
       name: string;
       questionType: "NPS";
-      responseValue: number;
+      responseValue?: number;
     }
   | {
       name: string;
       questionType: "ShortText" | "FreeText";
-      responseValue: string;
+      responseValue?: string;
     };
 
 export async function navigate(
@@ -251,9 +322,19 @@ export async function navigate(
     languageCode: session.languageCode,
     navigationAction: action,
     surveyPageResponses: {
+      name: session.currentPageName,
       questionResponses: answers,
     },
   };
+
+  // Diagnostic: log the body we send (elides flowInterviewState which is huge).
+  const bodyForLog = {
+    ...body,
+    flowInterviewState: `${session.flowInterviewState.slice(0, 40)}… (len=${session.flowInterviewState.length})`,
+  };
+  console.log(
+    `[sf/navigate] PATCH body → ${JSON.stringify(bodyForLog, null, 2)}`,
+  );
 
   const res = await fetch(url, {
     method: "PATCH",
@@ -265,6 +346,7 @@ export async function navigate(
   });
   if (!res.ok) {
     const errBody = await res.text().catch(() => "");
+    console.error(`[sf/navigate] SF ${res.status} response: ${errBody}`);
     throw new Error(`${action} failed ${res.status}: ${errBody}`);
   }
   const json = (await res.json()) as {
@@ -278,17 +360,19 @@ export async function navigate(
     surveyPage: Record<string, unknown>;
   };
 
+  const page = normalizePage(json);
   const nextSession: SurveySession = {
     invitationId: json.invitationId ?? session.invitationId,
     invitationUuid: json.invitationUuid ?? session.invitationUuid,
     flowInterviewState: json.flowInterviewState,
     responseId: json.responseId ?? session.responseId,
     languageCode: json.languageCode ?? session.languageCode,
+    currentPageName: page.name,
   };
 
   return {
     session: nextSession,
-    page: normalizePage(json),
+    page,
     navigationActions: json.navigationActions ?? [],
   };
 }

@@ -1,6 +1,6 @@
-import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 import { startSurvey } from "@/lib/salesforce/feedbackManagement";
-import { encodeSession, SESSION_COOKIE } from "@/lib/survey/session";
+import { saveSession, SESSION_COOKIE } from "@/lib/survey/session";
 
 export const dynamic = "force-dynamic";
 
@@ -17,21 +17,25 @@ export async function POST(request: Request) {
 
   try {
     const result = await startSurvey(languageCode);
-    const cookieStore = await cookies();
-    cookieStore.set(
-      SESSION_COOKIE.name,
-      encodeSession(result.session),
-      SESSION_COOKIE.options,
+    const sessionId = saveSession(result.session);
+    console.log(
+      `[survey/start] session stored id=${sessionId.slice(0, 8)}… (cookie carries ${sessionId.length} bytes)`,
     );
-    return Response.json({
+    const response = NextResponse.json({
       page: result.page,
       navigationActions: result.navigationActions,
       surveyLabel: result.surveyLabel,
       surveyName: result.surveyName,
     });
+    response.cookies.set(
+      SESSION_COOKIE.name,
+      sessionId,
+      SESSION_COOKIE.options,
+    );
+    return response;
   } catch (err) {
     console.error("[survey/start]", err);
-    return Response.json(
+    return NextResponse.json(
       { error: err instanceof Error ? err.message : "Unknown error" },
       { status: 500 },
     );

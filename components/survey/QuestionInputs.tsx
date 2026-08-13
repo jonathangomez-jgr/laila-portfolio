@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { SurveyQuestion } from "@/lib/salesforce/feedbackManagement";
 
 type BaseProps<T> = {
@@ -113,33 +114,83 @@ export function BooleanYesNo({
   );
 }
 
+function StarIcon({
+  filled,
+  size = 36,
+}: {
+  filled: boolean;
+  size?: number;
+}) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      className="transition-colors"
+      aria-hidden="true"
+    >
+      <path
+        d="M12 2l3.09 6.26 6.91 1.01-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2z"
+        fill={filled ? "currentColor" : "none"}
+        stroke="currentColor"
+        strokeWidth={filled ? 0 : 1.4}
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function Rating({ question, value, onChange }: BaseProps<string>) {
   const choices = question.questionChoices ?? [];
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const selectedIdx = choices.findIndex((c) => c.name === value);
+  const activeIdx = hoverIdx !== null ? hoverIdx : selectedIdx;
+
+  const firstLabel = choices[0]?.label;
+  const lastLabel = choices[choices.length - 1]?.label;
+  const showEndpointLabels =
+    choices.length >= 3 && firstLabel !== undefined && lastLabel !== undefined;
+
   return (
-    <div
-      className="flex flex-wrap gap-2"
-      role="radiogroup"
-      aria-label={question.label}
-    >
-      {choices.map((c) => {
-        const selected = value === c.name;
-        return (
-          <button
-            key={c.name}
-            type="button"
-            role="radio"
-            aria-checked={selected}
-            onClick={() => onChange(c.name)}
-            className={
-              selected
-                ? "min-w-[52px] rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow"
-                : "min-w-[52px] rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-800 hover:border-indigo-400"
-            }
-          >
-            {c.label}
-          </button>
-        );
-      })}
+    <div className="flex flex-col gap-1.5">
+      <div
+        className="flex gap-1"
+        role="radiogroup"
+        aria-label={question.label}
+        onMouseLeave={() => setHoverIdx(null)}
+      >
+        {choices.map((c, i) => {
+          const filled = i <= activeIdx;
+          const isSelected = value === c.name;
+          return (
+            <button
+              key={c.name}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              aria-label={c.label}
+              title={c.label}
+              onMouseEnter={() => setHoverIdx(i)}
+              onFocus={() => setHoverIdx(i)}
+              onBlur={() => setHoverIdx(null)}
+              onClick={() => onChange(c.name)}
+              className={
+                filled
+                  ? "cursor-pointer text-amber-400 hover:text-amber-500"
+                  : "cursor-pointer text-gray-300 hover:text-amber-300"
+              }
+            >
+              <StarIcon filled={filled} />
+            </button>
+          );
+        })}
+      </div>
+      {showEndpointLabels && (
+        <div className="flex justify-between px-1 text-xs text-gray-500">
+          <span>{firstLabel}</span>
+          <span>{lastLabel}</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -149,6 +200,26 @@ export function NPS({ question, value, onChange }: BaseProps<number>) {
   const max = question.maxScale ?? 10;
   const numbers: number[] = [];
   for (let n = min; n <= max; n++) numbers.push(n);
+
+  // Gradiente rojo → verde interpolando el matiz HSL (0 → 120).
+  function styleFor(n: number, selected: boolean): React.CSSProperties {
+    const t = max === min ? 0 : (n - min) / (max - min);
+    const hue = t * 120;
+    if (selected) {
+      return {
+        backgroundColor: `hsl(${hue}, 65%, 42%)`,
+        borderColor: `hsl(${hue}, 70%, 34%)`,
+        color: "white",
+        boxShadow: `0 4px 10px -2px hsla(${hue}, 65%, 40%, 0.45)`,
+      };
+    }
+    return {
+      backgroundColor: `hsl(${hue}, 92%, 96%)`,
+      borderColor: `hsl(${hue}, 60%, 78%)`,
+      color: `hsl(${hue}, 55%, 28%)`,
+    };
+  }
+
   return (
     <div className="flex flex-col gap-2">
       <div
@@ -165,10 +236,11 @@ export function NPS({ question, value, onChange }: BaseProps<number>) {
               role="radio"
               aria-checked={selected}
               onClick={() => onChange(n)}
+              style={styleFor(n, selected)}
               className={
                 selected
-                  ? "min-w-[42px] rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow"
-                  : "min-w-[42px] rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-800 hover:border-indigo-400"
+                  ? "min-w-[44px] rounded-md border-2 px-3 py-2 text-sm font-bold transition"
+                  : "min-w-[44px] rounded-md border-2 px-3 py-2 text-sm font-semibold transition hover:brightness-95"
               }
             >
               {n}

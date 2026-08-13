@@ -3652,53 +3652,59 @@ const headlessFeedbackManagement: Recipe = {
       id: "survey-design",
       eyebrow: "Paso 1 · Salesforce",
       title: "Construir la encuesta en Survey Builder",
-      peek: "6 páginas · 11 preguntas · 7 tipos · 1 branching · 3 reglas de display logic",
+      peek: "5 páginas · 10 preguntas · 7 tipos · flujo lineal (Basic Survey)",
       blocks: [
         {
+          type: "callout",
+          tone: "critical",
+          title: "Sobre el tipo de encuesta — hallazgo empírico del POC",
+          text: "El diálogo de New Survey ofrece tres tipos: Basic, Standard y Assessment. La doc pública sugiere que Standard es 'a survey with all the features' — y por tanto la mejor opción. En la práctica, la unAuth Response API responde: `INVALID_INPUT_COMBINATION — Specify a basic or conversational survey and try again` cuando se envía un Standard. Es decir: solo Basic y una variante 'Conversational' (que no está en las docs públicas ni en el picklist SurveyType de orgs estándar — parece feature en pilot/EA) son aceptadas por el endpoint /surveys/v1/survey-response. Esta receta usa Basic. Standard requiere el path autenticado (Connect REST), no el unAuth.",
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Basic no soporta page branching ni display logic",
+          text: "La Object Reference oficial dice: 'BASIC — Survey with a question page with like or dislike, long text, multiple selection, NPS, rating, short text, and single selection questions, and without inserted participant responses, display logic, and page branching logic'. Usar Basic significa flujo lineal y todas las preguntas siempre visibles. Si necesitas branching o display logic empresarial hoy, tienes que usar el path autenticado con Standard, o abrir case con Salesforce para activar Conversational en tu org.",
+        },
+        {
           type: "paragraph",
-          text: "Esta encuesta ejercita en un mismo diseño todo lo que la Business API oficial soporta hoy con certeza. Nombre sugerido de la encuesta: 'Descubrimiento_Agentforce'. El developer name se usa como valor del env SF_LAILA_SURVEY_DEV_NAME.",
+          text: "El diseño abajo se adaptó a Basic. Mantenemos los 7 tipos de pregunta como showcase técnico, pero el flujo es lineal — todas las páginas se recorren en orden y todas las preguntas siempre son visibles. Nombre sugerido: 'Descubrimiento_Agentforce_Basic'. Ese developer name se pasa al env SF_LAILA_SURVEY_DEV_NAME.",
         },
         {
           type: "dataModel",
-          name: "Descubrimiento_Agentforce",
+          name: "Descubrimiento_Agentforce_Basic",
           purpose:
-            "Encuesta de discovery — perfil del visitante, estado con IA/agentes y follow-up opcional",
+            "Discovery lineal — perfil, estado con Agentforce, priorización y follow-up",
           fields: [
             {
               name: "Página 1 · Perfil",
               type: "SurveyPage",
               purpose:
-                "Q1 Industria (RadioButton, requerida) · Q2 Rol (RadioButton, requerida)",
+                "Q1 Industria (Single selection, requerida) · Q2 Rol (Single selection, requerida)",
             },
             {
               name: "Página 2 · Estado actual",
               type: "SurveyPage",
               purpose:
-                "Q3 ¿Ya usan Agentforce o agentes IA? (Boolean Sí/No, requerida) · Page branching: Sí → Página 3, No → Página 4",
+                "Q3 ¿Ya usan Agentforce? (Single selection Sí/No, requerida) · Q4 Canales (Multi-select, opcional — los no-clientes lo dejan vacío) · Q5 Satisfacción (Rating 1-5, opcional)",
             },
             {
-              name: "Página 3 · Deep-dive (rama Sí)",
+              name: "Página 3 · Priorización",
               type: "SurveyPage",
               purpose:
-                "Q4 Canales (MultiChoice, requerida) · Q5 Satisfacción (Rating 1-5, requerida) · Q6 ¿Qué mejorar? (FreeText, opcional) — Display logic: Q6 solo si Q5 ≤ 3",
+                "Q6 Probabilidad IA este año (NPS 0-10, requerida) · Q7 ¿Qué te frena? (Single selection, requerida) · Q8 Cuéntanos más (Long text, opcional)",
             },
             {
-              name: "Página 4 · Readiness (rama No)",
+              name: "Página 4 · Contacto",
               type: "SurveyPage",
               purpose:
-                "Q7 Probabilidad este año (NPS 0-10, requerida) · Q8 ¿Qué te frena? (RadioButton, requerida) · Q9 Cuéntanos más (FreeText, opcional) — Display logic: Q9 solo si Q8 = 'Otro'",
+                "Q9 ¿Sesión con arquitecto? (Single selection Sí/No, requerida) · Q10 Email (Short text, opcional)",
             },
             {
-              name: "Página 5 · Contacto (convergencia)",
-              type: "SurveyPage",
-              purpose:
-                "Q10 ¿Quieres una sesión con un arquitecto? (Boolean, requerida) · Q11 Email (ShortText) — Display logic: Q11 solo si Q10 = 'Sí'; requerida cuando visible",
-            },
-            {
-              name: "Página 6 · Thank You",
+              name: "Página 5 · Thank You",
               type: "Survey Thank You Page",
               purpose:
-                "thankYouMessage: 'Gracias por tu tiempo.' · redirectUrl: '/es/insights/headless-feedback-management-salesforce' — cierra la respuesta y lleva al insight",
+                "thankYouMessage: 'Gracias por tu tiempo.' · redirectUrl: '/es/insights/headless-feedback-management-salesforce'",
             },
           ],
         },
@@ -3706,116 +3712,46 @@ const headlessFeedbackManagement: Recipe = {
           type: "callout",
           tone: "info",
           title: "Mapping de tipos Survey Builder ↔ API",
-          text: "El UI de Survey Builder usa etiquetas ('Radio', 'Multi-select', 'Yes/No', 'Rating', 'NPS', 'Short text', 'Long text'). El campo questionType en la API responde con: RadioButton · MultiChoice · Boolean · Rating · NPS · ShortText · FreeText. Ese es el discriminador que usa el dispatcher del frontend.",
+          text: "El UI de Basic Survey usa 'Single selection', 'Multi-select', 'Rating', 'NPS', 'Short text', 'Long text'. Para preguntas Sí/No usa Single selection con dos choices — el API devuelve questionType 'Boolean' o 'RadioButton' según cómo lo detecte el motor. El dispatcher del frontend maneja ambos.",
         },
         {
           type: "table",
-          headers: ["Pregunta", "Tipo (Builder)", "questionType (API)", "Choices"],
+          headers: ["Pregunta", "Tipo (Builder)", "questionType (API)", "Requerida"],
           rows: [
-            [
-              "Q1 · Industria",
-              "Radio",
-              "RadioButton",
-              "Retail · Banca · Seguros · Salud · Telco · Otro",
-            ],
-            [
-              "Q2 · Rol",
-              "Radio",
-              "RadioButton",
-              "CIO/CTO · VP CX · Arquitecto · Product Manager · Otro",
-            ],
-            [
-              "Q3 · ¿Ya usan Agentforce?",
-              "Yes/No",
-              "Boolean",
-              "Sí · No",
-            ],
-            [
-              "Q4 · Canales desplegados",
-              "Multi-select",
-              "MultiChoice",
-              "WhatsApp · Web chat · Voz/IVR · Email · Otro",
-            ],
-            [
-              "Q5 · Satisfacción",
-              "Rating (1-5)",
-              "Rating",
-              "1 · 2 · 3 · 4 · 5",
-            ],
-            [
-              "Q6 · ¿Qué mejorar?",
-              "Long text",
-              "FreeText",
-              "(sin choices)",
-            ],
-            [
-              "Q7 · Probabilidad IA este año",
-              "NPS (0-10)",
-              "NPS",
-              "escala 0-10",
-            ],
-            [
-              "Q8 · ¿Qué te frena?",
-              "Radio",
-              "RadioButton",
-              "Casos de uso · Presupuesto · Datos · Compliance · Otro",
-            ],
-            [
-              "Q9 · Cuéntanos más",
-              "Long text",
-              "FreeText",
-              "(sin choices)",
-            ],
-            [
-              "Q10 · Sesión con arquitecto",
-              "Yes/No",
-              "Boolean",
-              "Sí · No",
-            ],
-            [
-              "Q11 · Email",
-              "Short text",
-              "ShortText",
-              "(sin choices)",
-            ],
+            ["Q1 · Industria", "Single selection", "RadioButton", "✅"],
+            ["Q2 · Rol", "Single selection", "RadioButton", "✅"],
+            ["Q3 · ¿Ya usan Agentforce?", "Single selection (Sí/No)", "Boolean | RadioButton", "✅"],
+            ["Q4 · Canales", "Multi-select", "MultiChoice", "❌"],
+            ["Q5 · Satisfacción", "Rating (1-5)", "Rating", "❌"],
+            ["Q6 · Probabilidad IA", "NPS", "NPS", "✅"],
+            ["Q7 · ¿Qué te frena?", "Single selection", "RadioButton", "✅"],
+            ["Q8 · Cuéntanos más", "Long text", "FreeText", "❌"],
+            ["Q9 · Sesión con arquitecto", "Single selection (Sí/No)", "Boolean | RadioButton", "✅"],
+            ["Q10 · Email", "Short text", "ShortText", "❌"],
           ],
         },
         {
           type: "setupStep",
           number: 1,
-          title: "Crear la encuesta y las 6 páginas",
+          title: "Crear la encuesta y las 5 páginas",
           instructions:
-            "En Setup → Feedback Management → New Survey. Nombra 'Descubrimiento_Agentforce'. Agrega 5 páginas de preguntas más 1 página Thank You. Configura la Thank You con el mensaje y redirectUrl indicados arriba.",
+            "En Setup → Feedback Management → New Survey. Nombra 'Descubrimiento_Agentforce_Basic'. En el diálogo, elige **Basic Survey** (el primero de los tres). Marca 'Save partially completed survey responses' para habilitar Status=PartiallyCompleted. Agrega 4 páginas de preguntas más 1 página Thank You. Configura la Thank You con el mensaje y redirectUrl indicados arriba.",
         },
         {
           type: "setupStep",
           number: 2,
-          title: "Configurar page branching en la Página 2",
+          title: "Marcar preguntas requeridas",
           instructions:
-            "En la Página 2 → menú Page Branching Logic. Regla 1: Si Q3 = 'Sí' → ir a Página 3. Regla 2: Si Q3 = 'No' → ir a Página 4. Ambas ramas terminan navegando a Página 5 (convergencia).",
+            "Q1, Q2, Q3, Q6, Q7, Q9 → isResponseRequired = true. Q4, Q5, Q8, Q10 → false. En Basic Survey el toggle 'Required' aparece al editar cada pregunta — no en un panel separado como en Standard.",
         },
         {
           type: "setupStep",
           number: 3,
-          title: "Configurar display logic (3 reglas)",
-          instructions:
-            "En cada pregunta condicional → menú Display Logic. Q6 visible solo si Q5 ≤ 3. Q9 visible solo si Q8 = 'Otro'. Q11 visible solo si Q10 = 'Sí' (y marcar isResponseRequired cuando visible).",
-        },
-        {
-          type: "setupStep",
-          number: 4,
-          title: "Marcar preguntas requeridas",
-          instructions:
-            "Q1, Q2, Q3, Q4, Q5, Q7, Q8, Q10 → isResponseRequired = true. Q6, Q9 → false. Q11 → false a nivel encuesta (el display logic lo hace requerido solo cuando visible; la validación de required cuando visible se maneja en el frontend).",
-        },
-        {
-          type: "setupStep",
-          number: 5,
           title: "Publicar la encuesta",
           instructions:
-            "Publish → crea la SurveyVersion activa. Anota el Survey Id (Kdxx...) — puedes recuperarlo con SOQL: SELECT Id, Name, DeveloperName FROM Survey WHERE DeveloperName = 'Descubrimiento_Agentforce'",
+            "Publish → crea la SurveyVersion activa. Anota el Survey Id (Kdxx...) — recupéralo con SOQL. Confirma también que el DeveloperName quedó exactamente como esperas (Salesforce normaliza a minúsculas: 'descubrimiento_agentforce_basic') porque ese es el valor case-sensitive que va al env.",
           command:
-            "sf data query --query \"SELECT Id, Name, DeveloperName FROM Survey WHERE DeveloperName = 'Descubrimiento_Agentforce'\" --target-org Laila",
+            "sf data query --query \"SELECT Id, Name, DeveloperName, SurveyType FROM Survey WHERE DeveloperName = 'descubrimiento_agentforce_basic'\" --target-org Laila",
         },
       ],
     },
@@ -3895,8 +3831,8 @@ const headlessFeedbackManagement: Recipe = {
             ],
             [
               "SF_LAILA_SURVEY_DEV_NAME",
-              "Descubrimiento_Agentforce",
-              "Developer name de la encuesta publicada",
+              "descubrimiento_agentforce_basic",
+              "Developer name de la encuesta publicada (Salesforce normaliza a minúsculas — case-sensitive)",
             ],
             [
               "SF_LAILA_UNAUTH_APP_PREFIX",
@@ -3906,7 +3842,7 @@ const headlessFeedbackManagement: Recipe = {
             [
               "SURVEY_SESSION_SECRET",
               "openssl rand -base64 48",
-              "Secret para firmar la cookie de sesión (mínimo 32 caracteres)",
+              "Secret usado por el session store server-side (reservado — la implementación actual solo indexa por ID aleatorio; el secret queda listo para migrar a JWT o firma HMAC en producción)",
             ],
           ],
         },
@@ -3929,7 +3865,7 @@ const headlessFeedbackManagement: Recipe = {
           name: "lib/salesforce/feedbackManagement.ts",
           kind: "apex",
           purpose:
-            "Cliente server-side de la unAuth Response API. Cachea el accessToken en memoria del módulo con verificación de expiración. Normaliza el surveyPage polimórfico (Question Page o Thank You Page) en un tipo discriminado.",
+            "Cliente server-side de la unAuth Response API. Cachea el accessToken en memoria del módulo. Decodifica entities HTML en labels (Salesforce devuelve 'Tecnolog&iacute;a', no 'Tecnología'). Normaliza el surveyPage polimórfico (QuestionPage vs ThankYouPage) en un tipo discriminado con kind: 'question' | 'thankyou'.",
           methods: [
             {
               name: "getAccessToken",
@@ -3939,53 +3875,70 @@ const headlessFeedbackManagement: Recipe = {
             {
               name: "startSurvey(languageCode)",
               description:
-                "POST /surveys/v1/survey-response con surveyDeveloperName + invitationSettings { collectAnonymousResponse }. Devuelve { session, page, navigationActions, surveyLabel }.",
+                "POST /surveys/v1/survey-response con surveyDeveloperName + invitationSettings { collectAnonymousResponse }. Devuelve { session, page, navigationActions, surveyLabel }. La session incluye currentPageName (usado por navigate).",
             },
             {
               name: "navigate(session, action, answers)",
               description:
-                "PATCH /surveys/v1/survey-response con navigationAction (Next|Back) + surveyPageResponses.questionResponses[]. Devuelve el siguiente { page, navigationActions } y refresca session.",
+                "PATCH /surveys/v1/survey-response con surveyPageResponses.name (page id) + questionResponses[]. Debe enviar UNA entrada por cada pregunta de la página — no solo las contestadas. Devuelve { session, page, navigationActions }.",
             },
           ],
+        },
+        {
+          type: "callout",
+          tone: "critical",
+          title: "Hallazgo empírico · shape de PATCH que la doc no explicita",
+          text: "Dos requisitos que salieron en el POC y que la doc pública no deja claros: (1) surveyPageResponses.name — el ID de la página actual — es REQUERIDO en cada PATCH, aunque el brief dice 'reserved for future use'. (2) questionResponses[] debe contener una entrada por cada pregunta de la página, incluso las no contestadas — Salesforce responde 'Specify the same number of questions in the survey and the input representation' si falta alguna. Para las no contestadas: responses: [] en selection types, o omitir responseValue en NPS/Text.",
         },
         {
           type: "codeRef",
           name: "lib/survey/session.ts",
           kind: "apex",
           purpose:
-            "Sesión firmada HMAC-SHA256 en cookie httpOnly. La sesión guarda { invitationId, invitationUuid, flowInterviewState, responseId, languageCode }. No es secreto — Salesforce ya conoce esos IDs — pero la firma impide tampering desde el cliente.",
+            "Session store server-side indexado por session ID corto (64 chars hex). Ancla el Map a globalThis para sobrevivir HMR de Next en dev. La cookie httpOnly solo lleva el session ID — el estado real (invitationId + invitationUuid + flowInterviewState + responseId + languageCode + currentPageName) vive en memoria del servidor.",
           methods: [
             {
-              name: "encodeSession",
+              name: "saveSession(session)",
               description:
-                "Serializa a JSON → base64url → firma HMAC. Formato: <payload>.<signature>",
+                "Genera un ID aleatorio de 32 bytes, guarda { session, expiresAt: now+2h }. Sweep de sesiones expiradas en cada write. Devuelve el ID para la cookie.",
             },
             {
-              name: "decodeSession",
+              name: "loadSession(id)",
               description:
-                "Verifica firma con timingSafeEqual. Devuelve null si la sesión fue manipulada.",
+                "Look up por ID. Verifica expiresAt. Devuelve null si no existe o expiró (elimina expiradas al pasar).",
+            },
+            {
+              name: "updateSession(id, session)",
+              description:
+                "Refresca la sesión al navegar. El session ID de la cookie no cambia; solo el estado interno.",
             },
           ],
+        },
+        {
+          type: "callout",
+          tone: "critical",
+          title: "Por qué el estado NO viaja en la cookie — el flowInterviewState no cabe",
+          text: "Primera implementación puso el estado firmado con HMAC en la cookie. Fallo empírico: el flowInterviewState que devuelve Salesforce mide ~3.8 KB base64, y la sesión JSON serializada + base64 + firma + gzip queda en ~4.8 KB — por encima del límite de 4096 bytes por cookie que la mayoría de navegadores acepta silenciosamente. Chrome/Firefox rechazan la cookie sin decir nada y el próximo PATCH llega sin sesión. Solución: server-side session store con un session ID corto en la cookie (64 bytes). Para producción multi-instancia, cambia el Map de globalThis por Redis/KV — la interfaz saveSession/loadSession/updateSession queda igual.",
         },
         {
           type: "codeRef",
           name: "app/api/surveys/[surveyName]/start/route.ts",
           kind: "apex",
           purpose:
-            "Endpoint POST público. Llama startSurvey, escribe la sesión en cookie httpOnly, devuelve al cliente { page, navigationActions, surveyLabel } — sin exponer flowInterviewState ni tokens.",
+            "Endpoint POST. Llama startSurvey, guarda la session server-side vía saveSession, escribe el session ID en cookie httpOnly usando NextResponse.cookies.set. Devuelve { page, navigationActions, surveyLabel } al cliente.",
         },
         {
           type: "codeRef",
           name: "app/api/surveys/[surveyName]/navigate/route.ts",
           kind: "apex",
           purpose:
-            "Endpoint PATCH. Lee la sesión de la cookie firmada, valida action ∈ {Next, Back}, llama navigate, refresca cookie, devuelve { page, navigationActions }. Rechaza 400 si no hay sesión válida.",
+            "Endpoint PATCH. Lee el session ID desde NextRequest.cookies, hidrata la sesión con loadSession, valida action ∈ {Next, Back}, llama navigate, refresca la sesión con updateSession (el session ID de la cookie NO cambia). Rechaza 400 si no hay sesión válida.",
         },
         {
           type: "callout",
           tone: "info",
           title: "Por qué el token NO va al navegador",
-          text: "El accessToken unAuth es per-org — filtrarlo compromete todas las encuestas públicas de la org. Vive solo en el servidor, con TTL 3600s y cache in-memory. El navegador ve cookie firmada + JSON de páginas y respuestas. Cero superficie de secreto en cliente.",
+          text: "El accessToken unAuth es per-org — filtrarlo compromete todas las encuestas públicas de la org. Vive solo en el servidor, con TTL 3600s y cache in-memory. El navegador ve cookie con session ID de 64 bytes + JSON de páginas y respuestas. Cero superficie de secreto en cliente.",
         },
       ],
     },
@@ -4010,8 +3963,8 @@ const headlessFeedbackManagement: Recipe = {
             },
             {
               component: "BFF",
-              action: "Firma sesión → Set-Cookie httpOnly",
-              note: "Payload de sesión: { invitationId, invitationUuid, flowInterviewState, responseId, languageCode }",
+              action: "saveSession(state) → Set-Cookie con session ID (64 bytes)",
+              note: "El estado (invitationId + invitationUuid + flowInterviewState + currentPageName + …) queda en el store server-side; solo el ID viaja",
             },
             {
               component: "Frontend",
@@ -4021,17 +3974,17 @@ const headlessFeedbackManagement: Recipe = {
             {
               component: "Frontend",
               action: "PATCH /api/surveys/[name]/navigate { action: 'Next', answers: [...] }",
-              note: "Formato del answer depende del questionType: responses[] para selección, responseValue para NPS/Text",
+              note: "IMPORTANTE: answers[] debe incluir TODAS las preguntas de la página, no solo las contestadas — SF rechaza si falta alguna",
             },
             {
               component: "BFF",
-              action: "Decodifica cookie → PATCH /surveys/v1/survey-response",
-              note: "Salesforce evalúa branching server-side según respuestas — decide P3 o P4",
+              action: "loadSession(id) → PATCH /surveys/v1/survey-response con surveyPageResponses.name + questionResponses[]",
+              note: "surveyPageResponses.name es requerido (el ID de la página actual) — la doc pública dice 'reserved for future use' pero en la práctica sí se necesita",
             },
             {
               component: "BFF",
-              action: "Actualiza cookie con nuevo flowInterviewState",
-              note: "El invitationId/Uuid no cambian; el flow state sí",
+              action: "updateSession(id, next) con el nuevo flowInterviewState y currentPageName",
+              note: "El session ID de la cookie NO cambia; el estado interno sí. Cookie sigue viva.",
             },
             {
               component: "Frontend",
@@ -4064,7 +4017,7 @@ const headlessFeedbackManagement: Recipe = {
             { name: "Content-Type", value: "application/json" },
           ],
           body: `{
-  "surveyDeveloperName": "Descubrimiento_Agentforce",
+  "surveyDeveloperName": "descubrimiento_agentforce_basic",
   "languageCode": "es",
   "invitationSettings": {
     "collectAnonymousResponse": true
@@ -4079,11 +4032,12 @@ const headlessFeedbackManagement: Recipe = {
   "languageCode": "es",
   "navigationActions": ["Next"],
   "surveyDetail": {
-    "label": "Descubrimiento con Laila",
-    "name": "Descubrimiento_Agentforce",
+    "label": "Descubrimiento_Agentforce_Basic",
+    "name": "descubrimiento_agentforce_basic",
     "surveyPage": {
-      "label": "Perfil",
-      "name": "p_perfil",
+      "label": "Page 1",
+      "name": "S_617968c2_...",
+      "pageType": "QuestionPage",
       "surveyQuestions": [
         {
           "name": "q_industria",
@@ -4094,15 +4048,23 @@ const headlessFeedbackManagement: Recipe = {
             { "name": "c_retail", "label": "Retail" },
             { "name": "c_banca",  "label": "Banca" }
           ]
+        },
+        {
+          "name": "q_rol",
+          "label": "¿Cu\\u00e1l es tu rol?",
+          "questionType": "RadioButton",
+          "isResponseRequired": true,
+          "questionChoices": [ ... ]
         }
       ]
     }
   }
 }`,
+          note: "Guarda surveyPage.name — se necesita en el próximo PATCH como surveyPageResponses.name.",
         },
         {
           type: "apiCall",
-          title: "PATCH /survey-response · Navigate Next (con branching)",
+          title: "PATCH /survey-response · Navigate Next (una entrada por pregunta)",
           method: "PATCH",
           url: "https://laila-demo.my.salesforce-scrt.com/surveys/v1/survey-response",
           headers: [
@@ -4110,16 +4072,17 @@ const headlessFeedbackManagement: Recipe = {
             { name: "Content-Type", value: "application/json" },
           ],
           body: `{
-  "surveyDeveloperName": "Descubrimiento_Agentforce",
+  "surveyDeveloperName": "descubrimiento_agentforce_basic",
   "invitationId": "0Kixx...",
   "invitationUuid": "11845-...",
   "flowInterviewState": "state1",
   "languageCode": "es",
   "navigationAction": "Next",
   "surveyPageResponses": {
+    "name": "S_617968c2_...",
     "questionResponses": [
       { "name": "q_industria", "questionType": "RadioButton", "responses": [{ "name": "c_retail" }] },
-      { "name": "q_rol", "questionType": "RadioButton", "responses": [{ "name": "c_arquitecto" }] }
+      { "name": "q_rol",       "questionType": "RadioButton", "responses": [] }
     ]
   }
 }`,
@@ -4128,13 +4091,14 @@ const headlessFeedbackManagement: Recipe = {
   "flowInterviewState": "state2",
   "navigationActions": ["Next", "Back"],
   "surveyPage": {
-    "label": "Estado actual",
+    "label": "Page 2",
     "name": "p_estado",
+    "pageType": "QuestionPage",
     "surveyQuestions": [
       {
         "name": "q_usa_agentforce",
         "label": "¿Tu organización ya usa Agentforce o agentes IA?",
-        "questionType": "Boolean",
+        "questionType": "RadioButton",
         "isResponseRequired": true,
         "questionChoices": [
           { "name": "yes", "label": "Sí" },
@@ -4144,6 +4108,7 @@ const headlessFeedbackManagement: Recipe = {
     ]
   }
 }`,
+          note: "Fíjate: q_rol se envía con responses: [] (unanswered) — no se omite. Y surveyPageResponses.name lleva el ID de la página actual, no el nuevo.",
         },
         {
           type: "apiCall",
@@ -4250,7 +4215,7 @@ const headlessFeedbackManagement: Recipe = {
           command: `# .env.local
 SF_LAILA_MY_DOMAIN=laila-demo.my.salesforce.com
 SF_LAILA_ORG_ID=00DKY00000F1KgF2AV
-SF_LAILA_SURVEY_DEV_NAME=Descubrimiento_Agentforce
+SF_LAILA_SURVEY_DEV_NAME=descubrimiento_agentforce_basic
 SF_LAILA_UNAUTH_APP_PREFIX=surveys/v1
 SURVEY_SESSION_SECRET=$(openssl rand -base64 48)`,
         },
@@ -4267,7 +4232,7 @@ SURVEY_SESSION_SECRET=$(openssl rand -base64 48)`,
           number: 3,
           title: "Recorrer el flujo completo",
           instructions:
-            "Abre localhost:3000/es/demo/survey. Cubre las 6 páginas siguiendo cada rama. Verifica la ramificación Q3 = Sí vs No. Confirma que Q6 solo aparece si contestaste Q5 con 1, 2 o 3 — esa es la validación empírica de display logic server-side.",
+            "Abre localhost:3000/es/demo/survey. Cubre las 5 páginas en orden. En Basic Survey no hay ramificación ni display logic — todas las páginas se recorren en secuencia. Confirma que el Back funciona (regresa a la página previa preservando respuestas) y que el Thank You Page aparece al final.",
         },
         {
           type: "setupStep",
@@ -4348,9 +4313,21 @@ sf data query --query "SELECT Id, ResponseId, ResponseValue FROM SurveyQuestionR
           rows: [
             {
               issue:
+                "POST /accessToken responde 400 'UnauthenticatedSurveyParticipation API isn't enabled'",
+              solution:
+                "Falta habilitar el toggle 'Unauthenticated Survey Participation' en Setup → Survey Settings. Ojo: la propagación tarda ~30 segundos después de guardarlo — si probaste inmediatamente y ya activaste el toggle, espera y reintentaste.",
+            },
+            {
+              issue:
                 "POST /accessToken responde 401 o 'Invalid org id'",
               solution:
                 "Verifica que SF_LAILA_ORG_ID sea el Id de 18 caracteres (no el de 15). En Setup → Company Information está el valor correcto.",
+            },
+            {
+              issue:
+                "POST /survey-response responde 'Specify a basic or conversational survey and try again'",
+              solution:
+                "La encuesta es de tipo Standard (SurveyType=Survey). El unAuth API solo acepta Basic o Conversational. Borra la encuesta actual (SurveyType no se puede modificar por DML) y créala de nuevo como Basic Survey en el diálogo New Survey.",
             },
             {
               issue: "POST /survey-response responde 403 al iniciar",
@@ -4359,25 +4336,38 @@ sf data query --query "SELECT Id, ResponseId, ResponseValue FROM SurveyQuestionR
             },
             {
               issue:
-                "Unable to find survey 'Descubrimiento_Agentforce'",
+                "Unable to find survey 'Descubrimiento_Agentforce_Basic'",
               solution:
-                "El DeveloperName no coincide. Confirma que la encuesta está PUBLICADA (no solo guardada). SELECT DeveloperName FROM Survey — el valor exacto debe ir en SF_LAILA_SURVEY_DEV_NAME.",
+                "El DeveloperName no coincide. Salesforce lo normaliza a minúsculas — verifica con SOQL: `SELECT DeveloperName FROM Survey`. El valor exacto (case-sensitive) va en SF_LAILA_SURVEY_DEV_NAME.",
+            },
+            {
+              issue:
+                "PATCH devuelve 400 'Invalid request content' sin más detalle",
+              solution:
+                "Casi siempre es surveyPageResponses.name ausente. Aunque el brief dice 'reserved for future use', la unAuth API lo requiere — envía el nombre de la página actual (el que llegó en surveyPage.name en la respuesta previa).",
+            },
+            {
+              issue:
+                "PATCH devuelve 'Specify the same number of questions in the survey and the input representation'",
+              solution:
+                "questionResponses[] debe incluir una entrada por cada pregunta de la página — no solo las contestadas. Para no contestadas: responses: [] en selection types, o omitir responseValue en NPS/Text. Enviar la página con menos entradas que preguntas siempre falla.",
             },
             {
               issue: "PATCH devuelve 'Flow interview state expired'",
               solution:
-                "La sesión de la cookie tiene un flowInterviewState que Salesforce ya no reconoce. Puede haber pasado la ventana de tolerancia o la SurveyVersion cambió. Solución: reiniciar la respuesta (POST /start de nuevo).",
-            },
-            {
-              issue: "El branching devuelve siempre la misma página",
-              solution:
-                "La regla de Page Branching no está publicada — Survey Builder deja guardar reglas sin publicar. Republish la encuesta. Verifica también que Q3 use exactamente los valores esperados en la condición (case-sensitive en algunos releases).",
+                "La sesión tiene un flowInterviewState que Salesforce ya no reconoce. Puede haber pasado la ventana de tolerancia o la SurveyVersion cambió mid-flight. Solución: reiniciar la respuesta (POST /start de nuevo).",
             },
             {
               issue:
-                "Q6 aparece siempre, no respeta el display logic sobre Q5",
+                "Cookie 'sf_survey_session' desaparece entre POST /start y PATCH /navigate",
               solution:
-                "Confirma que la regla de Display Logic está en Q6 (no en Q5) y que el operador es 'Less than or equal' con el valor 3. Republish. Si tras eso Q6 sigue apareciendo, el POC prueba que el server NO evalúa display logic — abre ticket o mueve la validación al frontend.",
+                "Puede ser tamaño (cookies > 4096 bytes se rechazan silenciosamente) — verifica el log '[survey/start] session stored id=… cookie carries N bytes' (debe ser ~64). Si es mucho más grande, la implementación cayó en el patrón 'estado en cookie' — usa el session store server-side (Map en globalThis con session ID corto).",
+            },
+            {
+              issue:
+                "Labels vienen con caracteres HTML raros como 'Tecnolog&iacute;a'",
+              solution:
+                "Salesforce Survey Builder guarda labels HTML-encoded. El cliente FM (lib/salesforce/feedbackManagement.ts) trae un decoder de entities que se aplica server-side en normalizePage — si aparece en tu frontend, verifica que estás recibiendo los datos ya normalizados por el BFF, no directo desde Salesforce.",
             },
             {
               issue:
@@ -4398,16 +4388,17 @@ sf data query --query "SELECT Id, ResponseId, ResponseValue FROM SurveyQuestionR
           type: "tradeoffs",
           pros: [
             "Cero lógica de flujo en el frontend — un solo switch(questionType) resuelve todo el rendering.",
-            "Cambios en Survey Builder llegan gratis al frontend — no hay redeploy.",
+            "Cambios en la encuesta desde Survey Builder llegan gratis al frontend — no hay redeploy.",
             "Persistencia estándar — dashboards, Data Mapper y automatizaciones existentes siguen funcionando.",
-            "Superficie de seguridad mínima en cliente — solo cookie firmada, cero secretos.",
-            "Reutilizable: la misma encuesta la puede consumir un React, una app móvil o un Agente Encuestador de WhatsApp.",
+            "Superficie de seguridad mínima en cliente — solo un session ID de 64 chars, cero secretos.",
+            "Reutilizable: la misma encuesta la puede consumir un React, una app móvil o un Agente Encuestador de WhatsApp (con el path autenticado).",
           ],
           cons: [
             "Requiere Feedback Management Growth para el path unAuth (Starter solo cubre el path autenticado).",
-            "Depende del contrato Business API — si Salesforce cambia un campo, hay que actualizar el cliente TypeScript.",
-            "Preguntas 'menos comunes' (Ranking, Slider, Date, Picklist, Scoring) requieren validación empírica en el POC — no están confirmadas verbatim en docs.",
-            "El display logic server-side es hipótesis fuerte pero no verbatim — valide en el POC antes de asumir.",
+            "En el path unAuth solo funciona con Basic Survey — que NO soporta page branching ni question display logic. Si necesitas branching o condicionalidad, o vas por el path autenticado con Standard, o abres case para activar Conversational Survey.",
+            "Depende del contrato Business API — si Salesforce cambia un campo (ej: surveyPageResponses.name, questionResponses[] count), hay que actualizar el cliente TypeScript.",
+            "El session store server-side en memoria no escala a producción multi-instancia — cambiar a Redis/KV antes de deploy.",
+            "Preguntas 'menos comunes' (Ranking, Slider, Date, Picklist, Scoring) requieren validación empírica adicional — no están confirmadas verbatim en docs ni las verificamos en este POC.",
           ],
           whenToUse: [
             "Necesita servir encuestas de Salesforce dentro de una experiencia web/móvil propia (no dentro de Salesforce).",

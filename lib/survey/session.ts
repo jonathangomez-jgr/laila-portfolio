@@ -1,50 +1,69 @@
-// Sesión firmada en cookie httpOnly.
-// La sesión guarda { invitationId, invitationUuid, flowInterviewState, responseId, languageCode }.
-// No es secreto (Salesforce ya conoce esos IDs) — la firma HMAC evita tampering.
+// Session store server-side, indexado por un session ID corto.
+// El flowInterviewState de Salesforce mide ~3.8 KB — no cabe en una cookie
+// (límite ~4 KB); incluso comprimido se pasa (~4.8 KB). Por eso el estado
+// completo vive en un Map en memoria del servidor y la cookie solo lleva un
+// ID aleatorio de 32 bytes (64 chars hex).
+//
+// El store se ancla a `globalThis` para sobrevivir al Hot Module Reload de
+// Next.js en desarrollo. En producción con múltiples réplicas habría que
+// intercambiarlo por Redis / KV / DB — la interfaz es la misma.
 
-import { createHmac, timingSafeEqual } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import type { SurveySession } from "@/lib/salesforce/feedbackManagement";
 
 const COOKIE_NAME = "sf_survey_session";
-const MAX_AGE_SECONDS = 60 * 60 * 2;
+const TTL_MS = 60 * 60 * 2 * 1000;
 
-function getSecret(): Buffer {
-  const raw = process.env.SURVEY_SESSION_SECRET;
-  if (!raw || raw.length < 32) {
-    throw new Error(
-      "SURVEY_SESSION_SECRET missing or too short (>= 32 chars required)",
-    );
+type StoredSession = SurveySession & { expiresAt: number };
+
+type Store = Map<string, StoredSession>;
+
+function getStore(): Store {
+  const g = globalThis as unknown as { __sfSurveyStore?: Store };
+  if (!g.__sfSurveyStore) {
+    g.__sfSurveyStore = new Map();
   }
-  return Buffer.from(raw, "utf8");
+  return g.__sfSurveyStore;
 }
 
-function sign(payload: string): string {
-  return createHmac("sha256", getSecret()).update(payload).digest("base64url");
+function newSessionId(): string {
+  return randomBytes(32).toString("hex");
 }
 
-export function encodeSession(session: SurveySession): string {
-  const payload = Buffer.from(JSON.stringify(session), "utf8").toString(
-    "base64url",
-  );
-  const sig = sign(payload);
-  return `${payload}.${sig}`;
+function sweepExpired(store: Store): void {
+  const now = Date.now();
+  for (const [id, entry] of store) {
+    if (entry.expiresAt <= now) store.delete(id);
+  }
 }
 
-export function decodeSession(raw: string): SurveySession | null {
-  const parts = raw.split(".");
-  if (parts.length !== 2) return null;
-  const [payload, sig] = parts;
-  const expected = sign(payload);
-  const a = Buffer.from(sig);
-  const b = Buffer.from(expected);
-  if (a.length !== b.length) return null;
-  if (!timingSafeEqual(a, b)) return null;
-  try {
-    const json = Buffer.from(payload, "base64url").toString("utf8");
-    return JSON.parse(json) as SurveySession;
-  } catch {
+export function saveSession(session: SurveySession): string {
+  const store = getStore();
+  sweepExpired(store);
+  const id = newSessionId();
+  store.set(id, { ...session, expiresAt: Date.now() + TTL_MS });
+  return id;
+}
+
+export function loadSession(id: string): SurveySession | null {
+  const store = getStore();
+  const entry = store.get(id);
+  if (!entry) return null;
+  if (entry.expiresAt <= Date.now()) {
+    store.delete(id);
     return null;
   }
+  const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    expiresAt: _expiresAt,
+    ...session
+  } = entry;
+  return session;
+}
+
+export function updateSession(id: string, session: SurveySession): void {
+  const store = getStore();
+  store.set(id, { ...session, expiresAt: Date.now() + TTL_MS });
 }
 
 export const SESSION_COOKIE = {
@@ -54,6 +73,6 @@ export const SESSION_COOKIE = {
     sameSite: "lax" as const,
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: MAX_AGE_SECONDS,
+    maxAge: Math.floor(TTL_MS / 1000),
   },
 };
