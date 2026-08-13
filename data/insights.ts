@@ -5893,6 +5893,67 @@ const headlessFeedback: Insight = {
       ],
     },
     {
+      id: "explicacion-terrenal",
+      eyebrow: "Parte 0 · Para todos",
+      title: "Sin tecnicismos: la analogía del restaurante",
+      blocks: [
+        {
+          type: "statement",
+          text: "Salesforce mantiene la cocina; usted pone el comedor. La receta, los ingredientes y el chef siguen siendo de Salesforce. Lo que cambia es el envase — no el contenido.",
+        },
+        {
+          type: "paragraph",
+          text: "Piense en Feedback Management como un restaurante que normalmente le sienta en su propio comedor: los formularios prefabricados que Salesforce arma por usted. En modo headless, el restaurante cierra el comedor al público pero deja la cocina funcionando. Usted pone su propio comedor — su web, su app móvil, un bot de WhatsApp, un kiosco, lo que sea — y le pide platillos a la cocina a través de una ventanilla (la API). La cocina cocina, valida, guarda y decide qué sigue en el menú. El cliente final se sienta en su espacio, pero come lo que salió de la misma cocina de siempre.",
+        },
+        {
+          type: "paragraph",
+          text: "Esa separación es la que hace posible que Salesforce siga siendo el sistema de registro de la voz del cliente aunque la persona nunca vea una pantalla de Salesforce. Reportes, dashboards, automatizaciones y trazabilidad siguen funcionando exactamente igual.",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "En la cocina de Salesforce",
+              title: "Lo que se queda del lado servidor",
+              description:
+                "El cerebro de la encuesta: reglas de 'si contesta X, salta a Y', preguntas que solo aparecen bajo cierta condición, campos obligatorios y traducciones. La memoria: cada respuesta se guarda en los mismos objetos de siempre. La sesión: Salesforce recuerda en qué página va cada persona. El vínculo con el contexto: la encuesta se puede amarrar al caso, la sesión de WhatsApp, la llamada de voz, la cuenta.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "En su comedor",
+              title: "Lo que le toca a usted",
+              description:
+                "Pintar las preguntas con su diseño propio en su canal (web, móvil, WhatsApp, voz). Un intermediario ligero (BFF) que traduzca entre su frontend y Salesforce — no es opcional, es la puerta segura a la cocina. Y dos botones: 'siguiente' y 'anterior'. La navegación real la decide el servidor.",
+              tone: "success",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Las limitantes reales — sin endulzar",
+        },
+        {
+          type: "list",
+          items: [
+            "Solo dos verbos de navegación: 'Next' y 'Back'. Nada de saltar tres páginas, guardar borrador y volver mañana con la vida resuelta, ni editar una respuesta anterior una vez que avanzó.",
+            "La API oficial no expone todos los tipos de pregunta con contrato público confirmado. Ranking, Slider, Date/DateTime, Picklist y Scoring existen en la plataforma pero no todos tienen esquema publicado en la Business API — hay que validarlos org por org.",
+            "El modo público-anónimo (unAuth) requiere licencia Feedback Management Growth. Sin esa licencia, solo puede encuestar a usuarios ya identificados.",
+            "El navegador no puede llamar directo a Salesforce en modo unAuth por reglas de seguridad de dominio (CORS). Por eso el BFF es obligatorio — no es un lujo arquitectónico, es la puerta.",
+            "La lógica vive del lado servidor. Si Salesforce no le devuelve la pregunta 4, su frontend no la puede adivinar ni forzar. Está atado al orden en que la cocina despacha.",
+            "El momento en que la encuesta termina lo decide Salesforce, no usted. La 'página de gracias' se puede estilizar libremente, pero el punto final del flujo lo marca el servidor.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "En una frase",
+          text: "Usted pone la cara bonita y el canal (web, WhatsApp, voz, quiosco). Salesforce pone el cerebro, la memoria y las reglas. Cambia el envase, no el contenido.",
+        },
+      ],
+    },
+    {
       id: "definicion",
       eyebrow: "Parte 1 · Marco",
       title: "Qué significa 'headless' aquí — y por qué importa",

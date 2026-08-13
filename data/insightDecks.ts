@@ -1319,7 +1319,58 @@ export const insightDecks: InsightDeck[] = [
         context: "Statement técnico · Postura completa",
       },
 
-      // 3 · Sección marco
+      // 3 · Sección · Para todos
+      {
+        layout: "section",
+        eyebrow: "Parte 0 · Para todos",
+        title: "La analogía del restaurante",
+        subtitle:
+          "Salesforce mantiene la cocina; usted pone el comedor. Cambia el envase, no el contenido.",
+      },
+
+      // 4 · Cocina vs Comedor
+      {
+        layout: "comparison",
+        eyebrow: "Sin tecnicismos",
+        title: "La cocina  vs  El comedor",
+        before: {
+          heading: "En la cocina (Salesforce)",
+          items: [
+            "El cerebro: reglas 'si contesta X, salta a Y'.",
+            "La memoria: cada respuesta queda guardada en los objetos de siempre.",
+            "La sesión: recuerda en qué página va cada persona.",
+            "El vínculo: amarra la encuesta al caso, la llamada, la sesión de WhatsApp.",
+          ],
+        },
+        after: {
+          heading: "En el comedor (su app)",
+          items: [
+            "Pintar las preguntas con su diseño y su marca.",
+            "Un intermediario (BFF) que hable con la cocina — obligatorio.",
+            "Dos botones de navegación: siguiente y anterior.",
+            "El canal: web, móvil, WhatsApp, voz, kiosco.",
+          ],
+        },
+      },
+
+      // 5 · Limitantes reales
+      {
+        layout: "bullets",
+        eyebrow: "Sin endulzar",
+        title: "Las limitantes reales",
+        bullets: [
+          "Solo dos verbos: 'siguiente' y 'anterior'. Ni saltar páginas, ni guardar borrador para mañana, ni editar respuestas anteriores.",
+          "No todos los tipos de pregunta están en la API pública con contrato oficial — Ranking, Slider, Date, Picklist y Scoring exigen validación en org.",
+          "El modo público-anónimo (unAuth) requiere licencia Feedback Management Growth.",
+          "El navegador no puede llamar directo a Salesforce en unAuth por reglas de seguridad de dominio — por eso el BFF no es opcional.",
+          "La lógica vive del lado servidor: si Salesforce no manda la pregunta 4, su app no puede forzarla.",
+          "El fin de la encuesta lo decide el servidor, no su frontend.",
+        ],
+        highlight:
+          "Cambia el envase, no el contenido. Usted pone la cara y el canal; Salesforce pone el cerebro, la memoria y las reglas.",
+      },
+
+      // 6 · Sección marco
       {
         layout: "section",
         eyebrow: "Parte 1 · Marco",
