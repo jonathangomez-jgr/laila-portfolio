@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { startSurvey } from "@/lib/salesforce/feedbackManagement";
-import { saveSession, SESSION_COOKIE } from "@/lib/survey/session";
 
 export const dynamic = "force-dynamic";
 
@@ -17,22 +16,13 @@ export async function POST(request: Request) {
 
   try {
     const result = await startSurvey(languageCode);
-    const sessionId = saveSession(result.session);
-    console.log(
-      `[survey/start] session stored id=${sessionId.slice(0, 8)}… (cookie carries ${sessionId.length} bytes)`,
-    );
-    const response = NextResponse.json({
+    return NextResponse.json({
       page: result.page,
       navigationActions: result.navigationActions,
       surveyLabel: result.surveyLabel,
       surveyName: result.surveyName,
+      session: result.session,
     });
-    response.cookies.set(
-      SESSION_COOKIE.name,
-      sessionId,
-      SESSION_COOKIE.options,
-    );
-    return response;
   } catch (err) {
     console.error("[survey/start]", err);
     return NextResponse.json(

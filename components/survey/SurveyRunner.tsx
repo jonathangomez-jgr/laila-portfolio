@@ -5,6 +5,7 @@ import type {
   QuestionAnswerInput,
   SurveyPage,
   SurveyQuestion,
+  SurveySession,
 } from "@/lib/salesforce/feedbackManagement";
 import {
   BooleanYesNo,
@@ -24,6 +25,7 @@ type ApiPageResponse = {
   navigationActions: string[];
   surveyLabel?: string;
   surveyName?: string;
+  session: SurveySession;
 };
 
 type Props = {
@@ -47,6 +49,7 @@ export default function SurveyRunner({ surveyName, intro }: Props) {
         answers: AnswerMap;
         surveyLabel?: string;
         history: string[];
+        session: SurveySession;
       }
     | { phase: "error"; message: string }
   >({ phase: "idle" });
@@ -85,6 +88,7 @@ export default function SurveyRunner({ surveyName, intro }: Props) {
         answers: {},
         surveyLabel: data.surveyLabel,
         history: [data.page.name],
+        session: data.session,
       });
     } catch (e) {
       setState({
@@ -103,6 +107,7 @@ export default function SurveyRunner({ surveyName, intro }: Props) {
         ? buildAnswersPayload(state.page.surveyQuestions, state.answers)
         : [];
 
+    const currentSession = state.session;
     setState({ ...state, navigationActions: [] });
     try {
       const data = await callApi(
@@ -110,7 +115,11 @@ export default function SurveyRunner({ surveyName, intro }: Props) {
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action, answers: answersPayload }),
+          body: JSON.stringify({
+            action,
+            answers: answersPayload,
+            session: currentSession,
+          }),
         },
       );
       setState({
@@ -123,6 +132,7 @@ export default function SurveyRunner({ surveyName, intro }: Props) {
           action === "Next"
             ? [...state.history, data.page.name]
             : state.history.slice(0, -1),
+        session: data.session,
       });
     } catch (e) {
       setState({

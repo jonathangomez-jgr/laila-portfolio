@@ -1,41 +1,32 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import {
   navigate,
   type QuestionAnswerInput,
+  type SurveySession,
 } from "@/lib/salesforce/feedbackManagement";
-import {
-  loadSession,
-  updateSession,
-  SESSION_COOKIE,
-} from "@/lib/survey/session";
 
 export const dynamic = "force-dynamic";
 
 type Body = {
   action: "Next" | "Back";
   answers: QuestionAnswerInput[];
+  session: SurveySession;
 };
 
-export async function PATCH(request: NextRequest) {
-  const sessionId = request.cookies.get(SESSION_COOKIE.name)?.value;
-  if (!sessionId) {
-    const allCookieNames = request.cookies
-      .getAll()
-      .map((c) => c.name)
-      .join(", ");
-    console.warn(
-      `[survey/navigate] session cookie missing. Cookies present: [${allCookieNames || "(none)"}]`,
-    );
-    return NextResponse.json({ error: "No active session" }, { status: 400 });
-  }
-  const session = loadSession(sessionId);
-  if (!session) {
-    return NextResponse.json(
-      { error: "Invalid or expired session" },
-      { status: 400 },
-    );
-  }
+function isValidSession(s: unknown): s is SurveySession {
+  if (!s || typeof s !== "object") return false;
+  const o = s as Record<string, unknown>;
+  return (
+    typeof o.invitationId === "string" &&
+    typeof o.invitationUuid === "string" &&
+    typeof o.flowInterviewState === "string" &&
+    typeof o.responseId === "string" &&
+    typeof o.languageCode === "string" &&
+    typeof o.currentPageName === "string"
+  );
+}
 
+export async function PATCH(request: Request) {
   let body: Body;
   try {
     body = (await request.json()) as Body;
@@ -54,13 +45,19 @@ export async function PATCH(request: NextRequest) {
       { status: 400 },
     );
   }
+  if (!isValidSession(body.session)) {
+    return NextResponse.json(
+      { error: "Missing or invalid session in body" },
+      { status: 400 },
+    );
+  }
 
   try {
-    const result = await navigate(session, body.action, body.answers);
-    updateSession(sessionId, result.session);
+    const result = await navigate(body.session, body.action, body.answers);
     return NextResponse.json({
       page: result.page,
       navigationActions: result.navigationActions,
+      session: result.session,
     });
   } catch (err) {
     console.error("[survey/navigate]", err);
