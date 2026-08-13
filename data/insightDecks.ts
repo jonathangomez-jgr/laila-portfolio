@@ -1291,6 +1291,383 @@ export const insightDecks: InsightDeck[] = [
       },
     ],
   },
+  {
+    slug: "deck",
+    customerSlug: "insight",
+    insightSlug: "headless-feedback-management-salesforce",
+    title: "Headless Feedback Management",
+    subtitle:
+      "Salesforce como motor de encuesta, con un frontend construido por fuera",
+    duration: "15 min",
+    slides: [
+      // 1 · Portada
+      {
+        layout: "title",
+        eyebrow: "Insights · Postura técnica de integración",
+        title:
+          "Headless Salesforce\nFeedback Management",
+        subtitle:
+          "Cómo usar Salesforce como motor de encuesta y construir el frontend por fuera — sin reimplementar el motor y sin bajar SObjects a mano.",
+        footnote: "Postura técnica · Laila Portfolio · 2026",
+      },
+
+      // 2 · Statement
+      {
+        layout: "quote",
+        quote:
+          "Sí — Salesforce Feedback Management puede operarse como un motor de encuesta headless. Existe una API oficial que permite iniciar una respuesta, enviar las respuestas de la página actual y dejar que Salesforce decida server-side cuál es la siguiente página según la ramificación configurada en Survey Builder. No reimplemente el motor: úselo.",
+        context: "Statement técnico · Postura completa",
+      },
+
+      // 3 · Sección marco
+      {
+        layout: "section",
+        eyebrow: "Parte 1 · Marco",
+        title: "Qué significa headless aquí",
+        subtitle:
+          "Salesforce es dueño de la lógica y del dato. El frontend externo es dueño de la experiencia y del canal. Fronteras explícitas.",
+      },
+
+      // 4 · Dos responsabilidades
+      {
+        layout: "comparison",
+        eyebrow: "Fronteras claras",
+        title: "Motor  vs  Experiencia",
+        before: {
+          heading: "Salesforce (motor)",
+          items: [
+            "Survey y SurveyVersion.",
+            "Pages, Questions, Choices.",
+            "Page branching y display logic.",
+            "Required, merge fields, traducciones.",
+            "SurveyInvitation, SurveyResponse, SurveyQuestionResponse.",
+          ],
+        },
+        after: {
+          heading: "Frontend externo (experiencia)",
+          items: [
+            "Look & feel completo.",
+            "Componentes por tipo de pregunta.",
+            "Responsive · accesibilidad · animaciones.",
+            "Analítica de interacción propia.",
+            "Canal: web, app móvil, portal, WebView.",
+          ],
+        },
+      },
+
+      // 5 · Sección API
+      {
+        layout: "section",
+        eyebrow: "Parte 2 · Superficie oficial",
+        title: "Qué expone Salesforce hoy",
+        subtitle:
+          "Business API oficial · dos familias · un contrato coherente. Todo lo que sigue está verificado contra la Feedback Management Developer Guide.",
+      },
+
+      // 6 · Tres endpoints
+      {
+        layout: "pillars",
+        eyebrow: "Familias de endpoints",
+        title: "Dos caminos · un mismo patrón",
+        pillars: [
+          {
+            title: "Autenticado · POST + PATCH",
+            body: "/connect/surveys/{surveyId}/survey-response · o su variante con /invitation/{surveyInvitationId}. OAuth 2.0 bearer. Disponible desde API v56.0 (Winter '23).",
+            accent: "indigo",
+          },
+          {
+            title: "No autenticado · unAuth API",
+            body: "salesforce-scrt.com/surveys/v1/survey-response en el dominio de Omni-Channel Engagement. Token per-org emitido por /accessToken. Requiere Feedback Management Growth.",
+            accent: "violet",
+          },
+          {
+            title: "Invitaciones por email",
+            body: "POST /connect/surveys/{surveyId}/survey-invitation-emails a hasta 300 recipients. Complemento natural para journeys que envían la invitación por email antes del rendering.",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // 7 · Los tres campos de sesión
+      {
+        layout: "bullets",
+        eyebrow: "El estado de la sesión",
+        title: "Tres campos sostienen toda la respuesta",
+        bullets: [
+          "flowInterviewState · estado opaco server-side (el cliente no lo interpreta, solo lo re-envía).",
+          "invitationId · Id de la SurveyInvitation asociada a esta respuesta.",
+          "invitationUuid · refuerzo de seguridad exigido en cada PATCH del flujo unAuth.",
+          "Bonus (v63.0+): shouldLoadPartiallyCmplSurvey permite retomar una respuesta parcialmente completada.",
+        ],
+        highlight:
+          "Sin este trío, el servidor no reconoce la sesión. Nunca lo guarde en localStorage — vive en la sesión del BFF.",
+      },
+
+      // 8 · navigationAction
+      {
+        layout: "quote",
+        quote:
+          "navigationAction acepta exactamente dos valores oficiales: 'Back' y 'Next'. No hay Finish ni Submit. La encuesta termina cuando el servidor devuelve un Survey Thank You Page Output en lugar de un Survey Question Page Output. El cliente detecta la finalización por la forma del payload, no por un booleano.",
+        context: "Enum verdadero · Detalle no negociable",
+      },
+
+      // 9 · Sección flujo
+      {
+        layout: "section",
+        eyebrow: "Parte 3 · Flujo end-to-end",
+        title: "POST inicia · PATCH navega · Thank You cierra",
+        subtitle:
+          "El mismo patrón para autenticado y no autenticado. Solo cambia el host, el token y dos campos extra en el body.",
+      },
+
+      // 10 · Pasos del flujo
+      {
+        layout: "bullets",
+        eyebrow: "Ciclo canónico",
+        title: "Cómo se ve una respuesta desde el primer clic",
+        bullets: [
+          "01 · POST /survey-response · Salesforce devuelve Survey Description Output con la Página 1.",
+          "02 · Frontend renderiza · valida required · usuario responde.",
+          "03 · PATCH /survey-response con navigationAction: Next y las respuestas de la página.",
+          "04 · Salesforce evalúa branching server-side y devuelve la Página 2 o 5 correcta.",
+          "05 · Repite hasta que el server devuelve Survey Thank You Page Output.",
+          "06 · SurveyResponse.Status → Completed · SurveyQuestionResponse por cada pregunta.",
+        ],
+        highlight:
+          "Cero código de branching en el frontend. El único condicional del cliente es: '¿el surveyPage tiene surveyQuestions[] o thankYouMessage?'",
+      },
+
+      // 11 · Sección lógica condicional
+      {
+        layout: "section",
+        eyebrow: "Parte 4 · Lógica condicional",
+        title: "Page branching vs question display logic",
+        subtitle:
+          "Dos conceptos distintos. Uno resuelto por contrato. El otro muy probablemente también — se confirma en el POC.",
+      },
+
+      // 12 · Comparación
+      {
+        layout: "comparison",
+        eyebrow: "Dos capas de condicionalidad",
+        title: "Server evalúa el flujo · frontend solo renderiza",
+        before: {
+          heading: "Page branching · resuelto server-side",
+          items: [
+            "'Si Q1 = Sí, ir a Página 2' se configura en Survey Builder.",
+            "PATCH con Next devuelve la página correcta.",
+            "Ningún dato de reglas llega al cliente — imposible reimplementar.",
+            "Feature confirmada en las tres licencias de la feature table.",
+          ],
+        },
+        after: {
+          heading: "Question display logic · requiere validación",
+          items: [
+            "Question Output no expone dependsOn ni displayIf.",
+            "Muy probablemente el server omite preguntas ocultas.",
+            "Feature 'Dynamic Surveys' está en Starter y Growth.",
+            "POC de dos preguntas con dependencia lo confirma en minutos.",
+          ],
+        },
+      },
+
+      // 13 · Sección frontend
+      {
+        layout: "section",
+        eyebrow: "Parte 5 · Frontend",
+        title: "Un contenedor · una página · un dispatcher",
+        subtitle:
+          "El árbol de componentes se aplana porque el motor no vive en el cliente. Un switch(questionType) resuelve el rendering.",
+      },
+
+      // 14 · Árbol
+      {
+        layout: "bullets",
+        eyebrow: "Árbol de componentes",
+        title: "React · sin decisiones de flujo",
+        bullets: [
+          "SurveyContainer · guarda la sesión y decide entre SurveyPage o ThankYouPage.",
+          "SurveyPage · valida required · pinta Back cuando navigationActions lo incluye.",
+          "QuestionRenderer · switch(questionType) → SingleChoice · MultiChoice · Rating · NPS · TextInput · TextArea · YesNo.",
+          "Unsupported · fallback con telemetría cuando aparece un tipo no mapeado.",
+          "ThankYouPage · thankYouMessage · redirectUrl · urlButtons.",
+        ],
+        highlight:
+          "Cada hoja emite un shape uniforme hacia arriba. Un solo mapper (buildSurveyPageResponses) traduce a la forma que espera Salesforce.",
+      },
+
+      // 15 · Sección BFF
+      {
+        layout: "section",
+        eyebrow: "Parte 6 · Integración",
+        title: "El BFF no es opcional",
+        subtitle:
+          "OAuth token en el navegador es tóxico. Token unAuth per-org filtrado compromete toda la org. CORS entre dos hosts sin whitelist documentada.",
+      },
+
+      // 16 · Sin BFF vs con BFF
+      {
+        layout: "comparison",
+        eyebrow: "Decisión de arquitectura",
+        title: "Antipatrón  vs  Camino recomendado",
+        before: {
+          heading: "Sin BFF · browser → Salesforce",
+          items: [
+            "OAuth token expuesto en el bundle.",
+            "Access token unAuth visible desde el cliente.",
+            "CORS resuelto ad-hoc — frágil, no documentado.",
+            "Rotación de credenciales imposible sin redeploy.",
+            "Auditoría distribuida y difícil de centralizar.",
+          ],
+        },
+        after: {
+          heading: "Con BFF · browser → BFF → Salesforce",
+          items: [
+            "Secretos en variables de entorno server-side.",
+            "Sesión httpOnly con { invitationId, invitationUuid, flowInterviewState }.",
+            "Retries · rate limiting · logging estructurado.",
+            "Feature flags y observabilidad centralizadas.",
+            "CORS eliminado por diseño — el browser habla con su propio dominio.",
+          ],
+        },
+      },
+
+      // 17 · Sección comparación
+      {
+        layout: "section",
+        eyebrow: "Parte 7 · Decisión clave",
+        title:
+          "Bajar SObjects a mano  vs.  usar la Business API",
+        subtitle:
+          "El error más caro que un equipo puede cometer al empezar. La API oficial es más barata, más segura y más sostenible.",
+      },
+
+      // 18 · Tabla de opciones
+      {
+        layout: "kpi-table",
+        eyebrow: "Comparación honesta",
+        title: "Opción A · reconstruir  vs  Opción B · Business API",
+        rows: [
+          {
+            label: "Branching",
+            baseline: "Reimplementar en TypeScript",
+            goal6m: "Salesforce lo evalúa server-side",
+            goal12m: "El frontend nunca ve la regla.",
+            accent: "indigo",
+          },
+          {
+            label: "Display logic",
+            baseline: "Reglas propias en cliente",
+            goal6m: "Muy probablemente server-side",
+            goal12m: "Confirmable en POC en minutos.",
+            accent: "violet",
+          },
+          {
+            label: "Persistencia",
+            baseline: "DML manual · fácil equivocarse",
+            goal6m: "SurveyResponse + SurveyQuestionResponse automáticos",
+            goal12m: "Dashboards y automation heredados intactos.",
+            accent: "emerald",
+          },
+          {
+            label: "Versionamiento",
+            baseline: "Sincronización manual con publish",
+            goal6m: "Sesión anclada a SurveyVersion activa",
+            goal12m: "Salesforce garantiza la coherencia.",
+            accent: "sky",
+          },
+          {
+            label: "Esfuerzo inicial",
+            baseline: "6–10 semanas para paridad",
+            goal6m: "Un sprint para POC serio",
+            goal12m: "Diferencia de ~5× en time-to-market.",
+            accent: "indigo",
+          },
+          {
+            label: "Mantenimiento",
+            baseline: "Cada feature nueva → código nuevo",
+            goal6m: "Capacidades nuevas del motor · gratis",
+            goal12m: "Bajo TCO sostenido en el tiempo.",
+            accent: "violet",
+          },
+        ],
+      },
+
+      // 19 · Sección riesgos
+      {
+        layout: "section",
+        eyebrow: "Parte 8 · Riesgos",
+        title: "Lo que la documentación oficial soporta — y lo que no",
+        subtitle:
+          "Cuatro estados: soportado · parcial · requiere validación · no soportado. Ninguna afirmación optimista sin base documentada.",
+      },
+
+      // 20 · Riesgos clasificados
+      {
+        layout: "bullets",
+        eyebrow: "Puntos críticos",
+        title: "Los aspectos que definen el diseño",
+        bullets: [
+          "✅ RadioButton · MultiChoice · Boolean · Rating · NPS · ShortText · FreeText — soportados con ejemplos.",
+          "⚠️ Date · Ranking · Slider · Scoring · Picklist — requieren validación en POC (sin schema Connect REST público).",
+          "✅ Page branching · Required · Back · Save & Resume (v63.0+) — todo soportado.",
+          "⚠️ Question display logic — muy probablemente server-side, sin frase textual en docs.",
+          "❌ SurveyVersion switching en vuelo · Content-Type ≠ JSON · License base 'Response Pack' para Connect REST.",
+          "⚠️ CORS desde browser directo a salesforce-scrt.com — sin whitelist documentada. Un BFF lo resuelve.",
+        ],
+        highlight:
+          "Ningún riesgo bloquea el patrón. Todos los 'requiere validación' se cierran en el POC de dos semanas.",
+      },
+
+      // 21 · Sección POC
+      {
+        layout: "section",
+        eyebrow: "Parte 9 · POC",
+        title: "Un sprint · cuatro páginas · todo probado",
+        subtitle:
+          "Diseño mínimo que demuestra que Salesforce puede seguir siendo el motor mientras una aplicación externa controla la experiencia completa.",
+      },
+
+      // 22 · POC estructura
+      {
+        layout: "bullets",
+        eyebrow: "Diseño del POC",
+        title: "Encuesta 'Post-visita' · v1 publicada",
+        bullets: [
+          "Página 1 · Q1 RadioButton '¿Eres cliente?' — Sí branchea a Página 2 · No a Página 3.",
+          "Página 2 · Q2 MultiChoice productos · Q3 NPS · Q4 FreeText visible solo si Q3 ≤ 6.",
+          "Página 3 · Q5 RadioButton canal · Q6 ShortText opcional.",
+          "Página 4 · Thank You con thankYouMessage y redirectUrl · Response.Status → Completed.",
+          "Probado autenticado (con SurveyInvitation existente) y no autenticado (Guest User + Growth).",
+        ],
+        highlight:
+          "Objetivo del sprint: cero líneas de código de branching o display logic en el frontend. Auditable buscando 'goToPage' o 'if(answer'.",
+      },
+
+      // 23 · Cierre
+      {
+        layout: "closing",
+        title: "Próximos pasos",
+        bullets: [
+          "Alinee al equipo en el patrón Opción B — Business API + BFF.",
+          "Construya la encuesta del POC en una sandbox Developer o Partial con Feedback Management activo.",
+          "Implemente el BFF en Route Handlers de Next.js con sesión firmada.",
+          "Codifique el árbol de componentes con un solo switch(questionType).",
+          "Convierta el POC en receta reutilizable — el siguiente paso natural del portfolio.",
+        ],
+        cta: "¿Conversamos sobre cómo hacer headless una encuesta real de Salesforce en su próximo sprint?",
+      },
+
+      // 24 · Gracias
+      {
+        layout: "thanks",
+        eyebrow: "Insights · Laila Portfolio",
+        title: "Gracias",
+        subtitle:
+          "Salesforce es el motor. Su frontend es la experiencia. La Business API es el puente que los mantiene coherentes.",
+      },
+    ],
+  },
 ];
 
 export function getInsightDeck(insightSlug: string): InsightDeck | undefined {

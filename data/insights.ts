@@ -5820,4 +5820,1405 @@ const digitalEngagement: Insight = {
   ],
 };
 
-export const insights: Insight[] = [multiAgent, customerFeedback, digitalEngagement, retailAiMexico, retailAiColombia, retailAiCentroamerica, headlessCioMexico];
+const headlessFeedback: Insight = {
+  slug: "headless-feedback-management-salesforce",
+  topic: "Headless Feedback Management",
+  audience: ["executive", "architect", "deep"],
+  industry: ["Cross-industry"],
+  products: [
+    "Feedback Management",
+    "Salesforce Surveys",
+    "Connect REST API",
+    "Experience Cloud",
+  ],
+  region: ["Global"],
+  heroEyebrow: "Postura técnica · Integración headless",
+  title:
+    "Headless Salesforce Feedback Management: cómo usar Salesforce como motor de encuesta y construir el frontend por fuera",
+  subtitle:
+    "Cómo pilotar una encuesta definida en Feedback Management — con páginas, ramificación, lógica condicional, preguntas requeridas e invitaciones — desde un frontend externo en React, Next.js o móvil, sin reimplementar el motor y sin bajar cada SObject a mano. Documento escrito para usted, desde la mirada de un arquitecto técnico en IA y Agentforce.",
+  summary:
+    "Salesforce Feedback Management expone un juego oficial de APIs REST (Connect REST API para participantes autenticados y una familia unAuth separada sobre el dominio de Omni-Channel Engagement) que permiten iniciar una respuesta, enviar respuestas por página y dejar que Salesforce decida server-side cuál es la siguiente página según las reglas de branching configuradas en Survey Builder. Ese contrato hace posible construir una experiencia visual completamente custom — React, Next.js, móvil o portal — mientras Salesforce sigue siendo dueño de la definición de encuesta, la ramificación, la persistencia en SurveyResponse / SurveyQuestionResponse y las invitaciones. Este documento revisa la superficie oficial de la API, verifica qué está soportado y qué no, compara reconstruir el motor a mano contra usar el API oficial, propone una arquitectura con BFF, y cierra con un POC concreto de cuatro páginas.",
+  author: "Jonathan Gomez",
+  authorRole: "Arquitecto técnico · IA & Agentforce",
+  publishedAt: "2026-08-13",
+  updatedAt: "2026-08-13",
+  readingMinutes: 30,
+  tags: [
+    "Feedback Management",
+    "Salesforce Surveys",
+    "Connect REST API",
+    "Headless",
+    "Experience Cloud",
+    "Integration Architecture",
+    "React",
+    "Next.js",
+    "BFF",
+    "OAuth",
+  ],
+  coverImage: {
+    src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
+    alt: "Arquitectura de plataforma Salesforce con capas de datos, agentes y experiencia — base sobre la que se apoya un frontend headless de Feedback Management.",
+    source: {
+      label: "Salesforce · Agentforce Platform",
+      url: "https://www.salesforce.com/agentforce/",
+    },
+  },
+  sections: [
+    {
+      id: "resumen",
+      eyebrow: "Statement técnico",
+      title: "La tesis en una página",
+      blocks: [
+        {
+          type: "statement",
+          text: "Sí — Salesforce Feedback Management puede operarse como un motor de encuesta headless. Existe una superficie oficial de APIs REST (Connect REST API para participantes autenticados, y una familia unAuth Response API separada para participantes públicos) que permite iniciar una respuesta, enviar las respuestas de la página actual, pedir la siguiente página y dejar que Salesforce decida server-side cuál toca según la ramificación configurada en Survey Builder. Esa separación es real y está documentada. Lo que no debe hacer es reconstruir el motor bajando SurveyQuestion, SurveyQuestionChoice y SurveyPage vía SOQL: pierde branching, display logic, versionamiento y persistencia oficial en un solo movimiento.",
+        },
+        {
+          type: "paragraph",
+          text: "Este documento está escrito desde la mirada de un arquitecto técnico especializado en integración Salesforce y frontends externos. La audiencia son directores de plataforma, arquitectos de integración y líderes de producto digital que necesitan encuestas dentro de una experiencia propia (web, móvil, portal) sin renunciar a que Salesforce siga siendo el sistema de registro de la voz del cliente. No es una postura comercial: es una postura de ingeniería con verificación explícita contra la documentación oficial vigente.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Cómo leer este documento",
+          text: "Con 5 minutos basta el statement, el mapa de endpoints y la recomendación final. Con 30 minutos recorre la superficie de API oficial, el flujo end-to-end, la diferencia entre page branching y display logic, la arquitectura de componentes del frontend, la decisión entre BFF y llamada directa, la comparación entre 'bajar SObjects' y 'usar la API', y el POC concreto de cuatro páginas que se puede implementar en un sprint.",
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Alcance de verificación",
+          text: "Cada afirmación técnica está anclada a la Salesforce Feedback Management Developer Guide vigente al momento de publicación. Donde la documentación oficial no confirma explícitamente un comportamiento (por ejemplo, la evaluación server-side de display logic a nivel pregunta), lo marco como 'requiere validación en org' en lugar de afirmarlo. La lista completa de fuentes está al final.",
+        },
+      ],
+    },
+    {
+      id: "definicion",
+      eyebrow: "Parte 1 · Marco",
+      title: "Qué significa 'headless' aquí — y por qué importa",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Headless, aplicado a Feedback Management, significa una cosa concreta: Salesforce sigue siendo dueño de la definición y ejecución de la encuesta — encuesta, versión, páginas, preguntas, opciones, ramificación, invitaciones, respuestas — y la aplicación externa es dueña únicamente de la presentación y la experiencia. La aplicación no toma decisiones sobre el flujo de la encuesta; pregunta a Salesforce qué mostrar y le envía lo que el usuario respondió.",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Salesforce (motor)",
+              title: "Dueño de la lógica y del dato",
+              description:
+                "Survey y SurveyVersion. Pages, Questions y Choices. Page branching logic. Question display logic. Required flags. Merge fields. SurveyInvitation (creación y validación). SurveyResponse y SurveyQuestionResponse (persistencia). Idioma y traducciones. Reglas de fatiga si están configuradas en Feedback Management.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Frontend externo (experiencia)",
+              title: "Dueño de la UX y del canal",
+              description:
+                "Look & feel completo. Componentes por tipo de pregunta. Responsive y accesibilidad. Animaciones y transiciones. Persistencia visual de progreso. Analítica de interacción (dwell time, abandono por página). Canal: web propia, app móvil, portal white-label, WebView embebida en app de partner.",
+              tone: "success",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "El malentendido común",
+          text: "Cuando un equipo pide 'quiero mi propio frontend para las encuestas de Salesforce', muchas veces lo primero que se implementa es una integración que consulta SurveyQuestion y SurveyQuestionChoice por SOQL o Objects REST y reconstruye el motor en TypeScript. Ese camino existe y funciona para casos triviales, pero rompe todo lo que hace valiosa la licencia de Feedback Management: branching, display logic, versionamiento seguro, invitaciones y merge fields. Esta postura es un argumento para no ir por ahí.",
+        },
+      ],
+    },
+    {
+      id: "docs",
+      eyebrow: "Parte 2 · Superficie oficial de la API",
+      title: "Qué expone Salesforce hoy — endpoints, verbos y campos clave",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La Salesforce Feedback Management Developer Guide agrupa las APIs de respuesta bajo el nombre 'Business APIs'. Existen tres familias de endpoints y una utilidad de token para el caso público. Todas las URIs, verbos y nombres de campo listados en esta sección están tomados textualmente de la guía oficial vigente.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Familia 1 · Participantes autenticados (Bearer OAuth)",
+        },
+        {
+          type: "table",
+          headers: ["Recurso Connect REST", "Verbos", "Uso"],
+          rows: [
+            [
+              "/connect/surveys/{surveyId}/survey-response",
+              "POST · PATCH",
+              "POST inicia una respuesta creando la invitación server-side con la configuración enviada en el body. PATCH envía las respuestas de la página actual y navega.",
+            ],
+            [
+              "/connect/surveys/{surveyId}/invitation/{surveyInvitationId}/survey-response",
+              "POST · PATCH",
+              "Variante que usa una SurveyInvitation ya existente (creada previamente por Flow, invocable o Apex). Útil cuando la invitación se genera en un journey de negocio y el frontend solo la 'consume'.",
+            ],
+            [
+              "/connect/surveys/{surveyId}/survey-invitation-emails",
+              "POST",
+              "Envío masivo de invitaciones por email a hasta 300 leads, contacts o users. No es parte del flujo de rendering, pero es la contraparte natural cuando la invitación llega por email.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Detalle importante",
+          text: "El endpoint autenticado usa surveyId (Salesforce Record Id de 18 caracteres) — no surveyDeveloperName. La invitación queda anclada a un Contact, Lead o User real en la org. Disponible desde API v56.0 (Winter '23). El campo navigationAction en el body de PATCH fue añadido en v57.0 (Spring '23).",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Familia 2 · Participantes no autenticados (unAuth Response API)",
+        },
+        {
+          type: "paragraph",
+          text: "Esta familia no vive en el dominio estándar de Salesforce. Vive en el dominio de Omni-Channel Engagement — un host separado terminado en salesforce-scrt.com — bajo el prefijo /surveys/v1. Requiere Feedback Management Growth y habilitar explícitamente 'Unauthenticated Survey Participation' en Setup > Survey Settings.",
+        },
+        {
+          type: "table",
+          headers: ["Recurso unAuth", "Verbo", "Uso"],
+          rows: [
+            [
+              "<MyDomain>.salesforce-scrt.com/surveys/v1/accessToken",
+              "POST",
+              "Emite un access token per-org (TTL 3600s) a partir del Organization Id de 18 caracteres. No es OAuth — es un token de aplicación propio de la unAuth API.",
+            ],
+            [
+              "<MyDomain>.salesforce-scrt.com/surveys/v1/survey-response",
+              "POST · PATCH",
+              "Mismo patrón POST-inicia / PATCH-navega que la familia autenticada. El body requiere adicionalmente surveyDeveloperName e invitationUuid para reforzar la seguridad de la sesión.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "No es 'Experience Cloud + Guest User'",
+          text: "Un error frecuente es asumir que las encuestas públicas se sirven poniendo el frontend detrás de un guest user de Experience Cloud y llamando la Connect REST estándar. No — Salesforce definió una API separada, en un host separado, con un token separado y con requisitos de sharing explícitos. Experience Cloud sigue apareciendo en el flujo, pero solo como la comunidad asociada a la invitación (referenciada por communityId), no como el vehículo de autenticación de la llamada.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Los tres campos que sostienen toda la sesión",
+        },
+        {
+          type: "paragraph",
+          text: "Cualquiera de las dos familias devuelve al iniciar la respuesta un trío de valores que el cliente debe conservar y echar de vuelta en cada PATCH. Sin ellos el servidor no reconoce la sesión.",
+        },
+        {
+          type: "list",
+          items: [
+            "flowInterviewState — string opaco que representa el estado del flow interview server-side (Feedback Management ejecuta cada respuesta como un Flow interview). El cliente no lo interpreta; solo lo re-envía.",
+            "invitationId — el Id de la SurveyInvitation asociada a esta respuesta (autenticada) o generada por la unAuth API (pública).",
+            "invitationUuid — un identificador aleatorio adicional que la unAuth API exige en cada PATCH como refuerzo de seguridad. Solo aplica al camino público.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Resume: la respuesta puede pausarse y retomarse",
+          text: "Desde API v63.0 (Winter '25), enviar shouldLoadPartiallyCmplSurvey: true en el POST inicial hace que Salesforce cargue una respuesta parcialmente completa y devuelva la página exacta donde el participante se quedó. Del lado del dato, SurveyResponse.Status incluye desde esa versión el valor PartiallyCompleted. Requiere licencia Starter o Growth.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "navigationAction — el enum verdadero",
+        },
+        {
+          type: "callout",
+          tone: "critical",
+          title: "Solo dos valores oficiales",
+          text: "La documentación oficial define navigationAction con exactamente dos valores: 'Back' y 'Next'. No existe un 'Finish', 'Submit' o 'Save' documentado. La encuesta finaliza cuando el servidor responde con un Survey Thank You Page Output (con thankYouMessage y opcionalmente redirectUrl) en lugar de un Survey Question Page Output. Esa señal — el tipo del surveyPage devuelto — es cómo el cliente sabe que terminó.",
+        },
+      ],
+    },
+    {
+      id: "flujo",
+      eyebrow: "Parte 3 · Flujo end-to-end",
+      title: "Cómo se ve una respuesta desde el primer clic hasta la Thank You",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Este es el flujo canónico para una encuesta multipágina con branching, usando el endpoint autenticado con invitación existente. El unAuth es idéntico en forma; solo cambia el host, el token y dos campos adicionales en el body (invitationUuid y surveyDeveloperName).",
+        },
+        {
+          type: "ascii",
+          title: "Ciclo POST-start · PATCH-next · Thank You",
+          content: String.raw`
+  ┌────────────────────────────────────────────────────────────────────┐
+  │  Frontend  (React / Next.js / móvil)                               │
+  └───────────────────────┬────────────────────────────────────────────┘
+                          │  1. POST /survey-response         (start)
+                          ▼
+  ┌────────────────────────────────────────────────────────────────────┐
+  │  Salesforce  ← devuelve Survey Description Output:                 │
+  │    · responseId, invitationId, flowInterviewState                  │
+  │    · surveyPage = Página 1 (label, name, surveyQuestions[])        │
+  │    · navigationActions = ["Next"]                                  │
+  └───────────────────────┬────────────────────────────────────────────┘
+                          │  2. Renderiza Página 1 · usuario responde
+                          │
+                          │  3. PATCH /survey-response         (Next)
+                          │     body: { navigationAction: "Next",      │
+                          │             surveyPageResponses: {...} }   │
+                          ▼
+  ┌────────────────────────────────────────────────────────────────────┐
+  │  Salesforce evalúa branching server-side según la respuesta        │
+  │  ← devuelve Survey Response Output:                                │
+  │    · flowInterviewState (nuevo)                                    │
+  │    · surveyPage = Página 2 O Página 5 (según branching)            │
+  │    · navigationActions = ["Next", "Back"]                          │
+  └───────────────────────┬────────────────────────────────────────────┘
+                          │  4. Repite PATCH por cada página
+                          │
+                          │  5. PATCH última página · Next
+                          ▼
+  ┌────────────────────────────────────────────────────────────────────┐
+  │  Salesforce ← devuelve Survey Response Output con:                 │
+  │    · surveyPage = Survey Thank You Page Output                     │
+  │      (thankYouMessage, messageDescription, redirectUrl, urlButtons)│
+  │    · navigationActions = []                                        │
+  │  Persistencia:                                                     │
+  │    · SurveyResponse.Status → Completed                             │
+  │    · SurveyQuestionResponse por cada pregunta contestada           │
+  └────────────────────────────────────────────────────────────────────┘
+`,
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "1 · POST inicial (start)",
+        },
+        {
+          type: "ascii",
+          title: "Request",
+          content: String.raw`POST /services/data/v57.0/connect/surveys/0Kdxx0000000H46CAE/invitation/0Kixx0000004EsOCAU/survey-response
+Host: yourInstance.my.salesforce.com
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+{}
+`,
+        },
+        {
+          type: "ascii",
+          title: "Response · Survey Description Output (conceptual, campos verbatim)",
+          content: String.raw`{
+  "status": "Success",
+  "responseId": "0Myxx0000004CYqCAM",
+  "invitationId": "0Kixx0000004EsOCAU",
+  "flowInterviewState": "state1",
+  "languageCode": "en",
+  "navigationActions": ["Next"],
+  "surveyDetail": {
+    "label": "Post-purchase feedback",
+    "name": "Post_purchase_feedback",
+    "versionNumber": 3,
+    "surveyPage": {
+      "label": "Página 1",
+      "name": "p_d84a...",
+      "surveyQuestions": [
+        {
+          "name": "q_856a...",
+          "label": "¿Actualmente eres cliente?",
+          "questionType": "RadioButton",
+          "isResponseRequired": true,
+          "questionChoices": [
+            { "name": "c_yes", "label": "Sí" },
+            { "name": "c_no",  "label": "No" }
+          ]
+        }
+      ]
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
+`,
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "2 · PATCH para navegar a la siguiente página",
+        },
+        {
+          type: "ascii",
+          title: "Request (autenticado)",
+          content: String.raw`PATCH /services/data/v57.0/connect/surveys/0Kdxx.../invitation/0Kixx.../survey-response
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+{
+  "flowInterviewState": "state1",
+  "invitationId": "0Kixx0000004EsOCAU",
+  "languageCode": "en",
+  "navigationAction": "Next",
+  "surveyPageResponses": {
+    "questionResponses": [
+      {
+        "name": "q_856a...",
+        "questionType": "RadioButton",
+        "responses": [ { "name": "c_yes" } ]
+      }
+    ]
+  }
+}
+`,
+        },
+        {
+          type: "ascii",
+          title: "Response · Survey Response Output (Salesforce decidió la siguiente página)",
+          content: String.raw`{
+  "status": "Success",
+  "responseId": "0Myxx0000004CYqCAM",
+  "invitationId": "0Kixx0000004EsOCAU",
+  "flowInterviewState": "state2",
+  "languageCode": "en",
+  "navigationActions": ["Next", "Back"],
+  "surveyPage": {
+    "label": "Página 2 — datos de tu experiencia",
+    "name": "p_c73e...",
+    "surveyQuestions": [
+      {
+        "name": "q_ab12...",
+        "label": "¿Qué productos usaste esta semana?",
+        "questionType": "MultiChoice",
+        "isResponseRequired": true,
+        "questionChoices": [
+          { "name": "c_p1", "label": "Producto A" },
+          { "name": "c_p2", "label": "Producto B" },
+          { "name": "c_p3", "label": "Producto C" }
+        ]
+      },
+      {
+        "name": "q_cd34...",
+        "label": "Del 0 al 10, ¿qué tan probable es que nos recomiendes?",
+        "questionType": "NPS",
+        "isResponseRequired": true,
+        "minScale": 0,
+        "maxScale": 10
+      }
+    ]
+  },
+  "errors": []
+}
+`,
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "3 · PATCH final — Salesforce responde con la Thank You page",
+        },
+        {
+          type: "ascii",
+          title: "Response del último PATCH",
+          content: String.raw`{
+  "status": "Success",
+  "responseId": "0Myxx0000004CYqCAM",
+  "flowInterviewState": "final",
+  "navigationActions": [],
+  "surveyPage": {
+    "label": "Gracias",
+    "name": "p_thanks",
+    "thankYouMessage": "Gracias por tu tiempo.",
+    "messageDescription": "Tu opinión fue registrada correctamente.",
+    "redirectUrl": "https://miempresa.com/gracias",
+    "urlButtons": [
+      { "label": "Volver al inicio", "url": "https://miempresa.com" }
+    ]
+  }
+}
+`,
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Cómo detectar 'terminó' desde el cliente",
+          text: "El cliente detecta finalización por la forma del surveyPage devuelto: si trae thankYouMessage / messageDescription / redirectUrl es un Survey Thank You Page Output y la respuesta se cerró. Si trae surveyQuestions[] es una Survey Question Page Output y hay más navegación posible. No hay un booleano 'isFinished' — hay una polimorfía de tipo.",
+        },
+      ],
+    },
+    {
+      id: "branching-display",
+      eyebrow: "Parte 4 · Lógica condicional",
+      title: "Page branching vs question display logic — qué evalúa Salesforce y qué le toca al frontend",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Esta es la parte donde se juega la propuesta técnica completa. La pregunta operativa es: ¿puedo evitar reimplementar reglas condicionales en React? La respuesta corta es sí para page branching (confirmado por la forma del contrato) y muy probablemente sí para display logic, aunque este último no está confirmado verbatim en la documentación pública.",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Page Branching Logic",
+              title: "Regla: 'si Q1 = Sí, ir a Página 2; si no, ir a Página 5'",
+              description:
+                "Se configura en Survey Builder a nivel página. Cambia qué página aparece a continuación en función de las respuestas ya enviadas. Es una decisión de flujo — determina el orden de navegación.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Question Display Logic",
+              title: "Regla: 'muestra Q3 solo si Q2 = A o B'",
+              description:
+                "Se configura a nivel pregunta. No cambia la página siguiente — cambia qué preguntas dentro de la página actual son visibles. Es una decisión de visibilidad — determina qué se ve en una misma pantalla.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Page branching — resuelto server-side (confirmado por contrato)",
+        },
+        {
+          type: "paragraph",
+          text: "La forma del contrato lo hace obvio: la respuesta de PATCH contiene un surveyPage con label, name y surveyQuestions[] — pero no contiene reglas, ni un nextPage lookup, ni metadata condicional. El frontend no tiene la información necesaria para decidir la siguiente página. Y aún así, al enviar el PATCH con navigationAction: Next, el servidor devuelve la página correcta. La única forma en que eso funciona es que Salesforce evalúa la ramificación del lado del servidor. La feature table oficial confirma explícitamente que 'Apply branching logic' y 'Page branching logic based on merge fields' están en las tres licencias (Response Pack, Starter y Growth).",
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Consecuencia práctica para el frontend",
+          text: "Nunca escriba if (answer === 'yes') goToPage(2) en su código de React. Envíe la respuesta con navigationAction: Next y renderice lo que Salesforce le devuelva. Su código de navegación se reduce a: 'si el response.surveyPage tiene surveyQuestions[], renderiza; si tiene thankYouMessage, muestra la pantalla de agradecimiento'. Punto.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Question display logic — muy probablemente server-side (requiere validación)",
+        },
+        {
+          type: "paragraph",
+          text: "El schema oficial de Survey Question Output expone exactamente seis campos: description, isResponseRequired, label, name, questionType y responseDataType. No hay un campo dependsOn, displayIf ni visibility. Eso deja dos hipótesis: (a) Salesforce filtra server-side las preguntas ocultas y solo devuelve las visibles en surveyQuestions[], o (b) la lógica de display no está soportada vía API y solo funciona en el renderer nativo de Salesforce. La evidencia circunstancial — que la feature aparece publicitada como 'Dynamic Surveys' en las licencias Starter y Growth y que el schema no expone reglas al cliente — sugiere fuertemente la opción (a), pero la documentación pública no lo confirma con una frase textual.",
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Cómo lo confirmo en el POC",
+          text: "Construya una encuesta con dos preguntas en la misma página: Q2 debe aparecer solo si Q1 responde 'Sí'. Responda 'No' a Q1 y envíe PATCH. Observe si el response de PATCH devuelve Q2 en surveyQuestions[] o no. Si Salesforce filtra Q2, hipótesis (a) confirmada — y no necesita implementar display logic en el frontend. Si Salesforce devuelve Q2 igual, la responsabilidad se traslada al cliente y tendrá que decidir si vale la pena.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Lo que sí queda del lado del frontend, siempre",
+        },
+        {
+          type: "list",
+          items: [
+            "Validación de required en la UI antes de mandar PATCH — para no incurrir en un 400 evitable. El campo isResponseRequired ya viene en cada Survey Question Output.",
+            "Formato local: máscaras de texto, orden de opciones en radio, límite de caracteres visual, contadores. Nada de esto llega desde la API — es UX pura.",
+            "Estado transicional entre PATCHs: spinner, progreso, animación de página. La API no maneja transitions.",
+            "Persistencia optimista del último borrador local antes de mandar el PATCH — por si hay pérdida de red. Independiente del partial-save server-side de v63.0+.",
+            "Analítica de interacción: dwell time, número de cambios de respuesta, abandono por pregunta. Nada de esto va a Salesforce a menos que usted lo mande explícito.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "frontend",
+      eyebrow: "Parte 5 · Frontend",
+      title: "Cómo se ve la arquitectura de componentes del cliente",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "El árbol de componentes es sencillo porque el motor no está en el frontend. Solo hay un contenedor que orquesta el estado de sesión, un renderer de página que itera por surveyQuestions[] y un dispatcher por tipo de pregunta. Ese es todo el shape.",
+        },
+        {
+          type: "ascii",
+          title: "Árbol de componentes React",
+          content: String.raw`SurveyContainer
+    │  · guarda { invitationId, invitationUuid?, flowInterviewState, responseId }
+    │  · maneja fetch a start / next / back
+    │  · decide si render <SurveyPage /> o <ThankYouPage />
+    │
+    ├── SurveyPage
+    │     │  · recibe surveyQuestions[]
+    │     │  · valida required antes de habilitar 'Next'
+    │     │  · muestra 'Back' cuando navigationActions incluye "Back"
+    │     │
+    │     └── QuestionRenderer   (por cada pregunta)
+    │           │  switch(questionType)
+    │           │
+    │           ├── <SingleChoice />       questionType = "RadioButton"
+    │           ├── <MultiChoice />        questionType = "MultiChoice"
+    │           ├── <BooleanYesNo />       questionType = "Boolean"
+    │           ├── <Rating />             questionType = "Rating"
+    │           ├── <NPS />                questionType = "NPS"
+    │           ├── <TextInput />          questionType = "ShortText"
+    │           ├── <TextArea />           questionType = "FreeText"
+    │           └── <Unsupported />        fallback + telemetría
+    │
+    └── ThankYouPage
+          · label · thankYouMessage · messageDescription · redirectUrl · urlButtons[]
+`,
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Dispatcher por tipo de pregunta (TypeScript)",
+        },
+        {
+          type: "ascii",
+          title: "QuestionRenderer.tsx (pseudocódigo)",
+          content: String.raw`type Question = {
+  name: string;
+  label: string;
+  questionType:
+    | "RadioButton"
+    | "MultiChoice"
+    | "Boolean"
+    | "Rating"
+    | "NPS"
+    | "ShortText"
+    | "FreeText";
+  isResponseRequired: boolean;
+  questionChoices?: { name: string; label: string }[];
+  minScale?: number;
+  maxScale?: number;
+};
+
+export function QuestionRenderer({ question, value, onChange }: Props) {
+  switch (question.questionType) {
+    case "RadioButton":
+      return <SingleChoice question={question} value={value} onChange={onChange} />;
+    case "MultiChoice":
+      return <MultiChoice   question={question} value={value} onChange={onChange} />;
+    case "Boolean":
+      return <BooleanYesNo  question={question} value={value} onChange={onChange} />;
+    case "Rating":
+      return <Rating        question={question} value={value} onChange={onChange} />;
+    case "NPS":
+      return <NPS           question={question} value={value} onChange={onChange} />;
+    case "ShortText":
+      return <TextInput     question={question} value={value} onChange={onChange} />;
+    case "FreeText":
+      return <TextArea      question={question} value={value} onChange={onChange} />;
+    default:
+      // Nunca falle silencioso: logueé el tipo y muestre un placeholder claro.
+      return <Unsupported type={question.questionType} />;
+  }
+}
+`,
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Contrato uniforme de respuesta hacia arriba",
+        },
+        {
+          type: "paragraph",
+          text: "Cada componente hoja emite el mismo shape hacia arriba: un objeto con name (nombre API de la pregunta), questionType (para que el mapper reconstruya el questionResponse correcto) y ya sea responses[] (array de choice names) para preguntas de selección o responseValue (string o entero) para texto y NPS. Ese mapper es la única pieza no trivial del cliente — y no tiene reglas, solo forma.",
+        },
+        {
+          type: "ascii",
+          title: "buildSurveyPageResponses.ts (conceptual)",
+          content: String.raw`export function buildSurveyPageResponses(state: Record<string, any>, questions: Question[]) {
+  return {
+    questionResponses: questions.map((q) => {
+      const raw = state[q.name];
+      switch (q.questionType) {
+        case "RadioButton":
+        case "Boolean":
+        case "Rating":
+          return { name: q.name, questionType: q.questionType, responses: [{ name: raw }] };
+
+        case "MultiChoice":
+          return {
+            name: q.name,
+            questionType: q.questionType,
+            responses: (raw as string[]).map((n) => ({ name: n })),
+          };
+
+        case "NPS":
+          return { name: q.name, questionType: q.questionType, responseValue: Number(raw) };
+
+        case "ShortText":
+        case "FreeText":
+          return { name: q.name, questionType: q.questionType, responseValue: String(raw) };
+      }
+    }),
+  };
+}
+`,
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Design tokens y accesibilidad",
+          text: "El frontend externo hereda toda la ventaja de tener control total: aplicar sus propios design tokens, WCAG 2.2 AA, componentes accesibles con roles ARIA correctos, dark mode, densidad ajustable, animaciones que respetan prefers-reduced-motion, i18n con las traducciones que Salesforce ya devuelve por languageCode. Esa es exactamente la razón para no usar el renderer nativo.",
+        },
+      ],
+    },
+    {
+      id: "auth-vs-unauth",
+      eyebrow: "Parte 6 · Participantes",
+      title: "Autenticado vs no autenticado — dos APIs, dos hosts, dos contratos",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La decisión entre autenticado y no autenticado no es cosmética. Cambia la API que usa, el host donde vive, cómo obtiene el token, qué edición de Feedback Management necesita y qué configuración de sharing debe existir en la org. Esta tabla resume las diferencias reales.",
+        },
+        {
+          type: "table",
+          headers: ["Dimensión", "Autenticado", "No autenticado (unAuth)"],
+          rows: [
+            [
+              "Host",
+              "yourInstance.my.salesforce.com",
+              "yourInstance.my.salesforce-scrt.com (Omni-Channel Engagement URL)",
+            ],
+            [
+              "Prefijo",
+              "/services/data/vXX.0/connect/surveys/…",
+              "/surveys/v1/…",
+            ],
+            [
+              "Autenticación",
+              "OAuth 2.0 estándar — Authorization: Bearer <access_token>",
+              "Access token per-org emitido por /surveys/v1/accessToken usando Organization Id · TTL 3600s · header Authorization: Bearer <accessToken>",
+            ],
+            [
+              "Identidad del participante",
+              "Debe ser un User (interno o Experience Cloud) o vincularse a Contact / Lead vía invitación",
+              "No requiere identidad Salesforce. La invitación se genera contra un Contact o Lead (los User no se soportan en unAuth)",
+            ],
+            [
+              "Edición mínima requerida",
+              "Feedback Management Starter o Growth",
+              "Feedback Management Growth (obligatorio)",
+            ],
+            [
+              "Body extra requerido",
+              "flowInterviewState, invitationId, navigationAction, surveyPageResponses, languageCode?",
+              "Los mismos + invitationUuid + surveyDeveloperName",
+            ],
+            [
+              "Sharing / configuración",
+              "Perfiles y permisos estándar del User o Experience Cloud site",
+              "Encuesta compartida al perfil Guest User · sharing de merge-field records · Setup > Survey Settings > Unauthenticated Survey Participation habilitado",
+            ],
+            [
+              "Rate limits documentados",
+              "5,400 POST/min · 2,700 PATCH/min a nivel org",
+              "3,600 POST/min · 1,800 PATCH/min a nivel org",
+            ],
+            [
+              "Content-Type aceptado",
+              "application/json",
+              "application/json (verbatim: 'only accepts Content-Type: application/json')",
+            ],
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Cuál elegir en cada caso",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Autenticado",
+              title: "Cuando el participante ya es alguien conocido",
+              description:
+                "Portal de clientes con login, App móvil con sesión, empleado en una intranet, agente en el Service Console, contacto que abre un link de invitación con el token asociado a su SurveyInvitation. La invitación puede haber sido generada por Flow, invocable, journey de Marketing Cloud o llamada directa al endpoint POST survey-invitation-emails.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "No autenticado",
+              title: "Cuando la encuesta se sirve en abierto",
+              description:
+                "Landing pública, encuesta post-checkout embebida en el sitio corporativo, QR en tienda física, campaña de captura de leads con incentivo, encuesta de investigación de mercado. El participante llega sin login, y aún así la respuesta debe quedar asociada a un Contact o Lead (nunca a un User, restricción explícita).",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "El sharing es la trampa más común del camino unAuth",
+          text: "La encuesta debe estar compartida al perfil Guest User vía Sharing Settings. Si además usa merge fields que apuntan a records (Account, Contact, Case), esos records también deben estar compartidos al Guest User, y el nivel de acceso de merge-field debe estar configurado como 'System Context - Enforce record-level access'. Es la causa número uno de un 403 silencioso en producción con una encuesta que funcionaba perfecto desde el Survey Builder.",
+        },
+      ],
+    },
+    {
+      id: "bff",
+      eyebrow: "Parte 7 · Integración",
+      title: "¿Llamar Salesforce directo desde el browser, o pasar por un BFF?",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La pregunta se responde sola en cuanto se listan los requisitos reales. Cualquier llamada al camino autenticado exige un access token OAuth — ese token no puede vivir en el bundle de JavaScript sin que un atacante lo cosecha en la primera visita. En el camino unAuth, el token es 'per-org' — filtrarlo compromete todas las encuestas públicas de la org. Y encima hay dos hosts distintos (salesforce.com y salesforce-scrt.com) sin evidencia oficial de whitelist CORS para un third-party origin. La conclusión es directa: pase por un BFF.",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Sin BFF (browser → SF)",
+              title: "Antipatrón",
+              description:
+                "OAuth token expuesto en el cliente. Access token unAuth expuesto en el cliente. CORS resuelto ad-hoc con extensiones o proxies frágiles. Log de errores del cliente en consola del usuario final. Rotación de credenciales imposible sin redeploy del bundle. Auditoría distribuida entre origins que no controlas.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "Con BFF (browser → BFF → SF)",
+              title: "Camino recomendado",
+              description:
+                "El BFF guarda el client_id / client_secret / refresh_token en variables de entorno del servidor. Emite tokens de sesión cortos hacia el navegador con solo lo mínimo necesario. Concentra retries, rate limiting, logging estructurado y feature flags. Aísla al cliente del host de Salesforce y evita CORS de raíz.",
+              tone: "success",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Superficie mínima del BFF",
+        },
+        {
+          type: "ascii",
+          title: "Endpoints públicos del BFF hacia el frontend",
+          content: String.raw`POST   /api/surveys/{surveyDeveloperName}/start
+       ├─ crea la invitación (autenticada o unAuth según el flujo)
+       ├─ traduce a Salesforce y guarda { invitationId, invitationUuid?, flowInterviewState }
+       └─ devuelve al cliente { pageId, questions[], canGoBack, canGoNext }
+
+PATCH  /api/surveys/{surveyDeveloperName}/next
+       ├─ recibe answers[] del cliente
+       ├─ arma el surveyPageResponses.questionResponses[] correcto
+       ├─ PATCH a Salesforce con navigationAction: "Next"
+       └─ devuelve { pageId, questions[], canGoBack, canGoNext }  · O  { finished: true, thankYou }
+
+PATCH  /api/surveys/{surveyDeveloperName}/back
+       └─ igual que /next pero con navigationAction: "Back"
+
+GET    /api/surveys/{surveyDeveloperName}/state
+       └─ (opcional) devuelve la página actual sin navegar — útil tras refresh del browser
+`,
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Sesión del lado del BFF, no del lado del cliente",
+          text: "El BFF debería guardar el trío (invitationId, invitationUuid, flowInterviewState) en una sesión server-side (cookie httpOnly + Redis, o un session token firmado). Nunca en localStorage. Así, si un usuario abre otra pestaña o refresca, el BFF sabe reanudar sin exponer estado de encuesta al cliente. Bonus: con partial-save de v63.0+, el BFF puede reconstruir el estado desde Salesforce si perdió la sesión local.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Qué NO debe hacer el BFF",
+        },
+        {
+          type: "list",
+          items: [
+            "No debe reinterpretar branching ni display logic. Su rol es fielmente pasar respuestas y devolver páginas.",
+            "No debe cachear el schema de la encuesta indefinidamente. La SurveyVersion activa puede cambiar; una versión cacheada rompe la respuesta en vuelo si el usuario tarda entre pageviews.",
+            "No debe traducir preguntas. Salesforce ya lo hace por languageCode — el BFF solo forwardea.",
+            "No debe agregar validación de negocio propia (ej: aceptar o rechazar una respuesta según reglas propias). Si necesita eso, es porque la encuesta está mal diseñada — corríjala en Survey Builder.",
+            "No debe persistir respuestas fuera de Salesforce. La verdad vive en SurveyResponse. Si necesita observabilidad, envíe eventos de journey (start / page-completed / abandon) a su plataforma de analítica, no las respuestas mismas.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "opcion-a-vs-b",
+      eyebrow: "Parte 8 · Decisión clave",
+      title: "Bajar los SObjects a mano vs. usar la API oficial — comparación honesta",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Casi cualquier equipo que ataca este problema por primera vez propone la Opción A (bajar SurveyQuestion / SurveyQuestionChoice / SurveyPage con SOQL o Objects REST y armar el motor en el frontend). Es una tentación entendible porque el modelo de datos es transparente y las queries salen rápidas en el Developer Console. La Opción B (usar la Business API — Survey Response Connect API y su gemela unAuth) parece 'menos flexible' porque el frontend recibe una página a la vez. Esta comparación es lo que necesita ver alguien antes de decidir cuál camino toma.",
+        },
+        {
+          type: "table",
+          headers: [
+            "Dimensión",
+            "Opción A · Reconstruir con SObjects",
+            "Opción B · Business API oficial",
+          ],
+          rows: [
+            [
+              "Branching",
+              "Debe reimplementar toda la lógica de ramificación en TypeScript, replicando lo que hace Survey Builder. Cualquier cambio en el builder requiere sincronizar código.",
+              "Salesforce evalúa server-side. El frontend nunca ve la regla — recibe la página correcta.",
+            ],
+            [
+              "Display logic",
+              "Debe interpretar reglas condicionales de visibilidad. La API de Objects no expone estas reglas de forma limpia.",
+              "Muy probablemente resuelto server-side (verificar en POC). Su código no lo toca.",
+            ],
+            [
+              "Versionamiento",
+              "Cada publish de una nueva SurveyVersion puede romper el mapping. Debe manejar la migración de respuestas parciales.",
+              "Cada invitación queda anclada a una SurveyVersion. Salesforce garantiza la coherencia de la sesión.",
+            ],
+            [
+              "Merge fields",
+              "No los ejecuta — necesita re-implementar el motor de merge y traer los records referenciados desde Salesforce.",
+              "Salesforce entrega el label de la pregunta ya renderizado con merge fields resueltos.",
+            ],
+            [
+              "Persistencia",
+              "Debe crear SurveyResponse y SurveyQuestionResponse a mano via DML o Composite API. Fácil equivocarse en el shape.",
+              "Salesforce persiste automáticamente. Fila por respuesta, fila por pregunta contestada.",
+            ],
+            [
+              "Invitaciones",
+              "Debe generar SurveyInvitation, calcular UUID, validar expiración y unicidad.",
+              "Salesforce crea la invitación en el POST inicial (o consume una existente creada por Flow / invocable).",
+            ],
+            [
+              "Idiomas",
+              "Debe traer traducciones desde el objeto TranslationValue asociado y aplicarlas en cliente.",
+              "El endpoint respeta languageCode y devuelve labels traducidos si la traducción existe en la encuesta.",
+            ],
+            [
+              "Partial-save / resume",
+              "Debe diseñarlo. No hay 'PartiallyCompleted' semántico si no lo emula.",
+              "shouldLoadPartiallyCmplSurvey (v63.0+) más SurveyResponse.Status = PartiallyCompleted lo hacen nativo.",
+            ],
+            [
+              "Seguridad de participantes públicos",
+              "El equipo diseña autenticación y anti-abuso desde cero.",
+              "unAuth Response API + Sharing Guest User + token TTL 3600s ya está pensado.",
+            ],
+            [
+              "Esfuerzo inicial",
+              "Alto. Fácilmente 6–10 semanas de ingeniería + QA para llegar a paridad funcional con el motor nativo.",
+              "Bajo. Un sprint alcanza para un POC bien hecho.",
+            ],
+            [
+              "Mantenimiento",
+              "Alto. Cada feature nueva en Feedback Management no llega gratis.",
+              "Bajo. Nuevas capacidades del motor (por ejemplo, merge fields nuevos) llegan sin código adicional.",
+            ],
+            [
+              "Flexibilidad de UX",
+              "Máxima. Puede reordenar preguntas de una página, romper con la estructura de páginas del builder, dividir preguntas entre pantallas.",
+              "Alta pero acotada al contrato: una página por request, orden respetado por el server. Puede estilizar libremente cada pregunta.",
+            ],
+            [
+              "Dependencia de Salesforce",
+              "Alta pero implícita — cada vez que el builder cambia, el código debe adaptarse.",
+              "Alta y explícita — Salesforce es el motor y el sistema de registro. Contrato bien definido.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Recomendación clara",
+          text: "Opción B, la Business API oficial de Feedback Management, es el camino correcto para el 95% de los casos empresariales. La Opción A solo tiene sentido cuando el equipo necesita salirse deliberadamente del modelo de páginas (por ejemplo, una encuesta conversacional donde cada pregunta es un turno de chat) — y aún así, se recomienda usar la API oficial para persistencia y solo customizar el rendering.",
+        },
+      ],
+    },
+    {
+      id: "persistencia",
+      eyebrow: "Parte 9 · Persistencia",
+      title: "Dónde terminan las respuestas — y por qué eso importa",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Usar la Business API oficial no rompe el modelo de datos estándar. Todo lo que se envíe por PATCH termina en los mismos objetos que popularía una respuesta enviada por el renderer nativo de Salesforce. Esa es una de las razones por las que la Opción B es tan valiosa: no se está construyendo un silo — se está alimentando el sistema de registro.",
+        },
+        {
+          type: "ascii",
+          title: "Cadena de objetos estándar",
+          content: String.raw`Survey                        · plantilla del cuestionario
+  │
+  └── SurveyVersion           · versión publicada (cada publish crea una nueva)
+        │
+        ├── SurveyPage        · páginas de esa versión
+        │     │
+        │     └── SurveyQuestion       · preguntas de esa página
+        │           │
+        │           └── SurveyQuestionChoice
+        │
+        └── SurveyInvitation  · invitación a un Contact / Lead / User específico
+              │
+              └── SurveyResponse       · una fila por respuesta
+                    │
+                    └── SurveyQuestionResponse  · una fila por pregunta contestada
+`,
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "SurveyPageResponse NO es un objeto persistido",
+          text: "Aunque el body de la Business API usa la estructura surveyPageResponses.questionResponses[], SurveyPageResponse no es un objeto estándar de la plataforma. Es solamente la forma del payload en la API. Los datos persisten en SurveyResponse (una fila por respuesta completa) y SurveyQuestionResponse (una fila por pregunta contestada). No busque un objeto SurveyPageResponse en Setup — no existe.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Consecuencias de que la persistencia sea la estándar",
+        },
+        {
+          type: "list",
+          items: [
+            "Los dashboards de Customer Lifecycle Analytics siguen funcionando sin cambios — se alimentan de los mismos objetos.",
+            "Data Mapper puede seguir disparando acciones al recibir SurveyQuestionResponse (por ejemplo: 'si NPS < 6, abre un Case y asigna al gerente de cuenta').",
+            "Las Intelligent Survey Reminders siguen operando sobre SurveyInvitation.",
+            "Reportes y list views existentes no requieren migración.",
+            "La integración a Data Cloud vía Data Mapper y las políticas de retention estándar funcionan igual.",
+            "Cualquier automatización (Flow, Trigger, Process, invocable) que ya escuche cambios en SurveyResponse sigue viva.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "arquitectura",
+      eyebrow: "Parte 10 · Arquitectura final",
+      title: "Vista lógica de una solución headless de extremo a extremo",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Esta es la arquitectura de referencia. Muestra roles y fronteras de responsabilidad — no productos puntuales. Cada capa es explícita sobre qué le toca hacer y qué no debe intentar hacer.",
+        },
+        {
+          type: "ascii",
+          title: "Arquitectura headless · Salesforce Feedback Management + Frontend externo",
+          content: String.raw`┌────────────────────────────────────────────────────────────────────────────────┐
+│                                 SALESFORCE                                     │
+│                        (Motor de encuesta · Sistema de registro)               │
+│                                                                                │
+│                            Survey Builder / Feedback Management                │
+│                                        │                                       │
+│         Survey → SurveyVersion → SurveyPage → SurveyQuestion → Choice          │
+│                                        │                                       │
+│                     Page branching  ·  Question display logic                  │
+│                     Required flags  ·  Merge fields  ·  Traducciones           │
+│                                        │                                       │
+│                             SurveyInvitation                                   │
+│                                        │                                       │
+│                          Business API (Connect REST)                           │
+│                     /connect/surveys/…/survey-response                         │
+│                     salesforce-scrt.com/surveys/v1/…                           │
+│                                        │                                       │
+│                     SurveyResponse  ·  SurveyQuestionResponse                  │
+│                                        │                                       │
+│                     Data Mapper → Case, Task, Flow, Data Cloud                 │
+└────────────────────────────────────┬───────────────────────────────────────────┘
+                                     │  POST /survey-response  (start)
+                                     │  PATCH /survey-response (Next / Back)
+                                     ▼
+┌────────────────────────────────────────────────────────────────────────────────┐
+│                                 BACKEND / BFF                                  │
+│                    (Broker seguro · Sesión · Observabilidad)                   │
+│                                                                                │
+│      OAuth 2.0 client-credentials / JWT bearer  ·  Token unAuth per-org        │
+│      Sesión server-side (httpOnly cookie + Redis) con:                         │
+│                    invitationId · invitationUuid · flowInterviewState          │
+│                                                                                │
+│      Endpoints públicos hacia el cliente:                                      │
+│        POST   /api/surveys/{name}/start                                        │
+│        PATCH  /api/surveys/{name}/next                                         │
+│        PATCH  /api/surveys/{name}/back                                         │
+│        GET    /api/surveys/{name}/state                                        │
+│                                                                                │
+│      Responsabilidades: normalización · retries · rate limit · logging         │
+│      Prohibido: reinterpretar branching · cachear schema · validar negocio     │
+└────────────────────────────────────┬───────────────────────────────────────────┘
+                                     │  Payload normalizado (page + questions)
+                                     ▼
+┌────────────────────────────────────────────────────────────────────────────────┐
+│                              CUSTOM FRONTEND                                   │
+│                        (Look & feel · UX · Canal)                              │
+│                                                                                │
+│        SurveyContainer                                                         │
+│          ├── SurveyPage                                                        │
+│          │     └── QuestionRenderer                                            │
+│          │           ├── SingleChoice   MultiChoice   BooleanYesNo             │
+│          │           ├── Rating         NPS                                    │
+│          │           └── TextInput      TextArea      (Unsupported fallback)   │
+│          └── ThankYouPage                                                      │
+│                                                                                │
+│      Responsabilidades: rendering · validación required en UI · a11y · i18n    │
+│      Prohibido: mantener el mapa de branching · mutar SurveyQuestion           │
+└────────────────────────────────────────────────────────────────────────────────┘
+`,
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Lectura del diagrama",
+          text: "Las flechas son unidireccionales por diseño. El frontend nunca habla directo con Salesforce y nunca deriva reglas del schema. El BFF no toma decisiones de flujo — es un traductor con memoria de sesión. Salesforce es la única fuente de verdad sobre qué debe mostrarse a continuación.",
+        },
+      ],
+    },
+    {
+      id: "riesgos",
+      eyebrow: "Parte 11 · Riesgos y limitaciones",
+      title: "Lo que la documentación oficial soporta — y lo que no",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Ningún approach técnico es completo sin sus zonas grises. Esta tabla clasifica cada aspecto contra la documentación oficial vigente. Los estados usan cuatro niveles: soportado (afirmación oficial verificada), parcialmente soportado (docs contienen matices que hay que respetar), requiere validación (evidencia circunstancial pero sin confirmación explícita), no soportado (contradice la documentación o excede el contrato).",
+        },
+        {
+          type: "table",
+          headers: ["Aspecto", "Estado", "Comentario"],
+          rows: [
+            [
+              "Tipos: RadioButton, MultiChoice, Boolean, Rating, NPS, ShortText, FreeText",
+              "Soportado",
+              "Documentados con ejemplos de request y response en la Feedback Management Developer Guide.",
+            ],
+            [
+              "Tipos: Date, DateTime, Ranking, Slider, Scoring, Picklist",
+              "Requiere validación",
+              "Existen en el objeto SurveyQuestionScore, pero no hay ejemplos de Business API para estos tipos. Validar en POC si aparecen en surveyQuestions[] o si el server los omite.",
+            ],
+            [
+              "Matrix questions",
+              "Requiere validación",
+              "Disponibles en Starter y Growth según feature table, pero sin schema Connect REST publicado.",
+            ],
+            [
+              "Attachment questions",
+              "Requiere validación",
+              "Disponibles en Starter y Growth, pero el upload de archivos vía Business API no está documentado en los mismos ejemplos.",
+            ],
+            [
+              "Page branching logic",
+              "Soportado",
+              "Server evalúa al recibir PATCH con navigationAction: Next. Feature table confirma 'Apply branching logic' y 'Page branching logic based on merge fields'.",
+            ],
+            [
+              "Question display logic",
+              "Requiere validación",
+              "Muy probablemente server-side (el schema del cliente no expone reglas), pero sin frase textual en docs. Confirmar en POC observando qué preguntas llegan en surveyQuestions[].",
+            ],
+            [
+              "Required questions",
+              "Soportado",
+              "Campo isResponseRequired disponible en cada Survey Question Output.",
+            ],
+            [
+              "Back navigation",
+              "Soportado",
+              "navigationAction: 'Back' documentado; el server devuelve la página previa con la misma sesión.",
+            ],
+            [
+              "Save & resume",
+              "Soportado (v63.0+)",
+              "shouldLoadPartiallyCmplSurvey: true en POST + SurveyResponse.Status = PartiallyCompleted. Requiere Starter o Growth.",
+            ],
+            [
+              "Merge fields en labels y branching",
+              "Soportado",
+              "Se resuelven server-side. En unAuth, los records referenciados deben estar compartidos al Guest User.",
+            ],
+            [
+              "SurveyVersion switching en vuelo",
+              "No soportado",
+              "La respuesta queda anclada a la versión activa al momento del POST inicial. Cambios de publish en curso no afectan respuestas activas.",
+            ],
+            [
+              "Autenticado OAuth",
+              "Soportado",
+              "Bearer estándar contra el My Domain de Salesforce. Client credentials, JWT bearer o auth code según su patrón de integración.",
+            ],
+            [
+              "Unauth participants",
+              "Soportado (Growth)",
+              "Endpoint separado en salesforce-scrt.com/surveys/v1 con access token per-org.",
+            ],
+            [
+              "CORS directo desde browser",
+              "Requiere validación",
+              "No documentación de CORS whitelist para orígenes externos hacia salesforce-scrt.com. Un BFF elimina el problema.",
+            ],
+            [
+              "Content-Type distinto a JSON",
+              "No soportado",
+              "Doc oficial verbatim: 'only accepts Content-Type: application/json'.",
+            ],
+            [
+              "Licencia 'Survey Response Pack' base",
+              "No soportado",
+              "La feature table confirma que 'basic survey via Survey Response Connect API' es No para Response Pack — necesita Starter o Growth.",
+            ],
+            [
+              "Rate limits nivel org",
+              "Soportado",
+              "5,400 POST/min y 2,700 PATCH/min autenticado; 3,600 / 1,800 unAuth. Diseñe backoff en el BFF.",
+            ],
+            [
+              "Persistencia en SurveyResponse / SurveyQuestionResponse",
+              "Soportado",
+              "Doc verbatim: 'The survey responses are stored in the SurveyResponse object and the responses to individual questions in the SurveyQuestionResponse object.'",
+            ],
+            [
+              "SurveyPageResponse como objeto persistido",
+              "No soportado",
+              "No existe como objeto estándar. Es solo forma de payload en la API.",
+            ],
+            [
+              "Envío masivo por email desde la API",
+              "Soportado",
+              "POST /connect/surveys/{surveyId}/survey-invitation-emails a hasta 300 recipients.",
+            ],
+            [
+              "Recipient tipo User en el flujo unAuth",
+              "No soportado",
+              "unAuth Response API acepta únicamente Contact o Lead como recipientId.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Todos los 'requiere validación' se cierran en el POC",
+          text: "El POC descrito en la siguiente sección está diseñado precisamente para dejar sin ambigüedades cada punto marcado como 'requiere validación'. Un sprint de dos semanas basta para tener certeza empírica sobre display logic, tipos de pregunta menos comunes y comportamiento de CORS con su BFF real.",
+        },
+      ],
+    },
+    {
+      id: "recomendacion",
+      eyebrow: "Parte 12 · Recomendación · POC",
+      title: "Qué implementaría yo — y el POC que lo prueba",
+      blocks: [
+        {
+          type: "statement",
+          text: "Sí — Salesforce Feedback Management puede operar como un motor de encuesta headless. La respuesta es Opción B: use la Business API oficial (Connect REST autenticada o unAuth Response API según el tipo de participante), interpónga un BFF, deje al frontend hacer solo rendering y validación de UI. Ese patrón produce una experiencia visual completamente propia mientras Salesforce sigue siendo dueño de la definición, la ramificación y la persistencia. Es sostenible, versionable y no requiere reimplementar el motor.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Diseño del POC — cuatro páginas, dos caminos, todo probado",
+        },
+        {
+          type: "ascii",
+          title: "Estructura del POC",
+          content: String.raw`Encuesta "Post-visita" · v1 · publicada
+
+┌─────────────────────────────────────────────────────────────────────┐
+│  Página 1 · Perfil                                                  │
+│                                                                     │
+│    Q1  ¿Ya eres cliente?                                            │
+│        [ ] Sí                                                       │
+│        [ ] No                                                       │
+│        RadioButton · isResponseRequired = true                      │
+│                                                                     │
+│    Page branching:                                                  │
+│        Q1 = Sí  →  Página 2                                         │
+│        Q1 = No  →  Página 3                                         │
+└─────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│  Página 2 · Camino "cliente"                                        │
+│                                                                     │
+│    Q2  ¿Qué productos usas actualmente?                             │
+│        [ ] A   [ ] B   [ ] C   [ ] D                                │
+│        MultiChoice · isResponseRequired = true                      │
+│                                                                     │
+│    Q3  Del 0 al 10, ¿qué tan probable es que nos recomiendes?       │
+│        0 1 2 3 4 5 6 7 8 9 10                                       │
+│        NPS · isResponseRequired = true                              │
+│                                                                     │
+│    Q4  Cuéntanos qué te gustaría mejorar (opcional)                 │
+│        FreeText · isResponseRequired = false                        │
+│                                                                     │
+│    Question display logic:                                          │
+│        Muestra Q4 solo si Q3 ≤ 6                                    │
+│                                                                     │
+│    →  Página 4                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│  Página 3 · Camino "no cliente"                                     │
+│                                                                     │
+│    Q5  ¿Cómo escuchaste de nosotros?                                │
+│        Opción única (RadioButton)                                   │
+│        Redes · Recomendación · Búsqueda · Otro                      │
+│        isResponseRequired = true                                    │
+│                                                                     │
+│    Q6  ¿Podemos enviarte información?                               │
+│        ShortText  ·  isResponseRequired = false                     │
+│                                                                     │
+│    →  Página 4                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│  Página 4 · Confirmación (Thank You)                                │
+│                                                                     │
+│    Thank You Page  ·  thankYouMessage + redirectUrl                 │
+│    Response.Status → Completed                                      │
+└─────────────────────────────────────────────────────────────────────┘
+`,
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Objetivos técnicos del POC — qué queda demostrado al final",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "Iniciar una respuesta con la Business API oficial (autenticada, con SurveyInvitation existente) y recibir la Página 1 renderable.",
+            "Enviar PATCH con navigationAction: Next y verificar que Salesforce dirija a Página 2 o Página 3 según Q1 — sin código de branching en el frontend.",
+            "Renderizar los cinco tipos de pregunta del POC (RadioButton, MultiChoice, NPS, FreeText, ShortText) con un dispatcher por questionType.",
+            "Validar isResponseRequired en la UI antes de habilitar 'Next'.",
+            "Comprobar empíricamente si Q4 aparece o no en surveyQuestions[] según el valor de Q3 — confirma la hipótesis de display logic server-side.",
+            "Ejecutar 'Back' desde la Página 2 → Página 1 y comprobar que el estado se preserva.",
+            "Finalizar la respuesta y verificar que Salesforce devuelve Survey Thank You Page Output y que la fila en SurveyResponse queda como Completed con las SurveyQuestionResponse correspondientes.",
+            "Ejecutar la variante unAuth con la misma encuesta compartida al Guest User, probando el flujo completo desde /surveys/v1/accessToken hasta la Thank You Page.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Stack recomendado",
+        },
+        {
+          type: "cards",
+          columns: 3,
+          items: [
+            {
+              eyebrow: "Frontend",
+              title: "Next.js (App Router) + TypeScript",
+              description:
+                "Un solo repositorio con Route Handlers actuando como BFF nativo. Componentes de encuesta en /app/(survey), llamadas al BFF en /app/api/surveys/*. Testing con Vitest + Playwright end-to-end.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "BFF",
+              title: "Route Handlers de Next.js (mismo repo)",
+              description:
+                "Cliente OAuth con jsforce o fetch nativo. Sesión con iron-session firmada. Manejo de retries con exponential backoff. Logging estructurado con pino.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Salesforce",
+              title: "Sandbox Developer o Partial + Feedback Management",
+              description:
+                "Encuesta armada en Survey Builder con las 4 páginas y las reglas de branching y display logic. Named Credential para el BFF. Guest User configurado para el camino unAuth.",
+              tone: "violet",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Criterios de éxito medibles del POC",
+        },
+        {
+          type: "list",
+          items: [
+            "Cero líneas de código de branching o display logic en el frontend — auditable buscando 'goToPage', 'if(answer', 'visibleIf' u otras señales.",
+            "El mismo dispatcher renderiza los cinco tipos sin condicionales por página — un solo switch(questionType).",
+            "Tiempo de renderizado desde POST /start hasta primera página interactiva < 400 ms sobre red simulada 3G rápida.",
+            "Persistencia verificable en SurveyResponse y SurveyQuestionResponse con la SurveyVersion correcta, sin filas huérfanas.",
+            "Cobertura del flujo autenticado y del flujo unAuth con el mismo componente SurveyContainer — solo cambia el endpoint del BFF.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Después del POC",
+          text: "Una vez validados los ocho objetivos técnicos anteriores y los cinco criterios de éxito, el siguiente paso natural es publicarlo como receta reutilizable dentro del portfolio — pasar del POC 'esto sí funciona' al patrón 'esto es cómo se hace'. Con ese cimiento, cualquier cliente puede llevarse la implementación completa en horas, no en semanas.",
+        },
+      ],
+    },
+    {
+      id: "fuentes",
+      eyebrow: "Referencias",
+      title: "Fuentes oficiales",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Toda la superficie técnica descrita en este documento está anclada a documentación oficial vigente de Salesforce al momento de publicación. Las capacidades de Feedback Management evolucionan de release en release — antes de decisiones comerciales, confirme con su cuenta de Salesforce las ediciones, los límites y los SKUs vigentes.",
+        },
+        {
+          type: "sources",
+          items: [
+            {
+              label: "Salesforce Feedback Management Developer Guide",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/",
+            },
+            {
+              label: "Business APIs Overview · Feedback Management",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/salesforce_surveys_business_apis_overview.htm",
+            },
+            {
+              label: "Connect REST Resources · Surveys",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/connect_resources_surveys.htm",
+            },
+            {
+              label: "Create and Submit Surveys · Auth Flow",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/connect_resources_create_submit_surveys.htm",
+            },
+            {
+              label: "Create and Submit Surveys Using Invitation Id",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/connect_resources_create_submit_surveys_using_invitation_Id.htm",
+            },
+            {
+              label: "Surveys for Unauthenticated Participants",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/salesforce_surveys_for_unauthenticated_participants.htm",
+            },
+            {
+              label: "Set Up Your Environment · unAuth APIs",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/surveys_set_up_your_environment_unauth_apis.htm",
+            },
+            {
+              label: "Get Access Token · unAuth APIs",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/salesforce_surveys_get_access_token_unauth_apis.htm",
+            },
+            {
+              label: "Create and Submit Surveys · unAuth APIs",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/surveys_resources_create_submit_surveys_unauth_apis.htm",
+            },
+            {
+              label: "Survey Response Input · Request body (auth)",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/connect_requests_survey_response_input.htm",
+            },
+            {
+              label: "Survey Response Input · Request body (unAuth)",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/surveys_requests_survey_response_input_unauth_apis.htm",
+            },
+            {
+              label: "Survey Response Output · Response body",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/surveys_responses_survey_response_output_unauth_apis.htm",
+            },
+            {
+              label: "Survey Description Output · Response body",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/surveys_responses_survey_description_output_unauth_apis.htm",
+            },
+            {
+              label: "Survey Question Page Output",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/surveys_responses_survey_question_page_output_unauth_apis.htm",
+            },
+            {
+              label: "Salesforce Surveys · Standard Objects Overview",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/salesforce_surveys_objects_overview.htm",
+            },
+            {
+              label: "SurveyInvitation · SObject Reference",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_surveyinvitation.htm",
+            },
+            {
+              label: "SurveyResponse · SObject Reference",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_surveyresponse.htm",
+            },
+            {
+              label: "Feedback Management Add-on Licenses · Feature Comparison",
+              url: "https://help.salesforce.com/s/articleView?id=xcloud.concept_add_on_license.htm&type=5",
+            },
+            {
+              label: "Salesforce Feedback Management · Product Page",
+              url: "https://www.salesforce.com/products/feedback-management/",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+export const insights: Insight[] = [multiAgent, customerFeedback, headlessFeedback, digitalEngagement, retailAiMexico, retailAiColombia, retailAiCentroamerica, headlessCioMexico];

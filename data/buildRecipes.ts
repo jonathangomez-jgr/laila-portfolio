@@ -3476,11 +3476,1019 @@ sf agent activate --json --api-name ProteccionFamiliarVoice`,
   ],
 };
 
+const headlessFeedbackManagement: Recipe = {
+  slug: "headless-feedback-management-unauth",
+  title:
+    "Encuesta headless con Salesforce Feedback Management — frontend externo consumiendo la unAuth Response API",
+  problemOneLiner:
+    "Servir una encuesta de Salesforce Feedback Management dentro de un frontend propio, sin bajar SObjects a mano y sin renunciar a branching, display logic ni persistencia estándar.",
+  approach: "standard",
+  tags: [
+    "Feedback Management",
+    "Salesforce Surveys",
+    "Connect REST API",
+    "unAuth Response API",
+    "Next.js",
+    "Route Handlers",
+    "React",
+    "Headless",
+    "BFF",
+  ],
+  audiences: ["admin", "developer", "architect"],
+  author: "Jonathan Gomez",
+  authorRole: "Agentforce Enterprise Architect",
+  publishedAt: "2026-08-13",
+  updatedAt: "2026-08-13",
+  readingMinutes: 25,
+  tldr: [
+    "La encuesta vive en Survey Builder (Feedback Management) — pages, questions, branching, display logic, todo configurado por admin, sin código.",
+    "Un BFF en Next.js (Route Handlers) intermedia entre el navegador y el dominio salesforce-scrt.com. Emite el accessToken unAuth, guarda la sesión en cookie firmada httpOnly y traduce a la Business API oficial.",
+    "El frontend React tiene un componente único (SurveyRunner) que dispatcha por questionType. Cero código de branching o display logic en el cliente.",
+    "Al PATCH con navigationAction: Next, Salesforce evalúa la ramificación y devuelve la página correcta (o la Thank You Page). El cliente solo renderiza lo que llega.",
+    "Persistencia intacta: SurveyResponse + SurveyQuestionResponse quedan en el sistema de registro estándar. Dashboards y Data Mapper heredados funcionan sin cambios.",
+  ],
+  sections: [
+    {
+      id: "overview",
+      eyebrow: "El problema",
+      title: "Qué resuelve esta receta",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "problem",
+          symptom:
+            "Un equipo necesita servir encuestas dentro de su propia experiencia web o móvil — con su look & feel, sus animaciones, su i18n, su accesibilidad — pero la encuesta ya está definida en Salesforce Feedback Management y no quiere renunciar a la administración de páginas, ramificación y persistencia que Salesforce ya ofrece.",
+          rootCause:
+            "El camino más obvio para un desarrollador — bajar SurveyQuestion, SurveyQuestionChoice y SurveyPage vía SOQL y reconstruir el motor en TypeScript — es un antipatrón: se pierde el branching server-side, el display logic, el versionamiento por SurveyVersion, los merge fields y la persistencia oficial. Cada cambio en Survey Builder requiere sincronizar código.",
+          impact:
+            "El equipo termina construyendo un motor paralelo que hay que mantener, sincronizar y auditar en cada release. La licencia de Feedback Management deja de generar el valor por el que se compró.",
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "La forma correcta ya existe",
+          text: "Salesforce Feedback Management expone una Business API oficial (Connect REST autenticada + unAuth Response API en el dominio salesforce-scrt.com) diseñada exactamente para este caso. Esta receta la implementa end-to-end.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Base conceptual",
+          text: "Esta receta es la contraparte operativa del insight 'Headless Salesforce Feedback Management' — léalo primero si necesita el marco conceptual, el análisis de riesgos y las decisiones de arquitectura. Aquí implementamos exactamente lo que ese insight recomienda.",
+        },
+      ],
+    },
+    {
+      id: "comparison",
+      eyebrow: "Decisión clave",
+      title: "Por qué no reconstruir el motor",
+      blocks: [
+        {
+          type: "comparison",
+          standardLabel: "Business API oficial (esta receta)",
+          customLabel: "Reconstruir con SObjects + SOQL",
+          rows: [
+            {
+              dimension: "Branching",
+              standard:
+                "Salesforce evalúa server-side. El PATCH devuelve la página correcta.",
+              custom:
+                "Reimplementar reglas en TypeScript. Sincronizar cada cambio del builder.",
+            },
+            {
+              dimension: "Display logic",
+              standard:
+                "Muy probablemente server-side (validar en POC). El cliente pinta lo que llega.",
+              custom:
+                "Consultar y ejecutar reglas de visibilidad manualmente en cliente.",
+            },
+            {
+              dimension: "Versionamiento",
+              standard:
+                "Cada invitación queda anclada a la SurveyVersion activa. Consistencia garantizada.",
+              custom:
+                "Cada publish del builder puede romper el mapping en producción.",
+            },
+            {
+              dimension: "Persistencia",
+              standard:
+                "SurveyResponse + SurveyQuestionResponse automáticos. Dashboards y Data Mapper heredados.",
+              custom:
+                "DML manual, composite calls, riesgo de shape incorrecto.",
+            },
+            {
+              dimension: "Esfuerzo",
+              standard:
+                "Un sprint para POC funcional. Bajo mantenimiento sostenido.",
+              custom:
+                "6–10 semanas para paridad. Cada feature nueva del motor requiere código nuevo.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "architecture",
+      eyebrow: "Arquitectura",
+      title: "Tres capas · una encuesta · dos consumidores",
+      blocks: [
+        {
+          type: "architecture",
+          title: "Vista lógica end-to-end",
+          diagram: `┌──────────────────────────────────────────────────────────────────────┐
+│  SALESFORCE (motor · sistema de registro)                            │
+│                                                                      │
+│    Feedback Management — Survey Builder                              │
+│    Survey → SurveyVersion → Page → Question → Choice                 │
+│         · page branching  · display logic  · required flags          │
+│                                                                      │
+│    Business API oficial                                              │
+│      · Auth flow    /connect/surveys/…/survey-response               │
+│      · unAuth flow  salesforce-scrt.com/surveys/v1/…                 │
+│                                                                      │
+│    Persistencia                                                      │
+│      · SurveyInvitation · SurveyResponse · SurveyQuestionResponse    │
+│      · SurveySubject → MessagingSession / Case (Sprint 2)            │
+└──────────────────────────────────────┬───────────────────────────────┘
+                                       │
+              ┌────────────────────────┴────────────────────────┐
+              ▼                                                 ▼
+┌─────────────────────────────────────┐   ┌──────────────────────────────────┐
+│  BFF (Sprint 1 · web)               │   │  Agentforce Agent (Sprint 2)     │
+│  Next.js Route Handlers             │   │  Runs in-org via Apex actions    │
+│                                     │   │                                  │
+│  · POST /accessToken (SCRT)         │   │  · Uses authenticated Connect    │
+│  · POST /survey-response (start)    │   │    REST — no BFF needed          │
+│  · PATCH /survey-response (nav)     │   │  · SurveyInvitation prehecho     │
+│                                     │   │    con SubjectId = Session       │
+│  Sesión firmada HMAC · cookie       │   │                                  │
+│  httpOnly con { invitationId,       │   │  Renderiza cada pregunta como    │
+│  invitationUuid, flowInterviewState}│   │  turno WhatsApp                  │
+└──────────────────┬──────────────────┘   └──────────────────┬───────────────┘
+                   ▼                                         ▼
+┌─────────────────────────────────────┐   ┌──────────────────────────────────┐
+│  FRONTEND REACT                     │   │  WhatsApp                        │
+│  SurveyRunner · QuestionInputs      │   │  List messages · Quick replies   │
+│                                     │   │  · Free text · Rating text       │
+│  Renderiza · valida required        │   │                                  │
+│  · dispatcher por questionType      │   │  El agente es genérico —         │
+│                                     │   │  no hardcodea preguntas          │
+└─────────────────────────────────────┘   └──────────────────────────────────┘`,
+          legend: [
+            {
+              label: "Sprint 1 · web (esta receta)",
+              description:
+                "Consumidor externo anónimo desde el navegador. Usa el unAuth path. BFF obligatorio para no exponer el token.",
+            },
+            {
+              label: "Sprint 2 · WhatsApp",
+              description:
+                "Consumidor conocido post-sesión. Contact + MessagingSession ya resueltos. Usa el path autenticado desde dentro de la org. Fuera del alcance de esta receta.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "survey-design",
+      eyebrow: "Paso 1 · Salesforce",
+      title: "Construir la encuesta en Survey Builder",
+      peek: "6 páginas · 11 preguntas · 7 tipos · 1 branching · 3 reglas de display logic",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Esta encuesta ejercita en un mismo diseño todo lo que la Business API oficial soporta hoy con certeza. Nombre sugerido de la encuesta: 'Descubrimiento_Agentforce'. El developer name se usa como valor del env SF_LAILA_SURVEY_DEV_NAME.",
+        },
+        {
+          type: "dataModel",
+          name: "Descubrimiento_Agentforce",
+          purpose:
+            "Encuesta de discovery — perfil del visitante, estado con IA/agentes y follow-up opcional",
+          fields: [
+            {
+              name: "Página 1 · Perfil",
+              type: "SurveyPage",
+              purpose:
+                "Q1 Industria (RadioButton, requerida) · Q2 Rol (RadioButton, requerida)",
+            },
+            {
+              name: "Página 2 · Estado actual",
+              type: "SurveyPage",
+              purpose:
+                "Q3 ¿Ya usan Agentforce o agentes IA? (Boolean Sí/No, requerida) · Page branching: Sí → Página 3, No → Página 4",
+            },
+            {
+              name: "Página 3 · Deep-dive (rama Sí)",
+              type: "SurveyPage",
+              purpose:
+                "Q4 Canales (MultiChoice, requerida) · Q5 Satisfacción (Rating 1-5, requerida) · Q6 ¿Qué mejorar? (FreeText, opcional) — Display logic: Q6 solo si Q5 ≤ 3",
+            },
+            {
+              name: "Página 4 · Readiness (rama No)",
+              type: "SurveyPage",
+              purpose:
+                "Q7 Probabilidad este año (NPS 0-10, requerida) · Q8 ¿Qué te frena? (RadioButton, requerida) · Q9 Cuéntanos más (FreeText, opcional) — Display logic: Q9 solo si Q8 = 'Otro'",
+            },
+            {
+              name: "Página 5 · Contacto (convergencia)",
+              type: "SurveyPage",
+              purpose:
+                "Q10 ¿Quieres una sesión con un arquitecto? (Boolean, requerida) · Q11 Email (ShortText) — Display logic: Q11 solo si Q10 = 'Sí'; requerida cuando visible",
+            },
+            {
+              name: "Página 6 · Thank You",
+              type: "Survey Thank You Page",
+              purpose:
+                "thankYouMessage: 'Gracias por tu tiempo.' · redirectUrl: '/es/insights/headless-feedback-management-salesforce' — cierra la respuesta y lleva al insight",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Mapping de tipos Survey Builder ↔ API",
+          text: "El UI de Survey Builder usa etiquetas ('Radio', 'Multi-select', 'Yes/No', 'Rating', 'NPS', 'Short text', 'Long text'). El campo questionType en la API responde con: RadioButton · MultiChoice · Boolean · Rating · NPS · ShortText · FreeText. Ese es el discriminador que usa el dispatcher del frontend.",
+        },
+        {
+          type: "table",
+          headers: ["Pregunta", "Tipo (Builder)", "questionType (API)", "Choices"],
+          rows: [
+            [
+              "Q1 · Industria",
+              "Radio",
+              "RadioButton",
+              "Retail · Banca · Seguros · Salud · Telco · Otro",
+            ],
+            [
+              "Q2 · Rol",
+              "Radio",
+              "RadioButton",
+              "CIO/CTO · VP CX · Arquitecto · Product Manager · Otro",
+            ],
+            [
+              "Q3 · ¿Ya usan Agentforce?",
+              "Yes/No",
+              "Boolean",
+              "Sí · No",
+            ],
+            [
+              "Q4 · Canales desplegados",
+              "Multi-select",
+              "MultiChoice",
+              "WhatsApp · Web chat · Voz/IVR · Email · Otro",
+            ],
+            [
+              "Q5 · Satisfacción",
+              "Rating (1-5)",
+              "Rating",
+              "1 · 2 · 3 · 4 · 5",
+            ],
+            [
+              "Q6 · ¿Qué mejorar?",
+              "Long text",
+              "FreeText",
+              "(sin choices)",
+            ],
+            [
+              "Q7 · Probabilidad IA este año",
+              "NPS (0-10)",
+              "NPS",
+              "escala 0-10",
+            ],
+            [
+              "Q8 · ¿Qué te frena?",
+              "Radio",
+              "RadioButton",
+              "Casos de uso · Presupuesto · Datos · Compliance · Otro",
+            ],
+            [
+              "Q9 · Cuéntanos más",
+              "Long text",
+              "FreeText",
+              "(sin choices)",
+            ],
+            [
+              "Q10 · Sesión con arquitecto",
+              "Yes/No",
+              "Boolean",
+              "Sí · No",
+            ],
+            [
+              "Q11 · Email",
+              "Short text",
+              "ShortText",
+              "(sin choices)",
+            ],
+          ],
+        },
+        {
+          type: "setupStep",
+          number: 1,
+          title: "Crear la encuesta y las 6 páginas",
+          instructions:
+            "En Setup → Feedback Management → New Survey. Nombra 'Descubrimiento_Agentforce'. Agrega 5 páginas de preguntas más 1 página Thank You. Configura la Thank You con el mensaje y redirectUrl indicados arriba.",
+        },
+        {
+          type: "setupStep",
+          number: 2,
+          title: "Configurar page branching en la Página 2",
+          instructions:
+            "En la Página 2 → menú Page Branching Logic. Regla 1: Si Q3 = 'Sí' → ir a Página 3. Regla 2: Si Q3 = 'No' → ir a Página 4. Ambas ramas terminan navegando a Página 5 (convergencia).",
+        },
+        {
+          type: "setupStep",
+          number: 3,
+          title: "Configurar display logic (3 reglas)",
+          instructions:
+            "En cada pregunta condicional → menú Display Logic. Q6 visible solo si Q5 ≤ 3. Q9 visible solo si Q8 = 'Otro'. Q11 visible solo si Q10 = 'Sí' (y marcar isResponseRequired cuando visible).",
+        },
+        {
+          type: "setupStep",
+          number: 4,
+          title: "Marcar preguntas requeridas",
+          instructions:
+            "Q1, Q2, Q3, Q4, Q5, Q7, Q8, Q10 → isResponseRequired = true. Q6, Q9 → false. Q11 → false a nivel encuesta (el display logic lo hace requerido solo cuando visible; la validación de required cuando visible se maneja en el frontend).",
+        },
+        {
+          type: "setupStep",
+          number: 5,
+          title: "Publicar la encuesta",
+          instructions:
+            "Publish → crea la SurveyVersion activa. Anota el Survey Id (Kdxx...) — puedes recuperarlo con SOQL: SELECT Id, Name, DeveloperName FROM Survey WHERE DeveloperName = 'Descubrimiento_Agentforce'",
+          command:
+            "sf data query --query \"SELECT Id, Name, DeveloperName FROM Survey WHERE DeveloperName = 'Descubrimiento_Agentforce'\" --target-org Laila",
+        },
+      ],
+    },
+    {
+      id: "sandbox-config",
+      eyebrow: "Paso 2 · Configuración unAuth",
+      title: "Habilitar el path público en la org",
+      peek: "Toggle en Survey Settings · Guest User sharing · verificar accessToken",
+      blocks: [
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Prerrequisito de licencia",
+          text: "El path unAuth requiere Feedback Management — Growth. Con Starter no funciona. Verifica en Setup → Company Information → licencias antes de continuar.",
+        },
+        {
+          type: "setupStep",
+          number: 1,
+          title: "Habilitar Unauthenticated Survey Participation",
+          instructions:
+            "Setup → Survey Settings → toggle 'Unauthenticated Survey Participation'. Selecciona el Experience Cloud site que se usará como contexto de la invitación (el mismo debe estar activo).",
+        },
+        {
+          type: "setupStep",
+          number: 2,
+          title: "Compartir la encuesta al perfil Guest User",
+          instructions:
+            "Setup → Sharing Settings → Survey → Manual Sharing → agrega el Guest User Profile del Experience Cloud site elegido en el paso 1 con acceso Read. Sin esto, todo el flujo devuelve 403.",
+        },
+        {
+          type: "setupStep",
+          number: 3,
+          title: "Configurar merge-field access (solo si la encuesta usa merge fields)",
+          instructions:
+            "Setup → Session Settings o Survey Settings, según el release → 'System Context - Enforce record-level access'. Si tu encuesta no tiene merge fields (esta receta MVP no los usa), puedes omitirlo.",
+        },
+        {
+          type: "setupStep",
+          number: 4,
+          title: "Probar el accessToken endpoint desde curl",
+          instructions:
+            "Reemplaza <MY_DOMAIN> por el My Domain de la org (ej: laila-demo.my.salesforce.com) y <ORG_ID> por el 18-char Org Id. Si responde con {accessToken, expiresIn}, la configuración quedó bien.",
+          command: `curl -X POST 'https://<MY_DOMAIN_SIN_LA_M>.my.salesforce-scrt.com/surveys/v1/accessToken' \\
+  -H 'Content-Type: application/json' \\
+  -d '{"orgId": "<ORG_ID>"}'`,
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "El host SCRT",
+          text: "El endpoint no vive en my.salesforce.com — vive en my.salesforce-scrt.com (Omni-Channel Engagement URL). El BFF construye el host automáticamente reemplazando '.my.salesforce.com' por '.my.salesforce-scrt.com' — verifica que la resolución DNS funcione desde tu red.",
+        },
+      ],
+    },
+    {
+      id: "env",
+      eyebrow: "Paso 3 · Variables de entorno",
+      title: "Configurar el .env.local del BFF",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "El BFF necesita cinco variables server-side. Ninguna con prefijo NEXT_PUBLIC — todas quedan en el servidor.",
+        },
+        {
+          type: "table",
+          headers: ["Variable", "Valor de ejemplo", "Propósito"],
+          rows: [
+            [
+              "SF_LAILA_MY_DOMAIN",
+              "laila-demo.my.salesforce.com",
+              "El BFF deriva el host SCRT desde aquí — reemplaza .my.salesforce.com por .my.salesforce-scrt.com",
+            ],
+            [
+              "SF_LAILA_ORG_ID",
+              "00DKY00000F1KgF2AV",
+              "Organization Id de 18 caracteres — se envía al /accessToken",
+            ],
+            [
+              "SF_LAILA_SURVEY_DEV_NAME",
+              "Descubrimiento_Agentforce",
+              "Developer name de la encuesta publicada",
+            ],
+            [
+              "SF_LAILA_UNAUTH_APP_PREFIX",
+              "surveys/v1",
+              "Prefijo de la unAuth Response API — valor por defecto salvo que Salesforce lo cambie",
+            ],
+            [
+              "SURVEY_SESSION_SECRET",
+              "openssl rand -base64 48",
+              "Secret para firmar la cookie de sesión (mínimo 32 caracteres)",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "SF_LAILA_COMMUNITY_ID (opcional)",
+          text: "Si tu Experience Cloud site requiere que la invitación referencie el communityId explícitamente, agrégalo. Si dejas en blanco, el BFF omite el campo.",
+        },
+      ],
+    },
+    {
+      id: "bff-walkthrough",
+      eyebrow: "Paso 4 · BFF",
+      title: "Route Handlers de Next.js",
+      peek: "Cliente unAuth · sesión firmada · dos endpoints públicos",
+      blocks: [
+        {
+          type: "codeRef",
+          name: "lib/salesforce/feedbackManagement.ts",
+          kind: "apex",
+          purpose:
+            "Cliente server-side de la unAuth Response API. Cachea el accessToken en memoria del módulo con verificación de expiración. Normaliza el surveyPage polimórfico (Question Page o Thank You Page) en un tipo discriminado.",
+          methods: [
+            {
+              name: "getAccessToken",
+              description:
+                "POST /surveys/v1/accessToken con { orgId }. Devuelve { accessToken, expiresIn }. Cache in-memory con margen de 30s.",
+            },
+            {
+              name: "startSurvey(languageCode)",
+              description:
+                "POST /surveys/v1/survey-response con surveyDeveloperName + invitationSettings { collectAnonymousResponse }. Devuelve { session, page, navigationActions, surveyLabel }.",
+            },
+            {
+              name: "navigate(session, action, answers)",
+              description:
+                "PATCH /surveys/v1/survey-response con navigationAction (Next|Back) + surveyPageResponses.questionResponses[]. Devuelve el siguiente { page, navigationActions } y refresca session.",
+            },
+          ],
+        },
+        {
+          type: "codeRef",
+          name: "lib/survey/session.ts",
+          kind: "apex",
+          purpose:
+            "Sesión firmada HMAC-SHA256 en cookie httpOnly. La sesión guarda { invitationId, invitationUuid, flowInterviewState, responseId, languageCode }. No es secreto — Salesforce ya conoce esos IDs — pero la firma impide tampering desde el cliente.",
+          methods: [
+            {
+              name: "encodeSession",
+              description:
+                "Serializa a JSON → base64url → firma HMAC. Formato: <payload>.<signature>",
+            },
+            {
+              name: "decodeSession",
+              description:
+                "Verifica firma con timingSafeEqual. Devuelve null si la sesión fue manipulada.",
+            },
+          ],
+        },
+        {
+          type: "codeRef",
+          name: "app/api/surveys/[surveyName]/start/route.ts",
+          kind: "apex",
+          purpose:
+            "Endpoint POST público. Llama startSurvey, escribe la sesión en cookie httpOnly, devuelve al cliente { page, navigationActions, surveyLabel } — sin exponer flowInterviewState ni tokens.",
+        },
+        {
+          type: "codeRef",
+          name: "app/api/surveys/[surveyName]/navigate/route.ts",
+          kind: "apex",
+          purpose:
+            "Endpoint PATCH. Lee la sesión de la cookie firmada, valida action ∈ {Next, Back}, llama navigate, refresca cookie, devuelve { page, navigationActions }. Rechaza 400 si no hay sesión válida.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Por qué el token NO va al navegador",
+          text: "El accessToken unAuth es per-org — filtrarlo compromete todas las encuestas públicas de la org. Vive solo en el servidor, con TTL 3600s y cache in-memory. El navegador ve cookie firmada + JSON de páginas y respuestas. Cero superficie de secreto en cliente.",
+        },
+      ],
+    },
+    {
+      id: "api-flow",
+      eyebrow: "Paso 5 · Flujo API",
+      title: "Cómo se ve una respuesta desde el primer clic",
+      blocks: [
+        {
+          type: "pipeline",
+          title: "Ciclo Start · Navigate · Thank You",
+          steps: [
+            {
+              component: "Frontend",
+              action: "POST /api/surveys/[name]/start",
+              note: "Sin body relevante — el BFF pone el languageCode",
+            },
+            {
+              component: "BFF",
+              action: "POST /surveys/v1/accessToken (cached) → POST /surveys/v1/survey-response",
+              note: "Salesforce crea SurveyInvitation con collectAnonymousResponse:true y devuelve Survey Description Output",
+            },
+            {
+              component: "BFF",
+              action: "Firma sesión → Set-Cookie httpOnly",
+              note: "Payload de sesión: { invitationId, invitationUuid, flowInterviewState, responseId, languageCode }",
+            },
+            {
+              component: "Frontend",
+              action: "Renderiza Página 1 · valida required · usuario responde",
+              note: "Dispatcher por questionType — sin condicionales por página",
+            },
+            {
+              component: "Frontend",
+              action: "PATCH /api/surveys/[name]/navigate { action: 'Next', answers: [...] }",
+              note: "Formato del answer depende del questionType: responses[] para selección, responseValue para NPS/Text",
+            },
+            {
+              component: "BFF",
+              action: "Decodifica cookie → PATCH /surveys/v1/survey-response",
+              note: "Salesforce evalúa branching server-side según respuestas — decide P3 o P4",
+            },
+            {
+              component: "BFF",
+              action: "Actualiza cookie con nuevo flowInterviewState",
+              note: "El invitationId/Uuid no cambian; el flow state sí",
+            },
+            {
+              component: "Frontend",
+              action: "Repite hasta que surveyPage sea Thank You",
+              note: "Detecta finalización por polimorfía: presencia de thankYouMessage/redirectUrl vs surveyQuestions[]",
+            },
+          ],
+        },
+        {
+          type: "apiCall",
+          title: "POST /accessToken · unAuth",
+          method: "POST",
+          url: "https://laila-demo.my.salesforce-scrt.com/surveys/v1/accessToken",
+          headers: [{ name: "Content-Type", value: "application/json" }],
+          body: `{ "orgId": "00DKY00000F1KgF2AV" }`,
+          response: `{
+  "accessToken": "eyJ...",
+  "expiresIn": 3600,
+  "tokenType": "Bearer"
+}`,
+          note: "TTL 3600s. El BFF cachea in-memory con margen de 30s antes del expiry.",
+        },
+        {
+          type: "apiCall",
+          title: "POST /survey-response · Start",
+          method: "POST",
+          url: "https://laila-demo.my.salesforce-scrt.com/surveys/v1/survey-response",
+          headers: [
+            { name: "Authorization", value: "Bearer <accessToken>" },
+            { name: "Content-Type", value: "application/json" },
+          ],
+          body: `{
+  "surveyDeveloperName": "Descubrimiento_Agentforce",
+  "languageCode": "es",
+  "invitationSettings": {
+    "collectAnonymousResponse": true
+  }
+}`,
+          response: `{
+  "status": "Success",
+  "responseId": "0Myxx...",
+  "invitationId": "0Kixx...",
+  "invitationUuid": "11845-...",
+  "flowInterviewState": "state1",
+  "languageCode": "es",
+  "navigationActions": ["Next"],
+  "surveyDetail": {
+    "label": "Descubrimiento con Laila",
+    "name": "Descubrimiento_Agentforce",
+    "surveyPage": {
+      "label": "Perfil",
+      "name": "p_perfil",
+      "surveyQuestions": [
+        {
+          "name": "q_industria",
+          "label": "¿En qué industria trabajas?",
+          "questionType": "RadioButton",
+          "isResponseRequired": true,
+          "questionChoices": [
+            { "name": "c_retail", "label": "Retail" },
+            { "name": "c_banca",  "label": "Banca" }
+          ]
+        }
+      ]
+    }
+  }
+}`,
+        },
+        {
+          type: "apiCall",
+          title: "PATCH /survey-response · Navigate Next (con branching)",
+          method: "PATCH",
+          url: "https://laila-demo.my.salesforce-scrt.com/surveys/v1/survey-response",
+          headers: [
+            { name: "Authorization", value: "Bearer <accessToken>" },
+            { name: "Content-Type", value: "application/json" },
+          ],
+          body: `{
+  "surveyDeveloperName": "Descubrimiento_Agentforce",
+  "invitationId": "0Kixx...",
+  "invitationUuid": "11845-...",
+  "flowInterviewState": "state1",
+  "languageCode": "es",
+  "navigationAction": "Next",
+  "surveyPageResponses": {
+    "questionResponses": [
+      { "name": "q_industria", "questionType": "RadioButton", "responses": [{ "name": "c_retail" }] },
+      { "name": "q_rol", "questionType": "RadioButton", "responses": [{ "name": "c_arquitecto" }] }
+    ]
+  }
+}`,
+          response: `{
+  "status": "Success",
+  "flowInterviewState": "state2",
+  "navigationActions": ["Next", "Back"],
+  "surveyPage": {
+    "label": "Estado actual",
+    "name": "p_estado",
+    "surveyQuestions": [
+      {
+        "name": "q_usa_agentforce",
+        "label": "¿Tu organización ya usa Agentforce o agentes IA?",
+        "questionType": "Boolean",
+        "isResponseRequired": true,
+        "questionChoices": [
+          { "name": "yes", "label": "Sí" },
+          { "name": "no",  "label": "No" }
+        ]
+      }
+    ]
+  }
+}`,
+        },
+        {
+          type: "apiCall",
+          title: "PATCH final · Thank You devuelve",
+          method: "PATCH",
+          url: "https://laila-demo.my.salesforce-scrt.com/surveys/v1/survey-response",
+          body: `{ "navigationAction": "Next", "surveyPageResponses": { "questionResponses": [...] }, ... }`,
+          response: `{
+  "status": "Success",
+  "flowInterviewState": "final",
+  "navigationActions": [],
+  "surveyPage": {
+    "label": "Gracias",
+    "name": "p_thanks",
+    "thankYouMessage": "Gracias por tu tiempo.",
+    "messageDescription": "Tu respuesta quedó registrada.",
+    "redirectUrl": "https://laila-portfolio.local/es/insights/headless-feedback-management-salesforce",
+    "urlButtons": [
+      { "label": "Leer el insight", "url": "https://laila-portfolio.local/es/insights/headless-feedback-management-salesforce" }
+    ]
+  }
+}`,
+          note: "Detecta el fin comparando la forma del surveyPage: thankYouMessage/redirectUrl presente vs surveyQuestions[] presente.",
+        },
+      ],
+    },
+    {
+      id: "frontend-walkthrough",
+      eyebrow: "Paso 6 · Frontend",
+      title: "SurveyRunner y el dispatcher por questionType",
+      blocks: [
+        {
+          type: "codeRef",
+          name: "components/survey/SurveyRunner.tsx",
+          kind: "lwc",
+          purpose:
+            "Client component que orquesta el ciclo start/navigate. Maneja estado de máquina: idle → loading → running → error. Renderiza SurveyPage con Back/Next o ThankYouPage cuando el server devuelve el fin.",
+          methods: [
+            {
+              name: "handleStart",
+              description: "POST /api/surveys/[name]/start · setState running",
+            },
+            {
+              name: "handleNavigate(action)",
+              description:
+                "Arma answers desde el state local · PATCH · actualiza page y navigationActions",
+            },
+            {
+              name: "buildAnswersPayload(questions, answers)",
+              description:
+                "Mapper del state UI → forma que la API espera: responses[] para selección, responseValue para NPS/Text. Es la única pieza que traduce entre representaciones.",
+            },
+            {
+              name: "isAnswered(q, v)",
+              description:
+                "Valida required en la UI antes de habilitar el botón Next. Consulta isResponseRequired de cada pregunta.",
+            },
+          ],
+        },
+        {
+          type: "codeRef",
+          name: "components/survey/QuestionInputs.tsx",
+          kind: "lwc",
+          purpose:
+            "Siete componentes de tipo de pregunta (SingleChoice, MultiChoice, BooleanYesNo, Rating, NPS, TextInput, TextArea). Cada uno recibe { question, value, onChange } y no conoce ni siquiera qué encuesta está corriendo — son puros presentadores.",
+        },
+        {
+          type: "concept",
+          title: "El dispatcher — la única pieza no trivial del cliente",
+          peek: "Un switch(questionType) que mapea a componentes. Nada más.",
+          blocks: [
+            {
+              type: "paragraph",
+              text: "El dispatcher vive dentro de SurveyRunner como QuestionInput({ question, value, onChange }). Su forma es un switch de siete casos + un fallback para tipos no soportados que renderiza un placeholder claro y loguea el tipo (útil para descubrir en el POC si un tipo raro como Ranking o Slider llega vía API).",
+            },
+            {
+              type: "list",
+              items: [
+                "RadioButton → SingleChoice · value: string · onChange(name)",
+                "MultiChoice → MultiChoice · value: string[] · onChange([names])",
+                "Boolean → BooleanYesNo · value: string · onChange(name)",
+                "Rating → Rating · value: string (name de la choice) · onChange(name)",
+                "NPS → NPS · value: number · onChange(n)",
+                "ShortText → TextInput · value: string · onChange(s)",
+                "FreeText → TextArea · value: string · onChange(s)",
+                "default → <Unsupported type={type}/> con telemetría — no romper silencioso",
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "demo",
+      eyebrow: "Paso 7 · Probar",
+      title: "Levantar el demo en local",
+      blocks: [
+        {
+          type: "setupStep",
+          number: 1,
+          title: "Escribir .env.local",
+          instructions:
+            "Copia las 5 variables server-side en .env.local en la raíz del repo. Genera SURVEY_SESSION_SECRET con openssl rand -base64 48.",
+          command: `# .env.local
+SF_LAILA_MY_DOMAIN=laila-demo.my.salesforce.com
+SF_LAILA_ORG_ID=00DKY00000F1KgF2AV
+SF_LAILA_SURVEY_DEV_NAME=Descubrimiento_Agentforce
+SF_LAILA_UNAUTH_APP_PREFIX=surveys/v1
+SURVEY_SESSION_SECRET=$(openssl rand -base64 48)`,
+        },
+        {
+          type: "setupStep",
+          number: 2,
+          title: "Iniciar el dev server",
+          instructions:
+            "El demo vive en /es/demo/survey. El SurveyRunner llama al BFF, el BFF llama a Salesforce, Salesforce devuelve la Página 1.",
+          command: "npm run dev",
+        },
+        {
+          type: "setupStep",
+          number: 3,
+          title: "Recorrer el flujo completo",
+          instructions:
+            "Abre localhost:3000/es/demo/survey. Cubre las 6 páginas siguiendo cada rama. Verifica la ramificación Q3 = Sí vs No. Confirma que Q6 solo aparece si contestaste Q5 con 1, 2 o 3 — esa es la validación empírica de display logic server-side.",
+        },
+        {
+          type: "setupStep",
+          number: 4,
+          title: "Verificar persistencia en la org",
+          instructions:
+            "Después de completar la encuesta, revisa que se hayan creado los objetos estándar. Deberías ver 1 SurveyResponse (Status=Completed) y N SurveyQuestionResponse (una por pregunta respondida).",
+          command: `sf data query --query "SELECT Id, Status, CompletionDateTime FROM SurveyResponse ORDER BY CreatedDate DESC LIMIT 5" --target-org Laila
+sf data query --query "SELECT Id, ResponseId, ResponseValue FROM SurveyQuestionResponse ORDER BY CreatedDate DESC LIMIT 20" --target-org Laila`,
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "El acid test del headless",
+          text: "Busca en components/survey/SurveyRunner.tsx cualquier if que decida qué página mostrar. No debería haber ninguno. El único condicional del cliente es 'si page.kind === thankyou → renderiza ThankYouCard, si no → renderiza SurveyPage'. Toda la lógica de flujo vive en Salesforce.",
+        },
+      ],
+    },
+    {
+      id: "phase-2",
+      eyebrow: "Sprint 2 · WhatsApp",
+      title: "Preview de la Fase 2 — Agente Encuestador",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La misma encuesta armada en Feedback Management se consume también desde Agentforce vía WhatsApp — post-sesión, cuando ya conocemos MessagingEndUser + Contact. Este preview describe cómo se conecta; la implementación completa vive en una receta separada.",
+        },
+        {
+          type: "pipeline",
+          title: "Flujo post-sesión",
+          steps: [
+            {
+              component: "Trigger",
+              action: "Al cerrar MessagingSession (o cerrar Case)",
+              note: "Puede ser Flow, Apex trigger o invocable — según el diseño del handoff",
+            },
+            {
+              component: "SurveyInvitation",
+              action:
+                "Insert con ParticipantId = MessagingEndUser.ContactId, Options.AllowGuestUserResponse = true",
+              note: "Path autenticado desde dentro de la org — no necesita el token unAuth",
+            },
+            {
+              component: "SurveySubject",
+              action:
+                "Insert con ParentId = invitationId, SubjectEntityType = 'MessagingSession', SubjectId = <session Id>",
+              note: "Linking nativo — no requiere custom fields ni custom objects",
+            },
+            {
+              component: "Handoff",
+              action:
+                "Ruta a Agente Encuestador con context { surveyName, invitationId }",
+              note: "Reutiliza la MessagingSession si sigue en la ventana de 24h de WhatsApp",
+            },
+            {
+              component: "Agente Encuestador",
+              action:
+                "Loop turno-a-turno: POST /connect/surveys/…/invitation/{id}/survey-response → PATCH por cada página",
+              note: "Genérico — no hardcodea la encuesta. Un cambio en Survey Builder llega gratis.",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Por qué no hay BFF en este path",
+          text: "El agente vive dentro de la org y puede usar el path autenticado (Connect REST estándar) contra yourInstance.my.salesforce.com. Sin cross-origin, sin token unAuth, sin CORS. Las acciones Apex del agente llaman directo. Menos piezas, más simple.",
+        },
+      ],
+    },
+    {
+      id: "troubleshoot",
+      eyebrow: "Troubleshooting",
+      title: "Errores comunes y qué revisar",
+      blocks: [
+        {
+          type: "troubleshoot",
+          rows: [
+            {
+              issue:
+                "POST /accessToken responde 401 o 'Invalid org id'",
+              solution:
+                "Verifica que SF_LAILA_ORG_ID sea el Id de 18 caracteres (no el de 15). En Setup → Company Information está el valor correcto.",
+            },
+            {
+              issue: "POST /survey-response responde 403 al iniciar",
+              solution:
+                "El Guest User del Experience Cloud site no tiene acceso al Survey. Ve a Sharing Settings → Survey → agrega el perfil Guest User con acceso Read.",
+            },
+            {
+              issue:
+                "Unable to find survey 'Descubrimiento_Agentforce'",
+              solution:
+                "El DeveloperName no coincide. Confirma que la encuesta está PUBLICADA (no solo guardada). SELECT DeveloperName FROM Survey — el valor exacto debe ir en SF_LAILA_SURVEY_DEV_NAME.",
+            },
+            {
+              issue: "PATCH devuelve 'Flow interview state expired'",
+              solution:
+                "La sesión de la cookie tiene un flowInterviewState que Salesforce ya no reconoce. Puede haber pasado la ventana de tolerancia o la SurveyVersion cambió. Solución: reiniciar la respuesta (POST /start de nuevo).",
+            },
+            {
+              issue: "El branching devuelve siempre la misma página",
+              solution:
+                "La regla de Page Branching no está publicada — Survey Builder deja guardar reglas sin publicar. Republish la encuesta. Verifica también que Q3 use exactamente los valores esperados en la condición (case-sensitive en algunos releases).",
+            },
+            {
+              issue:
+                "Q6 aparece siempre, no respeta el display logic sobre Q5",
+              solution:
+                "Confirma que la regla de Display Logic está en Q6 (no en Q5) y que el operador es 'Less than or equal' con el valor 3. Republish. Si tras eso Q6 sigue apareciendo, el POC prueba que el server NO evalúa display logic — abre ticket o mueve la validación al frontend.",
+            },
+            {
+              issue:
+                "CORS bloqueado en el browser al llamar salesforce-scrt.com",
+              solution:
+                "Verifica que estás llamando al BFF (/api/surveys/*) — NO a salesforce-scrt.com directo. Si por error el frontend está apuntando al host de Salesforce, el navegador siempre bloqueará el CORS. Todas las requests deben pasar por el BFF.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "tradeoffs",
+      eyebrow: "Cuándo usar",
+      title: "Encajes y contraindicaciones",
+      blocks: [
+        {
+          type: "tradeoffs",
+          pros: [
+            "Cero lógica de flujo en el frontend — un solo switch(questionType) resuelve todo el rendering.",
+            "Cambios en Survey Builder llegan gratis al frontend — no hay redeploy.",
+            "Persistencia estándar — dashboards, Data Mapper y automatizaciones existentes siguen funcionando.",
+            "Superficie de seguridad mínima en cliente — solo cookie firmada, cero secretos.",
+            "Reutilizable: la misma encuesta la puede consumir un React, una app móvil o un Agente Encuestador de WhatsApp.",
+          ],
+          cons: [
+            "Requiere Feedback Management Growth para el path unAuth (Starter solo cubre el path autenticado).",
+            "Depende del contrato Business API — si Salesforce cambia un campo, hay que actualizar el cliente TypeScript.",
+            "Preguntas 'menos comunes' (Ranking, Slider, Date, Picklist, Scoring) requieren validación empírica en el POC — no están confirmadas verbatim en docs.",
+            "El display logic server-side es hipótesis fuerte pero no verbatim — valide en el POC antes de asumir.",
+          ],
+          whenToUse: [
+            "Necesita servir encuestas de Salesforce dentro de una experiencia web/móvil propia (no dentro de Salesforce).",
+            "El admin quiere seguir gestionando la encuesta desde Survey Builder sin tocar código.",
+            "La organización ya invirtió en Feedback Management y quiere sacarle el valor completo.",
+            "Va a haber múltiples consumidores de la misma encuesta (web + WhatsApp + móvil).",
+          ],
+          whenNotToUse: [
+            "La encuesta necesita tipos de pregunta que no están soportados por la Business API (validar en POC).",
+            "Requiere una experiencia visual radicalmente distinta al modelo de páginas (encuesta conversacional pura, sin páginas) — considere entonces un motor conversacional propio.",
+            "La organización solo tiene licencia base ('Survey Response Pack') y no puede subir a Starter/Growth.",
+            "El caso de uso es un formulario simple que no requiere branching ni display logic — un formulario nativo del sitio sirve.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "sources",
+      eyebrow: "Referencias",
+      title: "Fuentes oficiales",
+      blocks: [
+        {
+          type: "sources",
+          items: [
+            {
+              label: "Salesforce Feedback Management Developer Guide",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/",
+            },
+            {
+              label: "Surveys for Unauthenticated Participants",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/salesforce_surveys_for_unauthenticated_participants.htm",
+            },
+            {
+              label: "Set Up Your Environment · unAuth APIs",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/surveys_set_up_your_environment_unauth_apis.htm",
+            },
+            {
+              label: "Get Access Token · unAuth APIs",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/salesforce_surveys_get_access_token_unauth_apis.htm",
+            },
+            {
+              label: "Create and Submit Surveys · unAuth APIs",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/surveys_resources_create_submit_surveys_unauth_apis.htm",
+            },
+            {
+              label: "Survey Response Input · unAuth",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/surveys_requests_survey_response_input_unauth_apis.htm",
+            },
+            {
+              label: "Survey Response Output · unAuth",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/surveys_responses_survey_response_output_unauth_apis.htm",
+            },
+            {
+              label: "SurveyInvitation · SObject Reference",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/sforce_api_objects_surveyinvitation.htm",
+            },
+            {
+              label: "SurveySubject · SObject Reference (para Sprint 2)",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.salesforce_feedback_management_dev_guide.meta/salesforce_feedback_management_dev_guide/sforce_api_objects_surveysubject.htm",
+            },
+            {
+              label: "Feedback Management License Comparison",
+              url: "https://help.salesforce.com/s/articleView?id=xcloud.concept_add_on_license.htm&type=5",
+            },
+            {
+              label: "Insight base — Headless Salesforce Feedback Management",
+              url: "/es/insights/headless-feedback-management-salesforce",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 export const buildRecipes: Recipe[] = [
   whatsappAttachmentsCustom,
   whatsappV2Handoff,
   whatsappLightweightInterception,
   agentforceVoiceHandoffHumano,
+  headlessFeedbackManagement,
 ];
 
 export function getRecipe(slug: string): Recipe | undefined {
