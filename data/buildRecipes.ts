@@ -4474,12 +4474,693 @@ sf data query --query "SELECT Id, ResponseId, ResponseValue FROM SurveyQuestionR
   ],
 };
 
+const agentforceInAppUserVerification: Recipe = {
+  slug: "agentforce-in-app-user-verification",
+  title:
+    "Auth passthrough móvil → Agentforce chat — User Verification en MIAW con JWT firmado",
+  problemOneLiner:
+    "El cliente ya hizo login en la app móvil (auth propia, no SF). Al abrir el chat de Agentforce embebido, la conversación arranca anónima y el agente no sabe quién escribe. Queremos que sepa desde el turno 0, sin re-autenticar.",
+  approach: "hybrid",
+  tags: [
+    "Agentforce",
+    "MIAW",
+    "Messaging for In-App and Web",
+    "User Verification",
+    "JWT",
+    "RS256",
+    "iOS SDK",
+    "Android SDK",
+    "Auth passthrough",
+    "Pre-chat",
+  ],
+  audiences: ["admin", "developer", "architect"],
+  author: "Jonathan Gomez",
+  authorRole: "Agentforce Enterprise Architect",
+  publishedAt: "2026-08-17",
+  updatedAt: "2026-08-17",
+  readingMinutes: 18,
+  tldr: [
+    "La solución correcta es User Verification de Messaging for In-App and Web (MIAW) — el nombre viejo era 'Authenticated Conversations'; si buscas por ese término te vas a perder los docs actuales.",
+    "El customer firma un JWT (RS256 o RS512, asimétrico — HMAC no está soportado) en su backend con su private key; la public key vive en Salesforce dentro del Auth Method del deployment.",
+    "El SDK móvil (iOS/Android) entrega el JWT vía un delegate/provider al que MIAW le pide el token cuando lo necesita. El SDK web usa 'setIdentityToken' (no 'setAuthorizationToken' — ese es el nombre viejo).",
+    "MIAW valida la firma, resuelve el subject contra un Contact/PersonAccount/User de Salesforce y liga la Messaging Session a ese registro. Agentforce recibe el contexto y puede saludar por nombre desde el turno 0.",
+    "El truco del pre-chat hidden field NO es una autenticación — es data set por el cliente, no verificable. Sirve para enriquecer contexto pero jamás para identificar. Se documenta como anti-patrón.",
+    "Regla fuerte de MIAW: un deployment atiende usuarios verified O unverified; no se mezclan. Decidí eso desde el diseño.",
+  ],
+  sections: [
+    {
+      id: "problem",
+      eyebrow: "El problema",
+      title: "Por qué el chat arranca anónimo y qué pierdes con eso",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "problem",
+          symptom:
+            "El cliente hace login en la app móvil del negocio (auth propia, no Salesforce). Abre el componente de chat con Agentforce embebido vía MIAW. La conversación arranca anónima: el agente no sabe quién es, saluda genérico ('Hola, ¿en qué te ayudo?') y — peor — le pide datos que la app ya conoce (nombre, DNI, número de póliza).",
+          rootCause:
+            "MIAW, por default, trata cada conversación nueva como anónima. El SDK móvil y el SDK web no comparten cookies ni tokens con la capa de auth del negocio. Salesforce no tiene forma de saber que el usuario ya se autenticó afuera a menos que el customer se lo demuestre — con una firma criptográfica, no con un simple dato.",
+          impact:
+            "Fricción alta: doble autenticación percibida, saludo despersonalizado, agente que pide datos redundantes, más turnos hasta la resolución. En verticales regulados (banca, salud, telco) incluso obliga a validaciones extra por cumplimiento — cuando la app ya lo hizo mejor upstream.",
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Rename importante",
+          text: "Hasta 2024/2025 esta feature se llamaba 'Authenticated Conversations'. En la doc actual el término canónico es 'User Verification'. Si buscas por el nombre viejo vas a caer en material desactualizado y en el método SDK viejo 'setAuthorizationToken', que ya no es el que se usa.",
+        },
+      ],
+    },
+    {
+      id: "options",
+      eyebrow: "Los tres caminos posibles",
+      title: "Sin auth, pre-chat hidden field, o User Verification",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Antes de entrar al detalle, aclaramos las tres opciones que tiene un customer que quiere resolver esto. Solo una es una autenticación real.",
+        },
+        {
+          type: "comparison",
+          standardLabel: "Pre-chat hidden field (anti-patrón)",
+          customLabel: "User Verification con JWT (correcto)",
+          rows: [
+            {
+              dimension: "Qué se envía",
+              standard:
+                "Un valor plano (por ejemplo customerId=12345) inyectado como hidden field del pre-chat form. Data cualquiera, sin firma.",
+              custom:
+                "Un JWT firmado con la private key del customer. Salesforce valida con la public key. El contenido es no falsificable.",
+            },
+            {
+              dimension: "Verificación server-side",
+              standard:
+                "Ninguna. Salesforce confía en el valor que llega. Un cliente malicioso puede setear el customerId de otro usuario y suplantarlo.",
+              custom:
+                "Salesforce recalcula la firma del JWT con la public key del Auth Method. Si la firma no valida, la sesión se rechaza.",
+            },
+            {
+              dimension: "Vinculación al CRM",
+              standard:
+                "No vincula. El campo llega como texto libre a la Messaging Session; hay que resolver manualmente contra Contact/Account.",
+              custom:
+                "El subject del JWT se resuelve contra un campo (typ. External Id) de Contact / PersonAccount / User. La Messaging Session queda linkeada a ese record automáticamente.",
+            },
+            {
+              dimension: "Contexto que ve Agentforce",
+              standard:
+                "Un valor de texto sin identidad. El agente no puede confiar en él para decisiones sensibles (mostrar datos, ejecutar acciones a nombre del usuario).",
+              custom:
+                "El agente ve el Contact/Person Account real. Puede usar sus datos en el saludo, en las variables del topic, y en las acciones que ejecute.",
+            },
+            {
+              dimension: "Cuándo usarlo",
+              standard:
+                "Solo como enriquecimiento de contexto no sensible — por ejemplo, pre-poblar la pantalla que ve el asesor humano con el país de origen del cliente.",
+              custom:
+                "Cualquier caso donde la identidad del usuario debe ser fiable — que es prácticamente el 100% de los casos de negocio.",
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "critical",
+          title: "El pre-chat hidden field NO es una autenticación",
+          text: "Un campo 'hidden' del pre-chat form solo está oculto de la UI. Un atacante puede modificarlo con DevTools en web, o interceptar la petición con un proxy en móvil. Es data set por el cliente, no verificable por Salesforce. Si te suena tentador porque es más simple, es porque estás resolviendo un problema distinto — enriquecimiento — no autenticación.",
+        },
+      ],
+    },
+    {
+      id: "user-verification-concept",
+      eyebrow: "Cómo funciona User Verification",
+      title: "El mecanismo: JWT firmado con private key del customer",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "concept",
+          title: "Piezas del rompecabezas",
+          peek: "Cinco piezas: private key en el backend del customer, public key en Salesforce, JWT firmado, SDK móvil que lo entrega, y el Auth Method que resuelve el subject.",
+          blocks: [
+            {
+              type: "list",
+              items: [
+                "Par de llaves asimétricas — RS256 o RS512. El customer conserva la private key. La public key se sube a Salesforce (Cert & Key Management o directamente al Auth Method).",
+                "JWT (JSON Web Token) — el pasaporte firmado. Emitido y firmado por el backend del customer con la private key. Salesforce valida la firma con la public key correspondiente.",
+                "Auth Method (en Messaging Settings) — configuración en Salesforce que dice: 'para este deployment, acepto JWTs firmados con esta public key, y resuelvo el subject contra este campo de este objeto'.",
+                "SDK móvil (iOS/Android) o Web SDK — el envoltorio que corre en la app del cliente. Expone un hook (delegate/provider en móvil, evento de expiración en web) que se dispara cuando MIAW necesita el JWT.",
+                "MIAW runtime — recibe el JWT, valida firma y expiración, resuelve el subject contra el registro configurado, y liga la Messaging Session a ese Contact / PersonAccount / User.",
+              ],
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "Por qué firmado con private key (no HMAC)",
+          peek: "MIAW User Verification exige asimétrico (RS256/RS512). HMAC (secreto compartido) NO está soportado.",
+          blocks: [
+            {
+              type: "paragraph",
+              text: "La razón práctica es que la private key nunca sale del backend del customer. Salesforce solo tiene la public key — con eso valida pero no puede firmar. Si Salesforce se comprometiera, un atacante no podría forjar JWTs válidos porque no tendría la private key. En un esquema HMAC, en cambio, la misma llave firma y verifica; si cualquiera de los dos lados se compromete, el atacante puede fabricar tokens legítimos.",
+            },
+            {
+              type: "callout",
+              tone: "info",
+              title: "Consecuencia operativa",
+              text: "El customer debe montar la infraestructura de firma: manejo seguro de la private key, rotación planificada, y un endpoint interno que la app llame para pedir un JWT recién firmado. En un cliente enterprise esto casi siempre ya existe (identity provider, KMS, HSM); en clientes más chicos hay que provisionar.",
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "Regla fuerte: verified XOR unverified por deployment",
+          peek: "Un deployment MIAW atiende usuarios verificados O usuarios anónimos. No los mezcla.",
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Si tu app expone chat a usuarios logueados y a usuarios anónimos (por ejemplo un pre-sales chat que no requiere login), necesitas dos deployments: uno con User Verification requerido y otro sin. No se pueden mezclar en el mismo deployment. Tampoco se puede reutilizar un ConversationID entre deployments — cada uno tiene su propio scope de sesiones.",
+            },
+            {
+              type: "callout",
+              tone: "warning",
+              title: "Decide desde el diseño",
+              text: "Si el negocio tiene ambos casos (logueado y anónimo), plantea desde el arranque dos deployments con dos MessagingChannel independientes. Migrar después de estar en producción con uno solo obliga a reemitir configuración en el cliente móvil.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "end-to-end-flow",
+      eyebrow: "Flujo end-to-end",
+      title: "Del login en la app al 'Hola Jonathan' del agente",
+      defaultOpen: true,
+      blocks: [
+        {
+          type: "pipeline",
+          title: "Secuencia completa",
+          steps: [
+            {
+              component: "App móvil (login)",
+              action:
+                "El usuario abre la app del customer y se autentica con las credenciales del negocio (típ. OAuth contra el IdP corporativo). Recibe la sesión propia del customer.",
+              note: "Esta capa es 100% del customer. Salesforce no participa.",
+            },
+            {
+              component: "App móvil (usuario tap 'Chat')",
+              action:
+                "La app va a pedir un JWT específico para MIAW a su propio backend. La sesión que ya tiene el usuario autoriza esa petición.",
+              note: "El JWT NO es la sesión de la app: es un token corto (típ. 5–15 min) emitido específicamente para el chat.",
+            },
+            {
+              component: "Backend del customer (endpoint minter)",
+              action:
+                "Recibe la petición autenticada, arma los claims del JWT (iss, sub=customerId, aud, iat, exp), lo firma con la private key RS256/RS512 y lo devuelve.",
+              note: "El sub debe matchear con el campo configurado en el Auth Method (típ. External Id de Contact o Email).",
+            },
+            {
+              component: "SDK móvil (delegate/provider)",
+              action:
+                "El SDK dispara el hook userVerificationChallenge (Android) / userVerificationChallengeWithReason (iOS) cuando necesita el JWT. La app responde con el token recién obtenido del backend.",
+              note: "El SDK NO llama al backend por vos: solo te avisa 'necesito un token'. La lógica de traerlo es tuya.",
+            },
+            {
+              component: "MIAW runtime (Salesforce)",
+              action:
+                "Recibe el JWT vía el SDK. Valida firma con la public key del Auth Method, valida exp/iat, y resuelve el subject contra el campo configurado.",
+              note: "Si falla cualquier paso, la sesión no arranca y el SDK dispara un error que la app debe manejar.",
+            },
+            {
+              component: "MIAW → MessagingSession",
+              action:
+                "Crea (o reutiliza) la MessagingSession y la liga al Contact/PersonAccount/User resuelto. A partir de acá la conversación NO es anónima.",
+            },
+            {
+              component: "Agentforce Service Agent",
+              action:
+                "Recibe el primer turno del usuario con el contexto de sesión ya poblado. Puede acceder al Contact desde las variables de contexto del topic y usarlas en el saludo y en cualquier acción downstream.",
+              note: "El path exacto de la variable de contexto (algo como $Context.MessagingSession.MessagingEndUser.Contact) debe validarse abriendo el .agent en Studio del org destino — puede variar por release.",
+            },
+            {
+              component: "SDK móvil (token expiration)",
+              action:
+                "Cuando el JWT está por expirar, MIAW dispara el evento onEmbeddedMessagingIdentityTokenExpired (web) o vuelve a invocar el delegate/provider (móvil). La app pide un nuevo JWT al backend y lo entrega dentro de la ventana permitida.",
+              note: "En web la ventana para responder es 30 segundos: si no llega token fresco, la sesión termina.",
+            },
+          ],
+        },
+        {
+          type: "architecture",
+          title: "Arquitectura de alto nivel",
+          diagram: `App móvil del customer
+        │
+        │  1. Login (IdP corporativo)
+        ▼
+Auth propia del negocio  ────────────────────┐
+                                             │
+        │  2. Usuario abre chat              │
+        ▼                                    │
+Backend del customer (Token Minter)          │
+        │                                    │
+        │  3. Firma JWT (RS256, private key) │
+        ▼                                    │
+Retorna JWT ────────────────────────────────►│
+                                             │
+        │  4. SDK dispara challenge          │
+        ▼                                    ▼
+MIAW SDK (iOS/Android/Web)            Cert & Key Mgmt
+setIdentityToken / delegate               (public key)
+        │                                    │
+        │  5. JWT viaja al runtime           │
+        ▼                                    │
+MIAW Runtime en Salesforce  ◄────────────────┘
+        │  6. Valida firma con public key
+        │  7. Resuelve sub → Contact/PersonAccount
+        ▼
+MessagingSession vinculada al Contact
+        │
+        ▼
+Agentforce Service Agent
+"Hola Jonathan, ¿en qué te ayudo?"`,
+          legend: [
+            {
+              label: "Token Minter",
+              description:
+                "Endpoint interno del customer que emite JWTs firmados. Autorizado por la sesión que la app ya tiene. La private key nunca sale de este componente.",
+            },
+            {
+              label: "Cert & Key Mgmt",
+              description:
+                "Setup > Security > Certificate and Key Management (o directamente en el Auth Method). Almacena la public key que Salesforce usa para validar el JWT.",
+            },
+            {
+              label: "MIAW Runtime",
+              description:
+                "El servicio de Salesforce que recibe el JWT, valida firma/expiración, resuelve el subject y liga la MessagingSession al registro correspondiente.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "jwt-structure",
+      eyebrow: "El JWT",
+      title: "Estructura del token que firma el customer",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Formato estándar JWT (header.payload.signature). El header declara el algoritmo (RS256/RS512) y el key id que apunta a la public key registrada en Salesforce. El payload transporta los claims. La firma es RSASSA con la private key.",
+        },
+        {
+          type: "table",
+          headers: ["Claim", "Requerido", "Contenido"],
+          rows: [
+            ["alg (header)", "sí", "RS256 o RS512. HS256/HMAC NO está soportado."],
+            ["kid (header)", "recomendado", "Identifier de la key en Salesforce — necesario si registrás múltiples public keys por rotación."],
+            ["iss", "sí", "Identificador del emisor. Debe coincidir con el issuer configurado en el Auth Method."],
+            ["sub", "sí", "El identificador del usuario. Salesforce lo resuelve contra el campo configurado (típ. Contact.External_Id__c, PersonAccount.Email, User.Username)."],
+            ["aud", "sí", "Audience. Debe coincidir con el aud configurado en el Auth Method (típ. la URL del org o un valor lógico definido en config)."],
+            ["iat", "sí", "Issued-at, epoch seconds. Debe estar en el pasado próximo."],
+            ["exp", "sí", "Expiration, epoch seconds. TTL corto — 5 a 15 minutos es lo típico; el máximo lo configurás en Messaging Settings > 'Authorization Token Expiration Time for Verified Users' (default 60 min)."],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Verificar en tu Setup",
+          text: "Las claim names y el mapeo de subject dependen de la versión del Auth Method y de cómo lo configures. Lo listado arriba es el patrón estándar JWT; abrí Setup > Messaging Settings > tu Auth Method para confirmar los nombres exactos que espera tu deployment antes de escribir el minter del backend.",
+        },
+      ],
+    },
+    {
+      id: "sdk-integration",
+      eyebrow: "SDK móvil y web",
+      title: "Cómo entregar el JWT desde cada plataforma",
+      peek: "iOS, Android y Web tienen tres APIs distintas pero el mismo modelo mental: MIAW te pide el token, tu app lo entrega.",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Los tres SDKs implementan el mismo patrón: exponen un hook al que MIAW llama cuando necesita un token (al abrir la conversación y cuando el token está por expirar). El customer implementa ese hook, hace la llamada a su backend, y devuelve el JWT.",
+        },
+        {
+          type: "concept",
+          title: "Web SDK — embeddedservice_bootstrap",
+          peek: "Método principal setIdentityToken. Evento onEmbeddedMessagingIdentityTokenExpired con ventana de 30 segundos.",
+          blocks: [
+            {
+              type: "table",
+              headers: ["Método / Evento", "Uso"],
+              rows: [
+                [
+                  "embeddedservice_bootstrap.userVerificationAPI.setIdentityToken({identityTokenType: 'JWT', identityToken: jwt})",
+                  "Llamar después de que dispare onEmbeddedMessagingReady. Registra el JWT para la sesión actual.",
+                ],
+                [
+                  "onEmbeddedMessagingIdentityTokenExpired",
+                  "Evento que dispara MIAW cuando el token está por expirar. Ventana de 30 segundos para llamar de nuevo a setIdentityToken con un token fresco.",
+                ],
+                [
+                  "embeddedservice_bootstrap.userVerificationAPI.clearSession(true)",
+                  "Logout. El parámetro true termina la auth session, no solo limpia el estado local del SDK.",
+                ],
+              ],
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "iOS SDK ≥ 1.2.0 — MessagingInApp",
+          peek: "Protocolo UserVerificationDelegate. La app conforma al protocolo y responde al challenge con el JWT.",
+          blocks: [
+            {
+              type: "table",
+              headers: ["Símbolo", "Uso"],
+              rows: [
+                [
+                  "Configuration(url:, userVerificationRequired: true)",
+                  "Init del SDK exigiendo verificación. El SDK no permite arrancar una conversación sin JWT.",
+                ],
+                [
+                  "func userVerificationChallengeWithReason(_ reason:, completionHandler:)",
+                  "Método del protocolo UserVerificationDelegate. El SDK lo invoca cuando necesita el token. La app pide el JWT a su backend y lo devuelve por el completionHandler.",
+                ],
+                [
+                  "completionHandler(UserVerification(customerIdentityToken: jwt, type: .SMIAuthorizationTypeJWT))",
+                  "Retorno del challenge. El type explícito es requerido — es una enum tipo JWT.",
+                ],
+                [
+                  "coreClient.userVerificationDelegate = self",
+                  "Wire up del delegate al core client durante la inicialización del SDK.",
+                ],
+                [
+                  "CoreClient.revokeTokenAndDeregisterDevice",
+                  "Logout desde iOS. Revoca el token en Salesforce y deregistra el device de push notifications.",
+                ],
+              ],
+            },
+          ],
+        },
+        {
+          type: "concept",
+          title: "Android SDK ≥ 1.2.0 — messaging-in-app",
+          peek: "Interface UserVerificationProvider. Suspend function que devuelve el JWT dentro de una coroutine.",
+          blocks: [
+            {
+              type: "table",
+              headers: ["Símbolo", "Uso"],
+              rows: [
+                [
+                  "CoreConfiguration.fromFile(context, 'config.json', true)",
+                  "El tercer parámetro (isUserVerificationRequired) marca el SDK como verified-only.",
+                ],
+                [
+                  "suspend fun userVerificationChallenge(reason: ChallengeReason): UserVerificationToken",
+                  "Método del interface UserVerificationProvider. Se implementa como suspend function; dentro se hace la llamada al backend con Retrofit/OkHttp para obtener el JWT.",
+                ],
+                [
+                  "return UserVerificationToken(UserVerificationType.JWT, jwt)",
+                  "Retorno del challenge. Explicit type JWT.",
+                ],
+                [
+                  "coreClient.registerUserVerificationProvider(provider)",
+                  "Wire up del provider al core client durante la inicialización del SDK.",
+                ],
+                [
+                  "CoreClient.revokeToken",
+                  "Logout desde Android.",
+                ],
+              ],
+            },
+          ],
+        },
+        {
+          type: "callout",
+          tone: "critical",
+          title: "Nombre viejo que ya NO funciona",
+          text: "Si buscas 'setAuthorizationToken' en docs o Stack Overflow vas a encontrar posts de 2023/2024 que hablan del método viejo del Web SDK. El nombre actual es setIdentityToken. Si el customer tiene código legacy con el nombre viejo, hay que migrarlo — no basta con actualizar el SDK.",
+        },
+      ],
+    },
+    {
+      id: "salesforce-setup",
+      eyebrow: "Setup en Salesforce",
+      title: "Pasos para levantar el Auth Method y ligar al deployment",
+      peek: "El path exacto de Setup puede haber cambiado con releases recientes. Los pasos que siguen son la secuencia lógica — validá cada uno en el Setup del org antes de dar valores por confirmados.",
+      blocks: [
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Sobre los paths exactos de Setup",
+          text: "Las pantallas específicas de Setup para User Verification (Auth Methods) están en help.salesforce.com y se renderizan con JS — no las pude validar programáticamente. Los pasos siguen el patrón conocido de otros features de MIAW, pero validá los nombres exactos en tu Setup al levantar el ambiente. Los references al final apuntan a la doc oficial.",
+        },
+        {
+          type: "setupStep",
+          number: 1,
+          title: "Subir la public key del customer a Salesforce",
+          instructions:
+            "Setup > Security > Certificate and Key Management. Import de un certificate self-signed o CA-signed que contenga la public key del par que el customer usará para firmar. Anotar el Unique Name / Label del certificate.",
+        },
+        {
+          type: "setupStep",
+          number: 2,
+          title: "Crear el MIAW deployment (o abrir uno existente)",
+          instructions:
+            "Setup > Feature Settings > Service > Messaging > Messaging Settings > New Custom Client (o el existente que atenderá usuarios verificados). Elegir Deployment Type según la plataforma (Custom Client for In-App / Custom Client for Web).",
+        },
+        {
+          type: "setupStep",
+          number: 3,
+          title: "Crear el Auth Method (User Verification)",
+          instructions:
+            "Dentro del deployment, ir a la sección de Authentication Methods (nombre exacto: 'User Verification' o 'Authentication Methods' según release). New. Configurar: Identity Token Type = JWT, Algorithm = RS256 o RS512, Public Key = el certificate del paso 1, Issuer (iss) = valor acordado con el customer, Audience (aud) = valor acordado, Subject Field Mapping = objeto y campo contra el que se resuelve el sub del JWT (típ. Contact + External_Id__c).",
+        },
+        {
+          type: "setupStep",
+          number: 4,
+          title: "Asociar el Auth Method al deployment",
+          instructions:
+            "En el deployment, marcarlo como requiring User Verification y elegir el Auth Method recién creado como el método aceptado.",
+        },
+        {
+          type: "setupStep",
+          number: 5,
+          title: "Ajustar el token expiration window",
+          instructions:
+            "Setup > Messaging Settings > 'Authorization Token Expiration Time for Verified Users'. Default 60 min. Bajarlo a un valor razonable para tu app (5–15 min es lo típico). El TTL del JWT del customer debe ser menor o igual a este valor.",
+        },
+        {
+          type: "setupStep",
+          number: 6,
+          title: "Ligar el deployment al Messaging Channel + Omni-Channel Flow",
+          instructions:
+            "El MessagingChannel es lo que conecta el deployment al Agentforce Service Agent vía un Omni-Channel Flow (Route Work → Agent). Si ya tenías un deployment con Agentforce funcionando sin verificación, esta parte no cambia — solo se agrega el Auth Method arriba.",
+        },
+        {
+          type: "setupStep",
+          number: 7,
+          title: "Preparar el minter en el backend del customer",
+          instructions:
+            "Endpoint interno protegido por la sesión de la app. Cada request devuelve un JWT firmado con la private key (RS256/RS512), con sub = customer identifier, iss/aud consistentes con el Auth Method, y exp en 5–15 min.",
+        },
+        {
+          type: "setupStep",
+          number: 8,
+          title: "Integrar el SDK móvil / web",
+          instructions:
+            "En iOS, conformar al UserVerificationDelegate. En Android, registrar el UserVerificationProvider. En Web, escuchar onEmbeddedMessagingReady y llamar setIdentityToken. Ver la sección 'SDK móvil y web' para los métodos exactos por plataforma.",
+        },
+        {
+          type: "setupStep",
+          number: 9,
+          title: "Probar con un Contact real",
+          instructions:
+            "Antes de habilitar auto-create (si aplica), probá con un JWT cuyo sub matchee con un Contact que ya existe en Salesforce. Confirmá que la MessagingSession queda vinculada a ese Contact y que el agente puede leerlo desde el topic.",
+        },
+      ],
+    },
+    {
+      id: "agent-context",
+      eyebrow: "Del lado del Agent",
+      title: "Cómo el .agent lee la identidad del usuario",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Una vez que User Verification vincula la MessagingSession al Contact/PersonAccount, ese contexto queda disponible para el Agentforce Service Agent asociado al deployment. El path exacto de la variable de contexto depende de la versión del framework y del .agent que tengas — no lo hardcodees desde memoria, abrilo en Studio.",
+        },
+        {
+          type: "list",
+          items: [
+            "En el .agent authoring bundle, revisar las Context Variables definidas: típicamente hay una que refleja el MessagingEndUser resuelto y otra que expone el Contact/PersonAccount asociado.",
+            "En las instructions del topic, referenciar esas variables directamente para el saludo — por ejemplo 'Saluda al usuario por su nombre usando {!$Context.Contact.FirstName}'. Confirmar la sintaxis exacta en tu bundle.",
+            "En las invocable actions y prompt templates que el agente ejecute, pasar la referencia al Contact como input variable. Esto evita re-lookups y garantiza que todas las acciones operan sobre el mismo registro identificado.",
+            "Si vas a hacer decisiones sensibles (mostrar saldo, cambiar datos), no confíes solo en el saludo — hacé re-check del Contact.Id en cada acción invocable con un SOQL simple. La sesión está autenticada, pero el diseño defensive-in-depth vale.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Prompt Template con EndUser input",
+          text: "Un patrón práctico es tener un Prompt Template auxiliar con un EndUser (Contact/PersonAccount) input variable. Todas las acciones del agente que necesiten datos del usuario invocan ese template pasándole el ID resuelto, y el template resuelve nombre, saldo, plan, etc. desde SOQL. Centralizás el acceso a datos del usuario en un solo lugar.",
+        },
+      ],
+    },
+    {
+      id: "security",
+      eyebrow: "Seguridad",
+      title: "Qué protege este diseño y qué NO protege",
+      blocks: [
+        {
+          type: "table",
+          headers: ["Amenaza", "Cubierto por User Verification", "Nota"],
+          rows: [
+            ["Suplantación (fabricar sub de otro usuario)", "Sí", "El JWT firmado con la private key es infalsificable sin acceder al backend del customer."],
+            ["Man-in-the-middle en tránsito", "Sí (asumiendo TLS)", "Todo va sobre HTTPS. El JWT viaja en el channel del SDK, cifrado en transporte."],
+            ["Replay de un JWT viejo", "Sí (por exp)", "El claim exp corto (5–15 min) limita la ventana de replay. Un TTL más largo relaja esta garantía."],
+            ["Robo de la private key del customer", "NO", "Si la private key se filtra, un atacante puede firmar JWTs a nombre de cualquier usuario hasta que rotes el par de llaves. Manejo con KMS/HSM es lo esperado."],
+            ["Cliente móvil comprometido (root/jailbreak)", "Parcial", "El SDK confía en el backend del customer. Si el device está rooteado, el atacante puede leer memoria y potencialmente el JWT vigente. TTL corto mitiga."],
+            ["Sesión anónima paralela", "Diseñado XOR", "Deployment verified NO acepta usuarios anónimos. Si necesitas ambos, dos deployments separados."],
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "La private key es el activo crítico",
+          text: "Todo el modelo de confianza descansa en que la private key nunca sale del backend del customer. Almacenarla en un KMS/HSM, rotarla en cadencia (típicamente anual o al cambiar personal), y auditar quién puede acceder al servicio de firma son prácticas no-negociables. Si la private key se compromete, hay que rotarla en Salesforce (subir el nuevo public key + retirar el viejo) y en el minter del customer.",
+        },
+      ],
+    },
+    {
+      id: "tradeoffs",
+      eyebrow: "Trade-offs",
+      title: "Cuándo usar User Verification, y cuándo no vale la pena",
+      blocks: [
+        {
+          type: "tradeoffs",
+          pros: [
+            "Identidad verificable server-side — es la única forma legítima de hacer auth passthrough en MIAW.",
+            "Vinculación automática al Contact/PersonAccount — nada de resolver manualmente contra el CRM.",
+            "El agente arranca con contexto completo desde el turno 0 — mejor experiencia y menos turnos hasta la resolución.",
+            "Feature 100% estándar de Salesforce — sin desarrollo custom del lado del org.",
+            "Compatible con reports y auditoría — todas las MessagingSession quedan trazables al Contact real.",
+          ],
+          cons: [
+            "Requiere infraestructura de firma en el customer — endpoint minter, manejo seguro de private key, rotación planificada.",
+            "Verified XOR unverified — si el negocio tiene ambos casos, necesitas dos deployments.",
+            "TTL corto obliga a implementar el refresh handler en el SDK — no es solo 'setear una vez y olvidar'.",
+            "Debug más complejo cuando algo falla — errores como 'invalid subject' o 'signature verification failed' requieren correlacionar backend del customer + Auth Method config + payload del JWT.",
+            "Solo RS256/RS512 — si el customer solo tiene infraestructura HMAC, hay que provisionar par de llaves asimétricas nueva.",
+          ],
+          whenToUse: [
+            "La app móvil tiene login propio y la conversación con el agente debe operar como usuario identificado.",
+            "El caso de uso incluye acciones sensibles (consultar saldo, cambiar datos, tramitar solicitudes).",
+            "El customer ya tiene o puede montar KMS/HSM y un identity provider maduro.",
+          ],
+          whenNotToUse: [
+            "El chat es puramente pre-sales / anónimo — no hay identidad que traspasar.",
+            "El customer no puede montar el endpoint minter — sin backend firmante, no hay verificación.",
+            "El caso de uso es un enriquecimiento no-sensible — pre-chat hidden field alcanza y es más simple.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "troubleshooting",
+      eyebrow: "Troubleshooting",
+      title: "Fallos comunes al levantar la integración",
+      blocks: [
+        {
+          type: "troubleshoot",
+          rows: [
+            {
+              issue: "La conversación arranca pero el agente sigue anónimo",
+              solution:
+                "Confirmar que el deployment tiene el Auth Method asociado y marcado como requerido. Sin eso, MIAW acepta la conversación pero la trata como anónima. Verificar también que el SDK está llamando setIdentityToken / respondiendo al challenge — un console.log del token entregado ayuda.",
+            },
+            {
+              issue: "Error 'invalid signature' o 'signature verification failed'",
+              solution:
+                "El JWT se firma con private key que no matchea la public key del Auth Method. Confirmar que subiste el certificate correcto y que el alg del JWT (RS256/RS512) coincide con el configurado. Un cambio de kid sin registrar la nueva key es la causa típica.",
+            },
+            {
+              issue: "Error 'invalid subject' o 'user not found'",
+              solution:
+                "El sub del JWT no matchea el campo configurado en el Auth Method. Si el subject field es Contact.External_Id__c, el sub debe coincidir con un Contact con ese valor. Casos frecuentes: campos con distinto case-sensitivity, valores con whitespace, o el Contact simplemente no existe (habilitar auto-create si aplica).",
+            },
+            {
+              issue: "Error 'token expired' al primer mensaje",
+              solution:
+                "Diferencia de reloj entre backend del customer y Salesforce. Confirmar que el minter emite iat en tiempo actual y exp con TTL positivo. Un skew mayor a ~30 segundos suele romper la validación.",
+            },
+            {
+              issue: "Web SDK: la sesión termina después de un turno largo",
+              solution:
+                "El JWT expiró y el listener onEmbeddedMessagingIdentityTokenExpired no respondió en 30 segundos. Confirmar que el handler está registrado antes de setIdentityToken y que el backend del customer puede emitir un token nuevo en menos de esa ventana.",
+            },
+            {
+              issue: "iOS: el delegate no se dispara",
+              solution:
+                "coreClient.userVerificationDelegate no está seteado, o el Configuration se inicializa sin userVerificationRequired: true. Confirmar el wiring en el init del SDK y que el delegate sobrevive al lifecycle (retain).",
+            },
+            {
+              issue: "Android: 'no verification provider registered'",
+              solution:
+                "El CoreConfiguration está marcado como isUserVerificationRequired=true pero coreClient.registerUserVerificationProvider(...) no se llamó antes de arrancar la conversación. Orden de inicialización importa.",
+            },
+            {
+              issue: "El agente no ve al Contact aunque la MessagingSession está linkeada",
+              solution:
+                "Confirmar en el .agent que el topic tiene la Context Variable correcta (visibility External si se referencia desde una GenAiFunction). Si el bundle es viejo, puede necesitar regenerarse.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "sources",
+      eyebrow: "Referencias",
+      title: "Documentación oficial verificada",
+      blocks: [
+        {
+          type: "sources",
+          items: [
+            {
+              label: "Messaging for Web SDK — userVerificationAPI reference",
+              url: "https://developer.salesforce.com/docs/service/messaging-web/references/m4w-reference/userVerificationAPI.html",
+            },
+            {
+              label: "Messaging for Web SDK — API overview",
+              url: "https://developer.salesforce.com/docs/service/messaging-web/guide/api-overview.html",
+            },
+            {
+              label: "Messaging for Web SDK — User Verification guide",
+              url: "https://developer.salesforce.com/docs/service/messaging-web/guide/user-verification.html",
+            },
+            {
+              label: "Messaging for In-App iOS — User Verification",
+              url: "https://developer.salesforce.com/docs/service/messaging-in-app/guide/ios-user-verification.html",
+            },
+            {
+              label: "Messaging for In-App Android — User Verification",
+              url: "https://developer.salesforce.com/docs/service/messaging-in-app/guide/android-user-verification.html",
+            },
+            {
+              label: "Salesforce Help — User Verification (buscar por término actual)",
+              url: "https://help.salesforce.com/s/articleView?id=service.user_verification.htm",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 export const buildRecipes: Recipe[] = [
   whatsappAttachmentsCustom,
   whatsappV2Handoff,
   whatsappLightweightInterception,
   agentforceVoiceHandoffHumano,
   headlessFeedbackManagement,
+  agentforceInAppUserVerification,
 ];
 
 export function getRecipe(slug: string): Recipe | undefined {
