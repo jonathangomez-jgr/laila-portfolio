@@ -4491,7 +4491,6 @@ const agentforceInAppUserVerification: Recipe = {
     "iOS SDK",
     "Android SDK",
     "Auth passthrough",
-    "Pre-chat",
   ],
   audiences: ["admin", "developer", "architect"],
   author: "Jonathan Gomez",
@@ -4504,7 +4503,6 @@ const agentforceInAppUserVerification: Recipe = {
     "El customer firma un JWT (RS256 o RS512, asimétrico — HMAC no está soportado) en su backend con su private key; la public key vive en Salesforce dentro del Auth Method del deployment.",
     "El SDK móvil (iOS/Android) entrega el JWT vía un delegate/provider al que MIAW le pide el token cuando lo necesita. El SDK web usa 'setIdentityToken' (no 'setAuthorizationToken' — ese es el nombre viejo).",
     "MIAW valida la firma, resuelve el subject contra un Contact/PersonAccount/User de Salesforce y liga la Messaging Session a ese registro. Agentforce recibe el contexto y puede saludar por nombre desde el turno 0.",
-    "El truco del pre-chat hidden field NO es una autenticación — es data set por el cliente, no verificable. Sirve para enriquecer contexto pero jamás para identificar. Se documenta como anti-patrón.",
     "Regla fuerte de MIAW: un deployment atiende usuarios verified O unverified; no se mezclan. Decidí eso desde el diseño.",
   ],
   sections: [
@@ -4528,66 +4526,6 @@ const agentforceInAppUserVerification: Recipe = {
           tone: "note",
           title: "Rename importante",
           text: "Hasta 2024/2025 esta feature se llamaba 'Authenticated Conversations'. En la doc actual el término canónico es 'User Verification'. Si buscas por el nombre viejo vas a caer en material desactualizado y en el método SDK viejo 'setAuthorizationToken', que ya no es el que se usa.",
-        },
-      ],
-    },
-    {
-      id: "options",
-      eyebrow: "Los tres caminos posibles",
-      title: "Sin auth, pre-chat hidden field, o User Verification",
-      defaultOpen: true,
-      blocks: [
-        {
-          type: "paragraph",
-          text: "Antes de entrar al detalle, aclaramos las tres opciones que tiene un customer que quiere resolver esto. Solo una es una autenticación real.",
-        },
-        {
-          type: "comparison",
-          standardLabel: "Pre-chat hidden field (anti-patrón)",
-          customLabel: "User Verification con JWT (correcto)",
-          rows: [
-            {
-              dimension: "Qué se envía",
-              standard:
-                "Un valor plano (por ejemplo customerId=12345) inyectado como hidden field del pre-chat form. Data cualquiera, sin firma.",
-              custom:
-                "Un JWT firmado con la private key del customer. Salesforce valida con la public key. El contenido es no falsificable.",
-            },
-            {
-              dimension: "Verificación server-side",
-              standard:
-                "Ninguna. Salesforce confía en el valor que llega. Un cliente malicioso puede setear el customerId de otro usuario y suplantarlo.",
-              custom:
-                "Salesforce recalcula la firma del JWT con la public key del Auth Method. Si la firma no valida, la sesión se rechaza.",
-            },
-            {
-              dimension: "Vinculación al CRM",
-              standard:
-                "No vincula. El campo llega como texto libre a la Messaging Session; hay que resolver manualmente contra Contact/Account.",
-              custom:
-                "El subject del JWT se resuelve contra un campo (typ. External Id) de Contact / PersonAccount / User. La Messaging Session queda linkeada a ese record automáticamente.",
-            },
-            {
-              dimension: "Contexto que ve Agentforce",
-              standard:
-                "Un valor de texto sin identidad. El agente no puede confiar en él para decisiones sensibles (mostrar datos, ejecutar acciones a nombre del usuario).",
-              custom:
-                "El agente ve el Contact/Person Account real. Puede usar sus datos en el saludo, en las variables del topic, y en las acciones que ejecute.",
-            },
-            {
-              dimension: "Cuándo usarlo",
-              standard:
-                "Solo como enriquecimiento de contexto no sensible — por ejemplo, pre-poblar la pantalla que ve el asesor humano con el país de origen del cliente.",
-              custom:
-                "Cualquier caso donde la identidad del usuario debe ser fiable — que es prácticamente el 100% de los casos de negocio.",
-            },
-          ],
-        },
-        {
-          type: "callout",
-          tone: "critical",
-          title: "El pre-chat hidden field NO es una autenticación",
-          text: "Un campo 'hidden' del pre-chat form solo está oculto de la UI. Un atacante puede modificarlo con DevTools en web, o interceptar la petición con un proxy en móvil. Es data set por el cliente, no verificable por Salesforce. Si te suena tentador porque es más simple, es porque estás resolviendo un problema distinto — enriquecimiento — no autenticación.",
         },
       ],
     },
@@ -5058,7 +4996,7 @@ Agentforce Service Agent
           whenNotToUse: [
             "El chat es puramente pre-sales / anónimo — no hay identidad que traspasar.",
             "El customer no puede montar el endpoint minter — sin backend firmante, no hay verificación.",
-            "El caso de uso es un enriquecimiento no-sensible — pre-chat hidden field alcanza y es más simple.",
+            "El caso de uso no requiere identidad verificada — la conversación no ejecuta acciones sensibles ni consulta datos personales.",
           ],
         },
       ],
