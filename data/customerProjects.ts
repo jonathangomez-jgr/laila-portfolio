@@ -4876,6 +4876,14 @@ export const customerProjects: CustomerProject[] = [
     logo: "/Customers/Paquetexpress/paquetexpress-logo.png",
     passcode: "paquete2026",
     hidden: false,
+    embeddedMessaging: {
+      orgId: "00Ddh000001pK4B",
+      deploymentName: "fde_Web_messaging",
+      siteUrl:
+        "https://paquetexpress--qa2020.sandbox.my.site.com/ESWfdeWebmessaging1787853743276",
+      scrt2URL: "https://paquetexpress--qa2020.sandbox.my.salesforce-scrt.com",
+      language: "es_MX",
+    },
     tags: [
       "Agentforce",
       "Service Cloud",
