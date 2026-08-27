@@ -8,6 +8,7 @@ import ContextFindings from "./ContextFindings";
 import CustomerProfile from "./CustomerProfile";
 import ArchDiagram from "./ArchDiagram";
 import ArgosArchDiagram from "./ArgosArchDiagram";
+import PaquetexpressAgentArchitecture from "./PaquetexpressAgentArchitecture";
 import BefraArchitecture from "./BefraArchitecture";
 import ArgosKpiSummaryCard from "./ArgosKpiSummaryCard";
 import AgentforceLandscape from "./AgentforceLandscape";
@@ -409,6 +410,10 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
 
               {activeTab.argosArch && (
                 <ArgosArchDiagram />
+              )}
+
+              {activeTab.paquetexpressAgentArch && (
+                <PaquetexpressAgentArchitecture />
               )}
 
               {activeTab.agentforceLandscapeData && (

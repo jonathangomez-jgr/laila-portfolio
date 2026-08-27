@@ -7336,4 +7336,971 @@ GET    /api/surveys/{surveyDeveloperName}/state
   ],
 };
 
-export const insights: Insight[] = [multiAgent, customerFeedback, headlessFeedback, digitalEngagement, retailAiMexico, retailAiColombia, retailAiCentroamerica, headlessCioMexico];
+const agentforceBuilder: Insight = {
+  slug: "nuevo-agentforce-builder-y-enhanced-messaging-web-2",
+  topic: "Nuevo Agentforce Builder",
+  audience: ["executive", "architect", "deep"],
+  industry: ["Cross-industry"],
+  products: [
+    "Agentforce",
+    "Agent Script",
+    "Agentforce DX",
+    "Enhanced Web Chat",
+    "AiAuthoringBundle",
+  ],
+  region: ["Global"],
+  heroEyebrow: "Postura técnica · Nueva generación de Agentforce",
+  title:
+    "El nuevo Agentforce Builder: de configurar un bot a escribir un agente",
+  subtitle:
+    "Un recorrido en capas — desde la analogía más terrenal hasta el YAML del último `.agent` — que explica por qué Salesforce publicó un builder nuevo, qué cambia arquitectónicamente, cómo se construye un agente hoy con Agent Script + Agentforce DX, y cómo Enhanced Web Chat (ECv2) completa la experiencia del cliente. Escrito para que cualquier lector — sin importar cuánto sepa hoy — cierre el documento entendiendo el stack completo.",
+  summary:
+    "Salesforce reemplazó su modelo de configuración imperativa multi-metadata (Bot + BotVersion + GenAiPlanner + GenAiPlugin + GenAiFunction) por un único artefacto declarativo: el Agent Script, versionable como código y empaquetado dentro de un metadata type nuevo llamado AiAuthoringBundle. El builder que edita esos scripts se llama Agentforce Builder — con vista Canvas visual y vista Script para code-first. El toolkit pro-code se llama Agentforce DX (Salesforce CLI + VS Code Extension) y trae comandos oficiales para generar, previsualizar, testear, publicar y observar agentes. En paralelo, Enhanced Web Chat (ECv2) reemplaza al chat embebido clásico con una superficie de APIs modernas y flujo bot→humano manejado de fábrica. Este documento recorre el cambio desde la explicación más terrenal (analogía sin tecnicismos) hasta el detalle YAML del script, con una decisión honesta sobre cuándo migrar y una hoja de ruta accionable.",
+  author: "Jonathan Gomez",
+  authorRole: "Arquitecto técnico · IA & Agentforce",
+  publishedAt: "2026-08-27",
+  updatedAt: "2026-08-27",
+  readingMinutes: 32,
+  tags: [
+    "Agentforce",
+    "Agent Script",
+    "Agentforce DX",
+    "AiAuthoringBundle",
+    "Subagents",
+    "MCP",
+    "Enhanced Web Chat",
+    "ECv2",
+    "Salesforce CLI",
+    "DevOps",
+  ],
+  coverImage: {
+    src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
+    alt: "Plataforma agéntica de Salesforce sobre Data 360 y Customer 360 — base sobre la que corre el nuevo Agentforce Builder.",
+    source: {
+      label: "Salesforce · Agentforce Platform",
+      url: "https://www.salesforce.com/agentforce/",
+    },
+  },
+  sections: [
+    // ── 0 · Statement ──────────────────────────────────────────────────
+    {
+      id: "statement",
+      eyebrow: "Statement técnico",
+      title: "La tesis en una página",
+      blocks: [
+        {
+          type: "statement",
+          text: "Salesforce dejó de tratar a un agente como una configuración de varias metadatas sueltas y empezó a tratarlo como un artefacto de software. El nuevo Agentforce Builder edita un archivo declarativo llamado Agent Script, empaquetado dentro del metadata type AiAuthoringBundle, con una CLI oficial (Agentforce DX) para generar, previsualizar, testear, publicar y observar. En abril de 2026 lo que antes se llamaba `Topic` pasó a llamarse `Subagent` — mismo comportamiento, nombre alineado al modelo multi-agente que ahora sí es de primera clase.",
+        },
+        {
+          type: "paragraph",
+          text: "Este documento está pensado en capas. Si es la primera vez que oye la palabra Agentforce, arranque por la Parte 0 con una analogía sin tecnicismos. Si ya construyó un agente con el builder anterior, salte a la Parte 3 (Anatomía del stack nuevo) y a la Parte 5 (Su primer Agent Script). Si viene a decidir migración, mire la Parte 8 (Cuándo migrar) y la Parte 10 (Cómo empezar).",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Cómo leer este documento",
+          text: "5 minutos: statement + Parte 0 + Parte 8 (decisión). 15 minutos: agregue Parte 1, 2 y 5. 30 minutos: recórralo entero — incluye código, comandos CLI oficiales y decisión sobre Enhanced Web Chat.",
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Alcance de verificación",
+          text: "Cada afirmación técnica está anclada a documentación oficial de Salesforce vigente al momento de publicación. Donde la fuente oficial no confirma explícitamente algo (fechas de retirement del stack anterior, GA date del builder, motor de razonamiento interno), lo marco como `requiere verificación` en lugar de afirmarlo. Las fuentes completas están al final.",
+        },
+      ],
+    },
+
+    // ── 1 · Explicación terrenal (Parte 0) ────────────────────────────
+    {
+      id: "explicacion-terrenal",
+      eyebrow: "Parte 0 · Para todos",
+      title: "Sin tecnicismos: de armar una recepción a redactar un guion",
+      blocks: [
+        {
+          type: "statement",
+          text: "Antes: usted armaba a un asistente virtual comprando piezas sueltas — recepción, guion, catálogo de acciones, planificador — y ensamblándolas a mano. Ahora: usted escribe un guion en un cuaderno, y Salesforce se encarga de que ese guion se convierta en un asistente completo.",
+        },
+        {
+          type: "paragraph",
+          text: "Piense en un asistente virtual como si contratara personal para atender un mostrador de servicio al cliente. En el modelo anterior, usted contrataba por partes: primero el recepcionista (el bot), después le enseñaba en qué temas puede hablar (los tópicos), después le explicaba qué acciones puede ejecutar (las funciones), y por separado le entregaba un cerebro de planificación que decidía qué hacer con cada consulta. Cuatro contratos, cuatro archivos, cuatro conversaciones distintas — y todos tenían que estar sincronizados o el asistente se rompía.",
+        },
+        {
+          type: "paragraph",
+          text: "En el modelo nuevo, usted no contrata por partes. Escribe un solo guion — como el guion de una obra de teatro — que dice: así se llama el personaje, así saluda, así se presenta, esto es lo que sabe, estas son las escenas en las que participa, esta es su lista de acciones, este es el orden y estas son las variables que recuerda. Un solo cuaderno. Un solo idioma. Y si mañana quiere cambiar cómo saluda, edita una línea; no tiene que abrir cuatro archivos distintos.",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Antes (Agentforce v1)",
+              title: "Configurar por piezas sueltas",
+              description:
+                "Se creaba un Bot, se le colgaba una versión de bot, se le anexaba un planner (el que decide qué hacer), se le enganchaban tópicos y a cada tópico funciones. Cada pieza vivía en su propia metadata XML. Editar un flujo de conversación requería tocar 3 o 4 archivos y desplegarlos coordinados. Un cambio pequeño era una mini-operación.",
+              tone: "neutral",
+            },
+            {
+              eyebrow: "Ahora (Agentforce Builder + Agent Script)",
+              title: "Escribir un guion versionable",
+              description:
+                "Un archivo `.agent` describe todo — quién es el agente, con qué idiomas, qué variables recuerda, qué sub-agentes tiene, qué acciones puede llamar y cómo razona. Se versiona como código, se testea con comandos oficiales, se despliega con un solo `sf agent publish` y se observa en producción con un panel dedicado. Un cambio pequeño es una línea en un archivo de texto.",
+              tone: "primary",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "¿Y qué gana el negocio con esto?",
+        },
+        {
+          type: "list",
+          items: [
+            "Tiempo — cambiar cómo se comporta un agente pasa de horas de configuración a minutos de edición.",
+            "Confianza — se puede probar el agente antes de publicarlo, con casos de prueba que se corren en batch y en CI, no solo en la vista de Preview.",
+            "Trazabilidad — todo el comportamiento vive en un archivo versionado en Git, con historial de cambios y revisión por pares.",
+            "Escalabilidad — modelar un negocio grande con varios sub-agentes especializados (uno para pedidos, otro para reclamos, otro para cotizaciones) deja de ser una acrobacia técnica y pasa a ser el patrón oficial.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Regla de dedo para el lector no técnico",
+          text: "Antes: Salesforce le daba una cocina con muchos electrodomésticos y usted armaba la receta apretando botones. Ahora: le da un cuaderno de recetas, usted escribe la receta y la cocina la ejecuta. La comida es la misma; la forma de escribirla cambió — y con eso, cambia la velocidad, la calidad y la trazabilidad de cada plato.",
+        },
+      ],
+    },
+
+    // ── 2 · Por qué existe el builder nuevo (ejecutivo) ────────────────
+    {
+      id: "por-que-nuevo-builder",
+      eyebrow: "Parte 1 · Ejecutivo",
+      title: "Por qué Salesforce lanzó un builder nuevo",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "La motivación pública no está escrita como un manifiesto — hay que leerla entre líneas en el propio contenido oficial. El blog `Master the Agentic Development Lifecycle for Agentforce` (junio 2026) describe al AiAuthoringBundle como *the deployable package containing the agent's complete definition as local metadata files* y al Agent Script como *the declarative format that specifies your agent's sub-agents, routing logic, instructions, and action bindings*. Debajo de esas dos oraciones hay una decisión de arquitectura clara: pasar de una configuración imperativa fragmentada a una definición declarativa unificada.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Qué problemas del modelo anterior estaba resolviendo",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Deuda 1 · Configuración dispersa",
+              title: "Un agente vivía en 4-6 metadatas distintas",
+              description:
+                "Bot + BotVersion + GenAiPlanner + N GenAiPlugin + N GenAiFunction. Cambiar el comportamiento requería coordinar cambios entre archivos y sincronizar API names. Los errores más comunes eran de referencia — una función renombrada quedaba huérfana en un plugin.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "Deuda 2 · Difícil de versionar",
+              title: "El diff en Git no reflejaba la intención",
+              description:
+                "Cambiar una instrucción del planner producía un diff en varios XML separados. Revisar un pull request era leer metadata de plataforma, no leer lógica de negocio. La revisión por pares en equipos grandes era lenta y ruidosa.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "Deuda 3 · Testing frágil",
+              title: "Probar era casi siempre manual, en Preview",
+              description:
+                "El flujo típico era abrir el Preview del bot y probar preguntas a mano. Los casos regresivos volaban. Corner cases y batch evals estaban fuera del alcance del builder — había que armarlos por afuera con scripts caseros.",
+              tone: "warn",
+            },
+            {
+              eyebrow: "Deuda 4 · Multi-agente hostil",
+              title: "Coordinar varios agentes no era pattern oficial",
+              description:
+                "Se podía, pero cada equipo lo hacía distinto. No había un lenguaje declarativo para decir router → subagente A → subagente B ni una forma estándar de compartir contexto. La colaboración entre agentes era artesanía de cada implementador.",
+              tone: "warn",
+            },
+          ],
+        },
+        {
+          type: "paragraph",
+          text: "El nuevo Agentforce Builder ataca las cuatro deudas en paralelo. La definición se unifica en un archivo. El diff en Git empieza a leerse como lógica de negocio. El testing es un comando de CLI de primera clase. Y el patrón router + subagentes está documentado como la manera oficial de modelar dominios múltiples.",
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Qué NO cambia con el nuevo builder",
+          text: "La plataforma sigue siendo Salesforce — no es un producto nuevo, es una nueva forma de autoría. El Trust Layer, Data Cloud, las Actions basadas en Apex o Flow, la integración con Service Cloud y Experience Cloud y la superficie de canales (Web Chat, WhatsApp, Voice, Email) siguen funcionando igual. Lo que cambia es el `cómo` se define el agente, no el `sobre qué` corre.",
+        },
+      ],
+    },
+
+    // ── 3 · Anatomía del stack anterior ────────────────────────────────
+    {
+      id: "anatomia-anterior",
+      eyebrow: "Parte 2 · Arquitectura",
+      title: "Anatomía del stack anterior — para entender contra qué se compara",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Antes de meternos al nuevo modelo, revisemos el anterior con el mismo detalle. Sin esa foto no se aprecia el cambio.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Las 5 piezas que componían un agente v1",
+        },
+        {
+          type: "table",
+          headers: ["Metadata type", "Rol", "Ejemplo real (Paquetexpress)"],
+          rows: [
+            [
+              "`Bot` / `BotVersion`",
+              "Contenedor principal + versión activa. Guarda canales, context variables, session timeout, richContentEnabled.",
+              "`Agentforce_Paquete_Express` v12",
+            ],
+            [
+              "`GenAiPlanner`",
+              "Planificador (ReAct). El cerebro que elige qué tópico atender y qué acción invocar.",
+              "`AiCopilot__ReAct`",
+            ],
+            [
+              "`GenAiPlugin`",
+              "Tópico. Agrupa instrucciones + acciones bajo un scope semántico.",
+              "`Orden_Management`, `Quote_Management`, `SvcCopilotTmpl__CaseManagement`",
+            ],
+            [
+              "`GenAiFunction`",
+              "Acción custom. Wrapper sobre Apex, Flow o Prompt Template. Con esquema de input/output.",
+              "`Obtener_estatus_de_la_orden`, `Create_Case_v2`",
+            ],
+            [
+              "`EinsteinServiceAgent`",
+              "Sub-tipo específico para agentes de servicio (Messaging). Amarra el bot al canal.",
+              "Tipo del `Agentforce_Paquete_Express`",
+            ],
+          ],
+        },
+        {
+          type: "paragraph",
+          text: "En un caso real (Paquetexpress, agente `Agentforce_Paquete_Express` v12) esto se traducía en 1 bot, 1 planner, 5 GenAiPlugin, 17 GenAiFunction custom y decenas de instrucciones distribuidas — que en la auditoría dieron 8 funciones huérfanas y contradicciones entre reglas. No es que el modelo anterior estuviera mal; es que su superficie de configuración escalaba mal.",
+        },
+        {
+          type: "ascii",
+          title: "Cómo se veía un agente v1 en el árbol SFDX",
+          content: `force-app/main/default/
+├── bots/
+│   └── Agentforce_Paquete_Express/
+│       ├── Agentforce_Paquete_Express.bot-meta.xml
+│       └── v12.botVersion-meta.xml
+├── genAiPlanners/
+│   └── Agentforce_Paquete_Express.genAiPlanner-meta.xml
+├── genAiPlugins/
+│   ├── Orden_Management.genAiPlugin-meta.xml
+│   ├── Quote_Management.genAiPlugin-meta.xml
+│   ├── General_Information_Management.genAiPlugin-meta.xml
+│   ├── SvcCopilotTmpl__CaseManagement.genAiPlugin-meta.xml
+│   └── SvcCopilotTmpl__Escalation.genAiPlugin-meta.xml
+└── genAiFunctions/
+    ├── Obtener_estatus_de_la_orden/
+    ├── Create_Case_v2/
+    ├── Obtener_C_digo_postal_origen_v_lido/
+    └── ... (14 más)`,
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Punto clave",
+          text: "Editar el comportamiento del agente exigía saber qué metadata era la fuente de verdad para cada regla. Una instrucción de cómo saludar podía vivir en el plugin de Case Management; una regla de identificación en el de Order Management; el timeout de sesión en el bot; el tono en el planner. Ese scattering es exactamente lo que el nuevo builder colapsa en un solo archivo.",
+        },
+      ],
+    },
+
+    // ── 4 · Anatomía del stack nuevo ───────────────────────────────────
+    {
+      id: "anatomia-nueva",
+      eyebrow: "Parte 3 · Arquitectura",
+      title: "Anatomía del stack nuevo — un solo archivo, un solo bundle",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "El agente completo se define en un archivo `.agent` (Agent Script) y se empaqueta en un metadata type llamado `AiAuthoringBundle`. La estructura de directorios en SFDX se simplifica dramáticamente.",
+        },
+        {
+          type: "ascii",
+          title: "Cómo se ve un agente v2 en el árbol SFDX",
+          content: `force-app/main/default/
+└── aiAuthoringBundles/
+    └── Paquete_Express_Agent/
+        ├── Paquete_Express_Agent.agent
+        └── Paquete_Express_Agent.aiAuthoringBundle-meta.xml`,
+        },
+        {
+          type: "paragraph",
+          text: "Un archivo, un bundle. El contenido del `.agent` sigue un esquema declarativo con bloques nombrados. Cada bloque tiene una responsabilidad clara.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Los bloques que componen un `.agent`",
+        },
+        {
+          type: "table",
+          headers: ["Bloque", "Qué declara", "Equivalente en v1"],
+          rows: [
+            [
+              "`system:`",
+              "Instrucciones globales, mensajes de bienvenida y de error del agente.",
+              "Campos dispersos en Bot + planner",
+            ],
+            [
+              "`config:`",
+              "Nombre, descripción, metadatos del agente.",
+              "Campos del `Bot` metadata",
+            ],
+            [
+              "`access:`",
+              "Usuario dueño / default user del agente.",
+              "`botUser` del `Bot`",
+            ],
+            [
+              "`language:`",
+              "Locale por defecto + locales adicionales soportados.",
+              "Instrucciones sueltas del tipo *\"responde en español\"*",
+            ],
+            [
+              "`variables:`",
+              "Variables tipadas mutables con descripción legible por el LLM.",
+              "Context variables mapeadas manualmente en el `Bot`",
+            ],
+            [
+              "`start_agent <name>:`",
+              "El sub-agente raíz — con `description`, `reasoning: instructions:` y sus acciones/sub-agentes.",
+              "El `GenAiPlanner` con sus plugins",
+            ],
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Los 3 tipos de referencia que aparecen en el script",
+        },
+        {
+          type: "list",
+          items: [
+            "`@variables.<name>` — apunta a una variable declarada arriba. Ej. `@variables.isPremiumUser`.",
+            "`@actions.<name>` — apunta a una acción (Apex, Flow, prompt template) empaquetada en el bundle. Ej. `@actions.obtener_estatus_orden`.",
+            "`@subagents.<name>` — apunta a otro sub-agente definido en el mismo script. Ej. `@subagents.quotes_agent`.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Los 2 operadores de flujo",
+        },
+        {
+          type: "list",
+          items: [
+            "`->` (flecha determinística) — enrutamiento por regla, sin llamar al LLM. Ej. *si el canal es WhatsApp, dirige al subagente `mobile_agent`*.",
+            "`|` (pipe LLM) — llama al LLM para razonar la siguiente decisión. Es el modo natural cuando la lógica es flexible o depende de contexto conversacional.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Topics ahora se llaman Subagents",
+          text: "En abril de 2026 Salesforce renombró oficialmente los `Topic` a `Subagent`. La doc lo dice textual: *There are no changes to functionality* — es un rename cosmético que alinea el vocabulario del builder al modelo multi-agente que ya era la práctica común. Si viene de tutoriales pre-abril 2026, ambos términos son equivalentes.",
+        },
+      ],
+    },
+
+    // ── 5 · Su primer Agent Script ────────────────────────────────────
+    {
+      id: "primer-agent-script",
+      eyebrow: "Parte 4 · Developer",
+      title: "Su primer Agent Script — línea por línea",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Nada explica el nuevo modelo como leer un `.agent` completo. A continuación un ejemplo comentado — un agente de servicio para una empresa de paquetería, con router + 2 sub-agentes.",
+        },
+        {
+          type: "ascii",
+          title: "Paquete_Express_Agent.agent",
+          content: `system:
+  instructions: |
+    Eres el asistente virtual de Paquetexpress. Ayudas con
+    rastreo de envíos, cotizaciones nacionales y creación de
+    casos. Responde en el idioma indicado por
+    @variables.endUserLanguage; si no está definido, responde
+    en español. Nunca muestres el Case ID al cliente.
+  messages:
+    welcome: |
+      Hola, soy el asistente de Paquetexpress. Puedo ayudarte
+      a rastrear un envío, cotizar un servicio nacional o
+      crear un caso. ¿Qué necesitas hoy?
+    error: |
+      Perdona, tuve un problema procesando tu solicitud.
+      ¿Quieres intentarlo de nuevo o transferirte con un
+      agente humano?
+
+config:
+  agent_name: "Paquete Express Agent"
+  agent_description: |
+    Agente de servicio al cliente de Paquetexpress. Cubre
+    rastreo, cotización nacional y creación de casos.
+
+access:
+  default_agent_user: "paquete_express_agent@example.com"
+
+language:
+  default_locale: "es_MX"
+  additional_locales:
+    - "en_US"
+
+variables:
+  endUserLanguage: mutable string = "es_MX"
+    description: |
+      Idioma preferido del cliente, tomado de la sesión de
+      Messaging. Cambia si el cliente pide explícitamente
+      cambiar de idioma.
+  isPremiumUser: mutable boolean = False
+    description: |
+      Verdadero si el cliente tiene contrato empresarial
+      activo. Se calcula al identificar al contacto.
+
+start_agent router:
+  description: |
+    Router raíz. Decide qué sub-agente atiende la consulta
+    según intención del cliente.
+  reasoning:
+    instructions: |
+      Clasifica el mensaje del usuario en una de estas rutas:
+      1. Rastreo o estatus de pedido → @subagents.orders_agent
+      2. Cotización nacional → @subagents.quotes_agent
+      3. Cualquier otra cosa → responde con el mensaje de
+         bienvenida y ofrece las 2 opciones.
+
+  | @subagents.orders_agent
+  | @subagents.quotes_agent
+
+subagent orders_agent:
+  description: |
+    Atiende preguntas sobre rastreo y estatus de pedidos.
+  reasoning:
+    instructions: |
+      Si el usuario da número de guía, invoca
+      @actions.obtener_estatus_orden. Si no tiene guía,
+      ofrece crear un caso pidiendo email, nombre y apellido.
+      No solicites identificación adicional si la consulta
+      es solo de rastreo.
+  | @actions.obtener_estatus_orden
+  | @actions.crear_caso_seguimiento
+
+subagent quotes_agent:
+  description: |
+    Cotizaciones nacionales (Sobre y Paquete).
+  reasoning:
+    instructions: |
+      Pregunta CP origen → valídalo. Pregunta CP destino →
+      valídalo. Luego pregunta tipo (Sobre o Paquete). Para
+      Paquete pide peso y dimensiones. Ejecuta la acción de
+      cotización correspondiente. No identifiques al cliente.
+  | @actions.validar_cp_origen
+  | @actions.validar_cp_destino
+  | @actions.cotizar_sobre
+  | @actions.cotizar_paquete`,
+        },
+        {
+          type: "paragraph",
+          text: "Nótese la economía del formato: 60 líneas describen lo que en el modelo anterior requería un `Bot`, un `GenAiPlanner`, 3 `GenAiPlugin` y 5-6 `GenAiFunction` — cada uno en su propio XML. Aquí vive todo en una unidad legible, versionable y navegable.",
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Cómo se lee este script",
+          text: "Léalo de arriba hacia abajo como un contrato: primero se declara quién es el agente y qué recuerda; después se declaran las rutas de razonamiento; al final las acciones que puede invocar. El operador `|` significa `este es un paso donde el LLM razona`; el operador `->` (no aparece en este ejemplo) significa `este es un salto determinístico sin razonamiento`.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Cómo se llama un action desde el script",
+        },
+        {
+          type: "paragraph",
+          text: "Un `@actions.obtener_estatus_orden` en el script apunta a un archivo declarado en el mismo bundle. Ese archivo describe el input, el output y el binding a un Apex, Flow o prompt template. La ventaja: al leer el script se ve el nombre semántico (`obtener_estatus_orden`) y no un ID críptico de metadata. La ventaja secundaria: refactorizar es un rename cross-file en el bundle, no una operación de metadata.",
+        },
+      ],
+    },
+
+    // ── 6 · CLI y developer experience ─────────────────────────────────
+    {
+      id: "cli-y-toolkit",
+      eyebrow: "Parte 5 · Developer",
+      title: "Agentforce DX — la CLI y VS Code Extension oficiales",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Agentforce DX es el nombre oficial del toolkit pro-code: `sf agent` (subcomando de Salesforce CLI) + una extensión oficial de VS Code con syntax highlighting, autocompletion y validación del Agent Script. Todos los comandos siguientes están verificados en la Salesforce CLI unified reference.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Ciclo de vida completo con `sf agent`",
+        },
+        {
+          type: "table",
+          headers: ["Fase", "Comando", "Qué hace"],
+          rows: [
+            [
+              "Diseñar",
+              "`sf agent generate agent-spec`",
+              "Genera un YAML `agent spec` describiendo capabilities y persona. Es el input humano que después alimenta la generación del bundle.",
+            ],
+            [
+              "Empaquetar",
+              "`sf agent generate authoring-bundle`",
+              "Produce el `AiAuthoringBundle` deployable a partir del agent spec.",
+            ],
+            [
+              "Validar",
+              "`sf agent validate authoring-bundle`",
+              "Compila y valida el Agent Script sin desplegar. Feedback inmediato antes de tocar la org.",
+            ],
+            [
+              "Previsualizar",
+              "`sf agent preview` · `preview start` · `preview send` · `preview sessions` · `preview end`",
+              "Chat local antes de deploy. Interactivo (REPL) o programático — usable en CI para smoke tests.",
+            ],
+            [
+              "Publicar",
+              "`sf agent publish authoring-bundle`",
+              "Crea el agente en la org (o una nueva versión si ya existe). Es la operación de deploy oficial.",
+            ],
+            [
+              "Activar / Desactivar",
+              "`sf agent activate` · `sf agent deactivate`",
+              "Encender o apagar la versión publicada. Útil para blue/green deploys.",
+            ],
+            [
+              "Testear",
+              "`sf agent test create` · `list` · `run` · `resume` · `results`",
+              "Definir y ejecutar suites de test cases contra el agente.",
+            ],
+            [
+              "Evaluar (Beta)",
+              "`sf agent test run-eval`",
+              "Corre evaluaciones ricas — LLM-as-judge sobre múltiples inputs. En Beta al momento de publicación.",
+            ],
+            [
+              "Trazar",
+              "`sf agent trace list` · `read` · `delete`",
+              "Ver trazas de ejecución en producción. Cada llamada del LLM, cada action invocada, cada decisión de routing.",
+            ],
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Comandos adyacentes que amplían el ecosistema",
+        },
+        {
+          type: "list",
+          items: [
+            "`sf agent adl create/list/upload` + `sf agent adl file add/delete/list` — administración de **Agentforce Data Libraries (ADL)** desde CLI. Permite subir documentos y usarlos como grounding sin tocar la UI.",
+            "`sf agent mcp create/get/list/update/delete/fetch` — administración de servidores **MCP (Model Context Protocol)** conectados al agente. Está en **Developer Preview**.",
+            "`sf agent template ...` — packaging de agentes como templates reusables entre orgs.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "VS Code Extension oficial",
+          text: "La `Agentforce DX Visual Studio Code extension` ofrece syntax highlighting del `.agent`, autocompletion sobre `@variables`, `@actions` y `@subagents`, y validación en tiempo real. Adicionalmente Salesforce publica `AgentScriptDocs.zip` — un bundle Markdown de la documentación de Agent Script pensado para servir como grounding a coding agents (Copilot, Cursor, Claude Code). Se actualiza semanalmente los jueves PST.",
+        },
+      ],
+    },
+
+    // ── 7 · Testing y observabilidad ───────────────────────────────────
+    {
+      id: "testing-y-observabilidad",
+      eyebrow: "Parte 6 · Developer",
+      title: "Testing y observabilidad — antes ausentes, ahora de primera clase",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "En el modelo anterior, testear un agente era casi siempre manual — abrir Preview y hacer preguntas a mano. El nuevo builder trae dos superficies de testing y una de observabilidad que estaban ausentes como productos oficiales.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "1 · Test cases estructurados (`sf agent test`)",
+        },
+        {
+          type: "paragraph",
+          text: "Se declara un YAML de casos de prueba con `sf agent generate test-spec`. Cada caso tiene un input, una expectativa y una tolerancia. Se corren con `sf agent test run` — local o en CI. Los resultados son leíbles con `sf agent test results`.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "2 · Evaluación LLM-as-judge (`sf agent test run-eval`, Beta)",
+        },
+        {
+          type: "paragraph",
+          text: "Para casos donde la expectativa no es una respuesta exacta sino una calidad de respuesta (tono, completitud, adherencia a la política), la CLI expone `run-eval` — un evaluador que usa el LLM como juez. Al momento de publicación está en Beta. Es la respuesta oficial a la práctica común de armar evaluadores caseros.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "3 · Trazas de producción (`sf agent trace`)",
+        },
+        {
+          type: "paragraph",
+          text: "Cada interacción del agente en producción deja una traza que se puede recuperar con `sf agent trace read <id>`. La traza incluye qué sub-agente atendió, qué acciones invocó, qué decisiones de routing tomó y el uso de tokens. Es el equivalente a un logging estructurado sobre el runtime del agente — sin depender de Data Cloud ni de armar dashboards ad hoc.",
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Session Trace Data Model (STDM)",
+          text: "En paralelo, Salesforce expone las trazas en un modelo de datos dedicado en Data 360, consumible por dashboards y por el panel de Agentforce DX en VS Code. Eso permite pasar de `sf agent trace read` (mirada micro) a un dashboard de comportamiento del agente (mirada macro) sin código intermedio.",
+        },
+      ],
+    },
+
+    // ── 8 · MCP y ecosistema abierto ───────────────────────────────────
+    {
+      id: "mcp-y-ecosistema",
+      eyebrow: "Parte 7 · Arquitectura",
+      title: "MCP y el ecosistema abierto — el agente deja de estar solo",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Model Context Protocol (MCP) es un estándar abierto para exponer herramientas y datos a un modelo de lenguaje. Antes, las acciones de un agente en Agentforce vivían dentro de la plataforma — Apex, Flow, Prompt Templates. Con MCP integrado, un agente puede invocar herramientas expuestas por servidores externos que hablen el protocolo — sin escribir wrappers de Apex ni negociar contratos custom.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Qué habilita concretamente",
+        },
+        {
+          type: "list",
+          items: [
+            "Conectar el agente a un servidor MCP corporativo que exponga inventario en tiempo real, catálogos, servicios internos — sin construir integraciones bespoke.",
+            "Reutilizar herramientas que ya escribió para otros agentes (por ejemplo, un asistente de VS Code interno) en su agente de servicio al cliente.",
+            "Estandarizar el `agent A2A` (agent-to-agent) con contratos ya establecidos por la industria en lugar de reinventarlos por proyecto.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Estado: Developer Preview",
+          text: "La CLI ya expone `sf agent mcp create/list/update/delete/fetch` — pero está explícitamente marcado como Developer Preview al momento de publicación. Prod-readiness requiere validación caso a caso: latencia, autenticación, gobierno del contrato y observabilidad end-to-end.",
+        },
+      ],
+    },
+
+    // ── 9 · Qué cambia en el alcance ───────────────────────────────────
+    {
+      id: "cambio-de-alcance",
+      eyebrow: "Parte 8 · Decisión",
+      title: "Qué se puede hacer hoy que antes no — y qué cambia",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Comparación honesta entre alcance del builder anterior y del nuevo, con lo verificable y lo que sigue abierto.",
+        },
+        {
+          type: "table",
+          headers: ["Capacidad", "Agentforce v1 (Bot + GenAiPlanner)", "Agentforce Builder + Agent Script"],
+          rows: [
+            [
+              "Unidad de definición",
+              "5-6 metadatas coordinadas",
+              "1 archivo `.agent` en un `AiAuthoringBundle`",
+            ],
+            [
+              "Sub-agentes / multi-agente",
+              "Artesanal — no era pattern oficial",
+              "Router + N subagents como primera clase, con guidance oficial (1-5 subagents)",
+            ],
+            [
+              "Variables tipadas",
+              "Context variables mapeadas manualmente",
+              "Bloque `variables:` con tipos, defaults, mutabilidad y descripción legible por el LLM",
+            ],
+            [
+              "Enrutamiento determinístico vs LLM",
+              "Difícil — todo pasaba por el planner",
+              "Operadores `->` (determinístico) y `|` (LLM) explícitos",
+            ],
+            [
+              "Testing",
+              "Manual, vía Preview",
+              "`sf agent test` + `sf agent test run-eval` (Beta) — integrable en CI",
+            ],
+            [
+              "Observabilidad en producción",
+              "Logs limitados, sin producto dedicado",
+              "`sf agent trace` + Session Trace Data Model en Data 360",
+            ],
+            [
+              "MCP tools externos",
+              "No soportado nativamente",
+              "`sf agent mcp` (Developer Preview)",
+            ],
+            [
+              "Multi-idioma",
+              "Instrucciones sueltas *responde en español*",
+              "Bloque `language:` con `default_locale` + `additional_locales`",
+            ],
+            [
+              "Trust Layer / Data Cloud grounding",
+              "Sí (Custom Retrievers, Knowledge)",
+              "Sí + Agentforce Data Libraries (ADL) con CLI dedicada",
+            ],
+            [
+              "Versionable como código",
+              "Diff en Git ruidoso",
+              "Diff lee lógica de negocio, no metadata de plataforma",
+            ],
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Preguntas abiertas verificables — no fabricar respuestas",
+        },
+        {
+          type: "list",
+          items: [
+            "**GA date del Agentforce Builder** — no fue verificable en fuente oficial fetchable durante esta investigación. Requiere confirmación contra release notes Winter '26 / Spring '26 / Summer '26.",
+            "**Retirement del stack v1** (Bot + GenAiPlanner + GenAiPlugin + EinsteinServiceAgent) — no anunciado según lo verificable en agosto 2026. Coexistencia es la política observable.",
+            "**Motor de razonamiento** — si el nuevo builder sigue usando ReAct por debajo o si adoptó explícitamente Atlas Reasoning Engine no está confirmado en la doc actual de Agent Script. Requiere verificación con release notes de reasoning engine.",
+            "**Migración forzada** — no confirmada. Los agentes v1 pueden seguir corriendo; los nuevos deben ir sobre `AiAuthoringBundle` como path preferido.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "note",
+          title: "Regla honesta de arquitectura",
+          text: "No refactorizar por refactorizar. Si tiene un agente v1 en producción, funcional y sin fricción de mantenimiento, quedarse en v1 es una decisión válida hasta que aparezca una razón concreta (nueva feature disponible solo en v2, retirement anunciado, o refactor grande de negocio). Nuevos agentes, sí — hágalos en v2 desde el día 1.",
+        },
+      ],
+    },
+
+    // ── 10 · Enhanced Web Chat / ECv2 ──────────────────────────────────
+    {
+      id: "enhanced-web-chat",
+      eyebrow: "Parte 9 · Canal",
+      title: "Enhanced Web Chat (ECv2) — el canal que completa la experiencia",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Un agente sin canal es un experimento. El canal web de segunda generación en el ecosistema de Salesforce se llama en la documentación **Enhanced Web Chat** (referenciado como **ECv2** en la superficie de APIs). Es la evolución del widget que usted montaba antes con `embeddedservice_bootstrap.init(...)`.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Qué cambia respecto a la generación 1",
+        },
+        {
+          type: "cards",
+          columns: 2,
+          items: [
+            {
+              eyebrow: "Cambio 1 · Bot input control por default",
+              title: "El setting manual desaparece",
+              description:
+                "En Gen1 había que activar manualmente `enableUserInputForConversationWithBot` para prevenir que el usuario mandara mensajes antes de que el bot respondiera. En ECv2 el comportamiento es correcto por default y el setting ya no está disponible — menos fricción de configuración, menos superficies de error.",
+              tone: "success",
+            },
+            {
+              eyebrow: "Cambio 2 · APIs modernas de primera clase",
+              title: "User Verification, Hidden Pre-Chat, Auto-Response, Utilities",
+              description:
+                "La superficie de APIs de ECv2 incluye User Verification API (JWT auth), Hidden Pre-Chat API (pasar contexto sin formulario visible), Auto-Response API y Utilities API — todas documentadas como parte del contrato oficial del widget.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Cambio 3 · Custom UI con LWC",
+              title: "Componentes propios dentro del widget",
+              description:
+                "ECv2 permite embeber Lightning Web Components como parte de la UI del chat — un formulario custom, una card específica del dominio del cliente. Antes era un tema de configuración externa; ahora es un contrato interno del widget.",
+              tone: "primary",
+            },
+            {
+              eyebrow: "Cambio 4 · Session-scoped controls",
+              title: "Multi-tab y minimización controlados",
+              description:
+                "Configuraciones como `restrictSessionOnMessagingChannel` y `shouldMinimizeWindowOnNewTab` permiten decidir explícitamente si la sesión debe restringirse a una sola pestaña o comportarse de otra manera al abrir el sitio en varias — decisiones que antes eran ambiguas.",
+              tone: "primary",
+            },
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "El objeto bootstrap sigue existiendo",
+        },
+        {
+          type: "paragraph",
+          text: "Buenas noticias para quien ya tiene un widget Gen1 en producción: el objeto global `embeddedservice_bootstrap` sigue existiendo en ECv2. Los settings documentados de la nueva API operan sobre él con el mismo naming. Ejemplos verificados en la doc oficial:",
+        },
+        {
+          type: "ascii",
+          title: "Settings verificados de Enhanced Web Chat (ECv2)",
+          content: `embeddedservice_bootstrap.settings.chatButtonPosition = "30px,20px";
+embeddedservice_bootstrap.settings.disableInlineAutoLaunch = true;
+embeddedservice_bootstrap.settings.hideChatButtonOnLoad = true;
+embeddedservice_bootstrap.settings.restrictSessionOnMessagingChannel = true;
+embeddedservice_bootstrap.settings.shouldOpenLinksInSameTab = true;
+
+embeddedservice_bootstrap.init(
+  orgId,
+  deploymentName,
+  siteUrl,
+  { scrt2URL: scrt2URL }
+);`,
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Cómo se conecta con el nuevo Agentforce Builder",
+          text: "El canal Web Chat / ECv2 apunta a un Embedded Service Deployment que enruta al agente. Ese agente puede ser tanto un `EinsteinServiceAgent` legacy como un agente v2 empaquetado en un `AiAuthoringBundle`. El canal es agnóstico del builder; la ruta correcta es que el agente decida cómo responder — con handoff bot→humano, rich content y session state gestionados por Agentforce del lado servidor.",
+        },
+        {
+          type: "callout",
+          tone: "warning",
+          title: "Trusted URLs y CORS — verificar antes de deploy",
+          text: "El error más frecuente al montar un widget en un dominio externo (por ejemplo, un portafolio como este) es que la org no tenga el origen agregado en la lista de dominios permitidos. La ubicación exacta cambió entre versiones del Setup — el path oficial está en la Salesforce Help vigente. Si el `embedded-service-config` regresa 200 pero sin `Access-Control-Allow-Origin`, ese es el síntoma: agregue el origen y republique el deployment.",
+        },
+      ],
+    },
+
+    // ── 11 · Cómo empezar ─────────────────────────────────────────────
+    {
+      id: "como-empezar",
+      eyebrow: "Parte 10 · Accionable",
+      title: "Cómo empezar hoy — hoja de ruta de un sprint",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Si termina de leer este documento y quiere probarlo esta semana, este es un plan concreto de un sprint (2 semanas) que produce un agente v2 funcional publicado en una sandbox, con testing y observabilidad.",
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Semana 1 · Setup y primer agente",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "Instalar Salesforce CLI actualizada + la extensión oficial Agentforce DX para VS Code.",
+            "Instalar el skill bundle `forcedotcom/sf-skills` (`npx skills add forcedotcom/sf-skills`) para autoría asistida.",
+            "Autenticar CLI a una sandbox de desarrollo con `sf org login web`.",
+            "Ejecutar `sf agent generate agent-spec` — responder a las preguntas de persona, capabilities y idiomas.",
+            "Ejecutar `sf agent generate authoring-bundle` para producir el `.agent` inicial.",
+            "Abrir el `.agent` en VS Code y editarlo — agregar 1 subagente y 1 acción simple (por ejemplo, `hola_mundo`).",
+            "Validar con `sf agent validate authoring-bundle`.",
+            "Publicar en sandbox con `sf agent publish authoring-bundle` y activar con `sf agent activate`.",
+            "Previsualizar con `sf agent preview` — validar respuesta a 3-5 inputs típicos.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Semana 2 · Testing, canal y observabilidad",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "Ejecutar `sf agent generate test-spec` y describir 10-15 casos representativos (feliz, borde, adversarial).",
+            "Correr `sf agent test run` — iterar sobre las instrucciones hasta que los casos pasen.",
+            "Configurar un Embedded Service Deployment con Enhanced Web Chat (ECv2), apuntando al agente publicado.",
+            "Agregar el dominio del sitio anfitrión a la lista de dominios permitidos (Setup) y republicar.",
+            "Embeber el widget en el sitio con `embeddedservice_bootstrap.init(...)`.",
+            "Enviar 10 conversaciones reales de prueba desde el widget.",
+            "Correr `sf agent trace list` — revisar 3 trazas al azar para validar decisiones de routing y uso de acciones.",
+            "Documentar hallazgos, iterar sobre 2-3 instrucciones y republicar.",
+          ],
+        },
+        {
+          type: "heading",
+          level: 3,
+          text: "Checklist de listo para producción",
+        },
+        {
+          type: "list",
+          items: [
+            "El script está en Git, con revisión por pares aprobada.",
+            "El test suite corre en CI y bloquea merges si falla.",
+            "Todas las acciones críticas tienen `isConfirmationRequired` cuando aplica.",
+            "El agente tiene guardrails de scope explícitos (no dar consejos legales/médicos, no discutir competidores).",
+            "El canal tiene sessionTimeout definido (no `0`) — 15-30 min para chat, 24h para email.",
+            "Enhanced Web Chat está desplegado con dominios permitidos correctos y JWT auth (si aplica).",
+            "Al menos una alerta de observabilidad configurada sobre las trazas — error rate, latencia p95.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "success",
+          title: "Regla final",
+          text: "El nuevo builder no lo hace mejor arquitecto — lo hace más rápido. La calidad del agente sigue viniendo de la calidad de las instrucciones, del diseño de las acciones y de la disciplina de testing. El AiAuthoringBundle es un empaque mejor; lo que empaqueta sigue siendo su trabajo.",
+        },
+      ],
+    },
+
+    // ── 12 · Fuentes ───────────────────────────────────────────────────
+    {
+      id: "fuentes",
+      eyebrow: "Verificación",
+      title: "Fuentes oficiales verificadas",
+      blocks: [
+        {
+          type: "paragraph",
+          text: "Toda afirmación técnica de este documento está anclada a documentación oficial pública. Donde la fuente no fue verificable en el momento de investigación, quedó marcada como `requiere verificación`. Estas son las URLs que sostienen el resto del texto.",
+        },
+        {
+          type: "sources",
+          items: [
+            {
+              label: "Agentforce Developer Guide · Índice oficial",
+              url: "https://developer.salesforce.com/docs/ai/agentforce/guide/",
+            },
+            {
+              label: "Agent Script · Documentación de referencia",
+              url: "https://developer.salesforce.com/docs/ai/agentforce/guide/agent-script.html",
+            },
+            {
+              label: "Agent Script · Documentation download (AgentScriptDocs.zip)",
+              url: "https://developer.salesforce.com/docs/ai/agentforce/guide/ascript-download-documentation.html",
+            },
+            {
+              label: "Salesforce CLI · `sf agent` unified reference",
+              url: "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm",
+            },
+            {
+              label: "Master the Agentic Development Lifecycle (blog · jun 2026)",
+              url: "https://developer.salesforce.com/blogs/2026/06/master-the-agentic-development-lifecycle-for-agentforce",
+            },
+            {
+              label: "Enhanced Web Chat (ECv2) · Settings API reference",
+              url: "https://developer.salesforce.com/docs/service/messaging-web/references/m4w-reference/settingsAPI.html",
+            },
+            {
+              label: "Messaging for Web · Developer Guide",
+              url: "https://developer.salesforce.com/docs/service/messaging-web/guide/",
+            },
+            {
+              label: "Salesforce · Agentforce Platform (producto)",
+              url: "https://www.salesforce.com/agentforce/",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+export const insights: Insight[] = [multiAgent, customerFeedback, headlessFeedback, digitalEngagement, retailAiMexico, retailAiColombia, retailAiCentroamerica, headlessCioMexico, agentforceBuilder];

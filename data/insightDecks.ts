@@ -1719,6 +1719,352 @@ export const insightDecks: InsightDeck[] = [
       },
     ],
   },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // Deck · Nuevo Agentforce Builder + Enhanced Web Chat (ECv2)
+  // ═══════════════════════════════════════════════════════════════════
+  {
+    slug: "deck",
+    customerSlug: "insight",
+    insightSlug: "nuevo-agentforce-builder-y-enhanced-messaging-web-2",
+    title: "El nuevo Agentforce Builder",
+    subtitle: "De configurar un bot a escribir un agente — con Agent Script, Agentforce DX y Enhanced Web Chat",
+    duration: "18 min",
+    slides: [
+      // 1 · Portada
+      {
+        layout: "title",
+        eyebrow: "Insights · Nueva generación de Agentforce",
+        title: "El nuevo Agentforce Builder\nDe configurar un bot a escribir un agente",
+        subtitle:
+          "Agent Script, AiAuthoringBundle, Agentforce DX y Enhanced Web Chat — recorrido Zero-to-Hero.",
+        footnote: "Postura técnica · Laila Portfolio · Agosto 2026",
+      },
+
+      // 2 · Statement ejecutivo
+      {
+        layout: "quote",
+        quote:
+          "Salesforce dejó de tratar a un agente como una configuración de varias metadatas sueltas y empezó a tratarlo como un artefacto de software. Un archivo `.agent`, un `AiAuthoringBundle`, una CLI oficial y una capa de testing y observabilidad de primera clase.",
+        context: "Statement técnico · Postura completa",
+      },
+
+      // 3 · Sección · Parte 0
+      {
+        layout: "section",
+        eyebrow: "Parte 0 · Para todos",
+        title: "Sin tecnicismos — la analogía",
+        subtitle:
+          "De contratar por piezas sueltas a escribir un guion. Un solo cuaderno, un solo idioma, un solo diff.",
+      },
+
+      // 4 · Antes vs Ahora
+      {
+        layout: "comparison",
+        eyebrow: "El cambio en una imagen",
+        title: "Configurar por piezas vs escribir un guion",
+        before: {
+          heading: "Antes (Agentforce v1)",
+          items: [
+            "Bot + BotVersion + GenAiPlanner + N GenAiPlugin + N GenAiFunction.",
+            "Cada pieza en su propia metadata XML — coordinar cambios entre archivos.",
+            "Testing manual vía Preview del bot.",
+            "Multi-agente era artesanía — no pattern oficial.",
+            "El diff en Git leía metadata, no lógica de negocio.",
+          ],
+        },
+        after: {
+          heading: "Ahora (Agentforce Builder + Agent Script)",
+          items: [
+            "Un archivo `.agent` empaquetado en un `AiAuthoringBundle`.",
+            "Bloques declarativos: `system`, `config`, `variables`, `start_agent`, subagents.",
+            "Testing de primera clase con `sf agent test` + `run-eval` (Beta).",
+            "Router + N subagents como patrón oficial documentado.",
+            "El diff en Git lee lógica de negocio — versionable como código.",
+          ],
+        },
+      },
+
+      // 5 · Sección · Parte 1
+      {
+        layout: "section",
+        eyebrow: "Parte 1 · Ejecutivo",
+        title: "Por qué Salesforce lanzó un builder nuevo",
+        subtitle:
+          "Cuatro deudas del modelo anterior atacadas al mismo tiempo: dispersión, versionado, testing y multi-agente.",
+      },
+
+      // 6 · Cuatro deudas
+      {
+        layout: "pillars",
+        eyebrow: "Deudas resueltas",
+        title: "Qué problemas del modelo anterior estaba resolviendo",
+        pillars: [
+          {
+            title: "1 · Configuración dispersa",
+            body: "Un agente vivía en 4-6 metadatas coordinadas. Un cambio pequeño era una mini-operación.",
+            accent: "indigo",
+          },
+          {
+            title: "2 · Difícil de versionar",
+            body: "El diff en Git era metadata de plataforma, no lógica de negocio. Code review lento y ruidoso.",
+            accent: "violet",
+          },
+          {
+            title: "3 · Testing frágil",
+            body: "Probar era manual. Corner cases y batch evals había que armarlos por afuera del builder.",
+            accent: "sky",
+          },
+          {
+            title: "4 · Multi-agente hostil",
+            body: "Coordinar varios agentes no era pattern oficial. Cada equipo lo hacía distinto.",
+            accent: "emerald",
+          },
+        ],
+      },
+
+      // 7 · Sección · Parte 2
+      {
+        layout: "section",
+        eyebrow: "Parte 2 · Arquitectura",
+        title: "Anatomía del stack nuevo",
+        subtitle:
+          "Un archivo `.agent` con bloques declarativos, empaquetado en `AiAuthoringBundle`. El vocabulario nuevo.",
+      },
+
+      // 8 · Los 6 bloques del .agent
+      {
+        layout: "bullets",
+        eyebrow: "Los 6 bloques declarativos",
+        title: "Anatomía de un archivo `.agent`",
+        bullets: [
+          "`system:` — instrucciones globales, mensajes de bienvenida y de error.",
+          "`config:` — nombre, descripción, metadatos del agente.",
+          "`access:` — usuario dueño / default user.",
+          "`language:` — `default_locale` + `additional_locales`.",
+          "`variables:` — tipadas, mutables, con `description:` legible por el LLM.",
+          "`start_agent <name>:` — sub-agente raíz + `reasoning: instructions:` + sub-agentes y acciones.",
+        ],
+        highlight:
+          "En abril 2026 lo que antes se llamaba `Topic` pasó a llamarse `Subagent`. Es rename cosmético — no hay cambio de funcionalidad.",
+      },
+
+      // 9 · Referencias y operadores
+      {
+        layout: "split",
+        eyebrow: "El lenguaje interno",
+        title: "Referencias y operadores del Agent Script",
+        left: {
+          heading: "Referencias (@)",
+          items: [
+            "`@variables.<name>` — apunta a una variable declarada.",
+            "`@actions.<name>` — apunta a una acción del bundle (Apex, Flow, prompt).",
+            "`@subagents.<name>` — apunta a otro sub-agente del script.",
+          ],
+        },
+        right: {
+          heading: "Operadores de flujo",
+          items: [
+            "`|` — pipe LLM. El modelo razona la siguiente decisión.",
+            "`->` — flecha determinística. Enrutamiento sin llamar al LLM.",
+            "Mezclar ambos permite decisiones LLM-flexibles + guardrails de negocio duros.",
+          ],
+        },
+      },
+
+      // 10 · Sección · Parte 3
+      {
+        layout: "section",
+        eyebrow: "Parte 3 · Developer",
+        title: "Agentforce DX — la CLI oficial",
+        subtitle:
+          "Ciclo de vida completo desde CLI: diseñar, empaquetar, validar, previsualizar, publicar, testear y observar.",
+      },
+
+      // 11 · Comandos CLI
+      {
+        layout: "bullets",
+        eyebrow: "sf agent · comandos verificados",
+        title: "Ciclo de vida completo con Salesforce CLI",
+        bullets: [
+          "`sf agent generate agent-spec / authoring-bundle / test-spec / template`",
+          "`sf agent validate authoring-bundle` — compila y valida sin desplegar.",
+          "`sf agent preview` + `start / send / sessions / end` — chat local, integrable en CI.",
+          "`sf agent publish authoring-bundle` + `activate / deactivate`.",
+          "`sf agent test create / list / run / resume / results` — suites de test cases.",
+          "`sf agent test run-eval` (Beta) — evaluación LLM-as-judge.",
+          "`sf agent trace list / read / delete` — trazas de producción.",
+          "`sf agent adl ...` — Agentforce Data Libraries. `sf agent mcp ...` — MCP (Developer Preview).",
+        ],
+        highlight:
+          "Extensión oficial de VS Code (Agentforce DX) + bundle Markdown `AgentScriptDocs.zip` para grounding de coding agents.",
+      },
+
+      // 12 · Sección · Parte 4
+      {
+        layout: "section",
+        eyebrow: "Parte 4 · Decisión",
+        title: "Qué cambia en el alcance",
+        subtitle:
+          "Capacidades nuevas verificadas, capacidades legacy que persisten, y preguntas abiertas que no hay que fabricar.",
+      },
+
+      // 13 · Cambio de alcance
+      {
+        layout: "comparison",
+        eyebrow: "Alcance funcional",
+        title: "Qué se puede hacer hoy que antes no",
+        before: {
+          heading: "Persistía en v1",
+          items: [
+            "Trust Layer, Data Cloud grounding, Custom Retrievers, Knowledge Articles.",
+            "Actions basadas en Apex, Flow y Prompt Templates.",
+            "Integración con Service Cloud, Experience Cloud y canales de Messaging.",
+            "EinsteinServiceAgent + GenAiPlanner ReAct — sigue funcionando por coexistencia.",
+          ],
+        },
+        after: {
+          heading: "Nuevo en v2",
+          items: [
+            "Router + N subagents como patrón oficial (guidance: 1-5 subagents).",
+            "Variables tipadas mutables con `description:` legible por el LLM.",
+            "Testing built-in (`sf agent test`, `run-eval` Beta) integrable en CI.",
+            "Observabilidad con `sf agent trace` + Session Trace Data Model en Data 360.",
+            "MCP tools externos (Developer Preview).",
+            "Agentforce Data Libraries con CLI dedicada.",
+          ],
+        },
+      },
+
+      // 14 · Preguntas abiertas
+      {
+        layout: "bullets",
+        eyebrow: "Verificación honesta",
+        title: "Preguntas abiertas — no fabricar respuestas",
+        bullets: [
+          "GA date exacta del Agentforce Builder — no verificable en URL oficial fetchable.",
+          "Retirement del stack v1 (Bot + GenAiPlanner + EinsteinServiceAgent) — no anunciado según lo verificable.",
+          "Motor de razonamiento explícito del builder v2 (ReAct legacy vs Atlas Reasoning Engine) — no confirmado.",
+          "Migración forzada — no confirmada. Coexistencia es la política observable.",
+        ],
+        highlight:
+          "Regla honesta: no refactorizar por refactorizar. Nuevos agentes → v2. Agentes v1 funcionales en producción → quedarse hasta que aparezca razón concreta.",
+      },
+
+      // 15 · Sección · Parte 5
+      {
+        layout: "section",
+        eyebrow: "Parte 5 · Canal",
+        title: "Enhanced Web Chat (ECv2)",
+        subtitle:
+          "La evolución del widget MIAW — bot input control por default, APIs modernas, LWC embebibles, session controls.",
+      },
+
+      // 16 · Cambios ECv2
+      {
+        layout: "pillars",
+        eyebrow: "Qué cambia respecto a Gen1",
+        title: "Cuatro diferencias verificables",
+        pillars: [
+          {
+            title: "Bot input por default",
+            body: "El setting `enableUserInputForConversationWithBot` desaparece — el comportamiento es correcto por default.",
+            accent: "emerald",
+          },
+          {
+            title: "APIs modernas",
+            body: "User Verification (JWT), Hidden Pre-Chat, Auto-Response, Utilities — todas de primera clase.",
+            accent: "indigo",
+          },
+          {
+            title: "LWC dentro del widget",
+            body: "Custom UI vía Lightning Web Components como contrato interno, no configuración externa.",
+            accent: "violet",
+          },
+          {
+            title: "Session controls",
+            body: "`restrictSessionOnMessagingChannel`, `shouldMinimizeWindowOnNewTab` — decisiones session-scoped explícitas.",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // 17 · Sección · Parte 6
+      {
+        layout: "section",
+        eyebrow: "Parte 6 · Accionable",
+        title: "Cómo empezar en un sprint",
+        subtitle:
+          "Semana 1: setup + primer agente en sandbox. Semana 2: testing, canal y observabilidad.",
+      },
+
+      // 18 · Sprint plan
+      {
+        layout: "split",
+        eyebrow: "Sprint de 2 semanas",
+        title: "De cero a agente v2 en producción interna",
+        left: {
+          heading: "Semana 1 · Setup + primer agente",
+          items: [
+            "Instalar Salesforce CLI + extensión Agentforce DX en VS Code.",
+            "Autenticar CLI a sandbox — `sf org login web`.",
+            "`sf agent generate agent-spec` + `generate authoring-bundle`.",
+            "Editar el `.agent` — 1 subagente + 1 acción simple.",
+            "`sf agent validate authoring-bundle` + `publish` + `activate`.",
+            "Previsualizar con `sf agent preview`.",
+          ],
+        },
+        right: {
+          heading: "Semana 2 · Testing + canal + observabilidad",
+          items: [
+            "10-15 test cases con `sf agent generate test-spec`.",
+            "`sf agent test run` — iterar hasta pasar.",
+            "Enhanced Web Chat: Embedded Service Deployment + dominios permitidos.",
+            "Embeber widget con `embeddedservice_bootstrap.init(...)`.",
+            "10 conversaciones reales de prueba.",
+            "`sf agent trace list` — validar routing y uso de acciones.",
+          ],
+        },
+      },
+
+      // 19 · Checklist prod
+      {
+        layout: "bullets",
+        eyebrow: "Listo para producción",
+        title: "Checklist honesto antes del go-live",
+        bullets: [
+          "El `.agent` está en Git con revisión por pares aprobada.",
+          "Test suite corre en CI y bloquea merges si falla.",
+          "Acciones críticas con `isConfirmationRequired` cuando aplica.",
+          "Guardrails de scope explícitos (no consejos legales/médicos, no competidores).",
+          "sessionTimeout definido — 15-30 min chat, 24h email.",
+          "ECv2 desplegado con dominios permitidos correctos.",
+          "Al menos una alerta de observabilidad sobre trazas (error rate, latencia p95).",
+        ],
+      },
+
+      // 20 · Cierre
+      {
+        layout: "closing",
+        title: "Regla final",
+        bullets: [
+          "El nuevo builder no lo hace mejor arquitecto — lo hace más rápido.",
+          "La calidad sigue viniendo de las instrucciones, del diseño de acciones y de la disciplina de testing.",
+          "El AiAuthoringBundle es un empaque mejor; lo que empaqueta sigue siendo su trabajo.",
+        ],
+        cta: "¿Conversamos sobre cómo llevar su primer agente v2 a producción en un sprint?",
+      },
+
+      // 21 · Gracias
+      {
+        layout: "thanks",
+        eyebrow: "Insights · Laila Portfolio",
+        title: "Gracias",
+        subtitle:
+          "Un archivo `.agent`, una CLI oficial, testing y observabilidad de primera clase. El agente vuelve a ser software.",
+      },
+    ],
+  },
 ];
 
 export function getInsightDeck(insightSlug: string): InsightDeck | undefined {
