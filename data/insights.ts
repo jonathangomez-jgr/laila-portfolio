@@ -7374,10 +7374,10 @@ const agentforceBuilder: Insight = {
     "DevOps",
   ],
   coverImage: {
-    src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/05/AFDC-Overview-Story-TransformAnyTeam-Complete-Enterprise-Agentic-Platform.webp",
-    alt: "Plataforma agéntica de Salesforce sobre Data 360 y Customer 360 — base sobre la que corre el nuevo Agentforce Builder.",
+    src: "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2025/10/Agent-Builder-Images-4-2.webp?resize=1536,1239",
+    alt: "Vista del nuevo Agentforce Builder — Canvas + Script view sobre un Agent Script declarativo.",
     source: {
-      label: "Salesforce · Agentforce Platform",
+      label: "Salesforce · Agentforce Builder",
       url: "https://www.salesforce.com/agentforce/",
     },
   },

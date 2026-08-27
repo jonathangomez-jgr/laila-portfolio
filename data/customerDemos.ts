@@ -870,6 +870,7 @@ export type CustomerDemoTab = {
   argosArch?: true;
   argosKpiSummary?: true;
   paquetexpressAgentArch?: true;
+  contentAfter?: string;
   workPlanData?: WorkPlanData;
   agentforceLandscapeData?: AgentforceLandscapeData;
   workshopData?: WorkshopData;

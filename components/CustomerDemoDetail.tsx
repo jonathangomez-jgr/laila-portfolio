@@ -416,6 +416,12 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
                 <PaquetexpressAgentArchitecture />
               )}
 
+              {activeTab.contentAfter && activeTab.contentAfter.trim() && (
+                <div className="mt-8 max-w-4xl">
+                  <Markdown source={activeTab.contentAfter} />
+                </div>
+              )}
+
               {activeTab.agentforceLandscapeData && (
                 <AgentforceLandscape data={activeTab.agentforceLandscapeData} />
               )}
