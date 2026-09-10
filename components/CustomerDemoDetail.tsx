@@ -422,6 +422,30 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
                 </div>
               )}
 
+              {activeTab.embedUrl && (
+                <div className="mt-8 -mx-4 sm:mx-0">
+                  <div className="flex justify-end mb-3">
+                    <a
+                      href={activeTab.embedUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-violet-700 hover:text-violet-900 underline"
+                    >
+                      Abrir en pestaña nueva ↗
+                    </a>
+                  </div>
+                  <div className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
+                    <iframe
+                      src={activeTab.embedUrl}
+                      title={activeTab.title}
+                      className="w-full block"
+                      style={{ height: `${activeTab.embedHeight ?? 1600}px` }}
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              )}
+
               {activeTab.agentforceLandscapeData && (
                 <AgentforceLandscape data={activeTab.agentforceLandscapeData} />
               )}

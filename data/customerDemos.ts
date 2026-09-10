@@ -871,6 +871,8 @@ export type CustomerDemoTab = {
   argosKpiSummary?: true;
   paquetexpressAgentArch?: true;
   contentAfter?: string;
+  embedUrl?: string;
+  embedHeight?: number;
   workPlanData?: WorkPlanData;
   agentforceLandscapeData?: AgentforceLandscapeData;
   workshopData?: WorkshopData;

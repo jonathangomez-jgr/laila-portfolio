@@ -4971,6 +4971,14 @@ export const customerProjects: CustomerProject[] = [
         paquetexpressAgentArch: true,
       },
       {
+        id: "suite-40-pruebas",
+        label: "Suite 40 pruebas · Sep 2026",
+        title: "Suite completa · 40 pruebas del agente rediseñado",
+        content: "",
+        embedUrl: "/Customers/Paquetexpress/pruebas-suite40-ago2026.html",
+        embedHeight: 7200,
+      },
+      {
         id: "metadata",
         label: "Metadata del retrieve",
         title: "Cómo se obtuvo esta información",
