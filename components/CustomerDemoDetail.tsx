@@ -118,6 +118,28 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
                   {t.execDeckBtn}
                 </Link>
               )}
+              {basePath === "customer-projects" && (
+                <Link
+                  href={`/${lang}/${basePath}/${demo.slug}/tracker`}
+                  className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-white px-5 py-2.5 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-50"
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                    />
+                  </svg>
+                  Tracker de delivery
+                </Link>
+              )}
               {demo.tags.map((tag) => (
                 <span
                   key={tag}

@@ -56,6 +56,85 @@ async function getAccessToken(): Promise<TokenResponse> {
   return data;
 }
 
+export async function sfQuery<T = unknown>(soql: string): Promise<T[]> {
+  const { apiVersion } = getSalesforceConfig();
+  const { access_token, instance_url } = await getAccessToken();
+
+  const url = `${instance_url}/services/data/${apiVersion}/query?q=${encodeURIComponent(soql)}`;
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${access_token}` },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const details = await response.text();
+    throw new Error(`Salesforce query failed (${response.status}): ${details}`);
+  }
+
+  const data = (await response.json()) as { records: T[] };
+  return data.records;
+}
+
+export async function sfCreate(
+  sobject: string,
+  fields: Record<string, unknown>,
+): Promise<{ id: string }> {
+  const { apiVersion } = getSalesforceConfig();
+  const { access_token, instance_url } = await getAccessToken();
+
+  const response = await fetch(
+    `${instance_url}/services/data/${apiVersion}/sobjects/${sobject}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fields),
+      cache: "no-store",
+    },
+  );
+
+  if (!response.ok) {
+    const details = await response.text();
+    throw new Error(
+      `Salesforce ${sobject} create failed (${response.status}): ${details}`,
+    );
+  }
+
+  const data = (await response.json()) as { id: string };
+  return data;
+}
+
+export async function sfUpdate(
+  sobject: string,
+  id: string,
+  fields: Record<string, unknown>,
+): Promise<void> {
+  const { apiVersion } = getSalesforceConfig();
+  const { access_token, instance_url } = await getAccessToken();
+
+  const response = await fetch(
+    `${instance_url}/services/data/${apiVersion}/sobjects/${sobject}/${id}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fields),
+      cache: "no-store",
+    },
+  );
+
+  if (!response.ok) {
+    const details = await response.text();
+    throw new Error(
+      `Salesforce ${sobject} update failed (${response.status}): ${details}`,
+    );
+  }
+}
+
 export async function createPageAccessRecord(email: string, path: string) {
   const { apiVersion } = getSalesforceConfig();
   const { access_token, instance_url } = await getAccessToken();
