@@ -1,5 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { isValidElement } from "react";
+import MermaidBlock from "./MermaidBlock";
 
 type MarkdownProps = {
   source: string;
@@ -8,6 +10,20 @@ type MarkdownProps = {
 
 const isInternalMd = (href: string) =>
   /^\.\.?\//.test(href) && href.endsWith(".md");
+
+const childrenToString = (children: React.ReactNode): string => {
+  if (typeof children === "string") return children;
+  if (typeof children === "number") return String(children);
+  if (Array.isArray(children)) return children.map(childrenToString).join("");
+  return "";
+};
+
+const isMermaidChild = (node: React.ReactNode): boolean => {
+  const first = Array.isArray(node) ? node[0] : node;
+  if (!isValidElement(first)) return false;
+  const props = first.props as { className?: string } | undefined;
+  return props?.className === "language-mermaid";
+};
 
 export default function Markdown({ source, rewriteLink }: MarkdownProps) {
   return (
@@ -49,6 +65,9 @@ export default function Markdown({ source, rewriteLink }: MarkdownProps) {
             const { children, className } = props as { children: React.ReactNode; className?: string };
             const isBlock = className?.startsWith("language-");
             if (isBlock) {
+              if (className === "language-mermaid") {
+                return <MermaidBlock code={childrenToString(children).replace(/\n$/, "")} />;
+              }
               return (
                 <code className="block whitespace-pre overflow-x-auto rounded-none bg-gray-900 px-4 py-3 text-[12px] leading-6 text-gray-100 sm:rounded-lg sm:text-sm">
                   {children}
@@ -61,11 +80,16 @@ export default function Markdown({ source, rewriteLink }: MarkdownProps) {
               </code>
             );
           },
-          pre: ({ children }) => (
-            <pre className="-mx-4 my-5 overflow-x-auto rounded-none bg-gray-900 p-0 text-[13px] sm:mx-0 sm:rounded-xl sm:text-sm">
-              {children}
-            </pre>
-          ),
+          pre: ({ children }) => {
+            if (isMermaidChild(children)) {
+              return <>{children}</>;
+            }
+            return (
+              <pre className="-mx-4 my-5 overflow-x-auto rounded-none bg-gray-900 p-0 text-[13px] sm:mx-0 sm:rounded-xl sm:text-sm">
+                {children}
+              </pre>
+            );
+          },
           table: ({ children }) => (
             <div className="-mx-4 my-6 overflow-x-auto border-y border-gray-200 sm:mx-0 sm:rounded-xl sm:border">
               <table className="w-full min-w-[560px] border-collapse text-xs sm:text-sm">{children}</table>
