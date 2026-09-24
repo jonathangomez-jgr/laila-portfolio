@@ -1,5 +1,6 @@
 import type { CustomerDemo } from "./customerDemos";
 import { paquetexpressRadTab } from "./paquetexpress/radTab";
+import { paquetexpressRadVoiceImplTab } from "./paquetexpress/radVoiceImplTab";
 
 export type CustomerProject = CustomerDemo;
 
@@ -4980,6 +4981,7 @@ export const customerProjects: CustomerProject[] = [
         embedHeight: 7200,
       },
       paquetexpressRadTab,
+      paquetexpressRadVoiceImplTab,
       {
         id: "metadata",
         label: "Metadata del retrieve",
