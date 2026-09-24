@@ -13,8 +13,8 @@ export const paquetexpressDeliverable: AgentDeliverable = {
   version: "v43",
   publishedAt: "2026-09-24",
   preparedBy: {
-    name: "Jonathan Gomez",
-    role: "Agentforce Enterprise Architect · Salesforce",
+    name: "Equipo FDE Salesforce",
+    role: "Regina Segura · Ximena Macias · Andres Rivas · Jonathan Gómez",
     email: "jonathan.gomez@salesforce.com",
   },
 
