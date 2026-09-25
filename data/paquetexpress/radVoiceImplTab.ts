@@ -88,7 +88,25 @@ flowchart TB
 | \`MOCK_GLP_VoiceTest\` | Apex test class | 5 tests, 5 passing (baseline 100% verde) |
 | \`MOCK_GLP_DemoData\` | StaticResource (JSON) | Datos hardcoded del "cliente feliz" Ana María Torres + edge cases |`;
 
-const contentAfter = `## 📋 Sample conversation — RPP happy path (llamada real)
+const contentAfter = `## 📋 Sample conversations — dos perfiles demo
+
+El mock \`MOCK_GLP_DemoData\` incluye **dos guías válidas** para probar el flujo RPP end-to-end, con dos perfiles de cliente distintos. Ambas siguen la misma secuencia de turnos; lo que cambia son los datos del cliente y de la guía. Se pueden usar indistintamente en cualquier ensayo del Agent Preview o de la llamada real.
+
+| Perfil | Cliente | Correo | Guía RPP | Origen → Destino | Contenido |
+|---|---|---|---|---|---|
+| **1** | Ana María Torres López | \`a.torres@empaqueshb2.com\` | \`77834215906\` | CDMX → CDMX | Ropa nueva para retail · 5 kg |
+| **2** | Jonathan Gómez | \`jonathan@gmail.com\` | \`61240857309\` | Monterrey → Guadalajara | Documentos · 2 kg |
+
+**Racional del diseño de datos:**
+
+- **Correos elegidos a propósito para ser fáciles de dictar por voz.** \`a.torres@empaqueshb2.com\` mezcla letra suelta + palabra + siglas; \`jonathan@gmail.com\` es aún más limpio (una sola palabra + dominio conocido, sin puntos internos ni guiones) — sirve para reducir el riesgo de STT en la demo del segundo perfil.
+- **Guías con dígitos variados y sin patrón secuencial** (\`77834215906\`, \`61240857309\`). Se descartaron opciones tipo \`12345678900\` porque suenan obvias como datos fake en la demo con cliente.
+- **Cobertura complementaria de perfiles:** perfil 1 (mujer, CDMX intracity, ropa retail) + perfil 2 (hombre, Monterrey→Guadalajara, documentos) — dos ciudades del interior distintas, dos géneros, dos tipos de contenido, dos rangos de peso.
+- Ambas devuelven el mismo shape en \`MOCK_GLP_BuscarGuia\`: \`found=True\` + \`voiceSummary\` narrativo listo para leer al cliente. \`MOCK_GLP_RadCreate\` genera el tracking tomando los últimos 3 dígitos de la guía → **\`PX-RAD-DEMO-906\`** para Ana María, **\`PX-RAD-DEMO-309\`** para Jonathan.
+
+---
+
+## 🎬 Sample 1 — Ana María Torres López
 
 Los turnos del sample que aprobamos, con la acción que dispara el agente en cada paso. Para simular la llamada en Agent Preview, entrar como \`Ana María Torres López\` (correo \`a.torres@empaqueshb2.com\`) e ir dictando exactamente lo que aparece como cliente:
 
@@ -196,6 +214,122 @@ Turno 10 · Agente
 
 ---
 
+## 🎬 Sample 2 — Jonathan Gómez
+
+Perfil demo alternativo con datos aún más optimizados para audio (correo de una sola palabra, sin puntos ni guiones internos). Para simular la llamada, entrar como \`Jonathan Gómez\` (correo \`jonathan@gmail.com\`) e ir dictando lo que aparece como cliente:
+
+\`\`\`
+Turno 1 · Agente
+  "Hola, buen día. Soy el asistente virtual de Paquetexpress. Para
+   ayudarle mejor, ¿me indica su nombre completo, por favor?"
+  ← messages.welcome
+
+Turno 1 · Cliente
+  "Jonathan Gómez. Quiero agendar una recolección; ya tengo la guía
+   prepagada."
+
+Turno 2 · Agente
+  "Gracias, Jonathan. Y para completar la validación, ¿me dicta su
+   correo electrónico? Puede decirlo despacio."
+  ← Customer_Verification (dos turnos)
+  ← capture_pending_intent → pendingIntent = "RAD"
+
+Turno 2 · Cliente
+  "jonathan arroba gmail punto com"
+
+Turno 3 · Agente
+  "Entendí: jonathan arroba gmail punto com, ¿es correcto?"
+  ← grounding: readback separado por sílabas
+
+Turno 3 · Cliente
+  "Sí, correcto."
+
+Turno 4 · Agente
+  "Gracias. Un momento mientras valido sus datos… listo. Ahora,
+   ¿qué contenido tiene el paquete que quiere que recojan?"
+  ← AG_Get_and_create_contact ejecuta silenciosamente
+  ← isVerified=True → transición a RAD_Management_voice
+  ← Paso 1: pregunta contenido (PAM check)
+
+Turno 4 · Cliente
+  "Documentos."
+
+Turno 5 · Agente
+  "Perfecto, los documentos son aptos. Antes de continuar, necesito
+   confirmar que su envío cumple con nuestra política de aceptación
+   de mercancía. ¿Podemos continuar con ese entendido?"
+  ← Paso 2: PAM aceptada
+
+Turno 5 · Cliente
+  "Sí."
+
+Turno 6 · Agente
+  "Perfecto. ¿Me dicta el número de guía prepagada, por favor?"
+  ← Paso 3
+
+Turno 6 · Cliente
+  "Seis, uno, dos, cuatro, cero, ocho, cinco, siete, tres, cero,
+   nueve."
+
+Turno 7 · Agente
+  "Entendí seis uno dos, cuatro cero ocho, cinco siete tres,
+   cero nueve. ¿Es correcto?"
+  ← Paso 4: readback dígito por dígito, bloques de tres
+
+Turno 7 · Cliente
+  "Sí, correcto."
+
+Turno 8 · Agente
+  "Permítame verificar…"
+  [ejecuta MOCK_GLP_BuscarGuia con guiaNumber=61240857309]
+  "Encontré su guía. Corresponde a un envío de documentos con peso
+   de dos kilos, origen en Monterrey. ¿Los datos son correctos?"
+  ← capture_rad_guia_number → radGuiaNumber = "61240857309"
+  ← MOCK_GLP_BuscarGuia devuelve voiceSummary + radGuiaFound=True
+
+Turno 8 · Cliente
+  "Sí, todo bien."
+
+Turno 9 · Agente
+  "Un momento, revisando las opciones…"
+  [ejecuta MOCK_GLP_DatesToCollection]
+  "Tengo disponible mañana entre nueve y once de la mañana,
+   o mañana entre once y una de la tarde,
+   o pasado mañana entre nueve y once de la mañana.
+   ¿Cuál prefiere?"
+  ← MOCK_GLP_DatesToCollection devuelve option1/2/3
+
+Turno 9 · Cliente
+  "La primera."
+
+Turno 10 · Agente
+  "Un instante mientras la agendo…"
+  [ejecuta MOCK_GLP_RadCreate con guiaNumber + optionId=OPT_1]
+  "Listo, Jonathan. Su recolección quedó agendada. Le confirmo el
+   número de rastreo: pe equis rad demo, tres cero nueve. ¿Le
+   ayudo con algo más?"
+  ← capture_rad_selected_option → radSelectedOptionId = "OPT_1"
+  ← MOCK_GLP_RadCreate devuelve trackingNumber = "PX-RAD-DEMO-309"
+  ← Cierre con readback natural del tracking
+\`\`\`
+
+**Diferencias vs. el sample de Ana María:**
+- **Correo de una sola palabra** — reduce a 4 tokens el readback (*"jonathan arroba gmail punto com"*) contra 12 tokens del correo de Ana María. Ideal para probar el ladder de repair con ruido de fondo o acentos cerrados.
+- **Guía con dígitos variados** (no secuencial ni repetitivo) — verifica que el readback en bloques de tres se aplique correctamente incluso cuando los dígitos no forman patrones familiares.
+- **Rutas del interior** (Monterrey → Guadalajara vs. la ruta intraurbana CDMX de Ana María) — cubre un caso de larga distancia (700 km).
+- **Contenido "documentos"** en lugar de "ropa retail" — permite validar el PAM check con un contenido más neutral y frecuente en clientes B2B/personas físicas.
+
+**Números de rastreo generados por el mock:**
+
+| Guía | Cliente | Tracking devuelto por \`MOCK_GLP_RadCreate\` |
+|---|---|---|
+| \`77834215906\` | Ana María Torres López | \`PX-RAD-DEMO-906\` |
+| \`61240857309\` | Jonathan Gómez | \`PX-RAD-DEMO-309\` |
+
+El sufijo son los últimos 3 dígitos de la guía — lógica hardcoded en \`MOCK_GLP_RadCreate\` para dar una salida determinista sin depender de un contador global. Cuando se swappee al endpoint real, el tracking lo generará GLP directamente.
+
+---
+
 ## 🔌 Mocks vs. endpoints reales — swap contract
 
 Los 3 mocks tienen contrato I/O alineado al PDF v4 de Freeway. **Swappear a los endpoints reales requiere sólo renombrar el \`target\` en el \`.agent\`** — sin cambios en el shape de los datos ni en las instrucciones del sub-agente.
@@ -206,7 +340,7 @@ Los 3 mocks tienen contrato I/O alineado al PDF v4 de Freeway. **Swappear a los 
 | \`apex://MOCK_GLP_DatesToCollection\` | \`RadRestFul/datesToCollection\` | Idem. Mismos campos de output (optionsSpokenList, option1Id/Label, option2Id/Label, option3Id/Label). Si el endpoint real devuelve más de 3 opciones, extender la clase para tomar top-3 o refactorizar la instrucción del sub-agente. |
 | \`apex://MOCK_GLP_RadCreate\` | \`RadRestFul/radCreate\` con \`docType=P\` | Idem. Confirmar con el otro equipo que \`docType=P\` sea el estándar de RPP (según PDF v4 §5.4). Output: trackingNumber, confirmationMessage, docType. |
 
-**Los datos del "cliente feliz"** (Ana María Torres) viven en \`MOCK_GLP_DemoData.json\` como StaticResource. Cuando se quiera cambiar el guion o probar otro caso demo, basta con editar ese JSON y hacer un deploy — no requiere tocar el Apex ni el \`.agent\`.
+**Los datos de los "clientes felices"** (Ana María Torres y Jonathan Gómez) viven en \`MOCK_GLP_DemoData.json\` como StaticResource. El catálogo mock incluye actualmente **dos guías válidas** (\`77834215906\` y \`61240857309\`) más un edge case fronterizo sin origen registrado (\`77834215907\` — Distribuidora del Norte S.A. de C.V., Ciudad Juárez). Cualquier otro número dictado por el cliente devuelve \`found=False\` y el sub-agente ofrece transferir a un asesor. Cuando se quiera agregar un nuevo perfil demo, basta con editar el JSON y hacer un deploy del StaticResource — no requiere tocar el Apex ni el \`.agent\`.
 
 ---
 
