@@ -6,7 +6,7 @@ import SiteHeader from "./SiteHeader";
 import type { Dictionary } from "@/lib/i18n";
 
 const PRESENTATION_PATH =
-  /^\/[a-z]{2}\/(customer-demos\/[^/]+\/deck\/|insights\/[^/]+\/deck)/;
+  /^\/[a-z]{2}\/(customer-demos\/[^/]+\/deck\/|insights\/[^/]+\/deck|customer-projects\/[^/]+\/voice-demo)/;
 
 export default function SiteChrome({
   children,

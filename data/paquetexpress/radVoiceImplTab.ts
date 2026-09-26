@@ -5,6 +5,8 @@
 
 const content = `> 🚚 **RAD-voice · Implementación técnica** — el 2026-09-23 se publicó a QA (\`paquetexpress-sandbox\`, Org Id \`00Ddh000001pK4BEAU\`) la versión **v3** del agente \`FDE_Paquetexpress_Service_Agent_Split_voice\`, que agrega el sub-agente **\`RAD_Management_voice\`** cubriendo el happy path del flujo **RPP (guía prepagada)**. Esta pestaña documenta la implementación: arquitectura del sub-agente, sample conversation real, contrato de swap de los mocks GLP, reglas de voz aplicadas, y el puente Quote→RAD.
 
+> 🎙️ **Guión sincronizado de la llamada demo** — presentación full-screen para acompañar la grabación real del teléfono en OBS. Cada momento del happy path RPP aparece a la derecha mientras se avanza con flecha o clic. → **[Abrir presentación](/es/customer-projects/paquetexpress/voice-demo)** *(atajos: ←/→ · espacio · F para pantalla completa)*.
+
 ## 🎯 En una frase
 
 El sub-agente **RAD_Management_voice** vive dentro del mismo bundle del voice base, se activa cuando el cliente pide agendar recolección (o cuando el cliente marcó \`quoteRAD=Yes\` al terminar de cotizar), y orquesta un flujo de ~10 pasos que termina en un número de rastreo — usando **3 acciones Apex mock** con prefijo \`MOCK_GLP_\` que son swappables por los endpoints reales de GLP cuando el otro equipo los publique.
