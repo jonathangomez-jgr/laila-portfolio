@@ -113,12 +113,12 @@ function SceneIcon({ name, size = 22 }: { name: VoiceDemoIcon; size?: number }) 
 export default function PaquetexpressVoiceDemoPresentation({
   scenes,
 }: Props) {
-  // idx = -1 → cover slide; 0..total-1 → escenas
+  // idx = -1 → cover; 0..total-1 → escenas; total → closing slide
   const [idx, setIdx] = useState(-1);
   const total = scenes.length;
 
   const next = useCallback(() => {
-    setIdx((i) => (i < total - 1 ? i + 1 : i));
+    setIdx((i) => (i < total ? i + 1 : i));
   }, [total]);
   const prev = useCallback(() => {
     setIdx((i) => (i > -1 ? i - 1 : i));
@@ -161,7 +161,10 @@ export default function PaquetexpressVoiceDemoPresentation({
   }, [next, prev]);
 
   const isCover = idx === -1;
-  const scene = isCover ? scenes[0] : scenes[idx];
+  const isClosing = idx === total;
+  const isSlideMode = isCover || isClosing;
+  const scene = isSlideMode ? scenes[0] : scenes[idx];
+  const progressPct = Math.min(Math.max((idx + 1) / total, 0), 1) * 100;
 
   return (
     <>
@@ -175,6 +178,8 @@ export default function PaquetexpressVoiceDemoPresentation({
       >
         {isCover ? (
           <CoverSlide />
+        ) : isClosing ? (
+          <ClosingSlide />
         ) : (
           <>
         {/* ── Top bar ── */}
@@ -289,7 +294,7 @@ export default function PaquetexpressVoiceDemoPresentation({
           <div
             className="h-full transition-all duration-500 ease-out"
             style={{
-              width: `${((idx + 1) / total) * 100}%`,
+              width: `${progressPct}%`,
               background: `linear-gradient(90deg, ${ACCENT}, #90D0FE)`,
             }}
           />
@@ -337,6 +342,56 @@ function CoverSlide() {
         }}
       >
         Recolección a domicilio
+      </h1>
+
+      <p
+        className="mt-8 text-center font-semibold uppercase tracking-[0.32em]"
+        style={{
+          color: "#B8E4FF",
+          fontSize: "clamp(1rem, 1.3vw, 1.5rem)",
+        }}
+      >
+        Salesforce · Agentforce Voice
+      </p>
+    </div>
+  );
+}
+
+function ClosingSlide() {
+  return (
+    <div className="pxvd-detail-anim relative z-10 flex h-full w-full flex-col items-center justify-center px-10">
+      <div className="flex items-center gap-8">
+        <Image
+          src="/Customers/Paquetexpress/logo-white.png"
+          alt="Paquetexpress"
+          width={340}
+          height={72}
+          style={{ height: 68, width: "auto" }}
+          priority
+        />
+        <div
+          className="h-14 w-px"
+          style={{ backgroundColor: "rgba(255,255,255,0.36)" }}
+        />
+        <Image
+          src="/sfdc-logos/corporate-logo-horiz-allw.png"
+          alt="Salesforce"
+          width={320}
+          height={64}
+          style={{ height: 60, width: "auto" }}
+          priority
+        />
+      </div>
+
+      <h1
+        className="mt-16 text-center font-semibold leading-[1.02] tracking-tight"
+        style={{
+          color: "#FFFFFF",
+          fontSize: "clamp(4rem, 8vw, 7.5rem)",
+          letterSpacing: "-0.025em",
+        }}
+      >
+        Gracias
       </h1>
 
       <p
