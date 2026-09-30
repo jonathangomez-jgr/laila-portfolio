@@ -1,0 +1,1093 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RAD Voice · POD FDEs</title>
+  <style>
+    :root {
+      --ink: #0b1220;
+      --ink-soft: #1e293b;
+      --paper: #f8fafc;
+      --line: #cbd5e1;
+      --line-soft: #e2e8f0;
+      --muted: #64748b;
+      --accent: #ea580c;    /* naranja Paquetexpress */
+      --accent-soft: #fed7aa;
+      --brand: #1d4ed8;
+      --brand-soft: #dbeafe;
+      --ok: #15803d;
+      --ok-soft: #dcfce7;
+      --warn: #b45309;
+      --warn-soft: #fef3c7;
+      --stop: #b91c1c;
+      --stop-soft: #fee2e2;
+      --code-bg: #0f172a;
+      --code-fg: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--paper);
+      color: var(--ink);
+      font: 400 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display",
+            "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .deck {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: clamp(28px, 4vw, 56px) clamp(32px, 6vw, 96px);
+      display: none;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow: auto;
+    }
+    .slide.active { display: flex; }
+
+    .slide h1, .slide h2, .slide h3 { margin: 0; letter-spacing: -0.02em; }
+    .slide h1 { font-size: clamp(32px, 3.8vw, 54px); font-weight: 700; }
+    .slide h2 { font-size: clamp(22px, 2.4vw, 34px); font-weight: 650; color: var(--ink); }
+    .slide h3 { font-size: 18px; font-weight: 600; color: var(--ink); }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .lede { font-size: clamp(18px, 1.7vw, 22px); color: var(--ink-soft); max-width: 72ch; }
+
+    .hr { height: 1px; background: var(--line-soft); border: 0; margin: 24px 0; }
+
+    p, li { color: var(--ink-soft); }
+    strong { color: var(--ink); }
+
+    /* Chrome */
+    .top-bar {
+      position: fixed;
+      inset: 0 0 auto 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-transform: uppercase;
+      pointer-events: none;
+      z-index: 20;
+    }
+    .top-bar b { color: var(--ink); font-weight: 700; letter-spacing: 0.08em; }
+    .progress {
+      position: fixed;
+      inset: auto 0 0 0;
+      height: 3px;
+      background: transparent;
+      z-index: 20;
+    }
+    .progress > div {
+      height: 100%;
+      background: var(--accent);
+      transition: width 220ms ease;
+    }
+    .counter {
+      position: fixed;
+      bottom: 12px;
+      right: 24px;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      color: var(--muted);
+      z-index: 20;
+    }
+    .hint {
+      position: fixed;
+      bottom: 12px;
+      left: 24px;
+      font-size: 11px;
+      color: var(--muted);
+      z-index: 20;
+    }
+
+    /* Layouts */
+    .cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+    .cover .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .cover .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+      display: inline-block;
+    }
+    .cover .super {
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 750;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+    .cover .super em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .cover .sub {
+      font-size: clamp(18px, 1.8vw, 22px);
+      color: var(--muted);
+      max-width: 64ch;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+
+    /* Cards */
+    .card {
+      background: white;
+      border: 1px solid var(--line-soft);
+      border-radius: 14px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .card.tag { border-color: var(--line); }
+    .card .card-h {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--ink);
+      font-size: 16px;
+      letter-spacing: -0.01em;
+    }
+    .card .card-icon {
+      width: 28px; height: 28px;
+      display: grid; place-items: center;
+      border-radius: 8px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .card ul { padding: 0; margin: 4px 0 0 0; list-style: none; }
+    .card li {
+      position: relative;
+      padding-left: 16px;
+      margin: 6px 0;
+      font-size: 14px;
+      color: var(--ink-soft);
+    }
+    .card li:before {
+      content: "";
+      position: absolute; left: 0; top: 9px;
+      width: 6px; height: 2px; background: var(--muted); border-radius: 2px;
+    }
+
+    .card.accent .card-icon { background: var(--accent-soft); color: var(--accent); }
+    .card.ok .card-icon { background: var(--ok-soft); color: var(--ok); }
+    .card.warn .card-icon { background: var(--warn-soft); color: var(--warn); }
+    .card.stop .card-icon { background: var(--stop-soft); color: var(--stop); }
+
+    /* Flow diagram */
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .flow-step {
+      background: white;
+      border: 1px solid var(--line-soft);
+      border-radius: 12px;
+      padding: 18px 20px;
+      position: relative;
+    }
+    .flow-step .stepnum {
+      position: absolute; top: -12px; left: 16px;
+      width: 26px; height: 26px;
+      background: var(--ink);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      display: grid; place-items: center;
+      border-radius: 50%;
+    }
+    .flow-step .stepname {
+      font-weight: 700;
+      color: var(--ink);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .flow-step .stepdesc {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .flow-arrow {
+      color: var(--line);
+      font-size: 22px;
+      display: grid; place-items: center;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--line-soft);
+    }
+    th {
+      text-align: left;
+      background: #f1f5f9;
+      color: var(--ink);
+      font-weight: 650;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 10px 14px;
+    }
+    td {
+      padding: 10px 14px;
+      border-top: 1px solid var(--line-soft);
+      color: var(--ink-soft);
+      vertical-align: top;
+    }
+    td code, .code-inline {
+      background: #f1f5f9;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: var(--ink);
+    }
+
+    /* Chip */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .chip.accent { background: var(--accent-soft); color: var(--accent); }
+    .chip.ok { background: var(--ok-soft); color: var(--ok); }
+    .chip.warn { background: var(--warn-soft); color: var(--warn); }
+    .chip.stop { background: var(--stop-soft); color: var(--stop); }
+
+    /* Dialog boxes for turn-by-turn */
+    .dialog {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: calc(100vh - 220px);
+      overflow: auto;
+      padding-right: 6px;
+    }
+    .turn {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    .turn .who {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-top: 6px;
+    }
+    .turn .bubble {
+      background: white;
+      border: 1px solid var(--line-soft);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+    .turn.bot .bubble {
+      background: #f8fafc;
+      border-left: 3px solid var(--brand);
+    }
+    .turn.usr .bubble {
+      background: white;
+      border-left: 3px solid var(--accent);
+    }
+    .turn .note {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* Two-column dialog + guardrails */
+    .side-panel {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 24px;
+      height: calc(100vh - 200px);
+    }
+    .side-panel > div { min-width: 0; }
+    .callouts {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: auto;
+    }
+    .callout {
+      background: white;
+      border: 1px solid var(--line-soft);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .callout .callout-h {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 4px;
+    }
+    .callout.ok .callout-h { color: var(--ok); }
+    .callout.warn .callout-h { color: var(--warn); }
+    .callout.stop .callout-h { color: var(--stop); }
+    .callout .callout-b { font-size: 14px; color: var(--ink-soft); }
+
+    /* Comparison cards */
+    .cmp {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .cmp-col {
+      background: white;
+      border: 1px solid var(--line-soft);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cmp-col .cmp-head {
+      display: flex; align-items: center; gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line-soft);
+      margin-bottom: 4px;
+    }
+    .cmp-col .cmp-head .badge {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: grid; place-items: center;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .cmp-col.rpp .cmp-head .badge { background: var(--ok-soft); color: var(--ok); }
+    .cmp-col.ww .cmp-head .badge { background: var(--warn-soft); color: var(--warn); }
+    .cmp-col.normal .cmp-head .badge { background: var(--accent-soft); color: var(--accent); }
+    .cmp-col .cmp-name { font-weight: 700; font-size: 18px; color: var(--ink); }
+    .cmp-col .cmp-sub { font-size: 12px; color: var(--muted); }
+    .cmp-col .field { display: flex; gap: 8px; font-size: 13px; }
+    .cmp-col .field .k {
+      min-width: 88px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding-top: 2px;
+    }
+    .cmp-col .field .v { color: var(--ink-soft); }
+
+    /* Big number */
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--line-soft);
+      background: white;
+    }
+    .stat .num {
+      font-size: clamp(28px, 3.4vw, 44px);
+      font-weight: 750;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .stat .lbl { font-size: 13px; color: var(--muted); }
+
+    /* Nav buttons for touch */
+    .nav-btn {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px; height: 40px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: white;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      cursor: pointer;
+      z-index: 30;
+      opacity: 0;
+      transition: opacity 200ms;
+      user-select: none;
+    }
+    .deck:hover .nav-btn { opacity: 0.9; }
+    .nav-btn.prev { left: 16px; }
+    .nav-btn.next { right: 16px; }
+    .nav-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+    /* Utility */
+    .space-t { margin-top: 20px; }
+    .space-t-lg { margin-top: 32px; }
+    .muted { color: var(--muted); }
+    .tabular { font-variant-numeric: tabular-nums; }
+    .kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      padding: 1px 6px;
+      border: 1px solid var(--line);
+      border-bottom-width: 2px;
+      border-radius: 4px;
+      background: #f8fafc;
+      color: var(--ink);
+    }
+
+    @media print {
+      .top-bar, .progress, .counter, .hint, .nav-btn { display: none; }
+      .slide { display: flex !important; position: relative; page-break-after: always; height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span><b>Paquetexpress</b> · RAD Voice</span>
+  <span>Vista rápida para el POD FDEs</span>
+</div>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1 · COVER -->
+  <section class="slide active cover">
+    <div class="kicker"><span class="dot"></span> POD FDEs · Sesión interna</div>
+    <div class="super">Recolección<br/>a Domicilio <em>· voice</em></div>
+    <div class="sub">Cómo entender el proceso RAD, sus tres modalidades, y cómo probar el agente en 10 minutos.</div>
+    <div class="space-t" style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <span class="chip accent">FDE_Paquetexpress_Service_Agent_Split_voice</span>
+      <span class="chip">Sandbox QA · paquetexpress--qa2020</span>
+      <span class="chip ok">Draft en Builder</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 2 · QUÉ ES RAD -->
+  <section class="slide">
+    <div class="eyebrow">01 · Concepto</div>
+    <h1>¿Qué es RAD?</h1>
+    <div class="lede space-t">
+      <strong>Recolección A Domicilio.</strong> El servicio en el que Paquetexpress pasa por el paquete al cliente
+      en lugar de que el cliente lo lleve a sucursal. Es el punto de entrada del flujo logístico.
+    </div>
+
+    <div class="grid-3 space-t-lg">
+      <div class="card accent">
+        <div class="card-h"><span class="card-icon">📞</span> El cliente llama</div>
+        <p class="muted" style="font-size: 14px;">Por voz. El agente lo verifica una sola vez con nombre y correo.</p>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-icon">📦</span> Elige tipo</div>
+        <p class="muted" style="font-size: 14px;">RPP (ya tiene guía prepagada) · WW (guía documentada en línea) · Normal (no tiene guía).</p>
+      </div>
+      <div class="card ok">
+        <div class="card-h"><span class="card-icon">✅</span> Agenda fecha</div>
+        <p class="muted" style="font-size: 14px;">Sale con número de rastreo y ventana horaria para que pasen a recoger.</p>
+      </div>
+    </div>
+
+    <div class="space-t-lg">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%">Antes (sin voice)</th>
+            <th>Ahora (con el sub-agente)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cliente marca al call center, pasa por IVR, y un humano toma sus datos.</td>
+            <td>Cliente marca, agente virtual valida contenido, política, tipo, y agenda. El humano solo aparece si hay excepción real.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SLIDE 3 · FLUJO GENERAL -->
+  <section class="slide">
+    <div class="eyebrow">02 · Flujo general</div>
+    <h1>Cómo lo orquesta el agente</h1>
+    <p class="lede space-t">Cuatro fases determinísticas. Todas pasan por el intake común; después ramifica.</p>
+
+    <div class="flow space-t-lg">
+      <div class="flow-step">
+        <div class="stepnum">1</div>
+        <div class="stepname">Verificación</div>
+        <div class="stepdesc">Nombre completo + correo. Una sola vez por sesión.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="stepnum">2</div>
+        <div class="stepname">Intake común</div>
+        <div class="stepdesc">Contenido del paquete → política de aceptación → tipo de recolección.</div>
+      </div>
+    </div>
+    <div style="height: 22px"></div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="stepnum">3</div>
+        <div class="stepname">Rama por tipo</div>
+        <div class="stepdesc">RPP corto · WW cierre corto · Normal completo.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="stepnum">4</div>
+        <div class="stepname">Cierre</div>
+        <div class="stepdesc">Número de rastreo leído dígito por dígito y correo de confirmación.</div>
+      </div>
+    </div>
+
+    <div class="space-t-lg grid-2">
+      <div class="callout ok">
+        <div class="callout-h">Determinístico</div>
+        <div class="callout-b">Cada fase tiene guards booleanos y solo avanza cuando la anterior se completó. El LLM no puede saltar pasos.</div>
+      </div>
+      <div class="callout warn">
+        <div class="callout-h">Escalación forzada</div>
+        <div class="callout-b">Contenido prohibido, guía inexistente, dimensiones fuera de límite y valor declarado &gt; 50 000 disparan transferencia a asesor humano.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4 · LOS 3 TIPOS -->
+  <section class="slide">
+    <div class="eyebrow">03 · Modalidades</div>
+    <h1>Los tres tipos de recolección</h1>
+    <p class="lede space-t">La rama depende de si el cliente ya tiene guía y cómo la generó.</p>
+
+    <div class="cmp space-t-lg">
+      <div class="cmp-col rpp">
+        <div class="cmp-head">
+          <div class="badge">P</div>
+          <div>
+            <div class="cmp-name">RPP</div>
+            <div class="cmp-sub">Guía prepagada</div>
+          </div>
+        </div>
+        <div class="field"><div class="k">Cuándo</div><div class="v">Cliente B2B con volumen. Ya compró un bloque de guías.</div></div>
+        <div class="field"><div class="k">Aporte</div><div class="v">Corto. La guía ya trae dirección, contenido y peso registrados.</div></div>
+        <div class="field"><div class="k">Pide</div><div class="v">Número de guía prepagada.</div></div>
+        <div class="field"><div class="k">Cierra</div><div class="v">Confirma datos → elige fecha → tracking.</div></div>
+        <div class="field"><div class="k">Turnos</div><div class="v">~12 turnos totales.</div></div>
+      </div>
+
+      <div class="cmp-col ww">
+        <div class="cmp-head">
+          <div class="badge">W</div>
+          <div>
+            <div class="cmp-name">WW</div>
+            <div class="cmp-sub">Guía documentada en línea</div>
+          </div>
+        </div>
+        <div class="field"><div class="k">Cuándo</div><div class="v">Cliente generó su guía en el portal en línea de Paquetexpress.</div></div>
+        <div class="field"><div class="k">Aporte</div><div class="v">Muy corto en esta iteración. Escala a asesor humano.</div></div>
+        <div class="field"><div class="k">Pide</div><div class="v">Solo confirmar contenido y política.</div></div>
+        <div class="field"><div class="k">Cierra</div><div class="v">Mensaje de "no cartones de huevo" → transfiere.</div></div>
+        <div class="field"><div class="k">Turnos</div><div class="v">~8 turnos.</div></div>
+      </div>
+
+      <div class="cmp-col normal">
+        <div class="cmp-head">
+          <div class="badge">N</div>
+          <div>
+            <div class="cmp-name">Normal</div>
+            <div class="cmp-sub">Recolección natural</div>
+          </div>
+        </div>
+        <div class="field"><div class="k">Cuándo</div><div class="v">Cliente no tiene guía. Es la vía B2C típica y B2B ocasional.</div></div>
+        <div class="field"><div class="k">Aporte</div><div class="v">Flujo largo con captura de origen, paquete, destino y envío.</div></div>
+        <div class="field"><div class="k">Pide</div><div class="v">Cliente origen, dirección, contacto, paquetes, cliente destino, dirección, contacto, tipo entrega, pago, valor, cobertura, servicios, fecha.</div></div>
+        <div class="field"><div class="k">Cierra</div><div class="v">Confirma agendamiento → tracking.</div></div>
+        <div class="field"><div class="k">Turnos</div><div class="v">~35-45 turnos.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5 · RPP EN DETALLE -->
+  <section class="slide">
+    <div class="eyebrow">04 · RPP en detalle</div>
+    <h1>Recolección con guía prepagada</h1>
+    <div class="lede space-t">La guía ya tiene todos los datos. El agente solo confirma y agenda.</div>
+
+    <div class="grid-2 space-t-lg">
+      <div>
+        <h3 style="margin-bottom: 12px">Pasos que ejecuta el agente</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="card">
+            <div class="card-h"><span class="card-icon">1</span> Pide número de guía prepagada</div>
+            <p class="muted" style="font-size: 13px; margin: 0;">Readback dígito por dígito en bloques de tres.</p>
+          </div>
+          <div class="card ok">
+            <div class="card-h"><span class="card-icon">2</span> Busca la guía en GLP</div>
+            <p class="muted" style="font-size: 13px; margin: 0;"><code class="code-inline">MOCK_GLP_BuscarGuia</code> · determinístico.</p>
+          </div>
+          <div class="card">
+            <div class="card-h"><span class="card-icon">3</span> Lee el resumen y confirma</div>
+            <p class="muted" style="font-size: 13px; margin: 0;">Contenido · peso · ciudad origen. No lee dirección completa.</p>
+          </div>
+          <div class="card ok">
+            <div class="card-h"><span class="card-icon">4</span> Presenta 3 opciones de fecha</div>
+            <p class="muted" style="font-size: 13px; margin: 0;"><code class="code-inline">MOCK_GLP_DatesToCollection</code> · frase natural con "o".</p>
+          </div>
+          <div class="card ok">
+            <div class="card-h"><span class="card-icon">5</span> Agenda</div>
+            <p class="muted" style="font-size: 13px; margin: 0;"><code class="code-inline">MOCK_GLP_RadCreate</code> · devuelve tracking.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom: 12px">Qué NO hace</h3>
+        <div class="callout stop">
+          <div class="callout-h">No pide dirección</div>
+          <div class="callout-b">La guía prepagada ya trae origen registrado.</div>
+        </div>
+        <div class="callout stop" style="margin-top: 10px">
+          <div class="callout-h">No pide dimensiones</div>
+          <div class="callout-b">El paquete ya está descrito en la guía.</div>
+        </div>
+        <div class="callout stop" style="margin-top: 10px">
+          <div class="callout-h">No lee siglas</div>
+          <div class="callout-b">Nunca dice "RPP". Dice "guía prepagada".</div>
+        </div>
+        <div class="callout warn" style="margin-top: 10px">
+          <div class="callout-h">Si la guía no existe</div>
+          <div class="callout-b">Ofrece transferir con asesor o reintentar con otro número.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6 · NORMAL EN DETALLE -->
+  <section class="slide">
+    <div class="eyebrow">05 · Normal en detalle</div>
+    <h1>Recolección natural — el flujo largo</h1>
+    <div class="lede space-t">Cuatro bloques secuenciales. Cada uno tiene guards; el agente no puede saltarlos.</div>
+
+    <div class="grid-4 space-t-lg">
+      <div class="card accent">
+        <div class="card-h"><span class="card-icon">A</span> Origen</div>
+        <ul>
+          <li>Cliente por llave / RFC / nombre+tel</li>
+          <li>Confirma dirección o captura nueva</li>
+          <li>Contacto de recolección</li>
+          <li>CP → zona fronteriza automática</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-icon">B</span> Paquetes</div>
+        <ul>
+          <li>Cantidad</li>
+          <li>Por cada uno: empaque, contenido, peso, dimensiones</li>
+          <li>Clave SAT</li>
+          <li>Validación de dimensiones automática</li>
+        </ul>
+      </div>
+      <div class="card accent">
+        <div class="card-h"><span class="card-icon">C</span> Destino</div>
+        <ul>
+          <li>Cliente por llave / RFC / nombre+tel</li>
+          <li>Confirma dirección o captura nueva</li>
+          <li>Contacto de entrega</li>
+        </ul>
+      </div>
+      <div class="card ok">
+        <div class="card-h"><span class="card-icon">D</span> Envío</div>
+        <ul>
+          <li>Ocurre (sucursal) o Domicilio</li>
+          <li>Forma de pago y modo</li>
+          <li>Valor declarado</li>
+          <li>Cobertura y servicios extra</li>
+          <li>Fecha y hora → tracking</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="space-t-lg grid-3">
+      <div class="callout stop">
+        <div class="callout-h">Excede dimensiones</div>
+        <div class="callout-b">&gt; 300×200×180 cm o &gt; 2 000 kg → transfiere.</div>
+      </div>
+      <div class="callout stop">
+        <div class="callout-h">Excede valor declarado</div>
+        <div class="callout-b">&gt; 50 000 MXN → transfiere.</div>
+      </div>
+      <div class="callout warn">
+        <div class="callout-h">Cliente no encontrado</div>
+        <div class="callout-b">Alta manual: apellidos, nombre, RFC opcional, dirección completa.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7 · WW -->
+  <section class="slide">
+    <div class="eyebrow">06 · WW en detalle</div>
+    <h1>Guía documentada en línea</h1>
+    <div class="lede space-t">Flujo corto por diseño: la instrucción 60 del proceso de negocio quedó pendiente de definir.</div>
+
+    <div class="grid-2 space-t-lg">
+      <div>
+        <div class="card warn">
+          <div class="card-h"><span class="card-icon">1</span> Cliente elige WW después del intake común</div>
+          <p class="muted" style="font-size: 13px; margin: 0;">Después de contenido + política.</p>
+        </div>
+        <div class="card warn" style="margin-top: 10px">
+          <div class="card-h"><span class="card-icon">2</span> Agente dice el mensaje de cartones</div>
+          <p class="muted" style="font-size: 13px; margin: 0;">"Le pido de favor no usar cartones de huevo como empaque".</p>
+        </div>
+        <div class="card warn" style="margin-top: 10px">
+          <div class="card-h"><span class="card-icon">3</span> Transfiere a asesor</div>
+          <p class="muted" style="font-size: 13px; margin: 0;">Sin capturar más datos. Escalación limpia.</p>
+        </div>
+      </div>
+      <div>
+        <div class="callout warn">
+          <div class="callout-h">Dependencia viva</div>
+          <div class="callout-b">Cuando negocio defina la instrucción 60 real (crear caso, enviar email a sucursal, otra cosa) reemplazamos la transferencia por ese cierre. El punto de reemplazo está aislado.</div>
+        </div>
+        <div class="callout" style="margin-top: 12px">
+          <div class="callout-h">Diseño intencional</div>
+          <div class="callout-b">No se captura ningún dato en WW hasta tener la instrucción real; evita persistir estado que después habría que limpiar.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 8 · DATOS DE PRUEBA -->
+  <section class="slide">
+    <div class="eyebrow">07 · Datos disponibles</div>
+    <h1>Con qué probar</h1>
+    <div class="lede space-t">Todo está mockeado en Apex + Static Resource. No requiere endpoints reales de GLP.</div>
+
+    <div class="space-t-lg">
+      <h3 style="margin-bottom: 8px">Clientes que el mock GLP reconoce</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Identificadores</th>
+            <th>Cliente</th>
+            <th>Uso demo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>PXCUST001</code> · <code>TOLA850712MN4</code> · "Ana María Torres"</td>
+            <td>Ana María Torres López · CDMX</td>
+            <td>Happy path RPP y Normal.</td>
+          </tr>
+          <tr>
+            <td><code>PXCUST002</code> · <code>DNO120345XYZ</code> · "Distribuidora del Norte"</td>
+            <td>Distribuidora del Norte · Cd. Juárez</td>
+            <td>B2B fronterizo.</td>
+          </tr>
+          <tr>
+            <td><code>PXCUST003</code> · <code>GOJO900215HN7</code> · "Jonathan Gómez"</td>
+            <td>Jonathan Gómez · Monterrey</td>
+            <td>Perfil alterno.</td>
+          </tr>
+          <tr>
+            <td>Cualquier otro</td>
+            <td>—</td>
+            <td>Dispara rama de alta manual.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="space-t-lg grid-2">
+      <div>
+        <h3 style="margin-bottom: 8px">Guías prepagadas válidas</h3>
+        <table>
+          <thead><tr><th>Guía</th><th>Cliente · Ruta</th></tr></thead>
+          <tbody>
+            <tr><td><code>77834215906</code></td><td>Ana María · CDMX intracity · 5 kg</td></tr>
+            <tr><td><code>61240857309</code></td><td>Jonathan · MTY→GDL · 2 kg</td></tr>
+            <tr><td><code>77834215907</code></td><td>Distribuidora del Norte · sin origen (edge case)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3 style="margin-bottom: 8px">CPs de prueba</h3>
+        <table>
+          <thead><tr><th>CP</th><th>Comportamiento</th></tr></thead>
+          <tbody>
+            <tr><td><code>32xxx / 88xxx / 22xxx</code></td><td>Zona fronteriza detectada</td></tr>
+            <tr><td><code>06700 · 44630 · 64000</code></td><td>Sucursales disponibles para Ocurre</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 9 · SCRIPT RPP -->
+  <section class="slide">
+    <div class="eyebrow">08 · Escenario de prueba</div>
+    <h1>RPP happy path — Ana María</h1>
+    <div class="lede">Sigue el guion en el Preview del Agent Builder. Lo que aparece en gris es lo que debe estar pasando por debajo.</div>
+
+    <div class="side-panel space-t">
+      <div class="dialog">
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">¡Hola, buen día! Soy el asistente virtual de Paquetexpress. ¿Me indica su nombre completo, por favor?</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Ana María Torres López. Quiero agendar una recolección.<span class="note">→ pendingIntent = "RAD" (silencioso)</span></div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Gracias, Ana María. ¿Me dicta su correo?</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">a punto torres arroba empaques hb dos punto com</div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Entendí: a punto torres arroba empaques h b dos punto com, ¿es correcto?<span class="note">Readback obligatorio</span></div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Sí.<span class="note">→ isVerified = True · transición automática a RAD</span></div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">¿Qué contiene el paquete?</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Ropa nueva para retail.<span class="note">→ radContentAccepted = True</span></div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Gracias. ¿Podemos continuar con la política de aceptación?</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Sí.<span class="note">→ radPolicyConfirmed = True</span></div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">¿Su recolección es con guía prepagada, documentada en línea, o normal?</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Prepagada, ya la tengo.<span class="note">→ radType = "RPP"</span></div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">¿Me dicta el número de guía?</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Setenta y siete, ochenta y tres, cuarenta y dos, quince, nueve cero seis.</div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Entendí siete siete ocho, tres cuatro dos, uno cinco nueve, cero seis. ¿Correcto?<span class="note">Bloques de 3 dígitos</span></div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Sí.<span class="note">→ MOCK_GLP_BuscarGuia automático</span></div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Un momento… envío de ropa nueva para retail, 5 kg, origen CDMX. ¿Los datos son correctos?</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Sí.</div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Tengo disponible mañana entre 9 y 11, o mañana entre 11 y 13, o pasado mañana entre 9 y 11. ¿Cuál prefiere?<span class="note">→ MOCK_GLP_DatesToCollection</span></div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">La primera.<span class="note">→ radSelectedOptionId = "OPT_1" · MOCK_GLP_RadCreate automático</span></div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Listo. Su número de rastreo es pe equis rad demo, nueve cero seis. ¿Le ayudo con algo más?</div></div>
+      </div>
+      <div class="callouts">
+        <div class="callout ok">
+          <div class="callout-h">✓ Verificar</div>
+          <div class="callout-b">Readback en bloques de 3. Búsqueda de guía automática. Resumen no menciona dirección completa. Tracking leído dígito por dígito.</div>
+        </div>
+        <div class="callout stop">
+          <div class="callout-h">✗ Alerta</div>
+          <div class="callout-b">Si el agente pide dirección → bug. Si dice "RPP" o "OPT uno" → bug. Si dice "voy a transferirte" al pasar por verification → bug.</div>
+        </div>
+        <div class="callout">
+          <div class="callout-h">Variante</div>
+          <div class="callout-b">Con guía inexistente (ej. <code>12345678900</code>) el agente ofrece transferir o reintentar con <code>reset_rad_guia_state</code>.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 10 · SCRIPT NORMAL -->
+  <section class="slide">
+    <div class="eyebrow">09 · Escenario de prueba</div>
+    <h1>Normal — cliente conocido</h1>
+    <div class="lede">Solo la primera parte (Origen). El resto del flujo sigue el mismo patrón: bloque a bloque, guards claros.</div>
+
+    <div class="side-panel space-t">
+      <div class="dialog">
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Es una recolección normal, no tengo guía.<span class="note">→ radType = "Normal"</span></div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Comencemos con el origen. ¿Me proporciona su llave de cliente? Si no la tiene, con su RFC también puedo buscarlo.</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Mi RFC es TOLA 850712 MN4.</div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Entendí TOLA-850712-MN4, ¿es correcto?</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Sí.<span class="note">→ MOCK_GLP_BuscarCliente automático</span></div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Encontré el registro de Ana María Torres López con dirección en Avenida Insurgentes Sur mil doscientos treinta y cuatro, interior cinco B, colonia Del Valle Centro, código postal cero tres uno cero cero. ¿Es esta la dirección de origen?</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Sí.<span class="note">→ radOrigAddressConfirmed = True · consulta zona fronteriza automática</span></div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Ahora dígame nombre completo y teléfono de la persona que estará en el domicilio, más alguna referencia.</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Ana María Torres, 55 1234 5678. Casa blanca con portón azul.</div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">Entendí cinco cinco, uno dos tres, cuatro cinco seis, siete ocho. ¿Correcto?<span class="note">Readback teléfono</span></div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Sí.<span class="note">→ radOrigContactCaptured = True</span></div></div>
+        <div class="turn bot"><div class="who">Agente</div><div class="bubble">¿Cuántos paquetes va a enviar?</div></div>
+        <div class="turn usr"><div class="who">Cliente</div><div class="bubble">Uno.<span class="note">Continúa con detalles del paquete, uno por turno</span></div></div>
+      </div>
+      <div class="callouts">
+        <div class="callout ok">
+          <div class="callout-h">✓ Verificar</div>
+          <div class="callout-b">La dirección se lee, NO se pide capturar. Búsqueda de cliente automática al capturar RFC. Consulta fronteriza pasa en background.</div>
+        </div>
+        <div class="callout warn">
+          <div class="callout-h">Variante alta manual</div>
+          <div class="callout-b">Con RFC no reconocido (ej. <code>XAXX010101000</code>) el agente pide uno por uno: apellidos, nombre, RFC opcional, calle, exterior, colonia, CP.</div>
+        </div>
+        <div class="callout stop">
+          <div class="callout-h">✗ Alerta</div>
+          <div class="callout-b">Si pide dirección después de encontrar al cliente → bug. Si pide todos los datos del contacto en un solo turno → bug (voice = una pregunta a la vez).</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 11 · ESCALACIONES -->
+  <section class="slide">
+    <div class="eyebrow">10 · Escalaciones forzadas</div>
+    <h1>Cuándo el agente debe transferir</h1>
+    <div class="lede space-t">Situaciones donde el agente virtual NO debe insistir; lo correcto es pasar a humano.</div>
+
+    <div class="grid-2 space-t-lg">
+      <div class="callout stop">
+        <div class="callout-h">Contenido prohibido</div>
+        <div class="callout-b">Cliente dice "es una pistola" → transferencia. La lista PAM incluye armas, drogas, dinero, joyería, animales, restos humanos, mercancías NOM-002-SCT, artículos piratas, boletos de lotería extranjera.</div>
+      </div>
+      <div class="callout stop">
+        <div class="callout-h">Guía inexistente</div>
+        <div class="callout-b">Ofrece transferir o reintentar. Después de dos intentos fallidos del mismo cliente, transferencia obligatoria.</div>
+      </div>
+      <div class="callout stop">
+        <div class="callout-h">Dimensiones fuera de límite</div>
+        <div class="callout-b">&gt; 300 cm largo · &gt; 200 cm ancho · &gt; 180 cm alto · &gt; 2 000 kg → transferencia.</div>
+      </div>
+      <div class="callout stop">
+        <div class="callout-h">Valor declarado &gt; 50 000 MXN</div>
+        <div class="callout-b">Instrucción 41 del proceso RAD. Transferencia inmediata sin más preguntas.</div>
+      </div>
+      <div class="callout stop">
+        <div class="callout-h">Datos de guía incorrectos</div>
+        <div class="callout-b">Cliente dice que el resumen no corresponde a su envío → transferencia (no intentar editar datos).</div>
+      </div>
+      <div class="callout warn">
+        <div class="callout-h">WW (temporal)</div>
+        <div class="callout-b">Toda la rama WW cierra con transferencia hasta que negocio defina la instrucción 60.</div>
+      </div>
+    </div>
+
+    <div class="space-t-lg">
+      <div class="callout">
+        <div class="callout-h">Regla de continuidad</div>
+        <div class="callout-b">Al transferir, el agente NUNCA dice "voy a pasarte a otro agente virtual" ni frases similares. Para el cliente siempre es la misma conversación.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 12 · QUÉ VERIFICAR -->
+  <section class="slide">
+    <div class="eyebrow">11 · Checklist de prueba</div>
+    <h1>Qué verificar en cada corrida</h1>
+    <div class="lede space-t">Reglas mínimas de voz y determinismo. Si alguna falla, hay bug.</div>
+
+    <div class="grid-2 space-t-lg">
+      <div>
+        <h3 style="margin-bottom: 10px">Voz y grounding</h3>
+        <div class="callout ok"><div class="callout-h">Readback dígito por dígito</div><div class="callout-b">Guía en bloques de 3, teléfono 2-3-3-2, CP los 5, RFC por segmentos.</div></div>
+        <div class="callout ok" style="margin-top: 8px"><div class="callout-h">Nunca lee siglas</div><div class="callout-b">RPP → "guía prepagada"; WW → "guía documentada en línea"; RAD → "recolección a domicilio".</div></div>
+        <div class="callout ok" style="margin-top: 8px"><div class="callout-h">No lee IDs internos</div><div class="callout-b">OPT_1, OPT_2, OPT_3, docType, customer keys.</div></div>
+        <div class="callout ok" style="margin-top: 8px"><div class="callout-h">No lee URLs</div><div class="callout-b">Ni siquiera la política de aceptación de mercancía.</div></div>
+      </div>
+      <div>
+        <h3 style="margin-bottom: 10px">Determinismo</h3>
+        <div class="callout ok"><div class="callout-h">Intake común primero</div><div class="callout-b">No pregunta tipo antes de contenido + política.</div></div>
+        <div class="callout ok" style="margin-top: 8px"><div class="callout-h">Acciones auto-disparadas</div><div class="callout-b">Buscar guía, buscar cliente, validar dimensiones, agendar — todas corren solas cuando se cumplen sus guards.</div></div>
+        <div class="callout ok" style="margin-top: 8px"><div class="callout-h">Una pregunta por turno</div><div class="callout-b">Excepto al pedir contacto (nombre+teléfono+referencia en una sola frase natural).</div></div>
+        <div class="callout ok" style="margin-top: 8px"><div class="callout-h">No pide datos ya conocidos</div><div class="callout-b">Nombre + correo se piden solo en verificación. En RPP no pide dirección.</div></div>
+      </div>
+    </div>
+
+    <div class="space-t-lg" style="display: flex; gap: 16px; align-items: center; justify-content: space-between; padding: 16px 22px; background: var(--ink); color: white; border-radius: 12px;">
+      <div>
+        <div style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.7;">Cuando la prueba pase</div>
+        <div style="font-size: 16px; font-weight: 600; margin-top: 4px;">Publicar como nueva BotVersion</div>
+      </div>
+      <code style="background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; color: white; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px;">sf agent publish authoring-bundle --api-name FDE_Paquetexpress_Service_Agent_Split_voice --target-org paquetexpress-sandbox --skip-retrieve</code>
+    </div>
+  </section>
+
+  <!-- SLIDE 13 · FIN -->
+  <section class="slide cover">
+    <div class="kicker"><span class="dot"></span> Preguntas · Iteración · Publish</div>
+    <div class="super">¿Listos<br/>para probar?</div>
+    <div class="sub">Bundle en <strong>Draft</strong> en QA. Cualquier fix rápido se hace en Builder + deploy sin publish para no llenar de versiones. La guía completa turn-by-turn está en el portfolio, tab <em>🧪 RAD-voice · Guía de pruebas</em>.</div>
+    <div class="space-t-lg grid-3">
+      <div class="stat"><div class="num">3</div><div class="lbl">ramas cubiertas (RPP · WW · Normal)</div></div>
+      <div class="stat"><div class="num">8</div><div class="lbl">acciones Apex mock (swappables con GLP real)</div></div>
+      <div class="stat"><div class="num">45+</div><div class="lbl">variables determinísticas orquestando el flujo</div></div>
+    </div>
+  </section>
+
+</div>
+
+<div class="counter" id="counter">1 / 13</div>
+<div class="hint">
+  <span class="kbd">←</span> <span class="kbd">→</span> navegar · <span class="kbd">Espacio</span> siguiente · <span class="kbd">F</span> pantalla completa · <span class="kbd">Esc</span> salir
+</div>
+<div class="progress"><div id="bar"></div></div>
+
+<div class="nav-btn prev" onclick="prev()">‹</div>
+<div class="nav-btn next" onclick="next()">›</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  const counter = document.getElementById("counter");
+  const bar = document.getElementById("bar");
+  let i = 0;
+
+  function render() {
+    slides.forEach((s, idx) => s.classList.toggle("active", idx === i));
+    counter.textContent = (i + 1) + " / " + slides.length;
+    bar.style.width = ((i + 1) / slides.length * 100) + "%";
+    location.hash = "s" + (i + 1);
+  }
+  function next() { if (i < slides.length - 1) { i++; render(); } }
+  function prev() { if (i > 0) { i--; render(); } }
+  function goto(n) { i = Math.max(0, Math.min(slides.length - 1, n)); render(); }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); next(); }
+    else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); prev(); }
+    else if (e.key === "Home") { goto(0); }
+    else if (e.key === "End") { goto(slides.length - 1); }
+    else if (e.key === "f" || e.key === "F") {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+    else if (/^[0-9]$/.test(e.key)) { const n = parseInt(e.key, 10); if (n >= 1 && n <= slides.length) goto(n - 1); }
+  });
+
+  // Init from hash
+  const m = location.hash.match(/^#s(\d+)$/);
+  if (m) goto(parseInt(m[1], 10) - 1); else render();
+</script>
+</body>
+</html>
