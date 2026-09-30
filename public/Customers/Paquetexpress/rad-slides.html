@@ -126,9 +126,7 @@
     }
 
     /* Layouts */
-    .cover {
-      display: flex;
-      flex-direction: column;
+    .slide.cover {
       justify-content: center;
       gap: 20px;
     }
@@ -146,9 +144,9 @@
       display: inline-block;
     }
     .cover .super {
-      font-size: clamp(48px, 7vw, 96px);
+      font-size: clamp(40px, 5.5vw, 80px);
       font-weight: 750;
-      line-height: 1.02;
+      line-height: 1.05;
       letter-spacing: -0.03em;
       color: var(--ink);
     }
@@ -217,16 +215,19 @@
     /* Flow diagram */
     .flow {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 18px;
+      grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+      gap: 14px;
       align-items: stretch;
     }
     .flow-step {
       background: white;
       border: 1px solid var(--line-soft);
       border-radius: 12px;
-      padding: 18px 20px;
+      padding: 20px 20px 18px;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
     .flow-step .stepnum {
       position: absolute; top: -12px; left: 16px;
@@ -242,16 +243,17 @@
       font-weight: 700;
       color: var(--ink);
       font-size: 15px;
-      margin-bottom: 4px;
     }
     .flow-step .stepdesc {
       font-size: 13px;
       color: var(--muted);
+      line-height: 1.4;
     }
     .flow-arrow {
       color: var(--line);
       font-size: 22px;
       display: grid; place-items: center;
+      padding: 0 4px;
     }
 
     /* Tables */
@@ -576,11 +578,9 @@
       <div class="flow-step">
         <div class="stepnum">2</div>
         <div class="stepname">Intake común</div>
-        <div class="stepdesc">Contenido del paquete → política de aceptación → tipo de recolección.</div>
+        <div class="stepdesc">Contenido → política de aceptación → tipo de recolección.</div>
       </div>
-    </div>
-    <div style="height: 22px"></div>
-    <div class="flow">
+      <div class="flow-arrow">→</div>
       <div class="flow-step">
         <div class="stepnum">3</div>
         <div class="stepname">Rama por tipo</div>
@@ -590,7 +590,7 @@
       <div class="flow-step">
         <div class="stepnum">4</div>
         <div class="stepname">Cierre</div>
-        <div class="stepdesc">Número de rastreo leído dígito por dígito y correo de confirmación.</div>
+        <div class="stepdesc">Tracking leído dígito por dígito + correo de confirmación.</div>
       </div>
     </div>
 
