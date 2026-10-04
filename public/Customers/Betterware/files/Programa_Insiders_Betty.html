@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Programa Insiders · Betty mejorada</title>
+<style>
+  @font-face {
+    font-family: 'AvantGarde';
+    src: url('../../../Assets Salesforce Brand/Fonts/Titles/AvantGardeForSalesforceW05-Dm.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Regular.woff') format('woff');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Semibold.woff') format('woff');
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Bold.woff') format('woff');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Light.woff') format('woff');
+    font-weight: 300;
+  }
+
+  :root {
+    --eb15: #001E5B;
+    --eb30: #022AC0;
+    --eb50: #066AFE;
+    --cb68: #00B3FF;
+    --cb80: #90D0FE;
+    --cb95: #EAF5FE;
+    --rose: #E8275A;
+    --orange: #F28B42;
+    --ink: #0A1F44;
+    --slate: #4B5563;
+    --mist: #F3F6FB;
+    --rule: #E2E8F0;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'SalesforceSans', -apple-system, system-ui, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    font-size: 10.5pt;
+    line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @page { size: letter; margin: 0; }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 0.6in 0.7in;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  h1, h2, h3, h4 {
+    font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+    color: var(--eb15);
+    margin: 0 0 0.4em 0;
+    line-height: 1.15;
+  }
+
+  /* COVER */
+  .cover {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 55%, var(--eb50) 100%);
+    color: #fff;
+    padding: 0.9in 0.9in;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover h1 { color: #fff; font-size: 44pt; letter-spacing: -0.01em; line-height: 1.05; margin-bottom: 0.3em; }
+  .cover .subtitle {
+    font-family: 'SalesforceSans', sans-serif;
+    font-weight: 300;
+    font-size: 15pt;
+    color: var(--cb80);
+    margin-bottom: 1.1em;
+  }
+  .cover .eyebrow {
+    display: inline-block;
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cb68);
+    padding: 0.4em 0.9em;
+    border: 1px solid rgba(144,208,254,0.5);
+    border-radius: 100px;
+    margin-bottom: 2.2em;
+  }
+  .cover .top-row { display: flex; justify-content: space-between; align-items: center; }
+  .cover-logo { height: 32px; filter: brightness(0) invert(1); }
+  .cover-date {
+    font-size: 10pt;
+    color: var(--cb80);
+    letter-spacing: 0.05em;
+  }
+  .cover-sparkles {
+    position: absolute;
+    top: 1.5in;
+    right: 0.6in;
+    opacity: 0.5;
+    width: 180px;
+  }
+  .cover-astro {
+    position: absolute;
+    right: -40px;
+    bottom: -30px;
+    width: 320px;
+    opacity: 0.95;
+  }
+  .cover-author {
+    border-top: 1px solid rgba(144,208,254,0.3);
+    padding-top: 0.9em;
+    font-size: 10pt;
+  }
+  .cover-author .name { font-weight: 600; color: #fff; font-size: 11pt; margin-bottom: 0.1em; }
+  .cover-author .role { color: var(--cb80); }
+  .cover-tagline {
+    max-width: 5.5in;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #fff;
+    font-weight: 300;
+  }
+
+  /* INNER PAGES */
+  .section-eyebrow {
+    display: inline-block;
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--eb50);
+    margin-bottom: 0.6em;
+  }
+  h2 { font-size: 22pt; margin-bottom: 0.25em; }
+  h2 + .lead { font-size: 12pt; color: var(--slate); max-width: 6.5in; margin: 0 0 1.1em 0; line-height: 1.5; }
+
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.1em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid var(--rule);
+    font-size: 8.5pt;
+    color: var(--slate);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .page-head .brand { font-weight: 700; color: var(--eb30); }
+
+  .page-footer {
+    position: absolute;
+    bottom: 0.35in;
+    left: 0.7in;
+    right: 0.7in;
+    font-size: 8pt;
+    color: #9CA3AF;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--rule);
+    padding-top: 0.4em;
+  }
+
+  .narrative {
+    background: var(--cb95);
+    border-left: 4px solid var(--eb50);
+    padding: 0.9em 1.1em;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1em;
+  }
+  .narrative p { margin: 0; font-size: 11pt; color: var(--ink); line-height: 1.55; }
+  .narrative .quote {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 14pt;
+    color: var(--eb15);
+    line-height: 1.3;
+    margin-bottom: 0.5em;
+  }
+
+  ul.clean { list-style: none; padding-left: 0; margin: 0.6em 0; }
+  ul.clean li {
+    padding: 0.4em 0 0.4em 1.4em;
+    position: relative;
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
+  ul.clean li::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--eb50);
+    position: absolute;
+    left: 0.3em; top: 0.8em;
+  }
+
+  /* two columns */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; margin: 1em 0; }
+  .scope-card {
+    padding: 1em 1.2em;
+    border-radius: 10px;
+    border: 1px solid var(--rule);
+  }
+  .scope-card.in {
+    background: linear-gradient(180deg, #F0FDF4 0%, #fff 100%);
+    border-color: #BBF7D0;
+  }
+  .scope-card.out {
+    background: linear-gradient(180deg, #FEF2F2 0%, #fff 100%);
+    border-color: #FECACA;
+  }
+  .scope-card h3 { font-size: 13pt; margin-bottom: 0.4em; }
+  .scope-card.in h3 { color: #166534; }
+  .scope-card.out h3 { color: #991B1B; }
+  .scope-card ul { list-style: none; padding-left: 0; margin: 0.4em 0 0 0; font-size: 10pt; }
+  .scope-card ul li {
+    padding: 0.25em 0 0.25em 1.3em;
+    position: relative;
+    line-height: 1.4;
+  }
+  .scope-card.in ul li::before {
+    content: "✓";
+    position: absolute; left: 0; top: 0.3em;
+    color: #15803D; font-weight: 700;
+  }
+  .scope-card.out ul li::before {
+    content: "✗";
+    position: absolute; left: 0; top: 0.3em;
+    color: #B91C1C; font-weight: 700;
+  }
+
+  /* program table */
+  table.program {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.7em 0 1em 0;
+    font-size: 10pt;
+  }
+  table.program td {
+    padding: 0.7em 0.9em;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  table.program td:first-child {
+    font-weight: 600;
+    color: var(--eb30);
+    width: 2in;
+    background: var(--mist);
+  }
+
+  /* responsibilities */
+  .resp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8em; margin: 1em 0; }
+  .resp-card {
+    padding: 0.9em 1em;
+    border-radius: 10px;
+    border: 1px solid var(--rule);
+    background: #fff;
+  }
+  .resp-card header {
+    padding: 0.4em 0.7em;
+    margin: -0.4em -0.5em 0.6em -0.5em;
+    border-radius: 6px;
+    font-size: 9.5pt;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.03em;
+  }
+  .resp-card.sf header { background: var(--eb50); color: #fff; }
+  .resp-card.partner header { background: var(--orange); color: #fff; }
+  .resp-card.customer header { background: var(--rose); color: #fff; }
+  .resp-card ul { list-style: none; padding-left: 0; margin: 0; font-size: 9.5pt; }
+  .resp-card ul li {
+    padding: 0.35em 0 0.35em 1em;
+    position: relative;
+    line-height: 1.4;
+  }
+  .resp-card ul li::before {
+    content: "›";
+    position: absolute; left: 0.1em; top: 0.3em;
+    color: var(--eb50); font-weight: 700;
+  }
+
+  /* timeline */
+  .timeline {
+    position: relative;
+    padding-left: 1.2em;
+    margin: 1em 0 0.5em 0;
+    border-left: 2px solid var(--cb80);
+  }
+  .timeline-item {
+    position: relative;
+    padding: 0.4em 0 0.9em 0.6em;
+  }
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -1.6em;
+    top: 0.5em;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--eb50);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--eb50);
+  }
+  .timeline-item.critical::before { background: var(--rose); box-shadow: 0 0 0 2px var(--rose); }
+  .timeline-item .date {
+    font-weight: 700;
+    color: var(--eb30);
+    font-size: 10.5pt;
+    display: inline-block;
+    margin-right: 0.5em;
+  }
+  .timeline-item .label { font-size: 10.5pt; line-height: 1.45; }
+
+  /* metrics callout */
+  .metrics-callout {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 100%);
+    color: #fff;
+    padding: 1em 1.2em;
+    border-radius: 12px;
+    margin: 1em 0;
+  }
+  .metrics-callout h3 { color: #fff; font-size: 14pt; margin-bottom: 0.5em; }
+  .metrics-callout .metric-row {
+    display: flex;
+    align-items: start;
+    padding: 0.4em 0;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    font-size: 10pt;
+  }
+  .metrics-callout .metric-row:first-of-type { border-top: none; }
+  .metrics-callout .metric-name { flex: 1; font-weight: 600; }
+  .metrics-callout .metric-goal {
+    color: var(--cb68);
+    font-weight: 700;
+    margin-left: 1em;
+    white-space: nowrap;
+  }
+
+  /* risks mitigated */
+  .risk-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.7em 0 1em 0;
+    font-size: 10pt;
+  }
+  .risk-table th {
+    text-align: left;
+    padding: 0.5em 0.8em;
+    background: var(--mist);
+    color: var(--eb15);
+    font-size: 8.5pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--rule);
+  }
+  .risk-table td {
+    padding: 0.55em 0.8em;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.4;
+  }
+  .risk-table td:first-child { font-weight: 600; color: var(--eb30); width: 2.2in; }
+
+  /* next step box */
+  .next-step {
+    background: linear-gradient(135deg, var(--cb95) 0%, #fff 100%);
+    border: 2px solid var(--eb50);
+    border-radius: 14px;
+    padding: 1.1em 1.3em;
+    margin-top: 1.2em;
+  }
+  .next-step h3 {
+    color: var(--eb50);
+    font-size: 13pt;
+    margin-bottom: 0.6em;
+  }
+  .next-step .step {
+    display: flex;
+    gap: 0.9em;
+    padding: 0.35em 0;
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+  .next-step .step .day {
+    font-weight: 700;
+    color: var(--eb30);
+    min-width: 1.9in;
+  }
+
+  /* decorative sparkles */
+  .deco-sparkle {
+    position: absolute;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== PÁGINA 1 · PORTADA ============== -->
+<section class="page cover">
+  <div class="top-row">
+    <img class="cover-logo" src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" alt="Salesforce">
+    <span class="cover-date">OCTUBRE 2026</span>
+  </div>
+
+  <img class="cover-sparkles" src="../../../Assets Salesforce Brand/Sparkles/Sparkles Blue Main.svg" alt="">
+  <img class="cover-astro" src="../../../Assets Salesforce Brand/Carachters/Agent Astro/Agent Astro 3D 10 R.png" alt="">
+
+  <div>
+    <span class="eyebrow">Propuesta de piloto · Betterware México</span>
+    <h1>Programa Insiders<br>Betty mejorada</h1>
+    <p class="subtitle">Piloto cerrado con distribuidoras aliadas · 16 → 30 octubre 2026</p>
+    <p class="cover-tagline">Validar con usuarias reales las mejoras internas en el agente de servicio antes del lanzamiento al 100% de la red. Betty sigue siendo Betty — con menos fallos y respuestas más claras.</p>
+  </div>
+
+  <div class="cover-author">
+    <div class="name">Jonathan Gomez</div>
+    <div class="role">Salesforce · Forward Deployed Engineer</div>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 2 · QUÉ ES + ALCANCE ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Programa Insiders · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">1 · El Programa</span>
+  <h2>Qué es el Programa Insiders</h2>
+  <p class="lead">
+    Un piloto cerrado de 14 días con un grupo seleccionado de distribuidoras aliadas de Betterware. Durante este período, las distribuidoras invitadas usan Betty tal como la usan hoy — pero por detrás, una implementación técnica más robusta responde sus mensajes.
+  </p>
+
+  <div class="narrative">
+    <p class="quote">Betty sigue siendo Betty.</p>
+    <p>No es un Betty 2.0. Es la misma Betty que las distribuidoras ya conocen, con una base técnica reconstruida para dar menos fallos y respuestas más claras. El piloto nos permite validar las mejoras internas con usuarias reales antes de abrir al 100% de la base.</p>
+  </div>
+
+  <ul class="clean">
+    <li><strong>Objetivo:</strong> validar con usuarias reales las mejoras antes del rollout al 100% de la base de distribuidoras.</li>
+    <li><strong>Posición clave:</strong> no es un reemplazo visible — es Betty con menos fallos silenciosos, menos escalaciones innecesarias y respuestas más específicas.</li>
+    <li><strong>Qué significa para la distribuidora piloto:</strong> reconocimiento como aliada estratégica + voz privilegiada en el futuro del servicio.</li>
+  </ul>
+
+  <span class="section-eyebrow" style="margin-top: 1.3em; display:inline-block;">2 · Alcance</span>
+  <h2 style="font-size: 18pt;">Alcance explícito del piloto</h2>
+  <p class="lead" style="font-size: 10.5pt; margin-bottom: 0.6em;">
+    Delimitar qué está en alcance y qué no evita scope creep y mantiene la ventana del piloto manejable en 14 días.
+  </p>
+
+  <div class="two-col">
+    <div class="scope-card in">
+      <h3>Dentro del alcance</h3>
+      <p style="font-size: 9.5pt; color: var(--slate); margin: 0 0 0.5em 0;">Lo que las distribuidoras piloto deben probar:</p>
+      <ul>
+        <li>Autenticación por código de distribuidora o referencia bancaria</li>
+        <li>Consulta de saldos y pagos</li>
+        <li>Consulta de pedidos y seguimiento</li>
+        <li>Consulta de puntos BwPlus</li>
+        <li>Consulta y registro de altas de asociadas</li>
+        <li>Tickets ServiceNow</li>
+        <li>Reseteo de contraseña</li>
+        <li>Preguntas generales (FAQ)</li>
+        <li>Escalación a humano cuando aplica</li>
+      </ul>
+    </div>
+    <div class="scope-card out">
+      <h3>Fuera del alcance</h3>
+      <p style="font-size: 9.5pt; color: var(--slate); margin: 0 0 0.5em 0;">Lo que <strong>no es parte</strong> del piloto:</p>
+      <ul>
+        <li>Features nuevas que hoy Betty no hace</li>
+        <li>Canales distintos a WhatsApp</li>
+        <li>Cambios en el programa BwPlus, Credilazos u otros productos</li>
+        <li>Cambios en procesos de back office</li>
+        <li>Nuevos idiomas o regiones</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Programa Insiders · Betty mejorada</span>
+    <span>Página 2</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 3 · ESTRUCTURA + RESPONSABILIDADES ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Programa Insiders · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">3 · Estructura</span>
+  <h2>Cómo opera el programa</h2>
+
+  <table class="program">
+    <tr>
+      <td>Tamaño inicial</td>
+      <td><strong>15 – 25 distribuidoras</strong> seleccionadas por Betterware</td>
+    </tr>
+    <tr>
+      <td>Perfil</td>
+      <td>Super usuarias activas · con historial de retroalimentación · representativas de distintos tipos de intents (pedidos, pagos, BwPlus, altas, saldos)</td>
+    </tr>
+    <tr>
+      <td>Duración</td>
+      <td><strong>14 días</strong> · del viernes 16 octubre al viernes 30 octubre 2026</td>
+    </tr>
+    <tr>
+      <td>Canal de feedback</td>
+      <td>Grupo de WhatsApp dedicado + formulario rápido semanal (3 preguntas: qué funcionó, qué no, qué cambiarías)</td>
+    </tr>
+    <tr>
+      <td>Reconocimiento</td>
+      <td>A definir con Betterware: mención interna, acceso temprano a próximas mejoras, pin digital, certificado de participación</td>
+    </tr>
+    <tr>
+      <td>Comunicación</td>
+      <td>Mensaje de bienvenida enviado por <strong>Betterware</strong> (no por Salesforce) · onboarding corto · canal directo con Customer Success de Betterware</td>
+    </tr>
+  </table>
+
+  <span class="section-eyebrow" style="margin-top: 1.2em; display:inline-block;">4 · Responsabilidades</span>
+  <h2 style="font-size: 18pt;">Quién hace qué</h2>
+  <p class="lead" style="font-size: 10pt; margin-bottom: 0.4em;">Cada parte tiene un rol diferenciado — propuesta, aprobación y curaduría.</p>
+
+  <div class="resp-grid">
+    <div class="resp-card sf">
+      <header>Salesforce (FDE)<br><span style="font-weight: 400; font-size: 8pt; opacity: 0.85;">propone y construye</span></header>
+      <ul>
+        <li>Diseño técnico del piloto: routing con whitelist, Custom Metadata, Custom Field en MessagingSession</li>
+        <li>Deploy del agente nuevo con feature flag</li>
+        <li>Framework de medición A/B</li>
+        <li>Playbook del programa: narrativa, invitación, formulario</li>
+        <li>Monitoring + reporte semanal del comportamiento</li>
+      </ul>
+    </div>
+    <div class="resp-card partner">
+      <header>Partner<br><span style="font-weight: 400; font-size: 8pt; opacity: 0.85;">aprueba y ejecuta</span></header>
+      <ul>
+        <li>Visto bueno a la arquitectura técnica</li>
+        <li>Approval del deploy a producción</li>
+        <li>Soporte operativo durante el piloto</li>
+        <li>Soporte técnico de 1er nivel si surge una incidencia</li>
+      </ul>
+    </div>
+    <div class="resp-card customer">
+      <header>Betterware (CS)<br><span style="font-weight: 400; font-size: 8pt; opacity: 0.85;">curadura y comunicación</span></header>
+      <ul>
+        <li>Lista de 15 – 25 distribuidoras candidatas</li>
+        <li>Invitación formal con la narrativa del programa</li>
+        <li>Administración del grupo WhatsApp de las piloto</li>
+        <li>Punto de contacto para dudas de las piloto</li>
+        <li>Reconocimiento final al cerrar el piloto</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Programa Insiders · Betty mejorada</span>
+    <span>Página 3</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 4 · TIMELINE + MÉTRICAS + RIESGOS ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Programa Insiders · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">5 · Timeline</span>
+  <h2>Línea de tiempo del piloto</h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <span class="date">Lun 13 OCT ·</span>
+      <span class="label">Betterware entrega lista final de distribuidoras piloto a Salesforce + Partner.</span>
+    </div>
+    <div class="timeline-item">
+      <span class="date">Mié 15 OCT ·</span>
+      <span class="label">Whitelist cargada · agente nuevo publicado en producción con feature flag <strong>OFF</strong> · smoke test interno.</span>
+    </div>
+    <div class="timeline-item critical">
+      <span class="date">Vie 16 OCT ·</span>
+      <span class="label"><strong>ACTIVACIÓN del piloto</strong> · grupo WhatsApp abierto · mensaje de bienvenida enviado por Betterware a las distribuidoras invitadas.</span>
+    </div>
+    <div class="timeline-item">
+      <span class="date">Vie 23 OCT ·</span>
+      <span class="label">Checkpoint 1 · formulario semanal 1 · reporte comparativo A/B con el agente actual.</span>
+    </div>
+    <div class="timeline-item critical">
+      <span class="date">Vie 30 OCT ·</span>
+      <span class="label"><strong>Cierre del piloto</strong> · formulario final · demo de aprendizajes al Partner y a Betterware.</span>
+    </div>
+    <div class="timeline-item">
+      <span class="date">Lun 02 NOV ·</span>
+      <span class="label">Decisión informada de rollout gradual al general en base al resultado del piloto.</span>
+    </div>
+  </div>
+
+  <span class="section-eyebrow" style="margin-top: 1.2em; display: inline-block;">6 · Métricas</span>
+
+  <div class="metrics-callout">
+    <h3>Métricas de éxito del piloto</h3>
+    <p style="font-size: 9.5pt; color: var(--cb80); margin-top: 0; margin-bottom: 0.7em;">No son los KPIs de producción. Son métricas experienciales que validan la decisión de rollout.</p>
+    <div class="metric-row">
+      <div class="metric-name">NPS cualitativo del grupo piloto</div>
+      <div class="metric-goal">≥ 70% recomendaría</div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-name">% de intents validados funcionando correctamente</div>
+      <div class="metric-goal">≥ 85% de los flujos</div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-name">Bugs levantados y resueltos durante la ventana</div>
+      <div class="metric-goal">0 críticos abiertos</div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-name">Flujos sugeridos para mejoras futuras</div>
+      <div class="metric-goal">Insumo del roadmap</div>
+    </div>
+  </div>
+
+  <span class="section-eyebrow" style="margin-top: 1em; display: inline-block;">7 · Riesgos atendidos</span>
+  <h2 style="font-size: 15pt;">Lo que mitiga este enfoque</h2>
+  <table class="risk-table">
+    <thead>
+      <tr><th>Riesgo</th><th>Mitigación</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Scope creep durante el piloto</td>
+        <td>Alcance explícito comunicado desde la invitación. Toda sugerencia fuera de alcance va al roadmap, no al piloto.</td>
+      </tr>
+      <tr>
+        <td>Feedback negativo público</td>
+        <td>Grupo WhatsApp cerrado + punto de contacto directo con Betterware + respuesta rápida ante cualquier incidencia.</td>
+      </tr>
+      <tr>
+        <td>Falla con una piloto crítica</td>
+        <td>Kill-switch global + rollback inmediato en segundos. El agente actual (V40) queda intacto como respaldo.</td>
+      </tr>
+      <tr>
+        <td>Confusión interna (¿nuevo agente?)</td>
+        <td>Narrativa clara: <em>mejoras internas en Betty, no agente nuevo</em>. Mismo nombre, misma persona, mejor base técnica.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span>Programa Insiders · Betty mejorada</span>
+    <span>Página 4</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 5 · SIGUIENTES PASOS ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Programa Insiders · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">8 · Activación</span>
+  <h2>Siguiente paso concreto</h2>
+  <p class="lead">
+    Para que el piloto arranque el viernes 16 de octubre, estos son los hitos a cerrar esta semana. Cada uno es un paso ejecutable con un responsable claro.
+  </p>
+
+  <div class="next-step">
+    <h3>De aquí al arranque · 10 días</h3>
+    <div class="step">
+      <span class="day">Dom 04 OCT</span>
+      <span>Aprobación interna Salesforce de la propuesta técnica y narrativa del piloto.</span>
+    </div>
+    <div class="step">
+      <span class="day">Lun 05 OCT AM</span>
+      <span>Presentación formal al Partner implementador para visto bueno técnico y operativo.</span>
+    </div>
+    <div class="step">
+      <span class="day">Lun 05 PM / Mar 06</span>
+      <span>Propuesta conjunta Salesforce + Partner a Customer Success de Betterware. Se solicita curaduría de distribuidoras candidatas.</span>
+    </div>
+    <div class="step">
+      <span class="day">Mié 07 OCT</span>
+      <span>Inicio de curaduría por Betterware. Primera lista preliminar (10-15 candidatas) para validación.</span>
+    </div>
+    <div class="step">
+      <span class="day">Lun 13 OCT</span>
+      <span>Lista final de 15 – 25 distribuidoras piloto confirmada. Comunicación de invitación lista para enviar.</span>
+    </div>
+    <div class="step">
+      <span class="day">Vie 16 OCT</span>
+      <span style="color: var(--rose); font-weight: 600;">ACTIVACIÓN del Programa Insiders · Betty mejorada arranca para el grupo piloto.</span>
+    </div>
+  </div>
+
+  <div class="narrative" style="margin-top: 1.6em; background: #FFF7ED; border-left-color: var(--orange);">
+    <p class="quote" style="font-size: 12pt;">La propuesta se construye en tres etapas.</p>
+    <p>
+      Primero <strong>aprobación interna de Salesforce</strong>, luego <strong>visto bueno del Partner</strong> (son los implementadores — su aval técnico es condición de arranque), y finalmente <strong>propuesta conjunta a Betterware</strong>, donde la curaduría humana del piloto es el aporte distintivo del cliente al éxito del programa.
+    </p>
+  </div>
+
+  <div class="page-footer">
+    <span>Programa Insiders · Betty mejorada</span>
+    <span>Página 5</span>
+  </div>
+</section>
+
+</body>
+</html>

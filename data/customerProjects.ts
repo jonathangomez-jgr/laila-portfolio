@@ -5148,20 +5148,144 @@ export const customerProjects: CustomerProject[] = [
     logo: "/Customers/Betterware/images/Logo-betterware.png",
     passcode: "betterware2026",
     hidden: false,
-    tags: [
-      "Agentforce",
-      "Agent Script",
-      "AiAuthoringBundle",
-      "Auditoría de agente",
-      "Verification Gate",
-      "Deterministic gating",
-      "Service Cloud",
-      "Messaging",
-      "WhatsApp",
-      "Venta directa MX",
-      "FDE",
-    ],
+    tags: ["Agentforce Script", "Betty"],
     tabs: [
+      {
+        id: "plan",
+        label: "📋 Plan de ejecución",
+        title: "Plan de reconstrucción · 10 semanas",
+        content:
+          "> 📋 **Plan maestro vivo** de reconstrucción de BW_AGENT_N como `FDE_BW_Service_Agent`. 10 semanas · 6 fases · dashboard interactivo con timeline, actividades filtrables, milestones, risk register, criterios de estable y status feed semanal. Esta vista reemplaza al Markdown estático con un canvas dinámico que se actualiza semana a semana.\n\n**Kick-off ejecutivo:** martes 2026-10-06 · **Go-live target:** jueves 2026-12-11.",
+        betterwarePlan: true,
+      },
+      {
+        id: "assets",
+        label: "📎 Assets",
+        title: "Documentos y entregables del proyecto",
+        content:
+          "> 📎 Centro de acceso a todos los documentos del engagement. Los **PDFs** son descargables; las **presentaciones ejecutivas** se abren como slide deck interactivo en el navegador.",
+        assetsData: {
+          items: [
+            // Presentaciones ejecutivas (slide decks)
+            {
+              name: "🎤 Presentación Partner · Alineación FDE",
+              description:
+                "Deck ejecutivo para la sesión con el Partner implementador el lunes 2026-10-05 PM. 9 slides · tono técnico · diagrama de routing, opciones A/B del transfer-to-bot, timeline, riesgos y 3 CTA. Abre como presentación horizontal.",
+              available: true,
+              type: "deck",
+              url: "/Customers/Betterware/files/Presentacion_Partner_FDE.html",
+            },
+            {
+              name: "🎤 Presentación Betty mejorada · Demo",
+              description:
+                "Deck para Betterware CS + Partner el martes 2026-10-06 AM. 10 slides · tono business · incluye slide full-bleed con la narrativa clave 'Betty sigue siendo Betty · no es un Betty 2.0'. Abre como presentación horizontal.",
+              available: true,
+              type: "deck",
+              url: "/Customers/Betterware/files/Presentacion_Demo_Betterware.html",
+            },
+            // Propuestas y estrategia
+            {
+              name: "📋 Programa Insiders · Propuesta formal",
+              description:
+                "Propuesta formal del piloto cerrado del 16 al 30 de octubre con distribuidoras aliadas. 5 páginas · narrativa, alcance explícito, responsabilidades 3-col, timeline y métricas. HTML autocontenido con branding Salesforce.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/Programa_Insiders_Betty.html",
+            },
+            {
+              name: "📋 Estrategia FDE · Enfoque híbrido en 3 fases",
+              description:
+                "Documento maestro con las 3 fases: adapter al legacy → reemplazo gradual con tests de paridad → deprecación del legacy. HTML autocontenido con comparativa de enfoques y matriz de ownership.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/FDE_Estrategia_Recomendada.html",
+            },
+            // Descubrimiento (PDFs descargables)
+            {
+              name: "🔍 BW_AGENT_N · Reporte de descubrimientos",
+              description:
+                "Entregable formal del descubrimiento con los 16 hallazgos (4 Críticos · 8 Altos · 4 Medios) verificados en vivo contra el org via Tooling API. 11 páginas · branding Salesforce. PDF descargable.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/BW_AGENT_N%20%E2%80%94%20Reporte%20de%20descubrimientos.pdf",
+            },
+            {
+              name: "🔍 BW_AGENT_N · Deep-Dive V25 (Sesión 2)",
+              description:
+                "Auditoría estática original · 109 hallazgos citados línea por línea del YAML V25 (4,151 líneas) · 42 trazas de sesión reales enlazadas. Base del reporte de descubrimientos.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/BW_AGENT_N-Agent-Deep-Dive-Sesion-2.pdf",
+            },
+            // Arquitectura
+            {
+              name: "🏗️ Befra Architecture · To Be V1",
+              description:
+                "Arquitectura target del stack conversacional de Betterware (Befra). Diagrama de componentes propuesto con los flujos de datos entre WhatsApp, Agentforce, Data Cloud y backend.",
+              available: true,
+              type: "arch",
+              url: "/Customers/Betterware/files/Befra%20%28Betterware%29%20Architecture%20VF%20-%20To%20Be%20V1.pdf",
+            },
+            {
+              name: "🏗️ Befra Architecture · As Is",
+              description:
+                "Estado actual del stack conversacional antes de la intervención FDE. Diagrama de componentes y flujos existentes.",
+              available: true,
+              type: "arch",
+              url: "/Customers/Betterware/files/Befra%20%28Betterware%29%20Architecture%20VF%20-%20As%20Is.pdf",
+            },
+            {
+              name: "🏗️ Arquitectura · Contenido Personalizado con Atribución",
+              description:
+                "Diseño de la arquitectura de contenido personalizado por distribuidora, con atribución a nivel de link tracking vía WhatsApp + Data Cloud.",
+              available: true,
+              type: "arch",
+              url: "/Customers/Betterware/files/Betterware%20%E2%80%94%20Arquitectura%3A%20Contenido%20Personalizado%20con%20Atribuci%C3%B3n%20por%20Distribuidora.pdf",
+            },
+            // Research y workshops
+            {
+              name: "📊 JTBD · Insights, Journey & Roadmap",
+              description:
+                "Entregable del workshop de Jobs-to-be-Done con el journey completo de la distribuidora y el roadmap de capacidades priorizadas por impacto.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/Betterware%20%E2%80%94%20Entregable%20JTBD%3A%20Insights%2C%20Journey%20%26%20Roadmap.pdf",
+            },
+            {
+              name: "📊 Antiexperience Workshop",
+              description:
+                "Resultado del workshop de anti-experiencias — qué NO queremos que viva la distribuidora. Insumo clave para la definición de principios del nuevo diseño.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/Antiexperience%20Workshop%20%E2%80%94%20Betterware.pdf",
+            },
+            {
+              name: "📊 Demo Mastermind · Personalization + Amplitude + Data 360",
+              description:
+                "Deck de la sesión mastermind donde se presentó la visión de personalización end-to-end con Data Cloud y Amplitude.",
+              available: true,
+              type: "deck",
+              url: "/Customers/Betterware/files/%F0%9F%8E%AF%20Demo%20Mastermind%20%E2%80%94%20Betterware%20%7C%20Personalization%20%2B%20Amplitude%20%2B%20Data%20360.pdf",
+            },
+            {
+              name: "📊 How To · Link Tracking por Asesora + Data Cloud",
+              description:
+                "Guía técnica de implementación del tracking por asesora en WhatsApp con atribución via Data Cloud. Útil como referencia técnica para el Partner.",
+              available: true,
+              type: "doc",
+              url: "/Customers/Betterware/files/How%20To%3A%20Link%20Tracking%20por%20Asesora%20en%20WhatsApp%20%2B%20Data%20Cloud%20%E2%80%94%20Betterware.pdf",
+            },
+          ],
+        },
+      },
+      {
+        id: "test-matrix",
+        label: "🧪 Matriz de pruebas",
+        title: "Matriz de pruebas con histórico persistente",
+        content:
+          "> 🧪 Suite de pruebas del `FDE_BW_Service_Agent` con histórico persistente en la org Laila (JGR_FDE_TestCase__c + JGR_FDE_TestExecution__c). Filtrable por categoría, prioridad y último resultado. Registra ejecuciones directamente desde el canvas.",
+        betterwareTestMatrix: true,
+      },
       {
         id: "overview",
         label: "Overview",

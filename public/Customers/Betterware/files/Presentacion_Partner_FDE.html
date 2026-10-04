@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Presentación Partner · Alineación FDE</title>
+<style>
+  @font-face { font-family: 'AvantGarde'; src: url('../../../Assets Salesforce Brand/Fonts/Titles/AvantGardeForSalesforceW05-Dm.woff') format('woff'); }
+  @font-face { font-family: 'SalesforceSans'; src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Regular.woff') format('woff'); font-weight: 400; }
+  @font-face { font-family: 'SalesforceSans'; src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Semibold.woff') format('woff'); font-weight: 600; }
+  @font-face { font-family: 'SalesforceSans'; src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Bold.woff') format('woff'); font-weight: 700; }
+  @font-face { font-family: 'SalesforceSans'; src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Light.woff') format('woff'); font-weight: 300; }
+
+  :root {
+    --eb15: #001E5B; --eb30: #022AC0; --eb50: #066AFE;
+    --cb68: #00B3FF; --cb80: #90D0FE; --cb95: #EAF5FE;
+    --rose: #E8275A; --orange: #F28B42;
+    --ink: #0A1F44; --slate: #4B5563;
+    --mist: #F3F6FB; --rule: #E2E8F0;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; overflow: hidden;
+    font-family: 'SalesforceSans', -apple-system, system-ui, sans-serif;
+    color: var(--ink);
+    background: linear-gradient(135deg, #F3F6FB 0%, #EAF5FE 100%);
+    font-size: 16px; line-height: 1.5;
+    width: 100vw; height: 100vh;
+  }
+  h1, h2, h3, h4 { font-family: 'AvantGarde', 'SalesforceSans', sans-serif; color: var(--eb15); margin: 0 0 0.4em 0; line-height: 1.15; letter-spacing: -0.01em; }
+
+  /* === SLIDES CONTAINER === */
+  .slides {
+    display: flex;
+    width: 100vw; height: 100vh;
+    overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+  }
+  .slides::-webkit-scrollbar { display: none; }
+  .slides { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .slide {
+    flex: 0 0 100vw; width: 100vw; height: 100vh;
+    scroll-snap-align: start;
+    padding: 60px 100px;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+
+  /* === PROGRESS BAR === */
+  .progress {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px;
+    background: rgba(0,0,0,0.05); z-index: 100;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--eb50), var(--cb68));
+    transition: width 0.1s linear;
+  }
+
+  /* === NAV ARROWS === */
+  .nav-arrow {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
+    border: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 50;
+    opacity: 0.6; transition: all 0.2s;
+    font-size: 24px; color: var(--eb30);
+    user-select: none;
+  }
+  .nav-arrow:hover { opacity: 1; transform: translateY(-50%) scale(1.1); background: #fff; }
+  .nav-arrow.prev { left: 24px; }
+  .nav-arrow.next { right: 24px; }
+  .nav-arrow[disabled] { opacity: 0.15; cursor: not-allowed; pointer-events: none; }
+
+  /* === DOTS === */
+  .dots {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 8px; z-index: 50;
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
+    padding: 10px 16px; border-radius: 100px;
+    border: 1px solid var(--rule);
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--rule); cursor: pointer; transition: all 0.2s;
+  }
+  .dot.active { background: var(--eb50); width: 24px; border-radius: 100px; }
+  .dot:hover:not(.active) { background: var(--cb80); }
+
+  /* === SLIDE NUMBER === */
+  .slide-num {
+    position: absolute; top: 32px; right: 100px;
+    font-size: 12px; letter-spacing: 0.1em; color: var(--slate);
+    font-weight: 600; text-transform: uppercase;
+  }
+  .slide-num .current { color: var(--eb30); font-size: 16px; }
+
+  .brand-chip {
+    position: absolute; top: 32px; left: 100px;
+    font-size: 11px; letter-spacing: 0.14em; color: var(--eb30);
+    font-weight: 700; text-transform: uppercase;
+  }
+
+  /* === COVER === */
+  .slide.cover {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 55%, var(--eb50) 100%);
+    color: #fff; padding: 60px 100px;
+    display: grid; grid-template-columns: 1.3fr 1fr;
+    align-items: center; gap: 60px;
+  }
+  .slide.cover .left { position: relative; z-index: 2; }
+  .slide.cover .right { position: relative; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .slide.cover .cover-top {
+    position: absolute; top: 32px; left: 100px; right: 100px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .slide.cover .cover-logo { height: 36px; filter: brightness(0) invert(1); }
+  .slide.cover .cover-date { font-size: 13px; color: var(--cb80); letter-spacing: 0.05em; }
+  .slide.cover .eyebrow {
+    display: inline-block; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--cb68);
+    padding: 8px 18px; border: 1px solid rgba(144,208,254,0.5);
+    border-radius: 100px; margin-bottom: 32px;
+  }
+  .slide.cover h1 {
+    color: #fff; font-size: 68px; margin-bottom: 24px;
+  }
+  .slide.cover .subtitle {
+    font-weight: 300; font-size: 22px; color: var(--cb80);
+    margin-bottom: 48px; max-width: 90%;
+  }
+  .slide.cover .cover-author {
+    border-top: 1px solid rgba(144,208,254,0.3);
+    padding-top: 20px; font-size: 15px; max-width: 90%;
+  }
+  .slide.cover .cover-author .name { font-weight: 600; color: #fff; font-size: 18px; margin-bottom: 2px; }
+  .slide.cover .cover-author .role { color: var(--cb80); }
+  .slide.cover .cover-sparkles { position: absolute; top: 15%; right: 15%; width: 200px; opacity: 0.4; }
+  .slide.cover .cover-astro { max-width: 95%; max-height: 85%; }
+
+  /* === INNER === */
+  .section-eyebrow {
+    display: inline-block; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--eb50);
+    margin-bottom: 16px;
+  }
+  .slide h2 { font-size: 48px; margin-bottom: 16px; max-width: 1200px; }
+  .lead { font-size: 20px; color: var(--slate); max-width: 900px; margin: 0 0 36px 0; line-height: 1.5; }
+
+  /* === STATUS LIST (slide 2) === */
+  .two-col-content {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+    margin-top: 24px;
+  }
+  ul.status-list { list-style: none; padding-left: 0; margin: 0; }
+  ul.status-list li {
+    padding: 20px 24px 20px 60px;
+    position: relative;
+    font-size: 16px; line-height: 1.5;
+    background: #fff;
+    border-left: 4px solid var(--eb50);
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,30,91,0.04);
+  }
+  ul.status-list li::before {
+    content: "✓";
+    position: absolute; left: 20px; top: 20px;
+    width: 28px; height: 28px;
+    background: var(--eb50); color: #fff;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+  }
+  ul.status-list li strong { color: var(--eb15); display: block; margin-bottom: 4px; font-size: 17px; }
+  ul.status-list li span.detail { color: var(--slate); font-size: 14px; }
+
+  /* === NARRATIVE === */
+  .narrative {
+    background: linear-gradient(135deg, var(--cb95) 0%, #fff 100%);
+    border-left: 6px solid var(--eb50);
+    padding: 28px 36px;
+    border-radius: 0 14px 14px 0;
+    margin: 24px 0;
+  }
+  .narrative p { margin: 0 0 8px 0; font-size: 18px; line-height: 1.6; }
+  .narrative strong { color: var(--eb30); }
+
+  ul.clean { list-style: none; padding-left: 0; margin: 20px 0; columns: 2; column-gap: 48px; }
+  ul.clean li {
+    padding: 10px 0 10px 24px; position: relative;
+    font-size: 16px; line-height: 1.5;
+    break-inside: avoid;
+  }
+  ul.clean li::before {
+    content: ""; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--eb50); position: absolute; left: 4px; top: 18px;
+  }
+  ul.clean.one-col { columns: 1; }
+
+  /* === ARCH DIAGRAM === */
+  .arch-diagram {
+    background: #0F172A; color: #E2E8F0;
+    padding: 36px 48px;
+    border-radius: 14px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 24px 0;
+    white-space: pre;
+    overflow-x: auto;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .arch-diagram .in { color: var(--cb68); }
+  .arch-diagram .ok { color: #4ADE80; }
+  .arch-diagram .fallback { color: #FDBA74; }
+
+  .deployed-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+  .deployed-card {
+    padding: 24px 28px;
+    border-radius: 14px;
+    border: 1px solid var(--rule);
+  }
+  .deployed-card.done {
+    background: linear-gradient(180deg, #F0FDF4 0%, #fff 100%);
+    border-color: #BBF7D0;
+  }
+  .deployed-card.pending {
+    background: linear-gradient(180deg, #FEF3C7 0%, #fff 100%);
+    border-color: #FDE68A;
+  }
+  .deployed-card h4 { font-size: 18px; margin-bottom: 12px; }
+  .deployed-card.done h4 { color: #166534; }
+  .deployed-card.pending h4 { color: #92400E; }
+  .deployed-card ul { list-style: none; padding-left: 0; margin: 0; font-size: 15px; }
+  .deployed-card ul li { padding: 6px 0 6px 24px; position: relative; line-height: 1.5; }
+  .deployed-card.done ul li::before { content: "✓"; position: absolute; left: 0; top: 6px; color: #15803D; font-weight: 700; }
+  .deployed-card.pending ul li::before { content: "○"; position: absolute; left: 0; top: 6px; color: #B45309; font-weight: 700; }
+
+  /* === OPTIONS === */
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 24px 0; }
+  .option-card {
+    padding: 32px 36px;
+    border-radius: 14px;
+    border: 1px solid var(--rule);
+    background: #fff;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,30,91,0.04);
+  }
+  .option-card.recommended {
+    border: 2px solid var(--eb50);
+    background: linear-gradient(180deg, var(--cb95) 0%, #fff 100%);
+  }
+  .option-card.recommended::after {
+    content: "RECOMENDADA";
+    position: absolute; top: -14px; right: 24px;
+    background: var(--eb50); color: #fff;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 6px 14px;
+    border-radius: 100px;
+  }
+  .option-card h3 { font-size: 24px; margin-bottom: 12px; color: var(--eb30); }
+  .option-card .desc { font-size: 16px; line-height: 1.6; margin-bottom: 16px; color: var(--ink); }
+  .option-card .pros, .option-card .cons { font-size: 15px; line-height: 1.5; margin-bottom: 8px; }
+  .option-card .pros { color: #166534; }
+  .option-card .cons { color: #991B1B; }
+
+  /* Arch diagram (slide 5 renovado) */
+  .arch-diagram {
+    background: #0F172A;
+    color: #E2E8F0;
+    border-radius: 16px;
+    padding: 24px 32px;
+    margin: 16px 0;
+    overflow-x: auto;
+  }
+  .arch-diagram pre {
+    font-family: "SF Mono", "Monaco", "Menlo", monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    margin: 0;
+    white-space: pre;
+    color: #CBD5E1;
+  }
+  .deployed-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .deployed-card {
+    border-radius: 14px;
+    padding: 18px 22px;
+    border: 1px solid var(--rule);
+  }
+  .deployed-card.ok { background: #ECFDF5; border-color: #A7F3D0; }
+  .deployed-card.pending { background: #FEF3C7; border-color: #FCD34D; }
+  .deployed-card h4 { font-size: 16px; margin-bottom: 10px; color: var(--ink); font-weight: 700; }
+  .deployed-card ul { margin: 0; padding-left: 18px; }
+  .deployed-card li { font-size: 14px; line-height: 1.6; margin-bottom: 4px; color: var(--ink); }
+  .deployed-card code { background: rgba(0,0,0,0.08); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+
+  /* === ASKS === */
+  .asks-list { list-style: none; padding-left: 0; margin: 20px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .asks-list li {
+    padding: 18px 20px 18px 56px;
+    position: relative;
+    background: #fff;
+    border-left: 4px solid var(--orange);
+    border-radius: 0 12px 12px 0;
+    font-size: 15px;
+    line-height: 1.5;
+    box-shadow: 0 2px 8px rgba(0,30,91,0.04);
+  }
+  .asks-list li::before {
+    content: "☐";
+    position: absolute; left: 18px; top: 14px;
+    font-size: 24px; color: var(--orange); font-weight: 700;
+  }
+  .asks-list li strong { color: var(--eb15); display: block; margin-bottom: 4px; font-size: 16px; }
+
+  /* === TIMELINE HORIZONTAL === */
+  .timeline-horizontal {
+    display: flex; align-items: flex-start; gap: 0;
+    margin: 32px 0; width: 100%; overflow-x: auto;
+    position: relative;
+  }
+  .timeline-horizontal::before {
+    content: ""; position: absolute; top: 20px; left: 2%; right: 2%; height: 3px;
+    background: var(--cb80); z-index: 0;
+  }
+  .timeline-horizontal .ti {
+    flex: 1; min-width: 150px;
+    position: relative;
+    padding-top: 56px;
+    text-align: center;
+  }
+  .timeline-horizontal .ti::before {
+    content: ""; position: absolute;
+    top: 12px; left: 50%; transform: translateX(-50%);
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--eb50); border: 3px solid #fff;
+    box-shadow: 0 0 0 3px var(--eb50);
+    z-index: 2;
+  }
+  .timeline-horizontal .ti.critical::before { background: var(--rose); box-shadow: 0 0 0 3px var(--rose); }
+  .timeline-horizontal .ti .date {
+    display: block; font-weight: 700; color: var(--eb30);
+    font-size: 14px; margin-bottom: 6px;
+  }
+  .timeline-horizontal .ti.critical .date { color: var(--rose); }
+  .timeline-horizontal .ti .label { font-size: 13px; color: var(--slate); line-height: 1.4; padding: 0 8px; }
+  .timeline-horizontal .ti strong { color: var(--eb15); display: block; margin-bottom: 2px; }
+
+  /* === RISKS TABLE === */
+  .risk-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,30,91,0.05); }
+  .risk-table th {
+    text-align: left; padding: 16px 24px;
+    background: var(--eb15); color: #fff;
+    font-size: 12px; letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .risk-table td {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top; line-height: 1.5;
+  }
+  .risk-table tr:last-child td { border-bottom: none; }
+  .risk-table td:first-child { font-weight: 600; color: var(--eb30); width: 320px; }
+
+  /* === CTA cards === */
+  .cta-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin: 32px 0; }
+  .cta-card {
+    padding: 36px 32px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 100%);
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0,30,91,0.2);
+  }
+  .cta-card .icon { font-size: 48px; margin-bottom: 12px; }
+  .cta-card h4 { color: #fff; font-size: 20px; margin-bottom: 10px; }
+  .cta-card .text { font-size: 15px; color: var(--cb80); line-height: 1.5; }
+  .cta-card .text strong { color: #fff; }
+
+  .final-signature {
+    margin-top: 32px; text-align: center; font-size: 15px; color: var(--slate);
+  }
+  .final-signature strong { color: var(--eb15); font-size: 17px; }
+
+  @media (max-width: 1200px) {
+    .slide { padding: 48px 60px; }
+    .brand-chip, .slide.cover .cover-top { left: 60px; }
+    .slide-num, .slide.cover .cover-top { right: 60px; }
+    .slide h2 { font-size: 40px; }
+    .slide.cover h1 { font-size: 52px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="progress-fill" id="progress"></div></div>
+
+<button class="nav-arrow prev" id="prev" aria-label="Anterior">‹</button>
+<button class="nav-arrow next" id="next" aria-label="Siguiente">›</button>
+
+<div class="dots" id="dots"></div>
+
+<div class="slides" id="slides">
+
+<!-- SLIDE 1 · PORTADA -->
+<section class="slide cover" id="slide-1">
+  <div class="cover-top">
+    <img src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" class="cover-logo" alt="Salesforce">
+    <span class="cover-date">Lunes · 5 de octubre 2026</span>
+  </div>
+  <img src="../../../Assets Salesforce Brand/Sparkles/Sparkles Blue Main.svg" class="cover-sparkles" alt="">
+  <div class="left">
+    <span class="eyebrow">Sesión de alineación · Programa Insiders</span>
+    <h1>Presentación Partner<br/>Alineación FDE</h1>
+    <p class="subtitle">Programa Insiders · Betty mejorada · piloto cerrado del 16 al 30 de octubre con distribuidoras aliadas de Betterware.</p>
+    <div class="cover-author">
+      <div class="name">Jonathan Gomez</div>
+      <div class="role">Salesforce Forward Deployed Engineer</div>
+    </div>
+  </div>
+  <div class="right">
+    <img src="../../../Assets Salesforce Brand/Carachters/Agent Astro/Agent Astro 3D 10 R.png" class="cover-astro" alt="">
+  </div>
+</section>
+
+<!-- SLIDE 2 · DÓNDE ESTAMOS -->
+<section class="slide" id="slide-2">
+  <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
+  <span class="slide-num"><span class="current">02</span> / 09</span>
+  <span class="section-eyebrow">Status del sprint FDE</span>
+  <h2>Lo que ya está construido y validado</h2>
+  <p class="lead">Antes de proponer la ejecución del piloto, el punto de partida real. Todo lo siguiente está desplegado y verificado contra el sandbox <code>betterwaremx--better1to1</code>.</p>
+
+  <div class="two-col-content">
+    <ul class="status-list">
+      <li>
+        <strong>Reporte de descubrimientos entregado</strong>
+        <span class="detail">16 hallazgos (4 Críticos · 8 Altos · 4 Medios) verificados contra el org en vivo vía Tooling API + análisis estático de 26 clases Apex y 20 Flows.</span>
+      </li>
+      <li>
+        <strong>FDE_BW_Service_Agent construido y validado</strong>
+        <span class="detail">AiAuthoringBundle de 963 LOC con Hub-and-Spoke + Verification Gate · 10 subagentes · <code>sf agent validate</code> 0 errores contra el sandbox con los adapters conectados.</span>
+      </li>
+    </ul>
+    <ul class="status-list">
+      <li>
+        <strong>4 adapters funcionales al legacy BW_Ctrl*</strong>
+        <span class="detail"><code>BW_FDE_GetDistributorInfo</code> · <code>BW_FDE_GetSaldos</code> · <code>BW_CheckAffiliateOwnership</code> · <code>BW_FDE_GetAffiliateInfo</code>. Fail-closed por default, sin filtración de PII.</span>
+      </li>
+      <li>
+        <strong>4 escenarios base validados en vivo</strong>
+        <span class="detail">SEC-3 "Julieth" cerrado · escalation limpia · off-topic contenido · ambiguous clarifica. Live actions con <code>sf agent preview</code>.</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- SLIDE 3 · PROGRAMA INSIDERS -->
+<section class="slide" id="slide-3">
+  <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
+  <span class="slide-num"><span class="current">03</span> / 09</span>
+  <span class="section-eyebrow">La propuesta</span>
+  <h2>Programa Insiders · Betty mejorada</h2>
+  <p class="lead">Un piloto cerrado con 15-25 distribuidoras aliadas durante dos semanas antes del rollout general. Mínima exposición, máxima evidencia.</p>
+
+  <div class="narrative">
+    <p><strong>Framing clave:</strong> Betty mejorada <em>no es Betty 2.0</em>. Betty sigue siendo Betty — la misma persona, el mismo tono, el mismo canal. Lo que cambia es la implementación técnica por detrás: menos fallos, respuestas más claras, mayor fiabilidad.</p>
+  </div>
+
+  <h3 style="margin-top: 24px; font-size: 22px;">En una línea</h3>
+  <ul class="clean">
+    <li><strong>Piloto cerrado</strong> del 16 al 30 de octubre con 15-25 distribuidoras aliadas (super usuarias, perfiles representativos).</li>
+    <li><strong>Alcance explícito</strong>: los flujos operativos actuales (saldos, pedidos, puntos, altas, pagos, tickets, reset, FAQ, escalación). <em>No</em> features nuevas.</li>
+    <li><strong>Reconocimiento y voz privilegiada</strong>: las piloto se convierten en embajadoras del cambio.</li>
+    <li><strong>Reversible atómicamente</strong>: kill-switch global en Custom Metadata + V40 intacto como fallback.</li>
+    <li><strong>Evidencia dura</strong> antes del rollout general: NPS cualitativo, intents validados, bugs resueltos antes de abrir al 100%.</li>
+  </ul>
+</section>
+
+<!-- SLIDE 4 · ARQUITECTURA -->
+<section class="slide" id="slide-4">
+  <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
+  <span class="slide-num"><span class="current">04</span> / 09</span>
+  <span class="section-eyebrow">Arquitectura técnica del routing</span>
+  <h2>Flujo del Programa Insiders</h2>
+
+  <div class="arch-diagram"><span class="in">WhatsApp inbound</span> → MessagingSession → BW_FDE_RouteAgent <span class="in">(Flow Autolaunched)</span>
+                                      │
+                                      ├─ <span class="ok">whitelist / hash hit</span>  →  AgentVersion = FDE_PILOT_*
+                                      │                           →  Transfer to FDE_BW_Service_Agent
+                                      │
+                                      └─ <span class="fallback">no hit</span>  →  AgentVersion = V40_LEGACY
+                                                  →  BW_AGENT_N (como hoy)</div>
+
+  <div class="deployed-grid">
+    <div class="deployed-card done">
+      <h4>Desplegado hoy en sandbox (dom 2026-10-04)</h4>
+      <ul>
+        <li>Custom Metadata <code>FDE_Pilot_Config__mdt</code> · kill-switch + rollout% + whitelist</li>
+        <li>Custom Field <code>MessagingSession.AgentVersion__c</code> · analítica A/B</li>
+        <li>Apex <code>BW_FDE_RoutingDecision</code> · SHA-256 → bucket 0-99 determinístico</li>
+        <li>Flow <code>BW_FDE_RouteAgent</code> · RecordAfterSave en MessagingSession (Draft)</li>
+      </ul>
+    </div>
+    <div class="deployed-card pending">
+      <h4>Pendiente · requiere coordinación Partner</h4>
+      <ul>
+        <li>Publish + Activate de <code>FDE_BW_Service_Agent</code> como bot activo</li>
+        <li>Insertar el Transfer-to-Bot efectivo en el flujo de entry</li>
+        <li>Crear record <code>FDE_Pilot_Config.Default</code> desde Setup UI (1 min)</li>
+        <li>Activar el Flow <code>BW_FDE_RouteAgent</code> desde Setup</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5 · ARQUITECTURA DEL ROUTING -->
+<section class="slide" id="slide-5">
+  <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
+  <span class="slide-num"><span class="current">05</span> / 09</span>
+  <span class="section-eyebrow">Arquitectura técnica</span>
+  <h2>Routing al nacer la <code>MessagingSession</code></h2>
+  <p class="lead">Al crearse una MessagingSession, un Flow nuevo (nuestro) decide a qué agente va. Sin dependencia del código del Partner. Sin turnos extra visibles. 100% reversible desde Custom Metadata.</p>
+
+  <div class="arch-diagram">
+<pre>
+  WhatsApp inbound
+         │
+         ▼
+  MessagingSession.create (RecordAfterSave)
+         │
+         ▼
+  ┌─────────────────────────────────────────────────┐
+  │  BW_FDE_RouteAgent  (Flow autolaunched, FDE)    │
+  │                                                  │
+  │  1. BW_FDE_RoutingDecision (Apex invocable)     │
+  │     • Lee FDE_Pilot_Config__mdt.Default         │
+  │     • Si kill-switch OFF  → V40_LEGACY          │
+  │     • Si phone ∈ whitelist → FDE_PILOT_WHITELIST│
+  │     • Si hash(phone)%100 &lt; rollout → FDE_PILOT_ROLLOUT │
+  │     • Sino → V40_LEGACY                         │
+  │                                                  │
+  │  2. Update MessagingSession.AgentVersion__c     │
+  │  3. Transfer-to-Bot al destino decidido         │
+  └─────────────────────────────────────────────────┘
+         │
+         ├──── FDE_PILOT_* ──→  FDE_BW_Service_Agent (nuevo)
+         │
+         └──── V40_LEGACY ──→   BW_AGENT_N (como hoy)
+</pre>
+  </div>
+
+  <div class="deployed-grid" style="margin-top: 20px;">
+    <div class="deployed-card ok">
+      <h4>✓ Desplegado en el sandbox</h4>
+      <ul>
+        <li><code>FDE_Pilot_Config__mdt</code> · kill-switch + rollout% + whitelist</li>
+        <li><code>MessagingSession.AgentVersion__c</code> · persiste decisión para A/B analytics</li>
+        <li><code>BW_FDE_RoutingDecision</code> · Apex invocable con hash SHA-256 determinístico</li>
+        <li><code>BW_FDE_RouteAgent</code> · Flow autolaunched (Draft, listo para activar)</li>
+      </ul>
+    </div>
+    <div class="deployed-card pending">
+      <h4>⧗ Pendiente de coordinar</h4>
+      <ul>
+        <li>Publish + Activate del <code>FDE_BW_Service_Agent</code> como bot activo del org</li>
+        <li>Validar order of execution contra <code>BW_AsignarColaMessagingSession</code> (ambos RecordAfterSave)</li>
+        <li>Smoke test de la acción Transfer-to-Bot en el canal de WhatsApp del sandbox</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6 · ASKS -->
+<section class="slide" id="slide-6">
+  <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
+  <span class="slide-num"><span class="current">06</span> / 09</span>
+  <span class="section-eyebrow">Qué necesitamos del Partner</span>
+  <h2>5 asks concretos para el sprint</h2>
+  <p class="lead">Lo mínimo requerido para habilitar el cutover del viernes 16 de octubre con el Programa Insiders activo.</p>
+
+  <ul class="asks-list">
+    <li>
+      <strong>Visto bueno a la arquitectura técnica</strong>
+      Validar que <code>BW_FDE_RouteAgent</code> conviva con <code>BW_AsignarColaMessagingSession</code> sin romper la asignación de cola existente.
+    </li>
+    <li>
+      <strong>Approval para Publish + Activate</strong>
+      del FDE_BW_Service_Agent · sandbox esta semana · prod jueves 2026-10-15 con feature flag OFF.
+    </li>
+    <li>
+      <strong>Compromiso de testing interno</strong>
+      Dos ventanas: jueves 2026-10-08 y lunes 2026-10-12 (pre UAT con Betterware).
+    </li>
+    <li>
+      <strong>Soporte operativo durante el piloto</strong>
+      16-30 de octubre · war room primeras 48h · respuesta rápida a bugs.
+    </li>
+    <li>
+      <strong>Co-presentar a Betterware CS martes 2026-10-06</strong>
+      Propuesta conjunta Salesforce + Partner del concepto Programa Insiders.
+    </li>
+  </ul>
+</section>
+
+<!-- SLIDE 7 · TIMELINE HORIZONTAL -->
+<section class="slide" id="slide-7">
+  <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
+  <span class="slide-num"><span class="current">07</span> / 09</span>
+  <span class="section-eyebrow">Sprint hasta el cutover</span>
+  <h2>Timeline del Programa Insiders</h2>
+  <p class="lead">Doce días desde esta reunión hasta la activación del piloto en producción.</p>
+
+  <div class="timeline-horizontal">
+    <div class="ti"><span class="date">Lun 05-oct</span><div class="label"><strong>Alineación Partner</strong>Decisión A/B</div></div>
+    <div class="ti"><span class="date">Mar 06-oct</span><div class="label"><strong>Kick-off + Betterware CS</strong>Programa Insiders</div></div>
+    <div class="ti"><span class="date">Mié-Jue 07-08</span><div class="label"><strong>Betterware cura lista</strong>Partner valida sandbox</div></div>
+    <div class="ti"><span class="date">Vie 09-oct</span><div class="label"><strong>Partner testing</strong>Ajustes finos</div></div>
+    <div class="ti"><span class="date">Lun-Mar 12-13</span><div class="label"><strong>Lista final cargada</strong>Config ready</div></div>
+    <div class="ti"><span class="date">Mié-Jue 14-15</span><div class="label"><strong>UAT + smoke test</strong>Feature flag OFF</div></div>
+    <div class="ti critical"><span class="date">VIE 16-OCT</span><div class="label"><strong>CUTOVER 5%</strong>War room 48h</div></div>
+    <div class="ti"><span class="date">Lun 19 →</span><div class="label"><strong>Escaladas 10/30%</strong>Observación</div></div>
+    <div class="ti critical"><span class="date">VIE 30-OCT</span><div class="label"><strong>Cierre piloto</strong>Demo aprendizajes</div></div>
+  </div>
+</section>
+
+<!-- SLIDE 8 · RIESGOS -->
+<section class="slide" id="slide-8">
+  <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
+  <span class="slide-num"><span class="current">08</span> / 09</span>
+  <span class="section-eyebrow">Riesgos y mitigaciones</span>
+  <h2>Lo que ya tenemos atendido</h2>
+  <p class="lead">Riesgos identificados y su plan de contingencia. Transparencia total con el Partner antes de arrancar.</p>
+
+  <table class="risk-table">
+    <thead>
+      <tr><th>Riesgo</th><th>Mitigación</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>R1 · Partner no disponible en alguna ventana del sprint</td>
+        <td>Jonathan tiene acceso de desarrollo al sandbox y puede validar en demos asíncronas. Los adapters ya corren y los escenarios base están grabados.</td>
+      </tr>
+      <tr>
+        <td>R2 · Bug crítico en UAT bloquea cutover 16-oct</td>
+        <td>Buffer en Mié-Jue 14/15 reservado para bugfix. Plan B: deslizar cutover al Lun 2026-10-19 sin tocar el resto del timeline (quedarían 11 días efectivos).</td>
+      </tr>
+      <tr>
+        <td>R3 · <code>BW_FDE_RouteAgent</code> y <code>BW_AsignarColaMessagingSession</code> compiten en order of execution</td>
+        <td>Ambos son <code>RecordAfterSave</code> en MessagingSession. Validar durante el smoke test que el nuestro escribe <code>AgentVersion__c</code> antes de que el del Partner enrute a cola. Si hubiera race condition, consolidamos ambos en un Flow invocable único con orden explícito.</td>
+      </tr>
+      <tr>
+        <td>R4 · Modelo del org no es GPT-4.1</td>
+        <td>file_upload queda en modo <code>error</code>. Sin bloqueo del cutover. Decisión de upgrade queda al Partner / Betterware a futuro.</td>
+      </tr>
+      <tr>
+        <td>R5 · Métricas regresivas durante el piloto</td>
+        <td>Kill-switch global en Custom Metadata vuelve 100% al V40 en &lt;5 min. V40 queda intacto como fallback atómico.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SLIDE 9 · CIERRE / CTA -->
+<section class="slide" id="slide-9">
+  <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
+  <span class="slide-num"><span class="current">09</span> / 09</span>
+  <span class="section-eyebrow">Las 3 decisiones de hoy</span>
+  <h2>Lo que necesitamos salir con hoy</h2>
+  <p class="lead">Para habilitar el martes de co-presentación con Betterware CS y el cutover del viernes 16 de octubre.</p>
+
+  <div class="cta-grid">
+    <div class="cta-card">
+      <div class="icon">🏗️</div>
+      <h4>CTA técnico</h4>
+      <div class="text">Validamos juntos la <strong>convivencia</strong> de <code>BW_FDE_RouteAgent</code> con el Flow de asignación de cola existente.</div>
+    </div>
+    <div class="cta-card">
+      <div class="icon">📅</div>
+      <h4>CTA de scheduling</h4>
+      <div class="text">Confirmar fecha del <strong>test Partner · jueves 2026-10-08 AM</strong>.</div>
+    </div>
+    <div class="cta-card">
+      <div class="icon">🤝</div>
+      <h4>CTA de co-presentación</h4>
+      <div class="text">Confirmar <strong>co-presentación con Betterware CS · martes 06-oct AM</strong>.</div>
+    </div>
+  </div>
+
+  <div class="narrative" style="margin-top: 24px;">
+    <p><strong>Lectura final:</strong> todo lo técnico del lado FDE está construido, validado y listo. Lo que necesitamos de ustedes es coordinación de deploy a producción + 1 modificación mínima al flujo de entry + testing. Si cerramos esto hoy, el martes vamos juntos a Betterware con una propuesta sólida, y el viernes 16 de octubre tenemos a 15-25 distribuidoras aliadas probando una Betty con menos fallos — con el V40 intacto como red de seguridad.</p>
+  </div>
+
+  <div class="final-signature">
+    <strong>Jonathan Gomez</strong> · Salesforce Forward Deployed Engineer<br/>
+    jonathan.gomez@salesforce.com · octubre 2026
+  </div>
+</section>
+
+</div>
+
+<script>
+  (function() {
+    const slides = document.getElementById('slides');
+    const total = document.querySelectorAll('.slide').length;
+    const progressFill = document.getElementById('progress');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const dotsContainer = document.getElementById('dots');
+
+    for (let i = 0; i < total; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => go(i));
+      dotsContainer.appendChild(d);
+    }
+    const dots = document.querySelectorAll('.dot');
+
+    function current() { return Math.round(slides.scrollLeft / window.innerWidth); }
+    function go(i) {
+      i = Math.max(0, Math.min(total - 1, i));
+      slides.scrollTo({ left: i * window.innerWidth, behavior: 'smooth' });
+      history.replaceState(null, '', '#slide-' + (i + 1));
+    }
+    function update() {
+      const i = current();
+      const pct = (slides.scrollLeft / (slides.scrollWidth - window.innerWidth)) * 100;
+      progressFill.style.width = (isFinite(pct) ? pct : 0) + '%';
+      dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+      prev.disabled = i === 0;
+      next.disabled = i === total - 1;
+    }
+    slides.addEventListener('scroll', update);
+    window.addEventListener('resize', update);
+    prev.addEventListener('click', () => go(current() - 1));
+    next.addEventListener('click', () => go(current() + 1));
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(current() + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); }
+      else if (e.key === 'Home') { e.preventDefault(); go(0); }
+      else if (e.key === 'End') { e.preventDefault(); go(total - 1); }
+    });
+
+    const hash = window.location.hash.match(/#slide-(\d+)/);
+    if (hash) setTimeout(() => go(parseInt(hash[1]) - 1), 0);
+    update();
+  })();
+</script>
+
+</body>
+</html>

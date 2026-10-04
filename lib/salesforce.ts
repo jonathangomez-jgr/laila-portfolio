@@ -135,6 +135,72 @@ export async function sfUpdate(
   }
 }
 
+export async function sfUpsert(
+  sobject: string,
+  externalIdField: string,
+  externalIdValue: string,
+  fields: Record<string, unknown>,
+): Promise<{ id: string; created: boolean }> {
+  const { apiVersion } = getSalesforceConfig();
+  const { access_token, instance_url } = await getAccessToken();
+
+  const response = await fetch(
+    `${instance_url}/services/data/${apiVersion}/sobjects/${sobject}/${externalIdField}/${encodeURIComponent(
+      externalIdValue,
+    )}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fields),
+      cache: "no-store",
+    },
+  );
+
+  if (!response.ok) {
+    const details = await response.text();
+    throw new Error(
+      `Salesforce ${sobject} upsert failed (${response.status}): ${details}`,
+    );
+  }
+
+  // 201 Created with body { id, success, errors } · 204 No Content on update
+  if (response.status === 204) {
+    return { id: "", created: false };
+  }
+  const data = (await response.json()) as { id: string };
+  return { id: data.id, created: response.status === 201 };
+}
+
+export async function sfInvoke(
+  apexClassName: string,
+  inputs: Record<string, unknown>[],
+): Promise<unknown> {
+  const { apiVersion } = getSalesforceConfig();
+  const { access_token, instance_url } = await getAccessToken();
+
+  const url = `${instance_url}/services/data/${apiVersion}/actions/custom/apex/${apexClassName}`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ inputs }),
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const details = await response.text();
+    throw new Error(
+      `Salesforce invoke ${apexClassName} failed (${response.status}): ${details}`,
+    );
+  }
+  return response.json();
+}
+
 export async function createPageAccessRecord(email: string, path: string) {
   const { apiVersion } = getSalesforceConfig();
   const { access_token, instance_url } = await getAccessToken();

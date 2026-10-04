@@ -310,3 +310,147 @@ export async function createFDEActivity(
 
   return sfCreate("JGR_FDE_Activity__c", fields);
 }
+
+// ============================================================================
+// Test Matrix (FDE Test Cases + Executions)
+// ============================================================================
+
+export type FDETestCaseStatus = "Pass" | "Fail" | "Blocked" | "Partial" | "Not_Run";
+
+export type FDETestExecution = {
+  Id: string;
+  Name: string;
+  JGR_FDE_TestCase__c: string;
+  JGR_FDE_Executed_Date__c: string;
+  JGR_FDE_Environment__c: string | null;
+  JGR_FDE_Agent_Version__c: string | null;
+  JGR_FDE_Agent_Build__c: number | null;
+  JGR_FDE_Status__c: FDETestCaseStatus | null;
+  JGR_FDE_Actual_Result__c: string | null;
+  JGR_FDE_Defect_Notes__c: string | null;
+  JGR_FDE_Executed_By_Name__c: string | null;
+  JGR_FDE_Transcript__c: string | null;
+};
+
+export type FDETestCase = {
+  Id: string;
+  Name: string;
+  JGR_FDE_Test_Code__c: string;
+  JGR_FDE_Title__c: string;
+  JGR_FDE_Description__c: string | null;
+  JGR_FDE_Category__c: string | null;
+  JGR_FDE_Priority__c: "Alta" | "Media" | "Baja" | null;
+  JGR_FDE_Scenario_Type__c: string | null;
+  JGR_FDE_Source__c: string | null;
+  JGR_FDE_Prerequisites__c: string | null;
+  JGR_FDE_Steps__c: string | null;
+  JGR_FDE_Expected_Result__c: string | null;
+  JGR_FDE_Related_Finding__c: string | null;
+  JGR_FDE_Is_Active__c: boolean;
+  LastModifiedDate: string;
+  executions: FDETestExecution[];
+};
+
+const TESTCASE_FIELDS = [
+  "Id",
+  "Name",
+  "JGR_FDE_Test_Code__c",
+  "JGR_FDE_Title__c",
+  "JGR_FDE_Description__c",
+  "JGR_FDE_Category__c",
+  "JGR_FDE_Priority__c",
+  "JGR_FDE_Scenario_Type__c",
+  "JGR_FDE_Source__c",
+  "JGR_FDE_Prerequisites__c",
+  "JGR_FDE_Steps__c",
+  "JGR_FDE_Expected_Result__c",
+  "JGR_FDE_Related_Finding__c",
+  "JGR_FDE_Is_Active__c",
+  "LastModifiedDate",
+].join(", ");
+
+const EXECUTION_FIELDS = [
+  "Id",
+  "Name",
+  "JGR_FDE_TestCase__c",
+  "JGR_FDE_Executed_Date__c",
+  "JGR_FDE_Environment__c",
+  "JGR_FDE_Agent_Version__c",
+  "JGR_FDE_Agent_Build__c",
+  "JGR_FDE_Status__c",
+  "JGR_FDE_Actual_Result__c",
+  "JGR_FDE_Defect_Notes__c",
+  "JGR_FDE_Executed_By_Name__c",
+  "JGR_FDE_Transcript__c",
+].join(", ");
+
+export async function getTestMatrixForCustomer(
+  customerSlug: string,
+): Promise<FDETestCase[]> {
+  const safeSlug = escapeSoql(customerSlug);
+  const projects = await sfQuery<{ Id: string }>(
+    `SELECT Id FROM JGR_FDE_Project__c ` +
+      `WHERE JGR_FDE_Customer_Slug__c = '${safeSlug}'`,
+  );
+  if (projects.length === 0) return [];
+  const projectIds = projects.map((p) => `'${p.Id}'`).join(",");
+
+  const cases = await sfQuery<FDETestCase>(
+    `SELECT ${TESTCASE_FIELDS} FROM JGR_FDE_TestCase__c ` +
+      `WHERE JGR_FDE_Project__c IN (${projectIds}) ` +
+      `AND JGR_FDE_Is_Active__c = true ` +
+      `ORDER BY JGR_FDE_Test_Code__c`,
+  );
+
+  if (cases.length === 0) return [];
+
+  const caseIds = cases.map((c) => `'${c.Id}'`).join(",");
+  const executions = await sfQuery<FDETestExecution>(
+    `SELECT ${EXECUTION_FIELDS} FROM JGR_FDE_TestExecution__c ` +
+      `WHERE JGR_FDE_TestCase__c IN (${caseIds}) ` +
+      `ORDER BY JGR_FDE_Executed_Date__c DESC`,
+  );
+
+  const byCase = new Map<string, FDETestExecution[]>();
+  for (const e of executions) {
+    const bucket = byCase.get(e.JGR_FDE_TestCase__c) ?? [];
+    bucket.push(e);
+    byCase.set(e.JGR_FDE_TestCase__c, bucket);
+  }
+
+  return cases.map((c) => ({
+    ...c,
+    executions: (byCase.get(c.Id) ?? []).slice(0, 10),
+  }));
+}
+
+export type NewTestExecutionInput = {
+  testCaseId: string;
+  environment: string;
+  agentVersion: string | null;
+  agentBuild?: number | null;
+  status: FDETestCaseStatus;
+  actualResult: string;
+  defectNotes?: string;
+  executedByName: string;
+  transcript?: string;
+};
+
+export async function createTestExecution(
+  input: NewTestExecutionInput,
+): Promise<string> {
+  const fields: Record<string, unknown> = {
+    JGR_FDE_TestCase__c: input.testCaseId,
+    JGR_FDE_Executed_Date__c: new Date().toISOString(),
+    JGR_FDE_Environment__c: input.environment,
+    JGR_FDE_Status__c: input.status,
+    JGR_FDE_Actual_Result__c: input.actualResult,
+    JGR_FDE_Executed_By_Name__c: input.executedByName,
+  };
+  if (input.agentVersion) fields.JGR_FDE_Agent_Version__c = input.agentVersion;
+  if (input.agentBuild != null) fields.JGR_FDE_Agent_Build__c = input.agentBuild;
+  if (input.defectNotes) fields.JGR_FDE_Defect_Notes__c = input.defectNotes;
+  if (input.transcript) fields.JGR_FDE_Transcript__c = input.transcript;
+  const result = await sfCreate("JGR_FDE_TestExecution__c", fields);
+  return result.id;
+}
