@@ -888,6 +888,8 @@ export type CustomerDemoTab = {
   demoGuionData?: DemoGuionData;
   valorWorkshopPlanData?: ValorWorkshopPlanData;
   questionBankData?: QuestionBankData;
+  betterwarePlan?: true;
+  betterwareTestMatrix?: true;
 };
 
 export type CustomerDemoI18n = {
