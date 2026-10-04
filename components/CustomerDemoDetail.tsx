@@ -34,6 +34,8 @@ import OverviewStats from "./OverviewStats";
 import SolutionLayers from "./SolutionLayers";
 import WorkshopResult from "./WorkshopResult";
 import JafraValorPlanCanvas from "./JafraValorPlanCanvas";
+import BetterwarePlanCanvas from "./BetterwarePlanCanvas";
+import BetterwareTestMatrixCanvas from "./BetterwareTestMatrixCanvas";
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 import type { CustomerDemo, DeliverableCta } from "../data/customerDemos";
@@ -521,6 +523,10 @@ export default function CustomerDemoDetail({ demo, lang, dict, basePath = "custo
               {activeTab.workPlanData && (
                 <WorkPlanCanvas data={activeTab.workPlanData} />
               )}
+
+              {activeTab.betterwarePlan && <BetterwarePlanCanvas />}
+
+              {activeTab.betterwareTestMatrix && <BetterwareTestMatrixCanvas />}
 
               {activeTab.assetsData && (
                 <AssetsGrid data={activeTab.assetsData} />
