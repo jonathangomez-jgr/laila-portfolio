@@ -531,6 +531,49 @@ body.deck-mode {
   color: rgba(255, 255, 255, 0.45);
 }
 
+/* Share me — oculto en desktop, visible solo en mobile (reemplaza al QR) */
+.deck-share-button {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.deck-share-button:active {
+  transform: scale(0.97);
+}
+
+.deck-share-button-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.deck-share-button-copied,
+.deck-share-button-shared {
+  background: rgba(6, 165, 154, 0.22);
+  border-color: rgba(6, 165, 154, 0.55);
+  color: #d1fae5;
+}
+
+.deck-share-button-error {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #fecaca;
+}
+
 /* ── Hero (title slide) ─────────────────────────────────────────────────── */
 .deck-hero-layout {
   display: flex;
@@ -2193,8 +2236,10 @@ body.deck-mode {
   /* Thanks title */
   .deck-thanks-title { font-size: clamp(3rem, 18vw, 6rem); }
 
-  /* QR: ocultar en mobile */
+  /* QR: ocultar en mobile · aparece el botón Share me en su lugar */
   .deck-qr-wrapper { display: none; }
+
+  .deck-share-button { display: inline-flex; }
 
   /* Hero title: más compacto */
   .deck-hero-title {
