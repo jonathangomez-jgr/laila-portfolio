@@ -895,6 +895,7 @@ function MonthGrid({
 export default function BetterwarePlanCanvas({
   readOnly = false,
   projectSlug,
+  onlyView,
 }: {
   readOnly?: boolean;
   /**
@@ -903,10 +904,17 @@ export default function BetterwarePlanCanvas({
    * con localStorage (compatibilidad con /customer-projects/betterware).
    */
   projectSlug?: string;
+  /**
+   * Si se pasa, el canvas se renderiza en modo "una sola vista": oculta el header
+   * principal y la barra de navegación entre views, mostrando únicamente la vista
+   * indicada. Útil para embebér una vista específica (ej. Calendario) desde otro tab.
+   */
+  onlyView?: ViewTab;
 } = {}) {
   const plan = betterwarePlan;
   const usesApi = Boolean(projectSlug);
-  const [view, setView] = useState<ViewTab>("dashboard");
+  const singleView = Boolean(onlyView);
+  const [view, setView] = useState<ViewTab>(onlyView ?? "dashboard");
   const [filterOwner, setFilterOwner] = useState<OwnerTag | "all">("all");
   const [filterType, setFilterType] = useState<ActivityType | "all">("all");
   const [filterStatus, setFilterStatus] = useState<ActivityStatus | "all">("all");
@@ -1066,7 +1074,8 @@ export default function BetterwarePlanCanvas({
 
   return (
     <div className="w-full">
-      {/* Header */}
+      {/* Header (oculto en modo single-view: lo pinta el tab padre) */}
+      {!singleView && (
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
@@ -1117,8 +1126,10 @@ export default function BetterwarePlanCanvas({
           )}
         </div>
       </div>
+      )}
 
-      {/* Nav */}
+      {/* Nav (oculto en modo single-view) */}
+      {!singleView && (
       <div className="mb-4 flex flex-wrap gap-1 border-b border-slate-200">
         {(
           [
@@ -1145,6 +1156,7 @@ export default function BetterwarePlanCanvas({
           </button>
         ))}
       </div>
+      )}
 
       {/* DASHBOARD */}
       {view === "dashboard" && (
