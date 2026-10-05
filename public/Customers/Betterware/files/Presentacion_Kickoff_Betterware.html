@@ -154,29 +154,122 @@
   .slide h2 { font-size: 48px; margin-bottom: 16px; max-width: 1200px; }
   .lead { font-size: 20px; color: var(--slate); max-width: 900px; margin: 0 0 36px 0; line-height: 1.5; }
 
-  /* === EMBED (slide 2 · organigrama) === */
-  .slide.embed { padding: 72px 48px 72px 48px; justify-content: flex-start; }
-  .slide.embed .embed-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin: 0 52px 10px 52px; }
-  .slide.embed .embed-head .section-eyebrow { margin-bottom: 6px; }
-  .slide.embed .embed-head h2 { font-size: 32px; margin: 0; }
-  .slide.embed .embed-head .embed-sub { font-size: 14px; color: var(--slate); text-align: right; max-width: 340px; line-height: 1.4; }
-  .embed-frame-wrap {
+  /* === SLIDE · ORGANIGRAMA (inlined) === */
+  .slide.org { padding: 72px 48px 72px 48px; justify-content: flex-start; }
+  .slide.org .embed-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin: 0 52px 10px 52px; }
+  .slide.org .embed-head .section-eyebrow { margin-bottom: 6px; }
+  .slide.org .embed-head h2 { font-size: 32px; margin: 0; }
+  .slide.org .embed-head .embed-sub { font-size: 14px; color: var(--slate); text-align: right; max-width: 340px; line-height: 1.4; }
+  .org-shell {
     position: relative;
     flex: 1 1 auto;
     margin: 10px 52px 0 52px;
     border-radius: 18px;
     overflow: hidden;
-    background: #fff;
+    background: var(--mist);
     box-shadow: 0 8px 28px rgba(0,30,91,0.08);
     border: 1px solid var(--rule);
   }
-  .embed-frame-wrap iframe {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border: 0;
+  .org-fit {
+    position: absolute; top: 0; left: 0;
     transform-origin: top left;
+    will-change: transform;
   }
+
+  /* === Organigrama (scoped under .org-root) === */
+  .org-root {
+    --or-ink:#0A1F44; --or-ink2:#334155; --or-muted:#64748b; --or-line:#E2E8F0; --or-bg:#F3F6FB; --or-card:#ffffff;
+    --or-navy:#001E5B; --or-blue:#066AFE; --or-blue-50:#EAF5FE;
+    --c-lead:#001E5B; --c-acc:#066AFE; --c-spec:#022AC0; --c-pre:#00B3FF; --c-fde:#F28B42; --c-sig:#E8275A;
+    --or-conn:#b6c6da;
+    --or-radius:14px; --or-shadow:0 1px 2px rgba(0,30,91,.06),0 8px 22px rgba(0,30,91,.07);
+    width: 1480px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    color:var(--or-ink);
+    background:var(--or-bg);
+    font-size:13.5px;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  .org-root, .org-root * { box-sizing: border-box; }
+  .org-root h1, .org-root h2, .org-root h3, .org-root h4 {
+    font-family: inherit; color: inherit; margin: 0; line-height: 1.1; letter-spacing: normal;
+  }
+  .org-root .page{max-width:1480px;margin:0 auto;padding:28px 28px 22px}
+  .org-root .hero{background:linear-gradient(135deg,#001E5B 0%,#022AC0 60%,#066AFE 100%);color:#fff;border-radius:18px;padding:22px 26px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;box-shadow:var(--or-shadow)}
+  .org-root .hero .k{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:#bfdbfe;font-weight:700}
+  .org-root .hero h1{margin:6px 0 4px;font-size:32px;letter-spacing:-.02em;line-height:1.1;color:#fff}
+  .org-root .hero p{margin:0;color:#dbeafe;font-size:14px;max-width:760px}
+  .org-root .hero .meta{display:flex;gap:8px;flex-wrap:wrap}
+  .org-root .hero .meta span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:4px 11px;font-size:12px;color:#eff6ff;white-space:nowrap}
+
+  .org-root .level{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;position:relative}
+  .org-root .vline{width:0;height:22px;border-left:2px solid var(--or-conn);margin:0 auto}
+  .org-root .level-label{text-align:center;font-size:10.8px;letter-spacing:.14em;text-transform:uppercase;color:var(--or-muted);font-weight:700;margin:16px 0 8px}
+
+  .org-root .p{background:var(--or-card);border:1px solid var(--or-line);border-radius:var(--or-radius);box-shadow:var(--or-shadow);padding:11px 12px;display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start;border-top:4px solid var(--c,#94a3b8)}
+  .org-root .p.wide{width:330px}
+  .org-root .p.lead{width:400px;border-top-width:5px}
+  .org-root .av{position:relative;width:54px;height:54px;border-radius:50%;flex:none;background:var(--c,#64748b);color:#fff;font-weight:750;font-size:17px;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 0 0 3px #fff,0 0 0 4px var(--or-line)}
+  .org-root .p.lead .av{width:66px;height:66px;font-size:20px}
+  .org-root .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#fff}
+  .org-root .nm{font-size:14px;font-weight:750;line-height:1.2}
+  .org-root .tt{font-size:11.6px;color:var(--or-muted);margin-top:1px}
+  .org-root .badge{display:inline-block;margin-top:5px;font-size:10.4px;font-weight:750;letter-spacing:.03em;padding:2px 8px;border-radius:999px;background:var(--or-blue-50);color:var(--or-blue)}
+  .org-root .badge.lead{background:#001E5B;color:#fff}
+  .org-root .badge.sq{background:#fef3c7;color:#92400e}
+  .org-root .rs{font-size:12.2px;color:var(--or-ink2);margin-top:5px}
+
+  .org-root .p.tbd{border:1.5px dashed #cbd5e1;border-top:4px solid var(--c);background:#fcfdff;box-shadow:none}
+  .org-root .p.tbd .av{background:#e2e8f0;color:#64748b;font-size:12px;letter-spacing:.04em}
+  .org-root .p.tbd .nm{color:#475569}
+
+  .org-root .groups{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative;padding-top:22px}
+  .org-root .groups::before{content:"";position:absolute;top:0;left:calc(12.5% - 6.25px);right:calc(12.5% - 6.25px);border-top:2px solid var(--or-conn)}
+  .org-root .grp{position:relative;display:flex;flex-direction:column;background:rgba(255,255,255,.65);border:1.5px dashed var(--c);border-radius:18px;padding:30px 10px 10px}
+  .org-root .grp::before{content:"";position:absolute;top:-24px;left:calc(50% - 1px);height:22px;border-left:2px solid var(--or-conn)}
+  .org-root .grp-h{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#fff;border:1.5px solid var(--c);color:var(--c);border-radius:999px;padding:3px 12px;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
+  .org-root .grp .p{margin-bottom:9px;box-shadow:0 1px 2px rgba(0,30,91,.05)}
+  .org-root .grp .p:last-child{margin-bottom:0}
+  .org-root .grp .p.head{background:linear-gradient(180deg,#fff, #fbfdff)}
+  .org-root .grp-foot{margin-top:auto;padding-top:10px;text-align:center;font-size:10.8px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--c)}
+
+  .org-root .sigrow{display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative;padding-top:34px}
+  .org-root .sigrow::before{content:"";position:absolute;top:0;left:calc(87.5% + 4.25px);height:14px;border-left:2px solid var(--or-conn)}
+  .org-root .sigrow::after{content:"";position:absolute;top:12px;left:calc(25% - 4.5px);right:calc(12.5% - 6.25px);border-top:2px solid var(--or-conn)}
+  .org-root .sigbox .cards{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .org-root .sigbox .cards .p{margin:0}
+  .org-root .sig-note{display:flex;align-items:center;border:1px dashed #f0c6dc;background:#fff7fb;border-radius:var(--or-radius);padding:10px 12px;font-size:12px;color:var(--or-ink2)}
+
+  .org-root .squad{margin-top:18px;border-radius:18px;padding:16px 18px 18px;background:linear-gradient(135deg,#0f172a 0%,#1e293b 65%,#334155 100%);color:#e2e8f0;box-shadow:var(--or-shadow)}
+  .org-root .sq-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .org-root .sq-k{background:#fbbf24;color:#422006;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:3px 11px}
+  .org-root .sq-head h2{margin:0;font-size:18px;line-height:1.2;color:#fff;letter-spacing:-.01em}
+  .org-root .sq-head p{margin:0;font-size:12.5px;color:#cbd5e1;flex-basis:100%}
+  .org-root .sq-body{display:grid;grid-template-columns:400px 330px 1fr;gap:12px;align-items:stretch}
+  .org-root .sq-body .p{width:auto;color:var(--or-ink)}
+  .org-root .sq-body > .p{align-content:center}
+  .org-root .sq-col{display:flex;flex-direction:column;gap:12px}
+  .org-root .sq-col .p{flex:1}
+  .org-root .sq-members{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:var(--or-radius);padding:10px 12px}
+  .org-root .sq-l{font-size:10.8px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:700;margin-bottom:8px}
+  .org-root .chips{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .org-root .chip{display:flex;align-items:center;gap:9px;background:#fff;color:var(--or-ink);border-radius:12px;padding:6px 9px;border-left:3px solid var(--c)}
+  .org-root .chip .av{width:34px;height:34px;font-size:12px;box-shadow:none}
+  .org-root .chip .cn{font-size:12.4px;font-weight:750;line-height:1.15}
+  .org-root .chip .cr{font-size:11px;color:var(--or-muted);line-height:1.2;margin-top:1px}
+
+  .org-root .sec{display:flex;align-items:center;gap:12px;margin:26px 0 0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--or-ink2);font-weight:800}
+  .org-root .sec::before, .org-root .sec::after{content:"";flex:1;border-top:1px solid var(--or-line)}
+
+  .org-root .contact{margin-top:20px;background:#fff;border:1px solid var(--or-line);border-radius:var(--or-radius);box-shadow:var(--or-shadow);padding:14px 16px}
+  .org-root .contact h2{margin:0 0 10px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--or-ink2)}
+  .org-root .cgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+  .org-root .ci{border-left:3px solid var(--c);padding:2px 0 2px 10px}
+  .org-root .ci .q{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--or-muted);font-weight:700}
+  .org-root .ci .a{font-size:13px;font-weight:700;margin-top:2px}
+  .org-root .ci .s{font-size:11.6px;color:var(--or-ink2)}
+  .org-root .foot{margin-top:12px;font-size:11px;color:var(--or-muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
   @media (max-width: 1200px) {
     .slide { padding: 48px 60px; }
@@ -184,7 +277,7 @@
     .slide-num, .slide.cover .cover-top { right: 60px; }
     .slide h2 { font-size: 40px; }
     .slide.cover h1 { font-size: 52px; }
-    .slide.embed .embed-head, .embed-frame-wrap { margin-left: 20px; margin-right: 20px; }
+    .slide.org .embed-head, .org-shell { margin-left: 20px; margin-right: 20px; }
   }
 </style>
 </head>
@@ -224,8 +317,8 @@
   </div>
 </section>
 
-<!-- SLIDE 2 · ORGANIGRAMA (embed) -->
-<section class="slide embed" id="slide-2">
+<!-- SLIDE 2 · ORGANIGRAMA (inlined) -->
+<section class="slide org" id="slide-2">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
   <span class="slide-num"><span class="current">02</span></span>
   <div class="embed-head">
@@ -235,14 +328,246 @@
     </div>
     <div class="embed-sub">Organigrama funcional del equipo Salesforce que atiende al Grupo BeFra durante el plan de choque.</div>
   </div>
-  <div class="embed-frame-wrap">
-    <iframe id="orgFrame" src="Organigrama_Salesforce_BeFra.html" title="Organigrama Salesforce · BeFra" scrolling="no"></iframe>
+  <div class="org-shell">
+    <div class="org-fit">
+      <div class="org-root">
+        <div class="page">
+
+          <header class="hero">
+            <div>
+              <div class="k">Salesforce · Grupo BeFra</div>
+              <h1>Tu equipo Salesforce</h1>
+              <p>Quién es quién y de qué se encarga cada persona en la atención a Betterware, Jafra y Credilazos.</p>
+            </div>
+            <div class="meta">
+              <span>Octubre 2026</span>
+              <span>Organigrama funcional</span>
+            </div>
+          </header>
+
+          <section class="squad">
+            <div class="sq-head">
+              <span class="sq-k">Agent Squad · Equipo de choque</span>
+              <h2>Befra Agents Squad</h2>
+              <p>Equipo de Salesforce dedicado a los agentes de Agentforce de Betterware y Jafra (Betty y Janet) durante el plan de choque. Trabaja como un solo equipo para ambas compañías.</p>
+            </div>
+            <div class="sq-body">
+              <div class="sq-col">
+                <div class="p lead" style="--c:var(--c-acc)">
+                  <div class="av"><span class="ini">PC</span><img onerror="fx(this)" alt="Paola Castaño" src="https://avatars.slack-edge.com/2025-05-05/8843464863622_3865e52786372f67c1f8_192.jpg" data-orig="https://avatars.slack-edge.com/2025-05-05/8843464863622_3865e52786372f67c1f8_original.jpg"></div>
+                  <div><div class="nm">Paola Castaño</div><div class="tt">Cloud Account Executive · Lead de la cuenta</div><span class="badge lead">Lead del plan de choque</span><div class="rs">Lidera el plan de choque: coordina al equipo, las prioridades y las sesiones de seguimiento con BeFra.</div></div>
+                </div>
+                <div class="p" style="--c:var(--c-acc)">
+                  <div class="av"><span class="ini">LM</span><img onerror="fx(this)" alt="Luis Carlos Molina" src="https://avatars.slack-edge.com/2025-10-20/9738287280500_1350aeae0b66183da1a1_192.jpg" data-orig="https://avatars.slack-edge.com/2025-10-20/9738287280500_1350aeae0b66183da1a1_original.jpg"></div>
+                  <div><div class="nm">Luis Carlos Molina</div><div class="tt">Named Account Executive</div><span class="badge">Account Executive</span><div class="rs">Punto de contacto comercial del grupo durante el plan de choque.</div></div>
+                </div>
+              </div>
+              <div class="p" style="--c:var(--c-fde)">
+                <div class="av"><span class="ini">JG</span><img onerror="fx(this)" alt="Jonathan Gómez" src="https://avatars.slack-edge.com/2026-04-07/10865874074962_2f3defd17f6534ae5f80_192.png" data-orig="https://avatars.slack-edge.com/2026-04-07/10865874074962_2f3defd17f6534ae5f80_original.png"></div>
+                <div><div class="nm">Jonathan Gómez</div><div class="tt">Principal Forward Deployed Engineer</div><span class="badge sq">Líder técnico</span><div class="rs">Define el plan de trabajo de los agentes con actividades, tiempos y responsables, y lidera su ejecución técnica.</div></div>
+              </div>
+              <div class="sq-members">
+                <div class="sq-l">Integrantes</div>
+                <div class="chips">
+                  <div class="chip" style="--c:var(--c-fde)"><div class="av"><span class="ini">LS</span><img onerror="fx(this)" alt="Leandro de Souza" src="https://avatars.slack-edge.com/2024-07-26/7495830417457_23a700bfbbc26f6b553f_192.png" data-orig="https://avatars.slack-edge.com/2024-07-26/7495830417457_23a700bfbbc26f6b553f_original.png"></div><div><div class="cn">Leandro de Souza</div><div class="cr">Forward Deployed Engineer</div></div></div>
+                  <div class="chip" style="--c:var(--c-fde)"><div class="av"><span class="ini">MR</span><img onerror="fx(this)" alt="María Paula Rodríguez" src="https://avatars.slack-edge.com/2026-09-20/12107115588214_885c83162db3bb46c0a5_192.png" data-orig="https://avatars.slack-edge.com/2026-09-20/12107115588214_885c83162db3bb46c0a5_original.png"></div><div><div class="cn">María Paula Rodríguez</div><div class="cr">Forward Deployed Engineer</div></div></div>
+                  <div class="chip" style="--c:var(--c-sig)"><div class="av"><span class="ini">AH</span><img onerror="fx(this)" alt="Andrea Hernández" src="https://avatars.slack-edge.com/2025-10-17/9724419938020_5deb3eb0b96e5d1f3dc9_192.png" data-orig="https://avatars.slack-edge.com/2025-10-17/9724419938020_5deb3eb0b96e5d1f3dc9_original.png"></div><div><div class="cn">Andrea Hernández</div><div class="cr">Success Architect</div></div></div>
+                  <div class="chip" style="--c:var(--c-sig)"><div class="av"><span class="ini">DC</span><img onerror="fx(this)" alt="Diana Cruz" src="https://avatars.slack-edge.com/2025-09-03/9442032660967_50dada450e4f66ad16c4_192.png" data-orig="https://avatars.slack-edge.com/2025-09-03/9442032660967_50dada450e4f66ad16c4_original.png"></div><div><div class="cn">Diana Cruz</div><div class="cr">Customer Success Manager</div></div></div>
+                  <div class="chip" style="--c:var(--c-sig)"><div class="av"><span class="ini">HN</span><img onerror="fx(this)" alt="Héctor José Negrete" src="https://avatars.slack-edge.com/2026-06-01/11254280138614_34d723836ec93758a668_192.jpg" data-orig="https://avatars.slack-edge.com/2026-06-01/11254280138614_34d723836ec93758a668_original.jpg"></div><div><div class="cn">Héctor José Negrete</div><div class="cr">Customer Success Manager</div></div></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="sec">Organigrama del equipo de cuenta</div>
+
+          <div class="level-label">Sponsors ejecutivos</div>
+          <div class="level">
+            <div class="p wide" style="--c:var(--c-lead)">
+              <div class="av"><span class="ini">RC</span><img onerror="fx(this)" alt="Rodrigo Cuello Mera" src="https://avatars.slack-edge.com/2026-05-28/11231334625377_11f4272ccf81e5c34efb_192.png" data-orig="https://avatars.slack-edge.com/2026-05-28/11231334625377_11f4272ccf81e5c34efb_original.png"></div>
+              <div><div class="nm">Rodrigo Cuello Mera</div><div class="tt">SVP, Sales</div><div class="rs">Sponsor ejecutivo de Salesforce para el Grupo BeFra.</div></div>
+            </div>
+            <div class="p wide" style="--c:var(--c-lead)">
+              <div class="av"><span class="ini">JC</span><img onerror="fx(this)" alt="Jorge Andrés Caballero" src="https://avatars.slack-edge.com/2026-03-25/10784190648468_4a9a696deccd30a0b2a9_192.png" data-orig="https://avatars.slack-edge.com/2026-03-25/10784190648468_4a9a696deccd30a0b2a9_original.png"></div>
+              <div><div class="nm">Jorge Andrés Caballero</div><div class="tt">RVP, Sales</div><div class="rs">Líder del equipo comercial que atiende a BeFra y punto de escalamiento comercial.</div></div>
+            </div>
+            <div class="p wide" style="--c:var(--c-lead)">
+              <div class="av"><span class="ini">JA</span><img onerror="fx(this)" alt="Jorge Humberto Arias" src="https://avatars.slack-edge.com/2026-05-06/11097286144128_9d8ffb3159d8f28cac5d_192.jpg" data-orig="https://avatars.slack-edge.com/2026-05-06/11097286144128_9d8ffb3159d8f28cac5d_original.jpg"></div>
+              <div><div class="nm">Jorge Humberto Arias</div><div class="tt">VP, Solution Engineering</div><div class="rs">Sponsor técnico: arquitectura de soluciones y equipos de ingeniería.</div></div>
+            </div>
+          </div>
+
+          <div class="vline" style="margin-top:12px"></div>
+
+          <div class="level-label" style="margin-top:6px">Equipo de cuenta</div>
+          <div class="level">
+            <div class="p lead" style="--c:var(--c-acc)">
+              <div class="av"><span class="ini">PC</span><img onerror="fx(this)" alt="Paola Castaño" src="https://avatars.slack-edge.com/2025-05-05/8843464863622_3865e52786372f67c1f8_192.jpg" data-orig="https://avatars.slack-edge.com/2025-05-05/8843464863622_3865e52786372f67c1f8_original.jpg"></div>
+              <div><div class="nm">Paola Castaño</div><div class="tt">Cloud Account Executive · Marketing Cloud y WhatsApp</div><span class="badge lead">Lead de la cuenta · plan de choque</span><div class="rs">Lidera el plan de choque de los agentes y coordina al equipo de Salesforce. Especialista en Marketing Cloud y WhatsApp.</div></div>
+            </div>
+            <div class="p lead" style="--c:var(--c-acc)">
+              <div class="av"><span class="ini">LM</span><img onerror="fx(this)" alt="Luis Carlos Molina" src="https://avatars.slack-edge.com/2025-10-20/9738287280500_1350aeae0b66183da1a1_192.jpg" data-orig="https://avatars.slack-edge.com/2025-10-20/9738287280500_1350aeae0b66183da1a1_original.jpg"></div>
+              <div><div class="nm">Luis Carlos Molina</div><div class="tt">Named Account Executive</div><span class="badge">Account Executive del grupo</span><div class="rs">Punto de contacto comercial de Betterware, Jafra y Credilazos: propuestas, contratos y plan de cuenta.</div></div>
+            </div>
+          </div>
+
+          <div class="vline" style="margin-top:12px;height:18px"></div>
+
+          <div class="groups">
+
+            <div class="grp" style="--c:var(--c-spec)">
+              <div class="grp-h">Especialistas de producto</div>
+              <div class="p" style="--c:var(--c-spec)">
+                <div class="av"><span class="ini">AM</span><img onerror="fx(this)" alt="Ana Lilia Morales" src="https://avatars.slack-edge.com/2025-09-17/9534531176085_b5159283450d7e1f78f6_192.jpg" data-orig="https://avatars.slack-edge.com/2025-09-17/9534531176085_b5159283450d7e1f78f6_original.jpg"></div>
+                <div><div class="nm">Ana Lilia Morales</div><div class="tt">Cloud AE · Agentforce y Data Cloud</div><div class="rs">Seguimiento del consumo de Agentforce (Flex Credits) y planes de consumo de Betterware y Jafra.</div></div>
+              </div>
+              <div class="p" style="--c:var(--c-spec)">
+                <div class="av"><span class="ini">JU</span><img onerror="fx(this)" alt="Juan Carlos Uribe" src="https://avatars.slack-edge.com/2026-02-18/10519039385399_5ff4e4827ac971835b96_192.png" data-orig="https://avatars.slack-edge.com/2026-02-18/10519039385399_5ff4e4827ac971835b96_original.png"></div>
+                <div><div class="nm">Juan Carlos Uribe</div><div class="tt">Account Executive, Tableau Specialist</div><div class="rs">Tableau: licenciamiento, analítica y reportes.</div></div>
+              </div>
+              <div class="p" style="--c:var(--c-spec)">
+                <div class="av"><span class="ini">AE</span><img onerror="fx(this)" alt="Alan Eduardo Muñoz" src="https://avatars.slack-edge.com/2022-10-14/4217596194454_0b5308ec5ad0c2b501b7_192.jpg" data-orig="https://avatars.slack-edge.com/2022-10-14/4217596194454_0b5308ec5ad0c2b501b7_original.jpg"></div>
+                <div><div class="nm">Alan Eduardo Muñoz</div><div class="tt">Prime Named AE · MuleSoft e Informatica</div><div class="rs">Integración de sistemas (MuleSoft) y gobierno de datos (Informatica).</div></div>
+              </div>
+              <div class="p" style="--c:var(--c-spec)">
+                <div class="av"><span class="ini">MG</span><img onerror="fx(this)" alt="Monserrat Garza" src="https://avatars.slack-edge.com/2025-02-03/8393742000242_fc24a4d9bcb1757abd5f_192.jpg" data-orig="https://avatars.slack-edge.com/2025-02-03/8393742000242_fc24a4d9bcb1757abd5f_original.jpg"></div>
+                <div><div class="nm">Monserrat Garza</div><div class="tt">Cloud AE · Slack</div><div class="rs">Slack: colaboración, Slackbot y agentes dentro de Slack.</div></div>
+              </div>
+            </div>
+
+            <div class="grp" style="--c:var(--c-pre)">
+              <div class="grp-h">Preventa y arquitectura</div>
+              <div class="p" style="--c:var(--c-pre)">
+                <div class="av"><span class="ini">EA</span><img onerror="fx(this)" alt="José Eduardo Arteaga" src="https://avatars.slack-edge.com/2025-10-27/9795798991729_f0f79bf5fd427b3e2981_192.png" data-orig="https://avatars.slack-edge.com/2025-10-27/9795798991729_f0f79bf5fd427b3e2981_original.png"></div>
+                <div><div class="nm">José Eduardo Arteaga</div><div class="tt">Senior Account Solution Engineer</div><div class="rs">Diseño de soluciones y demos; estima el consumo de cada caso de uso.</div></div>
+              </div>
+              <div class="p" style="--c:var(--c-pre)">
+                <div class="av"><span class="ini">XF</span><img onerror="fx(this)" alt="Ximena Flores" src="https://avatars.slack-edge.com/2025-08-22/9398511727526_33de59750219437b01d2_192.png" data-orig="https://avatars.slack-edge.com/2025-08-22/9398511727526_33de59750219437b01d2_original.png"></div>
+                <div><div class="nm">Ximena Flores</div><div class="tt">Account Solution Engineer · Marketing</div><div class="rs">Soluciones y demos de Marketing Cloud.</div></div>
+              </div>
+              <div class="p" style="--c:var(--c-pre)">
+                <div class="av"><span class="ini">SR</span><img onerror="fx(this)" alt="Sergio Ramírez" src="https://avatars.slack-edge.com/2021-01-07/1616757482517_374a994e536e4a5d50b6_192.png" data-orig="https://avatars.slack-edge.com/2021-01-07/1616757482517_374a994e536e4a5d50b6_original.png"></div>
+                <div><div class="nm">Sergio Ramírez</div><div class="tt">Principal Account Solution Engineer</div><div class="rs">Soluciones y demos de Service Cloud y Agentforce.</div></div>
+              </div>
+              <div class="p" style="--c:var(--c-pre)">
+                <div class="av"><span class="ini">JR</span><img onerror="fx(this)" alt="Jonathan Romero" src="https://avatars.slack-edge.com/2025-12-08/10073317928101_2163a2d3c4588bb964d7_192.png" data-orig="https://avatars.slack-edge.com/2025-12-08/10073317928101_2163a2d3c4588bb964d7_original.png"></div>
+                <div><div class="nm">Jonathan Romero</div><div class="tt">Lead Technical Architect</div><div class="rs">Arquitectura multi-org del grupo: Betterware, Jafra y Credilazos.</div></div>
+              </div>
+            </div>
+
+            <div class="grp" style="--c:var(--c-fde)">
+              <div class="grp-h">Forward Deployed Engineering</div>
+              <div class="p head" style="--c:var(--c-fde)">
+                <div class="av"><span class="ini">GC</span><img onerror="fx(this)" alt="Gabriel Camarena" src="https://avatars.slack-edge.com/2021-03-23/1891864057074_9746fa91ad04a7aa0770_192.jpg" data-orig="https://avatars.slack-edge.com/2021-03-23/1891864057074_9746fa91ad04a7aa0770_original.jpg"></div>
+                <div><div class="nm">Gabriel Camarena</div><div class="tt">Senior Director, Solution Engineering</div><span class="badge">Líder del equipo FDE</span></div>
+              </div>
+              <div class="p" style="--c:var(--c-fde)">
+                <div class="av"><span class="ini">JG</span><img onerror="fx(this)" alt="Jonathan Gómez" src="https://avatars.slack-edge.com/2026-04-07/10865874074962_2f3defd17f6534ae5f80_192.png" data-orig="https://avatars.slack-edge.com/2026-04-07/10865874074962_2f3defd17f6534ae5f80_original.png"></div>
+                <div><div class="nm">Jonathan Gómez</div><div class="tt">Principal Forward Deployed Engineer</div><span class="badge sq">Líder técnico · Agent Squad</span><div class="rs">Lidera la ejecución técnica del plan de choque de los agentes Betty y Janet.</div></div>
+              </div>
+              <div class="p" style="--c:var(--c-fde)">
+                <div class="av"><span class="ini">LS</span><img onerror="fx(this)" alt="Leandro de Souza" src="https://avatars.slack-edge.com/2024-07-26/7495830417457_23a700bfbbc26f6b553f_192.png" data-orig="https://avatars.slack-edge.com/2024-07-26/7495830417457_23a700bfbbc26f6b553f_original.png"></div>
+                <div><div class="nm">Leandro de Souza</div><div class="tt">Senior Forward Deployed Engineer</div><div class="rs">Assessment y observabilidad de los agentes en producción.</div></div>
+              </div>
+              <div class="p" style="--c:var(--c-fde)">
+                <div class="av"><span class="ini">MR</span><img onerror="fx(this)" alt="María Paula Rodríguez" src="https://avatars.slack-edge.com/2026-09-20/12107115588214_885c83162db3bb46c0a5_192.png" data-orig="https://avatars.slack-edge.com/2026-09-20/12107115588214_885c83162db3bb46c0a5_original.png"></div>
+                <div><div class="nm">María Paula Rodríguez</div><div class="tt">Forward Deployed Engineer</div><div class="rs">Análisis y optimización de los agentes.</div></div>
+              </div>
+            </div>
+
+            <div class="grp" style="--c:var(--c-sig)">
+              <div class="grp-h">Customer Success y Signature</div>
+              <div class="p head" style="--c:var(--c-sig)">
+                <div class="av"><span class="ini">JV</span><img onerror="fx(this)" alt="Jorge Vargas Cervantes" src="https://avatars.slack-edge.com/2025-06-10/9029970929778_eb1b8f96d4e063a08f57_192.png" data-orig="https://avatars.slack-edge.com/2025-06-10/9029970929778_eb1b8f96d4e063a08f57_original.png"></div>
+                <div><div class="nm">Jorge Vargas Cervantes</div><div class="tt">RVP, Customer Success Management</div><span class="badge">Líder de Success y Signature</span></div>
+              </div>
+              <div class="p" style="--c:var(--c-sig)">
+                <div class="av"><span class="ini">GC</span><img onerror="fx(this)" alt="Giovanna Lucia Cano" src="https://avatars.slack-edge.com/2020-12-17/1608213041008_ff06b7e2387d9c37ba42_192.jpg" data-orig="https://avatars.slack-edge.com/2020-12-17/1608213041008_ff06b7e2387d9c37ba42_original.jpg"></div>
+                <div><div class="nm">Giovanna Lucia Cano</div><div class="tt">Director, Customer Success Management</div><div class="rs">Liderazgo de Customer Success para las cuentas Signature en México.</div></div>
+              </div>
+              <div class="p" style="--c:var(--c-sig)">
+                <div class="av"><span class="ini">FO</span><img onerror="fx(this)" alt="Fernando Ordaz" src="https://avatars.slack-edge.com/2025-03-18/8626929611268_b05c620a878058c3e31a_192.jpg" data-orig="https://avatars.slack-edge.com/2025-03-18/8626929611268_b05c620a878058c3e31a_original.jpg"></div>
+                <div><div class="nm">Fernando Ordaz</div><div class="tt">Signature Success, Sales Executive</div><div class="rs">Alcance y contratación del servicio Signature para Betterware, Jafra y Credilazos.</div></div>
+              </div>
+              <div class="grp-foot">Equipos Signature por compañía ↓</div>
+            </div>
+
+          </div>
+
+          <div class="sigrow">
+
+            <div class="grp sigbox" style="--c:var(--c-sig)">
+              <div class="grp-h">Signature · Jafra</div>
+              <div class="cards">
+                <div class="p" style="--c:var(--c-sig)">
+                  <div class="av"><span class="ini">MK</span><img onerror="fx(this)" alt="Marta King" src="https://avatars.slack-edge.com/2023-08-03/5686438612677_56e1183de96a01d22bf9_192.jpg" data-orig="https://avatars.slack-edge.com/2023-08-03/5686438612677_56e1183de96a01d22bf9_original.jpg"></div>
+                  <div><div class="nm">Marta King</div><div class="tt">Senior Onboarding Specialist · Signature</div><div class="rs">Onboarding del servicio Signature para Marketing Cloud.</div></div>
+                </div>
+                <div class="p" style="--c:var(--c-sig)">
+                  <div class="av"><span class="ini">DC</span><img onerror="fx(this)" alt="Diana Cruz" src="https://avatars.slack-edge.com/2025-09-03/9442032660967_50dada450e4f66ad16c4_192.png" data-orig="https://avatars.slack-edge.com/2025-09-03/9442032660967_50dada450e4f66ad16c4_original.png"></div>
+                  <div><div class="nm">Diana Cruz</div><div class="tt">Customer Success Manager · Signature</div><div class="rs">Seguimiento de casos, escalamientos y adopción de Marketing Cloud y WhatsApp.</div></div>
+                </div>
+                <div class="p" style="--c:var(--c-sig)">
+                  <div class="av"><span class="ini">HN</span><img onerror="fx(this)" alt="Héctor José Negrete" src="https://avatars.slack-edge.com/2026-06-01/11254280138614_34d723836ec93758a668_192.jpg" data-orig="https://avatars.slack-edge.com/2026-06-01/11254280138614_34d723836ec93758a668_original.jpg"></div>
+                  <div><div class="nm">Héctor José Negrete</div><div class="tt">Customer Success Manager · Signature</div><div class="rs">Seguimiento de casos, escalamientos y adopción de Service Cloud y Agentforce.</div></div>
+                </div>
+                <div class="p" style="--c:var(--c-sig)">
+                  <div class="av"><span class="ini">AH</span><img onerror="fx(this)" alt="Andrea Hernández" src="https://avatars.slack-edge.com/2025-10-17/9724419938020_5deb3eb0b96e5d1f3dc9_192.png" data-orig="https://avatars.slack-edge.com/2025-10-17/9724419938020_5deb3eb0b96e5d1f3dc9_original.png"></div>
+                  <div><div class="nm">Andrea Hernández</div><div class="tt">Senior Success Architect</div><div class="rs">Asesoría de arquitectura y mejores prácticas de Agentforce para el agente Janet.</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grp sigbox" style="--c:var(--c-sig)">
+              <div class="grp-h">Signature · Betterware</div>
+              <div class="cards">
+                <div class="p" style="--c:var(--c-sig)">
+                  <div class="av"><span class="ini">MZ</span><img onerror="fx(this)" alt="Magdalena Zatorska" src="https://avatars.slack-edge.com/2020-12-14/1585670661921_f6161d08cc61d10ce26f_192.jpg" data-orig="https://avatars.slack-edge.com/2020-12-14/1585670661921_f6161d08cc61d10ce26f_original.jpg"></div>
+                  <div><div class="nm">Magdalena Zatorska</div><div class="tt">Senior Onboarding Specialist · Signature</div><div class="rs">Coordina el arranque del onboarding Signature y la asignación del especialista.</div></div>
+                </div>
+                <div class="p tbd" style="--c:var(--c-sig)">
+                  <div class="av"><span class="ini">TBD</span></div>
+                  <div><div class="nm">Por definir (TBD)</div><div class="tt">Onboarding Specialist · Marketing Cloud</div><div class="rs">Acompañará el onboarding de Marketing Cloud.</div></div>
+                </div>
+                <div class="p tbd" style="--c:var(--c-sig)">
+                  <div class="av"><span class="ini">TBD</span></div>
+                  <div><div class="nm">Por definir (TBD)</div><div class="tt">Customer Success Managers · Signature</div><div class="rs">Seguimiento de casos, escalamientos y adopción.</div></div>
+                </div>
+                <div class="sig-note">Equipo en proceso de asignación: los puestos marcados como TBD se confirmarán próximamente.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <section class="contact">
+            <h2>¿A quién contacto para…?</h2>
+            <div class="cgrid">
+              <div class="ci" style="--c:var(--c-acc)"><div class="q">Plan de choque · Agent Squad</div><div class="a">Paola Castaño</div><div class="s">Lead: prioridades y seguimiento</div></div>
+              <div class="ci" style="--c:var(--c-fde)"><div class="q">Temas técnicos de los agentes</div><div class="a">Jonathan Gómez</div><div class="s">Líder técnico de la ejecución</div></div>
+              <div class="ci" style="--c:var(--c-acc)"><div class="q">Temas comerciales</div><div class="a">Luis Carlos Molina</div><div class="s">Propuestas, contratos y renovaciones</div></div>
+              <div class="ci" style="--c:var(--c-sig)"><div class="q">Signature · Jafra</div><div class="a">Diana Cruz · Héctor Negrete</div><div class="s">Casos, escalamientos y adopción</div></div>
+              <div class="ci" style="--c:var(--c-sig)"><div class="q">Signature · Betterware</div><div class="a">Magdalena Zatorska</div><div class="s">Arranque del onboarding (equipo por definir)</div></div>
+              <div class="ci" style="--c:var(--c-spec)"><div class="q">Consumo</div><div class="a">Ana Lilia Morales</div><div class="s">Flex Credits y planes de consumo</div></div>
+            </div>
+          </section>
+
+          <div class="foot">
+            <span>Organigrama funcional: muestra responsabilidades en la cuenta, no líneas de reporte. TBD: posición por definir.</span>
+            <span>Salesforce México · Octubre 2026</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 </div>
 
 <script>
+  /* Image fallback for Slack avatars (same as organigrama standalone) */
+  function fx(img){var o=img.getAttribute('data-orig');if(o&&img.getAttribute('src')!==o){img.setAttribute('src',o);}else{img.parentNode&&img.parentNode.removeChild(img);}}
+
   (function() {
     const slides = document.getElementById('slides');
     const total = document.querySelectorAll('.slide').length;
@@ -290,31 +615,36 @@
     update();
   })();
 
-  /* Fit organigrama iframe to its slide container */
-  (function fitOrgFrame() {
-    const frame = document.getElementById('orgFrame');
-    if (!frame) return;
-    function fit() {
-      try {
-        const wrap = frame.parentElement;
-        const doc = frame.contentDocument;
-        if (!doc || !doc.body) return;
-        const naturalW = Math.max(doc.documentElement.scrollWidth, doc.body.scrollWidth, 1480);
-        const naturalH = Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight, 900);
-        const wrapW = wrap.clientWidth;
-        const wrapH = wrap.clientHeight;
-        const scale = Math.min(wrapW / naturalW, wrapH / naturalH, 1);
-        frame.style.width = naturalW + 'px';
-        frame.style.height = naturalH + 'px';
-        frame.style.transform = 'scale(' + scale + ')';
-        const scaledW = naturalW * scale;
-        const scaledH = naturalH * scale;
-        frame.style.marginLeft = ((wrapW - scaledW) / 2) + 'px';
-        frame.style.marginTop = ((wrapH - scaledH) / 2) + 'px';
-      } catch (e) { /* cross-origin or not ready */ }
+  /* Fit inlined organigrama inside its slide shell */
+  (function fitOrg() {
+    const shell = document.querySelector('.org-shell');
+    const fit = document.querySelector('.org-fit');
+    const root = document.querySelector('.org-root');
+    if (!shell || !fit || !root) return;
+
+    function doFit() {
+      fit.style.transform = 'none';
+      fit.style.left = '0px';
+      fit.style.top = '0px';
+      const natW = root.scrollWidth || 1480;
+      const natH = root.scrollHeight;
+      const availW = shell.clientWidth;
+      const availH = shell.clientHeight;
+      const scale = Math.min(availW / natW, availH / natH, 1);
+      fit.style.transform = 'scale(' + scale + ')';
+      const scaledW = natW * scale;
+      const scaledH = natH * scale;
+      fit.style.left = Math.max(0, (availW - scaledW) / 2) + 'px';
+      fit.style.top = Math.max(0, (availH - scaledH) / 2) + 'px';
     }
-    frame.addEventListener('load', () => { fit(); setTimeout(fit, 100); setTimeout(fit, 400); });
-    window.addEventListener('resize', fit);
+    doFit();
+    setTimeout(doFit, 100);
+    setTimeout(doFit, 400);
+    window.addEventListener('resize', doFit);
+    window.addEventListener('load', doFit);
+    document.querySelectorAll('.org-root img').forEach(img => {
+      img.addEventListener('load', doFit, { once: true });
+    });
   })();
 </script>
 
