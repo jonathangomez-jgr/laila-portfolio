@@ -1443,17 +1443,17 @@ const MILESTONES: Milestone[] = [
   },
   {
     id: "partner_review",
-    title: "Presentación al Partner",
+    title: "Inicio pruebas · Agente · Salesforce + Partner",
     description:
-      "Deck ejecutivo + demo en vivo del agente con adapters funcionando en sandbox. Objetivo: obtener commit del Partner antes del kick-off oficial.",
+      "Lunes 05-oct AM. Sesión de alineación Salesforce + Capptus (deck Alineación Betty + demo en vivo del agente) y arranque de la ventana de pruebas conjuntas sobre FDE_BW_Service_Agent en sandbox. Objetivo: aceptación del plan por parte de Capptus, confirmación de la ventana de pruebas 06-08 oct y cierre de fecha de entrega de insumos del proyecto.",
     date: "2026-10-05",
-    kind: "Internal Review",
+    kind: "Kick-off",
     phaseId: "f0",
     participants: ["Salesforce - FDE", "Partner", "Salesforce - CSM"],
     status: "scheduled",
     references: [
       {
-        label: "Presentación Partner · Alineación FDE",
+        label: "Deck Alineación Betty · Salesforce + Capptus",
         url: "/Customers/Betterware/files/Presentacion_Partner_FDE.html",
         kind: "document",
       },
@@ -1512,11 +1512,11 @@ const MILESTONES: Milestone[] = [
     ],
   },
   {
-    id: "uat_formal_early",
-    title: "UAT formal (temprano) con Betterware",
+    id: "uat_inicio",
+    title: "Inicio UAT · Betterware prueba el agente",
     description:
-      "UAT estructurado del equipo de Betterware con 15+ escenarios. Firma formal o lista de defects críticos.",
-    date: "2026-10-14",
+      "Jueves 08-oct. Arranque de la ventana de UAT con el equipo de Betterware (2-3 personas). Script documentado con 15+ escenarios + criterios de aceptación por cada uno. Incluye casos edge del reporte de descubrimientos. La ventana corre del 08 al 10-oct; al cierre firma formal o lista cerrada de bugs.",
+    date: "2026-10-08",
     kind: "UAT Session",
     phaseId: "f1",
     participants: ["Betterware - UAT", "Salesforce - FDE", "Partner"],
@@ -1524,14 +1524,32 @@ const MILESTONES: Milestone[] = [
     references: [],
   },
   {
-    id: "er2_cutover_go_nogo",
-    title: "ER2 — go/no-go cutover 16-oct",
+    id: "insiders_prep_inicio",
+    title: "Inicio preparación Programa Insiders",
     description:
-      "Review ejecutivo del estado: UAT sign-off, bugs resueltos, pre-prod deploy. Decisión formal firmada de activar cutover el viernes o deslizar al lunes.",
+      "Lunes 12-oct. Arranque de la preparación operativa del Programa Insiders. Betterware cura la lista final de 15-25 distribuidoras aliadas con perfiles representativos; se marca a cada MessagingEndUser con el checkbox FDE_Pilot__c. Preparación de comunicación interna y materiales de soporte para las distribuidoras del piloto.",
+    date: "2026-10-12",
+    kind: "Internal Review",
+    phaseId: "f1",
+    participants: ["Salesforce - FDE", "Partner", "Betterware - Sponsor", "Betterware - UAT"],
+    status: "scheduled",
+    references: [
+      {
+        label: "Programa Insiders · Betty",
+        url: "/Customers/Betterware/files/Programa_Insiders_Betty.html",
+        kind: "document",
+      },
+    ],
+  },
+  {
+    id: "approval_publish",
+    title: "Approval para Publish + Activate",
+    description:
+      "Jueves 15-oct. Approval formal firmado para publicar FDE_BW_Service_Agent como bot activo en producción. Incluye verificación final del Flow FDE_BW_RouteAgent activo + smoke test del transfer-to-bot en WhatsApp de producción con un número del piloto marcado. Rollback drill validado.",
     date: "2026-10-15",
     kind: "Executive Review",
     phaseId: "f1",
-    participants: ["Shared"],
+    participants: ["Salesforce - FDE", "Partner", "Betterware - Sponsor", "Betterware - IT Lead"],
     status: "scheduled",
     references: [],
   },
@@ -1553,10 +1571,39 @@ const MILESTONES: Milestone[] = [
     references: [],
   },
   {
-    id: "er3",
-    title: "ER3 — fin A/B, go/no-go reemplazo",
+    id: "insiders_escalada",
+    title: "Incremento paulatino del Programa Insiders",
     description:
-      "Review ejecutivo al cierre de 2 semanas de A/B. Decisión de entrar a Fase 2 (reemplazo gradual de acciones) o ajustar/pausar.",
+      "Lunes 19-oct. Evaluar métricas del fin de semana post-cutover y, si hay cero regresión, incrementar paulatinamente el número de distribuidoras en el Programa Insiders. Observación intensiva + ajustes finos durante la semana. Daily standups con FDE + Partner + Betterware IT Lead.",
+    date: "2026-10-19",
+    kind: "Internal Review",
+    phaseId: "f1_5",
+    participants: ["Salesforce - FDE", "Partner", "Betterware - IT Lead"],
+    status: "scheduled",
+    references: [],
+  },
+  {
+    id: "insiders_50pct",
+    title: "50% de cobertura · cierre primer ciclo",
+    description:
+      "Viernes 30-oct. Programa Insiders alcanza el 50% de la lista cerrada de distribuidoras aliadas. Cierre del primer ciclo del piloto con reporte comparativo contra baseline del agente actual.",
+    date: "2026-10-30",
+    kind: "Go-live",
+    phaseId: "f1_5",
+    participants: [
+      "Salesforce - FDE",
+      "Partner",
+      "Betterware - Sponsor",
+      "Betterware - IT Lead",
+    ],
+    status: "scheduled",
+    references: [],
+  },
+  {
+    id: "er3",
+    title: "ER3 — fin primer ciclo Insiders, go/no-go reemplazo",
+    description:
+      "Review ejecutivo al cierre del primer ciclo del Programa Insiders. Decisión de entrar a Fase 2 (reemplazo gradual de acciones legacy) o ajustar/pausar según evidencia.",
     date: "2026-10-30",
     kind: "Executive Review",
     phaseId: "f1_5",
