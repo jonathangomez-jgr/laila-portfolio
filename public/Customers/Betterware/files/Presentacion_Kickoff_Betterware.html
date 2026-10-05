@@ -156,6 +156,111 @@
   .slide h2 { font-size: 48px; margin-bottom: 16px; max-width: 1200px; }
   .lead { font-size: 20px; color: var(--slate); max-width: 900px; margin: 0 0 36px 0; line-height: 1.5; }
 
+  /* === SLIDE · DOS AGENTES === */
+  .slide.agents { justify-content: center; }
+  .slide.agents .section-eyebrow,
+  .slide.agents h2,
+  .slide.agents .lead { text-align: center; }
+  .slide.agents h2 { margin-left: auto; margin-right: auto; }
+  .slide.agents .lead { margin-left: auto; margin-right: auto; margin-bottom: 40px; }
+
+  .agents-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1180px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .agent-card {
+    position: relative;
+    background: #fff;
+    border-radius: 22px;
+    border: 1px solid var(--rule);
+    overflow: hidden;
+    box-shadow: 0 10px 32px rgba(0,30,91,0.08);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .agent-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,30,91,0.12); }
+  .agent-card.betty { border-top: 6px solid var(--eb50); }
+  .agent-card.janet { border-top: 6px solid var(--rose); }
+
+  .agent-hero {
+    position: relative;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .agent-card.betty .agent-hero {
+    background: radial-gradient(ellipse at center, var(--cb95) 0%, #fff 72%);
+  }
+  .agent-card.janet .agent-hero {
+    background: radial-gradient(ellipse at center, #FDE8EF 0%, #fff 72%);
+  }
+  .agent-hero img {
+    max-height: 92%;
+    max-width: 70%;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 24px rgba(0,30,91,0.18));
+  }
+
+  .agent-body { padding: 24px 32px 32px 32px; }
+  .agent-eye {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 4px;
+  }
+  .agent-card.betty .agent-eye { color: var(--eb50); }
+  .agent-card.janet .agent-eye { color: var(--rose); }
+  .agent-card h3 {
+    font-size: 36px;
+    color: var(--eb15);
+    margin: 0 0 18px 0;
+    font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  ul.checklist { list-style: none; padding: 0; margin: 0; }
+  ul.checklist li {
+    position: relative;
+    padding: 11px 0 11px 42px;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--ink);
+    border-bottom: 1px solid #F1F5F9;
+  }
+  ul.checklist li:last-child { border-bottom: none; }
+  ul.checklist li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--eb50);
+    box-shadow: 0 2px 6px rgba(6,106,254,0.25);
+  }
+  ul.checklist li::after {
+    content: "";
+    position: absolute;
+    left: 7px; top: 16px;
+    width: 10px; height: 5px;
+    border-left: 2.5px solid #fff;
+    border-bottom: 2.5px solid #fff;
+    transform: rotate(-45deg);
+  }
+  .agent-card.janet ul.checklist li::before {
+    background: var(--rose);
+    box-shadow: 0 2px 6px rgba(232,39,90,0.25);
+  }
+
   /* === SLIDE · ORGANIGRAMA (full width, scrollable) === */
   .slide.org {
     padding: 56px 0 60px 0;
@@ -349,7 +454,7 @@
 <!-- SLIDE 2 · ORGANIGRAMA (full-width, scrollable, con desplegable) -->
 <section class="slide org" id="slide-2">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">02</span></span>
+  <span class="slide-num"><span class="current">02</span> / 03</span>
   <div class="org-root">
     <div class="page">
 
@@ -583,6 +688,52 @@
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- SLIDE 3 · DOS AGENTES NUEVOS -->
+<section class="slide agents" id="slide-3">
+  <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
+  <span class="slide-num"><span class="current">03</span> / 03</span>
+  <span class="section-eyebrow">Alcance del plan de choque</span>
+  <h2>Dos agentes nuevos</h2>
+  <p class="lead">Betty para Betterware y Janet para Jafra. Mismo stack, mismas prácticas; cada uno con la pieza específica que su compañía necesita.</p>
+
+  <div class="agents-grid">
+
+    <div class="agent-card betty">
+      <div class="agent-hero">
+        <img src="../../../Assets Salesforce Brand/Carachters/Agent Astro/Agent Astro 3D 20 L.png" alt="Betty">
+      </div>
+      <div class="agent-body">
+        <div class="agent-eye">Betterware</div>
+        <h3>Betty</h3>
+        <ul class="checklist">
+          <li>Agents Script</li>
+          <li>Determinístico</li>
+          <li>Subagents optimizado</li>
+          <li>Adaptadores en acciones</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="agent-card janet">
+      <div class="agent-hero">
+        <img src="../../../Assets Salesforce Brand/Carachters/Agent Astro/Astrobot_Sunglasses_AFlip_020_2K.png" alt="Janet">
+      </div>
+      <div class="agent-body">
+        <div class="agent-eye">Jafra</div>
+        <h3>Janet</h3>
+        <ul class="checklist">
+          <li>Agents Script</li>
+          <li>Determinístico</li>
+          <li>Subagents optimizado</li>
+          <li>Registro de casos</li>
+          <li>Knowledge</li>
+        </ul>
+      </div>
+    </div>
+
   </div>
 </section>
 
