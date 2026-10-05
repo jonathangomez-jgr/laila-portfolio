@@ -1464,8 +1464,13 @@ const MILESTONES: Milestone[] = [
     status: "scheduled",
     references: [
       {
-        label: "Presentación Betty mejorada · Programa Insiders",
-        url: "/Customers/Betterware/files/Presentacion_Demo_Betterware.html",
+        label: "Deck Kick-off · Partner + Betterware",
+        url: "/Customers/Betterware/files/Presentacion_Partner_FDE.html",
+        kind: "document",
+      },
+      {
+        label: "Programa Insiders · Betty",
+        url: "/Customers/Betterware/files/Programa_Insiders_Betty.html",
         kind: "document",
       },
     ],
@@ -1487,7 +1492,7 @@ const MILESTONES: Milestone[] = [
     status: "scheduled",
     references: [
       {
-        label: "Presentación Betty mejorada · Programa Insiders",
+        label: "Deck de demo · Betterware",
         url: "/Customers/Betterware/files/Presentacion_Demo_Betterware.html",
         kind: "document",
       },
