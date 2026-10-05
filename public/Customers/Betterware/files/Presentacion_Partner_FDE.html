@@ -117,6 +117,13 @@
     display: flex; justify-content: space-between; align-items: center;
   }
   .slide.cover .cover-logo { height: 36px; filter: brightness(0) invert(1); }
+  .slide.cover .cover-logos { display: flex; align-items: center; gap: 18px; }
+  .slide.cover .cover-logos .divider {
+    width: 1px; height: 28px; background: rgba(255,255,255,0.35);
+  }
+  .slide.cover .cover-logo-partner {
+    height: 32px; background: #fff; padding: 6px 10px; border-radius: 8px;
+  }
   .slide.cover .cover-date { font-size: 13px; color: var(--cb80); letter-spacing: 0.05em; }
   .slide.cover .eyebrow {
     display: inline-block; font-size: 12px; font-weight: 600;
@@ -199,6 +206,28 @@
     background: var(--eb50); position: absolute; left: 4px; top: 18px;
   }
   ul.clean.one-col { columns: 1; }
+
+  /* === STEP LIST (slide 3 · plan de validación) === */
+  ol.step-list { list-style: none; padding-left: 0; margin: 24px 0; counter-reset: step; }
+  ol.step-list li {
+    display: flex; gap: 20px; align-items: flex-start;
+    padding: 18px 24px;
+    background: #fff;
+    border-left: 4px solid var(--eb50);
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,30,91,0.04);
+  }
+  ol.step-list .step-num {
+    flex: 0 0 auto;
+    width: 36px; height: 36px;
+    background: var(--eb50); color: #fff;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+  }
+  ol.step-list strong { color: var(--eb15); display: block; margin-bottom: 4px; font-size: 17px; }
+  ol.step-list .detail { color: var(--slate); font-size: 14px; line-height: 1.55; }
 
   /* === ARCH DIAGRAM === */
   .arch-diagram {
@@ -316,6 +345,8 @@
     font-size: 24px; color: var(--orange); font-weight: 700;
   }
   .asks-list li strong { color: var(--eb15); display: block; margin-bottom: 4px; font-size: 16px; }
+  .asks-list li.full-width { grid-column: 1 / -1; border-left-color: var(--eb50); background: var(--cb95); }
+  .asks-list li.full-width::before { color: var(--eb50); }
 
   /* === TIMELINE HORIZONTAL === */
   .timeline-horizontal {
@@ -409,14 +440,18 @@
 <!-- SLIDE 1 · PORTADA -->
 <section class="slide cover" id="slide-1">
   <div class="cover-top">
-    <img src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" class="cover-logo" alt="Salesforce">
+    <div class="cover-logos">
+      <img src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" class="cover-logo" alt="Salesforce">
+      <span class="divider"></span>
+      <img src="../../images/Logo-betterware.png" class="cover-logo-partner" alt="Betterware">
+    </div>
     <span class="cover-date">Lunes · 5 de octubre 2026</span>
   </div>
   <img src="../../../Assets Salesforce Brand/Sparkles/Sparkles Blue Main.svg" class="cover-sparkles" alt="">
   <div class="left">
-    <span class="eyebrow">Sesión de alineación · Programa Insiders</span>
-    <h1>Presentación Partner<br/>Alineación FDE</h1>
-    <p class="subtitle">Programa Insiders · Betty mejorada · piloto cerrado del 16 al 30 de octubre con distribuidoras aliadas de Betterware.</p>
+    <span class="eyebrow">Sesión de alineación</span>
+    <h1>Alineación Betty</h1>
+    <p class="subtitle">Alineación Salesforce + Capptus</p>
     <div class="cover-author">
       <div class="name">Jonathan Gomez</div>
       <div class="role">Salesforce Forward Deployed Engineer</div>
@@ -427,13 +462,13 @@
   </div>
 </section>
 
-<!-- SLIDE 2 · DÓNDE ESTAMOS -->
+<!-- SLIDE 2 · PUNTO DE PARTIDA -->
 <section class="slide" id="slide-2">
   <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
-  <span class="slide-num"><span class="current">02</span> / 09</span>
+  <span class="slide-num"><span class="current">02</span> / 07</span>
   <span class="section-eyebrow">Status del sprint FDE</span>
-  <h2>Lo que ya está construido y validado</h2>
-  <p class="lead">Antes de proponer la ejecución del piloto, el punto de partida real. Todo lo siguiente está desplegado y verificado contra el sandbox <code>betterwaremx--better1to1</code>.</p>
+  <h2>Punto de Partida</h2>
+  <p class="lead">Antes de proponer la ejecución del piloto, el punto de partida real — validado contra el sandbox de Betterware.</p>
 
   <div class="two-col-content">
     <ul class="status-list">
@@ -442,257 +477,182 @@
         <span class="detail">16 hallazgos (4 Críticos · 8 Altos · 4 Medios) verificados contra el org en vivo vía Tooling API + análisis estático de 26 clases Apex y 20 Flows.</span>
       </li>
       <li>
-        <strong>FDE_BW_Service_Agent construido y validado</strong>
-        <span class="detail">AiAuthoringBundle de 963 LOC con Hub-and-Spoke + Verification Gate · 10 subagentes · <code>sf agent validate</code> 0 errores contra el sandbox con los adapters conectados.</span>
+        <strong>Agente base construido · FDE_BW_Service_Agent</strong>
+        <span class="detail">Se construyó un agente base en Agentforce Script, con Verification Gate y 10 subagentes.</span>
       </li>
     </ul>
     <ul class="status-list">
       <li>
-        <strong>4 adapters funcionales al legacy BW_Ctrl*</strong>
-        <span class="detail"><code>BW_FDE_GetDistributorInfo</code> · <code>BW_FDE_GetSaldos</code> · <code>BW_CheckAffiliateOwnership</code> · <code>BW_FDE_GetAffiliateInfo</code>. Fail-closed por default, sin filtración de PII.</span>
+        <strong>4 adaptadores funcionales a acciones legacy</strong>
+        <span class="detail">Los adaptadores conectan al agente nuevo con las acciones del agente actual sin duplicar lógica: consultan info del distribuidor, saldos, afiliados y validan ownership. Fallan de forma segura por default y no exponen datos sensibles.</span>
       </li>
       <li>
-        <strong>4 escenarios base validados en vivo</strong>
-        <span class="detail">SEC-3 "Julieth" cerrado · escalation limpia · off-topic contenido · ambiguous clarifica. Live actions con <code>sf agent preview</code>.</span>
+        <strong>Escenarios base validados en vivo</strong>
+        <span class="detail">Se validaron en vivo conversaciones reales contra el sandbox: el agente responde, escala cuando corresponde, se contiene ante off-topic y pide aclaración cuando la petición es ambigua.</span>
       </li>
     </ul>
   </div>
 </section>
 
-<!-- SLIDE 3 · PROGRAMA INSIDERS -->
+<!-- SLIDE 3 · PLAN DE VALIDACIÓN -->
 <section class="slide" id="slide-3">
   <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
-  <span class="slide-num"><span class="current">03</span> / 09</span>
-  <span class="section-eyebrow">La propuesta</span>
-  <h2>Programa Insiders · Betty mejorada</h2>
-  <p class="lead">Un piloto cerrado con 15-25 distribuidoras aliadas durante dos semanas antes del rollout general. Mínima exposición, máxima evidencia.</p>
+  <span class="slide-num"><span class="current">03</span> / 07</span>
+  <span class="section-eyebrow">Plan de validación propuesto</span>
+  <h2>Cómo validamos antes de encender a usuarias reales</h2>
+  <p class="lead">Una secuencia explícita de pasos para llegar al Programa Insiders con confianza. Cada paso depende del anterior.</p>
 
-  <div class="narrative">
-    <p><strong>Framing clave:</strong> Betty mejorada <em>no es Betty 2.0</em>. Betty sigue siendo Betty — la misma persona, el mismo tono, el mismo canal. Lo que cambia es la implementación técnica por detrás: menos fallos, respuestas más claras, mayor fiabilidad.</p>
-  </div>
-
-  <h3 style="margin-top: 24px; font-size: 22px;">En una línea</h3>
-  <ul class="clean">
-    <li><strong>Piloto cerrado</strong> del 16 al 30 de octubre con 15-25 distribuidoras aliadas (super usuarias, perfiles representativos).</li>
-    <li><strong>Alcance explícito</strong>: los flujos operativos actuales (saldos, pedidos, puntos, altas, pagos, tickets, reset, FAQ, escalación). <em>No</em> features nuevas.</li>
-    <li><strong>Reconocimiento y voz privilegiada</strong>: las piloto se convierten en embajadoras del cambio.</li>
-    <li><strong>Reversible atómicamente</strong>: kill-switch global en Custom Metadata + V40 intacto como fallback.</li>
-    <li><strong>Evidencia dura</strong> antes del rollout general: NPS cualitativo, intents validados, bugs resueltos antes de abrir al 100%.</li>
-  </ul>
+  <ol class="step-list">
+    <li>
+      <span class="step-num">1</span>
+      <div>
+        <strong>Capptus comparte insumos del proyecto</strong>
+        <span class="detail">Documentación del proyecto, requerimientos, historias de usuario y — crítico — <strong>escenarios y datos de prueba</strong> representativos. Sin esto, no podemos validar contra lo que Betterware realmente necesita que haga el agente.</span>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">2</span>
+      <div>
+        <strong>Pruebas conjuntas sobre el agente en Agentforce Script</strong>
+        <span class="detail">Salesforce + Capptus ejecutan los escenarios contra <code>FDE_BW_Service_Agent</code> en sandbox. Identificamos y resolvemos defectos antes de que el cliente lo vea.</span>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">3</span>
+      <div>
+        <strong>UAT con Betterware</strong>
+        <span class="detail">Una vez que las pruebas conjuntas pasen, el equipo de Betterware prueba el agente contra sus criterios de aceptación. Firma formal o lista cerrada de bugs.</span>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">4</span>
+      <div>
+        <strong>Programa Insiders · piloto cerrado con distribuidoras</strong>
+        <span class="detail">Como paso final antes del rollout general: 15-25 distribuidoras aliadas usan el agente en producción con rollout gradual. Evidencia dura antes de abrir al 100%.</span>
+      </div>
+    </li>
+  </ol>
 </section>
 
-<!-- SLIDE 4 · ARQUITECTURA -->
+<!-- SLIDE 4 · ARQUITECTURA DEL ROUTING -->
 <section class="slide" id="slide-4">
   <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
-  <span class="slide-num"><span class="current">04</span> / 09</span>
+  <span class="slide-num"><span class="current">04</span> / 07</span>
   <span class="section-eyebrow">Arquitectura técnica del routing</span>
   <h2>Flujo del Programa Insiders</h2>
+  <p class="lead">Un único Flow decide a qué agente va cada conversación. Determinístico, basado en una marca sobre el <code>MessagingEndUser</code>. Sin lógica compartida con el agente actual.</p>
 
-  <div class="arch-diagram"><span class="in">WhatsApp inbound</span> → MessagingSession → BW_FDE_RouteAgent <span class="in">(Flow Autolaunched)</span>
+  <div class="arch-diagram"><span class="in">WhatsApp inbound</span> → MessagingSession → <span class="ok">FDE_BW_RouteAgent</span> <span class="in">(Flow autolaunched · activo)</span>
                                       │
-                                      ├─ <span class="ok">whitelist / hash hit</span>  →  AgentVersion = FDE_PILOT_*
-                                      │                           →  Transfer to FDE_BW_Service_Agent
+                                      ├─ <span class="ok">MessagingEndUser.FDE_Pilot__c = true</span>  →  Transfer to <strong>FDE_BW_Service_Agent</strong>
                                       │
-                                      └─ <span class="fallback">no hit</span>  →  AgentVersion = V40_LEGACY
-                                                  →  BW_AGENT_N (como hoy)</div>
+                                      └─ <span class="fallback">no está en el piloto</span>              →  BW_AGENT_N (como hoy)</div>
 
   <div class="deployed-grid">
     <div class="deployed-card done">
-      <h4>Desplegado hoy en sandbox (dom 2026-10-04)</h4>
+      <h4>✓ Activo en el sandbox</h4>
       <ul>
-        <li>Custom Metadata <code>FDE_Pilot_Config__mdt</code> · kill-switch + rollout% + whitelist</li>
-        <li>Custom Field <code>MessagingSession.AgentVersion__c</code> · analítica A/B</li>
-        <li>Apex <code>BW_FDE_RoutingDecision</code> · SHA-256 → bucket 0-99 determinístico</li>
-        <li>Flow <code>BW_FDE_RouteAgent</code> · RecordAfterSave en MessagingSession (Draft)</li>
+        <li>Flow <code>FDE_BW_RouteAgent</code> · autolaunched en <code>MessagingSession</code> · <strong>activo</strong></li>
+        <li>Checkbox <code>MessagingEndUser.FDE_Pilot__c</code> · marca a las distribuidoras del piloto</li>
+        <li>12 adaptadores FDE desplegados · contrato alineado con el backing legacy</li>
+        <li><code>FDE_BW_Service_Agent</code> · AiAuthoringBundle validado en el org</li>
       </ul>
     </div>
-    <div class="deployed-card pending">
-      <h4>Pendiente · requiere coordinación Partner</h4>
+    <div class="deployed-card done">
+      <h4>Por qué este diseño</h4>
       <ul>
-        <li>Publish + Activate de <code>FDE_BW_Service_Agent</code> como bot activo</li>
-        <li>Insertar el Transfer-to-Bot efectivo en el flujo de entry</li>
-        <li>Crear record <code>FDE_Pilot_Config.Default</code> desde Setup UI (1 min)</li>
-        <li>Activar el Flow <code>BW_FDE_RouteAgent</code> desde Setup</li>
+        <li>Sin Custom Metadata, sin Apex de decisión: la marca vive en el record del usuario</li>
+        <li>Reversible: desmarcar al <code>MessagingEndUser</code> saca a esa persona del piloto</li>
+        <li>Kill-switch operativo: cambiar el Flow del canal al agente legacy en Messaging Settings</li>
+        <li>Sin race conditions: un único Flow sobre <code>MessagingSession</code></li>
       </ul>
     </div>
   </div>
 </section>
 
-<!-- SLIDE 5 · ARQUITECTURA DEL ROUTING -->
+<!-- SLIDE 5 · ASKS -->
 <section class="slide" id="slide-5">
   <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
-  <span class="slide-num"><span class="current">05</span> / 09</span>
-  <span class="section-eyebrow">Arquitectura técnica</span>
-  <h2>Routing al nacer la <code>MessagingSession</code></h2>
-  <p class="lead">Al crearse una MessagingSession, un Flow nuevo (nuestro) decide a qué agente va. Sin dependencia del código del Partner. Sin turnos extra visibles. 100% reversible desde Custom Metadata.</p>
-
-  <div class="arch-diagram">
-<pre>
-  WhatsApp inbound
-         │
-         ▼
-  MessagingSession.create (RecordAfterSave)
-         │
-         ▼
-  ┌─────────────────────────────────────────────────┐
-  │  BW_FDE_RouteAgent  (Flow autolaunched, FDE)    │
-  │                                                  │
-  │  1. BW_FDE_RoutingDecision (Apex invocable)     │
-  │     • Lee FDE_Pilot_Config__mdt.Default         │
-  │     • Si kill-switch OFF  → V40_LEGACY          │
-  │     • Si phone ∈ whitelist → FDE_PILOT_WHITELIST│
-  │     • Si hash(phone)%100 &lt; rollout → FDE_PILOT_ROLLOUT │
-  │     • Sino → V40_LEGACY                         │
-  │                                                  │
-  │  2. Update MessagingSession.AgentVersion__c     │
-  │  3. Transfer-to-Bot al destino decidido         │
-  └─────────────────────────────────────────────────┘
-         │
-         ├──── FDE_PILOT_* ──→  FDE_BW_Service_Agent (nuevo)
-         │
-         └──── V40_LEGACY ──→   BW_AGENT_N (como hoy)
-</pre>
-  </div>
-
-  <div class="deployed-grid" style="margin-top: 20px;">
-    <div class="deployed-card ok">
-      <h4>✓ Desplegado en el sandbox</h4>
-      <ul>
-        <li><code>FDE_Pilot_Config__mdt</code> · kill-switch + rollout% + whitelist</li>
-        <li><code>MessagingSession.AgentVersion__c</code> · persiste decisión para A/B analytics</li>
-        <li><code>BW_FDE_RoutingDecision</code> · Apex invocable con hash SHA-256 determinístico</li>
-        <li><code>BW_FDE_RouteAgent</code> · Flow autolaunched (Draft, listo para activar)</li>
-      </ul>
-    </div>
-    <div class="deployed-card pending">
-      <h4>⧗ Pendiente de coordinar</h4>
-      <ul>
-        <li>Publish + Activate del <code>FDE_BW_Service_Agent</code> como bot activo del org</li>
-        <li>Validar order of execution contra <code>BW_AsignarColaMessagingSession</code> (ambos RecordAfterSave)</li>
-        <li>Smoke test de la acción Transfer-to-Bot en el canal de WhatsApp del sandbox</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- SLIDE 6 · ASKS -->
-<section class="slide" id="slide-6">
-  <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
-  <span class="slide-num"><span class="current">06</span> / 09</span>
+  <span class="slide-num"><span class="current">05</span> / 07</span>
   <span class="section-eyebrow">Qué necesitamos del Partner</span>
-  <h2>5 asks concretos para el sprint</h2>
+  <h2>Lo que necesitamos de Capptus</h2>
   <p class="lead">Lo mínimo requerido para habilitar el cutover del viernes 16 de octubre con el Programa Insiders activo.</p>
 
   <ul class="asks-list">
-    <li>
-      <strong>Visto bueno a la arquitectura técnica</strong>
-      Validar que <code>BW_FDE_RouteAgent</code> conviva con <code>BW_AsignarColaMessagingSession</code> sin romper la asignación de cola existente.
+    <li class="full-width">
+      <strong>Aceptación del plan de acción</strong>
+      Alineación explícita sobre la secuencia completa — insumos de proyecto, pruebas conjuntas, UAT con Betterware, Programa Insiders — y las fechas asociadas.
     </li>
     <li>
-      <strong>Approval para Publish + Activate</strong>
-      del FDE_BW_Service_Agent · sandbox esta semana · prod jueves 2026-10-15 con feature flag OFF.
+      <strong>Entrega de insumos del proyecto</strong>
+      Documentación, requerimientos, historias de usuario y escenarios + datos de prueba representativos para validar el agente contra lo que Betterware necesita.
+    </li>
+    <li>
+      <strong>Visto bueno a la arquitectura técnica</strong>
+      Validar que <code>FDE_BW_RouteAgent</code> enrute correctamente al agente nuevo usando el checkbox <code>MessagingEndUser.FDE_Pilot__c</code>.
     </li>
     <li>
       <strong>Compromiso de testing interno</strong>
-      Dos ventanas: jueves 2026-10-08 y lunes 2026-10-12 (pre UAT con Betterware).
+      Pruebas conjuntas Salesforce + Capptus: <strong>06-oct al 08-oct</strong>. UAT con Betterware: <strong>09-oct al 10-oct</strong>.
+    </li>
+    <li>
+      <strong>Approval para Publish + Activate</strong>
+      del <code>FDE_BW_Service_Agent</code> como bot activo en producción. Fecha límite: <strong>jueves 15-oct</strong>.
     </li>
     <li>
       <strong>Soporte operativo durante el piloto</strong>
-      16-30 de octubre · war room primeras 48h · respuesta rápida a bugs.
-    </li>
-    <li>
-      <strong>Co-presentar a Betterware CS martes 2026-10-06</strong>
-      Propuesta conjunta Salesforce + Partner del concepto Programa Insiders.
+      16-30 de octubre · war room primeras 48h · <strong>monitoreo de conversaciones</strong> · respuesta rápida a bugs.
     </li>
   </ul>
 </section>
 
-<!-- SLIDE 7 · TIMELINE HORIZONTAL -->
-<section class="slide" id="slide-7">
+<!-- SLIDE 6 · TIMELINE HORIZONTAL -->
+<section class="slide" id="slide-6">
   <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
-  <span class="slide-num"><span class="current">07</span> / 09</span>
+  <span class="slide-num"><span class="current">06</span> / 07</span>
   <span class="section-eyebrow">Sprint hasta el cutover</span>
-  <h2>Timeline del Programa Insiders</h2>
-  <p class="lead">Doce días desde esta reunión hasta la activación del piloto en producción.</p>
+  <h2>Fechas clave</h2>
+  <p class="lead">De la alineación de hoy al 50% de cobertura del piloto el 30 de octubre.</p>
 
   <div class="timeline-horizontal">
-    <div class="ti"><span class="date">Lun 05-oct</span><div class="label"><strong>Alineación Partner</strong>Decisión A/B</div></div>
-    <div class="ti"><span class="date">Mar 06-oct</span><div class="label"><strong>Kick-off + Betterware CS</strong>Programa Insiders</div></div>
-    <div class="ti"><span class="date">Mié-Jue 07-08</span><div class="label"><strong>Betterware cura lista</strong>Partner valida sandbox</div></div>
-    <div class="ti"><span class="date">Vie 09-oct</span><div class="label"><strong>Partner testing</strong>Ajustes finos</div></div>
-    <div class="ti"><span class="date">Lun-Mar 12-13</span><div class="label"><strong>Lista final cargada</strong>Config ready</div></div>
-    <div class="ti"><span class="date">Mié-Jue 14-15</span><div class="label"><strong>UAT + smoke test</strong>Feature flag OFF</div></div>
-    <div class="ti critical"><span class="date">VIE 16-OCT</span><div class="label"><strong>CUTOVER 5%</strong>War room 48h</div></div>
-    <div class="ti"><span class="date">Lun 19 →</span><div class="label"><strong>Escaladas 10/30%</strong>Observación</div></div>
-    <div class="ti critical"><span class="date">VIE 30-OCT</span><div class="label"><strong>Cierre piloto</strong>Demo aprendizajes</div></div>
+    <div class="ti"><span class="date">Lun 05-oct</span><div class="label"><strong>Inicio pruebas</strong>Agente · Salesforce + Partner</div></div>
+    <div class="ti"><span class="date">Mar 06-oct</span><div class="label"><strong>Kick-off con Betterware CS</strong>Programa Insiders</div></div>
+    <div class="ti"><span class="date">Jue 08-oct</span><div class="label"><strong>Inicio UAT</strong>Betterware prueba el agente</div></div>
+    <div class="ti"><span class="date">Lun 12-oct</span><div class="label"><strong>Inicio Programa Insiders</strong>Preparación de distribuidoras</div></div>
+    <div class="ti critical"><span class="date">VIE 16-OCT</span><div class="label"><strong>CUTOVER 10%</strong>Primeras distribuidoras en prod</div></div>
+    <div class="ti"><span class="date">Lun 19 →</span><div class="label"><strong>Incremento paulatino</strong>Observación · ajustes</div></div>
+    <div class="ti critical"><span class="date">VIE 30-OCT</span><div class="label"><strong>50% de cobertura</strong>Cierre primer ciclo</div></div>
   </div>
 </section>
 
-<!-- SLIDE 8 · RIESGOS -->
-<section class="slide" id="slide-8">
+<!-- SLIDE 7 · CIERRE / CTA -->
+<section class="slide" id="slide-7">
   <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
-  <span class="slide-num"><span class="current">08</span> / 09</span>
-  <span class="section-eyebrow">Riesgos y mitigaciones</span>
-  <h2>Lo que ya tenemos atendido</h2>
-  <p class="lead">Riesgos identificados y su plan de contingencia. Transparencia total con el Partner antes de arrancar.</p>
-
-  <table class="risk-table">
-    <thead>
-      <tr><th>Riesgo</th><th>Mitigación</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>R1 · Partner no disponible en alguna ventana del sprint</td>
-        <td>Jonathan tiene acceso de desarrollo al sandbox y puede validar en demos asíncronas. Los adapters ya corren y los escenarios base están grabados.</td>
-      </tr>
-      <tr>
-        <td>R2 · Bug crítico en UAT bloquea cutover 16-oct</td>
-        <td>Buffer en Mié-Jue 14/15 reservado para bugfix. Plan B: deslizar cutover al Lun 2026-10-19 sin tocar el resto del timeline (quedarían 11 días efectivos).</td>
-      </tr>
-      <tr>
-        <td>R3 · <code>BW_FDE_RouteAgent</code> y <code>BW_AsignarColaMessagingSession</code> compiten en order of execution</td>
-        <td>Ambos son <code>RecordAfterSave</code> en MessagingSession. Validar durante el smoke test que el nuestro escribe <code>AgentVersion__c</code> antes de que el del Partner enrute a cola. Si hubiera race condition, consolidamos ambos en un Flow invocable único con orden explícito.</td>
-      </tr>
-      <tr>
-        <td>R4 · Modelo del org no es GPT-4.1</td>
-        <td>file_upload queda en modo <code>error</code>. Sin bloqueo del cutover. Decisión de upgrade queda al Partner / Betterware a futuro.</td>
-      </tr>
-      <tr>
-        <td>R5 · Métricas regresivas durante el piloto</td>
-        <td>Kill-switch global en Custom Metadata vuelve 100% al V40 en &lt;5 min. V40 queda intacto como fallback atómico.</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
-
-<!-- SLIDE 9 · CIERRE / CTA -->
-<section class="slide" id="slide-9">
-  <span class="brand-chip">FDE · Betterware · Betty mejorada</span>
-  <span class="slide-num"><span class="current">09</span> / 09</span>
+  <span class="slide-num"><span class="current">07</span> / 07</span>
   <span class="section-eyebrow">Las 3 decisiones de hoy</span>
   <h2>Lo que necesitamos salir con hoy</h2>
-  <p class="lead">Para habilitar el martes de co-presentación con Betterware CS y el cutover del viernes 16 de octubre.</p>
+  <p class="lead">Para habilitar el kick-off con Betterware CS el martes 06-oct y arrancar las pruebas conjuntas en el sprint.</p>
 
   <div class="cta-grid">
     <div class="cta-card">
-      <div class="icon">🏗️</div>
-      <h4>CTA técnico</h4>
-      <div class="text">Validamos juntos la <strong>convivencia</strong> de <code>BW_FDE_RouteAgent</code> con el Flow de asignación de cola existente.</div>
+      <div class="icon">📋</div>
+      <h4>Aceptación del plan</h4>
+      <div class="text">Confirmar la secuencia: <strong>insumos → pruebas conjuntas → UAT Betterware → Programa Insiders</strong>.</div>
+    </div>
+    <div class="cta-card">
+      <div class="icon">📦</div>
+      <h4>Insumos del proyecto</h4>
+      <div class="text">Fecha de entrega de <strong>documentación, requerimientos, historias de usuario y escenarios + datos de prueba</strong>.</div>
     </div>
     <div class="cta-card">
       <div class="icon">📅</div>
-      <h4>CTA de scheduling</h4>
-      <div class="text">Confirmar fecha del <strong>test Partner · jueves 2026-10-08 AM</strong>.</div>
-    </div>
-    <div class="cta-card">
-      <div class="icon">🤝</div>
-      <h4>CTA de co-presentación</h4>
-      <div class="text">Confirmar <strong>co-presentación con Betterware CS · martes 06-oct AM</strong>.</div>
+      <h4>Compromiso de testing</h4>
+      <div class="text">Confirmar ventana de pruebas conjuntas <strong>06 al 08-oct</strong> y UAT con Betterware <strong>09 al 10-oct</strong>.</div>
     </div>
   </div>
 
   <div class="narrative" style="margin-top: 24px;">
-    <p><strong>Lectura final:</strong> todo lo técnico del lado FDE está construido, validado y listo. Lo que necesitamos de ustedes es coordinación de deploy a producción + 1 modificación mínima al flujo de entry + testing. Si cerramos esto hoy, el martes vamos juntos a Betterware con una propuesta sólida, y el viernes 16 de octubre tenemos a 15-25 distribuidoras aliadas probando una Betty con menos fallos — con el V40 intacto como red de seguridad.</p>
+    <p><strong>Lectura final:</strong> el agente base, los adapters y el flujo del routing ya están construidos y activos en el sandbox. Lo que necesitamos de Capptus es los insumos del proyecto para validar correctamente, acompañarnos en las pruebas conjuntas, y el approval de publish a producción antes del jueves 15 de octubre. Si cerramos esto hoy, el viernes 16 de octubre arrancamos el Programa Insiders con 15-25 distribuidoras aliadas probando una Betty con menos fallos.</p>
   </div>
 
   <div class="final-signature">
