@@ -343,7 +343,7 @@
   <div class="left">
     <span class="eyebrow">Programa Insiders de Betterware</span>
     <h1>Betty mejorada</h1>
-    <p class="subtitle">Un piloto cerrado con nuestras distribuidoras aliadas · del 16 al 30 de octubre 2026 · antes del rollout general.</p>
+    <p class="subtitle">Un piloto cerrado con nuestras distribuidoras aliadas · del 16 al 23 de octubre 2026 · antes del flujo general.</p>
     <div class="cover-author">
       <div class="name">Jonathan Gomez</div>
       <div class="role">Salesforce Forward Deployed Engineer · con equipo Partner</div>
@@ -398,7 +398,7 @@
   <span class="slide-num"><span class="current">04</span> / 10</span>
   <span class="section-eyebrow">La propuesta</span>
   <h2>Programa Insiders · un grupo exclusivo</h2>
-  <p class="lead">Un piloto cerrado de dos semanas con quienes más impactan al negocio: las distribuidoras aliadas que ya nos han dado su voz.</p>
+  <p class="lead">Un piloto cerrado de una semana con quienes más impactan al negocio: las distribuidoras aliadas que ya nos han dado su voz. Escalada diaria desde el cutover hasta el flujo general.</p>
 
   <table class="program">
     <tr>
@@ -411,7 +411,7 @@
     </tr>
     <tr>
       <td>Duración</td>
-      <td><strong>Dos semanas: 16 al 30 de octubre 2026</strong>. Cutover controlado el viernes 16 con monitoreo intensivo las primeras 48h.</td>
+      <td><strong>Una semana: 16 al 23 de octubre 2026</strong>. Cutover controlado el viernes 16 al 10% con monitoreo intensivo las primeras 48h, escalada diaria de +10% y flujo general (GA) el viernes 23.</td>
     </tr>
     <tr>
       <td>Canal de feedback</td>
@@ -479,10 +479,10 @@
       <header>SALESFORCE · FDE</header>
       <ul>
         <li>Diseño técnico del piloto</li>
-        <li>Deploy del agente nuevo con feature flag</li>
-        <li>Framework de medición A/B</li>
+        <li>Deploy del agente nuevo con cohorte controlada</li>
+        <li>Framework de medición comparativa</li>
         <li>Playbook del programa (narrativa, invitación, formulario)</li>
-        <li>Monitoring + reporte semanal del comportamiento</li>
+        <li>Monitoreo diario + reporte del comportamiento</li>
         <li>Demo de aprendizajes al cierre</li>
       </ul>
     </div>
@@ -513,18 +513,18 @@
 <section class="slide" id="slide-7">
   <span class="brand-chip">Betty mejorada · Betterware</span>
   <span class="slide-num"><span class="current">07</span> / 10</span>
-  <span class="section-eyebrow">Las próximas 4 semanas</span>
+  <span class="section-eyebrow">Del kickoff al GA · 3 semanas</span>
   <h2>Timeline del piloto</h2>
   <p class="lead">Lo que Betterware necesita hacer en cada punto · claridad total.</p>
 
   <div class="timeline-horizontal">
-    <div class="ti"><span class="date">Semana 07-10 oct</span><div class="label"><strong>Betterware cura lista</strong>Salesforce + Partner alistan</div></div>
-    <div class="ti"><span class="date">Lun 13-oct</span><div class="label"><strong>Lista final cargada</strong>Config lista</div></div>
-    <div class="ti"><span class="date">Mié-Jue 14-15</span><div class="label"><strong>UAT + smoke test</strong>Feature flag OFF</div></div>
-    <div class="ti critical"><span class="date">VIE 16-OCT</span><div class="label"><strong>ACTIVACIÓN</strong>Grupo WhatsApp abierto</div></div>
-    <div class="ti"><span class="date">Vie 23-oct</span><div class="label"><strong>Checkpoint 1</strong>Reporte A/B semana 1</div></div>
-    <div class="ti critical"><span class="date">VIE 30-OCT</span><div class="label"><strong>Cierre del piloto</strong>Reconocimiento</div></div>
-    <div class="ti"><span class="date">Lun 02-nov →</span><div class="label"><strong>Decisión informada</strong>Rollout gradual</div></div>
+    <div class="ti"><span class="date">Mar 06-oct</span><div class="label"><strong>Kick-off</strong>Betterware CS + Partner + Salesforce</div></div>
+    <div class="ti"><span class="date">Jue 08 → Sáb 10</span><div class="label"><strong>UAT Betterware</strong>Prueba del agente</div></div>
+    <div class="ti"><span class="date">Lun 12-oct</span><div class="label"><strong>Lista final cargada</strong>MessagingEndUser marcado</div></div>
+    <div class="ti critical"><span class="date">VIE 16-OCT</span><div class="label"><strong>CUTOVER 10%</strong>Grupo WhatsApp abierto</div></div>
+    <div class="ti"><span class="date">Lun 19 → Jue 22</span><div class="label"><strong>Escalada +10%/día</strong>20 → 30 → 40 → 50%</div></div>
+    <div class="ti critical"><span class="date">VIE 23-OCT</span><div class="label"><strong>🎯 GA · 100%</strong>Flujo general + reconocimiento</div></div>
+    <div class="ti"><span class="date">Lun 26-oct →</span><div class="label"><strong>Fase 2</strong>Reemplazo gradual legacy</div></div>
   </div>
 </section>
 
@@ -558,7 +558,7 @@
 
   <div class="insight">
     <h4>Las métricas de producción también se miden en paralelo</h4>
-    <p>Durante las 2 semanas comparamos el comportamiento del grupo piloto (agente nuevo) vs. el resto del tráfico (V40). Es un A/B natural que deja evidencia dura para la decisión del 2 de noviembre. Pero esas métricas no son el objetivo del piloto — el objetivo es validar la experiencia con usuarias reales.</p>
+    <p>Durante la semana de escalada comparamos el comportamiento del grupo piloto (agente nuevo) vs. el resto del tráfico (agente actual). Es un A/B natural que deja evidencia dura para la decisión de GA del viernes 23. Pero esas métricas no son el objetivo del piloto — el objetivo es validar la experiencia con usuarias reales.</p>
   </div>
 </section>
 
@@ -579,12 +579,12 @@
     <div class="ask-card">
       <span class="num">2</span>
       <h4>Entregar lista final</h4>
-      <div class="text">Lista de 15-25 distribuidoras aliadas · a más tardar el <strong>lunes 2026-10-13</strong>.</div>
+      <div class="text">Lista de 15-25 distribuidoras aliadas · a más tardar el <strong>lunes 12 de octubre</strong>.</div>
     </div>
     <div class="ask-card">
       <span class="num">3</span>
       <h4>Comprometer a su CS</h4>
-      <div class="text">El equipo de Customer Success de Betterware como punto de contacto directo con las piloto durante las 2 semanas.</div>
+      <div class="text">El equipo de Customer Success de Betterware como punto de contacto directo con las piloto durante la semana de escalada.</div>
     </div>
   </div>
 
@@ -608,8 +608,8 @@
       Las super usuarias — las que generan más conversaciones, pedidos y relación con asociadas — son las primeras en ver la mejora. El impacto se siente en la red donde más duele hoy.
     </div>
     <div class="return-item">
-      <strong>Evidencia dura antes del rollout general</strong>
-      Dos semanas de operación con usuarias reales dan la certeza para abrir Betty mejorada a las ~21 mil distribuidoras activas sin sorpresas.
+      <strong>Evidencia dura antes del flujo general</strong>
+      Una semana de operación con escalada diaria da la certeza para abrir Betty mejorada a las ~21 mil distribuidoras activas sin sorpresas.
     </div>
     <div class="return-item">
       <strong>Las piloto se convierten en embajadoras del cambio</strong>
