@@ -69,24 +69,24 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"He
 .sigbox .cards .p{margin:0}
 .sig-note{grid-column:1 / -1;display:flex;align-items:center;border:1px dashed #f0c6dc;background:#fff7fb;border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--ink2)}
 
-/* equipo de choque */
-.squad{margin-top:18px;border-radius:18px;padding:16px 18px 18px;background:linear-gradient(135deg,#0f172a 0%,#1e293b 65%,#334155 100%);color:#e2e8f0;box-shadow:var(--shadow)}
-.sq-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+/* equipo de choque — glass white */
+.squad{margin-top:18px;border-radius:20px;padding:18px 20px 20px;background:rgba(255,255,255,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(144,208,254,.4);color:var(--ink);box-shadow:0 10px 36px rgba(0,30,91,.08)}
+.sq-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .sq-k{background:#fbbf24;color:#422006;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:3px 11px}
-.sq-head h2{margin:0;font-size:18px;line-height:1.2;color:#fff;letter-spacing:-.01em}
-.sq-head p{margin:0;font-size:12.5px;color:#cbd5e1;flex-basis:100%}
+.sq-head h2{margin:0;font-size:18px;line-height:1.2;color:var(--navy);letter-spacing:-.01em}
+.sq-head p{margin:0;font-size:12.5px;color:var(--ink2);flex-basis:100%}
 .sq-body{display:grid;grid-template-columns:400px 330px 1fr;gap:12px;align-items:stretch}
 .sq-body .p{width:auto;color:var(--ink)}
 .sq-body > .p{align-content:center}
 .sq-col{display:flex;flex-direction:column;gap:12px}
 .sq-col .p{flex:1}
-.sq-members{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:var(--radius);padding:10px 12px}
-.sq-l{font-size:10.8px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:700;margin-bottom:8px}
-.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.chip{display:flex;align-items:center;gap:9px;background:#fff;color:var(--ink);border-radius:12px;padding:6px 9px;border-left:3px solid var(--c)}
-.chip .av{width:34px;height:34px;font-size:12px;box-shadow:none}
-.chip .cn{font-size:12.4px;font-weight:750;line-height:1.15}
-.chip .cr{font-size:11px;color:var(--muted);line-height:1.2;margin-top:1px}
+.sq-members{background:rgba(234,245,254,.55);border:1px solid rgba(144,208,254,.3);border-radius:var(--radius);padding:14px 14px}
+.sq-l{font-size:10.8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:10px}
+.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.chip{display:flex;align-items:center;gap:14px;background:#fff;color:var(--ink);border-radius:14px;padding:18px 18px;border-left:4px solid var(--c);box-shadow:0 2px 8px rgba(0,30,91,.06)}
+.chip .av{width:50px;height:50px;font-size:16px;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--line)}
+.chip .cn{font-size:14px;font-weight:750;line-height:1.2}
+.chip .cr{font-size:12px;color:var(--muted);line-height:1.25;margin-top:3px}
 /* Capptus y cliente dentro del squad */
 .sq-ext{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
 .chips.c3{grid-template-columns:repeat(3,1fr)}
