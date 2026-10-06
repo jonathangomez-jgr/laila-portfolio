@@ -26,9 +26,19 @@ export const CATEGORY_ORDER: DocCategory[] = [
 ];
 
 // ----------------------------------------------------------------------------
-// Betterware · 11 docs (migrated verbatim from DocumentosTab.tsx)
+// Betterware docs
 // ----------------------------------------------------------------------------
 const BETTERWARE_DOCS: DocEntry[] = [
+  {
+    slug: "presentacion-kickoff",
+    label: "Presentación · Kick-off CS (compartida con Jafra)",
+    description:
+      "Deck del kick-off ejecutivo del martes 2026-10-07. Compartido Betterware + Jafra. Squad Salesforce + Partner Capptus, organigrama y timeline conjunto del piloto.",
+    url: "/Customers/Betterware/files/Presentacion_Kickoff_Betterware.html",
+    category: "Ejecutivo",
+    icon: "🎤",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
   {
     slug: "programa-insiders",
     label: "Programa Insiders · Betty",
@@ -139,6 +149,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
 // Jafra · Janet v2 docs
 // ----------------------------------------------------------------------------
 const JAFRA_DOCS: DocEntry[] = [
+  {
+    slug: "presentacion-kickoff",
+    label: "Presentación · Kick-off (compartida con Betterware)",
+    description:
+      "Deck del kick-off ejecutivo del martes 2026-10-07. Compartido Jafra + Betterware. Squad Salesforce + Partner Capptus, organigrama y timeline conjunto.",
+    url: "/Customers/Betterware/files/Presentacion_Kickoff_Betterware.html",
+    category: "Ejecutivo",
+    icon: "🎤",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
   {
     slug: "conociendo-agente",
     label: "Conociendo a Janet · agente actual",
