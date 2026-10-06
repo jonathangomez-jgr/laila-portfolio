@@ -407,7 +407,15 @@
   }
 
   /* === SLIDE · TRACKER (gestión del proyecto) === */
-  .slide.tracker { justify-content: flex-start; }
+  .slide.tracker {
+    justify-content: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--cb80) transparent;
+  }
+  .slide.tracker::-webkit-scrollbar { width: 8px; }
+  .slide.tracker::-webkit-scrollbar-thumb { background: var(--cb80); border-radius: 4px; }
   .slide.tracker .section-eyebrow,
   .slide.tracker h2,
   .slide.tracker .lead { text-align: center; }
@@ -480,7 +488,79 @@
     height: clamp(72px, 7vw, 104px);
     flex: none;
     display: block;
+    cursor: zoom-in;
+    transition: transform 0.2s ease;
   }
+  .qr-img:hover { transform: scale(1.04); }
+
+  /* QR modal / lightbox */
+  .qr-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 31, 68, 0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(32px, 5vh, 80px);
+    cursor: zoom-out;
+    animation: qrFadeIn 0.2s ease;
+  }
+  .qr-modal.open { display: flex; }
+  @keyframes qrFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .qr-modal img {
+    width: clamp(320px, 60vmin, 560px);
+    height: clamp(320px, 60vmin, 560px);
+    background: #fff;
+    padding: clamp(20px, 2.5vw, 32px);
+    border-radius: 24px;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
+    animation: qrPop 0.25s cubic-bezier(0.2, 1, 0.3, 1);
+  }
+  @keyframes qrPop {
+    from { transform: scale(0.86); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .qr-modal-url {
+    position: absolute;
+    bottom: clamp(32px, 5vh, 56px);
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 100px;
+    padding: 10px 20px;
+    white-space: nowrap;
+  }
+  .qr-modal-close {
+    position: fixed;
+    top: clamp(20px, 3vh, 32px);
+    right: clamp(20px, 3vw, 32px);
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background 0.2s;
+  }
+  .qr-modal-close:hover { background: rgba(255, 255, 255, 0.2); }
   .qr-text {
     display: flex;
     flex-direction: column;
@@ -1259,6 +1339,12 @@
 
 <div class="dots" id="dots"></div>
 
+<div class="qr-modal" id="qrModal" aria-hidden="true">
+  <button class="qr-modal-close" id="qrModalClose" aria-label="Cerrar">×</button>
+  <img id="qrModalImg" src="" alt="QR al portal · grande">
+  <div class="qr-modal-url">laila-jgr.com/portal/betterware</div>
+</div>
+
 <div class="slides" id="slides">
 
 <!-- SLIDE 1 · PORTADA -->
@@ -1963,18 +2049,48 @@
     next.addEventListener('click', () => go(current() + 1));
 
     window.addEventListener('keydown', (e) => {
-      // No capturar flechas si el foco está dentro del slide con scroll vertical
+      // No capturar flechas si el foco está dentro de un slide con scroll vertical
       const target = e.target;
-      const isInOrgSlide = target && target.closest && target.closest('.slide.org');
-      if (e.key === 'ArrowRight' || (e.key === ' ' && !isInOrgSlide)) { e.preventDefault(); go(current() + 1); }
+      const isScrollableSlide = target && target.closest && (
+        target.closest('.slide.org') || target.closest('.slide.tracker')
+      );
+      // No navegar entre slides si está abierto el QR modal
+      const qrOpen = document.getElementById('qrModal').classList.contains('open');
+      if (qrOpen) return;
+      if (e.key === 'ArrowRight' || (e.key === ' ' && !isScrollableSlide)) { e.preventDefault(); go(current() + 1); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); }
-      else if (e.key === 'Home' && !isInOrgSlide) { e.preventDefault(); go(0); }
-      else if (e.key === 'End' && !isInOrgSlide) { e.preventDefault(); go(total - 1); }
+      else if (e.key === 'Home' && !isScrollableSlide) { e.preventDefault(); go(0); }
+      else if (e.key === 'End' && !isScrollableSlide) { e.preventDefault(); go(total - 1); }
     });
 
     const hash = window.location.hash.match(/#slide-(\d+)/);
     if (hash) setTimeout(() => go(parseInt(hash[1]) - 1), 0);
     update();
+  })();
+
+  /* QR modal · click para ver grande */
+  (function() {
+    const qrImg = document.querySelector('.qr-img');
+    const modal = document.getElementById('qrModal');
+    const modalImg = document.getElementById('qrModalImg');
+    const closeBtn = document.getElementById('qrModalClose');
+    if (!qrImg || !modal) return;
+
+    function open() {
+      modalImg.src = qrImg.src;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    function close() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    qrImg.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) close();
+    });
   })();
 </script>
 
