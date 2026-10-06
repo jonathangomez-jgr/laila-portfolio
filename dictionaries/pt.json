@@ -10,7 +10,9 @@
     "insights": "Insights",
     "buildRecipes": "Build Recipes",
     "openMenu": "Abrir menu",
-    "closeMenu": "Fechar menu"
+    "closeMenu": "Fechar menu",
+    "portal": "Portal do Projeto",
+    "portalShort": "Portal"
   },
   "footer": {
     "tagline": "Agentforce Enterprise Architect na Salesforce. Projeto soluções, construo demos e desenvolvo narrativas que conectam tecnologia e negócio.",
@@ -30,6 +32,8 @@
     "description": "Um espaço para mostrar como o uso da IA de forma criativa e em seu sentido mais humano pode transformar a maneira de alcançar os objetivos mais aspiracionais dos clientes.",
     "exploreBtn": "Explorar Laila",
     "viewDemosBtn": "Ver demos",
+    "portalBtn": "Entrar no Portal do Projeto",
+    "portalBtnSub": "Acesso para clientes e equipe do engagement",
     "viewQrBtn": "Ver QR",
     "qrModalTitle": "laila-jgr.com",
     "qrModalSub": "Escaneie para abrir o portfólio",

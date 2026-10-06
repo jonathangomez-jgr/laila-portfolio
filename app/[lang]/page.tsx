@@ -53,6 +53,34 @@ export default async function Home({
               modalSub={d.qrModalSub}
             />
           </div>
+
+          {/* Portal CTA — acceso al portal del proyecto */}
+          <a
+            href="/portal"
+            className="mt-6 inline-flex items-center gap-3 rounded-2xl border border-indigo-200 bg-white px-5 py-4 text-left shadow-sm transition hover:border-indigo-400 hover:shadow-md"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white">
+              <svg
+                className="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
+              </svg>
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-indigo-700">
+                {d.portalBtn} →
+              </p>
+              <p className="text-xs text-gray-500">{d.portalBtnSub}</p>
+            </div>
+          </a>
         </div>
 
         <div className="grid gap-6">

@@ -182,6 +182,50 @@ export default function SiteHeader({
           </nav>
 
           <div className="flex items-center gap-2">
+            {/* Portal link — visible siempre, estilo filled para destacarse del nav */}
+            <a
+              href="/portal"
+              className="hidden items-center gap-1.5 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 md:inline-flex"
+              title={dict.nav.portal}
+            >
+              <svg
+                className="h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
+              </svg>
+              {dict.nav.portal}
+            </a>
+
+            {/* Mobile · versión compacta del portal */}
+            <a
+              href="/portal"
+              className="inline-flex items-center gap-1.5 rounded-full bg-indigo-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-indigo-700 md:hidden"
+              title={dict.nav.portal}
+            >
+              <svg
+                className="h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
+              </svg>
+              {dict.nav.portalShort}
+            </a>
+
             <LanguageSwitcher lang={lang} />
 
             {/* Hamburger — mobile only */}
@@ -232,6 +276,29 @@ export default function SiteHeader({
             menuOpen ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
           }`}
         >
+          {/* Portal CTA — primer item, destacado */}
+          <div className="border-b border-gray-100 px-3 pb-3 pt-3">
+            <a
+              href="/portal"
+              className="flex items-center gap-3 rounded-2xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
+            >
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
+              </svg>
+              {dict.nav.portal}
+            </a>
+          </div>
+
           {/* Nav items */}
           <ul className="px-3 py-3">
             {navItems.map((item) => {
