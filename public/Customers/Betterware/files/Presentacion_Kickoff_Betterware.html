@@ -668,8 +668,8 @@
     background: linear-gradient(160deg, #F7F0FA 0%, #F5EDF8 55%, #F1E7F5 100%);
     box-shadow: 0 24px 64px rgba(140, 71, 153, 0.16);
     border: 1px solid rgba(255, 255, 255, 0.6);
-    aspect-ratio: 0.9 / 1;
-    max-width: 480px;
+    aspect-ratio: 1122 / 1402;
+    max-width: 624px;
     width: 100%;
     margin: 0 auto;
     display: flex;
@@ -678,13 +678,11 @@
   }
   .ins-char {
     position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 92%;
+    inset: 0;
+    width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: center bottom;
+    object-fit: cover;
+    object-position: center;
   }
   .ins-tagline {
     position: absolute;
