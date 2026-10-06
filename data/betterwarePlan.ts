@@ -1480,8 +1480,8 @@ const MILESTONES: Milestone[] = [
     status: "scheduled",
     references: [
       {
-        label: "Deck Kick-off · Partner + Betterware",
-        url: "/Customers/Betterware/files/Presentacion_Partner_FDE.html",
+        label: "Deck Kick-off ejecutivo · Betterware + Jafra",
+        url: "/Customers/Betterware/files/Presentacion_Kickoff_Betterware.html",
         kind: "document",
       },
       {
