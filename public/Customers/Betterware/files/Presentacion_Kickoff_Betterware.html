@@ -142,12 +142,17 @@
     font-weight: 300; font-size: clamp(16px, 1.4vw, 26px); color: var(--cb80);
     margin-bottom: clamp(28px, 4vh, 56px); max-width: 90%;
   }
-  .slide.cover .cover-author {
+  .slide.cover .cover-authors {
     border-top: 1px solid rgba(144,208,254,0.3);
-    padding-top: 20px; font-size: 15px; max-width: 90%;
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 100%;
   }
-  .slide.cover .cover-author .name { font-weight: 600; color: #fff; font-size: 18px; margin-bottom: 2px; }
-  .slide.cover .cover-author .role { color: var(--cb80); }
+  .slide.cover .cover-author { display: flex; flex-direction: column; min-width: 0; }
+  .slide.cover .cover-author .name { font-weight: 600; color: #fff; font-size: clamp(14px, 1.1vw, 17px); margin-bottom: 2px; line-height: 1.2; }
+  .slide.cover .cover-author .role { color: var(--cb80); font-size: clamp(12px, 0.9vw, 14px); line-height: 1.3; }
   .slide.cover .cover-sparkles { position: absolute; top: 15%; right: 15%; width: 200px; opacity: 0.4; }
   .slide.cover .cover-astro { max-width: 95%; max-height: 85%; }
 
@@ -1398,9 +1403,19 @@
     <span class="eyebrow">Kick-off</span>
     <h1>Propuesta Plan de Choque Agentforce</h1>
     <p class="subtitle">Betterware + Jafra · Betty y Janet sobre Agentforce Script</p>
-    <div class="cover-author">
-      <div class="name">Jonathan Gómez</div>
-      <div class="role">Principal Forward Deployed Engineer</div>
+    <div class="cover-authors">
+      <div class="cover-author">
+        <div class="name">Paola Castaño</div>
+        <div class="role">Cloud Account Executive · Lead de cuenta</div>
+      </div>
+      <div class="cover-author">
+        <div class="name">Luis Carlos Molina</div>
+        <div class="role">Named Account Executive</div>
+      </div>
+      <div class="cover-author">
+        <div class="name">Jonathan Gómez</div>
+        <div class="role">Principal Forward Deployed Engineer</div>
+      </div>
     </div>
   </div>
   <div class="right">
