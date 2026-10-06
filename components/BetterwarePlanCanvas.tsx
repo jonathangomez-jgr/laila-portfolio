@@ -50,6 +50,47 @@ const STATUS_LABELS: Record<ActivityStatus, string> = {
   done: "Done",
 };
 
+function StatusDot({ status }: { status: ActivityStatus }) {
+  if (status === "done") {
+    return (
+      <span
+        className="inline-flex h-4 w-4 flex-none items-center justify-center rounded-full bg-emerald-500 text-white"
+        title="Completada"
+      >
+        <svg viewBox="0 0 20 20" fill="none" className="h-2.5 w-2.5" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 10l4 4 8-8" />
+        </svg>
+      </span>
+    );
+  }
+  if (status === "in-progress") {
+    return (
+      <span
+        className="inline-flex h-4 w-4 flex-none items-center justify-center rounded-full border-2 border-emerald-500 bg-white"
+        title="En curso"
+      >
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+      </span>
+    );
+  }
+  if (status === "blocked") {
+    return (
+      <span
+        className="inline-flex h-4 w-4 flex-none items-center justify-center rounded-full bg-rose-500 text-[9px] font-black leading-none text-white"
+        title="Bloqueada"
+      >
+        !
+      </span>
+    );
+  }
+  return (
+    <span
+      className="inline-flex h-4 w-4 flex-none rounded-full border border-slate-300 bg-white"
+      title="Pendiente"
+    />
+  );
+}
+
 const OWNER_STYLES: Record<OwnerTag, string> = {
   "Salesforce - FDE": "bg-blue-100 text-blue-900",
   "Salesforce - CSM": "bg-sky-100 text-sky-900",
@@ -1245,9 +1286,25 @@ export default function BetterwarePlanCanvas({
 
           {/* GRID DE ACTIVIDADES POR SEMANA (detalle) */}
           <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white p-4">
-            <h4 className="mb-3 text-sm font-semibold text-slate-900">
-              Detalle · actividades por semana
-            </h4>
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+              <h4 className="text-sm font-semibold text-slate-900">
+                Detalle · actividades por semana
+              </h4>
+              <div className="flex flex-wrap items-center gap-3 text-[10.5px] text-slate-600">
+                <span className="inline-flex items-center gap-1.5">
+                  <StatusDot status="done" />Completada
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <StatusDot status="in-progress" />En curso
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <StatusDot status="blocked" />Bloqueada
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <StatusDot status="not-started" />Pendiente
+                </span>
+              </div>
+            </div>
             <div className="min-w-[900px]">
               <div className="mb-2 grid grid-cols-[260px_repeat(10,minmax(60px,1fr))] gap-1 text-[11px] font-semibold text-slate-500">
                 <div>Actividad</div>
@@ -1274,23 +1331,35 @@ export default function BetterwarePlanCanvas({
                     <button
                       key={a.id}
                       onClick={() => setSelected(a)}
-                      className="grid grid-cols-[260px_repeat(10,minmax(60px,1fr))] gap-1 py-0.5 text-left"
+                      className="grid grid-cols-[260px_repeat(10,minmax(60px,1fr))] gap-1 py-0.5 text-left hover:bg-slate-50 rounded"
                     >
-                      <div className="truncate text-[11px] text-slate-700">
-                        <span className="mr-1 font-mono text-slate-400">#{a.number}</span>
-                        {a.title}
+                      <div className="flex min-w-0 items-center gap-2">
+                        <StatusDot status={a.status} />
+                        <div className="truncate text-[11px] text-slate-700">
+                          <span className="mr-1 font-mono text-slate-400">#{a.number}</span>
+                          {a.title}
+                        </div>
                       </div>
                       {Array.from({ length: 10 }, (_, i) => {
                         const w = i + 1;
                         const inW = w === a.week;
+                        const bg = inW
+                          ? a.status === "done"
+                            ? "#10b981"
+                            : a.status === "blocked"
+                            ? "#f43f5e"
+                            : phase.color
+                          : "#F1F5F9";
+                        const opacity = inW
+                          ? a.status === "not-started"
+                            ? 0.3
+                            : 0.9
+                          : 1;
                         return (
                           <div
                             key={i}
-                            className="h-5 rounded"
-                            style={{
-                              background: inW ? phase.color : "#F1F5F9",
-                              opacity: inW ? 0.8 : 1,
-                            }}
+                            className={`h-5 rounded ${inW && a.status === "in-progress" ? "ring-2 ring-emerald-500/30" : ""}`}
+                            style={{ background: bg, opacity }}
                           />
                         );
                       })}
