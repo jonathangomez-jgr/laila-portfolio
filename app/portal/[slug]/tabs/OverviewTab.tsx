@@ -1,12 +1,12 @@
 import Link from "next/link";
 import {
-  getPlanForSlug,
   currentPhase,
   upcomingMilestones,
   globalProgress,
   overallHealth,
 } from "@/data/plans";
 import { getKeyDocsForSlug } from "@/data/docs";
+import { getEffectivePlan } from "@/lib/portalPlan";
 import type { PortalUser } from "@/lib/portalAuth";
 
 const HEALTH_LABEL: Record<string, { label: string; cls: string }> = {
@@ -33,14 +33,14 @@ function fmtDate(iso: string): string {
   });
 }
 
-export default function OverviewTab({
+export default async function OverviewTab({
   slug,
   user,
 }: {
   slug: string;
   user: PortalUser;
 }) {
-  const plan = getPlanForSlug(slug);
+  const plan = await getEffectivePlan(slug);
   if (!plan) {
     return (
       <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">

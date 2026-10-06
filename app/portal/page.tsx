@@ -3,7 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { getCurrentUser } from "@/lib/portalAuth";
 import { customerProjects } from "@/data/customerProjects";
-import { getPlanForSlug, globalProgress } from "@/data/plans";
+import { globalProgress } from "@/data/plans";
+import { getEffectivePlan } from "@/lib/portalPlan";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,17 @@ export default async function PortalIndexPage() {
   if (projects.length === 1) {
     redirect(`/portal/${projects[0].slug}`);
   }
+
+  // Fetch de planes efectivos (con overrides de Salesforce aplicados) en
+  // paralelo para no serializar las queries.
+  const effectivePlans = await Promise.all(
+    projects.map((p) => getEffectivePlan(p.slug)),
+  );
+  const progressBySlug = new Map<string, number | null>();
+  projects.forEach((p, i) => {
+    const plan = effectivePlans[i];
+    progressBySlug.set(p.slug, plan ? globalProgress(plan) : null);
+  });
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-4 py-12">
@@ -41,8 +53,7 @@ export default async function PortalIndexPage() {
         ) : (
           <div className="mt-6 grid gap-3 md:grid-cols-2">
             {projects.map((p) => {
-              const plan = getPlanForSlug(p.slug);
-              const progress = plan ? globalProgress(plan) : null;
+              const progress = progressBySlug.get(p.slug) ?? null;
 
               return (
                 <Link
