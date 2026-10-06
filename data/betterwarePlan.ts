@@ -532,25 +532,6 @@ const ACTIVITIES: Activity[] = [
     tags: ["critical-path", "executive", "kick-off"],
   }),
   act({
-    id: "1.2",
-    phaseId: "f1",
-    number: "1.2",
-    title: "Demo rápida al cliente (incluye 2 usuarios reales)",
-    description:
-      "Demo martes PM del agente funcionando en sandbox: Partner + FDE + Betterware Sponsor + 2 usuarios reales (distribuidoras) prueban los 10 escenarios base en vivo. Objetivo: obtener feedback directo del usuario final sobre tono, respuestas y utilidad antes de activar en producción. Capturar observaciones.",
-    owner: "Shared",
-    collaborators: ["Salesforce - FDE", "Partner", "Betterware - Sponsor", "Betterware - UAT"],
-    delegableToPartner: false,
-    type: "Test",
-    week: 1,
-    plannedStart: "2026-10-06",
-    plannedEnd: "2026-10-06",
-    dependencies: ["1.1"],
-    deliverables: ["Observaciones de 2 usuarios reales · ajustes documentados"],
-    references: [],
-    tags: ["test", "customer-feedback", "critical-path"],
-  }),
-  act({
     id: "1.3",
     phaseId: "f1",
     number: "1.3",
@@ -1506,29 +1487,6 @@ const MILESTONES: Milestone[] = [
       {
         label: "Programa Insiders · Betty",
         url: "/Customers/Betterware/files/Programa_Insiders_Betty.html",
-        kind: "document",
-      },
-    ],
-  },
-  {
-    id: "customer_demo",
-    title: "Demo rápida al cliente",
-    description:
-      "Demo del agente en sandbox con 2 usuarios reales (distribuidoras) para capturar feedback directo antes de activar en producción.",
-    date: "2026-10-06",
-    kind: "UAT Session",
-    phaseId: "f1",
-    participants: [
-      "Salesforce - FDE",
-      "Partner",
-      "Betterware - Sponsor",
-      "Betterware - UAT",
-    ],
-    status: "scheduled",
-    references: [
-      {
-        label: "Deck de demo · Betterware",
-        url: "/Customers/Betterware/files/Presentacion_Demo_Betterware.html",
         kind: "document",
       },
     ],
