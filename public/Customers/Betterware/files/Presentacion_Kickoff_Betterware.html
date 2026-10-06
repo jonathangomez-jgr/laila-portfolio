@@ -190,7 +190,7 @@
 
   .agent-hero {
     position: relative;
-    height: 280px;
+    height: 220px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -232,25 +232,29 @@
   ul.checklist { list-style: none; padding: 0; margin: 0; }
   ul.checklist li {
     position: relative;
-    padding: 11px 0 11px 42px;
-    font-size: 16px;
+    padding: 9px 0 9px 36px;
+    font-size: 15px;
     line-height: 1.4;
     color: var(--ink);
     border-bottom: 1px solid #F1F5F9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
   }
   ul.checklist li:last-child { border-bottom: none; }
   ul.checklist li::before {
     content: "";
     position: absolute;
-    left: 0; top: 11px;
-    width: 24px; height: 24px;
+    left: 0; top: 10px;
+    width: 22px; height: 22px;
     border-radius: 50%;
   }
   ul.checklist li::after {
     content: "";
     position: absolute;
-    left: 7px; top: 16px;
-    width: 10px; height: 5px;
+    left: 6.5px; top: 15px;
+    width: 9px; height: 4.5px;
     border-left: 2.5px solid #fff;
     border-bottom: 2.5px solid #fff;
     transform: rotate(-45deg);
@@ -262,6 +266,67 @@
   .agent-card.janet ul.checklist li::before {
     background: #8C4799;
     box-shadow: 0 2px 6px rgba(140,71,153,0.3);
+  }
+  .cl-tag {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 9px;
+    border-radius: 100px;
+    white-space: nowrap;
+    flex: none;
+  }
+  .agent-card.betty .cl-tag.new { background: #39AEC7; color: #fff; }
+  .agent-card.janet .cl-tag.new { background: #8C4799; color: #fff; }
+  .cl-tag.imp {
+    background: transparent;
+    color: var(--slate);
+    border: 1px solid var(--rule);
+  }
+
+  .agent-kpis {
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+    margin-top: 16px;
+  }
+  .kpis-head {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 10px;
+  }
+  .kpi-list { list-style: none; padding: 0; margin: 0; }
+  .kpi-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 5px 0;
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .kpi-arrow {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    flex: none;
+    line-height: 1;
+  }
+  .agent-card.betty .kpi-arrow {
+    background: rgba(57,174,199,0.15);
+    color: #39AEC7;
+  }
+  .agent-card.janet .kpi-arrow {
+    background: rgba(140,71,153,0.15);
+    color: #8C4799;
   }
 
   /* === SLIDE · CRONOGRAMA (2 pistas apiladas) === */
@@ -941,11 +1006,19 @@
         <div class="agent-eye">Betterware</div>
         <h3>Betty</h3>
         <ul class="checklist">
-          <li>Agents Script</li>
-          <li>Determinístico</li>
-          <li>Subagents optimizado</li>
-          <li>Adaptadores en acciones</li>
+          <li><span class="cl-text">Agents Script</span><span class="cl-tag new">Nuevo</span></li>
+          <li><span class="cl-text">Determinístico</span><span class="cl-tag new">Nuevo</span></li>
+          <li><span class="cl-text">Subagents optimizado</span><span class="cl-tag new">Nuevo</span></li>
+          <li><span class="cl-text">Adaptadores en acciones</span><span class="cl-tag new">Nuevo</span></li>
         </ul>
+        <div class="agent-kpis">
+          <div class="kpis-head">KPIs a mejorar</div>
+          <ul class="kpi-list">
+            <li><span class="kpi-arrow">↑</span><span>Tasa de contención</span></li>
+            <li><span class="kpi-arrow">↑</span><span>Precisión en acciones</span></li>
+            <li><span class="kpi-arrow">↑</span><span>CSAT con distribuidoras</span></li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -957,12 +1030,20 @@
         <div class="agent-eye">Jafra</div>
         <h3>Janet</h3>
         <ul class="checklist">
-          <li>Agents Script</li>
-          <li>Determinístico</li>
-          <li>Subagents optimizado</li>
-          <li>Registro de casos</li>
-          <li>Knowledge</li>
+          <li><span class="cl-text">Agents Script</span><span class="cl-tag imp">Mejora</span></li>
+          <li><span class="cl-text">Determinístico</span><span class="cl-tag imp">Mejora</span></li>
+          <li><span class="cl-text">Subagents optimizado</span><span class="cl-tag new">Nuevo</span></li>
+          <li><span class="cl-text">Registro de casos</span><span class="cl-tag new">Nuevo</span></li>
+          <li><span class="cl-text">Knowledge</span><span class="cl-tag imp">Mejora</span></li>
         </ul>
+        <div class="agent-kpis">
+          <div class="kpis-head">KPIs a mejorar</div>
+          <ul class="kpi-list">
+            <li><span class="kpi-arrow">↑</span><span>Grounding con Knowledge</span></li>
+            <li><span class="kpi-arrow">↑</span><span>Resolución al primer intento</span></li>
+            <li><span class="kpi-arrow">↑</span><span>CSAT con consultoras</span></li>
+          </ul>
+        </div>
       </div>
     </div>
 
