@@ -631,8 +631,44 @@
     pointer-events: none;
     background:
       repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 22.22% 0 / 2px 100% no-repeat,
-      repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 33.33% 0 / 2px 100% no-repeat,
       repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 66.66% 0 / 2px 100% no-repeat;
+  }
+  .chrono-divider {
+    position: absolute;
+    top: 42px;
+    bottom: 10px;
+    left: 33.33%;
+    width: 3px;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, #39AEC7 0%, #8C4799 100%);
+    border-radius: 100px;
+    box-shadow: 0 0 16px rgba(140, 71, 153, 0.25);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .chrono-divider::before {
+    content: "Fase 1 anterior";
+    position: absolute;
+    top: -22px;
+    right: 14px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #39AEC7;
+    white-space: nowrap;
+  }
+  .chrono-divider::after {
+    content: "Plan completo →";
+    position: absolute;
+    top: -22px;
+    left: 14px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8C4799;
+    white-space: nowrap;
   }
   .chrono-head {
     display: grid;
@@ -1641,6 +1677,8 @@
   <p class="lead">Betterware y Jafra avanzan en paralelo sobre el mismo plan. 9 semanas, 4 fases, un cierre conjunto.</p>
 
   <div class="chrono-grid">
+
+    <div class="chrono-divider"></div>
 
     <div class="chrono-head">
       <div class="wk">Sem 1<span class="wk-date">Oct 6 → 10</span></div>
