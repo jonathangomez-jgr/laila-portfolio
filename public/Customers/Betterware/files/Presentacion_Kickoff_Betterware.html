@@ -407,22 +407,24 @@
   }
 
   /* === SLIDE · TRACKER (gestión del proyecto) === */
-  .slide.tracker { justify-content: center; }
+  .slide.tracker { justify-content: flex-start; }
   .slide.tracker .section-eyebrow,
   .slide.tracker h2,
   .slide.tracker .lead { text-align: center; }
   .slide.tracker h2 { margin-left: auto; margin-right: auto; }
-  .slide.tracker .lead { margin: 0 auto 36px auto; }
+  .slide.tracker .lead { margin: 0 auto clamp(16px, 2vh, 28px) auto; }
 
   .tracker-grid {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    gap: 56px;
+    gap: clamp(32px, 4vw, 64px);
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    align-items: center;
+    align-items: start;
   }
+  .tracker-mobile { padding-top: clamp(24px, 3vh, 50px); }
+  .tracker-desktop { padding-top: clamp(70px, 9vh, 140px); }
 
   /* Phone mockup */
   .phone-frame {
