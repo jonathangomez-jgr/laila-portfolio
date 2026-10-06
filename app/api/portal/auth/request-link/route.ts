@@ -41,25 +41,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(NOT_AUTHORIZED_RESPONSE, { status: 403 });
     }
 
-    // Resolver slug efectivo:
-    //  1) Si el request trae uno Y el user tiene acceso, usarlo.
-    //  2) Si no trae uno (login directo), usar el primer proyecto autorizado.
-    //  3) Si no cumple nada, el usuario está autorizado pero no para ese proyecto.
-    let effectiveSlug: string | null = null;
-    if (requestedSlug && userHasAccessToSlug(user, requestedSlug)) {
-      effectiveSlug = requestedSlug;
-    } else if (!requestedSlug && user.projects.length > 0) {
-      effectiveSlug = user.projects[0];
-    }
+    // Resolver returnTo + projectName:
+    //  1) Si el request trae slug Y el user tiene acceso → `/portal/${slug}`.
+    //  2) Si no trae slug y el user tiene 1 proyecto → `/portal/${único}`.
+    //  3) Si no trae slug y el user tiene varios → `/portal` (selector).
+    //  4) Si no cumple nada, no está autorizado.
+    let returnTo: string;
+    let projectName: string;
 
-    if (!effectiveSlug) {
+    if (requestedSlug && userHasAccessToSlug(user, requestedSlug)) {
+      returnTo = `/portal/${requestedSlug}`;
+      const project = customerProjects.find((p) => p.slug === requestedSlug);
+      projectName = project?.customerName ?? requestedSlug;
+    } else if (!requestedSlug && user.projects.length === 1) {
+      const only = user.projects[0];
+      returnTo = `/portal/${only}`;
+      const project = customerProjects.find((p) => p.slug === only);
+      projectName = project?.customerName ?? only;
+    } else if (!requestedSlug && user.projects.length > 1) {
+      returnTo = "/portal";
+      projectName = "Portal FDE";
+    } else {
       return NextResponse.json(NOT_AUTHORIZED_RESPONSE, { status: 403 });
     }
 
-    const project = customerProjects.find((p) => p.slug === effectiveSlug);
-    const projectName = project?.customerName ?? effectiveSlug;
-
-    await sendMagicLink(user, effectiveSlug, projectName);
+    await sendMagicLink(user, returnTo, projectName);
     return NextResponse.json(OK_RESPONSE);
   } catch (err) {
     console.error("[portal/request-link] error:", err);

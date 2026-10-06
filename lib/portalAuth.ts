@@ -78,7 +78,7 @@ export async function findUserByEmail(
 
 export async function sendMagicLink(
   user: PortalUser,
-  slug: string,
+  returnTo: string,
   projectName: string,
 ): Promise<void> {
   const token = await new SignJWT({
@@ -93,10 +93,11 @@ export async function sendMagicLink(
     .setExpirationTime(`${MAGIC_TTL_SECONDS}s`)
     .sign(getSecret());
 
-  const returnTo = `/portal/${slug}`;
+  // Sanitize returnTo: solo paths internos.
+  const safeReturnTo = returnTo.startsWith("/") ? returnTo : "/portal";
   const magicLink = `${getBaseUrl()}/api/portal/auth/verify?token=${encodeURIComponent(
     token,
-  )}&returnTo=${encodeURIComponent(returnTo)}`;
+  )}&returnTo=${encodeURIComponent(safeReturnTo)}`;
 
   await sfInvoke("FDE_PortalAccess_SendMagicLink", [
     {
