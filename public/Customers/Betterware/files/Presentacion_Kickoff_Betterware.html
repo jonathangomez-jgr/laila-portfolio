@@ -351,7 +351,97 @@
     color: #8C4799;
   }
 
-  /* === SLIDE · CRONOGRAMA (2 pistas apiladas) === */
+  /* === SLIDE · RACI === */
+  .slide.raci { justify-content: center; }
+  .slide.raci .section-eyebrow,
+  .slide.raci h2,
+  .slide.raci .lead { text-align: center; }
+  .slide.raci h2 { margin-left: auto; margin-right: auto; }
+  .slide.raci .lead { margin-left: auto; margin-right: auto; margin-bottom: 24px; }
+
+  .raci-legend {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin: 0 auto 24px auto;
+    flex-wrap: wrap;
+  }
+  .raci-legend .lg-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--slate);
+  }
+  .raci-legend .lg-item strong { color: var(--ink); }
+
+  .raci-table-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .raci-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 10px 32px rgba(0,30,91,0.08);
+    border: 1px solid var(--rule);
+  }
+  .raci-table thead th {
+    background: var(--eb15);
+    color: #fff;
+    padding: 16px 22px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .raci-table thead th:first-child {
+    text-align: left;
+    padding-left: 26px;
+  }
+  .raci-table tbody td {
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14.5px;
+    text-align: center;
+    color: var(--ink);
+    vertical-align: middle;
+  }
+  .raci-table tbody td:first-child {
+    text-align: left;
+    font-weight: 600;
+    padding-left: 26px;
+    width: 42%;
+  }
+  .raci-table tbody tr:nth-child(even) { background: #FAFBFD; }
+  .raci-table tbody tr:last-child td { border-bottom: none; }
+
+  .rc {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+  }
+  .rc-r { background: var(--eb50); }
+  .rc-a { background: var(--orange); }
+  .rc-c { background: var(--cb68); }
+  .rc-i { background: var(--slate); }
+  .rc-pair {
+    display: inline-flex;
+    gap: 6px;
+    justify-content: center;
+  }
   .slide.chrono { justify-content: center; }
   .slide.chrono .section-eyebrow,
   .slide.chrono h2,
@@ -782,7 +872,7 @@
 <!-- SLIDE 2 · ORGANIGRAMA (full-width, scrollable, con desplegable) -->
 <section class="slide org" id="slide-2">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">02</span> / 05</span>
+  <span class="slide-num"><span class="current">02</span> / 06</span>
   <div class="org-root">
     <div class="page">
 
@@ -1013,7 +1103,7 @@
 <!-- SLIDE 3 · DOS AGENTES NUEVOS -->
 <section class="slide agents" id="slide-3">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">03</span> / 05</span>
+  <span class="slide-num"><span class="current">03</span> / 06</span>
   <span class="section-eyebrow">Alcance del plan de choque</span>
   <h2>Dos agentes nuevos</h2>
   <p class="lead">Betty para Betterware y Janet para Jafra. Mismo stack, mismas prácticas; cada uno con la pieza específica que su compañía necesita.</p>
@@ -1089,7 +1179,7 @@
 <!-- SLIDE 4 · TIMELINE (Y horizontal: Betterware + Jafra convergen el 16-oct) -->
 <section class="slide timeline" id="slide-4">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">04</span> / 05</span>
+  <span class="slide-num"><span class="current">04</span> / 06</span>
   <span class="section-eyebrow">Del kickoff al GA · 3 semanas</span>
   <h2>Timeline del piloto</h2>
   <p class="lead">Dos líneas paralelas — Betterware y Jafra — que convergen el viernes 16-oct y continúan como un solo flujo hasta el GA.</p>
@@ -1172,7 +1262,7 @@
 <!-- SLIDE 5 · CRONOGRAMA ALTO NIVEL (Betterware + Jafra en paralelo) -->
 <section class="slide chrono" id="slide-5">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">05</span> / 05</span>
+  <span class="slide-num"><span class="current">05</span> / 06</span>
   <span class="section-eyebrow">Cronograma propuesto · alto nivel</span>
   <h2>Las 4 fases, en paralelo</h2>
   <p class="lead">Betterware y Jafra avanzan en paralelo sobre el mismo plan. 9 semanas, 4 fases, un cierre conjunto.</p>
@@ -1247,6 +1337,73 @@
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- SLIDE 6 · MATRIZ RACI -->
+<section class="slide raci" id="slide-6">
+  <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
+  <span class="slide-num"><span class="current">06</span> / 06</span>
+  <span class="section-eyebrow">Responsabilidades por actor</span>
+  <h2>Matriz RACI del plan</h2>
+  <p class="lead">Quién hace, quién decide, quién opina, quién se entera.</p>
+
+  <div class="raci-legend">
+    <span class="lg-item"><span class="rc rc-r">R</span><strong>Responsable</strong> · ejecuta</span>
+    <span class="lg-item"><span class="rc rc-a">A</span><strong>Aprobador</strong> · decide</span>
+    <span class="lg-item"><span class="rc rc-c">C</span><strong>Consultado</strong> · opina</span>
+    <span class="lg-item"><span class="rc rc-i">I</span><strong>Informado</strong> · se entera</span>
+  </div>
+
+  <div class="raci-table-wrap">
+    <table class="raci-table">
+      <thead>
+        <tr>
+          <th>Actividad</th>
+          <th>Salesforce</th>
+          <th>Capptus</th>
+          <th>Betterware · Jafra</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Discovery + Diseño del agente</td>
+          <td><span class="rc rc-r">R</span></td>
+          <td><span class="rc rc-c">C</span></td>
+          <td><span class="rc rc-a">A</span></td>
+        </tr>
+        <tr>
+          <td>Desarrollo técnico · Agent Script + Flows + Apex</td>
+          <td><span class="rc rc-r">R</span></td>
+          <td><span class="rc rc-r">R</span></td>
+          <td><span class="rc rc-i">I</span></td>
+        </tr>
+        <tr>
+          <td>Pruebas conjuntas en sandbox</td>
+          <td><span class="rc rc-r">R</span></td>
+          <td><span class="rc rc-r">R</span></td>
+          <td><span class="rc rc-c">C</span></td>
+        </tr>
+        <tr>
+          <td>UAT formal con usuarios finales</td>
+          <td><span class="rc rc-c">C</span></td>
+          <td><span class="rc rc-c">C</span></td>
+          <td><span class="rc-pair"><span class="rc rc-a">A</span><span class="rc rc-r">R</span></span></td>
+        </tr>
+        <tr>
+          <td>Publish + Rollout a producción</td>
+          <td><span class="rc rc-r">R</span></td>
+          <td><span class="rc rc-c">C</span></td>
+          <td><span class="rc rc-a">A</span></td>
+        </tr>
+        <tr>
+          <td>Monitoreo de KPIs + Hypercare</td>
+          <td><span class="rc rc-r">R</span></td>
+          <td><span class="rc rc-i">I</span></td>
+          <td><span class="rc rc-a">A</span></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
