@@ -351,6 +351,60 @@
     color: #8C4799;
   }
 
+  /* === SLIDE · GRACIAS (cierre, mismo gradient que portada) === */
+  .slide.gracias {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 55%, var(--eb50) 100%);
+    color: #fff;
+    padding: 60px 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 56px;
+    position: relative;
+  }
+  .slide.gracias .gracias-sparkles {
+    position: absolute;
+    top: 15%;
+    right: 12%;
+    width: 220px;
+    opacity: 0.4;
+  }
+  .slide.gracias .gracias-sparkles-2 {
+    position: absolute;
+    bottom: 18%;
+    left: 12%;
+    width: 170px;
+    opacity: 0.3;
+    transform: rotate(180deg);
+  }
+  .gracias-h1 {
+    font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+    color: #fff;
+    font-size: 200px;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    margin: 0;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .gracias-logos {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+  .gracias-logo { height: 48px; }
+  .gracias-logos .divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.35);
+  }
+
   /* === SLIDE · TRACKER (gestión del proyecto) === */
   .slide.tracker { justify-content: center; }
   .slide.tracker .section-eyebrow,
@@ -1147,7 +1201,7 @@
 <!-- SLIDE 2 · ORGANIGRAMA (full-width, scrollable, con desplegable) -->
 <section class="slide org" id="slide-2">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">02</span> / 08</span>
+  <span class="slide-num"><span class="current">02</span> / 09</span>
   <div class="org-root">
     <div class="page">
 
@@ -1378,7 +1432,7 @@
 <!-- SLIDE 3 · DOS AGENTES NUEVOS -->
 <section class="slide agents" id="slide-3">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">03</span> / 08</span>
+  <span class="slide-num"><span class="current">03</span> / 09</span>
   <span class="section-eyebrow">Alcance del plan de choque</span>
   <h2>Dos agentes nuevos</h2>
   <p class="lead">Betty para Betterware y Janet para Jafra. Mismo stack, mismas prácticas; cada uno con la pieza específica que su compañía necesita.</p>
@@ -1458,7 +1512,7 @@
   <div class="bg-orb orb-warm"></div>
 
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">04</span> / 08</span>
+  <span class="slide-num"><span class="current">04</span> / 09</span>
 
   <div class="insiders-grid">
     <div class="insiders-left">
@@ -1498,7 +1552,7 @@
 <!-- SLIDE 5 · TIMELINE (Y horizontal: Betterware + Jafra convergen el 16-oct) -->
 <section class="slide timeline" id="slide-5">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">05</span> / 08</span>
+  <span class="slide-num"><span class="current">05</span> / 09</span>
   <span class="section-eyebrow">Del kickoff al GA · 3 semanas</span>
   <h2>Timeline del piloto</h2>
   <p class="lead">Dos líneas paralelas — Betterware y Jafra — que convergen el viernes 16-oct y continúan como un solo flujo hasta el GA.</p>
@@ -1581,7 +1635,7 @@
 <!-- SLIDE 6 · CRONOGRAMA ALTO NIVEL (Betterware + Jafra en paralelo) -->
 <section class="slide chrono" id="slide-6">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">06</span> / 08</span>
+  <span class="slide-num"><span class="current">06</span> / 09</span>
   <span class="section-eyebrow">Cronograma propuesto · alto nivel</span>
   <h2>Las 4 fases, en paralelo</h2>
   <p class="lead">Betterware y Jafra avanzan en paralelo sobre el mismo plan. 9 semanas, 4 fases, un cierre conjunto.</p>
@@ -1662,7 +1716,7 @@
 <!-- SLIDE 7 · MATRIZ RACI -->
 <section class="slide raci" id="slide-7">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">07</span> / 08</span>
+  <span class="slide-num"><span class="current">07</span> / 09</span>
   <span class="section-eyebrow">Responsabilidades por actor</span>
   <h2>Matriz RACI del plan</h2>
   <p class="lead">Quién hace, quién decide, quién opina, quién se entera.</p>
@@ -1729,7 +1783,7 @@
 <!-- SLIDE 8 · GESTIÓN DEL PROYECTO (tracker en móvil + desktop) -->
 <section class="slide tracker" id="slide-8">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">08</span> / 08</span>
+  <span class="slide-num"><span class="current">08</span> / 09</span>
   <span class="section-eyebrow">Portal del cliente</span>
   <h2>Gestión del proyecto</h2>
   <p class="lead">Plataforma de seguimiento de avances de los proyectos.</p>
@@ -1749,6 +1803,18 @@
         <img src="../images/tracker-desktop.png" class="browser-content" alt="Portal desktop">
       </div>
     </div>
+  </div>
+</section>
+
+<!-- SLIDE 9 · GRACIAS (cierre, mismo gradient que la portada) -->
+<section class="slide gracias" id="slide-9">
+  <img src="../../../Assets Salesforce Brand/Sparkles/Sparkles Blue Main.svg" class="gracias-sparkles" alt="">
+  <img src="../../../Assets Salesforce Brand/Sparkles/Sparkles Blue Main.svg" class="gracias-sparkles-2" alt="">
+  <h1 class="gracias-h1">Gracias</h1>
+  <div class="gracias-logos">
+    <img src="../images/Logo-betterware-white.avif" class="gracias-logo" alt="Betterware">
+    <span class="divider"></span>
+    <img src="../../Jafra/images/logo2_jafra_w.png" class="gracias-logo" alt="Jafra">
   </div>
 </section>
 
