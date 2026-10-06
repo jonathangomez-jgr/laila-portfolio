@@ -261,6 +261,119 @@
     box-shadow: 0 2px 6px rgba(232,39,90,0.25);
   }
 
+  /* === SLIDE · TIMELINE (Y horizontal) === */
+  .slide.timeline { justify-content: center; }
+
+  .timeline-y {
+    position: relative;
+    width: 100%;
+    max-width: 1400px;
+    margin: 10px auto 0 auto;
+    aspect-ratio: 1400 / 450;
+  }
+  .ty-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .ty-svg path, .ty-svg line {
+    fill: none;
+    stroke-linecap: round;
+    stroke-width: 3;
+  }
+  .ty-svg .arm-bw { stroke: var(--cb80); }
+  .ty-svg .arm-jf { stroke: #F5B5C7; }
+  .ty-svg .trunk { stroke: var(--cb80); }
+
+  .ty-content { position: absolute; inset: 0; }
+
+  .ty-tag {
+    position: absolute;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .ty-tag-bw {
+    top: 11.11%;
+    background: var(--cb95);
+    color: var(--eb30);
+    border: 1px solid var(--cb80);
+  }
+  .ty-tag-jf {
+    top: 88.89%;
+    background: #FDE8EF;
+    color: var(--rose);
+    border: 1px solid #F5B5C7;
+  }
+
+  .ty-content .ti {
+    position: absolute;
+    width: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+    transform: translateX(-50%);
+  }
+  .ti.c1 { left: 7.14%; }
+  .ti.c2 { left: 21.43%; }
+  .ti.c3 { left: 35.71%; }
+  .ti.c4 { left: 50%; }
+  .ti.c5 { left: 64.29%; }
+  .ti.c6 { left: 78.57%; }
+  .ti.c7 { left: 92.86%; }
+
+  .ti.r-top { top: 8.89%; flex-direction: column; }
+  .ti.r-mid { top: 47.78%; flex-direction: column; }
+  .ti.r-bot { bottom: 8.89%; flex-direction: column-reverse; }
+
+  .ti .dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--eb50);
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 3px var(--eb50);
+  }
+  .ti.critical .dot {
+    background: var(--rose);
+    box-shadow: 0 0 0 3px var(--rose);
+  }
+  .ti.merge .dot {
+    width: 26px;
+    height: 26px;
+  }
+  .ti .date {
+    font-weight: 700;
+    color: var(--eb30);
+    font-size: 13.5px;
+    letter-spacing: 0.02em;
+    margin-top: 4px;
+  }
+  .ti.critical .date { color: var(--rose); }
+  .ti .label {
+    font-size: 12.5px;
+    color: var(--slate);
+    line-height: 1.35;
+  }
+  .ti .label strong {
+    color: var(--eb15);
+    display: block;
+    margin-bottom: 2px;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
   /* === SLIDE · ORGANIGRAMA (full width, scrollable) === */
   .slide.org {
     padding: 56px 0 60px 0;
@@ -454,7 +567,7 @@
 <!-- SLIDE 2 · ORGANIGRAMA (full-width, scrollable, con desplegable) -->
 <section class="slide org" id="slide-2">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">02</span> / 03</span>
+  <span class="slide-num"><span class="current">02</span> / 04</span>
   <div class="org-root">
     <div class="page">
 
@@ -694,7 +807,7 @@
 <!-- SLIDE 3 · DOS AGENTES NUEVOS -->
 <section class="slide agents" id="slide-3">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">03</span> / 03</span>
+  <span class="slide-num"><span class="current">03</span> / 04</span>
   <span class="section-eyebrow">Alcance del plan de choque</span>
   <h2>Dos agentes nuevos</h2>
   <p class="lead">Betty para Betterware y Janet para Jafra. Mismo stack, mismas prácticas; cada uno con la pieza específica que su compañía necesita.</p>
@@ -734,6 +847,84 @@
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- SLIDE 4 · TIMELINE (Y horizontal: Betterware + Jafra convergen el 16-oct) -->
+<section class="slide timeline" id="slide-4">
+  <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
+  <span class="slide-num"><span class="current">04</span> / 04</span>
+  <span class="section-eyebrow">Del kickoff al GA · 3 semanas</span>
+  <h2>Timeline del piloto</h2>
+  <p class="lead">Dos líneas paralelas — Betterware y Jafra — que convergen el viernes 16-oct y continúan como un solo flujo hasta el GA.</p>
+
+  <div class="timeline-y">
+    <svg class="ty-svg" viewBox="0 0 1400 450" preserveAspectRatio="none" aria-hidden="true">
+      <path class="arm-bw" d="M 100,50 L 540,50 C 640,50 640,225 700,225"/>
+      <path class="arm-jf" d="M 100,400 L 540,400 C 640,400 640,225 700,225"/>
+      <line class="trunk" x1="700" y1="225" x2="1300" y2="225"/>
+    </svg>
+
+    <div class="ty-content">
+      <div class="ty-tag ty-tag-bw">Betterware</div>
+      <div class="ty-tag ty-tag-jf">Jafra</div>
+
+      <!-- Betterware arm (top) -->
+      <div class="ti c1 r-top">
+        <div class="dot"></div>
+        <span class="date">Mar 06-oct</span>
+        <div class="label"><strong>Kick-off</strong>Betterware CS + Partner + Salesforce</div>
+      </div>
+      <div class="ti c2 r-top">
+        <div class="dot"></div>
+        <span class="date">Jue 08 → Sáb 10</span>
+        <div class="label"><strong>UAT Betterware</strong>Prueba del agente</div>
+      </div>
+      <div class="ti c3 r-top">
+        <div class="dot"></div>
+        <span class="date">Lun 12-oct</span>
+        <div class="label"><strong>Lista final cargada</strong>MessagingEndUser marcado</div>
+      </div>
+
+      <!-- Shared trunk from Vie 16-oct onwards -->
+      <div class="ti c4 r-mid critical merge">
+        <div class="dot"></div>
+        <span class="date">VIE 16-OCT</span>
+        <div class="label"><strong>CUTOVER 10%</strong>Grupo WhatsApp abierto · Betterware + Jafra</div>
+      </div>
+      <div class="ti c5 r-mid">
+        <div class="dot"></div>
+        <span class="date">Lun 19 → Jue 22</span>
+        <div class="label"><strong>Escalada +10%/día</strong>20 → 30 → 40 → 50%</div>
+      </div>
+      <div class="ti c6 r-mid critical">
+        <div class="dot"></div>
+        <span class="date">VIE 23-OCT</span>
+        <div class="label"><strong>🎯 GA · 100%</strong>Flujo general + reconocimiento</div>
+      </div>
+      <div class="ti c7 r-mid">
+        <div class="dot"></div>
+        <span class="date">Lun 26-oct →</span>
+        <div class="label"><strong>Fase 2</strong>Reemplazo gradual legacy</div>
+      </div>
+
+      <!-- Jafra arm (bottom) -->
+      <div class="ti c1 r-bot">
+        <div class="dot"></div>
+        <span class="date">Mar 06-oct</span>
+        <div class="label"><strong>Kick-off y análisis</strong>Setup inicial del agente Janet</div>
+      </div>
+      <div class="ti c2 r-bot">
+        <div class="dot"></div>
+        <span class="date">Jue 08-oct</span>
+        <div class="label"><strong>Quick wins</strong>Primeras validaciones</div>
+      </div>
+      <div class="ti c3 r-bot">
+        <div class="dot"></div>
+        <span class="date">Lun 12-oct</span>
+        <div class="label"><strong>UAT</strong>Prueba del agente Janet</div>
+      </div>
+    </div>
   </div>
 </section>
 
