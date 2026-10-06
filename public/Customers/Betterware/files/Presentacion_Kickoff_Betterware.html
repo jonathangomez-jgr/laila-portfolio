@@ -262,6 +262,90 @@
     box-shadow: 0 2px 6px rgba(232,39,90,0.25);
   }
 
+  /* === SLIDE · CRONOGRAMA (2 pistas apiladas) === */
+  .slide.chrono { justify-content: center; }
+  .slide.chrono .section-eyebrow,
+  .slide.chrono h2,
+  .slide.chrono .lead { text-align: center; }
+  .slide.chrono h2 { margin-left: auto; margin-right: auto; }
+  .slide.chrono .lead { margin-left: auto; margin-right: auto; margin-bottom: 36px; }
+
+  .chrono-grid {
+    position: relative;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+  .chrono-grid::before {
+    content: "";
+    position: absolute;
+    top: 50px; bottom: 10px;
+    left: 0; right: 0;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 25% 0 / 2px 100% no-repeat,
+      repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 50% 0 / 2px 100% no-repeat,
+      repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 75% 0 / 2px 100% no-repeat;
+  }
+  .chrono-head {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0 10px 10px 10px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    z-index: 1;
+  }
+  .chrono-head .wk {
+    font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--eb15);
+    letter-spacing: -0.01em;
+    padding: 0 10px;
+  }
+
+  .chrono-track { position: relative; z-index: 1; }
+  .track-label {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--track-c);
+    margin-bottom: 14px;
+    padding-left: 10px;
+    border-left: 3px solid var(--track-c);
+  }
+  .pill-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-bottom: 10px;
+  }
+  .pill-row:last-child { margin-bottom: 0; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 22px;
+    border-radius: 100px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.005em;
+    min-height: 44px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 30, 91, 0.08);
+  }
+  .pill.bw { background: #39AEC7; }
+  .pill.jf { background: #8C4799; }
+  .pill.span-1-2 { grid-column: 1 / span 2; margin: 0 10px; }
+  .pill.span-2-3 { grid-column: 2 / span 2; margin: 0 10px; }
+  .pill.span-3-4 { grid-column: 3 / span 2; margin: 0 10px; }
+  .pill.span-4   { grid-column: 4 / span 1; margin: 0 10px; }
+
   /* === SLIDE · TIMELINE (Y horizontal) === */
   .slide.timeline { justify-content: center; }
 
@@ -578,7 +662,7 @@
 <!-- SLIDE 2 · ORGANIGRAMA (full-width, scrollable, con desplegable) -->
 <section class="slide org" id="slide-2">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">02</span> / 04</span>
+  <span class="slide-num"><span class="current">02</span> / 05</span>
   <div class="org-root">
     <div class="page">
 
@@ -809,7 +893,7 @@
 <!-- SLIDE 3 · DOS AGENTES NUEVOS -->
 <section class="slide agents" id="slide-3">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">03</span> / 04</span>
+  <span class="slide-num"><span class="current">03</span> / 05</span>
   <span class="section-eyebrow">Alcance del plan de choque</span>
   <h2>Dos agentes nuevos</h2>
   <p class="lead">Betty para Betterware y Janet para Jafra. Mismo stack, mismas prácticas; cada uno con la pieza específica que su compañía necesita.</p>
@@ -855,7 +939,7 @@
 <!-- SLIDE 4 · TIMELINE (Y horizontal: Betterware + Jafra convergen el 16-oct) -->
 <section class="slide timeline" id="slide-4">
   <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
-  <span class="slide-num"><span class="current">04</span> / 04</span>
+  <span class="slide-num"><span class="current">04</span> / 05</span>
   <span class="section-eyebrow">Del kickoff al GA · 3 semanas</span>
   <h2>Timeline del piloto</h2>
   <p class="lead">Dos líneas paralelas — Betterware y Jafra — que convergen el viernes 16-oct y continúan como un solo flujo hasta el GA.</p>
@@ -932,6 +1016,42 @@
         <div class="label"><strong>UAT</strong>Prueba del agente Janet</div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- SLIDE 5 · CRONOGRAMA ALTO NIVEL (Betterware + Jafra en paralelo) -->
+<section class="slide chrono" id="slide-5">
+  <span class="brand-chip">Kick-off · Betterware · Agent Squad</span>
+  <span class="slide-num"><span class="current">05</span> / 05</span>
+  <span class="section-eyebrow">Cronograma propuesto · alto nivel</span>
+  <h2>Las 4 fases, en paralelo</h2>
+  <p class="lead">Betterware y Jafra avanzan en paralelo sobre el mismo plan. 4 semanas, 4 fases, un lanzamiento conjunto.</p>
+
+  <div class="chrono-grid">
+
+    <div class="chrono-head">
+      <div class="wk">Semana 1</div>
+      <div class="wk">Semana 2</div>
+      <div class="wk">Semana 3</div>
+      <div class="wk">Semana 4</div>
+    </div>
+
+    <div class="chrono-track" style="--track-c: #39AEC7">
+      <div class="track-label">Betterware · Betty</div>
+      <div class="pill-row"><span class="pill bw span-1-2">Voz y personalidad</span></div>
+      <div class="pill-row"><span class="pill bw span-2-3">Lo que sabe hacer</span></div>
+      <div class="pill-row"><span class="pill bw span-3-4">Afinación fina</span></div>
+      <div class="pill-row"><span class="pill bw span-4">En vivo</span></div>
+    </div>
+
+    <div class="chrono-track" style="--track-c: #8C4799">
+      <div class="track-label">Jafra · Janet</div>
+      <div class="pill-row"><span class="pill jf span-1-2">Voz y personalidad</span></div>
+      <div class="pill-row"><span class="pill jf span-2-3">Lo que sabe hacer</span></div>
+      <div class="pill-row"><span class="pill jf span-3-4">Afinación fina</span></div>
+      <div class="pill-row"><span class="pill jf span-4">En vivo</span></div>
+    </div>
+
   </div>
 </section>
 
