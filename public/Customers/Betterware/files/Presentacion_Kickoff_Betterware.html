@@ -305,6 +305,16 @@
     color: var(--eb15);
     letter-spacing: -0.01em;
     padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .chrono-head .wk-date {
+    font-family: 'SalesforceSans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--slate);
+    letter-spacing: 0.02em;
   }
 
   .chrono-track { position: relative; z-index: 1; }
@@ -322,9 +332,20 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
   }
   .pill-row:last-child { margin-bottom: 0; }
+  .pill-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    padding: 0 10px;
+  }
+  .pill-cell.span-1-2 { grid-column: 1 / span 2; }
+  .pill-cell.span-2-3 { grid-column: 2 / span 2; }
+  .pill-cell.span-3-4 { grid-column: 3 / span 2; }
+  .pill-cell.span-4   { grid-column: 4 / span 1; }
   .pill {
     display: inline-flex;
     align-items: center;
@@ -341,10 +362,13 @@
   }
   .pill.bw { background: #39AEC7; }
   .pill.jf { background: #8C4799; }
-  .pill.span-1-2 { grid-column: 1 / span 2; margin: 0 10px; }
-  .pill.span-2-3 { grid-column: 2 / span 2; margin: 0 10px; }
-  .pill.span-3-4 { grid-column: 3 / span 2; margin: 0 10px; }
-  .pill.span-4   { grid-column: 4 / span 1; margin: 0 10px; }
+  .pill-meta {
+    font-size: 11px;
+    color: var(--slate);
+    text-align: center;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+  }
 
   /* === SLIDE · TIMELINE (Y horizontal) === */
   .slide.timeline { justify-content: center; }
@@ -1030,26 +1054,66 @@
   <div class="chrono-grid">
 
     <div class="chrono-head">
-      <div class="wk">Semana 1</div>
-      <div class="wk">Semana 2</div>
-      <div class="wk">Semana 3</div>
-      <div class="wk">Semana 4</div>
+      <div class="wk">Semana 1<span class="wk-date">Oct 6 → 10</span></div>
+      <div class="wk">Semana 2<span class="wk-date">Oct 12 → 16</span></div>
+      <div class="wk">Semana 3<span class="wk-date">Oct 19 → 23</span></div>
+      <div class="wk">Semana 4<span class="wk-date">Oct 26 → 30</span></div>
     </div>
 
     <div class="chrono-track" style="--track-c: #39AEC7">
       <div class="track-label">Betterware · Betty</div>
-      <div class="pill-row"><span class="pill bw span-1-2">Voz y personalidad</span></div>
-      <div class="pill-row"><span class="pill bw span-2-3">Las manos del agente</span></div>
-      <div class="pill-row"><span class="pill bw span-3-4">Pruebas con distribuidoras</span></div>
-      <div class="pill-row"><span class="pill bw span-4">En vivo con todo</span></div>
+      <div class="pill-row">
+        <div class="pill-cell span-1-2">
+          <span class="pill bw">Voz y personalidad</span>
+          <div class="pill-meta">Kick-off + UAT · Oct 6 → 10</div>
+        </div>
+      </div>
+      <div class="pill-row">
+        <div class="pill-cell span-2-3">
+          <span class="pill bw">Las manos del agente</span>
+          <div class="pill-meta">Lista final → Cutover · Oct 12 → 16</div>
+        </div>
+      </div>
+      <div class="pill-row">
+        <div class="pill-cell span-3-4">
+          <span class="pill bw">Pruebas con distribuidoras</span>
+          <div class="pill-meta">Escalada → GA · Oct 19 → 23</div>
+        </div>
+      </div>
+      <div class="pill-row">
+        <div class="pill-cell span-4">
+          <span class="pill bw">En vivo con todo</span>
+          <div class="pill-meta">Reemplazo legacy · Oct 26 →</div>
+        </div>
+      </div>
     </div>
 
     <div class="chrono-track" style="--track-c: #8C4799">
       <div class="track-label">Jafra · Janet</div>
-      <div class="pill-row"><span class="pill jf span-1-2">Voz y personalidad</span></div>
-      <div class="pill-row"><span class="pill jf span-2-3">Memoria y casos</span></div>
-      <div class="pill-row"><span class="pill jf span-3-4">Pruebas con asesoras</span></div>
-      <div class="pill-row"><span class="pill jf span-4">En vivo con todo</span></div>
+      <div class="pill-row">
+        <div class="pill-cell span-1-2">
+          <span class="pill jf">Voz y personalidad</span>
+          <div class="pill-meta">Kick-off + Análisis · Oct 6 → 10</div>
+        </div>
+      </div>
+      <div class="pill-row">
+        <div class="pill-cell span-2-3">
+          <span class="pill jf">Memoria y casos</span>
+          <div class="pill-meta">UAT + Cutover · Oct 12 → 16</div>
+        </div>
+      </div>
+      <div class="pill-row">
+        <div class="pill-cell span-3-4">
+          <span class="pill jf">Pruebas con asesoras</span>
+          <div class="pill-meta">Escalada → GA · Oct 19 → 23</div>
+        </div>
+      </div>
+      <div class="pill-row">
+        <div class="pill-cell span-4">
+          <span class="pill jf">En vivo con todo</span>
+          <div class="pill-meta">Handoff y expansión · Oct 26 →</div>
+        </div>
+      </div>
     </div>
 
   </div>
