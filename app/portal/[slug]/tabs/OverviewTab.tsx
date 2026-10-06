@@ -58,7 +58,7 @@ export default async function OverviewTab({
   return (
     <div className="space-y-6">
       {/* Hero */}
-      <div className="rounded-2xl border border-blue-100 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-blue-100 bg-white p-5 shadow-sm sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-wide text-blue-600">
@@ -121,7 +121,7 @@ export default async function OverviewTab({
       </div>
 
       {/* Próximos hitos */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-wide text-blue-600">
@@ -178,7 +178,7 @@ export default async function OverviewTab({
       </div>
 
       {/* Documentos clave */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-wide text-blue-600">

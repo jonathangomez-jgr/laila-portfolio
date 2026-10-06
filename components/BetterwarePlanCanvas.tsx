@@ -1138,9 +1138,9 @@ export default function BetterwarePlanCanvas({
       </div>
       )}
 
-      {/* Nav (oculto en modo single-view) */}
+      {/* Nav (oculto en modo single-view) · scroll horizontal en mobile */}
       {!singleView && (
-      <div className="mb-4 flex flex-wrap gap-1 border-b border-slate-200">
+      <div className="mb-4 flex gap-1 overflow-x-auto border-b border-slate-200">
         {(
           [
             ["dashboard", "Dashboard"],
@@ -1156,7 +1156,7 @@ export default function BetterwarePlanCanvas({
           <button
             key={key}
             onClick={() => setView(key)}
-            className={`-mb-px border-b-2 px-3 py-2 text-xs font-semibold transition-colors ${
+            className={`shrink-0 whitespace-nowrap -mb-px border-b-2 px-3 py-2 text-xs font-semibold transition-colors ${
               view === key
                 ? "border-blue-600 text-blue-700"
                 : "border-transparent text-slate-500 hover:text-slate-800"
