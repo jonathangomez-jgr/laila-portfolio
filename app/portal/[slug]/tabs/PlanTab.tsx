@@ -1,4 +1,5 @@
 import BetterwarePlanCanvas from "@/components/BetterwarePlanCanvas";
+import { getPlanForSlug } from "@/data/plans";
 import type { PortalUser } from "@/lib/portalAuth";
 
 export default function PlanTab({
@@ -9,6 +10,15 @@ export default function PlanTab({
   slug: string;
 }) {
   const canEdit = user.role === "Salesforce" || user.role === "Partner";
+  const plan = getPlanForSlug(slug);
+
+  if (!plan) {
+    return (
+      <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">
+        No hay plan registrado para este proyecto todavía.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -21,7 +31,7 @@ export default function PlanTab({
           </p>
         </div>
       )}
-      <BetterwarePlanCanvas readOnly={!canEdit} projectSlug={slug} />
+      <BetterwarePlanCanvas readOnly={!canEdit} projectSlug={slug} plan={plan} />
     </div>
   );
 }

@@ -890,6 +890,9 @@ export type CustomerDemoTab = {
   questionBankData?: QuestionBankData;
   betterwarePlan?: true;
   betterwareTestMatrix?: true;
+  // Flag genérico — renderiza PlanCanvas con el plan correspondiente al slug del demo.
+  // Reemplaza a `betterwarePlan: true` para cualquier proyecto nuevo.
+  planCanvas?: true;
 };
 
 export type CustomerDemoI18n = {

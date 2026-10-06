@@ -1,3 +1,7 @@
+// Alias de `/api/portal/test-matrix?slug=betterware` para backward-compat con
+// la ruta pública /customer-projects/betterware (que no pasa slug en el fetch).
+// Toda nueva integración debería usar `/api/portal/test-matrix?slug=X`.
+
 import { NextResponse } from "next/server";
 import { getTestMatrixForCustomer } from "@/lib/salesforce/fdeTracker";
 

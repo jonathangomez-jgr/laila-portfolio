@@ -1,22 +1,25 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { betterwarePlan } from "../data/betterwarePlan";
 import {
-  betterwarePlan,
+  type ProjectPlan,
   phaseProgress,
   phaseStatus,
   globalProgress,
   overallHealth,
-  type Activity,
-  type ActivityStatus,
-  type ActivityType,
-  type BetterwarePlan,
-  type HealthColor,
-  type Milestone,
-  type MilestoneKind,
-  type OwnerTag,
-  type Phase,
-  type Risk,
+} from "../data/plans";
+import type {
+  Activity,
+  ActivityStatus,
+  ActivityType,
+  BetterwarePlan,
+  HealthColor,
+  Milestone,
+  MilestoneKind,
+  OwnerTag,
+  Phase,
+  Risk,
 } from "../data/betterwarePlan";
 
 type ViewTab =
@@ -896,6 +899,7 @@ export default function BetterwarePlanCanvas({
   readOnly = false,
   projectSlug,
   onlyView,
+  plan: planProp,
 }: {
   readOnly?: boolean;
   /**
@@ -910,8 +914,14 @@ export default function BetterwarePlanCanvas({
    * indicada. Útil para embebér una vista específica (ej. Calendario) desde otro tab.
    */
   onlyView?: ViewTab;
+  /**
+   * Si se pasa, el canvas renderiza este plan en vez del de Betterware. Permite
+   * reutilizar el componente para cualquier proyecto (jafra, pam, etc.) sin
+   * tocar lógica. Si se omite, por backward-compat se usa `betterwarePlan`.
+   */
+  plan?: ProjectPlan;
 } = {}) {
-  const plan = betterwarePlan;
+  const plan = (planProp ?? betterwarePlan) as BetterwarePlan;
   const usesApi = Boolean(projectSlug);
   const singleView = Boolean(onlyView);
   const [view, setView] = useState<ViewTab>(onlyView ?? "dashboard");

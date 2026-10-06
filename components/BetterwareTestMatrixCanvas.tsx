@@ -53,7 +53,7 @@ function lastExecutionStatus(c: FDETestCase): FDETestCaseStatus | null {
   return latest?.JGR_FDE_Status__c ?? null;
 }
 
-function ExecutionForm({ testCase, onDone, onCancel }: { testCase: FDETestCase; onDone: () => void; onCancel: () => void }) {
+function ExecutionForm({ testCase, slug, onDone, onCancel }: { testCase: FDETestCase; slug: string; onDone: () => void; onCancel: () => void }) {
   const [status, setStatus] = useState<FDETestCaseStatus>("Pass");
   const [environment, setEnvironment] = useState("Sandbox");
   const [agentVersion, setAgentVersion] = useState<string>("FDE_PILOT_INSIDER");
@@ -69,7 +69,7 @@ function ExecutionForm({ testCase, onDone, onCancel }: { testCase: FDETestCase; 
     setSubmitting(true);
     setError(null);
     try {
-      const res = await fetch("/api/betterware/test-matrix/execution", {
+      const res = await fetch(`/api/portal/test-matrix/execution?slug=${encodeURIComponent(slug)}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -162,7 +162,7 @@ function ExecutionForm({ testCase, onDone, onCancel }: { testCase: FDETestCase; 
   );
 }
 
-function TestCaseDetail({ testCase, onClose, onExecutionRecorded, readOnly = false }: { testCase: FDETestCase; onClose: () => void; onExecutionRecorded: () => void; readOnly?: boolean }) {
+function TestCaseDetail({ testCase, slug, onClose, onExecutionRecorded, readOnly = false }: { testCase: FDETestCase; slug: string; onClose: () => void; onExecutionRecorded: () => void; readOnly?: boolean }) {
   const [recording, setRecording] = useState(false);
   const lastStatus = lastExecutionStatus(testCase);
 
@@ -235,7 +235,7 @@ function TestCaseDetail({ testCase, onClose, onExecutionRecorded, readOnly = fal
             )}
           </div>
           {recording && !readOnly && (
-            <ExecutionForm
+            <ExecutionForm slug={slug}
               testCase={testCase}
               onCancel={() => setRecording(false)}
               onDone={() => { setRecording(false); onExecutionRecorded(); }}
@@ -278,8 +278,14 @@ function TestCaseDetail({ testCase, onClose, onExecutionRecorded, readOnly = fal
 
 export default function BetterwareTestMatrixCanvas({
   readOnly = false,
+  slug = "betterware",
 }: {
   readOnly?: boolean;
+  /**
+   * Project slug para resolver los test cases en Laila.
+   * Default "betterware" por backward-compat con la ruta /customer-projects/betterware.
+   */
+  slug?: string;
 } = {}) {
   const [cases, setCases] = useState<FDETestCase[]>([]);
   const [loading, setLoading] = useState(true);
@@ -293,7 +299,7 @@ export default function BetterwareTestMatrixCanvas({
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/betterware/test-matrix", { cache: "no-store" });
+      const res = await fetch(`/api/portal/test-matrix?slug=${encodeURIComponent(slug)}`, { cache: "no-store" });
       if (!res.ok) {
         const data = await res.json().catch(() => ({ error: "Server error" }));
         throw new Error(data.error || `HTTP ${res.status}`);
@@ -479,7 +485,7 @@ export default function BetterwareTestMatrixCanvas({
       )}
 
       {selected && (
-        <TestCaseDetail
+        <TestCaseDetail slug={slug}
           testCase={selected}
           onClose={() => setSelected(null)}
           onExecutionRecorded={() => {

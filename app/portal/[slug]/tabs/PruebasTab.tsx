@@ -1,7 +1,13 @@
 import BetterwareTestMatrixCanvas from "@/components/BetterwareTestMatrixCanvas";
 import type { PortalUser } from "@/lib/portalAuth";
 
-export default function PruebasTab({ user }: { user: PortalUser }) {
+export default function PruebasTab({
+  user,
+  slug,
+}: {
+  user: PortalUser;
+  slug: string;
+}) {
   // Salesforce + Partner registran ejecuciones; Client ve dashboard + lista
   // sin posibilidad de abrir el form de registrar.
   const canEdit = user.role === "Salesforce" || user.role === "Partner";
@@ -17,7 +23,7 @@ export default function PruebasTab({ user }: { user: PortalUser }) {
           </p>
         </div>
       )}
-      <BetterwareTestMatrixCanvas readOnly={!canEdit} />
+      <BetterwareTestMatrixCanvas readOnly={!canEdit} slug={slug} />
     </div>
   );
 }

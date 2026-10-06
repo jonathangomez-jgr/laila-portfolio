@@ -1,11 +1,12 @@
 import Link from "next/link";
 import {
-  betterwarePlan,
+  getPlanForSlug,
   currentPhase,
   upcomingMilestones,
   globalProgress,
   overallHealth,
-} from "@/data/betterwarePlan";
+} from "@/data/plans";
+import { getKeyDocsForSlug } from "@/data/docs";
 import type { PortalUser } from "@/lib/portalAuth";
 
 const HEALTH_LABEL: Record<string, { label: string; cls: string }> = {
@@ -18,37 +19,10 @@ const INTRO_BY_ROLE: Record<string, string> = {
   Salesforce:
     "Vista completa del proyecto. Desde acá podés navegar al Plan maestro, la Matriz de pruebas y los documentos ejecutivos.",
   Partner:
-    "Acá vas a seguir el avance del rewrite del Service Agent y las sesiones del Programa Insiders. Tenés acceso al Plan y a las pruebas.",
+    "Acá vas a seguir el avance del proyecto y las sesiones del piloto. Tenés acceso al Plan y a las pruebas.",
   Client:
-    "Resumen ejecutivo del rewrite de Betty. Acá vas a ver avances semanales, documentos compartibles y los hitos clave del Programa Insiders.",
+    "Resumen ejecutivo del proyecto. Acá vas a ver avances semanales, documentos compartibles y los hitos clave del piloto.",
 };
-
-const KEY_DOCS = [
-  {
-    slug: "programa-insiders",
-    label: "Programa Insiders · Betty",
-    description: "Pilot con 15–25 distribuidores. Cutover 2026-10-16.",
-    url: "/Customers/Betterware/files/Programa_Insiders_Betty.html",
-    icon: "📘",
-    visibleTo: ["Salesforce", "Partner", "Client"] as const,
-  },
-  {
-    slug: "presentacion-partner",
-    label: "Presentación · Partner + Betterware",
-    description: "Deck del kickoff · 10 slides · tono business.",
-    url: "/Customers/Betterware/files/Presentacion_Partner_FDE.html",
-    icon: "🎯",
-    visibleTo: ["Salesforce", "Partner", "Client"] as const,
-  },
-  {
-    slug: "reporte-descubrimientos",
-    label: "Reporte de descubrimientos · BW_AGENT_N",
-    description: "16 hallazgos del agente actual, verificados contra la org.",
-    url: "/Customers/Betterware/files/BW_AGENT_N%20%E2%80%94%20Reporte%20de%20descubrimientos.pdf",
-    icon: "🧪",
-    visibleTo: ["Salesforce", "Partner"] as const,
-  },
-];
 
 function fmtDate(iso: string): string {
   const d = new Date(iso + "T12:00:00");
@@ -66,15 +40,20 @@ export default function OverviewTab({
   slug: string;
   user: PortalUser;
 }) {
-  const plan = betterwarePlan;
+  const plan = getPlanForSlug(slug);
+  if (!plan) {
+    return (
+      <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">
+        No hay plan registrado para este proyecto todavía.
+      </div>
+    );
+  }
   const phase = currentPhase(plan);
   const upcoming = upcomingMilestones(plan, undefined, 3);
   const progress = globalProgress(plan);
   const health = overallHealth(plan);
   const healthMeta = HEALTH_LABEL[health];
-  const docs = KEY_DOCS.filter((d) =>
-    (d.visibleTo as readonly string[]).includes(user.role),
-  );
+  const docs = getKeyDocsForSlug(slug, user.role);
 
   return (
     <div className="space-y-6">

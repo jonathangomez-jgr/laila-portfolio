@@ -1,10 +1,8 @@
-import {
-  betterwarePlan,
-  currentPhase,
-  type ISODate,
-} from "@/data/betterwarePlan";
+import { getPlanForSlug, currentPhase } from "@/data/plans";
 import BetterwarePlanCanvas from "@/components/BetterwarePlanCanvas";
 import type { PortalUser } from "@/lib/portalAuth";
+
+type ISODate = string;
 
 function fmtDate(iso: ISODate): string {
   return new Date(iso + "T12:00:00").toLocaleDateString("es-MX", {
@@ -13,9 +11,24 @@ function fmtDate(iso: ISODate): string {
   });
 }
 
-export default function CalendarioTab({ user: _user }: { user: PortalUser }) {
+export default function CalendarioTab({
+  user: _user,
+  slug,
+}: {
+  user: PortalUser;
+  slug: string;
+}) {
   void _user;
-  const plan = betterwarePlan;
+  const plan = getPlanForSlug(slug);
+
+  if (!plan) {
+    return (
+      <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">
+        No hay calendario registrado para este proyecto todavía.
+      </div>
+    );
+  }
+
   const phase = currentPhase(plan);
 
   return (
@@ -44,7 +57,7 @@ export default function CalendarioTab({ user: _user }: { user: PortalUser }) {
 
       {/* Grid de calendario (reutiliza la vista "calendar" del canvas) */}
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <BetterwarePlanCanvas onlyView="calendar" readOnly />
+        <BetterwarePlanCanvas onlyView="calendar" readOnly plan={plan} />
       </div>
     </div>
   );

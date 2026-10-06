@@ -148,8 +148,8 @@ export default async function PortalSlugPage({
           <DocumentosTab slug={slug} user={user} />
         )}
         {activeTab === "plan" && <PlanTab user={user} slug={slug} />}
-        {activeTab === "pruebas" && <PruebasTab user={user} />}
-        {activeTab === "calendario" && <CalendarioTab user={user} />}
+        {activeTab === "pruebas" && <PruebasTab user={user} slug={slug} />}
+        {activeTab === "calendario" && <CalendarioTab user={user} slug={slug} />}
         {activeTab === "admin" && <AdminTab slug={slug} />}
       </section>
     </main>
