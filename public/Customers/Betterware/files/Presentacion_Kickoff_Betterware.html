@@ -119,13 +119,15 @@
     position: absolute; top: 32px; left: 100px; right: 100px;
     display: flex; justify-content: space-between; align-items: center;
   }
-  .slide.cover .cover-logo { height: 36px; filter: brightness(0) invert(1); }
-  .slide.cover .cover-logos { display: flex; align-items: center; gap: 18px; }
+  .slide.cover .cover-logo { height: clamp(28px, 2.2vw, 40px); filter: brightness(0) invert(1); }
+  .slide.cover .cover-logos { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .slide.cover .cover-logos .logo-row { display: flex; align-items: center; gap: 18px; }
   .slide.cover .cover-logos .divider {
-    width: 1px; height: 28px; background: rgba(255,255,255,0.35);
+    width: 1px; height: 24px; background: rgba(255,255,255,0.35);
   }
-  .slide.cover .cover-logo-partner { height: 32px; }
-  .slide.cover .cover-logo-jafra { height: 32px; }
+  .slide.cover .cover-logo-capptus { height: clamp(22px, 1.6vw, 30px); }
+  .slide.cover .cover-logo-partner { height: clamp(26px, 2vw, 36px); }
+  .slide.cover .cover-logo-jafra { height: clamp(26px, 2vw, 36px); }
   .slide.cover .cover-date { font-size: 13px; color: var(--cb80); letter-spacing: 0.05em; }
   .slide.cover .eyebrow {
     display: inline-block; font-size: 12px; font-weight: 600;
@@ -1351,11 +1353,16 @@
 <section class="slide cover" id="slide-1">
   <div class="cover-top">
     <div class="cover-logos">
-      <img src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" class="cover-logo" alt="Salesforce">
-      <span class="divider"></span>
-      <img src="../images/Logo-betterware-white.avif" class="cover-logo-partner" alt="Betterware">
-      <span class="divider"></span>
-      <img src="../../Jafra/images/logo2_jafra_w.png" class="cover-logo-partner cover-logo-jafra" alt="Jafra">
+      <div class="logo-row">
+        <img src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" class="cover-logo" alt="Salesforce">
+        <span class="divider"></span>
+        <img src="../images/capptus-white.png" class="cover-logo-capptus" alt="Capptus">
+      </div>
+      <div class="logo-row">
+        <img src="../images/Logo-betterware-white.avif" class="cover-logo-partner" alt="Betterware">
+        <span class="divider"></span>
+        <img src="../../Jafra/images/logo2_jafra_w.png" class="cover-logo-partner cover-logo-jafra" alt="Jafra">
+      </div>
     </div>
     <span class="cover-date">Martes · 6 de octubre 2026</span>
   </div>
