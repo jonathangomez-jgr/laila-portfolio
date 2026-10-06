@@ -306,16 +306,32 @@
     padding: 5px 0;
     font-size: 14px;
     color: var(--ink);
-    font-weight: 600;
+  }
+  .kpi-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .kpi-label strong {
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.2;
+  }
+  .kpi-baseline {
+    font-size: 11px;
+    color: var(--slate);
+    font-weight: 500;
+    letter-spacing: 0.01em;
   }
   .kpi-arrow {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 800;
     flex: none;
     line-height: 1;
@@ -1014,9 +1030,9 @@
         <div class="agent-kpis">
           <div class="kpis-head">KPIs a mejorar</div>
           <ul class="kpi-list">
-            <li><span class="kpi-arrow">↑</span><span>Tasa de contención</span></li>
-            <li><span class="kpi-arrow">↑</span><span>Precisión en acciones</span></li>
-            <li><span class="kpi-arrow">↑</span><span>CSAT con distribuidoras</span></li>
+            <li><span class="kpi-arrow up">↑</span><span class="kpi-label"><strong>Deflexión</strong><span class="kpi-baseline">baseline 10.2%</span></span></li>
+            <li><span class="kpi-arrow down">↓</span><span class="kpi-label"><strong>Escalación</strong><span class="kpi-baseline">baseline 51.4%</span></span></li>
+            <li><span class="kpi-arrow down">↓</span><span class="kpi-label"><strong>Abandono</strong><span class="kpi-baseline">baseline 33.4%</span></span></li>
           </ul>
         </div>
       </div>
@@ -1039,9 +1055,9 @@
         <div class="agent-kpis">
           <div class="kpis-head">KPIs a mejorar</div>
           <ul class="kpi-list">
-            <li><span class="kpi-arrow">↑</span><span>Grounding con Knowledge</span></li>
-            <li><span class="kpi-arrow">↑</span><span>Resolución al primer intento</span></li>
-            <li><span class="kpi-arrow">↑</span><span>CSAT con consultoras</span></li>
+            <li><span class="kpi-arrow up">↑</span><span class="kpi-label"><strong>Deflexión</strong><span class="kpi-baseline">vs baseline V1</span></span></li>
+            <li><span class="kpi-arrow down">↓</span><span class="kpi-label"><strong>Escalación</strong><span class="kpi-baseline">vs baseline V1</span></span></li>
+            <li><span class="kpi-arrow down">↓</span><span class="kpi-label"><strong>Abandono</strong><span class="kpi-baseline">vs baseline V1</span></span></li>
           </ul>
         </div>
       </div>
