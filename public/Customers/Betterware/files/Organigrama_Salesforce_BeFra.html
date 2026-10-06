@@ -82,11 +82,17 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"He
 .sq-col .p{flex:1}
 .sq-members{background:rgba(234,245,254,.55);border:1px solid rgba(144,208,254,.3);border-radius:var(--radius);padding:14px 14px}
 .sq-l{font-size:10.8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:10px}
-.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.chip{display:flex;align-items:center;gap:14px;background:#fff;color:var(--ink);border-radius:14px;padding:18px 18px;border-left:4px solid var(--c);box-shadow:0 2px 8px rgba(0,30,91,.06)}
-.chip .av{width:50px;height:50px;font-size:16px;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--line)}
-.chip .cn{font-size:14px;font-weight:750;line-height:1.2}
-.chip .cr{font-size:12px;color:var(--muted);line-height:1.25;margin-top:3px}
+.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.chip{display:flex;align-items:center;gap:9px;background:#fff;color:var(--ink);border-radius:12px;padding:6px 9px;border-left:3px solid var(--c)}
+.chip .av{width:34px;height:34px;font-size:12px;box-shadow:none}
+.chip .cn{font-size:12.4px;font-weight:750;line-height:1.15}
+.chip .cr{font-size:11px;color:var(--muted);line-height:1.2;margin-top:1px}
+/* Integrantes · Salesforce (sq-body) usa chips más altos */
+.sq-body .chips{gap:10px}
+.sq-body .chip{gap:14px;border-radius:14px;padding:18px 18px;border-left:4px solid var(--c);box-shadow:0 2px 8px rgba(0,30,91,.06)}
+.sq-body .chip .av{width:50px;height:50px;font-size:16px;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--line)}
+.sq-body .chip .cn{font-size:14px;line-height:1.2}
+.sq-body .chip .cr{font-size:12px;line-height:1.25;margin-top:3px}
 /* Capptus y cliente dentro del squad */
 .sq-ext{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
 .chips.c3{grid-template-columns:repeat(3,1fr)}
