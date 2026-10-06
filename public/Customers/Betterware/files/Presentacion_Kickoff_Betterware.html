@@ -124,6 +124,7 @@
     width: 1px; height: 28px; background: rgba(255,255,255,0.35);
   }
   .slide.cover .cover-logo-partner { height: 32px; }
+  .slide.cover .cover-logo-jafra { filter: brightness(0) invert(1); height: 28px; }
   .slide.cover .cover-date { font-size: 13px; color: var(--cb80); letter-spacing: 0.05em; }
   .slide.cover .eyebrow {
     display: inline-block; font-size: 12px; font-weight: 600;
@@ -317,7 +318,7 @@
 
   .ty-content .ti {
     position: absolute;
-    width: 170px;
+    width: 155px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -325,13 +326,14 @@
     gap: 4px;
     transform: translateX(-50%);
   }
-  .ti.c1 { left: 7.14%; }
-  .ti.c2 { left: 21.43%; }
-  .ti.c3 { left: 35.71%; }
-  .ti.c4 { left: 50%; }
-  .ti.c5 { left: 64.29%; }
-  .ti.c6 { left: 78.57%; }
-  .ti.c7 { left: 92.86%; }
+  .ti.c1 { left: 6.25%; }
+  .ti.c2 { left: 18.75%; }
+  .ti.c3 { left: 31.25%; }
+  .ti.c4 { left: 43.75%; }
+  .ti.c5 { left: 56.25%; }
+  .ti.c6 { left: 68.75%; }
+  .ti.c7 { left: 81.25%; }
+  .ti.c8 { left: 93.75%; }
 
   .ti.r-top { top: 8.89%; flex-direction: column; }
   .ti.r-mid { top: 47.78%; flex-direction: column; }
@@ -450,6 +452,7 @@
   .org-root .sigrow::before{content:"";position:absolute;top:0;left:calc(87.5% + 4.25px);height:14px;border-left:2px solid var(--or-conn)}
   .org-root .sigrow::after{content:"";position:absolute;top:12px;left:calc(50% - 1px);right:calc(12.5% - 6.25px);border-top:2px solid var(--or-conn)}
   .org-root .sigbox .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+  .org-root .sigbox.pair .cards{grid-template-columns:repeat(2,1fr)}
   .org-root .sigbox .cards .p{margin:0}
   .org-root .sig-note{grid-column:1 / -1;display:flex;align-items:center;border:1px dashed #f0c6dc;background:#fff7fb;border-radius:var(--or-radius);padding:10px 12px;font-size:12px;color:var(--or-ink2)}
 
@@ -546,14 +549,16 @@
       <img src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" class="cover-logo" alt="Salesforce">
       <span class="divider"></span>
       <img src="../images/Logo-betterware-white.avif" class="cover-logo-partner" alt="Betterware">
+      <span class="divider"></span>
+      <img src="../../Jafra/images/jafra-logo.webp" class="cover-logo-partner cover-logo-jafra" alt="Jafra">
     </div>
     <span class="cover-date">Martes · 6 de octubre 2026</span>
   </div>
   <img src="../../../Assets Salesforce Brand/Sparkles/Sparkles Blue Main.svg" class="cover-sparkles" alt="">
   <div class="left">
     <span class="eyebrow">Kick-off</span>
-    <h1>Arranque Betty</h1>
-    <p class="subtitle">Betterware CS × Salesforce · Plan de choque del agente</p>
+    <h1>Propuesta Plan de Choque Agentforce</h1>
+    <p class="subtitle">Betterware + Jafra · Betty y Janet sobre Agentforce Script</p>
     <div class="cover-author">
       <div class="name">Jonathan Gómez</div>
       <div class="role">Principal Forward Deployed Engineer</div>
@@ -608,10 +613,9 @@
             <div class="sq-l">Integrantes · Salesforce</div>
             <div class="chips">
               <div class="chip" style="--c:var(--c-fde)"><div class="av"><span class="ini">LS</span><img onerror="fx(this)" alt="Leandro de Souza" src="https://avatars.slack-edge.com/2024-07-26/7495830417457_23a700bfbbc26f6b553f_192.png" data-orig="https://avatars.slack-edge.com/2024-07-26/7495830417457_23a700bfbbc26f6b553f_original.png"></div><div><div class="cn">Leandro de Souza</div><div class="cr">Forward Deployed Engineer</div></div></div>
-              <div class="chip" style="--c:var(--c-fde)"><div class="av"><span class="ini">MR</span><img onerror="fx(this)" alt="María Paula Rodríguez" src="https://avatars.slack-edge.com/2026-09-20/12107115588214_885c83162db3bb46c0a5_192.png" data-orig="https://avatars.slack-edge.com/2026-09-20/12107115588214_885c83162db3bb46c0a5_original.png"></div><div><div class="cn">María Paula Rodríguez</div><div class="cr">Forward Deployed Engineer</div></div></div>
-              <div class="chip" style="--c:var(--c-sig)"><div class="av"><span class="ini">AH</span><img onerror="fx(this)" alt="Andrea Hernández" src="https://avatars.slack-edge.com/2025-10-17/9724419938020_5deb3eb0b96e5d1f3dc9_192.png" data-orig="https://avatars.slack-edge.com/2025-10-17/9724419938020_5deb3eb0b96e5d1f3dc9_original.png"></div><div><div class="cn">Andrea Hernández</div><div class="cr">Success Architect</div></div></div>
-              <div class="chip" style="--c:var(--c-sig)"><div class="av"><span class="ini">DC</span><img onerror="fx(this)" alt="Diana Cruz" src="https://avatars.slack-edge.com/2025-09-03/9442032660967_50dada450e4f66ad16c4_192.png" data-orig="https://avatars.slack-edge.com/2025-09-03/9442032660967_50dada450e4f66ad16c4_original.png"></div><div><div class="cn">Diana Cruz</div><div class="cr">Customer Success Manager</div></div></div>
               <div class="chip" style="--c:var(--c-sig)"><div class="av"><span class="ini">HN</span><img onerror="fx(this)" alt="Héctor José Negrete" src="https://avatars.slack-edge.com/2026-06-01/11254280138614_34d723836ec93758a668_192.jpg" data-orig="https://avatars.slack-edge.com/2026-06-01/11254280138614_34d723836ec93758a668_original.jpg"></div><div><div class="cn">Héctor José Negrete</div><div class="cr">Customer Success Manager</div></div></div>
+              <div class="chip" style="--c:var(--c-fde)"><div class="av"><span class="ini">MR</span><img onerror="fx(this)" alt="María Paula Rodríguez" src="https://avatars.slack-edge.com/2026-09-20/12107115588214_885c83162db3bb46c0a5_192.png" data-orig="https://avatars.slack-edge.com/2026-09-20/12107115588214_885c83162db3bb46c0a5_original.png"></div><div><div class="cn">María Paula Rodríguez</div><div class="cr">Forward Deployed Engineer</div></div></div>
+              <div class="chip" style="--c:var(--c-sig)"><div class="av"><span class="ini">DC</span><img onerror="fx(this)" alt="Diana Cruz" src="https://avatars.slack-edge.com/2025-09-03/9442032660967_50dada450e4f66ad16c4_192.png" data-orig="https://avatars.slack-edge.com/2025-09-03/9442032660967_50dada450e4f66ad16c4_original.png"></div><div><div class="cn">Diana Cruz</div><div class="cr">Customer Success Manager</div></div></div>
             </div>
           </div>
         </div>
@@ -627,9 +631,9 @@
           <div class="sq-members">
             <div class="sq-l">BeFra · Cliente</div>
             <div class="cli-tree">
-              <div class="chip top" style="--c:var(--c-cli)"><div class="av"><span class="ini">RM</span></div><div><div class="ded"><span class="bw">Betterware</span><span class="jf">Jafra</span></div><div class="cn">Roberto Morán Serna</div><div class="cr">Enlace transversal a ambas compañías</div></div></div>
-              <div class="chip sub l" style="--c:var(--c-bw)"><div class="av"><span class="ini">HW</span></div><div><div class="ded"><span class="bw">Solo Betterware</span></div><div class="cn">Héctor Mahatma Walkinshaw</div><div class="cr">Contacto del plan de choque</div></div></div>
-              <div class="chip sub r" style="--c:var(--c-jf)"><div class="av"><span class="ini">AG</span></div><div><div class="ded"><span class="jf">Solo Jafra</span></div><div class="cn">Alex Gómez</div><div class="cr">Contacto técnico del plan de choque</div></div></div>
+              <div class="chip top" style="--c:var(--c-cli)"><div class="av"><span class="ini">RM</span></div><div><div class="ded"><span class="bw">Betterware</span><span class="jf">Jafra</span></div><div class="cn">Roberto Morán Serna</div><div class="cr">Contacto técnico Befra</div></div></div>
+              <div class="chip sub l" style="--c:var(--c-bw)"><div class="av"><span class="ini">HW</span></div><div><div class="ded"><span class="bw">Betterware</span></div><div class="cn">Héctor Mahatma Walkinshaw</div><div class="cr">Contacto funcional Plan de Choque Betterware</div></div></div>
+              <div class="chip sub r" style="--c:var(--c-jf)"><div class="av"><span class="ini">AG</span></div><div><div class="ded"><span class="jf">Jafra</span></div><div class="cn">Alex Gómez</div><div class="cr">Contacto funcional Plan de Choque Jafra</div></div></div>
             </div>
           </div>
         </div>
@@ -759,7 +763,7 @@
 
         <div class="sigrow">
 
-          <div class="grp sigbox" style="--c:var(--c-sig)">
+          <div class="grp sigbox pair" style="--c:var(--c-sig)">
             <div class="grp-h">Signature · Betterware y Jafra</div>
             <div class="cards">
               <div class="p" style="--c:var(--c-sig)">
@@ -770,15 +774,7 @@
                 <div class="av"><span class="ini">HN</span><img onerror="fx(this)" alt="Héctor José Negrete" src="https://avatars.slack-edge.com/2026-06-01/11254280138614_34d723836ec93758a668_192.jpg" data-orig="https://avatars.slack-edge.com/2026-06-01/11254280138614_34d723836ec93758a668_original.jpg"></div>
                 <div><div class="nm">Héctor José Negrete</div><div class="tt">Customer Success Manager · Signature</div><div class="rs">Seguimiento de casos, escalamientos y adopción de Service Cloud y Agentforce en Betterware y Jafra.</div></div>
               </div>
-              <div class="p" style="--c:var(--c-sig)">
-                <div class="av"><span class="ini">AH</span><img onerror="fx(this)" alt="Andrea Hernández" src="https://avatars.slack-edge.com/2025-10-17/9724419938020_5deb3eb0b96e5d1f3dc9_192.png" data-orig="https://avatars.slack-edge.com/2025-10-17/9724419938020_5deb3eb0b96e5d1f3dc9_original.png"></div>
-                <div><div class="nm">Andrea Hernández</div><div class="tt">Senior Success Architect</div><div class="rs">Asesoría de arquitectura y mejores prácticas de Agentforce para el agente Janet.</div></div>
-              </div>
-              <div class="p tbd" style="--c:var(--c-sig)">
-                <div class="av"><span class="ini">TBD</span></div>
-                <div><div class="nm">Por definir (TBD)</div><div class="tt">Onboarding Specialist · Marketing Cloud</div><div class="rs">Acompañará el onboarding de Marketing Cloud de Betterware.</div></div>
-              </div>
-              <div class="sig-note">Un solo equipo Signature para ambas compañías. El especialista de onboarding marcado como TBD se confirmará próximamente.</div>
+              <div class="sig-note">Un solo equipo Signature para ambas compañías.</div>
             </div>
           </div>
 
@@ -860,9 +856,9 @@
 
   <div class="timeline-y">
     <svg class="ty-svg" viewBox="0 0 1400 450" preserveAspectRatio="none" aria-hidden="true">
-      <path class="arm-bw" d="M 100,50 L 540,50 C 640,50 640,225 700,225"/>
-      <path class="arm-jf" d="M 100,400 L 540,400 C 640,400 640,225 700,225"/>
-      <line class="trunk" x1="700" y1="225" x2="1300" y2="225"/>
+      <path class="arm-bw" d="M 87.5,50 L 670,50 C 735,50 735,225 787.5,225"/>
+      <path class="arm-jf" d="M 87.5,400 L 670,400 C 735,400 735,225 787.5,225"/>
+      <line class="trunk" x1="787.5" y1="225" x2="1312.5" y2="225"/>
     </svg>
 
     <div class="ty-content">
@@ -880,29 +876,29 @@
         <span class="date">Jue 08 → Sáb 10</span>
         <div class="label"><strong>UAT Betterware</strong>Prueba del agente</div>
       </div>
-      <div class="ti c3 r-top">
+      <div class="ti c4 r-top">
         <div class="dot"></div>
         <span class="date">Lun 12-oct</span>
         <div class="label"><strong>Lista final cargada</strong>MessagingEndUser marcado</div>
       </div>
 
       <!-- Shared trunk from Vie 16-oct onwards -->
-      <div class="ti c4 r-mid critical merge">
+      <div class="ti c5 r-mid critical merge">
         <div class="dot"></div>
         <span class="date">VIE 16-OCT</span>
         <div class="label"><strong>CUTOVER 10%</strong>Grupo WhatsApp abierto · Betterware + Jafra</div>
       </div>
-      <div class="ti c5 r-mid">
+      <div class="ti c6 r-mid">
         <div class="dot"></div>
         <span class="date">Lun 19 → Jue 22</span>
         <div class="label"><strong>Escalada +10%/día</strong>20 → 30 → 40 → 50%</div>
       </div>
-      <div class="ti c6 r-mid critical">
+      <div class="ti c7 r-mid critical">
         <div class="dot"></div>
         <span class="date">VIE 23-OCT</span>
         <div class="label"><strong>🎯 GA · 100%</strong>Flujo general + reconocimiento</div>
       </div>
-      <div class="ti c7 r-mid">
+      <div class="ti c8 r-mid">
         <div class="dot"></div>
         <span class="date">Lun 26-oct →</span>
         <div class="label"><strong>Fase 2</strong>Reemplazo gradual legacy</div>
@@ -920,6 +916,11 @@
         <div class="label"><strong>Quick wins</strong>Primeras validaciones</div>
       </div>
       <div class="ti c3 r-bot">
+        <div class="dot"></div>
+        <span class="date">Vie 09-oct</span>
+        <div class="label"><strong>Entrega de resultados</strong>Análisis del agente Janet</div>
+      </div>
+      <div class="ti c4 r-bot">
         <div class="dot"></div>
         <span class="date">Lun 12-oct</span>
         <div class="label"><strong>UAT</strong>Prueba del agente Janet</div>
