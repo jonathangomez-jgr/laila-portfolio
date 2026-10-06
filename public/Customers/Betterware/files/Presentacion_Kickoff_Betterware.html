@@ -273,48 +273,50 @@
   .chrono-grid {
     position: relative;
     width: 100%;
-    max-width: 1300px;
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 36px;
+    gap: 32px;
   }
   .chrono-grid::before {
     content: "";
     position: absolute;
-    top: 50px; bottom: 10px;
+    top: 54px; bottom: 10px;
     left: 0; right: 0;
     pointer-events: none;
     background:
-      repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 25% 0 / 2px 100% no-repeat,
-      repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 50% 0 / 2px 100% no-repeat,
-      repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 75% 0 / 2px 100% no-repeat;
+      repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 22.22% 0 / 2px 100% no-repeat,
+      repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 33.33% 0 / 2px 100% no-repeat,
+      repeating-linear-gradient(to bottom, #CBD5E1 0 4px, transparent 4px 10px) 66.66% 0 / 2px 100% no-repeat;
   }
   .chrono-head {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    padding: 0 10px 10px 10px;
+    grid-template-columns: repeat(9, 1fr);
+    padding: 0 4px 10px 4px;
     border-bottom: 1px solid var(--rule);
     position: relative;
     z-index: 1;
   }
   .chrono-head .wk {
     font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
-    font-size: 22px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--eb15);
     letter-spacing: -0.01em;
-    padding: 0 10px;
+    padding: 0 4px;
     display: flex;
     flex-direction: column;
     gap: 2px;
+    text-align: center;
   }
   .chrono-head .wk-date {
     font-family: 'SalesforceSans', sans-serif;
-    font-size: 12px;
+    font-size: 10.5px;
     font-weight: 600;
     color: var(--slate);
     letter-spacing: 0.02em;
+    white-space: nowrap;
   }
 
   .chrono-track { position: relative; z-index: 1; }
@@ -330,9 +332,9 @@
   }
   .pill-row {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(9, 1fr);
     gap: 0;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .pill-row:last-child { margin-bottom: 0; }
   .pill-cell {
@@ -340,30 +342,30 @@
     flex-direction: column;
     align-items: stretch;
     gap: 4px;
-    padding: 0 10px;
+    padding: 0 6px;
   }
   .pill-cell.span-1-2 { grid-column: 1 / span 2; }
-  .pill-cell.span-2-3 { grid-column: 2 / span 2; }
-  .pill-cell.span-3-4 { grid-column: 3 / span 2; }
-  .pill-cell.span-4   { grid-column: 4 / span 1; }
+  .pill-cell.span-3   { grid-column: 3 / span 1; }
+  .pill-cell.span-4-6 { grid-column: 4 / span 3; }
+  .pill-cell.span-7-9 { grid-column: 7 / span 3; }
   .pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 22px;
+    padding: 11px 18px;
     border-radius: 100px;
     color: #fff;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14.5px;
     letter-spacing: -0.005em;
-    min-height: 44px;
+    min-height: 42px;
     text-align: center;
     box-shadow: 0 4px 12px rgba(0, 30, 91, 0.08);
   }
   .pill.bw { background: #39AEC7; }
   .pill.jf { background: #8C4799; }
   .pill-meta {
-    font-size: 11px;
+    font-size: 10.5px;
     color: var(--slate);
     text-align: center;
     letter-spacing: 0.02em;
@@ -1049,41 +1051,46 @@
   <span class="slide-num"><span class="current">05</span> / 05</span>
   <span class="section-eyebrow">Cronograma propuesto · alto nivel</span>
   <h2>Las 4 fases, en paralelo</h2>
-  <p class="lead">Betterware y Jafra avanzan en paralelo sobre el mismo plan. 4 semanas, 4 fases, un lanzamiento conjunto.</p>
+  <p class="lead">Betterware y Jafra avanzan en paralelo sobre el mismo plan. 9 semanas, 4 fases, un cierre conjunto.</p>
 
   <div class="chrono-grid">
 
     <div class="chrono-head">
-      <div class="wk">Semana 1<span class="wk-date">Oct 6 → 10</span></div>
-      <div class="wk">Semana 2<span class="wk-date">Oct 12 → 16</span></div>
-      <div class="wk">Semana 3<span class="wk-date">Oct 19 → 23</span></div>
-      <div class="wk">Semana 4<span class="wk-date">Oct 26 → 30</span></div>
+      <div class="wk">Sem 1<span class="wk-date">Oct 6 → 10</span></div>
+      <div class="wk">Sem 2<span class="wk-date">Oct 12 → 16</span></div>
+      <div class="wk">Sem 3<span class="wk-date">Oct 19 → 23</span></div>
+      <div class="wk">Sem 4<span class="wk-date">Oct 26 → 30</span></div>
+      <div class="wk">Sem 5<span class="wk-date">Nov 2 → 6</span></div>
+      <div class="wk">Sem 6<span class="wk-date">Nov 9 → 13</span></div>
+      <div class="wk">Sem 7<span class="wk-date">Nov 16 → 20</span></div>
+      <div class="wk">Sem 8<span class="wk-date">Nov 23 → 27</span></div>
+      <div class="wk">Sem 9<span class="wk-date">Nov 30 → Dic 4</span></div>
     </div>
 
     <div class="chrono-track" style="--track-c: #39AEC7">
       <div class="track-label">Betterware · Betty</div>
       <div class="pill-row">
         <div class="pill-cell span-1-2">
-          <span class="pill bw">Voz y personalidad</span>
-          <div class="pill-meta">Kick-off + UAT · Oct 6 → 10</div>
+          <span class="pill bw">Alistar al agente</span>
+          <div class="pill-meta">Pruebas + UAT + prep Insiders · Oct 6 → 15</div>
         </div>
       </div>
       <div class="pill-row">
-        <div class="pill-cell span-2-3">
-          <span class="pill bw">Las manos del agente</span>
-          <div class="pill-meta">Lista final → Cutover · Oct 12 → 16</div>
+        <div class="pill-cell span-3">
+          <span class="pill bw">Primer vuelo</span>
+          <div class="pill-meta">Insiders Cutover → GA · Oct 16 → 23</div>
         </div>
       </div>
       <div class="pill-row">
-        <div class="pill-cell span-3-4">
-          <span class="pill bw">Pruebas con distribuidoras</span>
-          <div class="pill-meta">Escalada → GA · Oct 19 → 23</div>
+        <div class="pill-cell span-4-6">
+          <span class="pill bw">Modernización gradual</span>
+          <div class="pill-meta">Reemplazo acción por acción del legacy · Oct 26 → Nov 13</div>
         </div>
       </div>
       <div class="pill-row">
-        <div class="pill-cell span-4">
-          <span class="pill bw">En vivo con todo</span>
-          <div class="pill-meta">Reemplazo legacy · Oct 26 →</div>
+        <div class="pill-cell span-7-9">
+          <span class="pill bw">Cierre y entrega</span>
+          <div class="pill-meta">UAT formal + Go-live 100% + handoff · Nov 16 → Dic 4</div>
         </div>
       </div>
     </div>
@@ -1092,26 +1099,26 @@
       <div class="track-label">Jafra · Janet</div>
       <div class="pill-row">
         <div class="pill-cell span-1-2">
-          <span class="pill jf">Voz y personalidad</span>
-          <div class="pill-meta">Kick-off + Análisis · Oct 6 → 10</div>
+          <span class="pill jf">Alistar al agente</span>
+          <div class="pill-meta">Análisis + Quick wins + UAT · Oct 6 → 15</div>
         </div>
       </div>
       <div class="pill-row">
-        <div class="pill-cell span-2-3">
-          <span class="pill jf">Memoria y casos</span>
-          <div class="pill-meta">UAT + Cutover · Oct 12 → 16</div>
+        <div class="pill-cell span-3">
+          <span class="pill jf">Primer vuelo</span>
+          <div class="pill-meta">Piloto → GA con asesoras · Oct 16 → 23</div>
         </div>
       </div>
       <div class="pill-row">
-        <div class="pill-cell span-3-4">
-          <span class="pill jf">Pruebas con asesoras</span>
-          <div class="pill-meta">Escalada → GA · Oct 19 → 23</div>
+        <div class="pill-cell span-4-6">
+          <span class="pill jf">Profundizar y afinar</span>
+          <div class="pill-meta">Knowledge + Cases activos · Oct 26 → Nov 13</div>
         </div>
       </div>
       <div class="pill-row">
-        <div class="pill-cell span-4">
-          <span class="pill jf">En vivo con todo</span>
-          <div class="pill-meta">Handoff y expansión · Oct 26 →</div>
+        <div class="pill-cell span-7-9">
+          <span class="pill jf">Cierre y entrega</span>
+          <div class="pill-meta">Rollout total + handoff · Nov 16 → Dic 4</div>
         </div>
       </div>
     </div>
