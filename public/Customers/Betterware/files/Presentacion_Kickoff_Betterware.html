@@ -185,8 +185,8 @@
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
   .agent-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,30,91,0.12); }
-  .agent-card.betty { border-top: 6px solid var(--eb50); }
-  .agent-card.janet { border-top: 6px solid var(--rose); }
+  .agent-card.betty { border-top: 6px solid #39AEC7; }
+  .agent-card.janet { border-top: 6px solid #8C4799; }
 
   .agent-hero {
     position: relative;
@@ -197,10 +197,10 @@
     overflow: hidden;
   }
   .agent-card.betty .agent-hero {
-    background: radial-gradient(ellipse at center, var(--cb95) 0%, #fff 72%);
+    background: radial-gradient(ellipse at center, rgba(57,174,199,0.18) 0%, #fff 72%);
   }
   .agent-card.janet .agent-hero {
-    background: radial-gradient(ellipse at center, #FDE8EF 0%, #fff 72%);
+    background: radial-gradient(ellipse at center, rgba(140,71,153,0.14) 0%, #fff 72%);
   }
   .agent-hero img {
     max-height: 92%;
@@ -219,8 +219,8 @@
     color: var(--slate);
     margin-bottom: 4px;
   }
-  .agent-card.betty .agent-eye { color: var(--eb50); }
-  .agent-card.janet .agent-eye { color: var(--rose); }
+  .agent-card.betty .agent-eye { color: #39AEC7; }
+  .agent-card.janet .agent-eye { color: #8C4799; }
   .agent-card h3 {
     font-size: 36px;
     color: var(--eb15);
@@ -245,8 +245,6 @@
     left: 0; top: 11px;
     width: 24px; height: 24px;
     border-radius: 50%;
-    background: var(--eb50);
-    box-shadow: 0 2px 6px rgba(6,106,254,0.25);
   }
   ul.checklist li::after {
     content: "";
@@ -257,9 +255,13 @@
     border-bottom: 2.5px solid #fff;
     transform: rotate(-45deg);
   }
+  .agent-card.betty ul.checklist li::before {
+    background: #39AEC7;
+    box-shadow: 0 2px 6px rgba(57,174,199,0.3);
+  }
   .agent-card.janet ul.checklist li::before {
-    background: var(--rose);
-    box-shadow: 0 2px 6px rgba(232,39,90,0.25);
+    background: #8C4799;
+    box-shadow: 0 2px 6px rgba(140,71,153,0.3);
   }
 
   /* === SLIDE · CRONOGRAMA (2 pistas apiladas) === */
@@ -395,35 +397,35 @@
     stroke-linecap: round;
     stroke-width: 3;
   }
-  .ty-svg .arm-bw { stroke: var(--cb80); }
-  .ty-svg .arm-jf { stroke: #F5B5C7; }
-  .ty-svg .trunk { stroke: var(--cb80); }
+  .ty-svg .arm-bw { stroke: #39AEC7; }
+  .ty-svg .arm-jf { stroke: #8C4799; }
+  .ty-svg .trunk { stroke: #39AEC7; }
 
   .ty-content { position: absolute; inset: 0; }
 
   .ty-tag {
     position: absolute;
     left: 0;
-    transform: translateY(-50%);
     font-size: 10.5px;
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    padding: 5px 10px;
+    padding: 5px 12px;
     border-radius: 100px;
     white-space: nowrap;
   }
   .ty-tag-bw {
-    top: 11.11%;
-    background: var(--cb95);
-    color: var(--eb30);
-    border: 1px solid var(--cb80);
+    top: 0;
+    background: rgba(57,174,199,0.12);
+    color: #39AEC7;
+    border: 1px solid rgba(57,174,199,0.5);
   }
   .ty-tag-jf {
-    top: 88.89%;
-    background: #FDE8EF;
-    color: var(--rose);
-    border: 1px solid #F5B5C7;
+    bottom: 0;
+    top: auto;
+    background: rgba(140,71,153,0.1);
+    color: #8C4799;
+    border: 1px solid rgba(140,71,153,0.5);
   }
 
   .ty-content .ti {
@@ -453,13 +455,17 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: var(--eb50);
+    background: #39AEC7;
     border: 3px solid #fff;
-    box-shadow: 0 0 0 3px var(--eb50);
+    box-shadow: 0 0 0 3px #39AEC7;
+  }
+  .ti.r-bot .dot {
+    background: #8C4799;
+    box-shadow: 0 0 0 3px #8C4799;
   }
   .ti.critical .dot {
-    background: var(--rose);
-    box-shadow: 0 0 0 3px var(--rose);
+    background: #8C4799;
+    box-shadow: 0 0 0 3px #8C4799;
   }
   .ti.merge .dot {
     width: 26px;
@@ -467,12 +473,13 @@
   }
   .ti .date {
     font-weight: 700;
-    color: var(--eb30);
+    color: #39AEC7;
     font-size: 13.5px;
     letter-spacing: 0.02em;
     margin-top: 4px;
   }
-  .ti.critical .date { color: var(--rose); }
+  .ti.r-bot .date { color: #8C4799; }
+  .ti.critical .date { color: #8C4799; }
   .ti .label {
     font-size: 12.5px;
     color: var(--slate);
