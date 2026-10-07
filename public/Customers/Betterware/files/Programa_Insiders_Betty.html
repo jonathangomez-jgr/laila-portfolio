@@ -267,7 +267,7 @@
   }
 
   /* responsibilities */
-  .resp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8em; margin: 1em 0; }
+  .resp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8em; margin: 1em 0; }
   .resp-card {
     padding: 0.9em 1em;
     border-radius: 10px;
@@ -284,7 +284,6 @@
     letter-spacing: 0.03em;
   }
   .resp-card.sf header { background: var(--eb50); color: #fff; }
-  .resp-card.partner header { background: var(--orange); color: #fff; }
   .resp-card.customer header { background: var(--rose); color: #fff; }
   .resp-card ul { list-style: none; padding-left: 0; margin: 0; font-size: 9.5pt; }
   .resp-card ul li {
@@ -556,31 +555,24 @@
 
   <span class="section-eyebrow" style="margin-top: 1.2em; display:inline-block;">4 · Responsabilidades</span>
   <h2 style="font-size: 18pt;">Quién hace qué</h2>
-  <p class="lead" style="font-size: 10pt; margin-bottom: 0.4em;">Cada parte tiene un rol diferenciado — propuesta, aprobación y curaduría.</p>
+  <p class="lead" style="font-size: 10pt; margin-bottom: 0.4em;">Cada parte tiene un rol diferenciado — Salesforce propone y construye, Betterware cura y comunica.</p>
 
   <div class="resp-grid">
     <div class="resp-card sf">
-      <header>Salesforce (FDE)<br><span style="font-weight: 400; font-size: 8pt; opacity: 0.85;">propone y construye</span></header>
+      <header>Salesforce (FDE)<br><span style="font-weight: 400; font-size: 8pt; opacity: 0.85;">propone, construye y opera</span></header>
       <ul>
         <li>Diseño técnico del piloto: routing por Flow + marca FDE_Pilot__c en MessagingEndUser</li>
         <li>Deploy del agente nuevo + cohorte controlada por checkbox</li>
         <li>Framework de medición comparativa</li>
         <li>Playbook del programa: narrativa, invitación, formulario</li>
         <li>Monitoreo diario + reporte del comportamiento</li>
-      </ul>
-    </div>
-    <div class="resp-card partner">
-      <header>Partner<br><span style="font-weight: 400; font-size: 8pt; opacity: 0.85;">aprueba y ejecuta</span></header>
-      <ul>
-        <li>Visto bueno a la arquitectura técnica</li>
-        <li>Approval del deploy a producción</li>
-        <li>Soporte operativo durante el piloto</li>
-        <li>Soporte técnico de 1er nivel si surge una incidencia</li>
+        <li>Soporte operativo y técnico de 1er nivel durante la ventana del piloto</li>
       </ul>
     </div>
     <div class="resp-card customer">
-      <header>Betterware (CS)<br><span style="font-weight: 400; font-size: 8pt; opacity: 0.85;">curadura y comunicación</span></header>
+      <header>Betterware (CS)<br><span style="font-weight: 400; font-size: 8pt; opacity: 0.85;">aprueba, cura y comunica</span></header>
       <ul>
+        <li>Approval del deploy a producción</li>
         <li>Lista de 15 – 25 distribuidoras candidatas</li>
         <li>Invitación formal con la narrativa del programa</li>
         <li>Administración del grupo WhatsApp de las piloto</li>
@@ -609,7 +601,7 @@
   <div class="timeline">
     <div class="timeline-item">
       <span class="date">Lun 12 OCT ·</span>
-      <span class="label">Betterware entrega lista final de distribuidoras piloto a Salesforce + Partner. Se marcan los MessagingEndUser con FDE_Pilot__c.</span>
+      <span class="label">Betterware entrega lista final de distribuidoras piloto a Salesforce. Se marcan los MessagingEndUser con FDE_Pilot__c.</span>
     </div>
     <div class="timeline-item">
       <span class="date">Jue 15 OCT ·</span>
@@ -621,11 +613,11 @@
     </div>
     <div class="timeline-item">
       <span class="date">Lun 19 → Jue 22 OCT ·</span>
-      <span class="label">Escalada diaria de +10% (20 → 30 → 40 → 50%). Daily standups con FDE + Partner + Betterware. Formulario rápido a las piloto al cierre de cada día.</span>
+      <span class="label">Escalada diaria de +10% (20 → 30 → 40 → 50%). Daily standups con FDE + Betterware. Formulario rápido a las piloto al cierre de cada día.</span>
     </div>
     <div class="timeline-item critical">
       <span class="date">Vie 23 OCT ·</span>
-      <span class="label"><strong>🎯 GA · Flujo total General Available</strong> · el agente nuevo queda como el flujo general para todas las distribuidoras. Reconocimiento al grupo piloto + demo de aprendizajes al Partner y a Betterware.</span>
+      <span class="label"><strong>🎯 GA · Flujo total General Available</strong> · el agente nuevo queda como el flujo general para todas las distribuidoras. Reconocimiento al grupo piloto + demo de aprendizajes a Betterware.</span>
     </div>
     <div class="timeline-item">
       <span class="date">Lun 26 OCT ·</span>
@@ -722,7 +714,7 @@
     <h3>De aquí al arranque · 10 días</h3>
     <div class="step">
       <span class="day">Mar 06 OCT</span>
-      <span>Kick-off con Betterware CS + Partner. Propuesta validada; se solicita curaduría de distribuidoras candidatas.</span>
+      <span>Kick-off con Betterware CS. Propuesta validada; se solicita curaduría de distribuidoras candidatas.</span>
     </div>
     <div class="step">
       <span class="day">Mié 07 OCT</span>
