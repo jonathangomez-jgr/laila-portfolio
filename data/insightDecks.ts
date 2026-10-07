@@ -2075,7 +2075,7 @@ export const insightDecks: InsightDeck[] = [
     duration: "45 min · CORE 25 min + módulos opcionales",
     slides: [
       // ────────────────────────────────────────────────────────────────
-      //  CORE · ARCO 1 · Algo cambió
+      //  Apertura
       // ────────────────────────────────────────────────────────────────
 
       // 1 · Portada
@@ -2089,7 +2089,7 @@ export const insightDecks: InsightDeck[] = [
         showQr: true,
       },
 
-      // 2 · Statement de apertura
+      // 2 · Tesis
       {
         layout: "quote",
         quote:
@@ -2097,7 +2097,7 @@ export const insightDecks: InsightDeck[] = [
         context: "La tesis en una página",
       },
 
-      // 3 · El contrato de la sesión
+      // 3 · Contrato de la sesión
       {
         layout: "pillars",
         eyebrow: "El contrato de esta sesión",
@@ -2105,53 +2105,79 @@ export const insightDecks: InsightDeck[] = [
         pillars: [
           {
             title: "Entender",
-            body: "Salir con un modelo mental claro de qué es la IA, qué hace hoy y por qué este momento es distinto a los demás.",
+            body: "Un modelo mental claro de qué es la IA, qué hace hoy y por qué este momento es distinto a los demás.",
             accent: "indigo",
           },
           {
             title: "Experimentar",
-            body: "Llevarse 2 ó 3 cosas concretas que podría empezar a probar mañana — en su vida y en su trabajo.",
+            body: "Dos o tres cosas concretas que podría probar mañana — en su vida y en su trabajo.",
             accent: "violet",
           },
           {
             title: "Decidir con criterio",
-            body: "Reconocer cuándo la IA ayuda, cuándo no, y qué cuidados merecen la pena cuando la decisión importa.",
+            body: "Reconocer cuándo la IA ayuda, cuándo no, y qué cuidados importan cuando la decisión importa.",
             accent: "sky",
           },
         ],
       },
 
-      // 4 · Sección — Parte 1
+      // 4 · ¿Cómo usamos la IA hoy? · reveal progresivo
+      {
+        layout: "reveal-thirds",
+        eyebrow: "Antes de entrar en teoría · tres momentos cotidianos",
+        title: "¿Cómo usamos la IA hoy?",
+        thirds: [
+          {
+            kind: "image",
+            src: "/insights-assets/ia-para-todos/uso-busqueda-pollo.png",
+            alt: "Resultado de búsqueda en Google con AI Overview respondiendo cómo descongelar un pollo",
+            caption: "1 · Búsqueda con IA generativa",
+            source: "Google · AI Overview",
+          },
+          {
+            kind: "image",
+            src: "/insights-assets/ia-para-todos/uso-retro-80s.png",
+            alt: "Retrato estilo años 80 generado por IA — persona con cámara en un elevador de Miami, abril 1987",
+            caption: "2 · Imagen generada por IA",
+            source: "Modelo text-to-image · generación personal",
+          },
+          {
+            kind: "video",
+            src: "/insights-assets/ia-para-todos/uso-ejemplo.mp4",
+            alt: "Video generado por IA",
+            caption: "3 · Video generado por IA",
+            source: "Modelo text-to-video",
+          },
+        ],
+      },
+
+      // ────────────────────────────────────────────────────────────────
+      //  Arco 1 · Algo cambió
+      // ────────────────────────────────────────────────────────────────
+
+      // 5 · Sección — Algo cambió (con analogía)
       {
         layout: "section",
-        eyebrow: "Parte 1 de 4",
+        eyebrow: "Arco 1 de 4",
         title: "Algo cambió",
         subtitle:
-          "No es la primera vez que una tecnología promete transformarnos. Por qué ésta sí es diferente — y por qué lo que importa no es la tecnología, sino la decisión humana.",
+          "Imagine que cada persona, de un día para otro, contrató a un asistente que leyó casi todo lo que la humanidad escribió, no se cansa, trabaja a cualquier hora y cuesta muy poco. No sabe nada de usted hasta que usted le cuenta. Esa es, en el fondo, la IA de hoy.",
       },
 
-      // 5 · Analogía terrenal
-      {
-        layout: "quote",
-        quote:
-          "Imagine que, de un día para otro, cada persona contrató a un asistente nuevo. Leyó casi todo lo que la humanidad escribió, no se cansa, trabaja a cualquier hora y cuesta muy poco. No sabe nada de usted — hasta que usted le cuenta. Esa es, en el fondo, la IA de hoy.",
-        context: "La analogía que vale la pena recordar",
-      },
-
-      // 6 · Qué puede hacer: las seis capacidades
+      // 6 · Qué puede hacer — tres olas de maduración
       {
         layout: "pillars",
-        eyebrow: "Las seis olas que conviven",
+        eyebrow: "Las seis capacidades agrupadas en tres olas",
         title: "Qué puede hacer la IA — en orden de maduración",
         pillars: [
           {
             title: "Calcular · Reconocer",
-            body: "Lo que ya está en su GPS y en su cámara. Madurez: completa. Suele no llamarse `IA` — pero técnicamente lo es.",
+            body: "Ya está en su GPS y en su cámara. Madurez: completa. Suele no llamarse `IA` — pero técnicamente lo es.",
             accent: "indigo",
           },
           {
             title: "Predecir · Generar",
-            body: "Lo que las empresas usan desde hace una década (predictiva) y lo que explotó en 2022 con ChatGPT (generativa). La ola más visible — pero no la única.",
+            body: "Predictiva: la que las empresas usan desde hace una década. Generativa: la ola que explotó en 2022 con ChatGPT. La más visible — pero no la única.",
             accent: "violet",
           },
           {
@@ -2162,40 +2188,59 @@ export const insightDecks: InsightDeck[] = [
         ],
       },
 
-      // 7 · Historia breve con aceleración
+      // 7 · Historia en 3 fotos
       {
-        layout: "bullets",
-        eyebrow: "Setenta años en cuatro líneas",
-        title: "Cómo llegamos aquí — una historia muy corta",
-        bullets: [
-          "1950 · Turing publica `¿Pueden pensar las máquinas?` en Mind. El campo todavía no se llama IA.",
-          "1956 · Dartmouth · McCarthy acuña el término `artificial intelligence`.",
-          "1997 · Deep Blue vence a Kasparov. 2012 · AlexNet gana ImageNet. 2016 · AlphaGo vence a Lee Sedol.",
-          "2017 · `Attention Is All You Need` — el Transformer, motor silencioso de todo lo que vino después.",
-          "2022 · ChatGPT · 1M usuarios en 5 días, 100M en 2 meses — crecimiento más rápido de la historia digital.",
-          "2024-2026 · Era agéntica · Model Context Protocol, agentes en producción empresarial.",
-        ],
-        highlight: "El patrón no es la lista — es la curva: los años entre un hito y el siguiente se encogen de décadas a meses.",
-      },
-
-      // 8 · Wait AI did that — intro
-      {
-        layout: "section",
-        eyebrow: "Momentos de `espera, ¿la IA hizo eso?`",
-        title: "Tres ejemplos reales fuera del chatbot",
+        layout: "diagrams",
+        eyebrow: "70 años en tres rostros",
+        title: "De la pregunta de Turing al chatbot de 100M usuarios",
         subtitle:
-          "Hallazgos publicados en revistas de primer nivel. Cada uno con su advertencia: lo que realmente hizo la IA es menos espectacular que la frase viral — e igual de valioso.",
+          "1950 Turing · 1956 Dartmouth · 1997 Deep Blue · 2012 AlexNet · 2017 Transformer · 2022 ChatGPT · 2024-2026 era agéntica. Los años entre un hito y el siguiente se encogen de décadas a meses.",
+        diagrams: [
+          {
+            caption: "Alan Turing · ca. 1928",
+            src: "/insights-assets/ia-para-todos/alan-turing.jpg",
+            alt: "Retrato de Alan Turing adolescente en King's College, Cambridge",
+            source: "Turing Archive · King's College Cambridge · dominio público",
+            sourceHref:
+              "https://turingarchive.kings.cam.ac.uk/material-given-kings-college-cambridge-1960-amtk/amt-k-7-4",
+            accent: "indigo",
+          },
+          {
+            caption: "Deep Blue · 1997",
+            src: "/insights-assets/ia-para-todos/deep-blue.jpg",
+            alt: "Una de las torres de Deep Blue de IBM — la primera computadora en vencer a un campeón mundial de ajedrez",
+            source: "James the photographer · Flickr · CC BY 2.0",
+            sourceHref:
+              "https://www.flickr.com/photos/22453761@N00/592436598/",
+            accent: "violet",
+          },
+          {
+            caption: "ChatGPT · 2022",
+            src: "/insights-assets/ia-para-todos/chatgpt-logo.svg",
+            alt: "Logotipo de ChatGPT — de 0 a 100 millones de usuarios en dos meses",
+            source: "Logotipo oficial OpenAI · dominio público",
+            sourceHref:
+              "https://commons.wikimedia.org/wiki/File:ChatGPT_logo.svg",
+            accent: "sky",
+          },
+        ],
       },
 
-      // 9 · AlphaFold (Nobel 2024)
+      // 8 · AlphaFold · visual-split
       {
-        layout: "split",
-        eyebrow: "Biología · Nobel de Química 2024",
+        layout: "visual-split",
+        eyebrow: "`Espera, ¿la IA hizo eso?` · 1 de 3 · Biología · Nobel 2024",
         title: "AlphaFold · 200+ millones de estructuras de proteínas",
+        image: {
+          src: "/insights-assets/ia-para-todos/alphafold.png",
+          alt: "Visualización 3D de una proteína predicha por AlphaFold 2 con colores por confianza por residuo",
+          source: "Jumper et al. · Nature · CC BY 4.0",
+          sourceHref: "https://www.nature.com/articles/s41586-021-03819-2",
+        },
         left: {
           heading: "Lo que hizo",
           items: [
-            "Predice el pliegue 3D de una proteína a partir de su secuencia de aminoácidos.",
+            "Predice el pliegue 3D a partir de la secuencia de aminoácidos.",
             "La base pública pasó de ~190,000 estructuras resueltas en laboratorio a más de 200 millones predichas.",
             "Nobel de Química 2024 · Hassabis, Jumper y Baker.",
           ],
@@ -2204,17 +2249,23 @@ export const insightDecks: InsightDeck[] = [
           heading: "Lo que NO hizo",
           items: [
             "No `resolvió la biología`. Predice una estructura estática.",
-            "No inventa fármacos. Elimina un cuello de botella en la investigación biomédica.",
-            "No convierte el laboratorio en un escritorio — lo acelera.",
+            "No inventa fármacos — elimina un cuello de botella.",
+            "No reemplaza el laboratorio. Lo acelera.",
           ],
         },
       },
 
-      // 10 · Vesuvius Challenge
+      // 9 · Vesuvius · visual-split
       {
-        layout: "split",
-        eyebrow: "Arqueología · Vesuvius Challenge 2024",
+        layout: "visual-split",
+        eyebrow: "`Espera, ¿la IA hizo eso?` · 2 de 3 · Arqueología · 2024",
         title: "Leer un papiro carbonizado hace casi 2,000 años",
+        image: {
+          src: "/insights-assets/ia-para-todos/herculaneum-papyri.jpg",
+          alt: "Rollos de papiro carbonizados por la erupción del Vesubio del año 79, junto a tomografías CT",
+          source: "Stabile et al. · Scientific Reports · CC BY 4.0",
+          sourceHref: "https://www.nature.com/articles/s41598-020-80458-z",
+        },
         left: {
           heading: "Lo que hizo",
           items: [
@@ -2228,22 +2279,29 @@ export const insightDecks: InsightDeck[] = [
           items: [
             "No `leyó la biblioteca de Herculano`.",
             "Solo ~5% de un solo rollo. Hay cientos más sin abrir.",
-            "La segmentación sigue siendo trabajo humano caro — pero la frontera se mueve.",
+            "La segmentación sigue siendo trabajo humano caro.",
           ],
         },
       },
 
-      // 11 · GraphCast + pancreático (two in one)
+      // 10 · Clima + Salud · visual-split
       {
-        layout: "split",
-        eyebrow: "Clima + Medicina · 2023",
+        layout: "visual-split",
+        eyebrow: "`Espera, ¿la IA hizo eso?` · 3 de 3 · Clima + Salud · 2023",
         title: "Dos ejemplos adicionales — con el mismo matiz",
+        image: {
+          src: "/insights-assets/ia-para-todos/hurricane-florence.jpg",
+          alt: "Vista aérea del huracán Florence desde la ventana de cúpula de la Estación Espacial Internacional",
+          source: "NASA / Alexander Gerst · dominio público",
+          sourceHref:
+            "https://www.nasa.gov/image-feature/staring-down-hurricane-florence",
+        },
         left: {
           heading: "GraphCast · pronóstico de clima",
           items: [
             "DeepMind · supera a ECMWF-HRES en >90% de 1,380 variables.",
-            "Huracán Lee: trayectoria calculada 9 días antes vs 6 de métodos tradicionales.",
-            "No reemplaza supercomputadoras — depende de los datos de reanálisis de ECMWF.",
+            "Huracán Lee: trayectoria calculada 9 días antes vs 6 días de métodos tradicionales.",
+            "No reemplaza supercomputadoras — depende de datos de reanálisis.",
           ],
         },
         right: {
@@ -2256,32 +2314,27 @@ export const insightDecks: InsightDeck[] = [
         },
       },
 
-      // 12 · Statement — matiz
+      // 11 · El matiz
       {
         layout: "quote",
         quote:
-          "`AI invented a new antibiotic` es una frase viral. `AI repurposed an existing molecule as an antibiotic candidate` es la frase correcta. La diferencia no es estilística — es la frontera entre ciencia ficción y ciencia real.",
+          "`La IA inventó un nuevo antibiótico` es una frase viral. `La IA reposicionó una molécula existente como candidata a antibiótico` es la frase correcta. La diferencia no es estilística — es la frontera entre ciencia ficción y ciencia real.",
         context: "La disciplina del lenguaje",
       },
 
-      // 13 · Sección — Parte 2
-      {
-        layout: "section",
-        eyebrow: "Parte 2 de 4",
-        title: "Qué pasa cuando entra al negocio",
-        subtitle:
-          "Las mismas capacidades, aplicadas a clientes, procesos y datos de una empresa. Dónde encaja Salesforce, qué ha hecho antes de ChatGPT, y cómo se ve esto cuando aterriza en la realidad.",
-      },
+      // ────────────────────────────────────────────────────────────────
+      //  Arco 2 · Dónde entra Salesforce
+      // ────────────────────────────────────────────────────────────────
 
-      // 14 · Las tres olas
+      // 12 · Tres olas que conviven
       {
         layout: "pillars",
-        eyebrow: "Tres olas que conviven",
+        eyebrow: "Arco 2 · Tres olas que conviven en la empresa",
         title: "Predictiva → Generativa → Agéntica",
         pillars: [
           {
             title: "Predictiva",
-            body: "`¿Qué va a pasar?` El modelo lee datos históricos y predice. Churn, fraude, demanda, fallas. La IA que las empresas ya usan desde hace una década.",
+            body: "`¿Qué va a pasar?` El modelo lee datos históricos y predice. Churn, fraude, demanda, fallas. Lo que las empresas ya usan desde hace una década.",
             accent: "indigo",
           },
           {
@@ -2291,25 +2344,17 @@ export const insightDecks: InsightDeck[] = [
           },
           {
             title: "Agéntica",
-            body: "`Persigue un objetivo y actúa.` Entiende la intención, consulta datos, razona pasos, ejecuta en sistemas, escala al humano cuando toca. La ola 2024-2026 — y donde está el valor empresarial.",
+            body: "`Persigue un objetivo y actúa.` Entiende intención, consulta datos, razona pasos, ejecuta en sistemas, escala al humano. La ola 2024-2026 — donde está el valor empresarial.",
             accent: "sky",
           },
         ],
       },
 
-      // 15 · Dónde entra Salesforce (quote)
-      {
-        layout: "quote",
-        quote:
-          "Salesforce vende la tecnología que las empresas usan para relacionarse mejor con sus clientes y manejar los procesos que giran alrededor de ellos. No empezó con IA en 2022 — Einstein llegó en 2016. Cuando llegó la ola generativa y luego la agéntica, no partió de cero.",
-        context: "Sin corporativismo",
-      },
-
-      // 16 · Metáfora del cerebro, datos, manos, reglas
+      // 13 · Cerebro · Contexto · Manos · Reglas
       {
         layout: "pillars",
         eyebrow: "Qué separa un modelo potente de una solución empresarial",
-        title: "El modelo es el cerebro · los datos son el contexto · las acciones son las manos · las reglas son el gobierno",
+        title: "Cerebro · Contexto · Manos · Reglas",
         pillars: [
           {
             title: "Cerebro · Modelo",
@@ -2323,18 +2368,18 @@ export const insightDecks: InsightDeck[] = [
           },
           {
             title: "Manos · Agentforce",
-            body: "Ejecuta acciones en los sistemas: abre casos, reserva compensaciones, actualiza registros, escala al humano. Agent Builder, Agent Script, Agentforce Voice.",
+            body: "Ejecuta acciones en los sistemas: abre casos, reserva compensaciones, actualiza registros, escala al humano.",
             accent: "sky",
           },
           {
             title: "Reglas · Trust Layer",
-            body: "Enmascaramiento de datos, zero data retention, detección de toxicidad, filtros. Convierte modelo en solución responsable.",
+            body: "Enmascaramiento, zero data retention, detección de toxicidad, filtros. Convierte modelo en solución responsable.",
             accent: "emerald",
           },
         ],
       },
 
-      // 17 · Métricas de escala Salesforce
+      // 14 · Escala Salesforce
       {
         layout: "metrics",
         eyebrow: "Reconocimiento del mercado · 2026",
@@ -2347,191 +2392,104 @@ export const insightDecks: InsightDeck[] = [
         ],
       },
 
-      // 18 · Caso OpenTable
-      {
-        layout: "split",
-        eyebrow: "Caso 1 · Hospitalidad · prod. temprana",
-        title: "OpenTable · agente para restaurantes y comensales",
-        left: {
-          heading: "Antes · intervención",
-          items: [
-            "Chatbot anterior resolvía <33% de consultas.",
-            "Dos agentes Agentforce — B2B para restaurantes, B2C para comensales — grounded en 1,500 artículos de KB con Data 360.",
-            "Restaurant agent · PoC a producción en menos de un mes.",
-          ],
-        },
-        right: {
-          heading: "Resultado medido · beneficio humano",
-          items: [
-            "73% de resolución autónoma en las primeras 3 semanas.",
-            "11,000 conversaciones/semana entre ambos agentes.",
-            "40% de mejora vs chatbot anterior.",
-            "Los humanos del centro atienden las conversaciones donde su empatía importa, no la pregunta #14 repetida.",
-          ],
-        },
-      },
-
-      // 19 · Caso Takeda (humano en el loop)
-      {
-        layout: "split",
-        eyebrow: "Caso 2 · Life Sciences · producción",
-        title: "Takeda · SEIMEI + AIMI con humano en el loop",
-        left: {
-          heading: "Antes · intervención",
-          items: [
-            "25,000+ solicitudes anuales de información médica por profesionales de salud.",
-            "SEIMEI extrae de literatura clínica. AIMI genera borradores de respuesta con citas.",
-            "MuleSoft + Veeva Vault + Data 360 unificando 3,100+ documentos regulados.",
-          ],
-        },
-        right: {
-          heading: "Resultado medido · beneficio humano",
-          items: [
-            "25,000+ solicitudes HCP atendidas · 8,000 no-médicas adicionales.",
-            "Insights transformados en `horas, no semanas`.",
-            "Cada respuesta pasa por médico antes de salir — no es automatización ciega, es aceleración gobernada.",
-            "Los médicos vuelven al juicio clínico — que es la razón por la que existen en el flujo.",
-          ],
-        },
-      },
-
-      // 20 · Caso Engine (voz)
-      {
-        layout: "split",
-        eyebrow: "Caso 3 · Business Travel · prod. jun 2026",
-        title: "Engine · Eva, Agentforce Voice",
-        left: {
-          heading: "Antes · intervención",
-          items: [
-            "800,000+ solicitudes por año. Experiencia transaccional. Picos nocturnos sin cobertura.",
-            "Eva (Engine Virtual Assistant) sobre Agentforce + Agentforce Voice · live en <3 meses.",
-            "Data 360 unifica Sales Cloud, Service Cloud, Snowflake, S3 (zero-copy), Confluence.",
-          ],
-        },
-        right: {
-          heading: "Resultado medido · beneficio humano",
-          items: [
-            "Eva resuelve 50% de los chats de forma autónoma.",
-            "-15% en tiempo de manejo.",
-            "+16% en CSAT.",
-            "A las 3am con un vuelo cancelado, el viajero no espera un humano para desatorar la noche — la mitad de las veces.",
-          ],
-        },
-      },
-
-      // 21 · Patrón detrás de los casos (statement)
-      {
-        layout: "quote",
-        quote:
-          "En ninguno de los casos la historia termina en `despedimos a la mitad`. En todos, la IA no reemplaza al equipo — redistribuye la carga. Los humanos quedan libres para los casos de más alto valor o más alta sensibilidad. Donde eso NO ocurre es una decisión organizacional, no una capacidad técnica.",
-        context: "El patrón",
-      },
-
-      // 22 · Sección — Parte 3
-      {
-        layout: "section",
-        eyebrow: "Parte 3 de 4",
-        title: "Qué podría empezar a hacer mañana",
-        subtitle:
-          "No es una lista de 100 ideas para intimidar. Son categorías cotidianas en vida y trabajo — con la intención de que al menos tres le hagan sentido inmediato.",
-      },
-
-      // 23 · En la vida personal
-      {
-        layout: "bullets",
-        eyebrow: "En la vida personal · marque lo que ya hace",
-        title: "Nueve usos cotidianos con un asistente de IA",
-        bullets: [
-          "Aprender · pedir explicaciones de temas nuevos, con analogías del propio dominio.",
-          "Planear · un viaje, una comida, un evento — con restricciones reales.",
-          "Idiomas · conversar, pedir correcciones suaves, afinar tono.",
-          "Entender documentos · contratos, recetas médicas, reportes antes de ir al profesional.",
-          "Decidir · comparar opciones, listar trampas típicas, preparar preguntas al experto humano.",
-          "Practicar · simular entrevistas, conversaciones difíciles, presentaciones.",
-          "Escribir · mensajes delicados, cartas, respuestas a vecinos conflictivos.",
-          "Imágenes · fotos de errores, etiquetas, gráficas, pantallazos.",
-          "Segunda opinión · antes de una compra, un cambio laboral, una conversación grande.",
-        ],
-        highlight: "Nada de lo anterior exige saber programar.",
-      },
-
-      // 24 · En el trabajo
-      {
-        layout: "bullets",
-        eyebrow: "En el trabajo · no importa qué haga",
-        title: "Nueve usos profesionales que aplican fuera de la oficina",
-        bullets: [
-          "Mantenimiento · interpretar manuales, pantallas de error, etiquetas de equipo.",
-          "Administración · convertir notas de voz en reportes formales.",
-          "Servicio al cliente · mejorar respuestas difíciles, varias versiones para distintos canales.",
-          "Supervisión · preparar conversaciones delicadas con el equipo.",
-          "Ventas · investigar prospectos, listar preguntas de descubrimiento, qué NO decir.",
-          "Recursos humanos · traducir políticas formales a lenguaje humano.",
-          "Comunicación · traducir, adaptar tono entre canales.",
-          "Análisis · interrogar una hoja de cálculo con lenguaje natural.",
-          "Capacitación · convertir procedimientos en checklists visuales.",
-        ],
-        highlight: "La IA no es solo para programadores — es para cualquier trabajo que incluya pensar, comunicar, organizar o decidir.",
-      },
-
-      // 25 · Panorama de herramientas
+      // 15 · Tres casos SF (OpenTable + Takeda + Engine)
       {
         layout: "pillars",
-        eyebrow: "Panorama · organizado por qué necesita",
-        title: "Elija por necesidad, no por logo",
+        eyebrow: "Tres casos en producción · métricas publicadas por el cliente",
+        title: "Lo que pasa cuando aterriza en la realidad",
         pillars: [
           {
-            title: "Asistente general",
-            body: "ChatGPT · Claude · Gemini · Microsoft Copilot. Freemium. Para empezar, elija UNO y úselo dos semanas antes de probar otro.",
+            title: "OpenTable · Hospitalidad",
+            body: "73% de resolución autónoma en las primeras 3 semanas · 11,000 conversaciones/semana · 40% de mejora vs chatbot anterior. Los humanos atienden las conversaciones donde su empatía importa.",
             accent: "indigo",
           },
           {
-            title: "Investigación y aprendizaje",
-            body: "Perplexity (fuentes citadas) · NotebookLM (aprender de documentos propios). Freemium. Útil cuando necesita respaldo verificable.",
+            title: "Takeda · Life Sciences",
+            body: "25,000+ solicitudes HCP anuales atendidas con humano en el loop. Insights de literatura clínica en `horas, no semanas`. Cada respuesta pasa por médico antes de salir — aceleración gobernada.",
+            accent: "violet",
+          },
+          {
+            title: "Engine · Business Travel",
+            body: "Eva (Agentforce Voice) · 50% de chats resueltos de forma autónoma · -15% en tiempo de manejo · +16% en CSAT. A las 3am con un vuelo cancelado el viajero no espera un humano.",
+            accent: "sky",
+          },
+        ],
+      },
+
+      // 16 · El patrón
+      {
+        layout: "quote",
+        quote:
+          "En ninguno de los casos la historia termina en `despedimos a la mitad`. En todos, la IA no reemplaza al equipo — redistribuye la carga. Los humanos quedan libres para los casos de más alto valor o más alta sensibilidad.",
+        context: "El patrón detrás de los tres casos",
+      },
+
+      // ────────────────────────────────────────────────────────────────
+      //  Arco 3 · Qué puede hacer con ella mañana
+      // ────────────────────────────────────────────────────────────────
+
+      // 17 · Personal vs Trabajo (comparison)
+      {
+        layout: "comparison",
+        eyebrow: "Arco 3 · No es una lista para intimidar — son categorías cotidianas",
+        title: "Qué podría empezar a hacer mañana",
+        before: {
+          heading: "En la vida personal",
+          items: [
+            "Aprender · explicaciones con analogías de su propio dominio.",
+            "Planear · un viaje, una comida, un evento con restricciones reales.",
+            "Entender documentos · contratos, recetas, reportes antes del profesional.",
+            "Decidir · comparar opciones, listar trampas típicas, preparar preguntas.",
+            "Practicar · entrevistas, conversaciones difíciles, presentaciones.",
+            "Segunda opinión · antes de una compra, un cambio laboral.",
+          ],
+        },
+        after: {
+          heading: "En el trabajo — no importa qué haga",
+          items: [
+            "Interpretar manuales, pantallas de error, etiquetas.",
+            "Convertir notas de voz en reportes formales.",
+            "Mejorar respuestas difíciles para distintos canales.",
+            "Preparar conversaciones delicadas con el equipo.",
+            "Investigar prospectos; qué preguntar, qué NO decir.",
+            "Interrogar una hoja de cálculo en lenguaje natural.",
+          ],
+        },
+      },
+
+      // 18 · Panorama + ruta de arranque
+      {
+        layout: "pillars",
+        eyebrow: "Elija por necesidad, no por logo · ruta de dos semanas",
+        title: "Panorama de herramientas · y por dónde empezar",
+        pillars: [
+          {
+            title: "Asistente general",
+            body: "ChatGPT · Claude · Gemini · Copilot. Freemium. Elija UNO y úselo dos semanas antes de probar otro.",
+            accent: "indigo",
+          },
+          {
+            title: "Investigar / aprender",
+            body: "Perplexity (fuentes citadas) · NotebookLM (aprender de documentos propios). Útil cuando necesita respaldo verificable.",
             accent: "violet",
           },
           {
             title: "Reuniones y trabajo",
-            body: "Otter · Fathom · funciones nativas en Zoom, Teams, Meet. Reduce fricción diaria sin aprender un nuevo producto.",
+            body: "Otter · Fathom · funciones nativas de Zoom, Teams, Meet. Reduce fricción diaria sin aprender un producto nuevo.",
             accent: "sky",
           },
           {
             title: "Empresarial agéntico",
-            body: "Salesforce Agentforce · Microsoft Copilot Studio · Google Agentspace. Diferente categoría: conectado a datos corporativos con gobierno.",
+            body: "Salesforce Agentforce · Microsoft Copilot Studio · Google Agentspace. Otra categoría: conectado a datos corporativos con gobierno.",
             accent: "emerald",
           },
         ],
       },
 
-      // 26 · Start here (bullets)
-      {
-        layout: "bullets",
-        eyebrow: "Empiece aquí · ruta de dos semanas",
-        title: "El error más común al arrancar es coleccionar diez herramientas antes de usar una",
-        bullets: [
-          "Elija UN asistente general. No importa cuál — todos sirven para empezar.",
-          "Elija DOS propósitos para la primera semana: uno personal, uno laboral.",
-          "Antes de pedir, invierta cinco minutos en darle contexto. Quién es, para qué, para quién, qué considera `bueno`.",
-          "Haga tres rondas de iteración. La primera respuesta casi nunca es la mejor.",
-          "Verifique cualquier hecho crítico antes de usarlo.",
-          "Al final de la semana, doble la apuesta en lo que le ahorró tiempo. Deje lo demás.",
-        ],
-        highlight: "Dos semanas con una herramienta vale más que diez con cuatro.",
-      },
-
-      // 27 · Sección — Parte 4
-      {
-        layout: "section",
-        eyebrow: "Parte 4 · Craft",
-        title: "Cómo pedirle mejor",
-        subtitle:
-          "El secreto no es la frase mágica — es el contexto. En el mundo técnico lo llaman `context engineering`. Es la habilidad más valiosa que puede desarrollar sin ser programador.",
-      },
-
-      // 28 · Tres principios maestros
+      // 19 · Tres principios maestros
       {
         layout: "pillars",
-        eyebrow: "Si solo recuerda tres cosas",
+        eyebrow: "Si solo recuerda tres cosas de esta sesión",
         title: "Los tres principios maestros",
         pillars: [
           {
@@ -2546,13 +2504,29 @@ export const insightDecks: InsightDeck[] = [
           },
           {
             title: "3 · Pida que lo critique",
-            body: "El modelo tiende a complacerlo. Pídale que argumente en contra, que señale lo que falta, que actúe como revisor escéptico. El valor está en la crítica honesta.",
+            body: "El modelo tiende a complacerlo. Pídale que argumente en contra, que señale lo que falta, que actúe como revisor escéptico.",
             accent: "sky",
           },
         ],
       },
 
-      // 29 · Antes/después prompt (comparison)
+      // 20 · Anatomía de un buen prompt
+      {
+        layout: "bullets",
+        eyebrow: "Receta estructural · los tres principios aplicados",
+        title: "Anatomía de un buen prompt",
+        bullets: [
+          "Rol · `Actúa como coach de ventas B2B con 10 años en SaaS.`",
+          "Contexto · `Vendo plataforma de analítica a bancos medianos en LATAM. Mi contraparte es un CFO escéptico.`",
+          "Tarea · `Reescribe este correo de seguimiento después de una demo tibia.`",
+          "Formato · `6 líneas máximo. Sin saludo corporativo. Un solo call-to-action al final.`",
+          "Criterio · `Tono directo pero respetuoso. Abre con propuesta de valor, no con disculpa. Lenguaje de banco, no de startup.`",
+          "Crítica · `Antes de cerrar, dame 3 riesgos de que el CFO lo ignore y cómo mitigarlos.`",
+        ],
+        highlight: "Rol + Contexto + Tarea = qué quiere · Formato + Criterio = qué considera `bueno` · Crítica = cómo evitar que el modelo lo complazca.",
+      },
+
+      // 21 · Prompt antes / después
       {
         layout: "comparison",
         eyebrow: "Mismo modelo · mismo caso · dos niveles de contexto",
@@ -2560,8 +2534,8 @@ export const insightDecks: InsightDeck[] = [
         before: {
           heading: "Prompt que casi todo el mundo escribe",
           items: [
-            "`Escríbeme un correo para mi jefe diciéndole que necesito más tiempo para el reporte`.",
-            "Resultado: genérico, demasiado largo, en tono corporativo.",
+            "`Escríbeme un correo para mi jefe diciéndole que necesito más tiempo`.",
+            "Resultado: genérico, demasiado largo, tono corporativo.",
             "Disculpa en exceso. No pide nada concreto. Técnicamente cumple — humanamente no sirve.",
           ],
         },
@@ -2569,48 +2543,22 @@ export const insightDecks: InsightDeck[] = [
           heading: "Prompt con contexto + criterio + crítica",
           items: [
             "Contexto: soy supervisora de piso en retail. Mi jefe es directo e impaciente.",
-            "Criterio: 6 líneas máx. Abre con propuesta, no con disculpa. Fecha específica. Tono respetuoso y firme.",
-            "Crítica: antes del final, dame tres riesgos de que mi jefe reaccione mal y cómo evitarlos.",
-            "Resultado: casi listo-para-enviar + aprendizaje reusable para la próxima vez.",
+            "Criterio: 6 líneas máx. Abre con propuesta, no con disculpa. Fecha específica.",
+            "Crítica: dame tres riesgos de que mi jefe reaccione mal y cómo evitarlos.",
+            "Resultado: casi listo-para-enviar + aprendizaje reusable.",
           ],
         },
       },
 
-      // 30 · Hacks power-user (OPCIONAL)
-      {
-        layout: "bullets",
-        eyebrow: "OPCIONAL · módulo profundo",
-        title: "Doce técnicas que amplifican los tres principios",
-        bullets: [
-          "Dé ejemplos de lo que `bueno` significa — ejemplos imitan mejor que descripciones.",
-          "Pídale al modelo que le haga preguntas antes de responder.",
-          "Use IA para armar prompts para IA (meta-prompting).",
-          "Separe generar de criticar — dos conversaciones distintas.",
-          "Divida tareas en etapas: investigar → organizar → generar → criticar → mejorar.",
-          "Use varios modelos con propósito — diversidad de perspectiva, no consenso automático.",
-          "Entregue material fuente (PDFs, fotos, docs) en vez de preguntas abstractas.",
-          "Exija fuentes y pida separar hecho de inferencia.",
-          "Use voz — más rápida y rica que escribir.",
-          "Cree plantillas e instrucciones reutilizables para tareas recurrentes.",
-          "Use IA como simulador: entrevistas, conversaciones difíciles, negociaciones.",
-          "Diga explícitamente qué NO hacer — las restricciones negativas previenen errores predecibles.",
-        ],
-      },
+      // ────────────────────────────────────────────────────────────────
+      //  Arco 4 · Horizonte · Riesgos · El punto
+      // ────────────────────────────────────────────────────────────────
 
-      // 31 · Sección — Parte 5
-      {
-        layout: "section",
-        eyebrow: "Parte 5 de 4 · Horizonte",
-        title: "Qué sigue · qué podría salir mal",
-        subtitle:
-          "Separar lo altamente probable de lo plausible y lo especulativo. Y conectar cada riesgo con un comportamiento concreto.",
-      },
-
-      // 32 · Lo probable vs plausible vs especulativo
+      // 22 · Probable / Plausible / Especulativo
       {
         layout: "pillars",
-        eyebrow: "Cinco años · tres niveles",
-        title: "Separe la predicción de la fe",
+        eyebrow: "Arco 4 · Cinco años · separar la predicción de la fe",
+        title: "Qué sigue — en tres niveles de certeza",
         pillars: [
           {
             title: "Probable",
@@ -2619,7 +2567,7 @@ export const insightDecks: InsightDeck[] = [
           },
           {
             title: "Plausible",
-            body: "Educación hiperpersonalizada. Más descubrimientos científicos acelerados. Robótica útil en logística. Hay señales técnicas y de inversión, pero no es certeza.",
+            body: "Educación hiperpersonalizada. Más descubrimientos científicos acelerados. Robótica útil en logística. Señales técnicas y de inversión, pero no es certeza.",
             accent: "indigo",
           },
           {
@@ -2630,7 +2578,7 @@ export const insightDecks: InsightDeck[] = [
         ],
       },
 
-      // 33 · Dos escenarios
+      // 23 · Dos escenarios
       {
         layout: "comparison",
         eyebrow: "Dos personas · misma posición hoy · cinco años después",
@@ -2648,40 +2596,14 @@ export const insightDecks: InsightDeck[] = [
           heading: "Escenario B · dos horas por semana",
           items: [
             "No se volvió ingeniero. No cambió de carrera.",
-            "Aprendió a pedir bien, a verificar, a delegar lo mecánico.",
+            "Aprendió a pedir bien, verificar, delegar lo mecánico.",
             "Cinco años después hace su trabajo con más tiempo libre y mejor calidad.",
             "Nunca sintió que la IA lo reemplazara — sí sintió que lo liberó.",
           ],
         },
       },
 
-      // 34 · Riesgos conectados a comportamientos
-      {
-        layout: "bullets",
-        eyebrow: "El lado oscuro · conectado a comportamientos",
-        title: "Siete riesgos que vale la pena recordar — y qué hacer",
-        bullets: [
-          "Alucinación → verifique todo hecho crítico antes de usarlo. Pida fuente.",
-          "Sesgo → pida perspectivas alternativas; pida que señale sus propios supuestos.",
-          "Deepfakes → aumente escepticismo ante medios no verificados antes de reaccionar.",
-          "Privacidad → nunca pegue datos personales ni confidenciales en herramientas no aprobadas.",
-          "Dependencia → use IA para aprender, no solo para saltarse el pensamiento.",
-          "Complacencia → pida activamente que lo critique — el modelo responde pero usted tiene que pedir.",
-          "Decisiones de alto impacto → preserve al humano en el loop en lo médico, legal, financiero, de empleo, de seguridad.",
-        ],
-        highlight: "Toda tecnología poderosa exige más juicio, no menos.",
-      },
-
-      // 35 · Sección — Parte 6 · El punto
-      {
-        layout: "section",
-        eyebrow: "Cierre · El punto",
-        title: "La paradoja humana",
-        subtitle:
-          "La IA puede automatizar escribir, analizar, resumir, planear, coordinar — y cada vez más, actuar. La pregunta importante no es cuánta eficiencia es posible. Es qué queremos hacer con ella.",
-      },
-
-      // 36 · Lo que la IA automatiza vs lo que no reemplaza
+      // 24 · Automatiza vs no reemplaza
       {
         layout: "comparison",
         eyebrow: "El punto filosófico",
@@ -2693,7 +2615,6 @@ export const insightDecks: InsightDeck[] = [
             "Resumir una reunión.",
             "Buscar en documentación.",
             "Comparar opciones estándar.",
-            "Convertir notas en documentos.",
             "El `trabajo invisible` que consumía horas sin crear valor.",
           ],
         },
@@ -2703,26 +2624,35 @@ export const insightDecks: InsightDeck[] = [
             "Decidir qué pregunta vale la pena hacer.",
             "Dar criterio ante información ambigua.",
             "Escuchar con empatía real.",
-            "Enseñar a alguien que apenas empieza.",
             "Tener la conversación difícil que nadie quiere tener.",
             "Imaginar algo que no existe · cuidar a alguien · crear con alma.",
           ],
         },
       },
 
-      // 37 · El reencuadre (quote)
+      // 25 · Meta-uso · Hasta para usar la IA, usa la IA
       {
-        layout: "quote",
-        quote:
-          "La IA no debería ayudarnos solamente a comportarnos más como máquinas. Bien usada, debería liberarnos del trabajo mecánico para tener más tiempo para lo creativo, el juicio, las relaciones, la empatía, la curiosidad y las experiencias que nos recuerdan por qué estamos aquí.",
-        context: "El reencuadre que vale la pena llevarse",
+        layout: "diagrams",
+        eyebrow: "El truco que casi nadie te cuenta",
+        title: "Hasta para usar la IA, puedes usar la IA.",
+        subtitle:
+          "Si te trabas con un prompt — pídele a la IA que te lo escriba contigo. Si no sabes qué preguntarle — pídele que te enseñe a preguntarle. No es trampa. Es el superpoder que todavía nadie te enseñó en la escuela.",
+        diagrams: [
+          {
+            caption: "Vibe coders · meme viral",
+            src: "/insights-assets/ia-para-todos/vibe-coders-meme.jpg",
+            alt: "Meme de 4 paneles: programadores vs vibe coders que le piden a la IA hasta el prompt",
+            source: "Meme de internet · autor desconocido",
+          },
+        ],
+        footnote:
+          "Técnicamente se llama meta-prompting. Prácticamente se llama no pelearte con la pantalla en blanco.",
       },
 
-      // 38 · El reto de una semana
+      // 26 · El reto · 5 pasos + pregunta
       {
-        layout: "bullets",
-        eyebrow: "No `gracias por su atención` · un reto",
-        title: "Esta semana · cinco pasos",
+        layout: "closing",
+        title: "El reto de esta semana",
         bullets: [
           "Elija UNA tarea repetitiva que tenga esta semana.",
           "Elija UNA cosa que siempre quiso aprender.",
@@ -2730,18 +2660,10 @@ export const insightDecks: InsightDeck[] = [
           "Dedique cinco minutos a dar contexto antes de pedir. Pida que critique su propio resultado.",
           "Al final de la semana, repita lo que funcionó. Deje lo que no.",
         ],
-        highlight: "Después de una semana va a saber más de IA que la mayoría que lleva dos años `enterándose`.",
+        cta: "A medida que las máquinas pueden hacer más de lo que hacíamos, ¿en qué queremos ser mejores nosotros, como seres humanos?",
       },
 
-      // 39 · La pregunta final
-      {
-        layout: "quote",
-        quote:
-          "A medida que las máquinas pueden hacer más de lo que hacíamos, ¿en qué queremos ser mejores nosotros, como seres humanos?",
-        context: "La pregunta que vale la pena llevarse",
-      },
-
-      // 40 · Thanks
+      // 27 · Thanks
       {
         layout: "thanks",
         eyebrow: "Insight reusable · IA para todos",

@@ -187,8 +187,39 @@ export type ExecutiveSlide =
         src: string;
         alt?: string;
         accent?: SlideAccent;
+        source?: string;
+        sourceHref?: string;
       }[];
       footnote?: string;
+    } & SlideBrand)
+  | ({
+      layout: "reveal-thirds";
+      eyebrow?: string;
+      title: string;
+      subtitle?: string;
+      thirds: {
+        kind: "image" | "video";
+        src: string;
+        alt?: string;
+        caption?: string;
+        source?: string;
+        sourceHref?: string;
+        poster?: string;
+      }[];
+    } & SlideBrand)
+  | ({
+      layout: "visual-split";
+      eyebrow?: string;
+      title: string;
+      subtitle?: string;
+      image: {
+        src: string;
+        alt?: string;
+        source?: string;
+        sourceHref?: string;
+      };
+      left: { heading: string; items: string[] };
+      right: { heading: string; items: string[] };
     } & SlideBrand)
   | ({
       layout: "agent-questionnaire";

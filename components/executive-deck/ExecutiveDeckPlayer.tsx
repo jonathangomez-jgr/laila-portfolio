@@ -21,20 +21,41 @@ export default function ExecutiveDeckPlayer({
 }: ExecutiveDeckPlayerProps) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev">("next");
+  const [step, setStep] = useState(0);
   const total = deck.slides.length;
   const progress = ((index + 1) / total) * 100;
+
+  const currentSlide = deck.slides[index];
+  const slideSteps =
+    currentSlide.layout === "reveal-thirds"
+      ? currentSlide.thirds.length
+      : 1;
 
   const goTo = useCallback(
     (nextIndex: number, navDirection: "next" | "prev") => {
       if (nextIndex < 0 || nextIndex >= total) return;
       setDirection(navDirection);
       setIndex(nextIndex);
+      setStep(0);
     },
     [total],
   );
 
-  const next = useCallback(() => goTo(index + 1, "next"), [goTo, index]);
-  const prev = useCallback(() => goTo(index - 1, "prev"), [goTo, index]);
+  const next = useCallback(() => {
+    if (step < slideSteps - 1) {
+      setStep((s) => s + 1);
+      return;
+    }
+    goTo(index + 1, "next");
+  }, [goTo, index, step, slideSteps]);
+
+  const prev = useCallback(() => {
+    if (step > 0) {
+      setStep((s) => s - 1);
+      return;
+    }
+    goTo(index - 1, "prev");
+  }, [goTo, index, step]);
 
   useEffect(() => {
     document.body.classList.add("deck-mode");
@@ -92,7 +113,7 @@ export default function ExecutiveDeckPlayer({
     [next, prev],
   );
 
-  const slide = deck.slides[index];
+  const slide = currentSlide;
   const darkLayouts = new Set(["title", "section", "closing", "quote", "thanks"]);
   const isDark = darkLayouts.has(slide.layout);
 
@@ -164,7 +185,7 @@ export default function ExecutiveDeckPlayer({
           className={`deck-slide deck-slide-${direction}`}
           aria-live="polite"
         >
-          <ExecutiveSlideView slide={slide} />
+          <ExecutiveSlideView slide={slide} step={step} />
         </article>
       </main>
 

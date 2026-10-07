@@ -9,6 +9,8 @@ type Diagram = {
   src: string;
   alt?: string;
   accent?: SlideAccent;
+  source?: string;
+  sourceHref?: string;
 };
 
 type Props = {
@@ -128,6 +130,24 @@ export default function DeckDiagramsSlide({ diagrams }: Props) {
                 className="mt-3 block h-auto w-full transition group-hover:scale-[1.01]"
                 style={{ maxHeight: "58vh", objectFit: "contain" }}
               />
+              {d.source && (
+                <p className="mt-2 text-[10px] italic leading-snug text-slate-500">
+                  Fuente ·{" "}
+                  {d.sourceHref ? (
+                    <a
+                      href={d.sourceHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative z-20 underline-offset-2 hover:underline"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {d.source}
+                    </a>
+                  ) : (
+                    d.source
+                  )}
+                </p>
+              )}
               <span className="pointer-events-none absolute right-3 top-3 z-20 rounded-full bg-slate-900/70 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-white opacity-0 transition group-hover:opacity-100">
                 Clic para ampliar
               </span>
@@ -205,6 +225,26 @@ export default function DeckDiagramsSlide({ diagrams }: Props) {
             </button>
           )}
 
+          {activeDiagram.source && (
+            <div
+              className="pointer-events-auto absolute bottom-10 left-0 right-0 text-center text-[11px] italic text-slate-700/80"
+              onClick={(e) => e.stopPropagation()}
+            >
+              Fuente ·{" "}
+              {activeDiagram.sourceHref ? (
+                <a
+                  href={activeDiagram.sourceHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline-offset-2 hover:underline"
+                >
+                  {activeDiagram.source}
+                </a>
+              ) : (
+                activeDiagram.source
+              )}
+            </div>
+          )}
           <p className="pointer-events-none absolute bottom-4 left-0 right-0 text-center text-xs text-slate-700/70">
             ← → para navegar · Esc para cerrar
           </p>

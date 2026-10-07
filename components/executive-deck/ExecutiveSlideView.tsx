@@ -70,7 +70,13 @@ function SlideTitle({ children }: { children: string }) {
   return <h2 className="deck-title">{children}</h2>;
 }
 
-export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide }) {
+export default function ExecutiveSlideView({
+  slide,
+  step = 0,
+}: {
+  slide: ExecutiveSlide;
+  step?: number;
+}) {
   const brandDecor = slide.brand ? <DeckBrandDecor brand={slide.brand} /> : null;
   const productChips =
     "products" in slide && slide.products && slide.products.length > 0 ? (
@@ -356,6 +362,157 @@ export default function ExecutiveSlideView({ slide }: { slide: ExecutiveSlide })
                   </li>
                 ))}
               </ul>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ── Reveal thirds (light) · 3 columns revealed step-by-step ──────── */
+    case "reveal-thirds": {
+      const thirds = slide.thirds;
+      const revealed = Math.min(step + 1, thirds.length);
+      const remaining = thirds.length - revealed;
+      return (
+        <div className="deck-slide-inner">
+          {brandDecor}
+          {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
+          <SlideTitle>{slide.title}</SlideTitle>
+          {slide.subtitle && (
+            <p className="mt-3 max-w-4xl text-base leading-relaxed text-slate-600">
+              {slide.subtitle}
+            </p>
+          )}
+          <div
+            className="mt-8 grid gap-5 items-stretch"
+            style={{ gridTemplateColumns: `repeat(${thirds.length}, minmax(0, 1fr))` }}
+          >
+            {thirds.map((t, i) => {
+              const visible = i < revealed;
+              const isLatest = i === revealed - 1;
+              return (
+                <figure
+                  key={i}
+                  className={`rounded-2xl bg-white/70 ring-1 ring-indigo-200/60 p-3 shadow-sm backdrop-blur transition-all duration-500 ease-out ${
+                    visible ? "opacity-100" : "opacity-0 translate-y-3 pointer-events-none"
+                  } ${isLatest ? "ring-2 ring-indigo-400/60" : ""}`}
+                  aria-hidden={!visible}
+                >
+                  <div
+                    className="flex items-center justify-center rounded-xl bg-slate-50"
+                    style={{ minHeight: "48vh", maxHeight: "60vh" }}
+                  >
+                    {t.kind === "video" ? (
+                      <video
+                        key={`${slide.title}-${i}-${visible ? "on" : "off"}`}
+                        src={visible ? t.src : undefined}
+                        poster={t.poster}
+                        autoPlay={visible}
+                        muted
+                        playsInline
+                        loop
+                        controls
+                        className="block h-auto w-full rounded-xl"
+                        style={{ maxHeight: "58vh", objectFit: "contain" }}
+                      />
+                    ) : (
+                      <img
+                        src={t.src}
+                        alt={t.alt ?? t.caption ?? slide.title}
+                        className="block h-auto w-full rounded-xl"
+                        style={{ maxHeight: "58vh", objectFit: "contain" }}
+                      />
+                    )}
+                  </div>
+                  {t.caption && (
+                    <figcaption className="mt-2 text-center text-xs font-semibold text-slate-700">
+                      {t.caption}
+                    </figcaption>
+                  )}
+                  {t.source && (
+                    <p className="mt-1 text-center text-[10px] italic leading-snug text-slate-500">
+                      Fuente ·{" "}
+                      {t.sourceHref ? (
+                        <a
+                          href={t.sourceHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline-offset-2 hover:underline"
+                        >
+                          {t.source}
+                        </a>
+                      ) : (
+                        t.source
+                      )}
+                    </p>
+                  )}
+                </figure>
+              );
+            })}
+          </div>
+          {remaining > 0 && (
+            <p className="mt-4 text-center text-xs text-slate-500">
+              → clic para revelar ({remaining} restante{remaining > 1 ? "s" : ""})
+            </p>
+          )}
+        </div>
+      );
+    }
+
+    /* ── Visual split (light) · image + two stacked panels ─────────────── */
+    case "visual-split":
+      return (
+        <div className="deck-slide-inner">
+          {brandDecor}
+          {slide.eyebrow && <Eyebrow>{slide.eyebrow}</Eyebrow>}
+          <SlideTitle>{slide.title}</SlideTitle>
+          {slide.subtitle && (
+            <p className="mt-3 max-w-4xl text-base leading-relaxed text-slate-600">
+              {slide.subtitle}
+            </p>
+          )}
+          <div
+            className="mt-7 grid gap-8 items-start"
+            style={{ gridTemplateColumns: "minmax(0, 42fr) minmax(0, 58fr)" }}
+          >
+            <figure className="rounded-2xl bg-white/70 ring-1 ring-indigo-200/60 p-3 shadow-sm backdrop-blur">
+              <img
+                src={slide.image.src}
+                alt={slide.image.alt ?? slide.title}
+                className="block h-auto w-full rounded-xl"
+                style={{ maxHeight: "52vh", objectFit: "contain" }}
+              />
+              {slide.image.source && (
+                <figcaption className="mt-2 text-[10px] italic leading-snug text-slate-500">
+                  Fuente ·{" "}
+                  {slide.image.sourceHref ? (
+                    <a
+                      href={slide.image.sourceHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline-offset-2 hover:underline"
+                    >
+                      {slide.image.source}
+                    </a>
+                  ) : (
+                    slide.image.source
+                  )}
+                </figcaption>
+              )}
+            </figure>
+            <div className="grid gap-4">
+              {[slide.left, slide.right].map((column) => (
+                <div key={column.heading} className="deck-split-panel">
+                  <h3 className="deck-split-heading">{column.heading}</h3>
+                  <ul className="mt-3 space-y-2">
+                    {column.items.map((item) => (
+                      <li key={item} className="deck-split-item">
+                        <span className="deck-split-dot" aria-hidden />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </div>
