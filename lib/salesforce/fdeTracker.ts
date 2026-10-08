@@ -323,6 +323,7 @@ export type FDETestExecution = {
   JGR_FDE_TestCase__c: string;
   JGR_FDE_Executed_Date__c: string;
   JGR_FDE_Environment__c: string | null;
+  JGR_FDE_Channel__c: string | null;
   JGR_FDE_Agent_Version__c: string | null;
   JGR_FDE_Agent_Build__c: number | null;
   JGR_FDE_Status__c: FDETestCaseStatus | null;
@@ -375,6 +376,7 @@ const EXECUTION_FIELDS = [
   "JGR_FDE_TestCase__c",
   "JGR_FDE_Executed_Date__c",
   "JGR_FDE_Environment__c",
+  "JGR_FDE_Channel__c",
   "JGR_FDE_Agent_Version__c",
   "JGR_FDE_Agent_Build__c",
   "JGR_FDE_Status__c",
@@ -427,6 +429,7 @@ export async function getTestMatrixForCustomer(
 export type NewTestExecutionInput = {
   testCaseId: string;
   environment: string;
+  channel?: string | null;
   agentVersion: string | null;
   agentBuild?: number | null;
   status: FDETestCaseStatus;
@@ -447,6 +450,7 @@ export async function createTestExecution(
     JGR_FDE_Actual_Result__c: input.actualResult,
     JGR_FDE_Executed_By_Name__c: input.executedByName,
   };
+  if (input.channel) fields.JGR_FDE_Channel__c = input.channel;
   if (input.agentVersion) fields.JGR_FDE_Agent_Version__c = input.agentVersion;
   if (input.agentBuild != null) fields.JGR_FDE_Agent_Build__c = input.agentBuild;
   if (input.defectNotes) fields.JGR_FDE_Defect_Notes__c = input.defectNotes;

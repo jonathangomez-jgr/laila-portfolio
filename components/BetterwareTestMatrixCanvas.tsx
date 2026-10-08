@@ -53,9 +53,36 @@ function lastExecutionStatus(c: FDETestCase): FDETestCaseStatus | null {
   return latest?.JGR_FDE_Status__c ?? null;
 }
 
+const CHANNEL_OPTIONS: Array<[string, string]> = [
+  ["Preview_Builder", "Preview Builder"],
+  ["WhatsApp", "WhatsApp"],
+  ["Enhanced_Chat", "Enhanced Chat"],
+  ["Messaging_Web", "Messaging for Web"],
+  ["Voice", "Voice"],
+  ["API", "API"],
+  ["Other", "Other"],
+];
+
+const CHANNEL_STYLES: Record<string, string> = {
+  Preview_Builder: "bg-indigo-100 text-indigo-800",
+  WhatsApp: "bg-emerald-100 text-emerald-800",
+  Enhanced_Chat: "bg-sky-100 text-sky-800",
+  Messaging_Web: "bg-cyan-100 text-cyan-800",
+  Voice: "bg-violet-100 text-violet-800",
+  API: "bg-slate-200 text-slate-700",
+  Other: "bg-slate-100 text-slate-600",
+};
+
+function channelLabel(value: string | null | undefined): string {
+  if (!value) return "—";
+  const match = CHANNEL_OPTIONS.find(([v]) => v === value);
+  return match ? match[1] : value;
+}
+
 function ExecutionForm({ testCase, slug, onDone, onCancel }: { testCase: FDETestCase; slug: string; onDone: () => void; onCancel: () => void }) {
   const [status, setStatus] = useState<FDETestCaseStatus>("Pass");
   const [environment, setEnvironment] = useState("Sandbox");
+  const [channel, setChannel] = useState<string>("Preview_Builder");
   const [agentVersion, setAgentVersion] = useState<string>("FDE_PILOT_INSIDER");
   const [agentBuild, setAgentBuild] = useState<string>("1");
   const [actualResult, setActualResult] = useState("");
@@ -75,6 +102,7 @@ function ExecutionForm({ testCase, slug, onDone, onCancel }: { testCase: FDETest
         body: JSON.stringify({
           testCaseId: testCase.Id,
           environment,
+          channel,
           agentVersion,
           agentBuild: agentBuild.trim() === "" ? null : Number(agentBuild),
           status,
@@ -112,6 +140,12 @@ function ExecutionForm({ testCase, slug, onDone, onCancel }: { testCase: FDETest
           <span className="font-semibold text-slate-700">Environment</span>
           <select value={environment} onChange={(e) => setEnvironment(e.target.value)} className="mt-1 w-full rounded border border-slate-300 bg-white px-2 py-1">
             {["Sandbox", "UAT", "Pre_Prod", "Production"].map((e) => <option key={e} value={e}>{e}</option>)}
+          </select>
+        </label>
+        <label className="block">
+          <span className="font-semibold text-slate-700">Canal</span>
+          <select value={channel} onChange={(e) => setChannel(e.target.value)} className="mt-1 w-full rounded border border-slate-300 bg-white px-2 py-1">
+            {CHANNEL_OPTIONS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>
         </label>
         <label className="block">
@@ -247,9 +281,17 @@ function TestCaseDetail({ testCase, slug, onClose, onExecutionRecorded, readOnly
             <ul className="mt-2 space-y-2">
               {testCase.executions.map((e) => (
                 <li key={e.Id} className="rounded-md border border-slate-200 bg-white p-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-2">
                     <span className="font-mono text-[11px] text-slate-500">{e.Name} · {formatDate(e.JGR_FDE_Executed_Date__c)}</span>
-                    <Chip label={e.JGR_FDE_Status__c ?? "—"} className={STATUS_STYLES[e.JGR_FDE_Status__c ?? "none"]} />
+                    <div className="flex items-center gap-1">
+                      {e.JGR_FDE_Channel__c && (
+                        <Chip
+                          label={channelLabel(e.JGR_FDE_Channel__c)}
+                          className={CHANNEL_STYLES[e.JGR_FDE_Channel__c] ?? "bg-slate-100 text-slate-700"}
+                        />
+                      )}
+                      <Chip label={e.JGR_FDE_Status__c ?? "—"} className={STATUS_STYLES[e.JGR_FDE_Status__c ?? "none"]} />
+                    </div>
                   </div>
                   <p className="text-[11px] text-slate-500">
                     {e.JGR_FDE_Environment__c} · {e.JGR_FDE_Agent_Version__c ?? "—"}

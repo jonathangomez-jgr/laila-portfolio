@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
     const id = await createTestExecution({
       testCaseId: body.testCaseId,
       environment: body.environment,
+      channel: body.channel ?? null,
       agentVersion: body.agentVersion ?? null,
       agentBuild:
         body.agentBuild === "" || body.agentBuild == null
