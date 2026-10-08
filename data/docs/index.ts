@@ -87,6 +87,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner"],
   },
   {
+    slug: "reporte-remediaciones",
+    label: "Reporte de remediaciones · Betty",
+    description:
+      "Avance del audit: 7 resueltos en V42 producción, 10 completados en V2, 25 fixes nuevos, 6 al roadmap.",
+    url: "/Customers/Betterware/files/Reporte_Remediaciones_Betty.pdf",
+    category: "Ejecutivo",
+    icon: "✅",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "agent-deep-dive",
     label: "BW_AGENT_N · Agent Deep Dive (sesión 2)",
     description: "Workshop técnico sobre el agente actual.",

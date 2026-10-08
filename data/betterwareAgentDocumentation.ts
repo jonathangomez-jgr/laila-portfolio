@@ -1,35 +1,24 @@
-export type AgentSubagentDoc = {
-  id: string;
-  name: string;
-  category: AgentCategory;
-  summary: string;
-  example: string;
-  scope: string;
-  behavior: string[];
-  accept: string[];
-  avoid: string[];
-  pending?: string[];
-  actions?: Array<{ name: string; target: string }>;
-  extra?: Array<{ title: string; text: string }>;
-};
-
 export type AgentCategory =
   | "Atención y seguridad"
-  | "Cuenta y datos"
-  | "Pedidos y logística"
-  | "Pagos y finanzas"
+  | "Servicio y trámites"
   | "Puntos y programas"
-  | "Contenido y FAQ"
-  | "Guardarraíles";
+  | "Pedidos y logística"
+  | "Red y datos comerciales"
+  | "Saldos y pagos";
 
-export const AGENT_CATEGORY_STYLES: Record<AgentCategory, string> = {
-  "Atención y seguridad": "bg-rose-100 text-rose-800 border-rose-200",
-  "Cuenta y datos": "bg-sky-100 text-sky-800 border-sky-200",
-  "Pedidos y logística": "bg-amber-100 text-amber-800 border-amber-200",
-  "Pagos y finanzas": "bg-emerald-100 text-emerald-800 border-emerald-200",
-  "Puntos y programas": "bg-violet-100 text-violet-800 border-violet-200",
-  "Contenido y FAQ": "bg-cyan-100 text-cyan-800 border-cyan-200",
-  "Guardarraíles": "bg-slate-100 text-slate-700 border-slate-200",
+export type AgentActionDoc = { name: string; target: string; description?: string };
+
+export type AgentSubagentDoc = {
+  id: string;
+  number: number;
+  name: string;
+  category: AgentCategory;
+  // sections
+  descripcion: string;
+  activacion: string;
+  respuestas: string;
+  acciones: AgentActionDoc[];
+  criterios: string[];
 };
 
 export type AgentDocumentation = {
@@ -38,361 +27,295 @@ export type AgentDocumentation = {
   version: string;
   revision: string;
   base: string;
-  description: string;
-  subagentCount: number;
-  actionCount: number;
-  linkedVariableCount: number;
-  mutableVariableCount: number;
   subagents: AgentSubagentDoc[];
 };
 
+export const CATEGORIES: AgentCategory[] = [
+  "Atención y seguridad",
+  "Servicio y trámites",
+  "Puntos y programas",
+  "Pedidos y logística",
+  "Red y datos comerciales",
+  "Saldos y pagos",
+];
+
 export const betterwareAgentDocs: AgentDocumentation = {
-  name: "Betty (FDE BW Service Agent V2)",
+  name: "Betty",
   developerName: "FDE_BW_Service_Agent_V2",
-  version: "v6 Draft (Agent Script 2.0)",
-  revision: "2026-10-08",
-  base: "Prod rebuild de BW_AGENT_N v42 consolidando 26 subagentes en 11, reutilizando Apex y Flow existentes.",
-  description:
-    "Agente de servicio al cliente para distribuidores de Betterware en WhatsApp. Consolidación determinista con compuertas de autenticación estructurales, soporte para consultas de linaje, Knowledge wiring y rutas de recuperación de acceso. Aplica 25 fixes de orquestación del audit deep-dive sobre V40.",
-  subagentCount: 11,
-  actionCount: 58,
-  linkedVariableCount: 6,
-  mutableVariableCount: 14,
+  version: "v6 Draft",
+  revision: "08-oct-2026",
+  base: "Prod rebuild de BW_AGENT_N v42: 26 subagentes consolidados en 11 (10 + router), reutilizando Apex y Flow existentes. 25 fixes de orquestación del audit deep-dive sobre V40.",
   subagents: [
     {
       id: "agent_router",
-      name: "Agent Router (start_agent)",
-      category: "Guardarraíles",
-      summary:
-        "Punto de entrada de cada conversación. Clasifica el intent del usuario y transfiere al subagente apropiado — nunca ejecuta acciones ni responde preguntas directamente.",
-      example: "«Quiero ver mi saldo»",
-      scope:
-        "Toda sesión nueva pasa por aquí. Las decisiones de ruteo son LLM-driven con descripciones específicas por dominio.",
-      behavior: [
-        "Clasifica el mensaje en uno de 10 dominios: cuenta, pedidos, pagos, premios, contenido, FAQ, acceso, escalación, fuera de tema, ambiguo.",
-        "Preguntas generales de políticas/programas van a GeneralFAQ sin requerir auth.",
-        "Si el mensaje es un saludo o ambiguo, prefiere Ambiguous sobre Escalation.",
-        "Escala directo solo con 5 triggers literales: lenguaje agresivo, emergencia física, 'hablar con asesor humano', 'Compra con Confianza', 'Garantía Betterware'.",
+      number: 1,
+      name: "Agent Router",
+      category: "Atención y seguridad",
+      descripcion:
+        "Punto de entrada de cada conversación. Clasifica la intención del usuario y transfiere al subagente apropiado según el dominio de la solicitud. Nunca ejecuta acciones ni responde preguntas directamente — su única tarea es ruteo determinista.",
+      activacion:
+        "En cada turno nuevo de conversación, cuando el usuario envía un mensaje y Betty no está dentro de un subagente de dominio. Si llega un saludo o mensaje ambiguo, prefiere Pregunta Ambigua. Solo escala directo con 5 triggers literales: lenguaje agresivo, emergencia física, 'hablar con asesor humano', 'Compra con Confianza' o 'Garantía Betterware'.",
+      respuestas:
+        "No produce mensajes al usuario. Transfiere silenciosamente al subagente destino, que a su vez saluda o pide información según su propio flujo.",
+      acciones: [
+        { name: "go_to_auth", target: "@utils.transition", description: "A Autenticación y Recuperación de Acceso" },
+        { name: "go_to_account", target: "@utils.transition", description: "A Cuenta e Información del Distribuidor" },
+        { name: "go_to_orders", target: "@utils.transition", description: "A Pedidos y Entregas" },
+        { name: "go_to_payments", target: "@utils.transition", description: "A Pagos y Finanzas" },
+        { name: "go_to_rewards", target: "@utils.transition", description: "A Premios y Lealtad BW+" },
+        { name: "go_to_content", target: "@utils.transition", description: "A Contenido Digital Comercial" },
+        { name: "go_to_faq", target: "@utils.transition", description: "A Preguntas Generales (FAQ)" },
+        { name: "go_to_escalation", target: "@utils.transition", description: "A Transferencia con Asesor (solo 5 triggers)" },
+        { name: "go_to_off_topic", target: "@utils.transition", description: "A Fuera de Tema" },
+        { name: "go_to_ambiguous", target: "@utils.transition", description: "A Pregunta Ambigua (default fallback)" },
       ],
-      accept: [
-        "Un saludo corto va a Ambiguous, nunca a Escalation.",
-        "Consultas de datos del distribuidor rutean al subagente de dominio, que gestiona auth internamente.",
-        "El router no ejecuta acciones ni responde preguntas.",
-      ],
-      avoid: [
-        "Escalar sin uno de los 5 triggers literales.",
-        "Responder preguntas directamente desde el router.",
+      criterios: [
+        "Dado que el usuario escribe un saludo o mensaje corto, cuando el router recibe el mensaje, entonces transfiere a Ambiguous — nunca a Escalation.",
+        "Dado que el mensaje contiene palabras literales de los 5 triggers de escalación, cuando el router lo detecta, entonces transfiere a Escalation.",
+        "Dado que el usuario pide un dato específico de su cuenta, cuando el router recibe el intent, entonces rutea al subagente de dominio correspondiente, el cual exigirá autenticación si aplica.",
       ],
     },
     {
       id: "auth_and_security",
+      number: 2,
       name: "Autenticación y Recuperación de Acceso",
       category: "Atención y seguridad",
-      summary:
-        "Verifica identidad por código de distribuidor o referencia bancaria, y genera deep-link seguro de reset de contraseña con ownership check.",
-      example: "«Hola, quiero consultar mis puntos»",
-      scope: "Usuarios sin identidad verificada y solicitudes de reset de password.",
-      behavior: [
-        "Pide código de distribuidor en el primer intento.",
-        "Si el código falla, SOLO entonces ofrece autenticación por referencia bancaria.",
-        "Captura el teléfono del canal (channelPhone) y session Id (Id) desde el contexto automáticamente.",
-        "Al éxito, usa el nombre devuelto por la acción (v_NombreDistribuidor) para saludar.",
-        "Para reset: ejecuta BW_InvGenerarURLResetChatbotV2 con flagPerson='Distribuidor'. El Apex valida ownership internamente.",
-        "Nunca imprime la URL ni el token en el chat — solo confirma 'envié el enlace'.",
+      descripcion:
+        "Verifica la identidad del distribuidor por código o referencia bancaria, y genera deep-link seguro de reset de contraseña con compuerta de propiedad. Guarda el contexto de la sesión (código, nombre, teléfono) para que los subagentes downstream consulten sin pedir re-identificación.",
+      activacion:
+        "Al inicio cuando el usuario pide un dato autenticado y aún no se ha identificado. También cuando el usuario pide reset de contraseña. La ruta de referencia bancaria se ofrece SOLO después de que el login por código falla.",
+      respuestas:
+        "Pide el código de distribuidor con cortesía. Al éxito, saluda al usuario por su primer nombre (campo v_NombreDistribuidor del output) y le pregunta en qué le apoya. Para reset confirma solo el canal de entrega — nunca imprime la URL ni el token en el chat.",
+      acciones: [
+        { name: "auth_check_login_codigo", target: "flow://BW_Auth_Check_Login_Codigo", description: "Login principal: valida código contra teléfono del canal." },
+        { name: "auth_login_referencia", target: "flow://BW_Auth_Login_Referencia", description: "Autenticación alternativa por referencia bancaria." },
+        { name: "generar_url_reset", target: "apex://BW_InvGenerarURLResetChatbotV2", description: "Genera link de reset con ownership gate interno." },
       ],
-      accept: [
-        "Tras 2 fallos de auth, escala limpio.",
-        "El código y teléfono quedan en v_CodigoDistribuidor_Sesion y whatsappNumber para toda la sesión.",
-        "Si ownership de reset falla (encontrado=False), cita mensajeError y escala — no genera link.",
+      criterios: [
+        "Dado que el usuario está sin autenticar, cuando pide un dato de su cuenta, entonces Betty transfiere al subagente de autenticación y pide código antes de ejecutar la consulta.",
+        "Dado que el login por código falla una vez, cuando el usuario reintenta, entonces Betty ofrece la referencia bancaria como ruta alternativa — nunca antes.",
+        "Dado que el agente obtiene recoveryURL del reset, cuando responde al usuario, entonces NO imprime el token ni la URL — solo confirma que se envió el enlace.",
+        "Dado que fallan dos intentos de autenticación consecutivos, cuando ocurre el segundo fallo, entonces Betty transfiere a Escalation sin seguir reintentando.",
       ],
-      avoid: [
-        "Ofrecer referencia bancaria de entrada antes de que falle el código.",
-        "Imprimir URLs de reset, tokens, o fragmentos.",
-        "Permitir reset de un distribuidor que no sea el titular del canal.",
-      ],
-      actions: [
-        { name: "auth_check_login_codigo", target: "flow://BW_Auth_Check_Login_Codigo" },
-        { name: "auth_login_referencia", target: "flow://BW_Auth_Login_Referencia" },
-        { name: "generar_url_reset", target: "apex://BW_InvGenerarURLResetChatbotV2" },
-      ],
-    },
-    {
-      id: "account_and_info",
-      name: "Cuenta e Información del Distribuidor",
-      category: "Cuenta y datos",
-      summary:
-        "Datos del distribuidor autenticado y de su red: perfil, clasificación, venta por catálogo, venta acumulada, límite de crédito, reclutas, altas en trámite, Asociados, linaje y tickets de ServiceNow.",
-      example: "«¿Cuánto llevo vendido este catálogo?»",
-      scope:
-        "Cuenta propia y linaje autorizado. Para consultas de hija/nieta exige Validar_Linaje primero.",
-      behavior: [
-        "Para perfil usa BW_InformacionDistribuidor; cita vo_CorreoElectronicoDistribuidor, vo_DireccionDistribuidor, etc.",
-        "Para venta por catálogo usa BW_ConsultarVentaCatalogo v2 (M027); cita vo_Venta y vo_VentaNeta.",
-        "Para clasificación y venta acumulada usa BW_ConsultarClasificacionYVentaAcumulada v5 (M025).",
-        "Para estado de alta de una NUEVA distribuidora en trámite usa M010 V2.",
-        "Si el usuario pregunta por una hija: primero valida linaje; si varValido=False, rechaza.",
-        "Nunca cita comentarios internos de ServiceNow.",
-      ],
-      accept: [
-        "Las consultas de linaje validadas propagan V_CodigoLinaje a toda acción downstream.",
-        "Si una acción devuelve Resultadodeconsulta !== 'OK', cita el motivo específico.",
-      ],
-      avoid: [
-        "Cita de datos de memoria — solo del output de la acción.",
-        "Exponer PII de un asociado sin validar ownership via BWPlusAffiliateLookupAction.",
-        "Usar 'tus datos' si está consultando una hija de linaje.",
-      ],
-      actions: [
-        { name: "informacion_distribuidor", target: "flow://BW_InformacionDistribuidor" },
-        { name: "venta_por_catalogo", target: "flow://BW_ConsultarVentaCatalogo" },
-        { name: "clasificacion_venta_acumulada", target: "flow://BW_ConsultarClasificacionYVentaAcumulada" },
-        { name: "limite_credito_liberado", target: "flow://BW_ConsultarLimiteCreditoLiberado" },
-        { name: "facturacion_garantia_entrega", target: "flow://BW_ConsultaFacturacionYGarantiaEntrega" },
-        { name: "fecha_activacion", target: "flow://BW_ConsultaFechaActivacion" },
-        { name: "reclutas_referidos", target: "flow://BW_ConsultaReclutasReferidos_Flow" },
-        { name: "informacion_comercial_general", target: "flow://BW_ConsultarInformacionComercialGeneralDeUnDistribuidor" },
-        { name: "estado_alta_distribuidora", target: "apex://BW_M010_ConsultarEstadoAltaV2Action" },
-        { name: "consultar_asociados_data_cloud", target: "apex://BWPlusAffiliateLookupAction" },
-        { name: "altas_asociados", target: "apex://BW_M010_ConsultarAltasAsociados" },
-        { name: "validar_linaje", target: "flow://Consulta_mama_de_linaje_Pedidos_fuera_de_tiempo" },
-        { name: "consultar_hijas_linaje", target: "apex://BW_ConsultarLinajeAction" },
-        { name: "service_now_tickets", target: "apex://BW_InvServiceNowTickets" },
-      ],
-    },
-    {
-      id: "orders_and_delivery",
-      name: "Pedidos y Entregas",
-      category: "Pedidos y logística",
-      summary:
-        "Operación completa de pedidos: estatus, facturación, tracking Drivin, guías de paquetería (M024), coberturas por CP, bodegas (M036), venta retenida (M028), devoluciones y pedido extemporáneo con confirmación.",
-      example: "«¿Dónde está mi pedido?»",
-      scope:
-        "Cuenta propia autenticada; algunas rutas aceptan linaje validado para consultar pedidos de hijas.",
-      behavior: [
-        "'¿Dónde está mi pedido?' usa tracking_drivin — nunca imprime URLs firmadas, solo cita 'adjunto la evidencia'.",
-        "Para número de guía de una factura usa BW_ConsultarGuiaPaqueteria (M024) — distingue de tracking.",
-        "Pedido extemporáneo requiere confirmación afirmativa explícita del usuario antes del write.",
-        "Antes de registrar extemporáneo, valida ventana con Validar_Horario_Pedido_Extemporaneo.",
-        "Para recolección de devolución usa BW_ConsulaRecogerDevoluciones solo con código del distribuidor + folio RMA (o linaje validado).",
-        "Para venta retenida (M028): si vo_VentaRetenidaEncontrada=True cita vo_RegistrosPermitidos sin exponer motivo sensible.",
-      ],
-      accept: [
-        "pending_write_intent gate garantiza que registrar_pedido_extemporaneo solo corre tras confirmación.",
-        "Bodega asignada por CP del domicilio del distribuidor — nunca inventa cercanía.",
-        "Fuera de horario, cita openWindowLocal real y nunca inventa ventanas.",
-      ],
-      avoid: [
-        "Imprimir URLs JWT firmadas de Drivin (SEC-4).",
-        "Registrar pedido extemporáneo sin confirmación afirmativa.",
-        "Buscar en otras cuentas tras un fallo en recolección.",
-      ],
-      actions: [
-        { name: "tracking_drivin", target: "apex://BW_InvConsultarDrivin" },
-        { name: "guia_paqueteria", target: "apex://BW_ConsultarGuiaPaqueteria" },
-        { name: "estatus_pedido_facturacion", target: "apex://BW_ConsultaStatusPedidoFactAction" },
-        { name: "ultimo_pedido_facturado", target: "apex://BW_ConsultarFacturacionPedidoAction" },
-        { name: "consultar_cobertura", target: "apex://BW_ConsultarCoberturaAction" },
-        { name: "bodega_asignada", target: "apex://BW_ConsultarBodegaAsignadaAction" },
-        { name: "consultar_bodega", target: "apex://BW_ConsultarBodegaAction" },
-        { name: "venta_retenida", target: "flow://BW_ConsultarVentaRetenida" },
-        { name: "validar_horario_extemporaneo", target: "flow://Validar_Horario_Pedido_Extemporaneo" },
-        { name: "registrar_pedido_extemporaneo", target: "flow://Registrar_Pedid" },
-        { name: "devoluciones_bwplus", target: "apex://BW_InvConsultarDevolucionesBwPlus" },
-        { name: "recoger_devolucion", target: "apex://BW_ConsulaRecogerDevoluciones" },
-        { name: "revision_bonificacion", target: "apex://BWPlusBonificacionAction" },
-        { name: "revision_reenvio", target: "apex://BWPlusReenvioAction" },
-      ],
-      extra: [
-        {
-          title: "Confirmación de write (F-3 fix)",
-          text: "Antes de registrar un pedido extemporáneo, el agente resume la nota con el usuario y espera un 'sí' explícito. Solo entonces setea pending_write_intent='registrar_pedido_extemporaneo' y la acción está disponible via `available when`.",
-        },
-      ],
-    },
-    {
-      id: "payments_and_finance",
-      name: "Pagos y Finanzas",
-      category: "Pagos y finanzas",
-      summary:
-        "Consulta de pagos realizados, saldos vigente y restante, descuentos y comisiones semanales, convenios de cobranza y Credilazos (saldo y préstamo).",
-      example: "«¿Cuánto debo y cuánto está vencido?»",
-      scope:
-        "Cuenta propia y linaje autorizado. Credilazos propio. Para pagos de hija exige Validar_Linaje.",
-      behavior: [
-        "Diferenciación disjunta: pagos ≠ saldos ≠ descuentos ≠ convenios ≠ credilazos.",
-        "consultar_pagos lista PAGOS realizados — nunca credilazos ni bonos.",
-        "saldo_restante da vo_SaldoRestante, vo_SaldoTotal, vo_TotalSaldoVencido.",
-        "descuentos_por_semana recibe anio y semana como number.",
-        "convenios es read-only — no ofrece transfer automático (fix E-3).",
-        "Credilazos saldo y préstamo son DISTINTOS del saldo del distribuidor.",
-        "Si el usuario quiere REGISTRAR un pago nuevo, deriva a Escalation.",
-      ],
-      accept: [
-        "CERO cálculos: no resta pagos declarados del saldo.",
-        "Al pedir pago de una hija, primero valida linaje.",
-        "Convenios de linaje autorizados solo tras validación.",
-      ],
-      avoid: [
-        "Mezclar saldo del distribuidor con saldo Credilazos.",
-        "Ofrecer transfer automático tras consulta de convenio.",
-        "Confirmar que se pagó a partir del monto generado de descuentos.",
-      ],
-      actions: [
-        { name: "consultar_pagos", target: "apex://BW_ConsultaPagosAction" },
-        { name: "saldo_restante", target: "flow://BW_ConsultarSaldoRestante" },
-        { name: "descuentos_esta_semana", target: "apex://BW_ConsultarDescuentosEstaSemana" },
-        { name: "descuentos_por_semana", target: "flow://BW_ConsultarDescuentosPorSemana" },
-        { name: "detalle_descuentos", target: "apex://BW_ConsultaDescuentosAction" },
-        { name: "consultar_convenio_cobranza", target: "flow://Consultar_convenio_de_cobranza" },
-        { name: "consultar_prestamo_credilazos", target: "flow://Consultar_prestamo_Credilazos" },
-        { name: "consultar_saldo_credilazos", target: "flow://Consultar_saldo_Credilazos" },
-      ],
-    },
-    {
-      id: "rewards_and_loyalty",
-      name: "Premios y Lealtad BW+",
-      category: "Puntos y programas",
-      summary:
-        "Puntos BW+ (resumen, velocímetro, duplicador), programas de lealtad (Arranca y Gana, Haz Linaje y Gana Más, Recluta Asociados), premios BW+ y Drivin, traspasos de Asociadas.",
-      example: "«¿Cuántos puntos tengo para canjear?»",
-      scope: "Consulta propia. Para puntos/premios de una hija exige Validar_Linaje primero.",
-      behavior: [
-        "resumen_puntos (BW_OrcPuntos) cita puntosTotalesDisponibles, puntosCanjeados, puntosGanados.",
-        "velocimetro y duplica_velocimetro usan catálogo y codigoAsociado.",
-        "Arranca y Gana cita cantidadReclutas, puntosTotales, recibioBono.",
-        "Entrega de premios vía Drivin usa premios_drivin, no tracking general.",
-        "Si fecha de entrega viene 'planeada', no la cita como garantizada.",
-      ],
-      accept: [
-        "Programas BW+ cada uno con su acción específica.",
-        "Linaje validado permite consulta de puntos/premios de hija.",
-      ],
-      avoid: [
-        "Mencionar códigos canjeables de terceros (Cinépolis u otros) — alucinación F-13.",
-        "Cita de fecha planeada como entrega garantizada.",
-      ],
-      actions: [
-        { name: "resumen_puntos", target: "apex://BW_OrcPuntos" },
-        { name: "velocimetro", target: "apex://BW_ConsultarVelocimetroAction" },
-        { name: "duplica_velocimetro", target: "apex://BW_ConsultarDuplicaVelocimetroAction" },
-        { name: "arranca_y_gana", target: "apex://BW_ArrancaYGana" },
-        { name: "haz_linaje_y_gana", target: "apex://BW_HazLinajeYGana" },
-        { name: "recluta_asociados", target: "apex://BW_ConsultarPuntosReclutamiento" },
-        { name: "premios_bwplus", target: "apex://BW_InvConsultarPremiosBwPlus" },
-        { name: "premios_drivin", target: "apex://BW_ConsultarPremiosDrivin" },
-        { name: "traspasos", target: "apex://BW_InvConsultarTraspasosBwPlus" },
-      ],
-    },
-    {
-      id: "digital_content",
-      name: "Contenido Digital Comercial",
-      category: "Contenido y FAQ",
-      summary:
-        "Entrega material comercial del período activo: catálogo, flyer, oportunidades, combos, reglas comerciales, Última Oportunidad, guía de nuevos productos.",
-      example: "«Envíame el catálogo de venta»",
-      scope: "Material comercial vigente. No cita URLs inventadas.",
-      behavior: [
-        "Usa BW_AnswerQuestionsWithKnwoledge con la Query del usuario para responder.",
-        "Para videos de producto, cita solo enlaces que vengan en el output.",
-      ],
-      accept: [
-        "Entrega directa del material oficial de Knowledge.",
-      ],
-      avoid: [
-        "Inventar precios, disponibilidad o promociones.",
-        "Fabricar URLs de videos o PDFs.",
-      ],
-      actions: [{ name: "knowledge_content", target: "flow://BW_AnswerQuestionsWithKnwoledge" }],
-    },
-    {
-      id: "general_faq",
-      name: "Preguntas Generales (FAQ)",
-      category: "Contenido y FAQ",
-      summary:
-        "Responde preguntas sobre políticas, programas y procesos usando artículos oficiales de Knowledge. No requiere autenticación.",
-      example: "«¿Cómo funciona el programa de oportunidades?»",
-      scope: "Información general; no consulta cuentas específicas.",
-      behavior: [
-        "Responde solo con artículos oficiales de Knowledge via BW_AnswerQuestionsWithKnwoledge.",
-        "Si la pregunta requiere datos de cuenta, pide al usuario que lo diga para transferir al subagente que exige auth.",
-      ],
-      accept: [
-        "La insistencia del usuario no crea excepciones de política.",
-        "Si Knowledge no tiene respuesta, lo reconoce.",
-      ],
-      avoid: [
-        "Responder preguntas de conocimiento general (clima, geografía, trivia) — eso va a OffTopic.",
-        "Inventar políticas.",
-      ],
-      actions: [{ name: "knowledge_faq", target: "flow://BW_AnswerQuestionsWithKnwoledge" }],
     },
     {
       id: "escalation",
+      number: 3,
       name: "Transferencia con Asesor",
-      category: "Guardarraíles",
-      summary:
-        "Transferencia a asesor humano SOLO ante 5 triggers específicos. Antes de transferir, verifica horario y pide confirmación afirmativa.",
-      example: "«Quiero hablar con un asesor humano»",
-      scope:
-        "Último recurso. 5 triggers: lenguaje agresivo, emergencia física, petición literal, Compra con Confianza, Garantía Betterware.",
-      behavior: [
-        "Antes de transferir, usa BW_CheckBusinessHours. Si cerrado, cita MensajeSalida literal y ofrece dejar mensaje.",
-        "Si abierto, resume brevemente el motivo y pide confirmación afirmativa.",
-        "Solo con el 'sí' explícito ejecuta @utils.escalate.",
-        "Si llegó aquí por error, redirige a Ambiguous — no escala.",
+      category: "Atención y seguridad",
+      descripcion:
+        "Transferencia a asesor humano SOLO ante 5 triggers específicos: lenguaje agresivo del usuario, emergencia física, petición literal de 'hablar con asesor humano', mención de 'Compra con Confianza' o mención de 'Garantía Betterware'. Antes de transferir, verifica horario del queue y pide confirmación afirmativa del usuario.",
+      activacion:
+        "Cuando el router o un subagente detecta uno de los 5 triggers. También cuando otro subagente agota reintentos (ej. auth con 2 fallos) o encuentra una condición que no puede resolver.",
+      respuestas:
+        "Resume brevemente el motivo detectado, cita la ventana de horario real del queue (MensajeSalida del output de BW_CheckBusinessHours) y pregunta '¿Confirmas que quieres que te transfiera con un asesor?'. Solo con el 'sí' explícito ejecuta la transferencia. Si está fuera de horario, ofrece dejar mensaje.",
+      acciones: [
+        { name: "check_business_hours_esc", target: "flow://BW_CheckBusinessHours", description: "Verifica horario antes de ofrecer transferencia." },
+        { name: "handoff_asesor", target: "@utils.escalate", description: "Transferencia al asesor humano." },
+        { name: "back_to_ambiguous", target: "@utils.transition", description: "Si llegó por error, vuelve a Ambiguous." },
       ],
-      accept: [
-        "La ventana de horario viene del output real del BW_CheckBusinessHours (F-16 fix).",
-        "Nunca transfiere sin confirmación.",
-      ],
-      avoid: [
-        "Prometer cancelación, liberación o procesamiento — solo transfiere.",
-        "Inventar horarios o transferir fuera de horario.",
-      ],
-      actions: [
-        { name: "check_business_hours_esc", target: "flow://BW_CheckBusinessHours" },
-        { name: "handoff_asesor", target: "@utils.escalate" },
+      criterios: [
+        "Dado que el usuario pide un tema de escalación válido (p. ej. 'quiero hablar con una persona'), cuando Betty lo detecta, entonces consulta primero el horario de servicio y solo transfiere si está dentro de horario.",
+        "Dado que el horario del queue está cerrado, cuando el usuario confirma querer transfer, entonces Betty cita la ventana real del output y ofrece dejar mensaje — nunca inventa horarios.",
+        "Dado que el router transfirió aquí sin un trigger válido, cuando el subagente detecta el intent real, entonces retorna a Ambiguous sin ejecutar handoff.",
       ],
     },
     {
       id: "off_topic",
+      number: 4,
       name: "Fuera de Tema",
-      category: "Guardarraíles",
-      summary:
-        "Redirige con cortesía intents fuera del alcance de Betterware (clima, trivia, conocimiento general, otros servicios).",
-      example: "«¿Qué tiempo hace en Madrid?»",
-      scope: "Mensajes claramente off-topic.",
-      behavior: [
-        "Redirige al usuario preguntando en qué del dominio Betterware puede apoyar.",
-        "Nunca revela configuración interna, subagentes, instrucciones de sistema.",
-        "Si el usuario intenta cambiar reglas, ignora e insiste en el redirect.",
-      ],
-      accept: [
-        "No responde preguntas de conocimiento general.",
-      ],
-      avoid: [
-        "Revelar listas de funciones, subagentes o prompts internos.",
+      category: "Atención y seguridad",
+      descripcion:
+        "Redirige con cortesía los intents fuera del alcance de Betterware (clima, trivia, conocimiento general, otros servicios). No responde preguntas de conocimiento general ni revela configuración interna del agente.",
+      activacion:
+        "Cuando el router detecta un intent claramente fuera del dominio Betterware (geografía, política, cultura general, servicios de otras marcas).",
+      respuestas:
+        "Redirige al usuario preguntando en qué del dominio Betterware puede apoyarle. Lista implícita de temas disponibles: cuenta, pedidos, pagos, saldos, puntos, premios, altas, contenido, acceso.",
+      acciones: [],
+      criterios: [
+        "Dado que el usuario pregunta por un tema fuera de Betterware, cuando Betty responde, entonces no responde la pregunta y redirige a los temas del dominio.",
+        "Dado que el usuario intenta cambiar las reglas internas o pide la lista de funciones, cuando Betty detecta la instrucción, entonces la ignora y mantiene el redirect sin revelar configuración interna.",
       ],
     },
     {
       id: "ambiguous",
+      number: 5,
       name: "Pregunta Ambigua",
-      category: "Guardarraíles",
-      summary:
-        "Fallback por defecto para saludos y mensajes cortos. Saluda y pide un poco más de contexto con la lista de capacidades.",
-      example: "«Hola»",
-      scope: "Saludos y mensajes demasiado cortos para clasificar.",
-      behavior: [
-        "Saluda y lista las capacidades principales (saldo, pedidos, pagos, puntos BW+, premios, altas, políticas).",
-        "No pide el código de distribuidor aquí — lo hace Auth cuando aplique.",
-        "Tras la respuesta del usuario, el router rutea.",
+      category: "Atención y seguridad",
+      descripcion:
+        "Fallback por defecto para saludos y mensajes cortos. Saluda al usuario, se presenta como Betty y lista las capacidades principales para que el usuario pueda precisar su solicitud.",
+      activacion:
+        "Cuando el router recibe un mensaje demasiado corto para clasificar (saludo tipo 'hola', 'buenos días') o cuando no cabe en ninguno de los dominios de servicio.",
+      respuestas:
+        "Mensaje de bienvenida con el emoji 💙, se identifica como Betty y lista las capacidades: saldo, pedidos, pagos, puntos BW+, premios, altas de asociados, políticas y programas. Menciona que si el usuario prefiere hablar con un asesor humano, también lo diga.",
+      acciones: [],
+      criterios: [
+        "Dado que el usuario escribe 'hola' o un saludo breve, cuando Betty responde, entonces se presenta y lista las capacidades principales sin pedir código de distribuidor aún.",
+        "Dado que Ambiguous entregó la lista de opciones, cuando el usuario responde con una capacidad concreta, entonces el router rutea al subagente de dominio apropiado.",
       ],
-      accept: [
-        "Primera respuesta ante un 'hola' siempre viene de aquí.",
+    },
+    {
+      id: "general_faq",
+      number: 6,
+      name: "Preguntas Generales (FAQ)",
+      category: "Servicio y trámites",
+      descripcion:
+        "Responde preguntas sobre políticas, programas y procesos usando artículos oficiales de Knowledge. No requiere autenticación. Si la pregunta exige datos de cuenta, deriva al subagente correspondiente que exige auth.",
+      activacion:
+        "Cuando el router detecta una pregunta general que no requiere datos específicos del distribuidor (p. ej. '¿cómo funciona el programa de puntos?', '¿cuál es la política de devoluciones?').",
+      respuestas:
+        "Entrega la respuesta directa desde el output de Knowledge (campo Respuesta). Si Knowledge no tiene información suficiente, lo reconoce explícitamente. Nunca inventa políticas ni acepta excepciones por insistencia del usuario.",
+      acciones: [
+        { name: "knowledge_faq", target: "flow://BW_AnswerQuestionsWithKnwoledge", description: "Búsqueda y respuesta en artículos oficiales de Knowledge." },
       ],
-      avoid: [
-        "Ejecutar acciones.",
-        "Pedir código de distribuidor prematuramente.",
+      criterios: [
+        "Dado que el usuario pregunta sobre una política general, cuando Betty responde, entonces usa el output de Knowledge y cita solo lo que esté en los artículos oficiales.",
+        "Dado que la respuesta de Knowledge no cubre la pregunta, cuando Betty responde, entonces lo reconoce y ofrece transferir a un asesor si el usuario lo pide.",
+        "Dado que la pregunta requiere un dato de cuenta específico, cuando Betty lo detecta, entonces indica al usuario que debe autenticarse y rutea al subagente correspondiente.",
+      ],
+    },
+    {
+      id: "digital_content",
+      number: 7,
+      name: "Contenido Digital Comercial",
+      category: "Servicio y trámites",
+      descripcion:
+        "Entrega material comercial del período activo: catálogo de venta, flyer, oportunidades y premios, combos, reglas comerciales, Última Oportunidad, guía de nuevos productos y videos.",
+      activacion:
+        "Cuando el usuario pide un material comercial concreto (catálogo, flyer, promociones) o pregunta por los contenidos del período.",
+      respuestas:
+        "Usa BW_AnswerQuestionsWithKnwoledge con la Query del usuario y entrega el contenido oficial. Para videos de producto, cita solo enlaces que vengan del output — nunca inventa URLs ni precios.",
+      acciones: [
+        { name: "knowledge_content", target: "flow://BW_AnswerQuestionsWithKnwoledge", description: "Material comercial vigente vía Knowledge." },
+      ],
+      criterios: [
+        "Dado que el usuario pide un material comercial, cuando Betty responde, entonces entrega el contenido oficial del Knowledge y nunca inventa precios ni disponibilidad.",
+        "Dado que el usuario pide un enlace de video, cuando Betty responde, entonces solo cita URLs que estén en el output — jamás fabrica enlaces.",
+      ],
+    },
+    {
+      id: "rewards_and_loyalty",
+      number: 8,
+      name: "Premios y Lealtad BW+",
+      category: "Puntos y programas",
+      descripcion:
+        "Puntos BW+ (resumen, velocímetro, duplicador), programas de lealtad (Arranca y Gana, Haz Linaje y Gana Más, Recluta Asociados), premios BW+ y Drivin, y traspasos de Asociadas. Consulta propia o de linaje autorizado tras validación.",
+      activacion:
+        "Cuando el usuario pregunta por puntos, premios, velocímetro, un programa de lealtad específico o estatus de traspasos. Requiere autenticación. Si la consulta es sobre una hija/nieta del linaje, exige Validar_Linaje antes.",
+      respuestas:
+        "Cita los campos exactos del output: puntosTotalesDisponibles, puntosCanjeados, puntosGanados para el resumen; cantidadReclutas y recibioBono para Arranca y Gana; estatusEntrega y fechaPlaneada para premios Drivin. Si una fecha viene 'planeada', nunca la presenta como entrega garantizada.",
+      acciones: [
+        { name: "resumen_puntos", target: "apex://BW_OrcPuntos", description: "Resumen de puntos BW+." },
+        { name: "velocimetro", target: "apex://BW_ConsultarVelocimetroAction", description: "Velocímetro BW+." },
+        { name: "duplica_velocimetro", target: "apex://BW_ConsultarDuplicaVelocimetroAction", description: "Duplicador del velocímetro." },
+        { name: "arranca_y_gana", target: "apex://BW_ArrancaYGana", description: "Programa Arranca y Gana." },
+        { name: "haz_linaje_y_gana", target: "apex://BW_HazLinajeYGana", description: "Programa Haz Linaje y Gana Más." },
+        { name: "recluta_asociados", target: "apex://BW_ConsultarPuntosReclutamiento", description: "Programa Recluta Asociados." },
+        { name: "premios_bwplus", target: "apex://BW_InvConsultarPremiosBwPlus", description: "Premios BW+ del distribuidor." },
+        { name: "premios_drivin", target: "apex://BW_ConsultarPremiosDrivin", description: "Entrega de premios vía Drivin." },
+        { name: "traspasos", target: "apex://BW_InvConsultarTraspasosBwPlus", description: "Traspasos de Asociadas." },
+      ],
+      criterios: [
+        "Dado que el usuario pide sus puntos, cuando Betty consulta BW_OrcPuntos, entonces cita puntosTotalesDisponibles del output sin recalcular.",
+        "Dado que el usuario pregunta por puntos de una hija del linaje, cuando Betty lo detecta, entonces ejecuta Validar_Linaje antes de consultar — si varValido=False, rechaza con cortesía.",
+        "Dado que la fecha de entrega del premio Drivin viene como 'planeada', cuando Betty responde, entonces la presenta como fecha estimada y nunca como entrega garantizada.",
+        "Dado que el usuario pregunta por códigos canjeables de terceros (Cinépolis, etc.), cuando Betty detecta la pregunta, entonces no inventa códigos — solo cita lo que viene en el output.",
+      ],
+    },
+    {
+      id: "orders_and_delivery",
+      number: 9,
+      name: "Pedidos y Entregas",
+      category: "Pedidos y logística",
+      descripcion:
+        "Operación completa de pedidos: estatus por folio, facturación, último pedido, tracking Drivin, guías de paquetería (M024), coberturas por CP, bodega asignada y directorio (M036), venta retenida (M028), devoluciones (bonificación, reenvío, recolección por RMA) y solicitud de pedido extemporáneo con confirmación afirmativa.",
+      activacion:
+        "Cuando el usuario pregunta por un pedido, su facturación, su estado de entrega, cobertura, bodegas, venta retenida, devoluciones o quiere registrar un pedido extemporáneo. Requiere autenticación.",
+      respuestas:
+        "Cita campos específicos según la consulta: estatusEntrega y fechaPlaneada para Drivin; codigoRastreo + paqueteria + fechaEnvio + urlRastreo para guía; nombreBodega + direccion + horario + urlMapa para bodega. Para evidencia de Drivin no imprime URLs firmadas — solo dice 'adjunto la evidencia'. Para pedido extemporáneo resume la nota, pide confirmación afirmativa y solo entonces registra.",
+      acciones: [
+        { name: "tracking_drivin", target: "apex://BW_InvConsultarDrivin", description: "Seguimiento de entrega Drivin." },
+        { name: "guia_paqueteria", target: "apex://BW_ConsultarGuiaPaqueteria", description: "Número de guía por factura." },
+        { name: "estatus_pedido_facturacion", target: "apex://BW_ConsultaStatusPedidoFactAction", description: "Estatus del pedido por folio." },
+        { name: "ultimo_pedido_facturado", target: "apex://BW_ConsultarFacturacionPedidoAction", description: "Último pedido facturado." },
+        { name: "consultar_cobertura", target: "apex://BW_ConsultarCoberturaAction", description: "Cobertura por código postal." },
+        { name: "bodega_asignada", target: "apex://BW_ConsultarBodegaAsignadaAction", description: "Bodega del domicilio del distribuidor." },
+        { name: "consultar_bodega", target: "apex://BW_ConsultarBodegaAction", description: "Directorio de bodegas." },
+        { name: "venta_retenida", target: "flow://BW_ConsultarVentaRetenida", description: "Venta/pedido retenido." },
+        { name: "validar_horario_extemporaneo", target: "flow://Validar_Horario_Pedido_Extemporaneo", description: "Verifica ventana del extemporáneo." },
+        { name: "registrar_pedido_extemporaneo", target: "flow://Registrar_Pedid", description: "Registra el pedido extemporáneo (write, con confirmación)." },
+        { name: "devoluciones_bwplus", target: "apex://BW_InvConsultarDevolucionesBwPlus", description: "Lista de devoluciones." },
+        { name: "recoger_devolucion", target: "apex://BW_ConsulaRecogerDevoluciones", description: "Recolección de devolución por folio RMA." },
+        { name: "revision_bonificacion", target: "apex://BWPlusBonificacionAction", description: "Revisión de bonificación de devolución." },
+        { name: "revision_reenvio", target: "apex://BWPlusReenvioAction", description: "Revisión de reenvío de devolución." },
+      ],
+      criterios: [
+        "Dado que el usuario pregunta '¿dónde está mi pedido?', cuando Betty consulta Drivin, entonces cita estatusEntrega y fechaPlaneada del output y nunca imprime la URL firmada de la evidencia.",
+        "Dado que el usuario pide número de guía de una factura, cuando Betty consulta BW_ConsultarGuiaPaqueteria, entonces cita paqueteria, codigoRastreo y urlRastreo — y no lo confunde con tracking.",
+        "Dado que el usuario pide un pedido extemporáneo, cuando Betty prepara el write, entonces primero valida horario y solo registra tras un 'sí' explícito del usuario — nunca registra en el mismo turno de la aclaración.",
+        "Dado que el usuario pregunta por venta retenida, cuando Betty consulta BW_ConsultarVentaRetenida, entonces si vo_VentaRetenidaEncontrada=True cita vo_RegistrosPermitidos sin exponer motivo sensible.",
+      ],
+    },
+    {
+      id: "account_and_info",
+      number: 10,
+      name: "Cuenta e Información del Distribuidor",
+      category: "Red y datos comerciales",
+      descripcion:
+        "Datos del distribuidor autenticado y de su red: perfil, clasificación comercial, venta por catálogo (M027), venta acumulada (M025), límite de crédito liberado, facturación y garantía de entrega, fecha de activación, reclutas y referidos, altas de nuevas distribuidoras en trámite (M010 V2), consulta de Asociados vía Data Cloud, consultas de linaje y tickets de ServiceNow.",
+      activacion:
+        "Cuando el usuario pide un dato de su perfil, su venta, su clasificación, su crédito, el estado de alta de una nueva distribuidora o información de un Asociado o hija del linaje. Requiere autenticación. Para consultas de linaje exige Validar_Linaje antes de la consulta real.",
+      respuestas:
+        "Cita campos específicos del output según la consulta: vo_Venta y vo_VentaNeta para venta por catálogo; vo_ClasificacionDistribuidor para clasificación; vo_CorreoElectronicoDistribuidor, vo_DireccionDistribuidor y vo_NumeroTelefonicoTelefonico para perfil. Nunca cita comentarios internos de tickets de ServiceNow.",
+      acciones: [
+        { name: "informacion_distribuidor", target: "flow://BW_InformacionDistribuidor", description: "Perfil general." },
+        { name: "venta_por_catalogo", target: "flow://BW_ConsultarVentaCatalogo", description: "Venta por catálogo (M027)." },
+        { name: "clasificacion_venta_acumulada", target: "flow://BW_ConsultarClasificacionYVentaAcumulada", description: "Clasificación y venta acumulada (M025)." },
+        { name: "limite_credito_liberado", target: "flow://BW_ConsultarLimiteCreditoLiberado", description: "Límite de crédito liberado." },
+        { name: "facturacion_garantia_entrega", target: "flow://BW_ConsultaFacturacionYGarantiaEntrega", description: "Facturación y garantía." },
+        { name: "fecha_activacion", target: "flow://BW_ConsultaFechaActivacion", description: "Fecha de activación comercial." },
+        { name: "reclutas_referidos", target: "flow://BW_ConsultaReclutasReferidos_Flow", description: "Avance de reclutamiento." },
+        { name: "informacion_comercial_general", target: "flow://BW_ConsultarInformacionComercialGeneralDeUnDistribuidor", description: "Información comercial general." },
+        { name: "estado_alta_distribuidora", target: "apex://BW_M010_ConsultarEstadoAltaV2Action", description: "Estado de alta de nueva distribuidora (M010 V2)." },
+        { name: "consultar_asociados_data_cloud", target: "apex://BWPlusAffiliateLookupAction", description: "Lookup de Asociado desde Data Cloud." },
+        { name: "altas_asociados", target: "apex://BW_M010_ConsultarAltasAsociados", description: "Altas recientes de Asociados." },
+        { name: "validar_linaje", target: "flow://Consulta_mama_de_linaje_Pedidos_fuera_de_tiempo", description: "Confirma pertenencia de linaje antes de consultas cross-lineage." },
+        { name: "consultar_hijas_linaje", target: "apex://BW_ConsultarLinajeAction", description: "Lista hijas del linaje." },
+        { name: "service_now_tickets", target: "apex://BW_InvServiceNowTickets", description: "Tickets abiertos de ServiceNow." },
+      ],
+      criterios: [
+        "Dado que el usuario pide su venta del catálogo, cuando Betty consulta BW_ConsultarVentaCatalogo, entonces cita vo_Venta y vo_VentaNeta del output y nunca inventa cifras.",
+        "Dado que el usuario pregunta por una hija del linaje, cuando Betty lo detecta, entonces ejecuta Validar_Linaje primero — si varValido=False responde que solo puede consultar su propia red.",
+        "Dado que un ticket de ServiceNow trae un comentario marcado como interno, cuando Betty responde, entonces nunca cita ese comentario — solo los campos permitidos.",
+        "Dado que una acción devuelve Resultadodeconsulta diferente de 'OK', cuando Betty responde al usuario, entonces cita el motivo específico (MensajeResultado) en lugar de un genérico 'no encontré registros'.",
+      ],
+    },
+    {
+      id: "payments_and_finance",
+      number: 11,
+      name: "Pagos y Finanzas",
+      category: "Saldos y pagos",
+      descripcion:
+        "Consulta de pagos realizados, saldos (vigente y restante), descuentos y comisiones semanales, convenios de cobranza y Credilazos (saldo y préstamo activo). Diferenciación disjunta entre pagos, saldos, descuentos, convenios y Credilazos.",
+      activacion:
+        "Cuando el usuario pregunta por pagos realizados, saldo pendiente, descuentos de la semana, convenio de cobranza vigente o datos de Credilazos. Requiere autenticación. Si pregunta por una hija del linaje, exige Validar_Linaje. Si quiere registrar/reportar un pago nuevo, deriva a Escalation.",
+      respuestas:
+        "Cita campos específicos del output según el intent: vo_SaldoRestante y vo_TotalSaldoVencido para saldo; importe y cuentaBancaria para descuentos; outMonto y outPlazo para Credilazos. Nunca mezcla saldo del distribuidor con saldo Credilazos. Convenios son read-only — no ofrece transferencia automática tras la lectura.",
+      acciones: [
+        { name: "consultar_pagos", target: "apex://BW_ConsultaPagosAction", description: "Historial de pagos realizados." },
+        { name: "saldo_restante", target: "flow://BW_ConsultarSaldoRestante", description: "Saldo del distribuidor." },
+        { name: "descuentos_esta_semana", target: "apex://BW_ConsultarDescuentosEstaSemana", description: "Descuentos de la semana en curso." },
+        { name: "descuentos_por_semana", target: "flow://BW_ConsultarDescuentosPorSemana", description: "Descuentos por semana/año específicos." },
+        { name: "detalle_descuentos", target: "apex://BW_ConsultaDescuentosAction", description: "Detalle fino de descuentos." },
+        { name: "consultar_convenio_cobranza", target: "flow://Consultar_convenio_de_cobranza", description: "Convenio de cobranza (read-only)." },
+        { name: "consultar_prestamo_credilazos", target: "flow://Consultar_prestamo_Credilazos", description: "Préstamo Credilazos activo." },
+        { name: "consultar_saldo_credilazos", target: "flow://Consultar_saldo_Credilazos", description: "Saldo del préstamo Credilazos." },
+      ],
+      criterios: [
+        "Dado que el usuario pide su saldo, cuando Betty consulta BW_ConsultarSaldoRestante, entonces cita vo_SaldoRestante y vo_TotalSaldoVencido — nunca mezcla con saldo Credilazos.",
+        "Dado que el usuario pregunta por su convenio o Credilazos, cuando se muestra el resultado, entonces Betty informa solo los datos devueltos, pregunta si desea un asesor y, si dice que sí, transfiere sin pedir una segunda confirmación.",
+        "Dado que el usuario quiere registrar un pago fuera de tiempo, cuando Betty lo detecta, entonces pide confirmación y solo transfiere si responde afirmativamente — nunca registra el pago aquí.",
+        "Dado que el usuario pregunta por qué no se le transfiere, cuando Betty responde, entonces no revela criterios internos y solo ofrece apoyo con calidez.",
       ],
     },
   ],
