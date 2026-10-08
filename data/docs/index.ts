@@ -44,7 +44,7 @@ const BETTERWARE_DOCS: DocEntry[] = [
     label: "Programa Insiders · Betty",
     description:
       "Narrativa del pilot con 15–25 distribuidores. Cutover 2026-10-16. Tono business.",
-    url: "/Customers/Betterware/files/Programa_Insiders_Betty.html",
+    url: "/Customers/Betterware/files/Programa_Insiders_Betty.pdf",
     category: "Pilot",
     icon: "📘",
     visibleTo: ["Salesforce", "Partner", "Client"],
