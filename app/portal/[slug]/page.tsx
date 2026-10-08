@@ -43,10 +43,10 @@ export default async function PortalSlugPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ tab?: string }>;
+  searchParams: Promise<{ tab?: string; planTab?: string }>;
 }) {
   const { slug } = await params;
-  const { tab: tabParam } = await searchParams;
+  const { tab: tabParam, planTab: planTabParam } = await searchParams;
   const user = await getCurrentUser();
   if (!user) redirect(`/portal/login?returnTo=/portal/${slug}`);
 
@@ -164,7 +164,18 @@ export default async function PortalSlugPage({
         {activeTab === "documentos" && (
           <DocumentosTab slug={slug} user={user} />
         )}
-        {activeTab === "plan" && <PlanTab user={user} slug={slug} />}
+        {activeTab === "plan" && (
+          <PlanTab
+            user={user}
+            slug={slug}
+            customerName={project.customerName}
+            planTab={
+              planTabParam === "backlog" || planTabParam === "activities"
+                ? planTabParam
+                : "timeline"
+            }
+          />
+        )}
         {activeTab === "pruebas" && <PruebasTab user={user} slug={slug} />}
         {activeTab === "calendario" && <CalendarioTab user={user} slug={slug} />}
         {activeTab === "admin" && <AdminTab slug={slug} />}

@@ -475,6 +475,9 @@ export default function FDETracker({
   boundCreateItemAction,
   boundUpdateStatusAction,
   boundCreateActivityAction,
+  tabsHrefBuilder,
+  heading = "Seguimiento de proyectos",
+  subheading,
 }: {
   projects: FDEProject[];
   customerName: string;
@@ -485,7 +488,11 @@ export default function FDETracker({
   boundCreateItemAction: BoundCreateItemAction;
   boundUpdateStatusAction: BoundUpdateStatusAction;
   boundCreateActivityAction: BoundCreateActivityAction;
+  tabsHrefBuilder?: (tab: TrackerTab) => string;
+  heading?: string;
+  subheading?: string;
 }) {
+  void lang; // retained for API compatibility; unused when tabsHrefBuilder is provided
   const timestamp = lastRefreshedAt.toLocaleString("es-MX", {
     dateStyle: "medium",
     timeStyle: "short",
@@ -497,7 +504,9 @@ export default function FDETracker({
     0,
   );
 
-  const baseHref = `/${lang}/customer-projects/${slug}/tracker`;
+  const defaultBaseHref = `/${lang}/customer-projects/${slug}/tracker`;
+  const buildHref = (t: TrackerTab) =>
+    tabsHrefBuilder ? tabsHrefBuilder(t) : `${defaultBaseHref}?tab=${t}`;
 
   return (
     <main className="px-4 pb-16 pt-10 sm:px-6 sm:pt-12 md:px-8 md:pt-16">
@@ -506,12 +515,11 @@ export default function FDETracker({
           <div>
             <p className="eyebrow mb-3">{customerName} · Delivery Tracker</p>
             <h1 className="section-title max-w-4xl text-3xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
-              Seguimiento de proyectos
+              {heading}
             </h1>
             <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-600">
-              Vista en vivo del backlog, action items, actividades realizadas
-              y avances registrados en la org Salesforce del equipo
-              Agentforce. Filtrada por visibilidad al cliente.
+              {subheading ??
+                "Vista en vivo del backlog, action items, actividades realizadas y avances registrados en la org Salesforce del equipo Agentforce. Filtrada por visibilidad al cliente."}
             </p>
           </div>
           <p className="text-xs text-gray-400">
@@ -523,13 +531,13 @@ export default function FDETracker({
           <TabLink
             label="Backlog y action items"
             count={totalItems}
-            href={`${baseHref}?tab=backlog`}
+            href={buildHref("backlog")}
             active={tab === "backlog"}
           />
           <TabLink
             label="Actividades realizadas"
             count={totalActivities}
-            href={`${baseHref}?tab=activities`}
+            href={buildHref("activities")}
             active={tab === "activities"}
           />
         </nav>
