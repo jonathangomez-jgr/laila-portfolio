@@ -486,11 +486,11 @@
 
   <span class="section-eyebrow">1 · Resumen ejecutivo</span>
   <h2>De 48 hallazgos del audit, hoy cerramos el 87.5%</h2>
-  <p class="lead">El audit técnico de septiembre identificó 48 hallazgos en Betty. Entre lo que resolvió Capptus en producción (V42) y lo que cierra la nueva versión del agente, queda atendido el 87.5% del total. Los 6 pendientes son cambios en el código Apex de respaldo que no bloquean el programa Insiders.</p>
+  <p class="lead">El audit técnico de septiembre identificó 48 hallazgos en Betty. Entre lo que ya está resuelto en la versión de producción (V42) y lo que cierra la nueva versión del agente, queda atendido el 87.5% del total. Los 6 pendientes son cambios en el código Apex de respaldo que no bloquean el programa Insiders.</p>
 
   <div class="narrative">
     <p class="quote">El piloto arranca con el 87.5% del audit cerrado.</p>
-    <p>No todos los hallazgos requerían reemplazar el agente. V42 ya trajo 7 fixes importantes. El agente nuevo cierra 25 fixes más de orquestación: cómo responde, cuándo pide autenticación, cómo decide escalar. Los 6 pendientes son cambios en el Apex de respaldo y se trabajan en paralelo sin pausar al piloto.</p>
+    <p>No todos los hallazgos requerían reemplazar el agente. La versión de producción ya resolvió 7 fixes importantes. El agente nuevo cierra 25 fixes más de orquestación: cómo responde, cuándo pide autenticación, cómo decide escalar. Los 6 pendientes son cambios en el Apex de respaldo y se trabajan en paralelo sin pausar al piloto.</p>
   </div>
 
   <div class="stats-callout">
@@ -498,7 +498,7 @@
     <div class="stats-grid">
       <div class="stat">
         <div class="num">7 <span class="pct">15%</span></div>
-        <div class="label">Resueltos por Capptus en V42 producción</div>
+        <div class="label">Ya resueltos en V42 producción</div>
       </div>
       <div class="stat">
         <div class="num">10 <span class="pct">21%</span></div>
@@ -518,7 +518,7 @@
   <div class="bucket-grid" style="margin-top: 0.9em;">
     <div class="bucket v42">
       <h3>Ya en V42 <span class="count">7</span></h3>
-      <p class="sub">Lo que Capptus avanzó entre V40 y V42 — vigente en producción hoy.</p>
+      <p class="sub">Lo que se avanzó entre V40 y V42 — vigente en producción hoy.</p>
     </div>
     <div class="bucket partial">
       <h3>V42 + V2 <span class="count">10</span></h3>
@@ -548,8 +548,8 @@
   </div>
 
   <span class="section-eyebrow">2 · Lo que ya resolvió V42</span>
-  <h2>7 fixes críticos avanzados por Capptus</h2>
-  <p class="lead">Entre septiembre y los primeros días de octubre, el equipo Capptus avanzó mejoras importantes a Betty que ya están vigentes en producción.</p>
+  <h2>7 fixes críticos ya vigentes en producción</h2>
+  <p class="lead">Entre septiembre y los primeros días de octubre, se avanzaron mejoras importantes a Betty que ya están vigentes en la versión 42 de producción.</p>
 
   <ul class="detail-list">
     <li>
@@ -812,27 +812,27 @@
   <ul class="detail-list">
     <li>
       <span class="title">Permisos a nivel de campo en 10 clases Apex</span>
-      <span class="after">Auditoría de "with sharing" para evitar que configuraciones específicas filtren datos de terceros. Owner Capptus · 2 sprints.</span>
+      <span class="after">Auditoría de "with sharing" para evitar que configuraciones específicas filtren datos de terceros. Requiere cambio en Apex de respaldo · 2 sprints.</span>
     </li>
     <li>
       <span class="title">Datos corruptos en el pipeline de origen</span>
-      <span class="after">Email que se renderiza como placeholder; fechas tipo "01 de enero de 1900". Fuente upstream BW+. Owner Betterware · 1-2 sprints.</span>
+      <span class="after">Email que se renderiza como placeholder; fechas tipo "01 de enero de 1900". Fuente en el pipeline de datos upstream BW+ · 1-2 sprints.</span>
     </li>
     <li>
       <span class="title">Filtro de puntos por semana ignorado</span>
-      <span class="after">Pedir puntos de la semana 19 devuelve la cifra actual re-etiquetada. Owner Capptus · 1 sprint.</span>
+      <span class="after">Pedir puntos de la semana 19 devuelve la cifra actual re-etiquetada. Requiere cambio en Apex de respaldo · 1 sprint.</span>
     </li>
     <li>
       <span class="title">Concatenación errónea de inputs en devoluciones</span>
-      <span class="after">Dos valores requeridos se funden en un string mal formado, garantizando falso "no encontrado". Owner Capptus · 1 sprint.</span>
+      <span class="after">Dos valores requeridos se funden en un string mal formado, garantizando falso "no encontrado". Requiere cambio en Apex de respaldo · 1 sprint.</span>
     </li>
     <li>
       <span class="title">Strip de notas internas de ServiceNow en origen</span>
-      <span class="after">V2 ya filtra las notas a nivel de instrucciones; el fix definitivo es que el Apex nunca las devuelva. Owner Capptus · 0.5 sprint.</span>
+      <span class="after">V2 ya filtra las notas a nivel de instrucciones; el fix definitivo es que el Apex nunca las devuelva · 0.5 sprint.</span>
     </li>
     <li>
       <span class="title">Logging con atribución de rol correcta</span>
-      <span class="after">Texto que escribió Betty aparece atribuido al usuario en los logs. Observabilidad, no afecta UX. Owner plataforma Salesforce.</span>
+      <span class="after">Texto que escribió Betty aparece atribuido al usuario en los logs. Observabilidad de plataforma, no afecta UX.</span>
     </li>
   </ul>
 
