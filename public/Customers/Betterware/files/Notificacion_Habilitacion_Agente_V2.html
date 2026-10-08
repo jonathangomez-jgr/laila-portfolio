@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Notificación · Habilitación del Agente V2 · Betterware</title>
+<style>
+  @font-face {
+    font-family: 'AvantGarde';
+    src: url('../../../Assets Salesforce Brand/Fonts/Titles/AvantGardeForSalesforceW05-Dm.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Regular.woff') format('woff');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Semibold.woff') format('woff');
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Bold.woff') format('woff');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Light.woff') format('woff');
+    font-weight: 300;
+  }
+
+  :root {
+    --eb15: #001E5B;
+    --eb30: #022AC0;
+    --eb50: #066AFE;
+    --cb68: #00B3FF;
+    --cb80: #90D0FE;
+    --cb95: #EAF5FE;
+    --rose: #E8275A;
+    --orange: #F28B42;
+    --green: #15803D;
+    --green-bg: #F0FDF4;
+    --green-rule: #BBF7D0;
+    --amber: #B45309;
+    --amber-bg: #FFFBEB;
+    --amber-rule: #FDE68A;
+    --ink: #0A1F44;
+    --slate: #4B5563;
+    --mist: #F3F6FB;
+    --rule: #E2E8F0;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'SalesforceSans', -apple-system, system-ui, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    font-size: 10.5pt;
+    line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @page { size: letter; margin: 0; }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 0.6in 0.7in;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  h1, h2, h3, h4 {
+    font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+    color: var(--eb15);
+    margin: 0 0 0.4em 0;
+    line-height: 1.15;
+  }
+
+  .cover {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 55%, var(--eb50) 100%);
+    color: #fff;
+    padding: 0.9in 0.9in;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover h1 { color: #fff; font-size: 44pt; letter-spacing: -0.01em; line-height: 1.05; margin-bottom: 0.3em; }
+  .cover .subtitle {
+    font-family: 'SalesforceSans', sans-serif;
+    font-weight: 300;
+    font-size: 15pt;
+    color: var(--cb80);
+    margin-bottom: 1.1em;
+  }
+  .cover .eyebrow {
+    display: inline-block;
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cb68);
+    padding: 0.4em 0.9em;
+    border: 1px solid rgba(144,208,254,0.5);
+    border-radius: 100px;
+    margin-bottom: 2.2em;
+  }
+  .cover .top-row { display: flex; justify-content: space-between; align-items: center; }
+  .cover-logo { height: 32px; filter: brightness(0) invert(1); }
+  .cover-date {
+    font-size: 10pt;
+    color: var(--cb80);
+    letter-spacing: 0.05em;
+  }
+  .cover-sparkles {
+    position: absolute;
+    top: 1.5in;
+    right: 0.6in;
+    opacity: 0.5;
+    width: 180px;
+  }
+  .cover-astro {
+    position: absolute;
+    right: -40px;
+    bottom: -30px;
+    width: 320px;
+    opacity: 0.95;
+  }
+  .cover-author {
+    border-top: 1px solid rgba(144,208,254,0.3);
+    padding-top: 0.9em;
+    font-size: 10pt;
+  }
+  .cover-author .name { font-weight: 600; color: #fff; font-size: 11pt; margin-bottom: 0.1em; }
+  .cover-author .role { color: var(--cb80); }
+  .cover-tagline {
+    max-width: 5.5in;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #fff;
+    font-weight: 300;
+  }
+
+  .section-eyebrow {
+    display: inline-block;
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--eb50);
+    margin-bottom: 0.6em;
+  }
+  h2 { font-size: 22pt; margin-bottom: 0.25em; }
+  h2 + .lead { font-size: 12pt; color: var(--slate); max-width: 6.5in; margin: 0 0 1.1em 0; line-height: 1.5; }
+
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.1em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid var(--rule);
+    font-size: 8.5pt;
+    color: var(--slate);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .page-head .brand { font-weight: 700; color: var(--eb30); }
+
+  .page-footer {
+    position: absolute;
+    bottom: 0.35in;
+    left: 0.7in;
+    right: 0.7in;
+    font-size: 8pt;
+    color: #9CA3AF;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--rule);
+    padding-top: 0.4em;
+  }
+
+  .narrative {
+    background: var(--cb95);
+    border-left: 4px solid var(--eb50);
+    padding: 0.9em 1.1em;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1em;
+  }
+  .narrative p { margin: 0; font-size: 11pt; color: var(--ink); line-height: 1.55; }
+  .narrative .quote {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 14pt;
+    color: var(--eb15);
+    line-height: 1.3;
+    margin-bottom: 0.5em;
+  }
+
+  .notice {
+    background: var(--amber-bg);
+    border-left: 4px solid var(--amber);
+    padding: 0.9em 1.1em;
+    border-radius: 0 8px 8px 0;
+    margin: 1em 0;
+    font-size: 10.5pt;
+    line-height: 1.55;
+  }
+  .notice strong { color: var(--amber); font-weight: 700; }
+
+  .factor-list { list-style: none; padding-left: 0; margin: 0.6em 0 1em 0; }
+  .factor-list li {
+    padding: 0.9em 1.1em 0.9em 2.8em;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--eb50);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 0.55em;
+    position: relative;
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
+  .factor-list li .n {
+    position: absolute;
+    left: 0.95em;
+    top: 0.9em;
+    width: 1.4em;
+    height: 1.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--eb50);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 9pt;
+    font-weight: 700;
+    font-family: 'AvantGarde', sans-serif;
+  }
+  .factor-list li .title {
+    display: block;
+    font-weight: 600;
+    color: var(--eb15);
+    margin-bottom: 0.15em;
+  }
+
+  .step-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7em;
+    margin: 0.7em 0;
+  }
+  .step {
+    padding: 0.75em 0.9em;
+    border-radius: 10px;
+    border: 1px solid var(--rule);
+    background: linear-gradient(180deg, var(--cb95) 0%, #fff 100%);
+  }
+  .step .num {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 11pt;
+    color: var(--eb50);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 0.25em;
+  }
+  .step h3 { font-size: 13pt; margin-bottom: 0.3em; color: var(--eb15); }
+  .step p { margin: 0; font-size: 10pt; color: var(--slate); line-height: 1.45; }
+
+  figure.capture {
+    margin: 1em 0 0.6em 0;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(2,42,192,0.04);
+    page-break-inside: avoid;
+    break-inside: avoid;
+    display: block;
+  }
+  figure.capture img {
+    width: 100%;
+    max-height: 3.3in;
+    object-fit: contain;
+    display: block;
+    background: #fff;
+  }
+  figure.capture.flow img { max-height: 4.1in; }
+  figure.capture figcaption {
+    padding: 0.6em 0.9em;
+    font-size: 9pt;
+    color: var(--slate);
+    background: var(--mist);
+    border-top: 1px solid var(--rule);
+  }
+  .flow-explainer { page-break-inside: avoid; break-inside: avoid; }
+  .flow-step { page-break-inside: avoid; break-inside: avoid; }
+  .narrative, .notice, .roadmap-card, .step { page-break-inside: avoid; break-inside: avoid; }
+
+  .flow-explainer {
+    margin: 1em 0;
+  }
+  .flow-step {
+    display: flex;
+    gap: 0.9em;
+    padding: 0.75em 0;
+    border-top: 1px solid var(--rule);
+  }
+  .flow-step:first-child { border-top: none; padding-top: 0; }
+  .flow-step .marker {
+    flex-shrink: 0;
+    width: 2em;
+    height: 2em;
+    background: var(--eb50);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'AvantGarde', sans-serif;
+    font-weight: 700;
+    font-size: 10pt;
+  }
+  .flow-step .body { flex: 1; font-size: 10.5pt; line-height: 1.5; }
+  .flow-step .body .title {
+    font-weight: 600;
+    color: var(--eb15);
+    display: block;
+    margin-bottom: 0.1em;
+  }
+
+  .roadmap-card {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 100%);
+    color: #fff;
+    padding: 1.1em 1.3em;
+    border-radius: 12px;
+    margin: 1em 0;
+  }
+  .roadmap-card h3 { color: #fff; font-size: 14pt; margin-bottom: 0.5em; }
+  .roadmap-card p { margin: 0 0 0.4em 0; color: var(--cb80); font-size: 10.5pt; line-height: 1.5; }
+  .roadmap-card strong { color: #fff; font-weight: 600; }
+
+  ul.clean { list-style: none; padding-left: 0; margin: 0.6em 0; }
+  ul.clean li {
+    padding: 0.4em 0 0.4em 1.4em;
+    position: relative;
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
+  ul.clean li::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--eb50);
+    position: absolute;
+    left: 0.3em; top: 0.8em;
+  }
+
+  p { margin: 0 0 0.7em 0; }
+
+</style>
+</head>
+<body>
+
+<!-- ============== PÁGINA 1 · PORTADA ============== -->
+<section class="page cover">
+  <div class="top-row">
+    <img class="cover-logo" src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" alt="Salesforce">
+    <span class="cover-date">OCTUBRE 2026</span>
+  </div>
+
+  <img class="cover-sparkles" src="../../../Assets Salesforce Brand/Sparkles/Sparkles Blue Main.svg" alt="">
+  <img class="cover-astro" src="../../../Assets Salesforce Brand/Carachters/Agent Astro/Agent Astro 3D 10 R.png" alt="">
+
+  <div>
+    <span class="eyebrow">Notificación · Betterware México</span>
+    <h1>Habilitación<br>del Agente V2<br>en producción</h1>
+    <p class="subtitle">Transición gradual con el programa Insiders</p>
+    <p class="cover-tagline">Cómo se incorpora el nuevo agente, cómo convive con el agente actual durante el piloto, y por qué el trabajo se está haciendo directamente en el ambiente de producción.</p>
+  </div>
+
+  <div class="cover-author">
+    <div class="name">Jonathan Gomez</div>
+    <div class="role">Salesforce · Forward Deployed Engineer</div>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 2 · CONTEXTO ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Notificación · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">1 · Contexto</span>
+  <h2>Trabajo excepcional sobre producción para acelerar la estabilización</h2>
+  <p class="lead">Con el objetivo de acelerar la estabilización del servicio y la liberación del nuevo agente, hemos determinado trabajar de manera excepcional sobre el ambiente de producción. La decisión responde a tres factores operativos del proyecto.</p>
+
+  <ol class="factor-list">
+    <li>
+      <span class="n">1</span>
+      <span class="title">Prioridad operativa</span>
+      Corregir las deficiencias de la implementación actual y habilitar una solución estable en el menor tiempo posible.
+    </li>
+    <li>
+      <span class="n">2</span>
+      <span class="title">Estado actual de los ambientes</span>
+      Se han realizado ajustes directamente en producción, por lo que existen posibles diferencias de configuración respecto al Sandbox.
+    </li>
+    <li>
+      <span class="n">3</span>
+      <span class="title">Continuidad de la implementación</span>
+      Trabajar sobre la configuración vigente permitirá reducir esfuerzos de sincronización y evitar retrasos adicionales.
+    </li>
+  </ol>
+
+  <div class="narrative">
+    <p class="quote">La decisión es excepcional, acotada en alcance, y reversible.</p>
+    <p>Esta ruta no sustituye el ciclo recomendado de desarrollo en Sandbox. La aplicamos sólo para esta ventana de estabilización y con mecanismos de reversión en caso de necesitarlos.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Notificación · Habilitación del Agente V2</span>
+    <span>Página 2 · Contexto</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 3 · ESTRATEGIA ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Notificación · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">2 · Estrategia de habilitación y transición</span>
+  <h2>Dos agentes en paralelo, un grupo controlado de usuarios primero</h2>
+  <p class="lead">Para una transición gradual y controlada entre ambos agentes, se contempla la siguiente estrategia operativa.</p>
+
+  <div class="step-grid">
+    <div class="step">
+      <span class="num">PASO 1</span>
+      <h3>Identificación de usuarios</h3>
+      <p>Se incorpora el campo <strong>FDE_Insider__c</strong> en el objeto <strong>MessagingEndUser</strong> para identificar a los usuarios que participarán en el programa Insiders — acceso adelantado al nuevo agente.</p>
+    </div>
+    <div class="step">
+      <span class="num">PASO 2</span>
+      <h3>Enrutamiento condicionado</h3>
+      <p>Al iniciar una nueva conversación de WhatsApp, el sistema consulta el campo. Los usuarios identificados como Insider son dirigidos al nuevo agente; el resto continúa con el agente Legacy.</p>
+    </div>
+    <div class="step">
+      <span class="num">PASO 3</span>
+      <h3>Convivencia controlada</h3>
+      <p>Ambos agentes operan temporalmente en paralelo. Esto permite validar el desempeño del nuevo agente con un grupo delimitado de usuarios antes de ampliar su cobertura.</p>
+    </div>
+    <div class="step">
+      <span class="num">PASO 4</span>
+      <h3>Congelamiento del Legacy</h3>
+      <p>No deberán incorporarse nuevas funcionalidades ni mejoras evolutivas sobre el agente Legacy. Las nuevas capacidades se desarrollan exclusivamente en el nuevo agente. Solo se contemplan correcciones críticas, previa evaluación y autorización.</p>
+    </div>
+  </div>
+
+  <div class="narrative" style="margin-top: 0.9em;">
+    <p class="quote">La identificación del Insider sucede en un sólo campo del perfil del usuario.</p>
+    <p>En la siguiente página se muestra cómo luce ese campo en el registro de Salesforce. Marcar o desmarcar <strong>Insider</strong> mueve al usuario entre un agente y otro para su siguiente conversación.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Notificación · Habilitación del Agente V2</span>
+    <span>Página 3 · Estrategia</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 4 · CAPTURA REGISTRO INSIDER ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Notificación · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">2.1 · El campo Insider en el registro del usuario</span>
+  <h2>Un check y una fecha · así se marca a un Insider</h2>
+  <p class="lead">Cada usuario de WhatsApp tiene un registro en Salesforce. Para incorporarlo al piloto se activa el campo <strong>Insider</strong>; la fecha de incorporación se guarda automáticamente en <strong>Insider Entered Date</strong>.</p>
+
+  <figure class="capture">
+    <img src="notif-insider-record.png" alt="Registro MessagingEndUser con campo Insider marcado y Insider Entered Date 08/10/2026">
+    <figcaption>Vista del registro de un usuario Insider en Salesforce — campo <strong>Insider</strong> activo y <strong>Insider Entered Date</strong> con la fecha de incorporación.</figcaption>
+  </figure>
+
+  <ul class="clean">
+    <li><strong>Reversible:</strong> desmarcar el campo devuelve inmediatamente al usuario al agente Legacy en su próxima conversación.</li>
+    <li><strong>Trazable:</strong> la fecha de incorporación queda registrada, útil para analizar el comportamiento del piloto por cohortes de ingreso.</li>
+    <li><strong>Operable por el equipo:</strong> la gestión se hace desde el registro del usuario, sin despliegues ni ajustes técnicos.</li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Notificación · Habilitación del Agente V2</span>
+    <span>Página 4 · Campo Insider</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 5 · FLOW ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Notificación · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">3 · Enrutamiento · cómo funciona</span>
+  <h2>Un ruteo automático decide a qué agente llega cada conversación</h2>
+  <p class="lead">Cuando entra una conversación nueva por WhatsApp, un flujo automático verifica si el usuario es Insider y lo deriva al agente correspondiente. Todo sucede antes de que llegue el primer mensaje a un agente.</p>
+
+  <figure class="capture flow">
+    <img src="notif-flow-piloto.png" alt="Diagrama del flujo FDE BW Route to ASA - V2 con decisión Piloto y dos ramas: Route to V2 y Route to Legacy">
+    <figcaption>Flujo <strong>FDE BW Route to ASA · V2</strong> en Salesforce — se ejecuta automáticamente al llegar una nueva conversación.</figcaption>
+  </figure>
+
+  <div class="page-footer">
+    <span>Notificación · Habilitación del Agente V2</span>
+    <span>Página 5 · Flujo de enrutamiento</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 6 · FLOW EXPLAINER ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Notificación · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">3.1 · Enrutamiento paso a paso</span>
+  <h2>Cinco pasos del ruteo, en lenguaje de negocio</h2>
+  <p class="lead">Esto es lo que sucede desde que entra el mensaje hasta que llega al agente correcto. Todo se ejecuta de forma automática, en segundos.</p>
+
+  <div class="flow-explainer">
+    <div class="flow-step">
+      <div class="marker">1</div>
+      <div class="body">
+        <span class="title">Entra una conversación nueva</span>
+        El flujo se dispara cuando un distribuidor escribe por WhatsApp. En este primer paso aún no hay ningún agente asignado.
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="marker">2</div>
+      <div class="body">
+        <span class="title">Se identifica al usuario</span>
+        El sistema localiza al distribuidor que está escribiendo buscando su registro de usuario. Es un paso silencioso para el usuario — sucede en segundos.
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="marker">3</div>
+      <div class="body">
+        <span class="title">Pregunta clave · "¿es Insider?"</span>
+        El flujo consulta en el perfil del usuario si está marcado como Insider. Es la decisión central: dependiendo de la respuesta toma uno u otro camino.
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="marker">4</div>
+      <div class="body">
+        <span class="title">Si es Insider · <strong>Route to V2</strong></span>
+        La conversación se envía al nuevo agente. El usuario Insider recibe la nueva experiencia desde su primer mensaje.
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="marker">5</div>
+      <div class="body">
+        <span class="title">Si no es Insider · <strong>Route to Legacy</strong></span>
+        La conversación continúa con el agente actual, sin cambios. El resto de distribuidores sigue viendo exactamente lo mismo que hoy.
+      </div>
+    </div>
+  </div>
+
+  <div class="narrative" style="margin-top: 0.9em;">
+    <p class="quote">Agregar a alguien al piloto es un sólo clic.</p>
+    <p>Marcar o desmarcar el campo <strong>Insider</strong> en el registro del usuario lo mueve inmediatamente entre un agente y otro para su siguiente conversación. Esto permite ampliar el grupo de piloto gradualmente — o revertir a alguien si fuera necesario.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Notificación · Habilitación del Agente V2</span>
+    <span>Página 6 · Flujo paso a paso</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 7 · CONSIDERACIONES ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Notificación · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">4 · Consideraciones y siguientes pasos</span>
+  <h2>Mitigaciones, criterios y recomendación para alinear ambientes</h2>
+  <p class="lead">La decisión responde exclusivamente a las condiciones particulares del proyecto y no constituye una práctica recomendada. El enfoque recomendado continúa siendo realizar el desarrollo y las pruebas en Sandbox antes de desplegar cualquier cambio en producción.</p>
+
+  <div class="notice">
+    <strong>Mitigaciones activas durante esta ventana</strong>
+    <p style="margin-top: 0.5em;">Mantendremos un alcance controlado, realizaremos las validaciones correspondientes antes de habilitar el nuevo agente para cada grupo de usuarios, y tendremos mecanismos de reversión listos ante cualquier eventualidad.</p>
+  </div>
+
+  <h3 style="font-size: 14pt; margin-top: 1em;">Criterios para operar en esta modalidad</h3>
+  <ul class="clean">
+    <li><strong>Alcance acotado al piloto Insiders:</strong> cualquier cambio en producción se limita a lo necesario para habilitar y estabilizar el nuevo agente.</li>
+    <li><strong>Validación antes de ampliar:</strong> cada incorporación de usuarios al piloto se valida con pruebas específicas y revisión del comportamiento del nuevo agente.</li>
+    <li><strong>Reversibilidad:</strong> desmarcar el campo Insider devuelve al usuario al agente Legacy sin impacto para él.</li>
+    <li><strong>Congelamiento del Legacy:</strong> no se incorporan nuevas funcionalidades. Solo correcciones críticas, previa autorización.</li>
+  </ul>
+
+  <div class="roadmap-card">
+    <h3>Recomendación · refresh de Sandbox al cierre</h3>
+    <p>Una vez concluida y estabilizada la implementación, recomendamos realizar un <strong>refresh del Sandbox</strong>, previa revisión y respaldo de cualquier desarrollo existente.</p>
+    <p>Esto permitirá restablecer la alineación entre ambientes y retomar el ciclo recomendado de <strong>desarrollo → pruebas → despliegue</strong> para futuras modificaciones.</p>
+  </div>
+
+  <div class="narrative" style="margin-top: 1em;">
+    <p class="quote">Esta es una ventana excepcional, no la nueva forma de trabajar.</p>
+    <p>Al terminar la estabilización volvemos al flujo estándar: Sandbox primero, producción después, con la trazabilidad y validación habituales.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Notificación · Habilitación del Agente V2</span>
+    <span>Página 7 · Consideraciones y siguientes pasos</span>
+  </div>
+</section>
+
+</body>
+</html>

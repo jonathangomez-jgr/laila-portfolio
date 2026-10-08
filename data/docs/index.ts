@@ -50,6 +50,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
+    slug: "notificacion-habilitacion-v2",
+    label: "Notificación · Habilitación del Agente V2",
+    description:
+      "Por qué trabajamos excepcionalmente en producción, cómo se identifica a los Insiders con el campo FDE_Insider__c, y cómo opera el ruteo entre el agente nuevo y el Legacy.",
+    url: "/Customers/Betterware/files/Notificacion_Habilitacion_Agente_V2.pdf",
+    category: "Pilot",
+    icon: "🚦",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "presentacion-partner",
     label: "Presentación · Partner + Betterware",
     description: "Deck del kickoff. 10 slides. Horizontal.",
