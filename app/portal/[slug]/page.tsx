@@ -9,6 +9,7 @@ import PlanTab from "./tabs/PlanTab";
 import PruebasTab from "./tabs/PruebasTab";
 import CalendarioTab from "./tabs/CalendarioTab";
 import AdminTab from "./tabs/AdminTab";
+import AgentDocsTab from "./tabs/AgentDocsTab";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,14 @@ const ROLE_STYLES: Record<string, string> = {
   Client: "bg-emerald-100 text-emerald-900",
 };
 
-type TabId = "overview" | "calendario" | "plan" | "pruebas" | "documentos" | "admin";
+type TabId =
+  | "overview"
+  | "calendario"
+  | "plan"
+  | "pruebas"
+  | "documentos"
+  | "admin"
+  | "agent-docs";
 
 const TABS: Array<{ id: TabId; label: string; adminOnly?: boolean }> = [
   { id: "overview", label: "🏠 Overview" },
@@ -27,6 +35,7 @@ const TABS: Array<{ id: TabId; label: string; adminOnly?: boolean }> = [
   { id: "pruebas", label: "🧪 Pruebas" },
   { id: "documentos", label: "📎 Documentos" },
   { id: "admin", label: "⚙️ Admin pruebas", adminOnly: true },
+  { id: "agent-docs", label: "🤖 Documentación agente" },
 ];
 
 export default async function PortalSlugPage({
@@ -159,6 +168,7 @@ export default async function PortalSlugPage({
         {activeTab === "pruebas" && <PruebasTab user={user} slug={slug} />}
         {activeTab === "calendario" && <CalendarioTab user={user} slug={slug} />}
         {activeTab === "admin" && <AdminTab slug={slug} />}
+        {activeTab === "agent-docs" && <AgentDocsTab />}
       </section>
     </main>
   );
