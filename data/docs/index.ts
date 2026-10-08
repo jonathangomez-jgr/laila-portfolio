@@ -88,6 +88,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
+    slug: "reporte-observaciones",
+    label: "Reporte de observaciones · Betterware",
+    description:
+      "Tracker consolidado: 40 ajustes pendientes (24 observaciones técnicas + 16 de plataforma) y 136 modificaciones (82% cerradas).",
+    url: "/Customers/Betterware/files/Reporte_Observaciones_Betterware.pdf",
+    category: "Ejecutivo",
+    icon: "📊",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "agent-deep-dive",
     label: "BW_AGENT_N · Agent Deep Dive (sesión 2)",
     description: "Workshop técnico sobre el agente actual.",

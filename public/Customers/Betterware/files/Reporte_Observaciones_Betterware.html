@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte de Observaciones · Betterware</title>
+<style>
+  @font-face {
+    font-family: 'AvantGarde';
+    src: url('../../../Assets Salesforce Brand/Fonts/Titles/AvantGardeForSalesforceW05-Dm.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Regular.woff') format('woff');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Semibold.woff') format('woff');
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Bold.woff') format('woff');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Light.woff') format('woff');
+    font-weight: 300;
+  }
+
+  :root {
+    --eb15: #001E5B;
+    --eb30: #022AC0;
+    --eb50: #066AFE;
+    --cb68: #00B3FF;
+    --cb80: #90D0FE;
+    --cb95: #EAF5FE;
+    --rose: #E8275A;
+    --orange: #F28B42;
+    --green: #15803D;
+    --green-bg: #F0FDF4;
+    --green-rule: #BBF7D0;
+    --amber: #B45309;
+    --amber-bg: #FFFBEB;
+    --amber-rule: #FDE68A;
+    --ink: #0A1F44;
+    --slate: #4B5563;
+    --mist: #F3F6FB;
+    --rule: #E2E8F0;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'SalesforceSans', -apple-system, system-ui, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    font-size: 10.5pt;
+    line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @page { size: letter; margin: 0; }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 0.6in 0.7in;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  h1, h2, h3, h4 {
+    font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+    color: var(--eb15);
+    margin: 0 0 0.4em 0;
+    line-height: 1.15;
+  }
+
+  .cover {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 55%, var(--eb50) 100%);
+    color: #fff;
+    padding: 0.9in 0.9in;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover h1 { color: #fff; font-size: 44pt; letter-spacing: -0.01em; line-height: 1.05; margin-bottom: 0.3em; }
+  .cover .subtitle {
+    font-weight: 300;
+    font-size: 15pt;
+    color: var(--cb80);
+    margin-bottom: 1.1em;
+  }
+  .cover .eyebrow {
+    display: inline-block;
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cb68);
+    padding: 0.4em 0.9em;
+    border: 1px solid rgba(144,208,254,0.5);
+    border-radius: 100px;
+    margin-bottom: 2.2em;
+  }
+  .cover .top-row { display: flex; justify-content: space-between; align-items: center; }
+  .cover-logo { height: 32px; filter: brightness(0) invert(1); }
+  .cover-date { font-size: 10pt; color: var(--cb80); letter-spacing: 0.05em; }
+  .cover-sparkles { position: absolute; top: 1.5in; right: 0.6in; opacity: 0.5; width: 180px; }
+  .cover-astro { position: absolute; right: -40px; bottom: -30px; width: 320px; opacity: 0.95; }
+  .cover-author { border-top: 1px solid rgba(144,208,254,0.3); padding-top: 0.9em; font-size: 10pt; }
+  .cover-author .name { font-weight: 600; color: #fff; font-size: 11pt; margin-bottom: 0.1em; }
+  .cover-author .role { color: var(--cb80); }
+  .cover-tagline { max-width: 5.5in; font-size: 12pt; line-height: 1.5; color: #fff; font-weight: 300; }
+
+  .section-eyebrow {
+    display: inline-block;
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--eb50);
+    margin-bottom: 0.6em;
+  }
+  h2 { font-size: 22pt; margin-bottom: 0.25em; }
+  h2 + .lead { font-size: 12pt; color: var(--slate); max-width: 6.5in; margin: 0 0 1.1em 0; line-height: 1.5; }
+
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.1em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid var(--rule);
+    font-size: 8.5pt;
+    color: var(--slate);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .page-head .brand { font-weight: 700; color: var(--eb30); }
+
+  .page-footer {
+    position: absolute;
+    bottom: 0.35in;
+    left: 0.7in;
+    right: 0.7in;
+    font-size: 8pt;
+    color: #9CA3AF;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--rule);
+    padding-top: 0.4em;
+  }
+
+  .narrative {
+    background: var(--cb95);
+    border-left: 4px solid var(--eb50);
+    padding: 0.9em 1.1em;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1em;
+  }
+  .narrative p { margin: 0; font-size: 11pt; color: var(--ink); line-height: 1.55; }
+  .narrative .quote {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 14pt;
+    color: var(--eb15);
+    line-height: 1.3;
+    margin-bottom: 0.5em;
+  }
+
+  .stats-callout {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 100%);
+    color: #fff;
+    padding: 1.1em 1.3em;
+    border-radius: 12px;
+    margin: 1em 0;
+  }
+  .stats-callout h3 { color: #fff; font-size: 14pt; margin-bottom: 0.6em; }
+  .stats-callout .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8em;
+    margin-top: 0.7em;
+  }
+  .stats-callout .stat {
+    background: rgba(255,255,255,0.08);
+    border-left: 3px solid var(--cb68);
+    padding: 0.75em 0.9em;
+    border-radius: 0 8px 8px 0;
+  }
+  .stats-callout .stat .num {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 24pt;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+  }
+  .stats-callout .stat .label {
+    font-size: 9pt;
+    color: var(--cb80);
+    margin-top: 0.3em;
+    line-height: 1.3;
+  }
+  .stats-callout .stat .pct {
+    display: inline-block;
+    font-size: 9pt;
+    color: var(--cb68);
+    font-weight: 700;
+    margin-left: 0.4em;
+  }
+
+  .bucket-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9em;
+    margin: 1em 0;
+  }
+  .bucket {
+    padding: 1em 1.1em;
+    border-radius: 10px;
+    border: 1px solid var(--rule);
+    background: #fff;
+  }
+  .bucket.closed { background: linear-gradient(180deg, var(--green-bg) 0%, #fff 100%); border-color: var(--green-rule); }
+  .bucket.review { background: linear-gradient(180deg, var(--amber-bg) 0%, #fff 100%); border-color: var(--amber-rule); }
+  .bucket.validation { background: linear-gradient(180deg, var(--cb95) 0%, #fff 100%); border-color: #BAE6FD; }
+  .bucket.na { background: linear-gradient(180deg, var(--mist) 0%, #fff 100%); border-color: var(--rule); }
+  .bucket h3 { font-size: 13pt; margin-bottom: 0.2em; display: flex; align-items: baseline; gap: 0.5em; }
+  .bucket.closed h3 { color: var(--green); }
+  .bucket.review h3 { color: var(--amber); }
+  .bucket.validation h3 { color: var(--eb30); }
+  .bucket.na h3 { color: var(--slate); }
+  .bucket h3 .count {
+    font-family: 'SalesforceSans', sans-serif;
+    font-size: 9pt;
+    font-weight: 700;
+    padding: 0.15em 0.6em;
+    border-radius: 100px;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+  .bucket.closed h3 .count { background: var(--green); }
+  .bucket.review h3 .count { background: var(--amber); }
+  .bucket.validation h3 .count { background: var(--eb50); }
+  .bucket.na h3 .count { background: var(--slate); }
+  .bucket p.sub { font-size: 9.5pt; color: var(--slate); margin: 0 0 0.5em 0; line-height: 1.4; }
+
+  .detail-list { list-style: none; padding-left: 0; margin: 0.6em 0; }
+  .detail-list li {
+    padding: 0.65em 1em;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--eb50);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 0.45em;
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+  .detail-list li.closed { border-left-color: var(--green); }
+  .detail-list li.review { border-left-color: var(--amber); }
+  .detail-list li.na { border-left-color: var(--slate); }
+  .detail-list li .code { font-family: ui-monospace, monospace; font-size: 9pt; color: var(--eb30); font-weight: 700; margin-right: 0.5em; }
+  .detail-list li .status {
+    display: inline-block;
+    font-size: 8pt;
+    font-weight: 700;
+    padding: 0.1em 0.5em;
+    border-radius: 100px;
+    color: #fff;
+    letter-spacing: 0.03em;
+    margin-left: 0.4em;
+    vertical-align: middle;
+  }
+  .status.v-rev { background: var(--amber); }
+  .status.v-val { background: var(--eb50); }
+  .status.v-na { background: var(--slate); }
+  .status.v-case { background: var(--rose); }
+  .status.v-closed { background: var(--green); }
+  .detail-list li .title { font-weight: 600; color: var(--eb15); display: inline; }
+  .detail-list li .body { display: block; margin-top: 0.3em; color: var(--ink); font-size: 9.5pt; line-height: 1.5; }
+  .detail-list li .impact { display: block; margin-top: 0.25em; color: var(--slate); font-size: 9pt; font-style: italic; }
+
+  .cat-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 1em 0 0.5em 0;
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 13pt;
+    color: var(--eb15);
+  }
+  .cat-head .ico {
+    display: inline-flex;
+    width: 1.6em; height: 1.6em;
+    background: var(--cb95);
+    border-radius: 8px;
+    align-items: center; justify-content: center;
+    font-size: 13pt;
+  }
+
+  .next-step {
+    background: linear-gradient(135deg, var(--cb95) 0%, #fff 100%);
+    border: 2px solid var(--eb50);
+    border-radius: 14px;
+    padding: 1.1em 1.3em;
+    margin-top: 1.2em;
+  }
+  .next-step h3 { color: var(--eb50); font-size: 13pt; margin-bottom: 0.6em; }
+  .next-step .step {
+    display: flex;
+    gap: 0.9em;
+    padding: 0.35em 0;
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+  .next-step .step .day {
+    font-weight: 700;
+    color: var(--eb30);
+    min-width: 1.9in;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== PÁGINA 1 · PORTADA ============== -->
+<section class="page cover">
+  <div class="top-row">
+    <img class="cover-logo" src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" alt="Salesforce">
+    <span class="cover-date">OCTUBRE 2026</span>
+  </div>
+
+  <img class="cover-sparkles" src="../../../Assets Salesforce Brand/Sparkles/Sparkles Blue Main.svg" alt="">
+  <img class="cover-astro" src="../../../Assets Salesforce Brand/Carachters/Agent Astro/Agent Astro 3D 10 R.png" alt="">
+
+  <div>
+    <span class="eyebrow">Tracker del proyecto · Betterware México</span>
+    <h1>Reporte de<br>Observaciones<br>Betterware</h1>
+    <p class="subtitle">Avance de ajustes técnicos pendientes y modificaciones del proyecto</p>
+    <p class="cover-tagline">Consolidado del tracker Betterware · Capptus. Resumen de las 24 observaciones técnicas de auditoría, 16 observaciones de plataforma y datos, y las 136 modificaciones registradas desde capacitación hasta el día de hoy.</p>
+  </div>
+
+  <div class="cover-author">
+    <div class="name">Jonathan Gomez</div>
+    <div class="role">Salesforce · Forward Deployed Engineer</div>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 2 · RESUMEN EJECUTIVO ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Reporte de observaciones · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">1 · Resumen ejecutivo</span>
+  <h2>176 observaciones y modificaciones trackeadas</h2>
+  <p class="lead">El tracker del proyecto contiene dos conjuntos: 40 ajustes pendientes abiertos (24 observaciones técnicas de auditoría + 16 observaciones de plataforma y datos) y 136 modificaciones registradas durante el delivery, de las cuales 82% ya están cerradas.</p>
+
+  <div class="narrative">
+    <p class="quote">El 82% de las modificaciones ya está cerrado. 40 ajustes siguen abiertos.</p>
+    <p>Las modificaciones son peticiones surgidas durante capacitaciones y validaciones operativas; de 136, ya se cerraron 111. Los 40 ajustes pendientes son el foco actual: 24 observaciones técnicas de código y flows, 5 errores operativos del mes, y 11 observaciones varias de plataforma, Marketing Cloud, Tableau y datos.</p>
+  </div>
+
+  <div class="stats-callout">
+    <h3>Ajustes pendientes · 40 abiertos</h3>
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="num">15 <span class="pct">38%</span></div>
+        <div class="label">En validación interna</div>
+      </div>
+      <div class="stat">
+        <div class="num">13 <span class="pct">33%</span></div>
+        <div class="label">En revisión</div>
+      </div>
+      <div class="stat">
+        <div class="num">9 <span class="pct">22%</span></div>
+        <div class="label">No aplica / control de cambios</div>
+      </div>
+      <div class="stat">
+        <div class="num">3 <span class="pct">7%</span></div>
+        <div class="label">Caso Salesforce / respuesta pendiente</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-callout" style="background: linear-gradient(135deg, #0b5c33 0%, #15803D 100%);">
+    <h3>Modificaciones · 136 trackeadas</h3>
+    <div class="stats-grid">
+      <div class="stat" style="border-left-color:#86efac;">
+        <div class="num">111 <span class="pct" style="color:#86efac;">82%</span></div>
+        <div class="label" style="color:#dcfce7;">Cerradas</div>
+      </div>
+      <div class="stat" style="border-left-color:#86efac;">
+        <div class="num">8 <span class="pct" style="color:#86efac;">6%</span></div>
+        <div class="label" style="color:#dcfce7;">En validación interna</div>
+      </div>
+      <div class="stat" style="border-left-color:#86efac;">
+        <div class="num">1 <span class="pct" style="color:#86efac;">1%</span></div>
+        <div class="label" style="color:#dcfce7;">Depende de indicaciones Salesforce</div>
+      </div>
+      <div class="stat" style="border-left-color:#86efac;">
+        <div class="num">16 <span class="pct" style="color:#86efac;">11%</span></div>
+        <div class="label" style="color:#dcfce7;">Sin estado registrado</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Reporte de observaciones · Betterware</span>
+    <span>Página 2</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 3 · APEX ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Reporte de observaciones · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">2 · Observaciones técnicas · Apex</span>
+  <h2>11 hallazgos de código Apex</h2>
+  <p class="lead">Resultados de la auditoría de código: cobertura de pruebas, inyección SOQL, credenciales en código, pruebas con datos reales y mantenibilidad. Mayoría en validación interna o revisión.</p>
+
+  <ul class="detail-list">
+    <li class="review"><span class="code">OBS-01</span><span class="title">Clase Apex sin cobertura de pruebas</span><span class="status v-val">Validación</span><span class="body">BW_CtrlScorecardMessaging — 150 líneas, 0% de cobertura y concentra hallazgos de seguridad (OBS-03 y OBS-04).</span></li>
+    <li class="review"><span class="code">OBS-02</span><span class="title">11 clases con cobertura baja (75%–85%)</span><span class="status v-rev">En revisión</span><span class="body">Cumplen el mínimo pero con poco margen. Cobertura global: 90%.</span></li>
+    <li class="review"><span class="code">OBS-03</span><span class="title">Inyección SOQL en consultas dinámicas</span><span class="status v-val">Validación</span><span class="body">Consultas construidas con variables sin escapar en BW_CtrlPuntos, BW_CtrlScorecardMessaging. Riesgo de seguridad.</span></li>
+    <li class="na"><span class="code">OBS-04</span><span class="title">Consultas sin validar permisos (CRUD/FLS)</span><span class="status v-na">No aplica</span><span class="body">Falta WITH USER_MODE / stripInaccessible o Security.stripInaccessible. Reclasificado como control de cambios.</span></li>
+    <li class="review"><span class="code">OBS-05</span><span class="title">Credenciales manejadas en código</span><span class="status v-rev">En revisión</span><span class="body">MetaApiProxy — autenticación en código en lugar de Named Credentials. Riesgo de exposición.</span></li>
+    <li class="review"><span class="code">OBS-06</span><span class="title">Pruebas con @isTest(SeeAllData=true)</span><span class="status v-val">Validación</span><span class="body">13 clases de prueba dependen de datos reales del org. Fragilidad y riesgo de falsos positivos.</span></li>
+    <li class="review"><span class="code">OBS-07</span><span class="title">Pruebas sin validaciones (sin assert)</span><span class="status v-val">Validación</span><span class="body">BW_MK_CrearProspecto_Test, CommunitiesSelfRegConfirmController y otras ejecutan código pero no validan resultado.</span></li>
+    <li class="na"><span class="code">OBS-08</span><span class="title">Catch vacíos, operación en ciclo e Id fijo</span><span class="status v-na">No aplica</span><span class="body">2 bloques catch vacíos, 1 operación con límites en ciclo y 1 Id hardcoded en BW_ConsultarVentaCatalogo y otras.</span></li>
+    <li class="review"><span class="code">OBS-09</span><span class="title">Clases de plantilla Experience Cloud</span><span class="status v-val">Validación</span><span class="body">10 clases de plantilla estándar + 10 de prueba. Confirmar si se usan; si no, eliminarlas para reducir ruido.</span></li>
+    <li class="na"><span class="code">OBS-10</span><span class="title">Diseño y mantenibilidad</span><span class="status v-na">No aplica</span><span class="body">Complejidad alta, métodos y clases extensas, código duplicado y parámetros excesivos.</span></li>
+    <li class="na"><span class="code">OBS-11</span><span class="title">Estilo y documentación</span><span class="status v-na">No aplica</span><span class="body">Convenciones de nombres, llaves, espacios y ApexDoc. Se sugiere definir estándar y aplicar formateador.</span></li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Reporte de observaciones · Betterware</span>
+    <span>Página 3</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 4 · FLOWS ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Reporte de observaciones · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">3 · Observaciones técnicas · Flows</span>
+  <h2>8 hallazgos de flows activos</h2>
+  <p class="lead">Seguridad, manejo de errores, rendimiento y limpieza de flows en producción. Mezcla de validación interna y revisión.</p>
+
+  <ul class="detail-list">
+    <li class="na"><span class="code">OBS-12</span><span class="title">Datos del usuario en modo sistema</span><span class="status v-na">No aplica</span><span class="body">Datos enviados por el usuario llegan a consultas que corren en modo sistema sin sharing (BW_Auth_Check_Login y otros).</span></li>
+    <li class="review"><span class="code">OBS-13</span><span class="title">Flows sin ruta de error (Fault path)</span><span class="status v-case">Respuesta pendiente</span><span class="body">37 flows activos sin manejo de errores — principalmente BW_TransferirConversacion y BW_Re*. Riesgo de ejecución silenciosa.</span></li>
+    <li class="review"><span class="code">OBS-14</span><span class="title">Ids fijos (hardcoded) en flows activos</span><span class="status v-rev">En revisión</span><span class="body">11 flows activos tienen Ids de Salesforce escritos directamente en el flow — BW_TransferirConversacion, BW_Codigo_* y otros.</span></li>
+    <li class="review"><span class="code">OBS-15</span><span class="title">Rendimiento · consultas en ciclos</span><span class="status v-val">Validación</span><span class="body">Consultas dentro de ciclos en Marcar_encuesta_enviada y Obtener_campos_Messaging_sessions_a_Encuestas. Riesgo de límites.</span></li>
+    <li class="review"><span class="code">OBS-16</span><span class="title">Flows de prueba en producción</span><span class="status v-rev">En revisión</span><span class="body">7 flows de prueba activos en producción. BW_TestTransferFlow sigue vivo.</span></li>
+    <li class="review"><span class="code">OBS-17</span><span class="title">Flows inactivos y duplicados</span><span class="status v-val">Validación</span><span class="body">87 flows inactivos (63 autogenerados de campañas) + duplicados BW_SeguimientoDistribuidoras_Flujo / DS_Seguimiento_Nueva.</span></li>
+    <li class="review"><span class="code">OBS-18</span><span class="title">Versiones nuevas sin activar</span><span class="status v-rev">En revisión</span><span class="body">Flows activos con una versión más reciente en draft sin activar. BW_Auth_Check_Login_Codigo, BW_ConsultarSaldosVenci* y otros.</span></li>
+    <li class="review"><span class="code">OBS-19</span><span class="title">Cobertura de pruebas de flows</span><span class="status v-val">Validación</span><span class="body">Solo BW_Codigo_OTP tiene cobertura (53%). Flows activos disparados por registro/evento quedan sin pruebas automatizadas.</span></li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Reporte de observaciones · Betterware</span>
+    <span>Página 4</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 5 · ERRORES + PLATAFORMA ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Reporte de observaciones · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">4 · Errores del mes y observaciones de plataforma</span>
+  <h2>Errores operativos recientes y temas abiertos</h2>
+  <p class="lead">Fallas registradas en el período 10-24 de septiembre + observaciones de plataforma y datos (Knowledge, Marketing Cloud, Tableau, Data Cloud).</p>
+
+  <div class="cat-head"><span class="ico">⚠️</span> Errores del mes (10-24 sep)</div>
+  <ul class="detail-list">
+    <li class="review"><span class="code">OBS-20</span><span class="title">BW_CheckBusinessHours — 64 interviews con error</span><span class="status v-rev">En revisión</span><span class="body">54 fallas por falta del parámetro businessHoursId; 4 por Id inválido al asignar. Afecta el gating de horarios del agente.</span></li>
+    <li class="review"><span class="code">OBS-21</span><span class="title">Registro de consentimientos</span><span class="status v-val">Validación</span><span class="body">29 fallas de "Crear consentimiento" en Consent_Email y Consent_WhatsApp. Consent_Email además no tiene criterios de entrada.</span></li>
+    <li class="review"><span class="code">OBS-22</span><span class="title">BW_ObtenerTranscripcionConversacion</span><span class="status v-rev">En revisión</span><span class="body">16 fallas: error al procesar la solicitud + 1 tiempo de espera agotado (2 min).</span></li>
+    <li class="review"><span class="code">OBS-23</span><span class="title">BW_Auth_Check_Login_Codigo</span><span class="status v-rev">En revisión</span><span class="body">5 fallas por consultas a MessagingSession con valores que no son Id ('ConversationContext', fecha en vez de Id, etc.).</span></li>
+    <li class="review"><span class="code">OBS-24</span><span class="title">BW_EjecutarPromptClasificacionEtiquetas</span><span class="status v-rev">En revisión</span><span class="body">3 fallas con GatewaySystemError (20-22 sep).</span></li>
+  </ul>
+
+  <div class="cat-head" style="margin-top:1.4em;"><span class="ico">🧩</span> Plataforma, datos y configuración</div>
+  <ul class="detail-list">
+    <li class="review"><span class="title">Knowledge — Filtros y contexto RAG</span><span class="status v-rev">En revisión</span><span class="body">Validar configuración de Agentforce/Knowledge con criterios de filtrado y contexto adecuados para evitar recuperación irrelevante.</span></li>
+    <li class="review"><span class="title">Sincronización de datos y alarmas</span><span class="status v-rev">En revisión</span><span class="body">Mecanismos que aseguran la correcta ejecución de jobs y visibilidad ante errores. Alarmas con destinatarios en Betterware.</span></li>
+    <li class="review"><span class="title">Alucinaciones por falta de contexto de linaje</span><span class="status v-rev">En revisión</span><span class="body">Información imprecisa sobre linaje y la acción de linaje referenciada en reset de password.</span></li>
+    <li class="validation"><span class="title">WhatsApp Template — Marketing Cloud</span><span class="status v-val">Validación</span><span class="body">Al crear una campaña, no permite agregar template de WhatsApp; se tiene que acceder desde la configuración del canal.</span></li>
+    <li class="validation"><span class="title">Landing Pages — dominio predeterminado</span><span class="status v-val">Validación</span><span class="body">Marketing Cloud Next no permite publicar landing pages con URL pública; contenido no se puede utilizar.</span></li>
+    <li class="validation"><span class="title">Reportes analíticos Marketing Cloud</span><span class="status v-val">Validación</span><span class="body">No fueron instalados ni creados en el ambiente.</span></li>
+    <li class="validation"><span class="title">Setup de páginas de preferencias</span><span class="status v-val">Validación</span><span class="body">Setup de páginas de preferencias no fue concluido.</span></li>
+    <li class="validation"><span class="title">ConsultarAsociados — fecha genérica</span><span class="status v-val">Validación</span><span class="body">Reporta "último pedido: 2 de julio de 2026" porque 1,242,367 afiliados tienen esa misma fecha. Dato inconsistente.</span></li>
+    <li class="validation"><span class="title">DMO Affiliates · campo Refeer</span><span class="status v-val">Validación</span><span class="body">Refeer Affiliate está siendo mostrado como el código de distribuidor en DMO.</span></li>
+    <li><span class="title">Caso Salesforce abierto</span><span class="status v-case">Caso 474641845</span><span class="body">Messaging sessions sin cerrar desde hace más de 30 días. Tiene ticket activo con soporte Salesforce.</span></li>
+    <li class="closed"><span class="title">Tableau — documentación y CSAT/FCR</span><span class="status v-closed">Revisado 29 sep</span><span class="body">Documentación del tablero con diccionario y fórmulas + indicadores de CSAT y FCR agregados.</span></li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Reporte de observaciones · Betterware</span>
+    <span>Página 5</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 6 · MODIFICACIONES + ROADMAP ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Reporte de observaciones · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">5 · Tracker de modificaciones</span>
+  <h2>136 modificaciones · 82% cerradas</h2>
+  <p class="lead">Peticiones surgidas durante capacitación de supervisores y ejecutivos, revisiones operativas y pruebas de UAT. La mayoría ya cerradas; 9 siguen abiertas en validación o esperando lineamiento.</p>
+
+  <div class="bucket-grid">
+    <div class="bucket closed">
+      <h3>Cerradas <span class="count">111</span></h3>
+      <p class="sub">Modificaciones de capacitación de supervisores, ejecutivos, transferencias, dashboards, cierres, reportes y configuración.</p>
+    </div>
+    <div class="bucket validation">
+      <h3>En validación <span class="count">8</span></h3>
+      <p class="sub">Mayoría relacionadas al comportamiento del bot: horarios de colas, cierre tras encuesta, transferencias que no se completan y conversaciones estancadas.</p>
+    </div>
+    <div class="bucket review">
+      <h3>Depende lineamiento SF <span class="count">1</span></h3>
+      <p class="sub">Conversaciones atendidas simultáneamente por Agentforce y ejecutivo humano. Requiere definición de política antes de implementar.</p>
+    </div>
+    <div class="bucket na">
+      <h3>Sin estado <span class="count">16</span></h3>
+      <p class="sub">Registros sin status asignado — se requiere revisión para confirmar si están cerrados o quedaron sin seguimiento.</p>
+    </div>
+  </div>
+
+  <div class="cat-head" style="margin-top:1.4em;"><span class="ico">🔍</span> Modificaciones abiertas destacadas</div>
+  <ul class="detail-list">
+    <li class="review"><span class="title">No respeta los horarios de las colas</span><span class="status v-val">Validación</span><span class="body">Sigue haciendo transferencia de chats fuera de horario.</span></li>
+    <li class="review"><span class="title">Menciona estar fuera de horario siendo las 4:57</span><span class="status v-val">Validación</span><span class="body">Falso-negativo del gating de horario.</span></li>
+    <li class="review"><span class="title">Envía encuesta de cierre pero no finaliza</span><span class="status v-val">Validación</span><span class="body">La sesión queda abierta tras disparar la encuesta.</span></li>
+    <li class="review"><span class="title">Menciona transferencia pero cierra conversación</span><span class="status v-val">Validación</span><span class="body">Promete transfer y cierra sin ejecutarlo.</span></li>
+    <li class="review"><span class="title">Bot deja conversaciones estancadas sin respuesta</span><span class="status v-val">Validación</span><span class="body">Conversaciones atoradas todo el día. Varias instancias reportadas.</span></li>
+    <li class="review"><span class="title">Escalación sin intención identificada</span><span class="status v-val">Validación</span><span class="body">El bot escala a una cola solo porque recibe un número que podría ser código de distribuidor.</span></li>
+  </ul>
+
+  <div class="next-step">
+    <h3>Próximos pasos del tracker</h3>
+    <div class="step"><span class="day">Esta semana</span><span>Validación interna de las 15 observaciones técnicas en "validación interna" + resolución de los 13 en revisión.</span></div>
+    <div class="step"><span class="day">Semana 2</span><span>Clasificar los 16 registros sin estado del tracker de modificaciones y cerrar las 8 modificaciones en validación.</span></div>
+    <div class="step"><span class="day">Pre-cutover Insiders</span><span>Confirmar que las modificaciones abiertas de comportamiento del bot queden resueltas con la nueva versión del agente, antes del cutover del 16 de octubre.</span></div>
+    <div class="step"><span class="day">Post-cutover</span><span>Dar seguimiento al caso Salesforce 474641845 (sesiones sin cerrar) + decisión sobre las observaciones marcadas como control de cambios.</span></div>
+  </div>
+
+  <div class="page-footer">
+    <span>Reporte de observaciones · Betterware</span>
+    <span>Página 6</span>
+  </div>
+</section>
+
+</body>
+</html>
