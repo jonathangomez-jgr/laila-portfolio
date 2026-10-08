@@ -478,6 +478,9 @@ export default function FDETracker({
   tabsHrefBuilder,
   heading = "Seguimiento de proyectos",
   subheading,
+  hideInnerNav = false,
+  hideHeader = false,
+  hideTimestamp = false,
 }: {
   projects: FDEProject[];
   customerName: string;
@@ -491,6 +494,9 @@ export default function FDETracker({
   tabsHrefBuilder?: (tab: TrackerTab) => string;
   heading?: string;
   subheading?: string;
+  hideInnerNav?: boolean;
+  hideHeader?: boolean;
+  hideTimestamp?: boolean;
 }) {
   void lang; // retained for API compatibility; unused when tabsHrefBuilder is provided
   const timestamp = lastRefreshedAt.toLocaleString("es-MX", {
@@ -509,38 +515,44 @@ export default function FDETracker({
     tabsHrefBuilder ? tabsHrefBuilder(t) : `${defaultBaseHref}?tab=${t}`;
 
   return (
-    <main className="px-4 pb-16 pt-10 sm:px-6 sm:pt-12 md:px-8 md:pt-16">
-      <section className="mx-auto w-full sm:w-[min(90%,1400px)]">
-        <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
-          <div>
-            <p className="eyebrow mb-3">{customerName} · Delivery Tracker</p>
-            <h1 className="section-title max-w-4xl text-3xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
-              {heading}
-            </h1>
-            <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-600">
-              {subheading ??
-                "Vista en vivo del backlog, action items, actividades realizadas y avances registrados en la org Salesforce del equipo Agentforce. Filtrada por visibilidad al cliente."}
-            </p>
+    <main className={hideHeader ? "" : "px-4 pb-16 pt-10 sm:px-6 sm:pt-12 md:px-8 md:pt-16"}>
+      <section className={hideHeader ? "mx-auto w-full" : "mx-auto w-full sm:w-[min(90%,1400px)]"}>
+        {!hideHeader && (
+          <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
+            <div>
+              <p className="eyebrow mb-3">{customerName} · Delivery Tracker</p>
+              <h1 className="section-title max-w-4xl text-3xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
+                {heading}
+              </h1>
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-600">
+                {subheading ??
+                  "Vista en vivo del backlog, action items, actividades realizadas y avances registrados en la org Salesforce del equipo Agentforce. Filtrada por visibilidad al cliente."}
+              </p>
+            </div>
+            {!hideTimestamp && (
+              <p className="text-xs text-gray-400">
+                Última actualización · {timestamp}
+              </p>
+            )}
           </div>
-          <p className="text-xs text-gray-400">
-            Última actualización · {timestamp}
-          </p>
-        </div>
+        )}
 
-        <nav className="mb-8 flex flex-wrap gap-3">
-          <TabLink
-            label="Backlog y action items"
-            count={totalItems}
-            href={buildHref("backlog")}
-            active={tab === "backlog"}
-          />
-          <TabLink
-            label="Actividades realizadas"
-            count={totalActivities}
-            href={buildHref("activities")}
-            active={tab === "activities"}
-          />
-        </nav>
+        {!hideInnerNav && (
+          <nav className="mb-8 flex flex-wrap gap-3">
+            <TabLink
+              label="Backlog y action items"
+              count={totalItems}
+              href={buildHref("backlog")}
+              active={tab === "backlog"}
+            />
+            <TabLink
+              label="Actividades realizadas"
+              count={totalActivities}
+              href={buildHref("activities")}
+              active={tab === "activities"}
+            />
+          </nav>
+        )}
 
         {projects.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-gray-200 p-12 text-center">

@@ -30,7 +30,8 @@ type ViewTab =
   | "milestones"
   | "risks"
   | "stable"
-  | "status";
+  | "status"
+  | "backlog";
 
 type Override = { status: ActivityStatus; progressPercent: number };
 type OverrideMap = Record<string, Override>;
@@ -941,6 +942,8 @@ export default function BetterwarePlanCanvas({
   projectSlug,
   onlyView,
   plan: planProp,
+  backlogSlot,
+  backlogCount,
 }: {
   readOnly?: boolean;
   /**
@@ -961,6 +964,14 @@ export default function BetterwarePlanCanvas({
    * tocar lógica. Si se omite, por backward-compat se usa `betterwarePlan`.
    */
   plan?: ProjectPlan;
+  /**
+   * Nodo opcional que se renderiza como pestaña "Backlog & feedback" (al lado
+   * de Status semanal). Pensado para pasar un `<FDETracker>` ya ligado a las
+   * acciones del portal — así el componente no sabe nada de Salesforce.
+   */
+  backlogSlot?: React.ReactNode;
+  /** Opcional · contador para la etiqueta del tab Backlog. */
+  backlogCount?: number;
 } = {}) {
   const plan = (planProp ?? betterwarePlan) as BetterwarePlan;
   const usesApi = Boolean(projectSlug);
@@ -1192,6 +1203,16 @@ export default function BetterwarePlanCanvas({
             ["risks", `Riesgos (${plan.risks.length})`],
             ["stable", "Criterios de estable"],
             ["status", `Status semanal (${plan.statusUpdates.length})`],
+            ...(backlogSlot
+              ? ([
+                  [
+                    "backlog",
+                    typeof backlogCount === "number"
+                      ? `Backlog & feedback (${backlogCount})`
+                      : "Backlog & feedback",
+                  ],
+                ] as [ViewTab, string][])
+              : []),
           ] as [ViewTab, string][]
         ).map(([key, label]) => (
           <button
@@ -1693,6 +1714,11 @@ export default function BetterwarePlanCanvas({
             ))
           )}
         </div>
+      )}
+
+      {/* BACKLOG & FEEDBACK (slot externo) */}
+      {view === "backlog" && backlogSlot && (
+        <div className="-mx-4 sm:-mx-5">{backlogSlot}</div>
       )}
 
       {selected && (
