@@ -1,163 +1,483 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <title>Reporte de Remediaciones · Betty</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
-:root{
-  --eb0:#0176D3; --eb10:#0B5CAB; --eb30:#032D60; --eb50:#001639;
-  --sky:#4abfff; --astro:#7E57C2; --spark:#F28CFF;
-  --ink:#1b2447; --muted:#5c6a8a; --line:#dde3ef; --mist:#f3f6fb;
-  --rose:#E91E63; --orange:#FF7A00; --green:#2ecc71;
-}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;background:white;color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:11pt;line-height:1.6}
+  @font-face {
+    font-family: 'AvantGarde';
+    src: url('../../../Assets Salesforce Brand/Fonts/Titles/AvantGardeForSalesforceW05-Dm.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Regular.woff') format('woff');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Semibold.woff') format('woff');
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Bold.woff') format('woff');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Light.woff') format('woff');
+    font-weight: 300;
+  }
 
-.page{
-  position:relative;
-  width:8.5in;
-  min-height:11in;
-  margin:0 auto;
-  padding:0.65in 0.75in;
-  background:white;
-  page-break-after:always;
-}
-.page:last-child{page-break-after:auto}
+  :root {
+    --eb15: #001E5B;
+    --eb30: #022AC0;
+    --eb50: #066AFE;
+    --cb68: #00B3FF;
+    --cb80: #90D0FE;
+    --cb95: #EAF5FE;
+    --rose: #E8275A;
+    --orange: #F28B42;
+    --green: #15803D;
+    --green-bg: #F0FDF4;
+    --green-rule: #BBF7D0;
+    --amber: #B45309;
+    --amber-bg: #FFFBEB;
+    --amber-rule: #FDE68A;
+    --ink: #0A1F44;
+    --slate: #4B5563;
+    --mist: #F3F6FB;
+    --rule: #E2E8F0;
+  }
 
-.page-head{
-  display:flex;justify-content:space-between;align-items:center;
-  padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:28px;
-  font-size:8.5pt;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;
-}
-.page-head .brand{font-weight:700;color:var(--eb10)}
-.page-footer{
-  position:absolute;bottom:0.45in;left:0.75in;right:0.75in;
-  display:flex;justify-content:space-between;
-  font-size:8.5pt;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;
-}
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'SalesforceSans', -apple-system, system-ui, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    font-size: 10.5pt;
+    line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 
-.section-eyebrow{
-  display:inline-block;background:var(--eb10);color:white;
-  padding:3px 10px;border-radius:3px;
-  font-size:8pt;font-weight:600;letter-spacing:0.1em;
-}
-h1{font-size:24pt;font-weight:700;line-height:1.15;color:var(--eb30);margin:14px 0 8px;letter-spacing:-0.5px}
-h2{font-size:17pt;font-weight:700;line-height:1.2;color:var(--eb30);margin:14px 0 10px}
-h3{font-size:12pt;font-weight:600;color:var(--eb30);margin:16px 0 8px}
-.lead{color:var(--muted);font-size:10.5pt;margin:0 0 20px;max-width:6in}
+  @page { size: letter; margin: 0; }
 
-/* Portada */
-.cover{
-  padding:0;background:linear-gradient(135deg,var(--eb10) 0%,var(--eb30) 55%,var(--astro) 100%);
-  color:white;
-}
-.cover .inner{padding:0.9in 0.75in;position:relative;z-index:2;min-height:11in;display:flex;flex-direction:column}
-.cover .sparkles{position:absolute;top:0;right:0;width:4in;height:3in;background:
-  radial-gradient(circle at 70% 30%,var(--spark) 0%,transparent 2px),
-  radial-gradient(circle at 85% 60%,var(--sky) 0%,transparent 3px),
-  radial-gradient(circle at 55% 20%,white 0%,transparent 1.5px),
-  radial-gradient(circle at 30% 80%,var(--sky) 0%,transparent 2px),
-  radial-gradient(circle at 90% 15%,white 0%,transparent 2.5px);
-  opacity:0.7;z-index:1
-}
-.cover-brand{font-size:9pt;font-weight:600;letter-spacing:0.2em;opacity:0.85;text-transform:uppercase}
-.cover-title{font-size:36pt;font-weight:800;line-height:1.05;margin:30px 0 14px;letter-spacing:-1px}
-.cover-subtitle{font-size:14pt;font-weight:400;line-height:1.4;opacity:0.9;max-width:6in}
-.cover-meta{margin-top:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-top:40px}
-.cover-meta div span{display:block;font-size:8.5pt;opacity:0.75;text-transform:uppercase;letter-spacing:0.1em}
-.cover-meta div strong{display:block;font-size:14pt;margin-top:4px;font-weight:700}
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 0.6in 0.7in;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
 
-/* Stats */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
-.stat{padding:16px;border-radius:8px;border:1px solid var(--line);background:white;position:relative;overflow:hidden}
-.stat::before{content:"";position:absolute;top:0;left:0;right:0;height:4px}
-.stat.v42::before{background:var(--green)}
-.stat.partial::before{background:var(--orange)}
-.stat.fdev2::before{background:var(--eb10)}
-.stat.pending::before{background:var(--rose)}
-.stat .num{font-size:28pt;font-weight:700;line-height:1;color:var(--eb30)}
-.stat .label{font-size:9pt;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:6px;line-height:1.3}
-.stat .pct{position:absolute;top:14px;right:14px;font-size:9pt;color:var(--muted);font-weight:600}
+  h1, h2, h3, h4 {
+    font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+    color: var(--eb15);
+    margin: 0 0 0.4em 0;
+    line-height: 1.15;
+  }
 
-/* Finding cards */
-.finding-group{margin:16px 0 24px}
-.finding{
-  padding:14px 16px;background:white;border:1px solid var(--line);
-  border-left:4px solid var(--line);border-radius:5px;margin-bottom:9px;
-}
-.finding.v42{border-left-color:var(--green)}
-.finding.partial{border-left-color:var(--orange)}
-.finding.fdev2{border-left-color:var(--eb10)}
-.finding.pending{border-left-color:var(--rose)}
-.finding-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
-.finding-head .tag{
-  font-size:8pt;font-weight:700;letter-spacing:0.05em;
-  padding:2px 7px;border-radius:3px;color:white;flex-shrink:0;
-}
-.finding.v42 .tag{background:var(--green)}
-.finding.partial .tag{background:var(--orange)}
-.finding.fdev2 .tag{background:var(--eb10)}
-.finding.pending .tag{background:var(--rose)}
-.finding-head .title{font-weight:600;color:var(--eb30);font-size:10.5pt}
-.finding-body{font-size:10pt;color:var(--ink)}
-.finding-body .before{color:#8a6a3a;font-size:9.5pt;margin-top:4px;font-style:italic}
-.finding-body .after{color:var(--eb10);font-size:9.5pt;margin-top:2px;font-weight:500}
+  /* COVER */
+  .cover {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 55%, var(--eb50) 100%);
+    color: #fff;
+    padding: 0.9in 0.9in;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover h1 { color: #fff; font-size: 44pt; letter-spacing: -0.01em; line-height: 1.05; margin-bottom: 0.3em; }
+  .cover .subtitle {
+    font-family: 'SalesforceSans', sans-serif;
+    font-weight: 300;
+    font-size: 15pt;
+    color: var(--cb80);
+    margin-bottom: 1.1em;
+  }
+  .cover .eyebrow {
+    display: inline-block;
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cb68);
+    padding: 0.4em 0.9em;
+    border: 1px solid rgba(144,208,254,0.5);
+    border-radius: 100px;
+    margin-bottom: 2.2em;
+  }
+  .cover .top-row { display: flex; justify-content: space-between; align-items: center; }
+  .cover-logo { height: 32px; filter: brightness(0) invert(1); }
+  .cover-date {
+    font-size: 10pt;
+    color: var(--cb80);
+    letter-spacing: 0.05em;
+  }
+  .cover-sparkles {
+    position: absolute;
+    top: 1.5in;
+    right: 0.6in;
+    opacity: 0.5;
+    width: 180px;
+  }
+  .cover-astro {
+    position: absolute;
+    right: -40px;
+    bottom: -30px;
+    width: 320px;
+    opacity: 0.95;
+  }
+  .cover-author {
+    border-top: 1px solid rgba(144,208,254,0.3);
+    padding-top: 0.9em;
+    font-size: 10pt;
+  }
+  .cover-author .name { font-weight: 600; color: #fff; font-size: 11pt; margin-bottom: 0.1em; }
+  .cover-author .role { color: var(--cb80); }
+  .cover-tagline {
+    max-width: 5.5in;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #fff;
+    font-weight: 300;
+  }
 
-.callout{
-  padding:14px 18px;background:linear-gradient(135deg,#f0f6ff 0%,#e8f0ff 100%);
-  border:1px solid #c7d7ef;border-radius:7px;margin:18px 0;font-size:10pt
-}
-.callout strong{color:var(--eb30)}
+  /* INNER PAGES */
+  .section-eyebrow {
+    display: inline-block;
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--eb50);
+    margin-bottom: 0.6em;
+  }
+  h2 { font-size: 22pt; margin-bottom: 0.25em; }
+  h2 + .lead { font-size: 12pt; color: var(--slate); max-width: 6.5in; margin: 0 0 1.1em 0; line-height: 1.5; }
 
-.key-takeaway{
-  background:var(--eb30);color:white;padding:22px 26px;border-radius:8px;margin:22px 0
-}
-.key-takeaway .eyebrow{color:var(--sky);font-size:8.5pt;letter-spacing:0.1em;font-weight:600;text-transform:uppercase}
-.key-takeaway h3{color:white;margin:6px 0 10px;font-size:14pt}
-.key-takeaway p{margin:0;font-size:10.5pt;line-height:1.65;opacity:0.95}
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.1em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid var(--rule);
+    font-size: 8.5pt;
+    color: var(--slate);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .page-head .brand { font-weight: 700; color: var(--eb30); }
 
-.legend{display:flex;flex-wrap:wrap;gap:14px;margin:16px 0 24px;font-size:9pt}
-.legend span{display:flex;align-items:center;gap:7px;color:var(--muted)}
-.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px}
-.legend .l-v42::before{background:var(--green)}
-.legend .l-partial::before{background:var(--orange)}
-.legend .l-fdev2::before{background:var(--eb10)}
-.legend .l-pending::before{background:var(--rose)}
+  .page-footer {
+    position: absolute;
+    bottom: 0.35in;
+    left: 0.7in;
+    right: 0.7in;
+    font-size: 8pt;
+    color: #9CA3AF;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--rule);
+    padding-top: 0.4em;
+  }
 
-.next-step{
-  display:grid;grid-template-columns:95px 1fr;gap:16px;align-items:center;
-  padding:14px 16px;border:1px solid var(--line);border-radius:6px;margin-bottom:8px;
-  background:var(--mist)
-}
-.next-step .num{
-  background:var(--eb10);color:white;text-align:center;padding:10px 0;
-  border-radius:5px;font-weight:700;font-size:16pt
-}
-.next-step .num small{display:block;font-size:7.5pt;font-weight:400;opacity:0.85;letter-spacing:0.08em}
-.next-step .text{font-size:10pt;line-height:1.55}
-.next-step .text strong{color:var(--eb30);display:block;margin-bottom:3px;font-size:11pt}
+  .narrative {
+    background: var(--cb95);
+    border-left: 4px solid var(--eb50);
+    padding: 0.9em 1.1em;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1em;
+  }
+  .narrative p { margin: 0; font-size: 11pt; color: var(--ink); line-height: 1.55; }
+  .narrative .quote {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 14pt;
+    color: var(--eb15);
+    line-height: 1.3;
+    margin-bottom: 0.5em;
+  }
+
+  ul.clean { list-style: none; padding-left: 0; margin: 0.6em 0; }
+  ul.clean li {
+    padding: 0.4em 0 0.4em 1.4em;
+    position: relative;
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
+  ul.clean li::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--eb50);
+    position: absolute;
+    left: 0.3em; top: 0.8em;
+  }
+
+  /* Stats grid — metrics-callout styled for distribution */
+  .stats-callout {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 100%);
+    color: #fff;
+    padding: 1.1em 1.3em;
+    border-radius: 12px;
+    margin: 1em 0;
+  }
+  .stats-callout h3 { color: #fff; font-size: 14pt; margin-bottom: 0.6em; }
+  .stats-callout .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8em;
+    margin-top: 0.7em;
+  }
+  .stats-callout .stat {
+    background: rgba(255,255,255,0.08);
+    border-left: 3px solid var(--cb68);
+    padding: 0.75em 0.9em;
+    border-radius: 0 8px 8px 0;
+  }
+  .stats-callout .stat .num {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 24pt;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+  }
+  .stats-callout .stat .label {
+    font-size: 9pt;
+    color: var(--cb80);
+    margin-top: 0.3em;
+    line-height: 1.3;
+  }
+  .stats-callout .stat .pct {
+    display: inline-block;
+    font-size: 9pt;
+    color: var(--cb68);
+    font-weight: 700;
+    margin-left: 0.4em;
+  }
+
+  /* Status bucket cards (like scope-card) */
+  .bucket-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9em;
+    margin: 1em 0;
+  }
+  .bucket {
+    padding: 1em 1.1em;
+    border-radius: 10px;
+    border: 1px solid var(--rule);
+    background: #fff;
+  }
+  .bucket.v42 {
+    background: linear-gradient(180deg, var(--green-bg) 0%, #fff 100%);
+    border-color: var(--green-rule);
+  }
+  .bucket.partial {
+    background: linear-gradient(180deg, var(--amber-bg) 0%, #fff 100%);
+    border-color: var(--amber-rule);
+  }
+  .bucket.v2 {
+    background: linear-gradient(180deg, var(--cb95) 0%, #fff 100%);
+    border-color: #BAE6FD;
+  }
+  .bucket.pending {
+    background: linear-gradient(180deg, #FEF2F2 0%, #fff 100%);
+    border-color: #FECACA;
+  }
+  .bucket h3 { font-size: 13pt; margin-bottom: 0.2em; display: flex; align-items: baseline; gap: 0.5em; }
+  .bucket.v42 h3 { color: var(--green); }
+  .bucket.partial h3 { color: var(--amber); }
+  .bucket.v2 h3 { color: var(--eb30); }
+  .bucket.pending h3 { color: #991B1B; }
+  .bucket h3 .count {
+    font-family: 'SalesforceSans', sans-serif;
+    font-size: 9pt;
+    font-weight: 700;
+    padding: 0.15em 0.6em;
+    border-radius: 100px;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+  .bucket.v42 h3 .count { background: var(--green); }
+  .bucket.partial h3 .count { background: var(--amber); }
+  .bucket.v2 h3 .count { background: var(--eb50); }
+  .bucket.pending h3 .count { background: #B91C1C; }
+  .bucket p.sub {
+    font-size: 9.5pt;
+    color: var(--slate);
+    margin: 0 0 0.5em 0;
+    line-height: 1.4;
+  }
+
+  /* Finding list within each bucket */
+  .finding-list { list-style: none; padding-left: 0; margin: 0.5em 0 0 0; }
+  .finding-list li {
+    padding: 0.5em 0 0.5em 1.1em;
+    position: relative;
+    font-size: 9.5pt;
+    line-height: 1.5;
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+  .finding-list li:first-child { border-top: none; }
+  .bucket.v42 .finding-list li::before {
+    content: "✓";
+    position: absolute; left: 0; top: 0.5em;
+    color: var(--green); font-weight: 700;
+  }
+  .bucket.partial .finding-list li::before {
+    content: "◐";
+    position: absolute; left: 0; top: 0.4em;
+    color: var(--amber); font-weight: 700;
+  }
+  .bucket.v2 .finding-list li::before {
+    content: "✓";
+    position: absolute; left: 0; top: 0.5em;
+    color: var(--eb50); font-weight: 700;
+  }
+  .bucket.pending .finding-list li::before {
+    content: "→";
+    position: absolute; left: 0; top: 0.5em;
+    color: #B91C1C; font-weight: 700;
+  }
+  .finding-list li strong { color: var(--eb15); font-weight: 600; }
+
+  /* Detail block for a finding (before/after) */
+  .detail-list { list-style: none; padding-left: 0; margin: 0.6em 0; }
+  .detail-list li {
+    padding: 0.6em 1em;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--eb50);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 0.5em;
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+  .detail-list li .title { font-weight: 600; color: var(--eb15); display: block; margin-bottom: 0.25em; }
+  .detail-list li .before {
+    color: var(--amber);
+    font-size: 9.5pt;
+    display: block;
+    margin-top: 0.15em;
+  }
+  .detail-list li .before::before { content: "Antes · "; font-weight: 700; }
+  .detail-list li .after {
+    color: var(--eb30);
+    font-size: 9.5pt;
+    display: block;
+    margin-top: 0.15em;
+    font-weight: 500;
+  }
+  .detail-list li .after::before { content: "Ahora · "; font-weight: 700; }
+
+  /* Category heading */
+  .cat-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 1em 0 0.5em 0;
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 13pt;
+    color: var(--eb15);
+  }
+  .cat-head .ico {
+    display: inline-flex;
+    width: 1.6em; height: 1.6em;
+    background: var(--cb95);
+    border-radius: 8px;
+    align-items: center; justify-content: center;
+    font-size: 13pt;
+  }
+
+  /* timeline */
+  .timeline {
+    position: relative;
+    padding-left: 1.2em;
+    margin: 1em 0 0.5em 0;
+    border-left: 2px solid var(--cb80);
+  }
+  .timeline-item {
+    position: relative;
+    padding: 0.4em 0 0.9em 0.6em;
+  }
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -1.6em;
+    top: 0.5em;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--eb50);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--eb50);
+  }
+  .timeline-item.critical::before { background: var(--rose); box-shadow: 0 0 0 2px var(--rose); }
+  .timeline-item .date {
+    font-weight: 700;
+    color: var(--eb30);
+    font-size: 10.5pt;
+    display: inline-block;
+    margin-right: 0.5em;
+  }
+  .timeline-item .label { font-size: 10.5pt; line-height: 1.45; }
+
+  .next-step {
+    background: linear-gradient(135deg, var(--cb95) 0%, #fff 100%);
+    border: 2px solid var(--eb50);
+    border-radius: 14px;
+    padding: 1.1em 1.3em;
+    margin-top: 1.2em;
+  }
+  .next-step h3 {
+    color: var(--eb50);
+    font-size: 13pt;
+    margin-bottom: 0.6em;
+  }
+  .next-step .step {
+    display: flex;
+    gap: 0.9em;
+    padding: 0.35em 0;
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+  .next-step .step .day {
+    font-weight: 700;
+    color: var(--eb30);
+    min-width: 1.9in;
+  }
 </style>
 </head>
 <body>
 
-<!-- =========== PÁGINA 1 · PORTADA =========== -->
+<!-- ============== PÁGINA 1 · PORTADA ============== -->
 <section class="page cover">
-  <div class="sparkles"></div>
-  <div class="inner">
-    <div class="cover-brand">Salesforce · Betterware · Agentforce</div>
-    <h1 class="cover-title">Reporte de<br>Remediaciones<br>· Betty 💙</h1>
-    <p class="cover-subtitle">Avance en la atención de los 48 hallazgos del audit del agente conversacional de distribuidores. Qué se resolvió en producción (V42), qué completa el agente nuevo, y qué sigue en el roadmap.</p>
-    <div class="cover-meta">
-      <div><span>Agente</span><strong>Betty · BW_AGENT_N</strong></div>
-      <div><span>Base de comparación</span><strong>V42 (producción)</strong></div>
-      <div><span>Fecha</span><strong>08-oct-2026</strong></div>
-    </div>
+  <div class="top-row">
+    <img class="cover-logo" src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" alt="Salesforce">
+    <span class="cover-date">OCTUBRE 2026</span>
+  </div>
+
+  <img class="cover-sparkles" src="../../../Assets Salesforce Brand/Sparkles/Sparkles Blue Main.svg" alt="">
+  <img class="cover-astro" src="../../../Assets Salesforce Brand/Carachters/Agent Astro/Agent Astro 3D 10 R.png" alt="">
+
+  <div>
+    <span class="eyebrow">Avance del audit · Betterware México</span>
+    <h1>Reporte de<br>Remediaciones<br>Betty</h1>
+    <p class="subtitle">87.5% de los 48 hallazgos del audit cerrados hoy</p>
+    <p class="cover-tagline">Qué se resolvió en producción (V42), qué completa el agente nuevo y qué queda pendiente para el roadmap. Lectura clara, sin tecnicismos, para alinear a Betterware CS, Partner y Salesforce antes del cutover.</p>
+  </div>
+
+  <div class="cover-author">
+    <div class="name">Jonathan Gomez</div>
+    <div class="role">Salesforce · Forward Deployed Engineer</div>
   </div>
 </section>
 
-<!-- =========== PÁGINA 2 · RESUMEN EJECUTIVO =========== -->
+<!-- ============== PÁGINA 2 · RESUMEN EJECUTIVO ============== -->
 <section class="page">
   <div class="page-head">
     <span class="brand">Salesforce · Betterware</span>
@@ -166,356 +486,367 @@ h3{font-size:12pt;font-weight:600;color:var(--eb30);margin:16px 0 8px}
 
   <span class="section-eyebrow">1 · Resumen ejecutivo</span>
   <h2>De 48 hallazgos del audit, hoy cerramos el 87.5%</h2>
-  <p class="lead">El audit técnico de septiembre identificó 48 hallazgos en el agente conversacional. Entre lo que resolvió Capptus en producción (V42) y lo que cierra la nueva versión del agente (Betty V2), queda atendido el 87.5% del total. Los 6 pendientes son cambios en el código Apex de respaldo que no requieren pausar el programa Insiders.</p>
+  <p class="lead">El audit técnico de septiembre identificó 48 hallazgos en Betty. Entre lo que resolvió Capptus en producción (V42) y lo que cierra la nueva versión del agente, queda atendido el 87.5% del total. Los 6 pendientes son cambios en el código Apex de respaldo que no bloquean el programa Insiders.</p>
 
-  <div class="stats">
-    <div class="stat v42">
-      <div class="num">7</div>
-      <div class="label">Ya resueltos en V42 producción</div>
-      <div class="pct">15%</div>
-    </div>
-    <div class="stat partial">
-      <div class="num">10</div>
-      <div class="label">V42 cubre parcial · V2 completa</div>
-      <div class="pct">21%</div>
-    </div>
-    <div class="stat fdev2">
-      <div class="num">25</div>
-      <div class="label">Resuelve el agente nuevo (V2)</div>
-      <div class="pct">52%</div>
-    </div>
-    <div class="stat pending">
-      <div class="num">6</div>
-      <div class="label">Pendientes · roadmap post-cutover</div>
-      <div class="pct">12.5%</div>
+  <div class="narrative">
+    <p class="quote">El piloto arranca con el 87.5% del audit cerrado.</p>
+    <p>No todos los hallazgos requerían reemplazar el agente. V42 ya trajo 7 fixes importantes. El agente nuevo cierra 25 fixes más de orquestación: cómo responde, cuándo pide autenticación, cómo decide escalar. Los 6 pendientes son cambios en el Apex de respaldo y se trabajan en paralelo sin pausar al piloto.</p>
+  </div>
+
+  <div class="stats-callout">
+    <h3>Distribución de los 48 hallazgos</h3>
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="num">7 <span class="pct">15%</span></div>
+        <div class="label">Resueltos por Capptus en V42 producción</div>
+      </div>
+      <div class="stat">
+        <div class="num">10 <span class="pct">21%</span></div>
+        <div class="label">V42 cubre parcial · V2 completa</div>
+      </div>
+      <div class="stat">
+        <div class="num">25 <span class="pct">52%</span></div>
+        <div class="label">Cierra el agente nuevo (V2)</div>
+      </div>
+      <div class="stat">
+        <div class="num">6 <span class="pct">12%</span></div>
+        <div class="label">Pendientes · roadmap post-cutover</div>
+      </div>
     </div>
   </div>
 
-  <div class="legend">
-    <span class="l-v42">Resuelto por Capptus en V42</span>
-    <span class="l-partial">Parcial en V42, completa en V2</span>
-    <span class="l-fdev2">Resuelve el agente nuevo (V2)</span>
-    <span class="l-pending">Pendiente (requiere Apex)</span>
-  </div>
-
-  <div class="key-takeaway">
-    <div class="eyebrow">Lectura clave</div>
-    <h3>El programa Insiders arranca con el 87.5% del audit cerrado.</h3>
-    <p>No todos los hallazgos requerían reemplazar el agente. V42 ya trajo 7 fixes importantes (Knowledge activo, sesión persistente, horarios reales, código de distribuidora automático). El agente nuevo cierra 25 fixes más que son fundamentalmente de orquestación: cómo responde, cuándo pide auth, cómo decide escalar. Los 6 pendientes son cambios en el código Apex de respaldo y se trabajan en paralelo sin afectar al piloto.</p>
-  </div>
-</section>
-
-<!-- =========== PÁGINA 3 · YA RESUELTOS POR V42 =========== -->
-<section class="page">
-  <div class="page-head">
-    <span class="brand">Salesforce · Betterware</span>
-    <span>Reporte de remediaciones · Octubre 2026</span>
-  </div>
-
-  <span class="section-eyebrow">2 · Lo que ya resolvió V42 en producción</span>
-  <h2>Capptus avanzó 7 fixes críticos entre V40 y V42</h2>
-  <p class="lead">El equipo Capptus hizo mejoras importantes a Betty entre septiembre y los primeros días de octubre. Estos ya están vigentes en el agente que atiende a las distribuidoras hoy.</p>
-
-  <div class="finding-group">
-    <div class="finding v42">
-      <div class="finding-head">
-        <span class="tag">V42</span>
-        <span class="title">El código de distribuidora llega automático</span>
-      </div>
-      <div class="finding-body">Antes el agente pedía re-escribir el código cada vez que iba a consultar algo. Ahora el código se guarda en la sesión y se usa automáticamente en todas las consultas.</div>
+  <div class="bucket-grid" style="margin-top: 0.9em;">
+    <div class="bucket v42">
+      <h3>Ya en V42 <span class="count">7</span></h3>
+      <p class="sub">Lo que Capptus avanzó entre V40 y V42 — vigente en producción hoy.</p>
     </div>
-
-    <div class="finding v42">
-      <div class="finding-head">
-        <span class="tag">V42</span>
-        <span class="title">FAQ con respuestas reales de Knowledge</span>
-      </div>
-      <div class="finding-body">Antes la configuración de Knowledge estaba vacía y las preguntas generales no tenían respuesta. Ahora Knowledge está activo y entrega los artículos oficiales de Betterware (42 artículos + 21 traducciones corregidos en el período).</div>
+    <div class="bucket partial">
+      <h3>V42 + V2 <span class="count">10</span></h3>
+      <p class="sub">V42 trajo la base; V2 completa la lógica que faltaba.</p>
     </div>
-
-    <div class="finding v42">
-      <div class="finding-head">
-        <span class="tag">V42</span>
-        <span class="title">Horarios de atención reales, no inventados</span>
-      </div>
-      <div class="finding-body">Antes el agente a veces decía "cerrado" cuando el queue estaba abierto, u ofrecía horarios ficticios. Ahora consulta el horario real por cola de negocio y cita la ventana exacta.</div>
+    <div class="bucket v2">
+      <h3>Agente nuevo <span class="count">25</span></h3>
+      <p class="sub">Fixes de orquestación que cierra Betty V2 — mayoría de valor.</p>
     </div>
-
-    <div class="finding v42">
-      <div class="finding-head">
-        <span class="tag">V42</span>
-        <span class="title">Sesión persistente — no pide re-identificar</span>
-      </div>
-      <div class="finding-body">Antes el agente podía pedir el código a mitad de la conversación aunque ya se hubiera identificado. Ahora preserva la identidad durante toda la sesión.</div>
-    </div>
-
-    <div class="finding v42">
-      <div class="finding-head">
-        <span class="tag">V42</span>
-        <span class="title">SLAs de entrega citados de tabla real</span>
-      </div>
-      <div class="finding-body">Antes el agente inventaba plazos tipo "2 a 4 semanas" sin base. Ahora cita el SLA de la tabla de coberturas conectada al dato real por código postal.</div>
-    </div>
-
-    <div class="finding v42">
-      <div class="finding-head">
-        <span class="tag">V42</span>
-        <span class="title">Agente no filtra su razonamiento interno</span>
-      </div>
-      <div class="finding-body">Antes a veces el agente mandaba al usuario frases como "El usuario solicita ser transferido…" en lugar de actuar. Ahora las reglas globales le prohíben describir su propio razonamiento.</div>
-    </div>
-
-    <div class="finding v42">
-      <div class="finding-head">
-        <span class="tag">V42</span>
-        <span class="title">Inputs correctamente enlazados a sesión</span>
-      </div>
-      <div class="finding-body">Antes algunas acciones tenían el código de distribuidora sin enlazar (quedaba vacío al llamar). Ahora el mapeo de inputs es consistente en todas las acciones de la red de atención.</div>
-    </div>
-  </div>
-</section>
-
-<!-- =========== PÁGINA 4 · V42 PARCIAL + V2 COMPLETA =========== -->
-<section class="page">
-  <div class="page-head">
-    <span class="brand">Salesforce · Betterware</span>
-    <span>Reporte de remediaciones · Octubre 2026</span>
-  </div>
-
-  <span class="section-eyebrow">3 · Lo que V42 cubre a medias y Betty V2 completa</span>
-  <h2>10 fixes donde la base de V42 funciona pero el agente nuevo cierra la brecha</h2>
-  <p class="lead">V42 trajo mejoras parciales en estos puntos. El agente nuevo mantiene esas bases y añade la lógica que faltaba para cerrar el caso.</p>
-
-  <div class="finding-group">
-    <div class="finding partial">
-      <div class="finding-head"><span class="tag">V42 + V2</span><span class="title">Escalación controlada a asesor humano</span></div>
-      <div class="finding-body">
-        <div class="before">Antes: 15 tipos de solicitud se escalaban automáticamente aunque Betty podía resolverlas.</div>
-        <div class="after">V42: redujo a 2 triggers (Compra con Confianza, Garantía Betterware). V2: define 5 triggers literales y pide confirmación afirmativa antes de transferir.</div>
-      </div>
-    </div>
-
-    <div class="finding partial">
-      <div class="finding-head"><span class="tag">V42 + V2</span><span class="title">Altas de distribuidoras que fallaban al mes</span></div>
-      <div class="finding-body">
-        <div class="before">Antes: 32 de cada 65 sesiones (49%) de consulta de alta terminaban en "no encontré registros".</div>
-        <div class="after">V42: nueva acción M010 V2. V2: además cita el motivo específico (semana pendiente, código inválido) en vez del genérico.</div>
-      </div>
-    </div>
-
-    <div class="finding partial">
-      <div class="finding-head"><span class="tag">V42 + V2</span><span class="title">Fotos y audios adjuntos</span></div>
-      <div class="finding-body">
-        <div class="before">Antes: cualquier imagen o audio adjunto bloqueaba el intent completo.</div>
-        <div class="after">V42: regla "si llega archivo, pide escribir". V2: además si parece comprobante de pago deriva al flujo de reporte de pago.</div>
-      </div>
-    </div>
-
-    <div class="finding partial">
-      <div class="finding-head"><span class="tag">V42 + V2</span><span class="title">Entrega planeada vs entrega real</span></div>
-      <div class="finding-body">
-        <div class="before">Antes: la fecha planeada de Drivin se citaba como entrega garantizada.</div>
-        <div class="after">V2 formaliza: toda fecha "planeada" se presenta como estimación — nunca como garantía.</div>
-      </div>
-    </div>
-
-    <div class="finding partial">
-      <div class="finding-head"><span class="tag">V42 + V2</span><span class="title">Resolución determinista</span></div>
-      <div class="finding-body">
-        <div class="before">Antes: el mismo distribuidor con la misma petición podía obtener respuestas distintas (link, hold en inglés, error, escalación).</div>
-        <div class="after">V42: código desde sesión reduce varianza. V2: compuertas "available when" por intent eliminan rutas no deterministas.</div>
-      </div>
-    </div>
-
-    <div class="finding partial">
-      <div class="finding-head"><span class="tag">V42 + V2</span><span class="title">Confusión entre premios y pedidos</span></div>
-      <div class="finding-body">
-        <div class="before">Antes: el seguimiento de un premio BW+ se mezclaba con el tracking de un pedido comercial.</div>
-        <div class="after">V2 formaliza la separación: Drivin de pedidos vs Drivin de premios tienen acciones distintas.</div>
-      </div>
-    </div>
-
-    <div class="finding partial">
-      <div class="finding-head"><span class="tag">V42 + V2</span><span class="title">Validación de pedido extemporáneo</span></div>
-      <div class="finding-body">V42 valida ventana al momento de la solicitud. V2 preserva esa validación y agrega la confirmación afirmativa explícita antes de registrar el folio.</div>
-    </div>
-
-    <div class="finding partial">
-      <div class="finding-head"><span class="tag">V42 + V2</span><span class="title">Protección básica de información de terceros</span></div>
-      <div class="finding-body">V42 limitó la exposición al bind código desde sesión. V2 agrega compuerta estructural de linaje: antes de consultar datos de una hija, valida pertenencia.</div>
-    </div>
-
-    <div class="finding partial">
-      <div class="finding-head"><span class="tag">V42 + V2</span><span class="title">Pre-autenticación: fuga de datos</span></div>
-      <div class="finding-body">V42 vinculó el código a la sesión. V2 además agrega el guard de sesión-scoped y bloquea acciones hasta que isAuthenticated=True.</div>
-    </div>
-
-    <div class="finding partial">
-      <div class="finding-head"><span class="tag">V42 + V2</span><span class="title">Mensaje de "fuera de servicio" cuando estaba abierto</span></div>
-      <div class="finding-body">V42 trajo el check en tiempo real. V2 agrega la regla: nunca recitar ventanas de memoria, siempre citar el output de la acción.</div>
-    </div>
-  </div>
-</section>
-
-<!-- =========== PÁGINA 5 · V2 CIERRA =========== -->
-<section class="page">
-  <div class="page-head">
-    <span class="brand">Salesforce · Betterware</span>
-    <span>Reporte de remediaciones · Octubre 2026</span>
-  </div>
-
-  <span class="section-eyebrow">4 · Lo que el agente nuevo cierra ahora</span>
-  <h2>25 fixes de comportamiento y seguridad que resuelve Betty V2</h2>
-  <p class="lead">El agente nuevo (Betty V2 / FDE_BW_Service_Agent_V2) suma al backend de V42 una capa de orquestación con compuertas estructurales. Estos son los fixes más visibles.</p>
-
-  <h3 style="color:#8a2a4a">🔐 Seguridad y privacidad</h3>
-  <div class="finding-group">
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Fuga "Julieth" entre sesiones</span></div>
-      <div class="finding-body">Antes: el nombre "Julieth" se devolvía a varios códigos no relacionados (5+ sesiones verificadas). V2 ata el código al session-scope y bloquea toda acción si el guard está vacío.</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Token de reset de contraseña en el chat</span></div>
-      <div class="finding-body">Antes: 42 URLs con token devueltas en 16 sesiones. V2: regla system "nunca imprimas tokens ni URLs"; el agente solo confirma el canal de entrega.</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Datos de otros asociados sin autorización</span></div>
-      <div class="finding-body">Antes: 35 sesiones devolvieron registros de asociados ajenos. V2: valida ownership antes de llamar la acción de PII.</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">URLs firmadas de Drivin filtradas</span></div>
-      <div class="finding-body">Antes: 10 URLs JWT en el chat en 3 sesiones. V2: la evidencia se cita como "adjunto" sin imprimir la URL firmada.</div>
-    </div>
-  </div>
-
-  <h3 style="color:#2a4a8a">🏗️ Arquitectura y navegación</h3>
-  <div class="finding-group">
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Router sin autenticación atrapatodo</span></div>
-      <div class="finding-body">Antes: Autenticación capturaba TODO mensaje por "prioridad máxima". V2: tópico angosto, auth se dispara estructuralmente desde cada subagente protegido.</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">26 subagentes consolidados en 11</span></div>
-      <div class="finding-body">Antes: el agente se dividía en 26 flujos superpuestos (clasificar entre tantos reduce precisión). V2: 10 subagentes de dominio + router, con descripciones positivas y disjuntas.</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Instrucciones repetidas en 16 subagentes</span></div>
-      <div class="finding-body">Antes: el estilo global (cierre, emojis, encuesta) se repetía en cada subagente. V2: una sola declaración a nivel system; cada subagente solo describe su trabajo.</div>
-    </div>
-  </div>
-
-  <h3 style="color:#4a2a8a">🎯 Comportamiento y datos</h3>
-  <div class="finding-group">
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Folios registrados sin confirmación</span></div>
-      <div class="finding-body">Antes: un intent mal ruteado generó un folio de solicitud que el usuario nunca pidió. V2: todo write requiere confirmación afirmativa explícita.</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Códigos canjeables inventados</span></div>
-      <div class="finding-body">Antes: Betty presentaba folios internos como códigos para canjear en taquilla Cinépolis. V2: regla system "no mencionar códigos canjeables de terceros sin backing".</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Registro equivocado del propio usuario</span></div>
-      <div class="finding-body">Antes: lookup de datos devolvía nombre y correo cruzados. V2: VerifiedCustomerId session-bound garantiza consultas sobre el titular real.</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Nota interna de ticket filtrada al cliente</span></div>
-      <div class="finding-body">V2: regla específica "nunca cites comentarios marcados como internos de ServiceNow".</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Oferta financiera no solicitada</span></div>
-      <div class="finding-body">Antes: Betty ofrecía saldos vencidos o términos de Credilazos sin que el usuario los pidiera. V2: regla "responde solo lo preguntado".</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Mezcla de intents en el clúster de finanzas</span></div>
-      <div class="finding-body">Antes: 5 subagentes de finanzas desambiguados por negaciones ("NO incluye credilazos"). V2: un solo Pagos y Finanzas con descripciones disjuntas.</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Transfer ofrecido y luego retirado</span></div>
-      <div class="finding-body">Antes: Betty ofrecía transfer, el usuario aceptaba, y ella decía "no es posible escalar". V2: valida horario ANTES de ofrecer transfer.</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Mensajes repetidos de empatía/CSAT</span></div>
-      <div class="finding-body">Antes: el link de encuesta disparaba 16 veces, "Estoy para servirte" 29 veces. V2: cierre una sola vez al final de un intent resuelto.</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Mensaje en inglés en chat en español</span></div>
-      <div class="finding-body">Antes: "Kindly hold as we connect you…" en conversaciones hispanohablantes. V2: locale es_MX, sin fallback a inglés.</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">Ejemplos de folios con formato real</span></div>
-      <div class="finding-body">Antes: Betty sugería folios de ejemplo con formato PRM007… que podían ser válidos (riesgo de fraude). V2: regla "no sugerir folios de ejemplo".</div>
-    </div>
-    <div class="finding fdev2">
-      <div class="finding-head"><span class="tag">V2</span><span class="title">+ 9 fixes más de comportamiento</span></div>
-      <div class="finding-body">Inputs contradictorios en Premios, convenios con transfer automático, auth sin loop guard, descripciones solo-negación, instrucciones de escalación contradictorias, redirect de off-topic a conocimiento general, encuesta en handoff mid-intent, re-llamada de acciones ya ejecutadas, instrucciones vagas de post-acción. Todos cerrados con reglas y gates estructurales.</div>
-    </div>
-  </div>
-</section>
-
-<!-- =========== PÁGINA 6 · PENDIENTES Y CIERRE =========== -->
-<section class="page">
-  <div class="page-head">
-    <span class="brand">Salesforce · Betterware</span>
-    <span>Reporte de remediaciones · Octubre 2026</span>
-  </div>
-
-  <span class="section-eyebrow">5 · Pendientes · Roadmap post-cutover</span>
-  <h2>6 fixes que no bloquean el piloto</h2>
-  <p class="lead">Estos 6 hallazgos requieren cambios en el código Apex de respaldo o en la infraestructura de observabilidad. Se trabajan en paralelo sin pausar el programa Insiders.</p>
-
-  <div class="finding-group">
-    <div class="finding pending">
-      <div class="finding-head"><span class="tag">PENDIENTE</span><span class="title">Permisos a nivel campo en 10 clases Apex</span></div>
-      <div class="finding-body">Auditoría de "with sharing" para evitar que la configuración de permisos de un usuario específico filtre datos de un tercero. Owner: Capptus · Esfuerzo: 2 sprints.</div>
-    </div>
-    <div class="finding pending">
-      <div class="finding-head"><span class="tag">PENDIENTE</span><span class="title">Datos corruptos en el pipeline de origen</span></div>
-      <div class="finding-body">El campo email a veces se renderiza como un token placeholder; fechas aparecen como "01 de enero de 1900". Fuente en upstream BW+. Owner: Betterware (data pipeline) · Esfuerzo: 1-2 sprints.</div>
-    </div>
-    <div class="finding pending">
-      <div class="finding-head"><span class="tag">PENDIENTE</span><span class="title">Filtro de puntos por semana ignorado</span></div>
-      <div class="finding-body">Si el usuario pide puntos de la semana 19, el Apex devuelve la cifra actual pero re-etiquetada "para la semana 19". Owner: Capptus · Esfuerzo: 1 sprint.</div>
-    </div>
-    <div class="finding pending">
-      <div class="finding-head"><span class="tag">PENDIENTE</span><span class="title">Concatenación errónea de inputs en devoluciones</span></div>
-      <div class="finding-body">Dos valores requeridos se funden en un string mal formado, lo que garantiza falso "no encontrado". Owner: Capptus · Esfuerzo: 1 sprint.</div>
-    </div>
-    <div class="finding pending">
-      <div class="finding-head"><span class="tag">PENDIENTE</span><span class="title">Strip de notas internas de ServiceNow en origen</span></div>
-      <div class="finding-body">V2 ya filtra las notas internas a nivel de instrucciones, pero el fix definitivo es que el Apex nunca las devuelva. Owner: Capptus · Esfuerzo: 0.5 sprint.</div>
-    </div>
-    <div class="finding pending">
-      <div class="finding-head"><span class="tag">PENDIENTE</span><span class="title">Logging con atribución de rol correcta</span></div>
-      <div class="finding-body">En los logs, texto que escribió Betty aparece como si lo hubiera escrito el usuario. Es un problema de observabilidad, no afecta UX. Owner: plataforma Salesforce.</div>
-    </div>
-  </div>
-
-  <span class="section-eyebrow" style="margin-top:28px;display:inline-block">6 · Qué sigue</span>
-  <h2 style="margin-top:10px">De aquí al cutover del 16 de octubre</h2>
-
-  <div style="margin-top:14px">
-    <div class="next-step">
-      <div class="num">1<small>Esta semana</small></div>
-      <div class="text"><strong>Activar v6 del agente nuevo en producción</strong>Pre-wiring de canales (Messaging + Enhanced Chat) y activación controlada. V42 se mantiene disponible como fallback inmediato.</div>
-    </div>
-    <div class="next-step">
-      <div class="num">2<small>Vie 16-oct</small></div>
-      <div class="text"><strong>Programa Insiders · piloto cerrado</strong>15 a 25 distribuidoras seleccionadas por Betterware CS entran al agente nuevo via un checkbox en su perfil. V42 sigue atendiendo al resto.</div>
-    </div>
-    <div class="next-step">
-      <div class="num">3<small>Vie 23-oct</small></div>
-      <div class="text"><strong>GA · Rollout total</strong>Si el piloto cumple las métricas de aceptación (NPS cualitativo ≥70%, ≥85% intents validados funcionando, 0 bugs críticos abiertos), el agente nuevo pasa a atender a todas las distribuidoras.</div>
-    </div>
-    <div class="next-step">
-      <div class="num">4<small>Lun 26-oct</small></div>
-      <div class="text"><strong>Fase de modernización</strong>Arranca la etapa de atender los 6 pendientes de Apex en paralelo, sin impactar operación.</div>
+    <div class="bucket pending">
+      <h3>Pendientes <span class="count">6</span></h3>
+      <p class="sub">Cambios en Apex y observabilidad; roadmap post-cutover.</p>
     </div>
   </div>
 
   <div class="page-footer">
     <span>Reporte de remediaciones · Betty</span>
-    <span>Salesforce · Betterware · 08-oct-2026</span>
+    <span>Página 2</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 3 · YA RESUELTOS EN V42 ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Reporte de remediaciones · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">2 · Lo que ya resolvió V42</span>
+  <h2>7 fixes críticos avanzados por Capptus</h2>
+  <p class="lead">Entre septiembre y los primeros días de octubre, el equipo Capptus avanzó mejoras importantes a Betty que ya están vigentes en producción.</p>
+
+  <ul class="detail-list">
+    <li>
+      <span class="title">El código de distribuidora llega automático</span>
+      <span class="before">el agente pedía re-escribir el código en cada consulta.</span>
+      <span class="after">el código se guarda en la sesión y se usa automáticamente.</span>
+    </li>
+    <li>
+      <span class="title">FAQ con respuestas reales de Knowledge</span>
+      <span class="before">la configuración estaba vacía y las preguntas generales no tenían respuesta.</span>
+      <span class="after">Knowledge activo, entregando 42 artículos oficiales corregidos y 21 traducciones.</span>
+    </li>
+    <li>
+      <span class="title">Horarios de atención reales, no inventados</span>
+      <span class="before">a veces decía "cerrado" estando abierto u ofrecía horarios ficticios.</span>
+      <span class="after">consulta el horario real por cola de negocio y cita la ventana exacta.</span>
+    </li>
+    <li>
+      <span class="title">Sesión persistente — no pide re-identificar</span>
+      <span class="before">podía pedir el código a media conversación aunque ya se hubiera identificado.</span>
+      <span class="after">preserva la identidad durante toda la sesión del canal.</span>
+    </li>
+    <li>
+      <span class="title">SLAs de entrega citados de tabla real</span>
+      <span class="before">inventaba plazos tipo "2 a 4 semanas" sin base.</span>
+      <span class="after">cita el SLA real conectado a la tabla de coberturas por código postal.</span>
+    </li>
+    <li>
+      <span class="title">Ya no filtra su razonamiento interno</span>
+      <span class="before">a veces mandaba al usuario frases como "El usuario solicita ser transferido…".</span>
+      <span class="after">las reglas globales le prohíben describir su propio razonamiento.</span>
+    </li>
+    <li>
+      <span class="title">Inputs correctamente enlazados a sesión</span>
+      <span class="before">algunas acciones tenían el código de distribuidora sin enlazar.</span>
+      <span class="after">el mapeo de inputs es consistente en todas las acciones.</span>
+    </li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Reporte de remediaciones · Betty</span>
+    <span>Página 3</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 4 · V42 + V2 PARCIAL ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Reporte de remediaciones · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">3 · V42 cubre parcial · V2 completa</span>
+  <h2>10 fixes donde la base de V42 funciona y V2 cierra la brecha</h2>
+  <p class="lead">V42 trajo mejoras parciales en estos puntos. El agente nuevo mantiene esas bases y añade la lógica que faltaba para cerrar el caso completo.</p>
+
+  <ul class="detail-list">
+    <li>
+      <span class="title">Escalación controlada a asesor humano</span>
+      <span class="before">15 tipos de solicitud se escalaban automáticamente.</span>
+      <span class="after">V42 redujo a 2 triggers · V2 define 5 triggers literales + confirmación afirmativa.</span>
+    </li>
+    <li>
+      <span class="title">Altas de distribuidoras que fallaban al mes</span>
+      <span class="before">32 de 65 sesiones de alta (49%) terminaban en "no encontré registros".</span>
+      <span class="after">V42 nueva acción M010 V2 · V2 cita el motivo específico (semana pendiente, código inválido).</span>
+    </li>
+    <li>
+      <span class="title">Fotos y audios adjuntos</span>
+      <span class="before">cualquier imagen o audio bloqueaba el intent completo.</span>
+      <span class="after">V42 pide escribir · V2 si parece comprobante de pago deriva al flujo de reporte.</span>
+    </li>
+    <li>
+      <span class="title">Entrega planeada vs entrega real</span>
+      <span class="before">la fecha planeada de Drivin se citaba como entrega garantizada.</span>
+      <span class="after">V2 formaliza: toda fecha "planeada" se presenta como estimación — nunca garantía.</span>
+    </li>
+    <li>
+      <span class="title">Resolución determinista</span>
+      <span class="before">la misma petición podía dar link, hold en inglés, error o escalación según la sesión.</span>
+      <span class="after">V42 bind de código · V2 compuertas "available when" eliminan rutas no deterministas.</span>
+    </li>
+    <li>
+      <span class="title">Confusión entre premios y pedidos</span>
+      <span class="before">el seguimiento de un premio BW+ se mezclaba con el tracking de un pedido.</span>
+      <span class="after">V2 formaliza la separación: tracking de pedidos vs entrega de premios son acciones distintas.</span>
+    </li>
+    <li>
+      <span class="title">Validación de pedido extemporáneo</span>
+      <span class="before">la ventana se validaba al momento de la solicitud, no de la colocación.</span>
+      <span class="after">V42 valida ventana · V2 añade confirmación afirmativa antes de registrar.</span>
+    </li>
+    <li>
+      <span class="title">Protección de información de terceros</span>
+      <span class="before">se podían consultar datos de otros asociados sin validar pertenencia.</span>
+      <span class="after">V42 limita exposición · V2 agrega compuerta estructural de linaje antes de consultar.</span>
+    </li>
+    <li>
+      <span class="title">Fuga de datos pre-autenticación</span>
+      <span class="before">consultas protegidas corrían antes de verificar identidad.</span>
+      <span class="after">V42 bind código a sesión · V2 bloquea acciones hasta que isAuthenticated = True.</span>
+    </li>
+    <li>
+      <span class="title">Mensaje "fuera de servicio" estando abierto</span>
+      <span class="before">falso-negativo de horario en fines de semana.</span>
+      <span class="after">V42 check en tiempo real · V2 regla: nunca recitar ventanas de memoria.</span>
+    </li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Reporte de remediaciones · Betty</span>
+    <span>Página 4</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 5 · AGENTE NUEVO · SEGURIDAD + ARQUITECTURA ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Reporte de remediaciones · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">4 · El agente nuevo cierra 25 fixes</span>
+  <h2>Fixes de seguridad, arquitectura y comportamiento</h2>
+  <p class="lead">El agente nuevo suma al backend de V42 una capa de orquestación con compuertas estructurales. Estos son los grupos de mejoras más visibles.</p>
+
+  <div class="cat-head"><span class="ico">🔐</span> Seguridad y privacidad</div>
+  <ul class="detail-list">
+    <li>
+      <span class="title">Fuga "Julieth" entre sesiones de distintos distribuidores</span>
+      <span class="before">el nombre "Julieth" se devolvía a códigos no relacionados (5+ sesiones verificadas).</span>
+      <span class="after">el código se ata al session-scope y se bloquea toda acción si el guard está vacío.</span>
+    </li>
+    <li>
+      <span class="title">Token de reset de contraseña impreso en el chat</span>
+      <span class="before">42 URLs con token devueltas en 16 sesiones de reset.</span>
+      <span class="after">regla "nunca imprimas tokens ni URLs"; el agente solo confirma el canal de entrega.</span>
+    </li>
+    <li>
+      <span class="title">Datos de otros asociados sin autorización</span>
+      <span class="before">35 sesiones devolvieron registros de asociados ajenos.</span>
+      <span class="after">se valida ownership antes de llamar cualquier acción que exponga PII.</span>
+    </li>
+    <li>
+      <span class="title">URLs firmadas de Drivin filtradas en el chat</span>
+      <span class="before">10 URLs JWT en 3 sesiones de evidencia de entrega.</span>
+      <span class="after">la evidencia se cita como "adjunto" sin imprimir la URL firmada.</span>
+    </li>
+  </ul>
+
+  <div class="cat-head"><span class="ico">🏗️</span> Arquitectura y navegación</div>
+  <ul class="detail-list">
+    <li>
+      <span class="title">Autenticación capturando TODO mensaje por prioridad</span>
+      <span class="before">una regla de "prioridad máxima" capturaba cualquier mensaje para pedir código.</span>
+      <span class="after">auth es un tópico angosto que solo se dispara desde los subagentes protegidos.</span>
+    </li>
+    <li>
+      <span class="title">26 subagentes consolidados en 11</span>
+      <span class="before">el agente se dividía en 26 flujos superpuestos; clasificar entre tantos reduce precisión.</span>
+      <span class="after">10 subagentes de dominio + router, con descripciones positivas y disjuntas.</span>
+    </li>
+    <li>
+      <span class="title">Instrucciones de estilo repetidas 16 veces</span>
+      <span class="before">cada subagente repetía el bloque de cierre, encuesta, empatía y emojis.</span>
+      <span class="after">una sola declaración a nivel system; cada subagente solo describe su trabajo.</span>
+    </li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Reporte de remediaciones · Betty</span>
+    <span>Página 5</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 6 · AGENTE NUEVO · COMPORTAMIENTO ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Reporte de remediaciones · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">4 · El agente nuevo cierra 25 fixes · continuación</span>
+
+  <div class="cat-head"><span class="ico">🎯</span> Comportamiento y datos</div>
+  <ul class="detail-list">
+    <li>
+      <span class="title">Folios registrados sin confirmación</span>
+      <span class="before">un intent mal ruteado generó un folio de pedido que el usuario nunca pidió.</span>
+      <span class="after">todo write requiere confirmación afirmativa explícita del usuario antes de ejecutarse.</span>
+    </li>
+    <li>
+      <span class="title">Códigos canjeables inventados en Cinépolis</span>
+      <span class="before">Betty presentaba folios internos como códigos para canjear en taquilla.</span>
+      <span class="after">regla "no mencionar códigos canjeables de terceros sin backing real".</span>
+    </li>
+    <li>
+      <span class="title">Registro equivocado del propio usuario</span>
+      <span class="before">el lookup de datos devolvía nombre y correo cruzados.</span>
+      <span class="after">la identificación se mantiene session-bound y garantiza consultas sobre el titular real.</span>
+    </li>
+    <li>
+      <span class="title">Notas internas de ticket filtradas al cliente</span>
+      <span class="before">comentarios marcados como internos de ServiceNow se mostraban al distribuidor.</span>
+      <span class="after">regla específica: nunca cita comentarios internos — solo campos permitidos.</span>
+    </li>
+    <li>
+      <span class="title">Oferta financiera no solicitada</span>
+      <span class="before">Betty ofrecía saldos vencidos o términos de Credilazos sin que se pidieran.</span>
+      <span class="after">regla "responde solo lo preguntado"; no ofrece información financiera por iniciativa.</span>
+    </li>
+    <li>
+      <span class="title">Mezcla de intents en el clúster de finanzas</span>
+      <span class="before">5 subagentes de finanzas desambiguados por frases negativas tipo "NO incluye credilazos".</span>
+      <span class="after">un solo subagente de Pagos y Finanzas con descripciones positivas y disjuntas.</span>
+    </li>
+    <li>
+      <span class="title">Transfer ofrecido y luego retirado</span>
+      <span class="before">Betty ofrecía asesor, el usuario aceptaba, y después decía "no es posible escalar".</span>
+      <span class="after">valida horario del queue antes de ofrecer transferencia.</span>
+    </li>
+    <li>
+      <span class="title">Mensajes de cierre y encuesta repetidos</span>
+      <span class="before">link de encuesta disparaba 16 veces por sesión; cierre repetido 29 veces.</span>
+      <span class="after">cierre y encuesta una sola vez al final de un intent resuelto.</span>
+    </li>
+    <li>
+      <span class="title">Mensaje de espera en inglés</span>
+      <span class="before">"Kindly hold as we connect you…" en conversaciones hispanohablantes.</span>
+      <span class="after">locale es_MX, sin fallback a inglés en holds ni respuestas.</span>
+    </li>
+    <li>
+      <span class="title">Ejemplos de folios con formato real</span>
+      <span class="before">Betty sugería folios de ejemplo con formato PRM007… válido (riesgo de fraude).</span>
+      <span class="after">regla: no sugerir folios de ejemplo con formato real.</span>
+    </li>
+    <li>
+      <span class="title">+ 9 fixes adicionales de comportamiento</span>
+      <span class="after">inputs contradictorios en Premios · convenios con transfer automático · auth sin loop guard · descripciones solo-negación · instrucciones de escalación contradictorias · redirect de off-topic · encuesta en handoff mid-intent · re-llamada de acciones ejecutadas · instrucciones vagas post-acción.</span>
+    </li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Reporte de remediaciones · Betty</span>
+    <span>Página 6</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 7 · PENDIENTES + ROADMAP ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Reporte de remediaciones · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">5 · Roadmap post-cutover</span>
+  <h2>6 pendientes que no bloquean el piloto</h2>
+  <p class="lead">Estos 6 hallazgos requieren cambios en el Apex de respaldo o en la infraestructura de observabilidad. Se trabajan en paralelo sin pausar el programa Insiders.</p>
+
+  <ul class="detail-list">
+    <li>
+      <span class="title">Permisos a nivel de campo en 10 clases Apex</span>
+      <span class="after">Auditoría de "with sharing" para evitar que configuraciones específicas filtren datos de terceros. Owner Capptus · 2 sprints.</span>
+    </li>
+    <li>
+      <span class="title">Datos corruptos en el pipeline de origen</span>
+      <span class="after">Email que se renderiza como placeholder; fechas tipo "01 de enero de 1900". Fuente upstream BW+. Owner Betterware · 1-2 sprints.</span>
+    </li>
+    <li>
+      <span class="title">Filtro de puntos por semana ignorado</span>
+      <span class="after">Pedir puntos de la semana 19 devuelve la cifra actual re-etiquetada. Owner Capptus · 1 sprint.</span>
+    </li>
+    <li>
+      <span class="title">Concatenación errónea de inputs en devoluciones</span>
+      <span class="after">Dos valores requeridos se funden en un string mal formado, garantizando falso "no encontrado". Owner Capptus · 1 sprint.</span>
+    </li>
+    <li>
+      <span class="title">Strip de notas internas de ServiceNow en origen</span>
+      <span class="after">V2 ya filtra las notas a nivel de instrucciones; el fix definitivo es que el Apex nunca las devuelva. Owner Capptus · 0.5 sprint.</span>
+    </li>
+    <li>
+      <span class="title">Logging con atribución de rol correcta</span>
+      <span class="after">Texto que escribió Betty aparece atribuido al usuario en los logs. Observabilidad, no afecta UX. Owner plataforma Salesforce.</span>
+    </li>
+  </ul>
+
+  <div class="next-step">
+    <h3>De aquí al cutover · 16 de octubre</h3>
+    <div class="step"><span class="day">Esta semana</span><span>Activar v6 del agente nuevo en producción. V42 se mantiene como fallback inmediato.</span></div>
+    <div class="step"><span class="day">Vie 16 OCT · Cutover</span><span>Programa Insiders · piloto cerrado con 15-25 distribuidoras aliadas. V42 sigue atendiendo al resto de la base.</span></div>
+    <div class="step"><span class="day">Vie 23 OCT · GA</span><span>Rollout general si cumple métricas: NPS cualitativo ≥ 70%, ≥ 85% intents validados, 0 bugs críticos abiertos.</span></div>
+    <div class="step"><span class="day">Lun 26 OCT · Modernización</span><span>Arranca fase de atender los 6 pendientes de Apex en paralelo, sin impactar operación.</span></div>
+  </div>
+
+  <div class="page-footer">
+    <span>Reporte de remediaciones · Betty</span>
+    <span>Página 7</span>
   </div>
 </section>
 
