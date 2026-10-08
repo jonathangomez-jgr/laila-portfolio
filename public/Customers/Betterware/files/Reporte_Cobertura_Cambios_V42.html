@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cobertura de cambios V42 en el agente nuevo</title>
+<style>
+  @font-face {
+    font-family: 'AvantGarde';
+    src: url('../../../Assets Salesforce Brand/Fonts/Titles/AvantGardeForSalesforceW05-Dm.woff') format('woff');
+  }
+  @font-face { font-family: 'SalesforceSans'; src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Regular.woff') format('woff'); font-weight: 400; }
+  @font-face { font-family: 'SalesforceSans'; src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Semibold.woff') format('woff'); font-weight: 600; }
+  @font-face { font-family: 'SalesforceSans'; src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Bold.woff') format('woff'); font-weight: 700; }
+  @font-face { font-family: 'SalesforceSans'; src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Light.woff') format('woff'); font-weight: 300; }
+
+  :root {
+    --eb15: #001E5B; --eb30: #022AC0; --eb50: #066AFE;
+    --cb68: #00B3FF; --cb80: #90D0FE; --cb95: #EAF5FE;
+    --rose: #E8275A; --orange: #F28B42;
+    --green: #15803D; --green-bg: #F0FDF4; --green-rule: #BBF7D0;
+    --amber: #B45309; --amber-bg: #FFFBEB; --amber-rule: #FDE68A;
+    --ink: #0A1F44; --slate: #4B5563; --mist: #F3F6FB; --rule: #E2E8F0;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'SalesforceSans', -apple-system, system-ui, sans-serif;
+    color: var(--ink); background: #fff;
+    font-size: 10.5pt; line-height: 1.5;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  @page { size: letter; margin: 0; }
+
+  .page {
+    width: 8.5in; min-height: 11in;
+    padding: 0.6in 0.7in;
+    page-break-after: always;
+    position: relative; overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  h1, h2, h3, h4 {
+    font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+    color: var(--eb15);
+    margin: 0 0 0.4em 0;
+    line-height: 1.15;
+  }
+
+  .cover {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 55%, var(--eb50) 100%);
+    color: #fff;
+    padding: 0.9in 0.9in;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .cover h1 { color: #fff; font-size: 44pt; letter-spacing: -0.01em; line-height: 1.05; margin-bottom: 0.3em; }
+  .cover .subtitle { font-weight: 300; font-size: 15pt; color: var(--cb80); margin-bottom: 1.1em; }
+  .cover .eyebrow {
+    display: inline-block; font-size: 9pt; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--cb68);
+    padding: 0.4em 0.9em; border: 1px solid rgba(144,208,254,0.5);
+    border-radius: 100px; margin-bottom: 2.2em;
+  }
+  .cover .top-row { display: flex; justify-content: space-between; align-items: center; }
+  .cover-logo { height: 32px; filter: brightness(0) invert(1); }
+  .cover-date { font-size: 10pt; color: var(--cb80); letter-spacing: 0.05em; }
+  .cover-sparkles { position: absolute; top: 1.5in; right: 0.6in; opacity: 0.5; width: 180px; }
+  .cover-astro { position: absolute; right: -40px; bottom: -30px; width: 320px; opacity: 0.95; }
+  .cover-author { border-top: 1px solid rgba(144,208,254,0.3); padding-top: 0.9em; font-size: 10pt; }
+  .cover-author .name { font-weight: 600; color: #fff; font-size: 11pt; margin-bottom: 0.1em; }
+  .cover-author .role { color: var(--cb80); }
+  .cover-tagline { max-width: 5.5in; font-size: 12pt; line-height: 1.5; color: #fff; font-weight: 300; }
+
+  .section-eyebrow {
+    display: inline-block; font-size: 8.5pt; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--eb50); margin-bottom: 0.6em;
+  }
+  h2 { font-size: 22pt; margin-bottom: 0.25em; }
+  h2 + .lead { font-size: 12pt; color: var(--slate); max-width: 6.5in; margin: 0 0 1.1em 0; line-height: 1.5; }
+
+  .page-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.1em; padding-bottom: 0.5em;
+    border-bottom: 1px solid var(--rule);
+    font-size: 8.5pt; color: var(--slate);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .page-head .brand { font-weight: 700; color: var(--eb30); }
+
+  .page-footer {
+    position: absolute; bottom: 0.35in; left: 0.7in; right: 0.7in;
+    font-size: 8pt; color: #9CA3AF;
+    display: flex; justify-content: space-between;
+    border-top: 1px solid var(--rule); padding-top: 0.4em;
+  }
+
+  .narrative {
+    background: var(--cb95);
+    border-left: 4px solid var(--eb50);
+    padding: 0.9em 1.1em;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1em;
+  }
+  .narrative p { margin: 0; font-size: 11pt; color: var(--ink); line-height: 1.55; }
+  .narrative .quote {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 14pt; color: var(--eb15);
+    line-height: 1.3; margin-bottom: 0.5em;
+  }
+
+  .stats-callout {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 100%);
+    color: #fff; padding: 1.1em 1.3em;
+    border-radius: 12px; margin: 1em 0;
+  }
+  .stats-callout h3 { color: #fff; font-size: 14pt; margin-bottom: 0.6em; }
+  .stats-callout .stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0.8em; margin-top: 0.7em;
+  }
+  .stats-callout .stat {
+    background: rgba(255,255,255,0.08);
+    border-left: 3px solid var(--cb68);
+    padding: 0.75em 0.9em;
+    border-radius: 0 8px 8px 0;
+  }
+  .stats-callout .stat .num {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 24pt; font-weight: 700;
+    line-height: 1; color: #fff;
+  }
+  .stats-callout .stat .label {
+    font-size: 9pt; color: var(--cb80);
+    margin-top: 0.3em; line-height: 1.3;
+  }
+  .stats-callout .stat .pct {
+    display: inline-block; font-size: 9pt;
+    color: var(--cb68); font-weight: 700;
+    margin-left: 0.4em;
+  }
+
+  /* Change cards */
+  .change-list { list-style: none; padding-left: 0; margin: 0.5em 0; }
+  .change-list li {
+    padding: 0.55em 0.9em;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--green);
+    border-radius: 0 7px 7px 0;
+    margin-bottom: 0.4em;
+    font-size: 9.5pt;
+    line-height: 1.42;
+    position: relative;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .change-list li.partial { border-left-color: var(--amber); }
+  .change-list li.pending { border-left-color: var(--rose); }
+  .change-head {
+    display: flex; align-items: baseline; gap: 0.5em;
+    margin-bottom: 0.3em;
+    flex-wrap: wrap;
+  }
+  .change-num {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 10.5pt; font-weight: 700;
+    color: var(--eb30);
+    min-width: 1.3em;
+  }
+  .change-title {
+    font-weight: 700; color: var(--eb15);
+    font-size: 10.5pt; flex: 1;
+  }
+  .change-tag {
+    font-size: 7.5pt; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.15em 0.55em; border-radius: 100px;
+    color: #fff;
+  }
+  .change-tag.nueva { background: var(--eb50); }
+  .change-tag.ajuste { background: var(--orange); }
+  .change-tag.date { background: var(--slate); color: #fff; font-weight: 600; }
+  .change-status {
+    font-size: 8pt; font-weight: 700;
+    letter-spacing: 0.03em; text-transform: uppercase;
+    padding: 0.15em 0.5em; border-radius: 100px;
+    color: #fff;
+  }
+  .change-status.ok { background: var(--green); }
+  .change-status.partial { background: var(--amber); }
+  .change-status.pending { background: var(--rose); }
+  .change-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7em;
+    margin-top: 0.4em;
+  }
+  .change-body .col { font-size: 9pt; }
+  .change-body .col .k {
+    font-size: 7pt; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--slate); margin-bottom: 0.2em;
+    display: block;
+  }
+  .change-body .col .v { color: var(--ink); line-height: 1.4; }
+  .change-body .col .mono {
+    font-family: ui-monospace, monospace;
+    font-size: 8pt; color: var(--eb30);
+    background: var(--mist);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  .next-step {
+    background: linear-gradient(135deg, var(--cb95) 0%, #fff 100%);
+    border: 2px solid var(--eb50);
+    border-radius: 14px;
+    padding: 1.1em 1.3em;
+    margin-top: 1.2em;
+  }
+  .next-step h3 { color: var(--eb50); font-size: 13pt; margin-bottom: 0.6em; }
+  .next-step .step {
+    display: flex; gap: 0.9em;
+    padding: 0.35em 0;
+    font-size: 10pt; line-height: 1.45;
+  }
+  .next-step .step .day {
+    font-weight: 700; color: var(--eb30);
+    min-width: 1.9in;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== PÁGINA 1 · PORTADA ============== -->
+<section class="page cover">
+  <div class="top-row">
+    <img class="cover-logo" src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" alt="Salesforce">
+    <span class="cover-date">OCTUBRE 2026</span>
+  </div>
+
+  <img class="cover-sparkles" src="../../../Assets Salesforce Brand/Sparkles/Sparkles Blue Main.svg" alt="">
+  <img class="cover-astro" src="../../../Assets Salesforce Brand/Carachters/Agent Astro/Agent Astro 3D 10 R.png" alt="">
+
+  <div>
+    <span class="eyebrow">Cobertura técnica · Betterware México</span>
+    <h1>Cambios V42<br>en el agente<br>nuevo</h1>
+    <p class="subtitle">17 cambios liberados entre 29-sep y 07-oct · 17 funcionales en Betty V2</p>
+    <p class="cover-tagline">Mapeo punto por punto de las 6 capacidades nuevas y 11 ajustes de V42, con el estado de cobertura en el agente nuevo. Documento de referencia antes del cutover del 16 de octubre.</p>
+  </div>
+
+  <div class="cover-author">
+    <div class="name">Jonathan Gomez</div>
+    <div class="role">Salesforce · Forward Deployed Engineer</div>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 2 · RESUMEN ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Cobertura V42 en el agente nuevo · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">1 · Resumen ejecutivo</span>
+  <h2>17 de 17 cambios de V42 operativos en el agente nuevo</h2>
+  <p class="lead">Entre el 29-sep y el 07-oct se liberaron 17 cambios vigentes en producción (V42): 6 capacidades nuevas y 11 ajustes de comportamiento. El agente nuevo reutiliza las mismas acciones de respaldo (Apex y Flow) por lo que todas las capacidades están disponibles. La única diferencia estructural es la consolidación de 26 subagentes en 11, aplicada en la capa de orquestación.</p>
+
+  <div class="narrative">
+    <p class="quote">Cobertura 100% · con una capa de orquestación más robusta.</p>
+    <p>Betty V2 no duplica el trabajo backend que ya está en V42. Reutiliza las ~45 acciones Apex y Flow desplegadas en producción. Lo que suma es una capa de orquestación con compuertas estructurales de autenticación, reglas de confirmación para escrituras y navegación consolidada entre dominios. Cada cambio de V42 queda disponible como acción accesible desde el subagente correspondiente del agente nuevo.</p>
+  </div>
+
+  <div class="stats-callout">
+    <h3>Estado de cobertura</h3>
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="num">17 <span class="pct">100%</span></div>
+        <div class="label">Cambios funcionales en V2</div>
+      </div>
+      <div class="stat">
+        <div class="num">6 <span class="pct">35%</span></div>
+        <div class="label">Capacidades nuevas liberadas</div>
+      </div>
+      <div class="stat">
+        <div class="num">11 <span class="pct">65%</span></div>
+        <div class="label">Ajustes de comportamiento</div>
+      </div>
+      <div class="stat">
+        <div class="num">0 <span class="pct">0%</span></div>
+        <div class="label">Cambios no cubiertos</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 1em; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6em; font-size: 10pt;">
+    <div style="padding: 0.7em 0.9em; background: var(--green-bg); border: 1px solid var(--green-rule); border-radius: 7px;">
+      <div style="font-size: 7.5pt; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); margin-bottom: 0.3em;">✓ Funcional</div>
+      <div style="font-size: 9.5pt; color: var(--ink);">17 cambios cableados a su acción correspondiente en el agente nuevo con las variables de sesión y linaje bindeadas.</div>
+    </div>
+    <div style="padding: 0.7em 0.9em; background: var(--amber-bg); border: 1px solid var(--amber-rule); border-radius: 7px;">
+      <div style="font-size: 7.5pt; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.3em;">◐ Parcial</div>
+      <div style="font-size: 9.5pt; color: var(--ink);">0 cambios parcialmente cubiertos. Toda la lógica de V42 está portada o reutilizada 1:1.</div>
+    </div>
+    <div style="padding: 0.7em 0.9em; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 7px;">
+      <div style="font-size: 7.5pt; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #991B1B; margin-bottom: 0.3em;">✗ Pendiente</div>
+      <div style="font-size: 9.5pt; color: var(--ink);">0 cambios pendientes de implementar. El agente nuevo arranca con paridad completa a V42.</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Cobertura V42 en el agente nuevo</span>
+    <span>Página 2</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 3 · 6 CAPACIDADES NUEVAS ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Cobertura V42 en el agente nuevo · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">2 · Capacidades nuevas liberadas en V42</span>
+  <h2>6 nuevas funciones · todas cableadas</h2>
+  <p class="lead">Las 6 capacidades agregadas entre septiembre y octubre quedan accesibles en el agente nuevo con las mismas acciones de respaldo.</p>
+
+  <ul class="change-list">
+    <li>
+      <div class="change-head">
+        <span class="change-num">01</span>
+        <span class="change-title">Bodegas de entrega</span>
+        <span class="change-tag nueva">Nueva · M036</span>
+        <span class="change-tag date">07-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">El agente informa qué bodega corresponde al CP del domicilio y entrega directorio con dirección, horario y liga de Google Maps.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Subagente <span class="mono">OrdersAndDelivery</span> → acciones <span class="mono">bodega_asignada</span> + <span class="mono">consultar_bodega</span>.</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">02</span>
+        <span class="change-title">Guías de paquetería</span>
+        <span class="change-tag nueva">Nueva · M024</span>
+        <span class="change-tag date">06-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">Devuelve factura, paquetería, número de guía, fecha de envío y liga de rastreo. Diferencia explícita de "¿dónde está mi pedido?" (que va a Drivin).</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Subagente <span class="mono">OrdersAndDelivery</span> → acción <span class="mono">guia_paqueteria</span>.</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">03</span>
+        <span class="change-title">Venta retenida</span>
+        <span class="change-tag nueva">Nueva · M028</span>
+        <span class="change-tag date">01-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">Responde si hay venta retenida: motivo compartible → importe + motivo; motivo sensible → solo confirma existencia. Después ofrece pasar con ejecutivo.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Subagente <span class="mono">OrdersAndDelivery</span> → acción <span class="mono">venta_retenida</span>.</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">04</span>
+        <span class="change-title">Venta por catálogo</span>
+        <span class="change-tag nueva">Nueva · M027</span>
+        <span class="change-tag date">01-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">Responde venta por catálogo actual, anterior o por mes, siempre de la cuenta autenticada.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Subagente <span class="mono">AccountAndInfo</span> → acción <span class="mono">venta_por_catalogo</span> con binding de linaje opcional.</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">05</span>
+        <span class="change-title">Consultas de linaje</span>
+        <span class="change-tag nueva">Nueva</span>
+        <span class="change-tag date">06-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">Permite consultar saldos, pagos, descuentos, puntos, premios, devoluciones, convenios y venta de una hija o alguien del linaje, validando pertenencia antes.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Variable <span class="mono">V_CodigoLinaje</span> + acción <span class="mono">validar_linaje</span> cableadas en Account, Payments y Rewards. Propagación automática a 24 acciones downstream.</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">06</span>
+        <span class="change-title">Estado de alta de distribuidora</span>
+        <span class="change-tag nueva">Nueva · M010 V2</span>
+        <span class="change-tag date">06-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">Consulta por nombre o semana el estatus real de altas en trámite, sin pedir datos personales. Separado de altas de asociados.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Subagente <span class="mono">AccountAndInfo</span> → acción <span class="mono">estado_alta_distribuidora</span> apuntando a <span class="mono">BW_M010_ConsultarEstadoAltaV2Action</span>.</span></div>
+      </div>
+    </li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Cobertura V42 en el agente nuevo</span>
+    <span>Página 3</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 4 · 6 PRIMEROS AJUSTES ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Cobertura V42 en el agente nuevo · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">3 · Ajustes de comportamiento · parte 1</span>
+  <h2>Los primeros 6 ajustes de V42 en el agente nuevo</h2>
+  <p class="lead">De los 11 ajustes de comportamiento liberados en V42, estos son los primeros 6 — Knowledge, reglas globales, código desde sesión, clasificación, FAQ y escalamiento.</p>
+
+  <ul class="change-list">
+    <li>
+      <div class="change-head">
+        <span class="change-num">07</span>
+        <span class="change-title">Knowledge respuestas</span>
+        <span class="change-tag ajuste">Ajuste · M042/M035</span>
+        <span class="change-tag date">07-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">Las respuestas de Knowledge salen del flujo propio en lugar de la acción estándar que fallaba casi siempre.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Flow <span class="mono">BW_AnswerQuestionsWithKnwoledge</span> cableado en subagentes <span class="mono">GeneralFAQ</span> y <span class="mono">DigitalContent</span>.</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">08</span>
+        <span class="change-title">Reglas globales del agente</span>
+        <span class="change-tag ajuste">Ajuste · M034</span>
+        <span class="change-tag date">06-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">El agente no hace cálculos (solo repite cifras de acciones o Knowledge). Máximo un emoji y ninguno al hablar de dinero o datos personales. Ante audios, fotos o stickers pide que escriban.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Reglas 9, 10 y 11 del bloque <span class="mono">system.instructions</span> declaran "CERO CÁLCULOS", "máximo un emoji y ninguno en dinero/datos personales" y "ante audios/fotos/stickers pide que escriban".</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">09</span>
+        <span class="change-title">Código de la distribuidora desde sesión</span>
+        <span class="change-tag ajuste">Ajuste · patrón M025</span>
+        <span class="change-tag date">06-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">El código de distribuidora llega desde la sesión a casi todas las consultas, en lugar de que el agente lo deduzca.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Variable <span class="mono">v_CodigoDistribuidor_Sesion</span> session-scoped, bindeada en todas las acciones de dominio y protegida por guard SEC-3.</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">10</span>
+        <span class="change-title">Clasificación y venta acumulada</span>
+        <span class="change-tag ajuste">Ajuste · M025</span>
+        <span class="change-tag date">30-sep</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">Si no hay sesión iniciada responde "sesión no autenticada" y ya admite consultas de linaje.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Acción <span class="mono">clasificacion_venta_acumulada</span> en AccountAndInfo con binding de <span class="mono">V_CodigoLinaje</span>. Gate de auth estructural en el <span class="mono">before_reasoning</span>.</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">11</span>
+        <span class="change-title">Preguntas generales</span>
+        <span class="change-tag ajuste">Ajuste · M034</span>
+        <span class="change-tag date">01-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">Las preguntas generales se contestan solo con Knowledge, sin inventar, y ya no exigen sesión iniciada.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Subagente dedicado <span class="mono">GeneralFAQ</span> sin <span class="mono">before_reasoning</span> de auth. Única acción: <span class="mono">knowledge_faq</span>.</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">12</span>
+        <span class="change-title">Escalamiento</span>
+        <span class="change-tag ajuste">Ajuste</span>
+        <span class="change-tag date">01-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">Compra con Confianza y Garantía Betterware pasan a un ejecutivo. El convenio de pago se puede consultar propio o de alguien del linaje.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Router describe los 5 triggers literales + subagente <span class="mono">Escalation</span> con instrucción explícita de los 5 triggers. Convenios con binding de linaje opcional.</span></div>
+      </div>
+    </li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Cobertura V42 en el agente nuevo</span>
+    <span>Página 4</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 5 · 5 AJUSTES FINALES ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Cobertura V42 en el agente nuevo · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">4 · Ajustes de comportamiento · parte 2</span>
+  <h2>Los últimos 5 ajustes de V42 en el agente nuevo</h2>
+  <p class="lead">Pagos, inicio de sesión, coberturas, contenido Knowledge y devoluciones por recolección.</p>
+
+  <ul class="change-list">
+    <li>
+      <div class="change-head">
+        <span class="change-num">13</span>
+        <span class="change-title">Pagos</span>
+        <span class="change-tag ajuste">Ajuste</span>
+        <span class="change-tag date">01-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">El agente distingue consultar un pago de reportar uno; reportar lleva al flujo de pago fuera de tiempo o a escalamiento.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Subagente <span class="mono">PaymentsAndFinance</span> instrucción explícita: consulta via <span class="mono">consultar_pagos</span>; reporte deriva a <span class="mono">Escalation</span> con transición go_to_escalation.</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">14</span>
+        <span class="change-title">Inicio de sesión</span>
+        <span class="change-tag ajuste">Ajuste</span>
+        <span class="change-tag date">01-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">El login alternativo se ofrece solo después de que falla el login por código, y la referencia bancaria no se menciona hasta que la distribuidora acepte.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Subagente <span class="mono">AuthAndSecurity</span>, instrucción literal: "Si el intento de código falla, SOLO entonces ofrece la alternativa de referencia bancaria y, si acepta, usa <span class="mono">auth_login_referencia</span>".</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">15</span>
+        <span class="change-title">Coberturas</span>
+        <span class="change-tag ajuste">Ajuste · M032</span>
+        <span class="change-tag date">01-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">El agente entiende la colonia elegida de una lista, sea por número o por nombre.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Acción <span class="mono">consultar_cobertura</span> en OrdersAndDelivery con input opcional <span class="mono">asentamiento</span> que soporta nombre o número. Instrucción incluye "si <span class="mono">requiereDesambiguacion=True</span>, pide elegir del campo <span class="mono">opcionesTexto</span>".</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">16</span>
+        <span class="change-title">Contenido de Knowledge</span>
+        <span class="change-tag ajuste">Ajuste · M035</span>
+        <span class="change-tag date">07-oct en curso</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">42 artículos y 21 traducciones corregidos en el período. Más contenido publicado el 07-oct sin revisión posterior aún.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">El agente nuevo usa automáticamente todo el contenido disponible en Knowledge a través del flow <span class="mono">BW_AnswerQuestionsWithKnwoledge</span>. No requiere configuración adicional.</span></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="change-head">
+        <span class="change-num">17</span>
+        <span class="change-title">Devoluciones · recolección</span>
+        <span class="change-tag ajuste">Ajuste</span>
+        <span class="change-tag date">06-oct</span>
+        <span class="change-status ok">✓ Funcional</span>
+      </div>
+      <div class="change-body">
+        <div class="col"><span class="k">Qué cambió en V42</span><span class="v">"¿Cuándo recogen mi devolución?" busca en Drivin solo con el código de la distribuidora y el folio RMA (o con el código de linaje ya validado). Se quitó la búsqueda alterna por código de asociado.</span></div>
+        <div class="col"><span class="k">Dónde está en V2</span><span class="v">Acción <span class="mono">recoger_devolucion</span> en OrdersAndDelivery apuntando a <span class="mono">BW_ConsulaRecogerDevoluciones</span>. Bindings: codigoDistribuidor + rma + V_CodigoLinaje.</span></div>
+      </div>
+    </li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Cobertura V42 en el agente nuevo</span>
+    <span>Página 5</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 6 · CIERRE Y PRÓXIMOS PASOS ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · Betterware</span>
+    <span>Cobertura V42 en el agente nuevo · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">5 · Cierre y próximos pasos</span>
+  <h2>Paridad completa con V42 + capa de orquestación</h2>
+  <p class="lead">Lo que el agente nuevo aporta por encima de V42 es la capa de orquestación: compuertas estructurales de autenticación, confirmación obligatoria antes de escrituras, consolidación de 26 subagentes en 11 y 25 fixes del audit cerrados a nivel de instrucciones.</p>
+
+  <div class="narrative">
+    <p class="quote">Paridad en capacidades + mejoras del audit sin perder funcionalidad.</p>
+    <p>El agente nuevo nace con la misma funcionalidad que V42 porque reutiliza el mismo backend (Apex y Flows). La diferencia está en cómo decide cuándo invocarlos, qué información pide antes, qué información no revela y cómo se recupera de errores. Para el usuario final, es Betty con menos fallos y respuestas más específicas.</p>
+  </div>
+
+  <div style="margin: 1em 0; padding: 1em 1.2em; background: var(--mist); border-radius: 10px; border: 1px solid var(--rule);">
+    <div style="font-family: 'AvantGarde', sans-serif; font-size: 13pt; color: var(--eb15); margin-bottom: 0.6em;">Resumen de la cobertura</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.7em; font-size: 10pt;">
+      <div style="padding: 0.6em 0.8em; background: #fff; border-radius: 6px; border-left: 3px solid var(--eb50);">
+        <strong style="color: var(--eb30);">6 capacidades nuevas</strong> · Bodegas, Guías de paquetería, Venta retenida, Venta por catálogo, Linaje, Estado de alta
+      </div>
+      <div style="padding: 0.6em 0.8em; background: #fff; border-radius: 6px; border-left: 3px solid var(--eb50);">
+        <strong style="color: var(--eb30);">11 ajustes</strong> · Knowledge, M034 globales, código desde sesión, M025, FAQ, escalamiento, pagos, login, coberturas, contenido, devoluciones
+      </div>
+    </div>
+  </div>
+
+  <div class="next-step">
+    <h3>De aquí al cutover · 16 de octubre</h3>
+    <div class="step"><span class="day">Esta semana</span><span>Smoke test de los 17 cambios en Live Test del agente nuevo. Validación operativa interna.</span></div>
+    <div class="step"><span class="day">Pre-cutover</span><span>Activar la versión definitiva del agente en producción con los canales Messaging + Enhanced Chat conectados.</span></div>
+    <div class="step"><span class="day">Vie 16 OCT · Cutover</span><span>Piloto cerrado con 15-25 distribuidoras aliadas vía checkbox <span style="font-family: ui-monospace, monospace; font-size: 9pt; background: #fff; padding: 0.05em 0.4em; border-radius: 3px;">FDE_Insider__c</span> en MessagingEndUser. V42 sigue atendiendo al resto de la base.</span></div>
+    <div class="step"><span class="day">Vie 23 OCT · GA</span><span>Rollout general si el piloto cumple métricas de aceptación (NPS cualitativo ≥ 70%, ≥ 85% intents validados, 0 bugs críticos abiertos).</span></div>
+  </div>
+
+  <div class="page-footer">
+    <span>Cobertura V42 en el agente nuevo</span>
+    <span>Página 6</span>
+  </div>
+</section>
+
+</body>
+</html>

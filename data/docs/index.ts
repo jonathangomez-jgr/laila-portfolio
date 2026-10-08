@@ -98,6 +98,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
+    slug: "reporte-cobertura-v42",
+    label: "Cobertura V42 en el agente nuevo",
+    description:
+      "Punto por punto de los 17 cambios liberados en V42 entre 29-sep y 07-oct, con el estado de cada uno en Betty V2. Cobertura 100%.",
+    url: "/Customers/Betterware/files/Reporte_Cobertura_Cambios_V42.pdf",
+    category: "Ejecutivo",
+    icon: "🔄",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "agent-deep-dive",
     label: "BW_AGENT_N · Agent Deep Dive (sesión 2)",
     description: "Workshop técnico sobre el agente actual.",
