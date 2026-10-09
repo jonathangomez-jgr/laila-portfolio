@@ -201,6 +201,133 @@ export async function sfInvoke(
   return response.json();
 }
 
+// ============================================================================
+// Files · ContentVersion / ContentDocument helpers
+// ============================================================================
+
+export type SfUploadedFile = {
+  contentVersionId: string;
+  contentDocumentId: string;
+  title: string;
+};
+
+/**
+ * Uploads a file to Salesforce as a ContentVersion and links it to a record
+ * via FirstPublishLocationId (which auto-creates the ContentDocumentLink).
+ *
+ * `fileBytes` is the raw binary; `contentType` is the MIME; `filename` the
+ * original name with extension (Salesforce derives FileType from it).
+ */
+export async function sfUploadFileToRecord(
+  linkedEntityId: string,
+  filename: string,
+  contentType: string,
+  fileBytes: Uint8Array,
+): Promise<SfUploadedFile> {
+  const { apiVersion } = getSalesforceConfig();
+  const { access_token, instance_url } = await getAccessToken();
+
+  const boundary = `----sfboundary${Date.now().toString(16)}${Math.random()
+    .toString(16)
+    .slice(2)}`;
+  const metadata = {
+    Title: filename.replace(/\.[^.]+$/, "") || filename,
+    PathOnClient: filename,
+    FirstPublishLocationId: linkedEntityId,
+  };
+
+  const encoder = new TextEncoder();
+  const preamble = encoder.encode(
+    `--${boundary}\r\n` +
+      `Content-Disposition: form-data; name="entity_content";\r\n` +
+      `Content-Type: application/json\r\n\r\n` +
+      JSON.stringify(metadata) +
+      `\r\n--${boundary}\r\n` +
+      `Content-Disposition: form-data; name="VersionData"; filename="${filename}"\r\n` +
+      `Content-Type: ${contentType}\r\n\r\n`,
+  );
+  const closing = encoder.encode(`\r\n--${boundary}--\r\n`);
+
+  const body = new Uint8Array(
+    preamble.length + fileBytes.length + closing.length,
+  );
+  body.set(preamble, 0);
+  body.set(fileBytes, preamble.length);
+  body.set(closing, preamble.length + fileBytes.length);
+
+  const response = await fetch(
+    `${instance_url}/services/data/${apiVersion}/sobjects/ContentVersion`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": `multipart/form-data; boundary=${boundary}`,
+      },
+      body,
+      cache: "no-store",
+    },
+  );
+
+  if (!response.ok) {
+    const details = await response.text();
+    throw new Error(
+      `Salesforce ContentVersion upload failed (${response.status}): ${details}`,
+    );
+  }
+
+  const data = (await response.json()) as { id: string };
+  const contentVersionId = data.id;
+
+  // Fetch ContentDocumentId from the newly created ContentVersion
+  const docResponse = await fetch(
+    `${instance_url}/services/data/${apiVersion}/sobjects/ContentVersion/${contentVersionId}?fields=ContentDocumentId,Title`,
+    {
+      headers: { Authorization: `Bearer ${access_token}` },
+      cache: "no-store",
+    },
+  );
+  if (!docResponse.ok) {
+    throw new Error(
+      `Could not fetch ContentDocumentId for ${contentVersionId}: ${docResponse.status}`,
+    );
+  }
+  const doc = (await docResponse.json()) as {
+    ContentDocumentId: string;
+    Title: string;
+  };
+  return {
+    contentVersionId,
+    contentDocumentId: doc.ContentDocumentId,
+    title: doc.Title,
+  };
+}
+
+/** Fetch the raw binary data for a ContentVersion. */
+export async function sfFetchFileBytes(
+  contentVersionId: string,
+): Promise<{ bytes: Uint8Array; contentType: string }> {
+  const { apiVersion } = getSalesforceConfig();
+  const { access_token, instance_url } = await getAccessToken();
+
+  const response = await fetch(
+    `${instance_url}/services/data/${apiVersion}/sobjects/ContentVersion/${contentVersionId}/VersionData`,
+    {
+      headers: { Authorization: `Bearer ${access_token}` },
+      cache: "no-store",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Salesforce ContentVersion fetch failed (${response.status})`,
+    );
+  }
+  const contentType =
+    response.headers.get("content-type") ?? "application/octet-stream";
+  const arrayBuffer = await response.arrayBuffer();
+  return { bytes: new Uint8Array(arrayBuffer), contentType };
+}
+
 export async function createPageAccessRecord(email: string, path: string) {
   const { apiVersion } = getSalesforceConfig();
   const { access_token, instance_url } = await getAccessToken();

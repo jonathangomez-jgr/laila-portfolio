@@ -317,6 +317,14 @@ export async function createFDEActivity(
 
 export type FDETestCaseStatus = "Pass" | "Fail" | "Blocked" | "Partial" | "Not_Run";
 
+export type FDETestAttachment = {
+  contentDocumentId: string;
+  contentVersionId: string;
+  title: string;
+  fileType: string | null;
+  contentSize: number | null;
+};
+
 export type FDETestExecution = {
   Id: string;
   Name: string;
@@ -331,6 +339,7 @@ export type FDETestExecution = {
   JGR_FDE_Defect_Notes__c: string | null;
   JGR_FDE_Executed_By_Name__c: string | null;
   JGR_FDE_Transcript__c: string | null;
+  attachments?: FDETestAttachment[];
 };
 
 export type FDETestCase = {
@@ -413,8 +422,43 @@ export async function getTestMatrixForCustomer(
       `ORDER BY JGR_FDE_Executed_Date__c DESC`,
   );
 
+  // Fetch attachments for all executions in one query
+  const attachmentsByExec = new Map<string, FDETestAttachment[]>();
+  if (executions.length > 0) {
+    const execIds = executions.map((e) => `'${e.Id}'`).join(",");
+    type LinkRow = {
+      LinkedEntityId: string;
+      ContentDocumentId: string;
+      ContentDocument: {
+        Title: string;
+        FileType: string | null;
+        ContentSize: number | null;
+        LatestPublishedVersionId: string;
+      };
+    };
+    const links = await sfQuery<LinkRow>(
+      `SELECT LinkedEntityId, ContentDocumentId, ` +
+        `ContentDocument.Title, ContentDocument.FileType, ` +
+        `ContentDocument.ContentSize, ContentDocument.LatestPublishedVersionId ` +
+        `FROM ContentDocumentLink ` +
+        `WHERE LinkedEntityId IN (${execIds})`,
+    );
+    for (const l of links) {
+      const bucket = attachmentsByExec.get(l.LinkedEntityId) ?? [];
+      bucket.push({
+        contentDocumentId: l.ContentDocumentId,
+        contentVersionId: l.ContentDocument.LatestPublishedVersionId,
+        title: l.ContentDocument.Title,
+        fileType: l.ContentDocument.FileType,
+        contentSize: l.ContentDocument.ContentSize,
+      });
+      attachmentsByExec.set(l.LinkedEntityId, bucket);
+    }
+  }
+
   const byCase = new Map<string, FDETestExecution[]>();
   for (const e of executions) {
+    e.attachments = attachmentsByExec.get(e.Id) ?? [];
     const bucket = byCase.get(e.JGR_FDE_TestCase__c) ?? [];
     bucket.push(e);
     byCase.set(e.JGR_FDE_TestCase__c, bucket);

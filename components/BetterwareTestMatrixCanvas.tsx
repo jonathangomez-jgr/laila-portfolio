@@ -1,7 +1,21 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import type { FDETestCase, FDETestCaseStatus, FDETestExecution } from "@/lib/salesforce/fdeTracker";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { FDETestCase, FDETestCaseStatus, FDETestExecution, FDETestAttachment } from "@/lib/salesforce/fdeTracker";
+
+const MAX_FILES = 5;
+const MAX_FILE_BYTES = 10 * 1024 * 1024;
+const ALLOWED_MIME = /^(image\/.+|application\/pdf|text\/.+)$/;
+
+function isImageMime(m: string | null | undefined): boolean {
+  return !!m && m.startsWith("image/");
+}
+function fileSizeLabel(bytes: number | null): string {
+  if (bytes == null) return "";
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+}
 
 const STATUS_STYLES: Record<FDETestCaseStatus | "none", string> = {
   Pass: "bg-emerald-100 text-emerald-800 border-emerald-200",
@@ -89,13 +103,75 @@ function ExecutionForm({ testCase, slug, onDone, onCancel }: { testCase: FDETest
   const [defectNotes, setDefectNotes] = useState("");
   const [executedByName, setExecutedByName] = useState("Jonathan Gomez");
   const [transcript, setTranscript] = useState("");
+  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function addFiles(incoming: File[]) {
+    const errors: string[] = [];
+    const accepted: File[] = [];
+    for (const f of incoming) {
+      if (!ALLOWED_MIME.test(f.type)) {
+        errors.push(`${f.name}: tipo ${f.type || "desconocido"} no permitido`);
+        continue;
+      }
+      if (f.size > MAX_FILE_BYTES) {
+        errors.push(`${f.name}: supera 10 MB`);
+        continue;
+      }
+      accepted.push(f);
+    }
+    if (errors.length) setError(errors.join(" · "));
+    setAttachedFiles((prev) => {
+      const combined = [...prev, ...accepted];
+      if (combined.length > MAX_FILES) {
+        setError(`Máximo ${MAX_FILES} archivos. Se mantuvieron los primeros ${MAX_FILES}.`);
+        return combined.slice(0, MAX_FILES);
+      }
+      return combined;
+    });
+  }
+
+  function removeFileAt(idx: number) {
+    setAttachedFiles((prev) => prev.filter((_, i) => i !== idx));
+  }
+
+  function handlePaste(e: React.ClipboardEvent<HTMLDivElement>) {
+    const items = Array.from(e.clipboardData?.items ?? []);
+    const imageFiles: File[] = [];
+    for (const it of items) {
+      if (it.kind === "file") {
+        const f = it.getAsFile();
+        if (f) {
+          // Clipboard images often have no filename — synthesize one
+          if (!f.name || f.name === "image.png" || f.name === "File") {
+            const renamed = new File([f], `pegado-${Date.now()}.png`, { type: f.type });
+            imageFiles.push(renamed);
+          } else {
+            imageFiles.push(f);
+          }
+        }
+      }
+    }
+    if (imageFiles.length > 0) {
+      e.preventDefault();
+      addFiles(imageFiles);
+    }
+  }
+
+  function handleFileInput(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    if (files.length > 0) addFiles(files);
+    e.target.value = "";
+  }
 
   async function submit() {
     setSubmitting(true);
     setError(null);
     try {
+      // 1. Create execution record
       const res = await fetch(`/api/portal/test-matrix/execution?slug=${encodeURIComponent(slug)}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -116,11 +192,30 @@ function ExecutionForm({ testCase, slug, onDone, onCancel }: { testCase: FDETest
         const data = await res.json().catch(() => ({ error: "Server error" }));
         throw new Error(data.error || "Error al guardar");
       }
+      const { id: executionId } = (await res.json()) as { id: string };
+
+      // 2. Upload any attachments
+      if (attachedFiles.length > 0 && executionId) {
+        setUploading(true);
+        const form = new FormData();
+        form.append("executionId", executionId);
+        for (const f of attachedFiles) form.append("files", f, f.name);
+        const upRes = await fetch("/api/portal/test-matrix/execution/attachment", {
+          method: "POST",
+          body: form,
+        });
+        if (!upRes.ok) {
+          const data = await upRes.json().catch(() => ({ error: "Upload error" }));
+          throw new Error(`Ejecución guardada, pero fallaron adjuntos: ${data.error ?? "upload"}`);
+        }
+      }
+
       onDone();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
       setSubmitting(false);
+      setUploading(false);
     }
   }
 
@@ -184,12 +279,74 @@ function ExecutionForm({ testCase, slug, onDone, onCancel }: { testCase: FDETest
           <span className="font-semibold text-slate-700">Transcript (opcional)</span>
           <textarea value={transcript} onChange={(e) => setTranscript(e.target.value)} rows={3} className="mt-1 w-full rounded border border-slate-300 bg-white px-2 py-1" />
         </label>
+
+        <div className="block col-span-2">
+          <span className="font-semibold text-slate-700">Evidencia (opcional)</span>
+          <div
+            onPaste={handlePaste}
+            tabIndex={0}
+            className="mt-1 rounded-lg border-2 border-dashed border-slate-300 bg-white p-3 focus-within:border-blue-400 focus:outline-none focus:border-blue-400"
+          >
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <p className="text-[11px] text-slate-500">
+                Pega una imagen (<kbd className="rounded border border-slate-300 bg-slate-50 px-1 text-[10px]">⌘V</kbd> / <kbd className="rounded border border-slate-300 bg-slate-50 px-1 text-[10px]">Ctrl+V</kbd> aquí dentro) o selecciona archivos. Max {MAX_FILES} · 10 MB c/u · imágenes, PDF, logs.
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="rounded-md border border-slate-300 bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+                >
+                  + Añadir archivo
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept="image/*,application/pdf,text/*,.log,.txt"
+                  className="hidden"
+                  onChange={handleFileInput}
+                />
+              </div>
+            </div>
+
+            {attachedFiles.length > 0 && (
+              <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+                {attachedFiles.map((f, idx) => {
+                  const isImg = f.type.startsWith("image/");
+                  const url = isImg ? URL.createObjectURL(f) : null;
+                  return (
+                    <div key={idx} className="group relative overflow-hidden rounded-md border border-slate-200 bg-slate-50 p-2">
+                      {isImg && url ? (
+                        <img src={url} alt={f.name} className="h-20 w-full rounded object-cover" />
+                      ) : (
+                        <div className="flex h-20 items-center justify-center text-[10px] font-mono text-slate-500">
+                          📄 {f.type.split("/")[1]?.toUpperCase() ?? "FILE"}
+                        </div>
+                      )}
+                      <p className="mt-1 truncate text-[10px] text-slate-600" title={f.name}>{f.name}</p>
+                      <p className="text-[10px] text-slate-400">{fileSizeLabel(f.size)}</p>
+                      <button
+                        type="button"
+                        onClick={() => removeFileAt(idx)}
+                        className="absolute right-1 top-1 rounded-full bg-slate-900/70 px-1.5 py-0 text-[10px] text-white opacity-0 transition hover:bg-rose-600 group-hover:opacity-100"
+                        aria-label={`Quitar ${f.name}`}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
       {error && <p className="text-xs text-rose-700">{error}</p>}
       <div className="flex gap-2 justify-end">
         <button onClick={onCancel} disabled={submitting} className="rounded-md border border-slate-300 bg-white px-3 py-1 text-xs text-slate-700 hover:bg-slate-50">Cancelar</button>
         <button onClick={submit} disabled={submitting} className="rounded-md bg-blue-600 px-3 py-1 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50">
-          {submitting ? "Guardando..." : "Guardar ejecución"}
+          {submitting ? (uploading ? "Subiendo adjuntos..." : "Guardando...") : "Guardar ejecución"}
         </button>
       </div>
     </div>
@@ -308,6 +465,9 @@ function TestCaseDetail({ testCase, slug, onClose, onExecutionRecorded, readOnly
                   {e.JGR_FDE_Defect_Notes__c && (
                     <p className="mt-1 text-sm text-rose-700 whitespace-pre-wrap"><strong>Defect:</strong> {e.JGR_FDE_Defect_Notes__c}</p>
                   )}
+                  {e.attachments && e.attachments.length > 0 && (
+                    <AttachmentGrid attachments={e.attachments} />
+                  )}
                 </li>
               ))}
             </ul>
@@ -315,6 +475,79 @@ function TestCaseDetail({ testCase, slug, onClose, onExecutionRecorded, readOnly
         </div>
       </div>
     </div>
+  );
+}
+
+function AttachmentGrid({ attachments }: { attachments: FDETestAttachment[] }) {
+  const [preview, setPreview] = useState<FDETestAttachment | null>(null);
+  return (
+    <>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {attachments.map((a) => {
+          const url = `/api/portal/test-matrix/execution/attachment?contentVersionId=${a.contentVersionId}`;
+          const isImg = isImageMime(a.fileType ? `image/${a.fileType.toLowerCase()}` : null) || a.fileType === "PNG" || a.fileType === "JPG" || a.fileType === "JPEG" || a.fileType === "GIF" || a.fileType === "WEBP";
+          if (isImg) {
+            return (
+              <button
+                type="button"
+                key={a.contentDocumentId}
+                onClick={() => setPreview(a)}
+                className="group relative overflow-hidden rounded-md border border-slate-200 bg-slate-50 hover:border-blue-400"
+                title={`${a.title} · ${fileSizeLabel(a.contentSize)}`}
+              >
+                <img src={url} alt={a.title} className="h-16 w-24 object-cover" />
+              </button>
+            );
+          }
+          return (
+            <a
+              key={a.contentDocumentId}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] text-slate-700 hover:border-blue-400"
+              title={a.title}
+            >
+              📄 <span className="max-w-[12rem] truncate">{a.title}</span>
+              <span className="text-slate-400">{fileSizeLabel(a.contentSize)}</span>
+            </a>
+          );
+        })}
+      </div>
+      {preview && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/70 p-4"
+          onClick={() => setPreview(null)}
+        >
+          <div className="max-h-[90vh] max-w-5xl overflow-auto rounded-lg bg-white p-3" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <p className="text-xs font-semibold text-slate-700">{preview.title}</p>
+              <div className="flex gap-2">
+                <a
+                  href={`/api/portal/test-matrix/execution/attachment?contentVersionId=${preview.contentVersionId}`}
+                  download={preview.title}
+                  className="rounded border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-700 hover:bg-slate-50"
+                >
+                  Descargar
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setPreview(null)}
+                  className="rounded border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-700 hover:bg-slate-50"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+            <img
+              src={`/api/portal/test-matrix/execution/attachment?contentVersionId=${preview.contentVersionId}`}
+              alt={preview.title}
+              className="max-h-[80vh] w-auto rounded"
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

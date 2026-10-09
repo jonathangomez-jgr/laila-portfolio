@@ -883,9 +883,9 @@ const ACTIVITIES: Activity[] = [
     id: "2.4",
     phaseId: "f2",
     number: "2.4",
-    title: "Reemplazo Flows de autenticación (BW_Auth_*)",
+    title: "Rediseño autenticación (BW_Auth_*) · funcional + técnico",
     description:
-      "Reemplazar los 2 Flows de autenticación por implementación en Apex invocable con sharing explícito. Cierra hallazgo 11 parcial. Flows gigantes (943+842 líneas) reemplazados por código con tests.",
+      "Dos frentes en paralelo. (1) Técnico: reemplazar los 2 Flows gigantes (943+842 líneas) por Apex invocable con sharing explícito y tests ≥80%. Cierra hallazgo 11 parcial. (2) Funcional: revisar y ratificar con cliente la lógica del subagente AuthAndSecurity — umbral global de intentos (hoy 2 por método en el Flow, propuesta V2 es 3 globales), decisión de escalar vs cerrar conversación al agotarlos, exclusividad o mezcla de método código/ref bancaria por sesión, y continuidad del estado AUTENTICADO_TEMPORAL (7 días) de ref bancaria. Las confirmaciones viven como items en el backlog del portal.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: false,
