@@ -155,11 +155,28 @@ const JAFRA_DOCS: DocEntry[] = [
 ];
 
 // ----------------------------------------------------------------------------
+// Telasist · Voice AI · Retención Invex TDC docs
+// ----------------------------------------------------------------------------
+const TELASIST_RETENCION_DOCS: DocEntry[] = [
+  {
+    slug: "snapshot-externo",
+    label: "Snapshot de preparación · versión externa",
+    description:
+      "Documento compartible con Telasist y Partner. 12 páginas. Qué tenemos en la plataforma, qué necesitamos definir, 6 decisiones para la próxima sesión y plan de fases con duración orientativa. Sin IDs, sin usernames, sin PII — apto para compartir bajo NDA.",
+    url: "/Customers/Telasist/files/Telasist-Invex-Retencion-TDC-Snapshot-Externo.pdf",
+    category: "Ejecutivo",
+    icon: "📘",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+];
+
+// ----------------------------------------------------------------------------
 // Lookup
 // ----------------------------------------------------------------------------
 const DOCS_BY_SLUG: Record<string, DocEntry[]> = {
   betterware: BETTERWARE_DOCS,
   jafra: JAFRA_DOCS,
+  "telasist-retencion": TELASIST_RETENCION_DOCS,
 };
 
 export function getDocsForSlug(slug: string): DocEntry[] {
