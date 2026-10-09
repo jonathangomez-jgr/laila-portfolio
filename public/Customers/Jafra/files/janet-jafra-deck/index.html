@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JAFRA × Salesforce · Janet en live la próxima semana</title>
+<style>
+@font-face{font-family:"Avant Garde for Salesforce";src:url(assets/fonts/AvantGardeForSalesforceW05-Dm.woff) format("woff");font-weight:600;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Light.woff) format("woff");font-weight:300;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Regular.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Semibold.woff) format("woff");font-weight:600;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Bold.woff) format("woff");font-weight:700;font-display:swap}
+
+/* ===== THEME: salesforce-brand (Sacred palette) — copied from the engine theme, do not invent hex ===== */
+:root{
+  --ink:#001E5B;--ink2:#052663;--ink3:#0a2f74;--ink4:#103a86;
+  --line:#1c3f80;--line2:#2b4f95;
+  --text:#EAF5FE;--muted:#a8c2ec;--faint:#7592c4;
+  --accent:#00B3FF;--accent-soft:#90D0FE;--accent-dim:rgba(0,179,255,.14);
+  --electric:#066AFE;--electric-2:#022AC0;
+  --good:#04E1CB;--good-dim:rgba(4,225,203,.14);--warn:#FCC003;--warn-dim:rgba(252,192,3,.14);
+  --pink:#FF538A;--pink-dim:rgba(255,83,138,.14);--violet:#D17DFE;--violet-dim:rgba(209,125,254,.14);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --display:"Avant Garde for Salesforce","Salesforce Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sans:"Salesforce Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  /* chart series in stack order def,esc,aba,amb — validated with dataviz validate_palette.js on surface #052663 (dark): ALL CHECKS PASS; Not set = neutral gray + hatch (no data) */
+  --c-def:#199e70;--c-amb:#3987e5;--c-esc:#9085e9;--c-aba:#d95926;--c-not:#4a6396;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#000f33;font-family:var(--sans);color:var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+/* ===== fixed 1920x1080 canvas, scaled to fit ===== */
+#deck{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 82% 2%, rgba(0,179,255,.18), transparent 46%),
+    radial-gradient(120% 120% at 6% 104%, rgba(6,106,254,.22), transparent 54%),
+    radial-gradient(150% 120% at 50% 42%, #062a75 0%, #001E5B 62%, #001542 100%)}
+.progress{position:absolute;top:0;left:0;height:5px;z-index:50;background:linear-gradient(90deg,var(--accent),var(--electric),var(--good));box-shadow:0 0 14px rgba(0,179,255,.6);transition:width .45s cubic-bezier(.2,.7,.2,1)}
+
+.slide{position:absolute;inset:0;padding:92px 120px 134px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
+.slide.active{opacity:1;visibility:visible;transition:opacity .45s ease}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(rgba(144,208,254,.07) 1px,transparent 1.5px);background-size:34px 34px}
+.slide>*{position:relative;z-index:1}
+
+/* chrome */
+.pill{position:absolute!important;top:34px;right:44px;z-index:6;display:flex;align-items:center;gap:16px;padding:10px 22px;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 8px 26px rgba(0,10,40,.35)}
+.pill img.jafra{height:24px}
+.pill i{width:1px;height:24px;background:#c9d3e2}
+.pill img{height:26px;display:block}
+.snum{position:absolute!important;bottom:34px;right:48px;font-size:15px;letter-spacing:.16em;color:var(--faint);font-weight:600}
+.src{position:absolute!important;bottom:28px;left:120px;right:250px;font-size:15px;color:#9db4dc;line-height:1.38;border-top:1px solid rgba(144,208,254,.18);padding-top:8px}
+.src::before{content:"Fuente · ";font-weight:700;color:var(--accent-soft)}
+.eyebrow{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;font-size:15px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-soft);padding:8px 16px;border-radius:999px;background:var(--accent-dim);border:1px solid rgba(0,179,255,.3);margin-bottom:22px}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.eyebrow.pk{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.35)}
+.eyebrow.gd{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.35)}
+.eyebrow.yl{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.35)}
+
+h1{font-family:var(--display);font-weight:600;font-size:104px;line-height:1.02;letter-spacing:-.025em}
+h2{font-family:var(--display);font-weight:600;font-size:58px;line-height:1.08;letter-spacing:-.02em;max-width:1500px}
+h3{font-size:27px;font-weight:700;line-height:1.25;color:#fff}
+p,li{font-size:23px;line-height:1.5;color:var(--muted)}
+b,strong{color:#fff;font-weight:700}
+.lede{font-size:27px;line-height:1.45;color:var(--muted);max-width:1300px;margin-top:18px}
+.mono{font-family:var(--mono)}
+.grad{background:linear-gradient(92deg,#90D0FE,#00B3FF 40%,#04E1CB);-webkit-background-clip:text;background-clip:text;color:transparent}
+.body{flex:1;display:flex;flex-direction:column;min-height:0}
+
+/* cards */
+.card{position:relative;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:22px;padding:28px 30px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 18px 40px rgba(0,8,32,.35);overflow:hidden}
+.card.bar::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--accent),var(--electric))}
+.card.bar.g::before{background:linear-gradient(90deg,var(--good),var(--accent))}
+.card.bar.y::before{background:linear-gradient(90deg,var(--warn),#ff9f45)}
+.card.bar.p::before{background:linear-gradient(90deg,var(--pink),var(--violet))}
+.card.bar.v::before{background:linear-gradient(90deg,var(--violet),var(--electric))}
+.card .k{font-size:15px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:10px}
+.card p{font-size:21px}
+.grid{display:grid;gap:24px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+
+/* evidence level chips */
+.lv{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:28px;padding:0 9px;border-radius:8px;font-size:15px;font-weight:700;font-family:var(--mono);margin-right:10px;vertical-align:3px}
+.lv.A{background:rgba(0,179,255,.18);color:var(--accent-soft);border:1px solid rgba(0,179,255,.45)}
+.lv.B{background:var(--violet-dim);color:#e3b6ff;border:1px solid rgba(209,125,254,.45)}
+.lv.C{background:var(--warn-dim);color:var(--warn);border:1px solid rgba(252,192,3,.45)}
+
+/* session buttons */
+.ses{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(144,208,254,.4);color:#fff;text-decoration:none;font-size:17px;font-weight:600;transition:background .25s,transform .35s cubic-bezier(.34,1.56,.64,1)}
+.ses:hover{background:rgba(0,179,255,.22);transform:translateY(-3px)}
+.ses .id{font-family:var(--mono);font-size:14px;color:var(--accent-soft);font-weight:500}
+.ses::after{content:"↗";color:var(--accent)}
+.sesrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+
+/* status (always icon + label) */
+.st{display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:999px;font-size:15.5px;font-weight:700;white-space:nowrap;border:1px solid}
+.st.ok{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.4)}
+.st.mid{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.4)}
+.st.no{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.4)}
+
+/* sparkles: edges only */
+.spk{position:absolute!important;z-index:2;pointer-events:none;width:56px;height:auto}
+/* big stat */
+.big{font-family:var(--display);font-weight:600;font-size:120px;line-height:.95;letter-spacing:-.03em;color:#fff}
+.big.md{font-size:84px}
+.big small{font-size:.42em;color:var(--accent-soft);letter-spacing:0}
+
+/* dividers */
+.divider{justify-content:center;align-items:flex-start;background:radial-gradient(1200px 820px at 70% 30%,#0b3a8f 0%,#001E5B 55%,#000f33 100%)}
+.divider::after{background-image:linear-gradient(rgba(0,179,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,179,255,.07) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(1100px 760px at 60% 45%,#000 0%,transparent 75%);mask-image:radial-gradient(1100px 760px at 60% 45%,#000 0%,transparent 75%)}
+.divider .glow{position:absolute;width:900px;height:900px;right:-120px;top:50%;transform:translateY(-50%);border-radius:50%;background:radial-gradient(circle,rgba(0,179,255,.28),transparent 64%);filter:blur(10px);z-index:0}
+.divider.pk .glow{background:radial-gradient(circle,rgba(255,83,138,.24),transparent 64%)}
+.divider.gd .glow{background:radial-gradient(circle,rgba(4,225,203,.22),transparent 64%)}
+.divider .chap{font-family:var(--display);font-size:260px;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(144,208,254,.55);margin-bottom:30px}
+.divider h2{font-size:96px;max-width:1680px}
+.divider .lede{font-size:30px}
+
+/* tooltip */
+#tip{position:fixed;z-index:100;pointer-events:none;background:#fff;color:#001E5B;font-size:15px;font-weight:600;padding:8px 12px;border-radius:10px;box-shadow:0 10px 26px rgba(0,0,0,.35);opacity:0;transition:opacity .12s;white-space:nowrap}
+#tip b{color:#001E5B}
+svg text{font-family:var(--sans)}
+.chart{width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:22px;font-size:17px;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:16px;height:16px;border-radius:4px;display:inline-block}
+
+/* tables */
+table.tb{width:100%;border-collapse:separate;border-spacing:0;font-size:18px;background:rgba(5,38,99,.7);border:1px solid var(--line2);border-radius:18px;overflow:hidden}
+.tb th{font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-soft);text-align:left;padding:13px 16px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--line2);font-weight:700}
+.tb td{padding:10px 16px;border-bottom:1px solid var(--line);color:var(--muted);line-height:1.32;vertical-align:middle}
+.tb td:first-child{color:#fff;font-weight:700}
+.tb tr:last-child td{border-bottom:none}
+.sem{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:10px;vertical-align:-1px;flex-shrink:0}.sem.g{background:var(--good)}.sem.y{background:var(--warn)}.sem.r{background:var(--pink)}.sm18 td{padding:7px 14px}tr.rg td{background:rgba(4,225,203,.05)}tr.ry td{background:rgba(252,192,3,.06)}tr.rr td{background:rgba(255,83,138,.08)}.pn{display:inline-block;margin-left:8px;font-size:12.5px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--pink-dim);color:#ff8db1;border:1px solid rgba(255,83,138,.4)}
+.tag{display:inline-block;font-size:13.5px;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:7px;background:var(--accent-dim);color:var(--accent-soft);white-space:nowrap}
+
+/* finding layout */
+.fhead{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
+.fnum{font-family:var(--display);font-size:30px;color:var(--accent);letter-spacing:.04em}
+.fcols{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;margin-top:30px;flex:1;min-height:0}
+.fcols .card h3{margin-bottom:12px}
+.fcols ul{list-style:none;display:flex;flex-direction:column;gap:13px}
+.fcols li{font-size:22.5px;line-height:1.42}
+.gate{display:flex;align-items:center;gap:16px;padding:16px 22px;border-radius:16px;background:rgba(4,225,203,.1);border:1px solid rgba(4,225,203,.4);font-size:19px;color:#d9fffa}
+.gate .gk{font-family:var(--mono);font-weight:700;color:var(--good);font-size:18px;white-space:nowrap}
+.why{margin-top:22px;padding:18px 22px;border-radius:14px;background:rgba(0,179,255,.08);border-left:4px solid var(--accent)}
+.why .k{font-size:14px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:6px}
+.why p{font-size:22px;color:var(--text);line-height:1.45}
+.fcols>div:last-child>.card{flex:1;display:flex;flex-direction:column}
+.fcols>div:last-child>.card p{font-size:22.5px!important;line-height:1.5}
+.fcols>div:last-child .v41{margin-top:auto}
+.v41{font-size:20.5px;line-height:1.45;color:var(--muted);padding:14px 18px;border-radius:14px;background:rgba(209,125,254,.08);border:1px solid rgba(209,125,254,.3);margin-top:14px}
+.v41 b{color:#e9c8ff}
+
+.rm .slide{transition:none!important}
+.cover-title .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em}.cover-title .wi{display:inline-block}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div id="deck">
+<div class="progress" id="progress"></div>
+
+<!-- 01 · COVER -->
+<section class="slide cover" data-anim="cover">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:54px;top:170px;width:88px">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:96px;bottom:150px;width:40px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:64px;bottom:120px;width:60px">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="right:120px;top:150px;width:32px">
+  <div class="body" style="justify-content:center">
+    <div class="eyebrow" data-a>JAFRA México × Salesforce · Sesión de trabajo · 9 de octubre de 2026</div>
+    <h1 class="cover-title" style="max-width:1180px">Janet: salida propuesta<br><span class="grad">la próxima semana</span></h1>
+    <p class="lede" data-a style="max-width:1060px;margin-top:22px">Sujeta a los criterios go/no-go G1-G8 (slide 21).</p>
+    <p class="lede" data-a style="max-width:1060px">Estado de Jafra_Agentforce v35 en prod, cambios de Jafra_Agentforce_V2 V41 en sandbox, pendientes con cifra y fuente, y plan con criterios go/no-go.</p>
+    <div data-a style="display:flex;gap:16px;margin-top:40px">
+      <span class="st ok" style="font-size:19px;padding:9px 18px">Base propuesta: V41 → V42</span>
+      <span class="st" style="font-size:19px;padding:9px 18px;color:var(--muted);border-color:var(--line2)">Canal: WhatsApp · Consultoras de Belleza</span>
+    </div>
+  </div>
+  <img class="astro" src="assets/img/agent-astro.png" alt="Agent Astro" style="position:absolute;right:150px;top:300px;width:470px;z-index:1">
+  <div class="src">Versiones: Jafra_Agentforce.bundle-meta.xml target Jafra_Agentforce.v35 (org-prod) · Jafra_Agentforce_V2.bundle-meta.xml target Jafra_Agentforce_V2.v41 (org-sbx).</div>
+</section>
+
+<!-- 02 · AGENDA -->
+<section class="slide">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="right:40px;top:420px;width:44px">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:40px;bottom:200px;width:34px">
+  <div class="eyebrow" data-a>Agenda · 60 minutos</div>
+  <h2 data-a>Cuatro bloques; siete decisiones de JAFRA en la slide 22</h2>
+  <div class="grid g4" style="margin-top:56px" data-pop>
+    <div class="card bar"><div class="k">01 · 15 min</div><h3>v35 en prod</h3><p style="margin-top:10px">Agent Analytics de 30 días y 1,204 sesiones exportadas.</p></div>
+    <div class="card bar v"><div class="k">02 · 10 min</div><h3>V41 en sandbox</h3><p style="margin-top:10px">Cambios medidos contra v35, con línea del script.</p></div>
+    <div class="card bar p"><div class="k">03 · 15 min</div><h3>Cinco pendientes</h3><p style="margin-top:10px">Cada uno con cifra, fuente, sesión y criterio de salida.</p></div>
+    <div class="card bar g"><div class="k">04 · 15 min</div><h3>Plan</h3><p style="margin-top:10px">Pasos 0 a 3, criterios G1-G8 y regla de reversa.</p></div>
+  </div>
+  <div class="card" data-a style="margin-top:34px;display:flex;align-items:center;gap:28px;padding:26px 34px">
+    <div class="big md" style="font-size:64px;color:var(--good)">V42</div>
+    <p style="font-size:24px;color:var(--text)">V42 = V41 sin cambios de arquitectura + paquete V2 con valores de prod + seis ediciones al script (detalle en el documento, Parte 5). 5 minutos finales para preguntas.</p>
+  </div>
+  <div class="src">Jafra_Agentforce_V2.agent V41 (org-sbx), líneas por edición (documento, Parte 5): (a) L2480-2489 · (b) L1616-1618 · (c) L268 · (d) L585 + JAF_ConsultaSimpleService.cls L88-93, L187-192 · (e) L253, L651-652, L1936-1937 · (f) L1897.</div>
+</section>
+
+<!-- 03 · CRITERIO -->
+<section class="slide">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:36px;bottom:170px;width:50px">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="left:44px;top:200px;width:30px">
+  <div class="eyebrow gd" data-a>Método</div>
+  <h2 data-a>Una sesión cuenta como resuelta si corrió la acción correcta y la consultora obtuvo su dato o su folio</h2>
+  <div style="display:grid;grid-template-columns:1.05fr 1fr;gap:36px;margin-top:40px;flex:1;min-height:0">
+    <div>
+      <div class="k" data-a style="font-size:15px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:16px">Recorridos evaluados (12, slide 18)</div>
+      <div class="grid g3" style="gap:12px" data-pop>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">Reportar faltante o dañado</h3></div>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">Saldo</h3></div>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">Estatus de caso</h3></div>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">Puntos y premios</h3></div>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">Pago no reflejado</h3></div>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">Verificación</h3></div>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">Enviar evidencia</h3></div>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">Estatus de pedido</h3></div>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">Preguntas públicas</h3></div>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">Transferencia a persona</h3></div>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">“Ya no me escriban”</h3></div>
+        <div class="card" style="padding:14px 18px"><h3 style="font-size:20px">Consulta por equipo</h3></div>
+      </div>
+    </div>
+    <div>
+      <div class="k" data-a style="font-size:15px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:16px">Clasificación por transcripción</div>
+      <table class="tb" data-a style="font-size:19px">
+        <tr><td><span class="st ok">✓ Resuelta</span></td><td>Acción correcta ejecutada; dato o folio entregado; sin transferencia</td></tr>
+        <tr><td><span class="st ok" style="color:var(--accent-soft);border-color:rgba(0,179,255,.4);background:var(--accent-dim)">✓ Resuelta, otro resultado</span></td><td>Resuelta en la transcripción; Resultado de la sesión = Not set o Abandoned</td></tr>
+        <tr><td><span class="st mid">◐ Parcial</span></td><td>Resultado entregado con turnos adicionales</td></tr>
+        <tr><td><span class="st no">✕ No resuelta</span></td><td>Sin pasar verificación, cortada por guardrail o persona solicitada sin transferencia</td></tr>
+      </table>
+      <div class="card" data-a style="margin-top:22px;padding:20px 24px">
+        <div class="k">Niveles de evidencia</div>
+        <p style="font-size:19px;margin-top:6px"><span class="lv A">A</span>Prod: Agent Analytics de 30 días o export de sesiones</p>
+        <p style="font-size:19px;margin-top:8px"><span class="lv B">B</span>Metadata de la org (Flow, Apex, CMDT, objeto) con línea</p>
+        <p style="font-size:19px;margin-top:8px"><span class="lv C">C</span>Lectura del script V41; pendiente de prueba (AC-nn)</p>
+      </div>
+    </div>
+  </div>
+  <div class="src">Criterio aplicado a 1,182 sesiones: sessions_weekday_2026-10-08.csv (683) + sessions_weekend_2026-10-03_04.csv (499), columnas “Transcripción”, “Acciones” y “Resultado de la sesión”. Nivel B: org-prod/ y org-sbx/force-app. Nivel C: Jafra_Agentforce_V2.agent V41.</div>
+</section>
+
+<!-- 04 · MÉTRICAS -->
+<section class="slide">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:40px;top:330px;width:36px">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:38px;bottom:230px;width:46px">
+  <div class="eyebrow" data-a>Resultado de sesión · Nivel A</div>
+  <h2 data-a>Cinco resultados de sesión, 30 días, denominador 31,001 incluidas Not set</h2>
+  <div class="grid g4" style="margin-top:36px;flex:1;min-height:0;align-items:stretch" data-pop>
+    <div class="card" style="display:flex;flex-direction:column;border-top:6px solid var(--c-def)">
+      <div class="k" style="color:#5fd6a8">Deflected</div>
+      <div class="big md"><span data-count="11.24" data-dec="2">11.24</span><small> %</small></div>
+      <p style="margin-top:14px;color:var(--text)">3,485 de 31,001 sesiones.</p>
+      <p style="margin-top:12px;font-size:19px">Sobre 16,043 sesiones con resultado: <b>21.7 %</b>.</p>
+      <div style="margin-top:auto"><p style="font-size:17px;margin:14px 0 8px">Faltante reportado con folio</p><a class="ses" data-s="01a11d0d-8b9a-77d3-9324-8e44407dac38" data-t="2026-10-08T14:46:31">Ver sesión <span class="id">01a11d0d-8b9a</span></a></div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;border-top:6px solid var(--c-esc)">
+      <div class="k" style="color:#b8b0ff">Escalated</div>
+      <div class="big md"><span data-count="4.00" data-dec="2">4.00</span><small> %</small></div>
+      <p style="margin-top:14px;color:var(--text)">1,240 de 31,001 sesiones.</p>
+      <p style="margin-top:12px;font-size:19px">23 Escalated del 5-8 oct: 0 transferencias; 11 terminan en “Safety violation limit exceeded.”, 12 con Errores = 1.</p>
+      <div style="margin-top:auto"><p style="font-size:17px;margin:14px 0 8px">“SI” a premio dañado: sin caso, 2 respuestas fuera de alcance y Safety violation</p><a class="ses" data-s="01a1176b-4a4e-7297-b7e3-0310377b7216" data-t="2026-10-07T12:31:12">Ver sesión <span class="id">01a1176b-4a4e</span></a></div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;border-top:6px solid var(--c-aba)">
+      <div class="k" style="color:#ff9a6b">Abandoned</div>
+      <div class="big md"><span data-count="35.46" data-dec="2">35.46</span><small> %</small></div>
+      <p style="margin-top:14px;color:var(--text)">10,993 de 31,001 sesiones.</p>
+      <p style="margin-top:12px;font-size:19px">Muestra: 106 de 370 Abandoned con “Puntuación de desviación” 4 o 5.</p>
+      <div style="margin-top:auto"><p style="font-size:17px;margin:14px 0 8px">Saldo entregado, Abandoned</p><a class="ses" data-s="01a11c30-b353-7187-97a3-7fd2748ec029" data-t="2026-10-08T10:45:18">Ver sesión <span class="id">01a11c30-b353</span></a></div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;border-top:6px solid #8aa0cc">
+      <div class="k" style="color:#b9c8e6">Not set</div>
+      <div class="big md"><span data-count="48.25" data-dec="2">48.25</span><small> %</small></div>
+      <p style="margin-top:14px;color:var(--text)">14,958 de 31,001. Sin señal de fin, la sesión no se califica.</p>
+      <p style="margin-top:12px;font-size:19px">Muestra: 196 de 598 Not set (32.8 %) ejecutaron una acción Create_*.</p>
+      <div style="margin-top:auto"><p style="font-size:17px;margin:14px 0 8px">Faltante con caso, Not set</p><a class="ses" data-s="01a1085b-b3c4-71d1-9e32-b7c9162883c2" data-t="2026-10-04T14:19:52">Ver sesión <span class="id">01a1085b-b3c4</span></a></div>
+    </div>
+  </div>
+  <div class="src">Quinto resultado: Ambiguous 1.05 % (325 de 31,001). Agent Analytics prod (Jafra Agentforce), tarjeta Effectiveness y session-outcome.csv, filas 9-sep a 9-oct 2026 (9-oct parcial; 31,001 incluye 6 sesiones del 9-oct) (11.24 % = 3,485 / 31,001). Muestra: sessions_weekday_2026-10-08.csv + sessions_weekend_2026-10-03_04.csv (1,182; “Puntuación de desviación” y “Acciones”); sessions_escalated_2026-10-05_08.csv (23; “Errores”). Definición de resultados: Salesforce Help, Analyze Data with Agent Optimization, help.salesforce.com/s/articleView?id=ai.generative_ai_optimize_use.htm</div>
+</section>
+
+<!-- 05 · DIVIDER 01 -->
+<section class="slide divider" data-anim="divider">
+  <div class="glow"></div>
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:50px;bottom:180px;width:70px">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="right:60px;top:180px;width:40px">
+  <div class="chap">01</div>
+  <div class="eyebrow" data-a>Nivel A</div>
+  <h2 data-a>v35 en prod</h2>
+  <p class="lede" data-a>Agent Analytics, export de 30 días con filas del 9-sep al 9-oct de 2026 (9-oct parcial, 6 sesiones): 31,001 sesiones. Export de sesiones: jueves 8-oct (683), fin de semana 3-4 oct (499) y Escalated 5-8 oct (23); 1,204 Ids únicos.</p>
+  <div class="src">Agent Analytics prod (Jafra Agentforce), unique-sessions.csv · sessions_weekday_2026-10-08.csv, sessions_weekend_2026-10-03_04.csv, sessions_escalated_2026-10-05_08.csv (1,205 filas, 1 Id repetido).</div>
+</section>
+
+<!-- 06 · VOLUMEN -->
+<section class="slide">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:34px;top:400px;width:38px">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="left:38px;bottom:160px;width:44px">
+  <div class="eyebrow" data-a>Volumen · Nivel A</div>
+  <h2 data-a>31,001 sesiones y 11.99 k usuarios únicos en 30 días</h2>
+  <div class="grid g4" style="margin-top:36px" data-pop>
+    <div class="card"><div class="big md" data-count="31001">31,001</div><p style="margin-top:8px">sesiones en 30 días</p></div>
+    <div class="card"><div class="big md"><span data-count="11.99" data-dec="2">11.99</span><small> k</small></div><p style="margin-top:8px">usuarios únicos</p></div>
+    <div class="card"><div class="big md" data-count="1033">1,033</div><p style="margin-top:8px">sesiones por día (30,995 / 30, 9-sep a 8-oct)</p></div>
+    <div class="card"><div class="big md"><span data-count="160.6" data-dec="1">160.6</span><small> k</small></div><p style="margin-top:8px">interacciones</p></div>
+  </div>
+  <div class="card" data-a style="margin-top:26px;flex:1;min-height:0;padding:22px 30px 14px;display:flex;flex-direction:column">
+    <div style="display:flex;justify-content:space-between;align-items:baseline"><h3 style="font-size:22px">Sesiones por día · máximos 23-sep (2,576) y 6-oct (2,613)</h3><a href="orig/usage-metrics.html" target="_blank" class="ses" style="font-size:15px;padding:7px 14px">Tarjeta original</a></div>
+    <div class="chart" data-chart="sessions" style="flex:1;min-height:0"></div>
+  </div>
+  <div class="src">Agent Analytics prod (Jafra Agentforce), filas 9-sep a 9-oct 2026 (9-oct parcial): unique-sessions.csv (gráfica redibujada 9-sep a 8-oct; 31,001 incluye 6 sesiones del 9-oct no graficadas), tarjeta Usage Metrics (Unique Users 11.99 k), unique-interactions.csv (160,599).</div>
+</section>
+
+<!-- 07 · OUTCOME -->
+<section class="slide">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:36px;top:260px;width:48px">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:40px;bottom:250px;width:30px">
+  <div class="eyebrow" data-a>Resultado de sesión · Nivel A</div>
+  <h2 data-a>14,958 de 31,001 sesiones (48.25 %) no tienen resultado</h2>
+  <div class="card" data-a style="margin-top:30px;padding:24px 30px 16px">
+    <h3 style="font-size:22px;margin-bottom:6px">30 días, 31,001 sesiones</h3>
+    <div class="chart" data-chart="outcome100" style="height:150px"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:24px;margin-top:22px;flex:1;min-height:0">
+    <div class="card" data-a style="padding:20px 26px 12px;display:flex;flex-direction:column">
+      <h3 style="font-size:22px">Por día</h3>
+      <div class="chart" data-chart="outcomeDaily" style="flex:1;min-height:0"></div>
+    </div>
+    <div class="card bar g" data-a style="display:flex;flex-direction:column;justify-content:center">
+      <div class="k">16,043 sesiones con resultado</div>
+      <div style="display:flex;gap:30px;margin-top:6px"><div><div class="big md" style="font-size:72px"><span data-count="21.7" data-dec="1">21.7</span><small> %</small></div><p style="font-size:18px">Deflected (3,485)</p></div><div><div class="big md" style="font-size:72px"><span data-count="68.5" data-dec="1">68.5</span><small> %</small></div><p style="font-size:18px">Abandoned (10,993)</p></div></div>
+      <p style="margin-top:18px;font-size:20px">Decisión: la semana de live se mide por función (Paso 3, slide 20), no con la deflexión global.</p>
+    </div>
+  </div>
+  <div class="src">Agent Analytics prod (Jafra Agentforce), session-outcome.csv, filas 9-sep a 9-oct 2026 (9-oct parcial; 31,001 incluye 6 sesiones del 9-oct) (redibujado). Porcentajes de la tarjeta oficial; totales sobre todo el CSV; conteos diarios sin el 9-oct. 16,043 = 31,001 − 14,958 Not set.</div>
+</section>
+
+<!-- 08 · ESCALATED -->
+<section class="slide">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="right:36px;top:200px;width:52px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="left:40px;bottom:170px;width:32px">
+  <div class="eyebrow pk" data-a>Transferencia a persona · Nivel A + B</div>
+  <h2 data-a>Escalated 4.00 %; 0 de 1,204 sesiones exportadas tienen una transferencia</h2>
+  <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:26px;margin-top:32px;flex:1;min-height:0">
+    <div class="card" data-a style="display:flex;flex-direction:column;padding:22px 28px 12px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><h3 style="font-size:22px">Escalation Rate por día</h3><a href="orig/escalation.html" target="_blank" class="ses" style="font-size:15px;padding:7px 14px">Gráfica original</a></div>
+      <div class="chart" data-chart="escalation" style="flex:1;min-height:0"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div class="card bar p" data-a>
+        <div class="k">Sesiones con acción de transferencia</div>
+        <div class="big" data-count="0">0</div>
+        <p style="margin-top:10px;font-size:20px">62 de 62 sesiones con Validate_Human_Escalation responden “no disponible” o límite de intentos, incluido horario hábil.</p>
+        <div class="sesrow"><a class="ses" data-s="01a11bd9-6fb5-7df9-b5d7-aca7b372c97e" data-t="2026-10-08T09:09:57">Ver sesión <span class="id">01a11bd9-6fb5</span></a></div>
+      </div>
+      <div class="card" data-a>
+        <p style="font-size:20px">23 Escalated del 5-8 oct: 11 terminan en “Safety violation limit exceeded.” y 12 tienen Errores = 1 en sessions_escalated_2026-10-05_08.csv.</p>
+        <div class="sesrow">
+          <a class="ses" data-s="01a1176b-4a4e-7297-b7e3-0310377b7216" data-t="2026-10-07T12:31:12">Ver sesión · guardrail <span class="id">01a1176b-4a4e</span></a>
+          <a class="ses" data-s="01a117a7-1ae1-71df-9a21-380192021932" data-t="2026-10-07T13:36:33">Ver sesión · Errores = 1 <span class="id">01a117a7-1ae1</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="src">Agent Analytics prod, escalation.csv y session-outcome.csv, filas 9-sep a 9-oct 2026 (9-oct parcial; 31,001 incluye 6 sesiones del 9-oct) (redibujado; 22-29 sep = 1,130 de 1,240 Escalated; fuera de la ventana 110 de 19,893). sessions_weekday_2026-10-08.csv + sessions_weekend_2026-10-03_04.csv + sessions_escalated_2026-10-05_08.csv (1,204 Ids únicos), columna “Acciones”; “no disponible” = no se encuentra disponible | no hay (atención con) un agente/ejecutivo (humano) disponible | límite/número máximo de intentos | ya no puedo intentar otra transferencia. Flow janet_agentforce_validar_escalamiento_humano_alf_f_a (org-prod, status Active, API 66.0) L428-437 cancelarFlujo=true, L218-233.</div>
+</section>
+
+<!-- 09 · NECESIDADES -->
+<section class="slide">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:36px;top:420px;width:40px">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="right:40px;top:170px;width:34px">
+  <div class="eyebrow" data-a>Sesiones por intent · Nivel A</div>
+  <h2 data-a>Missing and Damaged Products: 924 sesiones, deflexión 24 %. Pide una persona: 1.2 %</h2>
+  <div style="display:grid;grid-template-columns:1.75fr 1fr;gap:26px;margin-top:32px;flex:1;min-height:0">
+    <div class="card" data-a style="padding:22px 28px 14px;display:flex;flex-direction:column">
+      <h3 style="font-size:22px;margin-bottom:8px">Ocho intents con más sesiones y Human Assistance Requests: deflexión y abandono</h3>
+      <div class="chart" data-chart="needs" style="flex:1;min-height:0"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div class="card bar g" data-a>
+        <div class="k">Deflexión, intents con más sesiones</div>
+        <p style="font-size:20.5px;color:var(--text)">Missing and Damaged Products <b>24 %</b> (924) y Account Balance and Payment Details <b>25 %</b> (1,199); global 11.24 %. Muestra: 171 sesiones con Create_Product_Affected_Case; 169 muestran folio en la transcripción.</p>
+        <div class="sesrow"><a class="ses" data-s="01a11d0d-8b9a-77d3-9324-8e44407dac38" data-t="2026-10-08T14:46:31">Ver sesión · folio <span class="id">01a11d0d-8b9a</span></a><a class="ses" data-s="01a11bec-0944-7c43-b60b-556d3e0aa8d3" data-t="2026-10-08T09:30:16">Ver sesión · saldo <span class="id">01a11bec-0944</span></a></div>
+      </div>
+      <div class="card bar p" data-a>
+        <div class="k">Abandono más alto</div>
+        <p style="font-size:20.5px">Unclear or Unspecified Requests: 6,298 sesiones, abandono 49 %. Pide una persona (4 intents): 614 sesiones, abandono 45.3 %.</p>
+      </div>
+    </div>
+  </div>
+  <div class="src">Agent Analytics prod, intents-deflection.csv + intents-abandonment.csv (el CSV no muestra periodo; sus hipervínculos llevan c__timeFilter=90); cifras por intent tal como vienen en el CSV. Pide una persona = Human Assistance Requests + Live Agent or Specialist Requests + Escalate Cases or Submit Complaints + Service Requests and Agent Assistance (tasas ponderadas por sesiones). Folio: sessions_weekday_2026-10-08.csv + sessions_weekend_2026-10-03_04.csv (1,182), Create_Product_Affected_Case en “Acciones” y regex \b000\d{5}\b en “Transcripción”.</div>
+</section>
+
+<!-- 10 · SESIONES -->
+<section class="slide">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:34px;bottom:190px;width:58px">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="left:40px;top:230px;width:30px">
+  <div class="eyebrow" data-a>Lectura manual de sesiones · sin lista de Ids publicada</div>
+  <h2 data-a>Lectura manual: 428 de 1,182 sesiones (36.2 %) sin falla en la transcripción</h2>
+  <div style="display:grid;grid-template-columns:1fr 1.55fr;gap:26px;margin-top:32px;flex:1;min-height:0">
+    <div class="card bar g" data-a style="display:flex;flex-direction:column">
+      <div class="k">Sin falla visible</div>
+      <div class="big"><span data-count="428">428</span></div>
+      <p style="font-size:20px;margin-top:6px">Se usan como pruebas de regresión de V42.</p>
+      <div class="sesrow" style="margin-top:auto">
+        <a class="ses" data-s="01a11d0d-8b9a-77d3-9324-8e44407dac38" data-t="2026-10-08T14:46:31">Ver sesión · folio <span class="id">01a11d0d-8b9a</span></a>
+        <a class="ses" data-s="01a11bec-0944-7c43-b60b-556d3e0aa8d3" data-t="2026-10-08T09:30:16">Ver sesión · saldo <span class="id">01a11bec-0944</span></a>
+        <a class="ses" data-s="01a11d3c-42e1-7ada-9abe-44d13564cd9e" data-t="2026-10-08T15:37:31">Ver sesión · Knowledge <span class="id">01a11d3c-42e1</span></a>
+        <a class="ses" data-s="01a11c13-9b3f-74ef-8e65-0ed5d9d5a10f" data-t="2026-10-08T10:13:29">Ver sesión · caso <span class="id">01a11c13-9b3f</span></a>
+      </div>
+    </div>
+    <div class="card" data-a style="padding:22px 28px 12px;display:flex;flex-direction:column">
+      <h3 style="font-size:22px;margin-bottom:8px">Falla principal, una por sesión (737 sesiones)</h3>
+      <div class="chart" data-chart="fails" style="flex:1;min-height:0"></div>
+    </div>
+  </div>
+  <div class="src">sessions_weekday_2026-10-08.csv (683) + sessions_weekend_2026-10-03_04.csv (499); clasificación manual por lectura de transcripción, una categoría por sesión; la lista de Ids por categoría no se incluye en este deck (cifra de lectura, no nivel A). 428 + 737 + 17 no graficadas (sobre-escalación 7, link truncado 6, dilución de instrucción 4) = 1,182. Deflected 8-oct: 132 de 683 en el export (19.3 %) vs 166 de 1,052 en session-outcome.csv (15.8 %).</div>
+</section>
+
+<!-- 11 · DIVIDER 02 -->
+<section class="slide divider pk" data-anim="divider">
+  <div class="glow"></div>
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="right:54px;bottom:200px;width:80px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="left:56px;top:210px;width:36px">
+  <div class="chap">02</div>
+  <div class="eyebrow pk" data-a>Nivel B y C</div>
+  <h2 data-a>V41 frente a v35, y cinco pendientes</h2>
+  <p class="lede" data-a>Cambios medidos en el script de V41. Después, cinco pendientes con cifra, fuente, sesión y criterio go/no-go.</p>
+  <div class="src">Jafra_Agentforce.agent v35 (org-prod) y Jafra_Agentforce_V2.agent V41 (org-sbx).</div>
+</section>
+
+<!-- 12 · V41 vs v35 -->
+<section class="slide">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:36px;top:300px;width:44px">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:38px;bottom:210px;width:36px">
+  <div class="eyebrow gd" data-a>Cambios de V41 (Marcos, sandbox) · Nivel B</div>
+  <h2 data-a>V41 frente a v35: 23 → 8 subagentes, 81 → 42 acciones, 6,989 → 273 palabras</h2>
+  <div class="grid g3" style="margin-top:30px" data-pop>
+    <div class="card bar g"><div class="k">Subagentes</div><div class="big md"><span class="from">23</span> <span style="color:var(--faint)">→</span> <span data-count="8">8</span></div><p style="margin-top:6px;font-size:19px">más start_agent; acciones declaradas 81 → 42</p></div>
+    <div class="card bar g"><div class="k">Palabras en el system prompt</div><div class="big md"><span class="from" style="font-size:.72em">6,989</span> <span style="color:var(--faint)">→</span> <span data-count="273">273</span></div><p style="margin-top:6px;font-size:19px">wc -w del bloque system: v35 L1-229, V41 L11-40</p></div>
+    <div class="card bar g"><div class="k">Líneas de start_agent</div><div class="big md"><span class="from">190</span> <span style="color:var(--faint)">→</span> <span data-count="78">78</span></div><p style="margin-top:6px;font-size:19px">v35 L337-526 · V41 L164-241</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:22px;gap:16px 24px" data-pop>
+    <div class="card" style="padding:18px 26px"><h3 style="font-size:22px">Verificación como paso fijo con pending_subagent (L1616-1618, L256)</h3><p style="font-size:18.5px;margin-top:6px">Prod: 30 sesiones con el turno “Listo, ya validé tu membresía 💜” sin retomar la petición; 5 terminan ahí.</p></div>
+    <div class="card" style="padding:18px 26px"><h3 style="font-size:22px">Persona sin verificación (L2465) y sin cierre (L268); 0 end_session</h3><p style="font-size:18.5px;margin-top:6px">Prod: 67 sesiones con “cerrar esta sesión” o “cerrar la sesión”.</p></div>
+    <div class="card" style="padding:18px 26px"><h3 style="font-size:22px">Un Create_Case (L2098) con 61 tipos en Case_Type_Config__c</h3><p style="font-size:18.5px;margin-top:6px">v35 declara 59 targets crear_caso.</p></div>
+    <div class="card" style="padding:18px 26px"><h3 style="font-size:22px">Guardrail solo sin intención de negocio JAFRA (L197); Log_Session_State en 8 subagentes</h3><p style="font-size:18.5px;margin-top:6px"><span class="lv C">C</span>“Si” a la confirmación de un premio crea el caso: prueba AC-08.</p></div>
+  </div>
+  <div class="sesrow" data-a><a class="ses" data-s="01a11de6-53cc-772d-942b-4a9f25305824" data-t="2026-10-08T18:43:18">Ver sesión · “ya validé” <span class="id">01a11de6-53cc</span></a><a class="ses" data-s="01a11da2-66d1-7364-b71d-924138ef3e18" data-t="2026-10-08T17:29:05">Ver sesión · cierre tras verificación <span class="id">01a11da2-66d1</span></a><a class="ses" data-s="01a1176b-4a4e-7297-b7e3-0310377b7216" data-t="2026-10-07T12:31:12">Ver sesión · “SI” de premio sin caso <span class="id">01a1176b-4a4e</span></a></div>
+  <div class="src">Jafra_Agentforce.agent v35 (org-prod): 23 subagent, 81 “target:”, 59 crear_caso, start_agent L337-526. Jafra_Agentforce_V2.agent V41 (org-sbx): 8 subagent, 42 “target:”, start_agent L164-241, Log_Session_State L292-L2859. SOQL sbx 9-oct-2026 Case_Type_Config__c = 61 filas. Prod: sessions_weekday_2026-10-08.csv + sessions_weekend_2026-10-03_04.csv (1,182); turno exacto “Listo, ya validé tu membresía 💜”; cierre = “cerrar esta sesión” o “cerrar la sesión” (67).</div>
+</section>
+
+<!-- 13 · P1 PERSONA -->
+<section class="slide finding">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:36px;top:420px;width:42px">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:38px;bottom:150px;width:30px">
+  <div class="fhead">
+    <div><div class="fnum" data-a>1 / 5 · Transferencia a persona</div><h2 data-a style="margin-top:10px">62 de 62 sesiones con Validate_Human_Escalation responden “no disponible” o límite de intentos</h2></div>
+    <div data-a style="text-align:right;flex-shrink:0"><div class="big" data-count="0">0</div><p style="font-size:19px">transferencias en 1,204 sesiones</p></div>
+  </div>
+  <div class="fcols">
+    <div class="card" data-a style="display:flex;flex-direction:column">
+      <h3>Datos</h3>
+      <ul>
+        <li><span class="lv B">B</span>Flow validador (prod): cancelarFlujo Boolean = true, isInput = false (L428-437); con true va a Cancelar_escalamiento (L218-233).</li>
+        <li><span class="lv A">A</span>62 de 62 sesiones con Validate_Human_Escalation: “no disponible” o límite de intentos, incluido jueves 8-oct 09:15. 0 transferencias.</li>
+        <li><span class="lv A">A</span><span class="mono" style="font-size:17px">Human Assistance Requests</span>: 500 sesiones, abandono 49 %.</li>
+      </ul>
+      <div class="why"><div class="k">Qué decidir</div><p>Habilitar la transferencia: sí o no; cola y horario de atención. Sin agente disponible: Janet lo informa una vez y crea el caso.</p></div>
+      <div class="sesrow" style="margin-top:auto">
+        <a class="ses" data-s="01a11bd9-6fb5-7df9-b5d7-aca7b372c97e" data-t="2026-10-08T09:09:57">Ver sesión · 09:15 horario hábil <span class="id">01a11bd9-6fb5</span></a>
+        <a class="ses" data-s="01a11275-ccb8-7a2c-87c8-c06b24ef0ba7" data-t="2026-10-06T13:24:32">Ver sesión · sin folio <span class="id">01a11275-ccb8</span></a>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="card bar g" data-a>
+        <h3>Cambio propuesto</h3>
+        <p style="font-size:20.5px">Quitar cancelarFlujo=true fijo o volverlo configurable (Paso 0). Edición (a) de V42: V41 L2480-2489.</p>
+        <div class="v41"><b>V41:</b> persona sin verificación (L2465). Mismo validador: target flow://janet_agentforce_validar_escalamiento_humano_alf_f_a (L2529).</div>
+      </div>
+      <div class="gate" data-a><span class="gk">G3</span>1 transferencia real llega a la cola de prod; sin agente, Janet lo informa una vez y crea el caso.</div>
+    </div>
+  </div>
+  <div class="src">org-prod Flow janet_agentforce_validar_escalamiento_humano_alf_f_a (status Active, API 66.0) L218-233, L428-437 · sessions_weekday_2026-10-08.csv + sessions_weekend_2026-10-03_04.csv + sessions_escalated_2026-10-05_08.csv (1,204 Ids únicos), columnas “Acciones” y “Transcripción”, cadenas de la slide 8 · Agent Analytics prod, intents-abandonment.csv (c__timeFilter=90 en el hipervínculo) · Jafra_Agentforce_V2.agent V41 L2465, L2480-2489, L2529.</div>
+</section>
+
+<!-- 14 · P2 PEDIDO -->
+<section class="slide finding">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="left:36px;top:430px;width:40px">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="right:40px;bottom:160px;width:30px">
+  <div class="fhead">
+    <div><div class="fnum" data-a>2 / 5 · Estatus de pedido</div><h2 data-a style="margin-top:10px">786,450 de 786,450 pedidos en prod tienen Status “Borrador”; la acción de Janet solo lee Status</h2></div>
+    <div data-a style="text-align:right;flex-shrink:0"><div class="big md">100<small> %</small></div><p style="font-size:19px">de los pedidos en “Borrador”</p></div>
+  </div>
+  <div class="fcols">
+    <div class="card" data-a style="display:flex;flex-direction:column">
+      <h3>Datos</h3>
+      <ul>
+        <li><span class="lv B">B</span>Order en prod: 786,450 registros; 786,450 con Status = “Borrador”. La integración no actualiza Status.</li>
+        <li><span class="lv B">B</span>Ya están en Salesforce: fecha de facturación en 786,450 (285,385 en los últimos 30 días), fecha de entrega en 786,450, número de rastreo en 784,458.</li>
+        <li><span class="lv B">B</span>Get_Consultant_Orders → Apex JAF_ConsultaPedidosService: lee solo Order.Status (L79) y lo devuelve como estatus (L174). No lee facturación, entrega ni rastreo.</li>
+        <li><span class="lv A">A</span>Efecto: 164 de 173 sesiones con la acción responden “Borrador”. Order Tracking: 905 sesiones, deflexión 8 %.</li>
+      </ul>
+      <div class="why"><div class="k">Qué decidir</div><p>(a) La integración AS/400 actualiza Status con el estado real, o (b) la acción de Janet responde con facturación, entrega y rastreo, que ya están en Salesforce.</p></div>
+      <div class="sesrow" style="margin-top:auto">
+        <a class="ses" data-s="01a119fb-00dc-74d2-9705-3fbd401ab947" data-t="2026-10-08T00:27:24">Ver sesión · “Borrador” <span class="id">01a119fb-00dc</span></a>
+        <a class="ses" data-s="01a1036c-159f-72ed-bb9e-236a629576c8" data-t="2026-10-03T15:19:39">Ver sesión · número de pedido <span class="id">01a1036c-159f</span></a>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="card bar g" data-a>
+        <h3>Cambio propuesto</h3>
+        <p style="font-size:20.5px">Con la opción (b): agregar a la consulta de JAF_ConsultaPedidosService la fecha de facturación, la fecha de entrega y el número de rastreo, y que Janet responda con ellos. Confirmar si la fecha de entrega es programada o real.</p>
+        <div class="v41"><b>V41 L596, L922:</b> misma acción Get_Consultant_Orders; el cambio va en el Apex, no en el script.</div>
+      </div>
+      <div class="gate" data-a><span class="gk">G6</span>3 pedidos facturados con estatus real, o sin “Borrador” como explicación; el número sirve para el reporte.</div>
+    </div>
+  </div>
+  <div class="src">SOQL agregada jafra-prod 9-oct-2026, solo lectura: SELECT Status, COUNT(Id) FROM Order GROUP BY Status; COUNT de JAF_InvoicingOrderDate__c, JAF_DeliveryOrderDate__c y JAF_TrackingNumber__c no nulos · org-prod JAF_ConsultaPedidosService.cls L79, L174 · sessions_weekday_2026-10-08.csv + sessions_weekend_2026-10-03_04.csv (1,182): respuesta con “Borrador” (164 de 173) · Agent Analytics prod, intents-deflection.csv · Jafra_Agentforce_V2.agent V41 L596, L922.</div>
+</section>
+
+<!-- 15 · P3 VERIFICACIÓN -->
+<section class="slide finding">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="right:36px;top:410px;width:46px">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:38px;bottom:170px;width:32px">
+  <div class="fhead">
+    <div><div class="fnum" data-a>3 / 5 · Verificación</div><h2 data-a style="margin-top:10px">969 de 1,182 sesiones llaman a la verificación por membresía</h2></div>
+    <div data-a style="text-align:right;flex-shrink:0"><div class="big md"><span data-count="82">82</span><small> %</small></div><p style="font-size:19px">de la muestra</p></div>
+  </div>
+  <div class="fcols">
+    <div class="card" data-a style="display:flex;flex-direction:column">
+      <h3>Datos</h3>
+      <ul>
+        <li><span class="lv A">A</span>Membresía de 10 dígitos sin guion: 77 de 92 respuestas no validan (01a102b8). Con guion NNNNNNNN-NN: 14 de 129. “mismo número de teléfono” en 105 sesiones (EXP-1204); 67 con “cerrar esta/la sesión”.</li>
+        <li><span class="lv A">A</span>“11” valida contra MEMBRESIA DE PRUEBAS LGM y crea el caso #00062058 (01a11daf).</li>
+        <li><span class="lv B">B</span>Sandbox: Validate_Phone__c = false, Test_Until__c = 2026-11-04; PHONE_APPROVED_BYPASS en janet_v2_verificar_cliente L95-113.</li>
+      </ul>
+      <div class="why"><div class="k">Qué decidir</div><p>Valores de prod para Janet_Setting y Janet_Approved_Phone__mdt; 5 formatos de membresía de prueba; mensaje de error por formato, no por teléfono.</p></div>
+      <div class="sesrow" style="margin-top:auto">
+        <a class="ses" data-s="01a102b8-1712-7adb-83fd-352e405ec4e3" data-t="2026-10-03T12:03:03">Ver sesión · 10 dígitos falla <span class="id">01a102b8-1712</span></a>
+        <a class="ses" data-s="01a11da2-66d1-7364-b71d-924138ef3e18" data-t="2026-10-08T17:29:05">Ver sesión · cierre <span class="id">01a11da2-66d1</span></a>
+        <a class="ses" data-s="01a11daf-9e0e-74e6-aeb2-1e2047926002" data-t="2026-10-08T17:43:33">Ver sesión · “11” <span class="id">01a11daf-9e0e</span></a>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="card bar g" data-a>
+        <h3>Cambio propuesto</h3>
+        <p style="font-size:20.5px">Paquete V2 con valores de prod; edición (e): retirar el paso de teléfono aprobado (V41 L253).</p>
+        <div class="v41"><b>V41:</b> “Never end the session” (L268), retoma la petición con pending_subagent (L320-326). <span class="lv C">C</span>Normalización de los 5 formatos: por probar.</div>
+      </div>
+      <div class="gate" data-a><span class="gk">G2</span>Teléfono encendido, sin modo prueba, 0 teléfonos aprobados; 5 de 5 formatos validan y un teléfono distinto recibe PHONE_MISMATCH.</div>
+    </div>
+  </div>
+  <div class="src">sessions_weekday_2026-10-08.csv + sessions_weekend_2026-10-03_04.csv (1,182): 969 con Verify_Messaging_user_by_MembershipNumber. Formato: mensaje de la consultora = solo /\d{10}/ o /\d{8}-\d{2}/; no valida si el siguiente turno de Janet contiene “escribes desde”, “mismo número”, “cerrar esta sesión” o “no pude/encontr/logr”. 105 = “mismo número de teléfono” en EXP-1204 (1,204); 67 = “cerrar esta/la sesión” en 1,182 · org-sbx Janet_Setting.Default.md-meta.xml, Flow janet_v2_verificar_cliente L95-113 · Jafra_Agentforce_V2.agent V41 L253, L268, L320-326.</div>
+</section>
+
+<!-- 16 · P4 PREGUNTAS PÚBLICAS -->
+<section class="slide finding">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="left:36px;top:420px;width:44px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:40px;bottom:170px;width:34px">
+  <div class="fhead">
+    <div><div class="fnum" data-a>4 / 5 · Preguntas públicas</div><h2 data-a style="margin-top:10px">160 de 172 sesiones con Knowledge también llaman a la verificación por membresía</h2></div>
+    <div data-a style="text-align:right;flex-shrink:0"><div class="big md"><span data-count="160">160</span><small> de 172</small></div><p style="font-size:19px">sesiones con Knowledge</p></div>
+  </div>
+  <div class="fcols">
+    <div class="card" data-a style="display:flex;flex-direction:column">
+      <h3>Datos</h3>
+      <ul>
+        <li><span class="lv A">A</span>Primer mensaje sobre catálogo, folleto, promoción, ruta o dónde pagar: 31 de 32 reciben un pedido de membresía. 01a11cca: 15 turnos de Janet con “número de membresía”.</li>
+        <li><span class="lv A">A</span>Grupo catálogos y folletos: 861 sesiones, abandono 37.1 %, deflexión 6.2 %.</li>
+        <li><span class="lv A">A</span>Con verificación aprobada: pregunta 15:37:46, membresía 15:38:12, respuesta 15:38:19 (7 s); Deflected, calidad High.</li>
+      </ul>
+      <div class="why"><div class="k">Qué decidir</div><p>Contestar lo público sin membresía (edición b, 3 líneas), o pedir la membresía una sola vez.</p></div>
+      <div class="sesrow" style="margin-top:auto">
+        <a class="ses" data-s="01a11d47-381e-75e1-a752-a94278f027a5" data-t="2026-10-08T15:49:31">Ver sesión · catálogo, pide membresía <span class="id">01a11d47-381e</span></a>
+        <a class="ses" data-s="01a11cca-9672-7896-9c1e-e784db57035c" data-t="2026-10-08T13:33:23">Ver sesión · 15 pedidos de membresía <span class="id">01a11cca-9672</span></a>
+        <a class="ses" data-s="01a11d3c-42e1-7ada-9abe-44d13564cd9e" data-t="2026-10-08T15:37:31">Ver sesión · Knowledge tras verificar <span class="id">01a11d3c-42e1</span></a>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="card bar y" data-a>
+        <h3>Decisión de JAFRA</h3>
+        <p style="font-size:20.5px">Opción 1: Knowledge_Answers sin verificación (V41 L1616-1618). Opción 2: verificación una vez por sesión.</p>
+        <div class="v41"><b>V41:</b> subagente Knowledge_Answers; si isVerified == False, transition a Identity_Verification (L1616-1618).</div>
+      </div>
+      <div class="gate" data-a style="background:rgba(252,192,3,.08);border-color:rgba(252,192,3,.4);color:#fff3c9"><span class="gk" style="color:var(--warn)">AC-09</span>“¿Dónde puedo pagar?” y “quiero el catálogo” se contestan sin membresía, o pidiéndola una sola vez.</div>
+    </div>
+  </div>
+  <div class="src">sessions_weekday_2026-10-08.csv + sessions_weekend_2026-10-03_04.csv (1,182): 172 con Answer_Question_with_Knowledge_Jafra, 160 también con Verify_Messaging_user_by_MembershipNumber; primer mensaje de la consultora con /cat[aá]logo|folleto|d[oó]nde (puedo )?pag|promoci|ruta/i (32) y siguiente turno de Janet con “membresía” (31); “número de membresía” contado por turno de Janet · Agent Analytics prod, intents-deflection.csv + intents-abandonment.csv (el CSV no muestra periodo; sus hipervínculos llevan c__timeFilter=90); catálogos y folletos = intents con /Catalog|Brochure/ en el nombre (7) · Jafra_Agentforce_V2.agent V41 L1616-1618.</div>
+</section>
+
+<!-- 17 · P5 LINAJE -->
+<section class="slide finding">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:36px;top:420px;width:40px">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:38px;bottom:160px;width:44px">
+  <div class="fhead">
+    <div><div class="fnum" data-a>5 / 5 · Linaje · se ejecuta primero</div><h2 data-a style="margin-top:10px">El Resolver de linaje activo en prod no llama a la verificación de linaje</h2></div>
+    <div data-a style="text-align:right;flex-shrink:0"><div class="big md">0</div><p style="font-size:19px">&lt;subflows&gt; en el Resolver de prod (1 en sandbox)</p></div>
+  </div>
+  <div class="fcols">
+    <div class="card" data-a style="display:flex;flex-direction:column">
+      <p style="font-size:19px;color:var(--text);margin-bottom:12px"><b style="color:var(--accent-soft)">Qué es el linaje:</b> la red de venta de una consultora, las consultoras que ella invitó o lidera (patrocinadora o líder en la cuenta). Con el número de membresía, Janet deja consultar datos o abrir casos de alguien de su linaje.</p>
+      <h3>Datos</h3>
+      <ul>
+        <li><span class="lv B">B</span>Prod: rama tercero → get_account (L110-112), recordLookup (L224), sin &lt;subflows&gt;. Solo comprueba que la membresía exista.</li>
+        <li><span class="lv B">B</span>Sandbox: llama al subflow aaf_verificacion_de_linaje_consultora (L194-202).</li>
+        <li><span class="lv A">A</span>2 sesiones con “no encontré / no pude ubicar esa membresía dentro de tu linaje”. En 01a11d8d: rechazo a las 17:10:16; se reenvía la membresía sin sufijo y a las 17:11:44 lista pedidos.</li>
+      </ul>
+      <div class="why"><div class="k">Qué decidir</div><p>JAFRA aprueba la corrección del Resolver de linaje en prod (Paso 0); aplica también a v35.</p></div>
+      <div class="sesrow" style="margin-top:auto">
+        <a class="ses" data-s="01a11d8d-7e49-7bd8-b3d1-0aeb3240d159" data-t="2026-10-08T17:06:17">Ver sesión · rechazo y luego pedidos <span class="id">01a11d8d-7e49</span></a>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="card bar g" data-a>
+        <h3>Acción inmediata · Paso 0</h3>
+        <p style="font-size:20.5px">Activar en prod la versión que llama a aaf_verificacion_de_linaje_consultora, con un test que falle si una membresía fuera de linaje pasa.</p>
+        <div class="v41"><b>V41:</b> “the server validates the lineage; do not decide” (L579). Depende del Resolver de prod.</div>
+      </div>
+      <div class="gate" data-a><span class="gk">G1</span>En prod, 3 de 3 intentos fuera de linaje se rechazan, sin datos de la otra consultora y sin casos creados.</div>
+    </div>
+  </div>
+  <div class="src">Flow Resolver_cuenta_solicitante_en_linaje_ALF_verifiedAccount_membresia_account_resu, org-prod L110-112, L224 y org-sbx L194-202 · aaf_verificacion_de_linaje_consultora (prod = sbx) · sessions_weekday_2026-10-08.csv + sessions_weekend_2026-10-03_04.csv + sessions_escalated_2026-10-05_08.csv (1,204 Ids únicos), búsqueda de texto: 2 sesiones (01a11d8d, 01a11c93) · Jafra_Agentforce_V2.agent V41 L579.</div>
+</section>
+
+<!-- 18 · TABLERO POR RECORRIDO -->
+<section class="slide" style="padding-top:74px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="left:30px;top:140px;width:34px">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:30px;bottom:110px;width:30px">
+  <div class="eyebrow" data-a>Las 12 funciones · prod, sandbox y los 5 pendientes</div>
+  <h2 data-a style="font-size:42px">Prod: 2 verdes, 5 amarillas, 5 rojas · V41: 6 verdes, 3 amarillas, 3 rojas. Las 5 rojas de prod son los 5 pendientes</h2>
+  <table class="tb ftable sm18" data-a style="margin-top:14px;font-size:15.5px">
+    <thead><tr><th style="width:19%">Función</th><th style="width:30%">Hoy en prod (v35)</th><th style="width:28%">En V41 (sandbox)</th><th>Qué falta para live</th></tr></thead>
+    <tbody>
+      <tr class="rg"><td>Reportar faltante o dañado</td><td><span class="sem g"></span>Missing and Damaged Products 924 · 24 %</td><td><span class="sem g"></span>Create_Case (L2098); 61 tipos en sandbox, 0 en prod</td><td>Cargar las 61 filas; un “sí” crea un caso</td></tr>
+      <tr class="rg"><td>Saldo</td><td><span class="sem g"></span>Account Balance… 1,199 · 25 %</td><td><span class="sem g"></span>Mismas acciones de facturas y pagos (L576)</td><td>19 de 20 frases sin cifras inventadas (AC-11)</td></tr>
+      <tr class="ry"><td>Estatus de caso</td><td><span class="sem y"></span>Case and Report Status… 511 · 19 %</td><td><span class="sem g"></span>Get_Case_Status filtra por la cuenta verificada (L647, L1463)</td><td>Folios de terceras dependen del linaje (P5)</td></tr>
+      <tr class="ry"><td>Puntos y premios</td><td><span class="sem y"></span>Points Redemption… 474 · 21 %; “Safety violation” tras un “Si”</td><td><span class="sem g"></span>Guardrail solo sin intención de negocio (L197)</td><td>AC-08: un “Si” de premio crea el caso</td></tr>
+      <tr class="ry"><td>Pago no reflejado</td><td><span class="sem y"></span>Unreflected and Misapplied… 699 · 19 %</td><td><span class="sem g"></span>Get_Case_Type_Config + Create_Case (L1897, L2098)</td><td>Prueba en sandbox</td></tr>
+      <tr class="rr"><td>Verificación<span class="pn">P3</span></td><td><span class="sem r"></span>969 de 1,182 (82 %) pasan por ahí; 105 con “mismo número de teléfono”</td><td><span class="sem g"></span>Paso fijo con pending_subagent (L256, L320-326); sandbox en modo prueba</td><td>Valores de prod y 5 formatos (G2)</td></tr>
+      <tr class="ry"><td>Enviar evidencia</td><td><span class="sem y"></span>73 de 1,204 con “No pude procesar el archivo” y “Ya me llegó tu foto”</td><td><span class="sem y"></span>Sync_Case_Attachments (L587, L1625)</td><td>Decidir chat o link</td></tr>
+      <tr class="rr"><td>Estatus de pedido<span class="pn">P2</span></td><td><span class="sem r"></span>Order Tracking… 905 · 8 %; 786,450 de 786,450 pedidos en “Borrador”</td><td><span class="sem r"></span>Misma acción Get_Consultant_Orders y mismo Apex (L596)</td><td>Decisión (a) integración o (b) facturación, entrega y rastreo (G6)</td></tr>
+      <tr class="rr"><td>Preguntas públicas<span class="pn">P4</span></td><td><span class="sem r"></span>160 de 172 con Knowledge pasan por la verificación</td><td><span class="sem y"></span>Knowledge_Answers mantiene la verificación (L1616-1618)</td><td>Decisión de JAFRA: sin membresía o una vez (AC-09)</td></tr>
+      <tr class="rr"><td>Transferencia a persona<span class="pn">P1</span></td><td><span class="sem r"></span>Human Assistance… 500 · 0 %; 0 transferencias en 62 sesiones con Validate_Human_Escalation</td><td><span class="sem r"></span>Sin verificación (L2465); mismo validador de prod (L2529)</td><td>Habilitar transferencia o registrar el caso (G3)</td></tr>
+      <tr class="ry"><td>“Ya no me escriban”</td><td><span class="sem y"></span>Sin conteo; termina en “Safety violation”</td><td><span class="sem y"></span>go_to_Human_Handoff (L268)</td><td>Registrar la baja (AC-22)</td></tr>
+      <tr class="rr"><td>Consulta por equipo (linaje)<span class="pn">P5</span></td><td><span class="sem r"></span>2 sesiones con rechazo de linaje; Resolver de prod sin verificación</td><td><span class="sem r"></span>Linaje en servidor (L579); en prod usa el Resolver de prod</td><td>Resolver con verificación de linaje en prod (G1)</td></tr>
+    </tbody>
+  </table>
+  <p data-a style="font-size:14.5px;margin-top:9px;color:var(--muted);line-height:1.4"><b style="color:var(--text)">Prod:</b> <span class="sem g"></span>deflexión del intent ≥ 20 % y sesión resuelta en la muestra · <span class="sem y"></span>deflexión &lt; 20 % o falla visible en sesiones, sin causa de configuración identificada · <span class="sem r"></span>causa identificada en un Flow, Apex, dato o configuración de prod (P1-P5, slides 13-17). <b style="color:var(--text)">V41:</b> <span class="sem g"></span>el script de V41 ya trae el cambio (línea citada); lo que falta para live va en la última columna · <span class="sem y"></span>V41 no cambia el comportamiento o depende de una decisión de JAFRA · <span class="sem r"></span>en prod usaría la misma pieza que causa el pendiente.</p>
+  <div class="sesrow" data-a style="margin-top:6px"><a class="ses" data-s="01a11d72-df75-72b3-a537-d8a55ef931fe" data-t="2026-10-08T16:37:12">Ver sesión · “ya no me escriban” <span class="id">01a11d72-df75</span></a><a class="ses" data-s="01a1176b-4a4e-7297-b7e3-0310377b7216" data-t="2026-10-07T12:31:12">Ver sesión · Escalated, Safety violation <span class="id">01a1176b-4a4e</span></a></div>
+  <div class="src" style="bottom:20px">Agent Analytics prod, intents-deflection.csv (intent único, sesiones · deflexión; c__timeFilter=90) · EXP 1,182 y EXP 1,204, búsqueda de texto · SOQL prod 9-oct-2026 Order; SOQL sbx 9-oct-2026 Case_Type_Config__c = 61 · Jafra_Agentforce_V2.agent V41, líneas citadas · Mismo criterio y filas: documento ejecutivo, “Las 12 funciones”.</div>
+</section>
+
+<!-- 19 · DIVIDER 03 -->
+<section class="slide divider gd" data-anim="divider">
+  <div class="glow"></div>
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="left:50px;bottom:190px;width:76px">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="right:64px;top:200px;width:38px">
+  <div class="chap">03</div>
+  <div class="eyebrow gd" data-a>Plan</div>
+  <h2 data-a>V42 a live: Pasos 0 a 3</h2>
+  <p class="lede" data-a>Paso 0: acción inmediata en prod. Paso 1: V41 → V42 y paquete. Paso 2: go/no-go. Paso 3: lanzamiento monitoreado. Todo la próxima semana.</p>
+  <div class="src">Plan y criterios G1-G8: documento ejecutivo, Parte 5.</div>
+</section>
+
+<!-- 20 · PLAN -->
+<section class="slide" data-anim="plan" style="justify-content:center">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:34px;top:180px;width:34px">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="left:34px;bottom:150px;width:46px">
+  <div class="eyebrow gd" data-a>Plan · la próxima semana</div>
+  <h2 data-a>Salida la próxima semana en cuatro pasos</h2>
+  <div class="tl" style="position:relative;margin-top:46px">
+    <div class="tl-line" style="position:absolute;left:0;right:0;top:18px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--pink),var(--accent),var(--good),var(--violet));transform-origin:0 50%"></div>
+    <div class="grid g4" style="gap:22px;position:relative" data-pop>
+      <div><div class="dot" style="width:40px;height:40px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 8px rgba(255,83,138,.18)"></div>
+        <div class="card" style="margin-top:22px;padding:22px 24px"><div class="k" style="color:#ff8db1">Paso 0</div><h3 style="font-size:23px">Acción inmediata en prod</h3>
+          <ul style="margin-top:10px;padding-left:20px"><li style="font-size:20px">Linaje validado en el Resolver y AC-01 en prod</li><li style="font-size:20px">Decisión de negocio sobre la persona y la cola de prod en <span class="mono" style="font-size:17px">JAF_routeLive</span></li><li style="font-size:20px">Integración abre la causa del “Borrador”</li></ul>
+          <p style="font-size:16px;margin-top:10px;color:var(--faint)">Aplica también a v35</p></div></div>
+      <div><div class="dot" style="width:40px;height:40px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 8px rgba(0,179,255,.18)"></div>
+        <div class="card" style="margin-top:22px;padding:22px 24px"><div class="k">Paso 1</div><h3 style="font-size:23px">V41 → V42 y paquete</h3>
+          <ul style="margin-top:10px;padding-left:20px"><li style="font-size:20px">Paquete V2 completo con valores de prod y las 61 filas de tipos de caso</li><li style="font-size:20px">Seis ediciones cortas</li><li style="font-size:20px">Suite de humo en sandbox con la traza abierta</li></ul>
+          <p style="font-size:16px;margin-top:10px;color:var(--faint)">V42 y subida a prod: FDE Salesforce (Leo y María Paula)</p></div></div>
+      <div><div class="dot" style="width:40px;height:40px;border-radius:50%;background:var(--good);box-shadow:0 0 0 8px rgba(4,225,203,.18)"></div>
+        <div class="card" style="margin-top:22px;padding:22px 24px"><div class="k" style="color:var(--good)">Paso 2</div><h3 style="font-size:23px">Go/no-go</h3>
+          <ul style="margin-top:10px;padding-left:20px"><li style="font-size:20px">Ocho criterios G1–G8: linaje, verificación, persona, folio, saldo, pedido, paquete, velocidad</li><li style="font-size:20px">Uno en “no” frena el live</li></ul>
+          <p style="font-size:16px;margin-top:10px;color:var(--faint)">Criterios: slide 21</p></div></div>
+      <div><div class="dot" style="width:40px;height:40px;border-radius:50%;background:var(--violet);box-shadow:0 0 0 8px rgba(209,125,254,.18)"></div>
+        <div class="card" style="margin-top:22px;padding:22px 24px"><div class="k" style="color:var(--violet)">Paso 3</div><h3 style="font-size:23px">Lanzamiento monitoreado</h3>
+          <ul style="margin-top:10px;padding-left:20px"><li style="font-size:20px">Medio día con números internos, después todo el tráfico</li><li style="font-size:20px">v35 lista para reactivarse</li><li style="font-size:20px">Revisión diaria de 15 min por función con <span class="mono" style="font-size:17px">Log_Session_State</span></li></ul></div></div>
+    </div>
+  </div>
+  <div class="src">Plan propuesto, sujeto al acuerdo de hoy. Ediciones con línea de V41 y paquete V2: documento ejecutivo, Parte 5. Criterios: slide 21.</div>
+</section>
+
+<!-- 21 · GO / NO-GO -->
+<section class="slide" style="justify-content:center">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:34px;top:250px;width:40px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:36px;bottom:230px;width:34px">
+  <div class="eyebrow gd" data-a>Criterios go/no-go · Paso 2</div>
+  <h2 data-a>Ocho criterios; uno en “no” detiene la salida</h2>
+  <div class="grid g4 gates" style="margin-top:34px;gap:18px" data-pop>
+    <div class="card" style="padding:20px 22px"><div class="k" style="color:var(--good)">G1 · Linaje</div><p style="font-size:20.5px;color:var(--text)">En prod, 3 de 3 intentos fuera de linaje rechazados, sin datos de la otra y 0 casos</p></div>
+    <div class="card" style="padding:20px 22px"><div class="k" style="color:var(--good)">G2 · Verificación</div><p style="font-size:20.5px;color:var(--text)">Teléfono encendido, sin modo prueba, 0 teléfonos aprobados; 5 de 5 formatos validan; teléfono distinto da PHONE_MISMATCH</p></div>
+    <div class="card" style="padding:20px 22px"><div class="k" style="color:var(--good)">G3 · Persona</div><p style="font-size:20.5px;color:var(--text)">1 transferencia real llega a la cola de prod; sin agente, Janet lo informa una vez y crea el caso</p></div>
+    <div class="card" style="padding:20px 22px"><div class="k" style="color:var(--good)">G4 · Reporte con folio</div><p style="font-size:20.5px;color:var(--text)">58 de 61 frases caen en su tipo, un “sí” crea un caso y los “Si” de premio no se cortan</p></div>
+    <div class="card" style="padding:20px 22px"><div class="k" style="color:var(--good)">G5 · Saldo y pagos</div><p style="font-size:20.5px;color:var(--text)">19 de 20 frases sin cifras inventadas; la sesión 01a11c17-f46c se reproduce igual</p><div class="sesrow" style="margin-top:8px"><a class="ses" data-s="01a11c17-f46c-743d-8939-a5d003cc8eac" data-t="2026-10-08T10:18:16">Ver sesión <span class="id">01a11c17-f46c</span></a></div></div>
+    <div class="card" style="padding:20px 22px"><div class="k" style="color:var(--good)">G6 · Pedido</div><p style="font-size:20.5px;color:var(--text)">3 pedidos facturados con estatus real, o sin “Borrador” como explicación; el número sirve para el reporte</p></div>
+    <div class="card" style="padding:20px 22px"><div class="k" style="color:var(--good)">G7 · Paquete</div><p style="font-size:20.5px;color:var(--text)">61 filas de Case_Type_Config__c, permission set asignado, router y cola de prod</p></div>
+    <div class="card" style="padding:20px 22px"><div class="k" style="color:var(--good)">G8 · Latencia</div><p style="font-size:20.5px;color:var(--text)">Latencia por turno ≤ 5.4 s (AC-19); tarjeta Health: 5.42</p></div>
+  </div>
+  <div class="card bar p" data-a style="margin-top:24px;padding:22px 28px">
+    <div class="k" style="color:#ff8db1">Reversa a v35 si, en un día completo</div>
+    <p style="font-size:20px;color:var(--text)">casos con folio caen más de 30 % contra el mismo día de la semana anterior; error por turno &gt; 3 %; una consulta con datos fuera de linaje; o transferencia sin llegar a la cola en horario.</p>
+  </div>
+  <div class="src">G1-G8 y regla de reversa: documento ejecutivo, Parte 5. Línea base G8: Agent Analytics prod, tarjeta Health Metrics, Agent Interaction Latency 5.42 (unidad no visible en la tarjeta), Error Rate 1.14 %.</div>
+</section>
+
+<!-- 22 · DECISIONES -->
+<section class="slide" style="justify-content:center">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:38px;top:250px;width:52px">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:36px;bottom:170px;width:30px">
+  <div class="eyebrow" data-a>Decisiones y responsables</div>
+  <h2 data-a>Siete decisiones de JAFRA; tres son del Paso 0</h2>
+  <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:26px;margin-top:30px">
+    <div class="card bar y" data-a>
+      <div class="k" style="color:var(--warn)">Decisiones · negocio JAFRA</div>
+      <ol style="margin-top:8px;padding-left:28px;display:flex;flex-direction:column;gap:10px">
+        <li style="color:var(--text);font-size:18.5px"><b>Transferencia a una persona:</b> habilitar con cola y horario, o salir sin transferencia y registrar el caso. <span style="color:var(--faint);font-size:15px">· Paso 0</span></li>
+        <li style="color:var(--text);font-size:18.5px"><b>Horario de atención:</b> alinear el texto del validador (9:00 a 18:00) con BusinessHours (09:00 a 20:00). <span style="color:var(--faint);font-size:15px">· con la anterior</span></li>
+        <li style="color:var(--text);font-size:18.5px"><b>Preguntas de Knowledge:</b> responder sin membresía, o pedirla una vez. <span style="color:var(--faint);font-size:15px">· antes del Paso 1</span></li>
+        <li style="color:var(--text);font-size:18.5px"><b>Evidencia (fotos):</b> por chat o por link. <span style="color:var(--faint);font-size:15px">· antes del Paso 1</span></li>
+        <li style="color:var(--text);font-size:18.5px"><b>“Ya no me escriban”:</b> qué se registra y cómo se cierra. <span style="color:var(--faint);font-size:15px">· antes del Paso 1</span></li>
+        <li style="color:var(--text);font-size:18.5px"><b>Linaje en prod:</b> aprobar la corrección del Resolver de linaje en prod. <span style="color:var(--faint);font-size:15px">· Paso 0</span></li>
+        <li style="color:var(--text);font-size:18.5px"><b>Estatus de pedido:</b> (a) la integración de pedidos (AS/400) actualiza Status con el estado real; o (b) la acción de Janet responde con fecha de facturación, fecha de entrega y número de rastreo, que ya están en Salesforce; confirmar si la fecha de entrega es programada o real. Además: mismo número de pedido para consulta y reporte. <span style="color:var(--faint);font-size:15px">· Paso 0</span></li>
+      </ol>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div class="card bar g" data-a>
+        <div class="k" style="color:var(--good)">Paso 0 · acción inmediata</div>
+        <p style="font-size:20px;color:var(--text)">Resolver con linaje en prod y AC-01 corrida. Decisión de transferencia aplicada y 1 transferencia real de prueba. Decisión de estatus de pedido tomada.</p>
+      </div>
+      <div class="card" data-a>
+        <div class="k">Responsables</div>
+        <p style="font-size:19px;margin-top:4px"><b>JAFRA:</b> toma las decisiones de esta lista; aprueba la corrección del Resolver de linaje en prod; reunión go/no-go.</p>
+        <p style="font-size:19px;margin-top:8px"><b>FDE Salesforce (Leo y María Paula):</b> Paso 0 en prod; paquete V2 con valores de prod; ediciones V41 → V42; suite de humo y Testing Center; subida a prod; revisión diaria de la semana de live.</p>
+      </div>
+    </div>
+  </div>
+  <div class="src">Documento ejecutivo, Parte 6 (misma lista y responsables) · pendientes de las slides 13-17 · Flow validador prod L426; BusinessHours.settings-meta.xml L6-17 · SOQL agregada prod 9-oct-2026 (Order) y JAF_ConsultaPedidosService.cls L79, L174.</div>
+</section>
+
+<!-- 23 · CIERRE -->
+<section class="slide" style="justify-content:center">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:40px;top:200px;width:48px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="left:36px;bottom:170px;width:34px">
+  <div class="eyebrow" data-a>Cierre</div>
+  <h2 data-a>Gracias</h2>
+  <div style="display:grid;grid-template-columns:1.05fr 1fr;gap:26px;margin-top:36px">
+    <div class="card bar v" data-a>
+      <div class="k" style="color:var(--violet)">Gracias, Marcos · V41</div>
+      <p style="font-size:20.5px;color:var(--text);margin-top:6px">V41 ya resuelve buena parte de lo observado en v35:</p>
+      <ul style="margin-top:10px;padding-left:22px;display:flex;flex-direction:column;gap:8px">
+        <li style="font-size:19.5px">23 → 8 subagentes, 81 → 42 acciones, system prompt de 6,989 → 273 palabras, router de 190 → 78 líneas.</li>
+        <li style="font-size:19.5px">Verificación como paso fijo que retoma la petición: 30 sesiones de prod con “Listo, ya validé tu membresía 💜” sin retomarla.</li>
+        <li style="font-size:19.5px">Persona sin verificación y “Never end the session”: 67 sesiones de prod con “cerrar esta/la sesión”.</li>
+        <li style="font-size:19.5px">59 targets crear_caso → un Create_Case con 61 tipos; JAF_ClassifyChannelMessage antes de razonar: 39 sesiones con “unsupported message type”.</li>
+        <li style="font-size:19.5px">Log_Session_State en los 8 subagentes (0 en v35).</li>
+      </ul>
+      <p style="font-size:19px;margin-top:12px;color:var(--muted)">V42 parte de esa base sin cambios de arquitectura.</p>
+    </div>
+    <div data-a>
+      <div class="k" style="margin-bottom:12px">Más detalle en el documento · Janet v2.1, versión ejecutiva (PDF)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="card" style="padding:14px 20px;text-decoration:none;color:var(--text)"><div class="k">Parte 1</div><p style="font-size:19px;color:var(--text);margin-top:2px">Métricas del tablero y su definición</p></div><div class="card" style="padding:14px 20px;text-decoration:none;color:var(--text)"><div class="k">Parte 2</div><p style="font-size:19px;color:var(--text);margin-top:2px">Línea base en prod (v35)</p></div><div class="card" style="padding:14px 20px;text-decoration:none;color:var(--text)"><div class="k">Parte 3</div><p style="font-size:19px;color:var(--text);margin-top:2px">Los 5 hallazgos, con sesiones</p></div><div class="card" style="padding:14px 20px;text-decoration:none;color:var(--text)"><div class="k">Parte 4</div><p style="font-size:19px;color:var(--text);margin-top:2px">V41: cambios y diferencias con prod</p></div><div class="card" style="padding:14px 20px;text-decoration:none;color:var(--text)"><div class="k">Parte 5</div><p style="font-size:19px;color:var(--text);margin-top:2px">Plan a live y criterios go/no-go</p></div><div class="card" style="padding:14px 20px;text-decoration:none;color:var(--text)"><div class="k">Parte 6</div><p style="font-size:19px;color:var(--text);margin-top:2px">Decisiones para JAFRA y línea base</p></div></div>
+    </div>
+  </div>
+  <div class="src">Cifras de V41: documento ejecutivo, Parte 4 (Jafra_Agentforce.agent v35 org-prod; Jafra_Agentforce_V2.agent V41 org-sbx; SOQL sbx 9-oct-2026 Case_Type_Config__c = 61; EXP-1182 y EXP-1204, búsqueda de texto).</div>
+</section>
+
+</div>
+<div id="tip"></div>
+<script src="assets/data.js"></script>
+<script src="assets/gsap.min.js"></script>
+<script>
+(() => {
+const deck = document.getElementById('deck');
+const slides = Array.from(deck.querySelectorAll('.slide'));
+const total = slides.length;
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]still/.test(location.search) || !window.gsap;
+const pad = n => String(n).padStart(2, '0');
+if (RM) document.documentElement.classList.add('rm');
+const fmt = (v, d = 0) => Number(v).toLocaleString('en-US', {minimumFractionDigits: d, maximumFractionDigits: d});
+
+/* ---- scale the 1920x1080 canvas ---- */
+function fit(){ const s = Math.min(innerWidth/1920, innerHeight/1080);
+  deck.style.transform = `translate(${(innerWidth-1920*s)/2}px,${(innerHeight-1080*s)/2}px) scale(${s})`; }
+addEventListener('resize', fit); fit();
+
+/* ---- chrome: co-brand pill + slide number tied to slides.length ---- */
+slides.forEach((s, i) => {
+  const p = document.createElement('div'); p.className = 'pill';
+  p.innerHTML = '<img class="jafra" src="assets/img/jafra-logo.png" alt="JAFRA"><i></i><img src="assets/img/sf-logo.svg" alt="Salesforce">';
+  s.prepend(p);
+  const n = document.createElement('div'); n.className = 'snum'; n.textContent = `${pad(i+1)} / ${pad(total)}`; s.append(n);
+});
+
+/* ---- session links (Agent Analytics de prod; UUID = Id. de sesión, hora CDMX -06:00) ---- */
+deck.querySelectorAll('a.ses[data-s]').forEach(a => {
+  const u = a.dataset.s, t = encodeURIComponent(a.dataset.t + '.000-06:00');
+  a.href = `https://jafracosmetics.lightning.force.com/lightning/cmp/runtime_analytics_evf_aie__record?c__id=${u}&c__type=2&c__title=${u}&c__sessionId=${u}&c__startTimestamp=${t}&c__timeFilter=30&c__agentApiName=Jafra_Agentforce&c__icon=standard%3Alive_chat`;
+  a.target = '_blank'; a.rel = 'noopener'; a.title = 'Abrir en Agent Analytics · ' + u;
+});
+
+/* ---- tooltip ---- */
+const tip = document.getElementById('tip');
+deck.addEventListener('mousemove', e => { const t = e.target.closest('[data-tip]');
+  if (!t) { tip.style.opacity = 0; return; }
+  tip.innerHTML = t.dataset.tip; tip.style.opacity = 1;
+  tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8) + 'px'; tip.style.top = (e.clientY - 44) + 'px'; });
+
+/* ---- tiny SVG chart kit ---- */
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs = {}, parent){ const n = document.createElementNS(NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.append(n); return n; }
+function svgFor(box){ const w = box.clientWidth, h = box.clientHeight;
+  const s = el('svg', {viewBox:`0 0 ${w} ${h}`, width:w, height:h, role:'img'}); box.append(s); return [s, w, h]; }
+const roundTop = (x, y, w, h, r) => { r = Math.min(r, w/2, h); return `M${x},${y+h}V${y+r}Q${x},${y} ${x+r},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h}Z`; };
+const roundRight = (x, y, w, h, r) => { r = Math.min(r, h/2, w); return `M${x},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h-r}Q${x+w},${y+h} ${x+w-r},${y+h}H${x}Z`; };
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const dlabel = d => `${+d.slice(8)} ${MES[+d.slice(5,7)-1]}`;
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const GRID = 'rgba(144,208,254,.14)', AX = '#a8c2ec';
+const charts = {};
+
+function hatch(svg){ const defs = el('defs', {}, svg);
+  const p = el('pattern', {id:'hatch', width:8, height:8, patternUnits:'userSpaceOnUse', patternTransform:'rotate(45)'}, defs);
+  el('rect', {width:8, height:8, fill:css('--c-not')}, p); el('line', {x1:0, y1:0, x2:0, y2:8, stroke:'rgba(234,245,254,.28)', 'stroke-width':3}, p); }
+
+function yAxis(svg, m, w, h, max, ticks, f){ const g = el('g', {}, svg);
+  ticks.forEach(t => { const y = m.t + (h - m.t - m.b) * (1 - t/max);
+    el('line', {x1:m.l, x2:w-m.r, y1:y, y2:y, stroke:GRID}, g);
+    const tx = el('text', {x:m.l-12, y:y+5, 'text-anchor':'end', fill:AX, 'font-size':15}, g); tx.textContent = f(t); }); }
+
+charts.sessions = box => {
+  const [svg, w, h] = svgFor(box), D = JD.days, V = JD.sessions, m = {l:64, r:16, t:34, b:36}, max = 3000;
+  yAxis(svg, m, w, h, max, [0,1000,2000,3000], t => fmt(t));
+  const bw = (w - m.l - m.r) / D.length, ih = h - m.t - m.b, bars = [];
+  D.forEach((d, i) => { const bh = ih * V[i] / max, x = m.l + i*bw + 2, y = m.t + ih - bh;
+    bars.push(el('path', {d:roundTop(x, y, bw-4, bh, 4), fill:css('--accent')}, svg));
+    el('rect', {x:m.l+i*bw, y:m.t, width:bw, height:ih, fill:'transparent', 'data-tip':`${dlabel(d)} · <b>${fmt(V[i])}</b> sesiones`}, svg);
+    if ((i % 7) === 0) { const t = el('text', {x:x+(bw-4)/2, y:h-10, 'text-anchor':'middle', fill:AX, 'font-size':15}, svg); t.textContent = dlabel(d); }
+    if (V[i] > 2500) { const t = el('text', {x:x+(bw-4)/2, y:y-10, 'text-anchor':'middle', fill:'#fff', 'font-size':16, 'font-weight':700, class:'lbl'}, svg); t.textContent = fmt(V[i]); } });
+  return tl => tl.from(bars, {scaleY:0, transformOrigin:'50% 100%', duration:.7, stagger:.025, ease:'power3.out'}, .35)
+                 .from(svg.querySelectorAll('.lbl'), {opacity:0, y:8, duration:.4}, 1.2);
+};
+
+const OUT = [['Deflected','--c-def'],['Escalated','--c-esc'],['Abandoned','--c-aba'],['Ambiguous','--c-amb'],['Not set','url(#hatch)']];
+const OFFICIAL = {Deflected:'11.24', Escalated:'4.00', Abandoned:'35.46', Ambiguous:'1.05', 'Not set':'48.25'};
+const fillOf = c => c.startsWith('url') ? c : css(c);
+
+charts.outcome100 = box => {
+  const [svg, w, h] = svgFor(box); hatch(svg);
+  const T = JD.totals, sum = Object.values(T).reduce((a, b) => a + b, 0), y = 46, bh = 58, segs = [];
+  let x = 0;
+  OUT.forEach(([k, c], i) => { const sw = w * T[k] / sum, g = el('g', {'data-tip':`${k} · <b>${OFFICIAL[k]} %</b> · ${fmt(T[k])} sesiones`}, svg);
+    segs.push(el('rect', {x:x+(i?1:0), y, width:Math.max(sw-2,1), height:bh, rx:4, fill:fillOf(c)}, g));
+    const above = T[k]/sum < .06, t = el('text', {x:x+(i?1:0), y:above ? y-12 : y+bh+30, fill:'#fff', 'font-size':above ? 17 : 21, 'font-weight':700, class:'lbl'}, svg);
+    t.innerHTML = `${k} <tspan fill="${AX}" font-weight="400">${OFFICIAL[k]} %</tspan>`;
+    x += sw; });
+  return tl => tl.from(segs, {attr:{width:0}, duration:.8, stagger:.12, ease:'power3.out'}, .3).from(svg.querySelectorAll('.lbl'), {opacity:0, duration:.4, stagger:.08}, .8);
+};
+
+charts.outcomeDaily = box => {
+  const [svg, w, h] = svgFor(box); hatch(svg);
+  const D = JD.days, m = {l:64, r:12, t:16, b:36}, max = 2800, ih = h - m.t - m.b, bw = (w - m.l - m.r) / D.length, cols = [];
+  yAxis(svg, m, w, h, max, [0,1000,2000], t => fmt(t));
+  D.forEach((d, i) => { const g = el('g', {}, svg); let y = m.t + ih; const parts = [];
+    OUT.forEach(([k, c]) => { const v = JD.outcomes[k][i], hh = ih * v / max; if (!v) return;
+      el('rect', {x:m.l+i*bw+2, y:y-hh+1, width:bw-4, height:Math.max(hh-2, .5), fill:fillOf(c)}, g); y -= hh; parts.push(`${k} ${fmt(v)}`); });
+    el('rect', {x:m.l+i*bw, y:m.t, width:bw, height:ih, fill:'transparent', 'data-tip':`${dlabel(d)} · ${parts.join(' · ')}`}, svg);
+    cols.push(g);
+    if ((i % 7) === 0) { const t = el('text', {x:m.l+i*bw+bw/2, y:h-10, 'text-anchor':'middle', fill:AX, 'font-size':15}, svg); t.textContent = dlabel(d); } });
+  return tl => tl.from(cols, {scaleY:0, transformOrigin:'50% 100%', duration:.6, stagger:.02, ease:'power2.out'}, .5);
+};
+
+charts.escalation = box => {
+  const [svg, w, h] = svgFor(box), D = JD.days, V = JD.escalation, m = {l:64, r:24, t:30, b:36}, max = .16, ih = h - m.t - m.b;
+  const X = i => m.l + (w - m.l - m.r) * i / (D.length - 1), Y = v => m.t + ih * (1 - v/max);
+  const a = D.indexOf('2026-09-22'), b = D.indexOf('2026-09-29');
+  const band = el('rect', {x:X(a)-8, y:m.t, width:X(b)-X(a)+16, height:ih, fill:'rgba(252,192,3,.10)', stroke:'rgba(252,192,3,.45)', 'stroke-dasharray':'4 5', rx:6}, svg);
+  yAxis(svg, m, w, h, max, [0,.04,.08,.12,.16], t => Math.round(t*100) + ' %');
+  const ann = el('text', {x:X(a)-4, y:m.t+24, fill:'#fff3c9', 'font-size':16, 'font-weight':700, 'text-anchor':'end', class:'lbl'}, svg);
+  ann.innerHTML = '<tspan x="'+(X(a)-16)+'" dy="0">22 al 29 sep</tspan><tspan x="'+(X(a)-16)+'" dy="22" font-weight="400" fill="#a8c2ec">91 % de las Escalated (1,130 de 1,240)</tspan>';
+  const line = el('path', {d:V.map((v, i) => (i ? 'L' : 'M') + X(i) + ',' + Y(v)).join(''), fill:'none', stroke:css('--accent'), 'stroke-width':3, 'stroke-linejoin':'round', 'stroke-linecap':'round'}, svg);
+  D.forEach((d, i) => { if ((i % 7) === 0) { const t = el('text', {x:X(i), y:h-10, 'text-anchor':'middle', fill:AX, 'font-size':15}, svg); t.textContent = dlabel(d); }
+    el('rect', {x:X(i)-10, y:m.t, width:20, height:ih, fill:'transparent', 'data-tip':`${dlabel(d)} · <b>${(V[i]*100).toFixed(2)} %</b> Escalated`}, svg); });
+  const end = el('text', {x:X(D.length-1), y:Y(.032), 'text-anchor':'end', fill:'#fff', 'font-size':16, 'font-weight':700, class:'lbl'}, svg);
+  end.textContent = 'Fuera de 22-29 sep: 110 de 19,893 (0.55 %)';
+  const len = line.getTotalLength();
+  return tl => { line.style.strokeDasharray = len; tl.fromTo(line, {strokeDashoffset:len}, {strokeDashoffset:0, duration:1.4, ease:'power2.inOut'}, .35)
+    .from(band, {opacity:0, duration:.5}, 1.2).from(svg.querySelectorAll('.lbl'), {opacity:0, x:-10, duration:.5, stagger:.15}, 1.4); };
+};
+
+function hbars(box, rows, max, valFmt, side, LW){
+  const [svg, w, h] = svgFor(box), lw = LW || 360, rw = side ? 230 : 0, gap = 8, rh = (h - 6) / rows.length, bars = [];
+  rows.forEach((r, i) => { const y = 3 + i*rh, bh = Math.min(rh - gap*2, 34), cy = y + rh/2, bwid = (w - lw - rw - 150) * r.v / max;
+    const g = el('g', {'data-tip':r.tip || `${r.n} · <b>${valFmt(r.v)}</b>`}, svg);
+    el('rect', {x:0, y, width:w, height:rh, fill:'transparent'}, g);
+    const n = el('text', {x:0, y:cy+6, fill:r.dim ? AX : '#fff', 'font-size':18.5, 'font-weight':600}, g); n.textContent = r.n;
+    bars.push(el('path', {d:roundRight(lw, cy-bh/2, Math.max(bwid, 2), bh, 4), fill:r.dim ? '#5a6f9b' : css('--accent')}, g));
+    const v = el('text', {x:lw + bwid + 10, y:cy+6, fill:'#fff', 'font-size':17, 'font-weight':700, class:'lbl'}, g); v.textContent = valFmt(r.v);
+    if (side) { const s = el('text', {x:w, y:cy+6, 'text-anchor':'end', fill:AX, 'font-size':16.5, class:'lbl'}, g); s.innerHTML = r.side; } });
+  return tl => tl.from(bars, {scaleX:0, transformOrigin:'0% 50%', duration:.8, stagger:.07, ease:'power3.out'}, .4).from(svg.querySelectorAll('.lbl'), {opacity:0, duration:.4, stagger:.03}, .9);
+}
+charts.needs = box => hbars(box, [
+  {n:'Unclear or Unspecified Requests', v:6298, side:'defl. 0 % · aband. 49 %'},
+  {n:'Account Balance and Payment Details', v:1199, side:'defl. 25 % · aband. 22 %'},
+  {n:'Missing and Damaged Products', v:924, side:'<tspan fill="#04E1CB" font-weight="700">defl. 24 %</tspan> · aband. 22 %'},
+  {n:'Order Tracking and Status Updates', v:905, side:'defl. 8 % · aband. 37 %'},
+  {n:'Customer Service and Contact Information', v:816, side:'defl. 0 % · aband. 49 %'},
+  {n:'General Greetings and Gratitude', v:803, side:'defl. 16 % · aband. 29 %'},
+  {n:'Unreflected and Misapplied Payments', v:699, side:'defl. 19 % · aband. 27 %'},
+  {n:'Payment Corrections and Discrepancies', v:673, side:'defl. 15 % · aband. 27 %'},
+  {n:'Human Assistance Requests', v:500, side:'defl. 0 % · aband. 49 %'}], 6298, v => fmt(v), true, 420);
+charts.fails = box => hbars(box, [
+  {n:'Verificación', v:132}, {n:'Dato que no contesta (pedidos “Borrador”)', v:108}, {n:'Adjuntos', v:104},
+  {n:'Persona negada', v:75}, {n:'Ruteo al tema equivocado', v:64}, {n:'Bucle', v:58},
+  {n:'Caso aceptado que no se crea', v:36}, {n:'Error de acción', v:19}, {n:'Otras', v:141, dim:true}], 141, v => fmt(v) + ' sesiones', false, 480);
+
+const built = new Map();
+function buildCharts(s){ if (built.has(s)) return built.get(s);
+  const list = Array.from(s.querySelectorAll('[data-chart]')).map(b => charts[b.dataset.chart](b)); built.set(s, list); return list; }
+
+/* ---- per-slide GSAP choreography ---- */
+function play(s){
+  const anims = buildCharts(s);
+  if (RM) return;
+  if (s._tl) { s._tl.progress(1).kill(); }
+  const tl = gsap.timeline(); s._tl = tl;
+  if (s.dataset.anim === 'cover') {
+    const t = s.querySelector('.cover-title');
+    if (!t.dataset.split) { t.dataset.split = 1;
+      t.innerHTML = t.innerHTML.replace(/(<span class="grad">)(.*?)(<\/span>)/, (m, a, b, c) => b.split(' ').map(w => `<span class="w"><span class="grad wi">${w}</span></span>`).join(' '))
+        .replace(/^([^<]+)/, m => m.trim().split(' ').map(w => `<span class="w"><span class="wi">${w}</span></span>`).join(' ') + ' '); }
+    tl.from(t.querySelectorAll('.wi'), {yPercent:110, duration:1, stagger:.09, ease:'power4.out'}, .15)
+      .from(s.querySelector('.astro'), {x:120, y:40, rotation:8, opacity:0, duration:1.4, ease:'power3.out'}, .3);
+    gsap.to(s.querySelector('.astro'), {y:'-=16', duration:3.2, repeat:-1, yoyo:true, ease:'sine.inOut', delay:1.6});
+  }
+  if (s.dataset.anim === 'divider') {
+    tl.from(s.querySelector('.chap'), {scale:.6, opacity:0, duration:1.1, ease:'expo.out'}, 0)
+      .from(s.querySelector('.glow'), {scale:.4, opacity:0, duration:1.6, ease:'power2.out'}, 0);
+  }
+  if (s.dataset.anim === 'plan') {
+    tl.from(s.querySelector('.tl-line'), {scaleX:0, duration:1.4, ease:'power2.inOut'}, .3)
+      .from(s.querySelectorAll('.dot'), {scale:0, duration:.5, stagger:.3, ease:'back.out(3)'}, .4);
+  }
+  tl.from(s.querySelectorAll('[data-a]'), {y:30, opacity:0, duration:.7, stagger:.08, ease:'power3.out'}, .05);
+  s.querySelectorAll('[data-pop]').forEach(g => tl.from(g.children, {y:26, scale:.95, opacity:0, duration:.6, stagger:.08, ease:'back.out(1.6)'}, .25));
+  tl.from(s.querySelectorAll('.spk'), {scale:0, rotation:-70, opacity:0, duration:1, stagger:.12, ease:'back.out(2)'}, .2);
+  s.querySelectorAll('[data-count]').forEach(n => { const end = +n.dataset.count, d = +(n.dataset.dec || 0), o = {v:0};
+    if (!end) return; tl.to(o, {v:end, duration:1.4, ease:'power2.out', onUpdate:() => n.textContent = fmt(o.v, d), onComplete:() => n.textContent = fmt(end, d)}, .35); });
+  s.querySelectorAll('.from').forEach(f => tl.to(f, {opacity:.45, duration:.5}, 1.3));
+  anims.forEach(a => a && a(tl));
+  setTimeout(() => { if (s._tl === tl && tl.progress() < 1) tl.progress(1); }, 4500); // ponytail: failsafe if rAF is throttled (background tab / headless)
+}
+
+/* ---- navigation (auto-counted) ---- */
+const progress = document.getElementById('progress');
+let cur = 0;
+function go(i){ i = Math.max(0, Math.min(total-1, i));
+  slides[cur].classList.remove('active'); cur = i; slides[cur].classList.add('active');
+  progress.style.width = `${(cur+1)/total*100}%`; history.replaceState(null, '', '#' + (cur+1)); play(slides[cur]); }
+addEventListener('keydown', e => {
+  if (['ArrowRight',' ','PageDown'].includes(e.key)) { e.preventDefault(); go(cur+1); }
+  else if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); go(cur-1); }
+  else if (e.key === 'Home') go(0); else if (e.key === 'End') go(total-1);
+  else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); } });
+deck.addEventListener('click', e => { if (e.target.closest('a,button,.no-advance') || getSelection().toString()) return;
+  (e.clientX < innerWidth * .25) ? go(cur-1) : go(cur+1); });
+cur = Math.max(0, Math.min(total-1, (parseInt(location.hash.slice(1)) || 1) - 1));
+slides[cur].classList.add('active'); go(cur);
+})();
+</script>
+</body>
+</html>

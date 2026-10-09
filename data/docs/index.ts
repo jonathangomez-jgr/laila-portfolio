@@ -133,6 +133,26 @@ const BETTERWARE_DOCS: DocEntry[] = [
 // ----------------------------------------------------------------------------
 const JAFRA_DOCS: DocEntry[] = [
   {
+    slug: "deep-dive-deck",
+    label: "Deck ejecutivo · Deep-dive 9-oct · Janet v2.1 a live",
+    description:
+      "Deck de la sesión de trabajo del vie 2026-10-09 con JAFRA México. Base propuesta Janet v2.1 (V42) = V41 + paquete V2 con valores de prod + 6 ediciones. Cifras AA-30d prod (31,001 sesiones), 5 hallazgos con fuente, criterios go/no-go G1-G8 y plan de 4 pasos para la próxima semana. 24 slides interactivos.",
+    url: "/Customers/Jafra/files/janet-jafra-deck/index.html",
+    category: "Ejecutivo",
+    icon: "🎤",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "dossier-ejecutivo",
+    label: "Dossier ejecutivo · Deep-dive 9-oct (PDF)",
+    description:
+      "Documento fuente de verdad post-deep-dive: cifras del tablero (Agent Analytics 30 días, 9-sep a 9-oct 2026), configuración de prod y sandbox, cambios de V41 con línea del script, 5 hallazgos con fuente y plan para la próxima semana con criterios go/no-go. 21 páginas, nivel A/B/C de evidencia por afirmación.",
+    url: "/Customers/Jafra/files/Janet-JAFRA-Dossier-Ejecutivo.pdf",
+    category: "Ejecutivo",
+    icon: "📘",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "presentacion-kickoff",
     label: "Presentación · Kick-off (compartida con Betterware)",
     description:
@@ -146,9 +166,9 @@ const JAFRA_DOCS: DocEntry[] = [
     slug: "conociendo-agente",
     label: "Conociendo a Janet · agente actual",
     description:
-      "Documento interno con la ficha del agente Jafra_Agentforce en producción. Tono comercial.",
+      "Documento interno con la ficha del agente Jafra_Agentforce en producción. Tono comercial. Documento histórico — las cifras actuales viven en el dossier del 9-oct.",
     url: "/Customers/Jafra/files/Conociendo-a-nuestro-agente.html",
-    category: "Ejecutivo",
+    category: "Técnico",
     icon: "📘",
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
