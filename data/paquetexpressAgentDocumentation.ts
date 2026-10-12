@@ -1,8 +1,17 @@
-// Documentación + audit del agente Paquete_Express_vX.
-// Fuente de verdad: aiAuthoringBundles/Paquete_Express_vX_15.agent retrievado
-// del sandbox paquetexpress-sandbox (qa2020) el 2026-10-12.
-// BotVersion V14 Active · Última modificación 2026-10-09.
-// Diseño de referencia para gaps: Files - Freeway/RAD - simulacion de pruebas por tipo - unificado.xlsx
+// Documentación + audit del agente DRAFT de Paquetexpress (Fase 2 · RAD).
+//
+// Fuente de verdad: aiAuthoringBundles/FDE_Paquetexpress_Service_Agent_Split_voice_16.agent
+// retrievado del sandbox paquetexpress-sandbox (qa2020) el 2026-10-12.
+// Este bundle es el Draft con el subagente RAD_Management_voice que cubre los
+// tres flujos del Excel de diseño (Normal, Prepago/RPP, WW).
+//
+// Mapa de iniciativas:
+//   - Iniciativa 1 (en UAT · sobre el Active `Paquete_Express_vX` V14): migración a
+//     Agent Script + WhatsApp Voice Messages + Speech-to-Text en chat web.
+//   - Iniciativa 2 (Fase 2 · este documento): construcción del flujo RAD completo
+//     para integrarlo al agente definitivo.
+//
+// Diseño de referencia: Files - Freeway/RAD - simulacion de pruebas por tipo - unificado.xlsx
 // (hojas DISEÑO - RAD, Normal, Prepago, WW, Datos de prueba).
 
 export type PaquetexpressAgentCategory =
@@ -56,6 +65,7 @@ export type PaquetexpressSubagentDoc = {
   estado:
     | "Implementado · Active"
     | "Implementado · Draft"
+    | "Draft parcial · mocks"
     | "No implementado · diseño pendiente"
     | "Deprecated";
   descripcion: string;
@@ -81,6 +91,16 @@ export type PaquetexpressGapWave = {
   items: Array<{ titulo: string; detalle: string }>;
 };
 
+export type PaquetexpressTimelineMilestone = {
+  semana: string;
+  fecha: string;
+  iniciativa: "Iniciativa 1 · UAT" | "Iniciativa 2 · RAD" | "Transversal";
+  titulo: string;
+  descripcion: string;
+  entregable: string;
+  estado: "Hecho" | "En curso" | "Pendiente" | "Riesgo";
+};
+
 export type PaquetexpressAgentDocumentation = {
   name: string;
   developerName: string;
@@ -90,9 +110,11 @@ export type PaquetexpressAgentDocumentation = {
   revision: string;
   canal: string;
   base: string;
+  iniciativaResumen: string;
   resumenAudit: string;
   hallazgos: PaquetexpressAuditFinding[];
   planOlas: PaquetexpressGapWave[];
+  timeline: PaquetexpressTimelineMilestone[];
   subagents: PaquetexpressSubagentDoc[];
 };
 
@@ -105,7 +127,7 @@ const DATOS_IDENTIFICACION = [
   { campo: "RFC alterno", valor: "XAXX-010101-000" },
   { campo: "Teléfono alterno", valor: "5558649070" },
   { campo: "Nombre alterno", valor: "PRUEBA SALESFORCE RAD" },
-  { campo: "Alta ya creada (solo para buscar)", valor: "clave 5620393" },
+  { campo: "Alta ya creada (solo buscar)", valor: "clave 5620393" },
 ];
 
 const DATOS_DIRECCION_ORIGEN = [
@@ -125,225 +147,375 @@ const DATOS_DIRECCION_DESTINO = [
 // -----------------------------------------------------------------------------
 
 export const paquetexpressAgentDocs: PaquetexpressAgentDocumentation = {
-  name: "Paquete Express vX",
-  developerName: "Paquete_Express_vX",
-  botId: "0XxVn00000005FUKAY (bundle Paquete_Express_vX_15)",
-  version: "V14",
-  estado: "Active",
-  revision: "12-oct-2026 (bundle retrievado del sandbox qa2020)",
-  canal: "Enhanced Messaging (WhatsApp · Web · Facebook · Line · Email · ABC · Embedded · Custom) + Voice",
+  name: "Paquete Express — Agente Draft (Fase 2 · RAD)",
+  developerName: "FDE_Paquetexpress_Service_Agent_Split_voice",
+  botId: "Bundle Draft: FDE_Paquetexpress_Service_Agent_Split_voice_16 (BotDefinition 0XxVn… · ExternalCopilot)",
+  version: "V12 Draft",
+  estado: "Draft",
+  revision: "12-oct-2026 · bundle retrievado del sandbox qa2020 (modificado 2026-10-02 por Regina Segura)",
+  canal: "Voice (telefonía con mocks GLP) + Enhanced Messaging (default_locale es_MX, additional en_US)",
   base:
-    "Agente Agentforce Service Agent construido sobre Agent Script (aiAuthoringBundle). Versión Active actual: V14 — bundle Paquete_Express_vX_15. Reemplaza el stack legado (BotDefinitions · EinsteinServiceAgent · GenAiPlanner ReAct) con un start_agent determinista (agent_router) y 10 subagentes orientados a dominio: Verification Gate, Cotización nacional, Cotización internacional separada, Rastreo, Casos, FAQ/General Information, Empleo/Sucursales, Escalamiento con compuerta de horario, Ambiguous y Off-topic. El modelo configurado es sfdc_ai__DefaultGPT4Omni. El agente ya consume el campo ChannelType para saludar diferente en WhatsApp (WhatsAppPhone pre-poblado) vs. web (pide teléfono).",
+    "Bundle Draft objetivo de la Fase 2. Agent Script con 10 subagentes consolidados y un subagente dedicado RAD_Management_voice que soporta los TRES tipos de recolección del Excel de diseño: RPP (guía prepagada con flujo completo mock), WW (simplificado — escala directo a asesor), y Normal (flujo end-to-end completo con captura cliente → dirección → paquetes → cliente destino → pago → cobertura → agendamiento). Hoy el flujo RAD usa mocks (MOCK_GLP_*); el paralelo pendiente es engancharlo a las 11 clases Glp* reales ya desplegadas en la org.",
+  iniciativaResumen:
+    "Dos iniciativas corren en paralelo. **Iniciativa 1** (en UAT sobre `Paquete_Express_vX` V14 Active): migración a Agent Script + mejoras de WhatsApp Voice Messages + Speech-to-Text en el widget web — ya en pruebas del cliente. **Iniciativa 2** (este documento): este Draft con el flujo RAD completo. La versión final del agente consolidará ambas: los subagentes Active V14 (quote nacional + internacional separados, verificación con teléfono) + el subagente RAD_Management del Draft, enganchado contra las clases Glp* reales en lugar de los mocks.",
   resumenAudit:
-    "El agente ACTIVO en el sandbox NO implementa el flujo de Recolección a Domicilio (RAD). El Excel de diseño (RAD - simulacion de pruebas por tipo - unificado) especifica tres modalidades — Normal, Prepago (RPP) y WW — con llamadas a GLP (buscar/crear cliente, consultar zona, cotizar, consultar fechas, crear recolección) y una captura paso-a-paso. En la org existe el stack Apex completo (11 clases Glp* reales + 8 MOCK_GLP_*), pero ningún subagente lo invoca. El bundle paralelo FDE_Paquetexpress_Service_Agent_Split_voice fue la prueba de concepto con mocks del flujo prepago (voice); hoy no está publicado como Active. Prioridad inmediata: construir el subagente RAD_Management con los 3 flujos del Excel, enganchando primero los Glp* reales. Secundaria: cerrar observaciones menores de orquestación en el bundle actual.",
+    "El Draft cubre el flujo RAD de los tres tipos como lo pide el Excel de diseño — pero todavía usa mocks (MOCK_GLP_*), no las clases Glp* reales que ya existen en la org. El flujo WW está muy simplificado (solo escala) en lugar de implementar WW-003 a WW-010 del diseño. La convergencia con el Active V14 (que ya tiene International_Quote_Management separado, verificación con teléfono y mejoras post-UAT) todavía no está hecha: ambos bundles divergen y hay que portar los learnings. Los Glp* reales ya cubren TODO lo que el Draft necesita (buscar/crear cliente, consultar guía, zona, sucursales Ocurre, fechas, cotizar, crear recolección), así que la Ola 1 es la migración mock→real.",
   hallazgos: [
     {
       id: "C-1",
       severidad: "Crítico",
-      titulo: "Flujo RAD completamente ausente en el agente Active",
+      titulo: "Flujo RAD completo usa mocks — no las clases Glp* reales ya desplegadas",
       evidencia:
-        "El bundle Paquete_Express_vX_15 (V14 Active) contiene 10 subagentes y ninguno corresponde a RAD. El `agent_router` no tiene transición hacia un subagente RAD ni palabras clave de recolección en sus descriptores. El Excel de diseño describe 73 pasos repartidos en Normal / Prepago (RPP) / WW.",
+        "El subagente RAD_Management_voice del Draft invoca: MOCK_GLP_BuscarGuia, MOCK_GLP_BuscarCliente, MOCK_GLP_ConsultarSucursalFronteriza, MOCK_GLP_ValidarDimensiones, MOCK_GLP_SucursalesDisponibles, MOCK_GLP_DatesToCollection, MOCK_GLP_RadCreate. En paralelo existen las clases reales: GlpBuscarCliente, GlpConsultarGuia, GlpConsultarZona, GlpConsultarSucursalesOcurre, GlpConsultarFechas, GlpCotizar, GlpCrearRecoleccion, GlpCrearCliente, GlpCrearDireccionFiscal, GlpHttpCliente, GlpCalloutMock — con last modified entre 22-sep y 06-oct 2026.",
       impacto:
-        "Cada cliente que pida agendar una recolección (RAD / 'pasar por mi paquete' / 'guía prepagada') cae a off_topic o ambiguous_question. Los flujos Normal / RPP / WW no son resolubles en self-service en ningún canal.",
+        "El Draft funciona en Preview pero no está wired al back-office real. Un publish hoy no genera recolecciones reales en GLP. Riesgo también de divergencia silenciosa si GLP cambia contratos.",
       fix:
-        "Agregar subagente `RAD_Management` con tres ramas (Normal / RPP / WW), enganchado al router por pendingIntent = 'RAD' y palabras clave documentadas. Reutilizar las clases Glp* reales desplegadas (ver C-2).",
+        "Ola 1 del plan: migrar cada MOCK_GLP_* al Glp* real. El contrato de entrada/salida ya es compatible — es cambio de `target: apex://MOCK_GLP_*` a `target: apex://Glp*` y ajuste de nombres de inputs/outputs donde difieran.",
     },
     {
       id: "C-2",
       severidad: "Crítico",
-      titulo: "Capa Apex GLP real existe pero está huérfana",
+      titulo: "Flujo WW colapsado — hoy solo escala, no construye el caso/correo",
       evidencia:
-        "11 clases Apex `Glp*` con LastModifiedDate reciente (sept–oct 2026) desplegadas en la org: `GlpBuscarCliente`, `GlpCrearCliente`, `GlpCrearDireccionFiscal`, `GlpConsultarGuia`, `GlpConsultarZona`, `GlpConsultarSucursalesOcurre`, `GlpConsultarFechas`, `GlpCotizar`, `GlpCrearRecoleccion`, `GlpHttpCliente` (base) y `GlpCalloutMock`. Ningún AiAction del bundle las invoca.",
+        "El bloque `if radType == 'WW'` del subagente dice: `1. Di al cliente: 'Le pido de favor no usar cartones de huevo'. 2. Luego: 'Para completar el agendamiento con guía documentada en línea, le voy a comunicar con un asesor especializado. Le mantengo en línea.' y transiciona al subagente de Escalation.` No llama a GlpConsultarGuia(SIPWEB), no confirma dirección, no captura contacto, no crea Case ni dispara email.",
       impacto:
-        "Trabajo de integración ya pagado (http client + wrappers + tests) sin uso en el agente. Riesgo de drift silencioso: cambios en GLP pueden romper las clases sin que nadie se entere.",
+        "El Excel especifica WW-002 → WW-010: consultar guía en SIPWEB, confirmar datos, confirmar dirección, pedir contacto RAD, crear Case en Salesforce con los datos y disparar email a la sucursal RAD de origen. Hoy el agente escala siempre — carga 100% al humano.",
       fix:
-        "Al construir el subagente RAD, mapear cada acción del Excel a su clase Apex concreta (ver tabla en 'Plan por olas'). Mantener los MOCK_GLP_* solo como fixture de desarrollo y pruebas de integración.",
+        "Construir el flujo WW: integración a `GlpConsultarGuia`, confirmación de datos, captura de contacto, Flow autolanzado para crear Case (template de email por diseñar), y disparo de email a la sucursal via Email Alert. Está marcado en Ola 2 porque depende de alinear el template de correo con operación.",
     },
     {
       id: "C-3",
       severidad: "Crítico",
-      titulo: "Bundle paralelo FDE_Paquetexpress_Service_Agent_Split_voice divergente del Active",
+      titulo: "Divergencia Draft ↔ Active: features de UAT no están en el Draft",
       evidencia:
-        "El bundle `FDE_Paquetexpress_Service_Agent_Split_voice` (V12 / marcado [TEST]) incluye un subagente `RAD_Management_voice` con mocks `MOCK_GLP_BuscarGuia`, `MOCK_GLP_DatesToCollection` y `MOCK_GLP_RadCreate`. No se ha mergeado al bundle Active y su copia del system prompt difiere en reglas de voz, correos y repair ladder.",
+        "El Active `Paquete_Express_vX` V14 tiene mejoras post-UAT que NO están en este Draft: (a) subagente `International_Quote_Management` separado (en Draft la rama internacional vive dentro de Quote_Management), (b) `Customer_Verification` ahora pide teléfono y usa WhatsAppPhone pre-poblado, (c) `isExistingContact` para saludar diferente a clientes recurrentes, (d) `Escalation_v2` cubre intents operativos directos, (e) saludos y copy actualizados.",
       impacto:
-        "Dos ramas de verdad del mismo agente conviven en el repo y en la org, con riesgo de perder la ingeniería ya hecha para voice si solo se trabaja sobre el bundle Active.",
+        "Si se publica este Draft tal cual, se pierden todas las mejoras ya validadas en UAT. La versión final tiene que ser una fusión Draft + Active, no una u otra.",
       fix:
-        "Decidir una sola línea de evolución: tomar los learnings de `FDE_..._voice` (reglas de voice, PAM, repair ladder, mocks) y portarlos al bundle `Paquete_Express_vX` como subagente `RAD_Management`. Deprecar el bundle `FDE_..._voice` una vez portado.",
+        "Ola 0 del plan: portar al Draft los 5 cambios del Active V14 ANTES de empezar la Ola 1 (migración mocks→reales). Esto es solo mover YAML, no toca código Apex.",
     },
     {
       id: "A-1",
       severidad: "Alto",
-      titulo: "Teléfono recién introducido en verificación — regresión en flujos previos",
+      titulo: "Validación de valor declarado > 50,000 presente pero sin fallback de retomar",
       evidencia:
-        "En V14 `Customer_Verification` agrega `customerPhone` como campo requerido (`capture_phone` + nuevo input `Phone` en `AG_Get_and_create_contact`). Para WhatsApp se pre-popula con `WhatsAppPhone`, pero en web/voice se pide al cliente.",
+        "El bloque `if radDeclaredValue > 50000: … transición al subagente de Escalation` corta correctamente. Pero el flujo nunca persiste el estado parcial (datos capturados hasta ese paso) ni crea un Case con la info ya recolectada para que el asesor retome sin volver a preguntar todo.",
       impacto:
-        "Clientes acostumbrados al flujo anterior (nombre + correo) pueden percibirlo como fricción. Si WhatsAppPhone no llega por alguna razón (misconfig del canal), el agente pide teléfono dos veces.",
+        "Cuando el valor pasa el tope, el cliente ya invirtió ~20 turnos capturando datos de origen, paquetes, destino, pago. Esa inversión se pierde al escalar — mala UX.",
       fix:
-        "Agregar un fallback explícito: si ChannelType == 'WhatsApp' y WhatsAppPhone está vacío, loggear y entrar al flow de web. Monitorear métricas de drop-off en el paso de teléfono las primeras 2 semanas post-release.",
+        "Antes de transferir, crear un Case con `Description` = resumen de datos capturados (cliente, direcciones, paquetes, pago, valor declarado) para que el asesor lo tome como briefing.",
     },
     {
       id: "A-2",
       severidad: "Alto",
-      titulo: "Cotización internacional no ofrece fallback fuera de horario",
+      titulo: "Captura de clave SAT por default a '01010101' sin aviso",
       evidencia:
-        "`International_Quote_Management` crea un caso y luego solo ofrece 'transferir a un agente ahora'. Si la respuesta es Yes y el horario está cerrado, el flujo cae en Escalation_v2, que responde 'por el momento no tenemos asesores disponibles' — pero el caso de cotización ya quedó creado sin seguimiento comprometido.",
+        "`capture_sat_key` guarda `01010101` cuando el cliente no la sabe. El Excel (NO-013) dice literal: 'Si no la tiene, no inventes una: se omite y GLP la asigna con el contenido.'",
       impacto:
-        "El cliente recibe un número de caso y expectativa de atención por agente, pero no un SLA ni un canal alternativo.",
+        "Agente envía una clave SAT genérica aunque GLP ya tiene esa lógica de assignación. Si el producto real cae en otra categoría, factura/carta porte queda mal clasificada.",
       fix:
-        "En Escalation_v2 fuera de horario, mostrar explícitamente el número de caso ya creado y un ETA de respuesta (ej. 24 h hábiles) en lugar del genérico 'con gusto puedo seguir ayudándote por este medio'.",
+        "Dejar `radSatKey` en vacío cuando el cliente no la tiene, y en GlpCrearRecoleccion no mandar el campo (el back-end lo asigna por contenido).",
     },
     {
       id: "A-3",
       severidad: "Alto",
-      titulo: "Validación de valor declarado > 50,000 MXN no gated",
+      titulo: "RPP: medidas del cliente no se validan contra las de la guía",
       evidencia:
-        "En Quote_Management no hay instrucción ni acción que corte el flujo cuando `quoteAmt > 50000`. El Excel (NO-032) lo marca como corte explícito: 'con ese valor no puedo programar la recolección, te comunico con una persona'.",
+        "El Excel PP-020/PP-021 pide comparar peso/largo/ancho/alto de lo que dicta el cliente vs. lo que trae la guía (devuelto por GlpConsultarGuia) y transferir si no coinciden. En el Draft, después de encontrar la guía solo se lee `radGuiaVoiceSummary` y se pasa directo a elegir fecha — nunca se re-captura el paquete ni se valida.",
       impacto:
-        "Cuando se construya el flujo RAD Normal, cliente con mercancía >50k podría llegar hasta la creación de guía sin que el agente lo transfiera. Umbral regulatorio documentado en diseño.",
+        "Si el cliente dicta medidas distintas al despachar, el operador llega sin saberlo. GLP puede rechazar la operación en el campo.",
       fix:
-        "Al construir RAD_Management (Normal), agregar guardia determinística: `if quoteAmt > 50000: transition to Escalation_v2`. Documentar también el umbral en Quote_Management si cotización excede, aunque la validación oficial vive en RAD.",
+        "En RPP, después de confirmar la guía, agregar PP-015 (pedir embalaje/contenido/peso/medidas) y PP-020 (comparar). Si no coinciden en kilometraje o alguna dimensión → transferir.",
+    },
+    {
+      id: "A-4",
+      severidad: "Alto",
+      titulo: "Normal: cambio de información fiscal no implementado",
+      evidencia:
+        "El Excel NO-030/NO-031 cubre: 'La factura sale a nombre de quien paga. ¿Desea modificar la información de facturación?' — si Sí, transferir a asesor. En el Draft no existe este paso ni la variable asociada.",
+      impacto:
+        "Clientes con información fiscal distinta a la del alta no tienen vía de atención self-service para pedir el cambio dentro del flujo RAD.",
+      fix:
+        "Agregar `capture_facturacion_change` entre pago y valor declarado. Si Yes → crear Case y escalar.",
     },
     {
       id: "M-1",
       severidad: "Medio",
-      titulo: "Ocho variantes de capitalización repetidas para 'Sí'/'No'",
+      titulo: "Agente dice 'recibirá un correo electrónico con la confirmación' sin verificar que exista el flow de email",
       evidencia:
-        "`International_Quote_Management` tiene 13 ramas `else if` para normalizar 'sí/si/SÍ/SI/yes/YES/no/NO/Sí/Si/No/no' a 'Yes'/'No'. El mismo patrón se repite en Quote_Management para RAD/EAD/IVPF.",
-      impacto:
-        "Mantenibilidad baja. Si se agrega un idioma, hay que tocar varios bloques. Riesgo de que una variante nueva (ej. 'Claro') no caiga en ningún caso.",
+        "Instrucción línea 2520: `Comparte con el cliente: 'Listo. Su recolección quedó agendada y recibirá un correo electrónico con la confirmación.'` Pero no hay evidencia en la org de un Email Alert conectado a la creación de GlpCrearRecoleccion.",
+      impacto: "Expectativa generada no cumplida. Potencial queja del cliente.",
       fix:
-        "Centralizar la normalización en una Apex `@InvocableMethod` (NormalizeYesNo) o en un flow utilitario. Reemplazar los 13 if por una sola llamada por campo.",
+        "Construir el Email Alert o quitar la mención del correo. Si GLP ya envía el correo del lado back-office, confirmar canal y adaptar el copy.",
     },
     {
       id: "M-2",
       severidad: "Medio",
-      titulo: "`General_Information_Management` crea caso incluso para FAQ atendida 100% por texto predefinido",
+      titulo: "Normal: no se cobra el seguro al valor declarado",
       evidencia:
-        "El reasoning crea un caso 'Consulta de informacion general' siempre que `faqQuestion != ''`, aunque la respuesta sea una de las 6 FAQs resueltas por texto fijo (sin usar FAQ_Search).",
-      impacto:
-        "Ruido en la cola de casos: cada pregunta '¿qué identificaciones aceptan?' genera caso que no requiere atención humana.",
-      fix:
-        "Agregar flag `faqResolvedInline = True` cuando la respuesta sale de texto predefinido, y solo crear caso cuando la respuesta vino de `FAQ_Search` o cuando el cliente pide seguimiento.",
+        "`capture_coverage` pregunta si quiere contratar cobertura y qué tipo, pero el valor del seguro NO se calcula ni se refleja en el total cotizado. El Excel menciona en NO-032/NO-033 cobertura amplia (A), limitada (L) o sin seguro (N).",
+      impacto: "Cotización incompleta en Normal cuando se contrata cobertura.",
+      fix: "Al llamar GlpCotizar en Normal, incluir `Tipo de cobertura` y `Valor declarado`. GLP calcula el cargo y lo refleja en la respuesta.",
     },
     {
       id: "M-3",
       severidad: "Medio",
-      titulo: "`off_topic` sin mecanismo para detectar intents nuevos del diseño",
+      titulo: "Zona Plus origen y destino no se consulta en Draft",
       evidencia:
-        "El router rutea a off_topic 'siempre que el mensaje no corresponda a rastreo, cotización, FAQ, sucursales/empleo, casos o escalamiento'. 'Agendar recolección' entra en esa lista por omisión.",
+        "El Excel NO-009 y NO-026 piden consultar `GlpConsultarZona` para origen y destino, con corte si Zona Plus. En el Draft solo se consulta `MOCK_GLP_ConsultarSucursalFronteriza` para el origen — no se chequea destino, ni se diferencia zona plus de fronteriza.",
       impacto:
-        "Oculta demanda real de RAD. No hay métrica fácil de 'intents RAD caídos en off_topic' porque off_topic no deja breadcrumb.",
+        "Clientes en zonas plus llegan hasta el agendamiento aunque la operación no las soporta sin tramites adicionales.",
       fix:
-        "Agregar temporalmente en el router un `capture_pending_intent='RAD'` cuando el mensaje contenga palabras clave de recolección, aunque el subagente aún no exista — para medir volumen antes de construir el flujo.",
+        "En Normal reemplazar `MOCK_GLP_ConsultarSucursalFronteriza` por `GlpConsultarZona` (que ya cubre plus + fronteriza) para ambos CPs. Gate temprano si `isZonePlus`.",
     },
     {
       id: "O-1",
       severidad: "Observación",
-      titulo: "Positivo · ancla de clasificación shipmentType bien instrumentada",
+      titulo: "Positivo · reset_rad_full_state limpia 40 variables para 'otra recolección'",
       evidencia:
-        "El Quote_Management V14 tiene un gate textual muy explícito que prohíbe pedir cualquier detalle del paquete antes de clasificar Domestic/International. Logra evitar un bug común donde el LLM asume Domestic por defecto.",
-      impacto: "Buen patrón para replicar en el futuro subagente RAD.",
-      fix: "Usar la misma técnica (ancla de clasificación con PROHIBIDO literal) al pedir el tipo de recolección (Normal/RPP/WW).",
+        "La acción `reset_rad_full_state` resetea todo el estado local del subagente RAD en un solo call — permite al cliente agendar múltiples recolecciones en una misma llamada sin ensuciar state.",
+      impacto: "Buen patrón para replicar en flujos largos (Quote, Case).",
+      fix: "Agregar el mismo patrón `request_new_quote` en Quote_Management si no existe ya al mismo nivel.",
     },
     {
       id: "O-2",
       severidad: "Observación",
-      titulo: "Positivo · `International_Quote_Management` separado como subagente",
+      titulo: "Positivo · flujo intake común (PAM + tipo) consolidado",
       evidencia:
-        "Antes vivía como rama dentro de Quote_Management. Ahora es un subagente independiente con descripción disjunta ('ÚNICO dato: país'). Simplifica el router y la clasificación.",
-      impacto: "Patrón saludable para evitar que el LLM mezcle flujos.",
-      fix: "Replicar el mismo criterio al crear RAD_Management: considerar sub-subagentes separados por modalidad (Normal / RPP / WW) o un switch disciplinado dentro de uno solo.",
+        "Los pasos GE-001/GE-002/GE-003 del Excel (contenido + PAM + tipo de recolección) viven en el inicio del subagente RAD y son el mismo para los 3 tipos. Reduce duplicación.",
+      impacto: "Mantenibilidad alta.",
+      fix: "N/A — mantener.",
     },
   ],
   planOlas: [
     {
-      nombre: "Ola 1 · Construir el subagente RAD con los Glp* reales",
+      nombre: "Ola 0 · Convergencia Draft ↔ Active (pre-requisito)",
       objetivo:
-        "Entregar el flujo RAD transaccional end-to-end en el agente Active, usando las 11 clases Apex ya desplegadas. Cierra los 3 hallazgos críticos.",
+        "Portar al bundle Draft las 5 mejoras validadas en UAT sobre el Active V14, para que la versión final no pierda ninguna. Es cambio solo de YAML — no toca Apex.",
       items: [
         {
-          titulo: "Crear subagente `RAD_Management` + enlace en router",
+          titulo: "Dividir Quote_Management en nacional + International_Quote_Management",
           detalle:
-            "Agregar `pendingIntent = 'RAD'` al router y descriptor con palabras clave (recolección, agendar recolección, pasar por mi paquete, guía prepagada, documenté en línea, WW). Captura paso General: GE-001 (preguntar contenido + validar contra PAM) → GE-002 (aceptación de PAM) → GE-003 (elegir modalidad).",
+            "Replicar la separación del Active V14. International_Quote_Management es un subagente dedicado que solo pide el país y crea el caso. Simplifica el router y reduce confusión del LLM.",
         },
         {
-          titulo: "Rama RAD Normal",
+          titulo: "Agregar teléfono a Customer_Verification",
           detalle:
-            "Encadenar: NO-001 (clave/RFC/nombre+tel) → `GlpBuscarCliente` → NO-003 confirmar dirección → NO-005/006/007 alta `GlpCrearCliente` si no existe → NO-009 `GlpConsultarZona` origen (gate Zona Plus) → NO-010/011/012/013 paquete+clave SAT → NO-016/017 destino → NO-018/019 Ocurre/Domicilio con `GlpConsultarSucursalesOcurre` → NO-026 `GlpConsultarZona` destino → NO-027/028/029 pago (PAID/N o TO_PAY/C — rechazo TO_PAY/N) → NO-030/031 facturación (transfer si cambia) → NO-032/033 valor declarado (**guardia 50,000**) → NO-035/036 COD/acuse → NO-037/038 `GlpCotizar` + `GlpConsultarFechas` → NO-041 `GlpCrearRecoleccion` docType=G.",
+            "Nuevos campos customerPhone + capture_phone + input Phone en AG_Get_and_create_contact. En WhatsApp pre-popular con WhatsAppPhone; en web/voice pedirlo. isExistingContact para saludar diferente.",
         },
         {
-          titulo: "Rama RAD Prepago (RPP)",
+          titulo: "Agregar escalamiento operativo directo en Escalation_v2",
           detalle:
-            "PP-001 cantidad de guías → PP-002 consecutivas si > 1 → PP-003 pedir número de guía → PP-004 `GlpConsultarGuia` → PP-005 confirmar o continuar en PP-006 si Guide not found → PP-007 `GlpBuscarCliente` origen → PP-008/009 confirmar dirección → PP-010/011/012 alta destino si falta → PP-013 contacto RAD → PP-014/015 paquete → PP-016 aviso 'no cajas de huevo' → PP-017 **NO pedir clave SAT en RPP** → PP-018 múltiples artículos → PP-020/021 validar medidas vs guía (transfer si no coinciden) → PP-022…PP-030 destino → PP-033 `GlpConsultarZona` ambos CPs → PP-034/035/036 `GlpConsultarFechas` → PP-037 `GlpCrearRecoleccion` docType=P → PP-038 compartir trackingNumber (si varias guías, re-consultar relacionadas).",
+            "Nuevo trigger explícito para intents operativos (cambio de dirección, instalación, reprogramar). Transfiere sin pedir confirmación adicional. Mantener Business Hours check.",
         },
         {
-          titulo: "Rama RAD WW",
+          titulo: "Actualizar copy del welcome y saludos de retorno",
           detalle:
-            "WW-001 aviso 'no cajas de huevo' → WW-002 pedir número de guía o rastreo → WW-003 `GlpConsultarGuia` (si Éxito=False cortar y transferir) → WW-004 confirmar datos → WW-005 confirmar dirección RAD (si pide cambio, transfer) → WW-006 pedir contacto RAD (nombre, horario, teléfono) → **WW-007: crear Caso en Salesforce (flow autolanzado — por construir)** → **WW-008: email a sucursal RAD origen (template por construir)** → GE-004 cierre.",
+            "Mensaje de welcome del Active V14 ya pide nombre + correo + teléfono en el saludo. Saludo diferente para contacto existente ('¡Hola de nuevo, {firstName}!').",
         },
         {
-          titulo: "Validaciones de aceptación / smoke tests",
+          titulo: "Modelo config y rich content enabled",
           detalle:
-            "Reproducir los 3 escenarios documentados (Normal con cliente 5619946 · Prepago con guía 13167470703 · WW con guía 19168671204). Verificar PAID/N / TO_PAY/C en Normal, Guide not found path en RPP, y creación de Case + email en WW. Las claves QA y rastreos ya probados viven en la hoja Datos de prueba.",
+            "Sincronizar `model_config: sfdc_ai__DefaultGPT4Omni` y `#DisableURLRedaction#` tag en description. Verificar `additional_parameter__safety_classifier_prompt_version: v1`.",
         },
       ],
     },
     {
-      nombre: "Ola 2 · Hardening y limpieza del agente",
-      objetivo: "Cerrar hallazgos altos y medios del audit sin tocar el flujo RAD recién construido.",
+      nombre: "Ola 1 · Reemplazar mocks por clases Glp* reales",
+      objetivo:
+        "Enganchar los 7 MOCK_GLP_* a los Glp* reales ya desplegados. Es la transición de 'funciona en Preview' a 'funciona en QA real con back-office GLP'. Cierra hallazgos C-1, M-3.",
       items: [
         {
-          titulo: "A-2 Caso internacional fuera de horario con SLA explícito",
+          titulo: "MOCK_GLP_BuscarCliente → GlpBuscarCliente",
           detalle:
-            "Cuando Escalation_v2 esté cerrado y el cliente venga del flow internacional, mostrar: 'Su caso [CaseNumber] ya quedó registrado; un agente de cotización internacional le contactará en las próximas 24 h hábiles.'",
+            "Reemplazar en RAD_Management_voice. Mismo contrato: inputs (customerKey/rfc/fullName/phone) y outputs (found/hasAddresses/customerId/primaryAddressVoiceSummary). Validar con cliente real 5619946 que QA ya conoce.",
         },
         {
-          titulo: "A-1 Monitoreo del nuevo paso de teléfono",
+          titulo: "MOCK_GLP_BuscarGuia → GlpConsultarGuia",
           detalle:
-            "Instrumentar un contador cuando `customerPhone == ''` y `ChannelType == 'WhatsApp'` para detectar casos donde WhatsAppPhone no llegó. Dashboard de drop-off en el paso capture_phone las primeras 2 semanas.",
+            "Usar en RPP y WW. GlpConsultarGuia devuelve servicio, origen, medidas, tarifa, peso, CP + flag found. Validar con guía 13167470703 (RPP, nueva) y 19168671204 (WW ya consultable).",
         },
         {
-          titulo: "M-1 Centralizar normalización Yes/No",
+          titulo: "MOCK_GLP_ConsultarSucursalFronteriza → GlpConsultarZona",
           detalle:
-            "Reemplazar las 13 ramas `else if` en International_Quote_Management (y las de RAD/EAD/IVPF en Quote_Management) por un `@InvocableMethod NormalizeYesNo` que acepte sí/si/claro/dale/ok/por favor → Yes.",
+            "GlpConsultarZona cubre zona plus + fronteriza en un solo call (fix de M-3). Agregar gate para zona plus en origen y destino.",
         },
         {
-          titulo: "M-2 FAQ inline sin crear caso",
+          titulo: "MOCK_GLP_SucursalesDisponibles → GlpConsultarSucursalesOcurre",
           detalle:
-            "Agregar `faqResolvedInline = True` para las 6 FAQ atendidas con texto fijo. Crear caso solo cuando se invocó `FAQ_Search` o cuando el cliente pide seguimiento explícito.",
+            "Para flujo Normal cuando radShipmentDelivery == 'Ocurre'. Devuelve lista de sucursales con tope de medidas por sucursal. Validar con destino CP 80000 (CUL01/CUL02 tope 9999).",
         },
         {
-          titulo: "M-3 Breadcrumb de intents RAD en off_topic",
+          titulo: "MOCK_GLP_ValidarDimensiones → GlpConsultarSucursalesOcurre (abosorbida)",
           detalle:
-            "Mientras el flujo RAD de Ola 1 esté en desarrollo, hacer que el router capture `pendingIntent='RAD'` en lugar de rutear a off_topic cuando el mensaje incluya palabras clave de recolección. Permite medir volumen y rutear al nuevo subagente apenas se publique.",
+            "El Excel dice que la validación de dimensiones vive dentro de Sucursales Ocurre. Si el agente no es Ocurre, saltarla; el cap de tamaño absoluto lo cubre GLP al agendar.",
+        },
+        {
+          titulo: "MOCK_GLP_DatesToCollection → GlpConsultarFechas",
+          detalle:
+            "Mismos tres slots. Validar con sucursal origen MEX14 → destino CUL01 y fechas que ya funcionaron (07, 08, 09, 12 oct 2026, ventana 10:00-18:30).",
+        },
+        {
+          titulo: "MOCK_GLP_RadCreate → GlpCrearRecoleccion",
+          detalle:
+            "docType = G (Normal) o P (RPP). Devuelve trackingNumber real. Validar con rastreos QA ya probados (21168675514 origen efectivo, 21168675516 TO_PAY/C, 21168675517 dos paquetes).",
         },
       ],
     },
     {
-      nombre: "Ola 3 · Nuevas capacidades sugeridas (fuera del Excel actual)",
-      objetivo: "Ampliar cobertura hacia necesidades del cliente final no cubiertas hoy.",
+      nombre: "Ola 2 · Construir flujo WW completo",
+      objetivo: "Cerrar hallazgo C-2 implementando los pasos WW-003 a WW-010 del Excel.",
       items: [
         {
-          titulo: "Facturación electrónica por guía o RFC",
+          titulo: "WW-003: consultar guía documentada en línea",
           detalle:
-            "Flow + Apex `GlpConsultarFactura` (opcional) + subagente `Billing_Management`. Entregar link al portal de facturación por un canal crossmodal (SMS/email) sin pronunciarlo en voice.",
+            "Llamar GlpConsultarGuia con el número que dicta el cliente. Si Éxito=False cortar y transferir. Si True, mostrar datos devueltos (nombre, servicio, dirección, CP, tarifa, peso, medidas).",
         },
         {
-          titulo: "Sucursal más cercana dinámica por CP",
+          titulo: "WW-004/WW-005: confirmar datos y dirección",
           detalle:
-            "Reemplazar el fallback actual 'URL /sucursales' por un lookup contra GLP (ya hay `GlpConsultarSucursalesOcurre`) con CP y filtros de horario. Devolver nombre, dirección, horario y teléfono.",
+            "Pedir sí/no sobre datos devueltos. Si no coinciden o pide cambiar plaza/dirección → transferir. No construir caso.",
         },
         {
-          titulo: "Vacantes activas dinámicas",
+          titulo: "WW-006: capturar contacto RAD",
           detalle:
-            "Si hay API de reclutamiento (Pandape), exponer `GetVacanciesByCity`. Mientras tanto, el Job_Search actual (URL fija) ya cubre lo mínimo.",
+            "Nombre completo, teléfono, ventana horaria. Readback del teléfono dígito a dígito.",
         },
         {
-          titulo: "Multimedia inbound (foto de la guía)",
+          titulo: "WW-007: crear Case en Salesforce",
           detalle:
-            "Cuando el cliente mande foto por WhatsApp, OCR del número de guía para precargar el tracking o la consulta de rastreo. Requiere GPT-4.1 o superior; el modelo actual (GPT-4o) ya es compatible.",
+            "Flow autolanzado nuevo: Create_case_RAD_WW. Inputs: guía, dirección confirmada, contacto. Output: caseNumber. Agente informa el caseNumber al cliente.",
+        },
+        {
+          titulo: "WW-008: email a sucursal RAD origen",
+          detalle:
+            "Email Alert nuevo + plantilla con los datos de la recolección (guía, dirección, contacto, ventana). Agregar campo Email de tipo email al objeto Sucursal + poblar registros (pendiente listado de correos del cliente).",
         },
       ],
+    },
+    {
+      nombre: "Ola 3 · Hardening y gaps menores",
+      objetivo: "Cerrar hallazgos A-* y M-* no cubiertos en olas anteriores.",
+      items: [
+        {
+          titulo: "A-1: persistir estado parcial cuando se escala por valor declarado > 50k",
+          detalle: "Antes del transfer, crear Case con resumen de datos capturados para que el asesor retome sin re-preguntar.",
+        },
+        {
+          titulo: "A-2: no auto-asignar clave SAT genérica",
+          detalle: "Dejar radSatKey en vacío cuando el cliente no la tiene y no pasarla a GlpCrearRecoleccion.",
+        },
+        {
+          titulo: "A-3: en RPP validar medidas vs guía (PP-020/PP-021)",
+          detalle: "Después de confirmar la guía, pedir embalaje/contenido/peso/medidas y comparar con las medidas devueltas por GlpConsultarGuia. Si no coinciden → transferir.",
+        },
+        {
+          titulo: "A-4: cambio de facturación en Normal (NO-030/NO-031)",
+          detalle: "Pregunta: '¿Desea modificar la información de facturación?'. Si Yes → crear Case y transferir.",
+        },
+        {
+          titulo: "M-1: verificar o quitar la promesa del correo de confirmación",
+          detalle: "Confirmar si GLP ya dispara el correo back-office. Si no, construir el Email Alert o eliminar la mención.",
+        },
+        {
+          titulo: "M-2: cobro de seguro en Normal",
+          detalle: "Pasar `Tipo de cobertura` y `Valor declarado` a GlpCotizar para que calcule el cargo. Reflejarlo en el total mostrado al cliente.",
+        },
+      ],
+    },
+  ],
+  timeline: [
+    // Iniciativa 1 (UAT sobre V14 Active) — status actual, basado en que ya hay UAT en curso
+    {
+      semana: "S1",
+      fecha: "2026-09-29 – 2026-10-05",
+      iniciativa: "Iniciativa 1 · UAT",
+      titulo: "Deploy V14 Active con mejoras UAT",
+      descripcion:
+        "Publicar bundle Paquete_Express_vX_15 (V14) con International_Quote_Management separado, verificación con teléfono, isExistingContact y escalamiento operativo directo. Habilitar en canal WhatsApp y web.",
+      entregable: "BotVersion V14 Active + bundle publicado",
+      estado: "Hecho",
+    },
+    {
+      semana: "S2",
+      fecha: "2026-10-06 – 2026-10-12",
+      iniciativa: "Iniciativa 1 · UAT",
+      titulo: "UAT de WhatsApp Voice Messages + STT en chat web",
+      descripcion:
+        "Pruebas del cliente sobre el nuevo soporte de audios de WhatsApp (Speech-to-Text) y el widget web con dictado por voz. Capturar bugs de reconocimiento (números de guía, CPs, correos) y ajustes de copy.",
+      entregable: "Reporte de UAT + lista de hotfixes",
+      estado: "En curso",
+    },
+    {
+      semana: "S3",
+      fecha: "2026-10-13 – 2026-10-19",
+      iniciativa: "Iniciativa 1 · UAT",
+      titulo: "Hotfixes de UAT + consolidación en V14.x",
+      descripcion:
+        "Aplicar los ajustes identificados en S2 al bundle. Publicar V14 patch si aplica. Preparar handoff a operación.",
+      entregable: "Agente V14 estable en Active + sign-off UAT",
+      estado: "Pendiente",
+    },
+    // Iniciativa 2 (RAD) — plan hacia la convergencia
+    {
+      semana: "S3",
+      fecha: "2026-10-13 – 2026-10-19",
+      iniciativa: "Iniciativa 2 · RAD",
+      titulo: "Ola 0 · Convergencia Draft ↔ Active",
+      descripcion:
+        "Portar al Draft (`FDE_Paquetexpress_Service_Agent_Split_voice`) los 5 cambios de UAT del V14 Active: International_Quote_Management separado, Customer_Verification con teléfono, isExistingContact, escalamiento operativo directo, welcome y saludos actualizados. Cambio solo de YAML.",
+      entregable: "Bundle Draft fusionado · validar con AiEvaluationDefinition en Preview",
+      estado: "Pendiente",
+    },
+    {
+      semana: "S4",
+      fecha: "2026-10-20 – 2026-10-26",
+      iniciativa: "Iniciativa 2 · RAD",
+      titulo: "Ola 1 · Reemplazar mocks por Glp* reales",
+      descripcion:
+        "Swap de los 7 MOCK_GLP_* → Glp* reales. Correr smoke tests por tipo (RPP con guía 13167470703, Normal con cliente 5619946, WW con guía 19168671204). Validar que los contratos de entrada/salida calzan.",
+      entregable: "Draft con integraciones GLP reales + traza de 3 recolecciones agendadas en QA",
+      estado: "Pendiente",
+    },
+    {
+      semana: "S5-S6",
+      fecha: "2026-10-27 – 2026-11-09",
+      iniciativa: "Iniciativa 2 · RAD",
+      titulo: "Ola 2 · Construir flujo WW completo",
+      descripcion:
+        "Implementar WW-003 → WW-010: integración GlpConsultarGuia, confirmaciones, captura de contacto, Flow autolanzado para Case, Email Alert a sucursal RAD. Agregar campo Email a objeto Sucursal + poblar.",
+      entregable: "Flujo WW end-to-end + Case y correo generados en QA",
+      estado: "Pendiente",
+    },
+    {
+      semana: "S7",
+      fecha: "2026-11-10 – 2026-11-16",
+      iniciativa: "Iniciativa 2 · RAD",
+      titulo: "Ola 3 · Hardening (A-1 … M-2)",
+      descripcion:
+        "Cerrar los 7 hallazgos Altos/Medios: persistir estado parcial al escalar, no auto-asignar clave SAT, validar medidas en RPP, cambio de facturación Normal, cobro de seguro, verificar correo de confirmación.",
+      entregable: "Agente Draft listo para UAT de RAD",
+      estado: "Pendiente",
+    },
+    {
+      semana: "S8",
+      fecha: "2026-11-17 – 2026-11-23",
+      iniciativa: "Iniciativa 2 · RAD",
+      titulo: "UAT de RAD con el cliente",
+      descripcion:
+        "Correr los 3 escenarios Normal / Prepago / WW con operación del cliente. Usar los datos de prueba de la hoja Datos de prueba. Capturar bugs y ajustes de UX.",
+      entregable: "Reporte UAT RAD + sign-off operación",
+      estado: "Pendiente",
+    },
+    {
+      semana: "S9",
+      fecha: "2026-11-24 – 2026-11-30",
+      iniciativa: "Transversal",
+      titulo: "Publicar agente final V15/V16",
+      descripcion:
+        "Mergear Draft (con RAD + Olas 0-3 cerradas) al bot principal. Promover BotVersion a Active. Comunicar cambios a operación y canales.",
+      entregable: "Agente V15/V16 Active con RAD completo + feature flags por canal",
+      estado: "Pendiente",
     },
   ],
   subagents: [
@@ -353,149 +525,81 @@ export const paquetexpressAgentDocs: PaquetexpressAgentDocumentation = {
       name: "Enrutador del Agente",
       developerName: "agent_router",
       category: "Entrada y verificación",
-      estado: "Implementado · Active",
+      estado: "Implementado · Draft",
       descripcion:
-        "Es el `start_agent` del bundle Paquete_Express_vX_15. Da la bienvenida, aplica un gate determinista de verificación y, cuando el cliente ya está verificado, enruta al subagente de dominio según `pendingIntent` o según palabras clave y variables derivadas (shipmentType, newQuoteRequested). Nunca ejecuta acciones de negocio directamente. Normaliza también casos donde el cliente envía solo un número (lo trata como tracking) o pide fuera de dominio (fuerza off_topic).",
+        "`start_agent` del bundle Draft. Da la bienvenida, aplica gate de verificación y, cuando el cliente ya está verificado, enruta por `pendingIntent`: Quote, Order, Case, GeneralInfo, JobBranch, Escalation o **RAD**. En el Draft la rama internacional vive dentro de Quote_Management (ver hallazgo C-3 — se debe portar la separación del Active V14).",
       activacion:
-        "En cada turno nuevo mientras el cliente no haya seleccionado un dominio. Si isVerified != True transiciona a Customer_Verification. Si pendingIntent == Quote/Order/Case/GeneralInfo/JobBranch/Escalation enruta al subagente correspondiente. shipmentType == 'International' lo manda al subagente dedicado.",
+        "En cada turno nuevo. Si isVerified != True transiciona a Customer_Verification_16j1dade3eb0b10. Si pendingIntent == 'RAD' transiciona a RAD_Management_voice.",
       respuestas:
-        "No produce texto propio hacia el cliente. El `welcome` ('Hola. Soy el asistente de servicio de IA de Paquetexpress. Para continuar con su solicitud, compártame su nombre completo y correo electrónico, por favor.') lo entrega `system.messages` antes de pasar el control al router.",
+        "No produce texto propio. Welcome definido en system.messages: 'Hola, buen día. Soy el asistente virtual de Paquetexpress. Para ayudarle mejor, ¿me indica su nombre completo, por favor?'",
       acciones: [
-        { name: "go_to_Customer_Verification", target: "@utils.transition", description: "Verificación de identidad del cliente (nombre, correo y teléfono)." },
-        { name: "go_to_Quote_Management", target: "@utils.transition", description: "Cotización nacional o clasificación inicial del envío." },
-        { name: "go_to_International_Quote_Management", target: "@utils.transition", description: "Cotización internacional (único dato: país destino)." },
-        { name: "go_to_Orden_Management", target: "@utils.transition", description: "Rastreo o estatus de envío." },
-        { name: "go_to_CaseManagement_v2", target: "@utils.transition", description: "Alta, actualización o consulta de casos." },
-        { name: "go_to_General_Information_Management", target: "@utils.transition", description: "FAQ y preguntas informativas." },
-        { name: "go_to_Job_Search", target: "@utils.transition", description: "Sucursales y vacantes de empleo." },
-        { name: "go_to_Escalation_v2", target: "@utils.transition", description: "Transferencia a agente humano (con compuerta de horario)." },
-        { name: "go_to_ambiguous_question", target: "@utils.transition", description: "Fallback cuando la solicitud es demasiado ambigua." },
-        { name: "go_to_off_topic", target: "@utils.transition", description: "Redirige cuando el mensaje está fuera del dominio Paquetexpress." },
+        { name: "go_to_Customer_Verification_16j1dade3eb0b10", target: "@utils.transition" },
+        { name: "go_to_Quote_Management_16j9427bc776003", target: "@utils.transition", description: "Nacional + internacional (en el Draft no están separados)." },
+        { name: "go_to_Orden_Management_16je7f3f3223af5", target: "@utils.transition" },
+        { name: "go_to_CaseManagement_v2_16jf9db4b526803", target: "@utils.transition" },
+        { name: "go_to_General_Information_Management_16jeb86fca18701", target: "@utils.transition" },
+        { name: "go_to_Job_Search_16jfb5eb38adcd9", target: "@utils.transition" },
+        { name: "go_to_Escalation_v2_16j6b2f5f1ead75", target: "@utils.transition" },
+        { name: "go_to_RAD_Management_voice", target: "@utils.transition", description: "Palabras clave: recolección, agendar recolección, recoger paquete, pasar por mi paquete, guía prepagada, recolección a domicilio." },
+        { name: "go_to_ambiguous_question", target: "@utils.transition" },
+        { name: "go_to_off_topic", target: "@utils.transition" },
       ],
       criterios: [
-        "Dado que el cliente aún no está verificado, cuando el router recibe un mensaje, entonces transiciona a Customer_Verification sin importar el intent inicial — el pendingIntent se preserva.",
-        "Dado que isVerified == True y el mensaje consiste solo en dígitos, cuando el router evalúa, entonces lo trata como número de guía y rutea a Orden_Management — nunca a off_topic.",
-        "Dado que el mensaje queda fuera de los dominios definidos, cuando el router responde, entonces delega a off_topic — nunca responde el conocimiento general por su cuenta.",
-        "**Gap V14 (hallazgo C-1):** cuando el cliente pide 'agendar recolección' / 'pasar por mi paquete' / 'guía prepagada', entonces hoy cae a off_topic porque no existe subagente RAD. Ola 1 del plan corrige esto.",
-      ],
-    },
-    {
-      id: "customer_verification",
-      number: 2,
-      name: "Verificación del Cliente",
-      developerName: "Customer_Verification",
-      category: "Entrada y verificación",
-      estado: "Implementado · Active",
-      descripcion:
-        "Gate de identidad obligatorio antes de abrir cualquier subagente de dominio. En V14 captura nombre + apellido + correo + **teléfono** (nuevo). Para WhatsApp el teléfono se pre-popula desde `WhatsAppPhone`; para web/voice se pide al cliente. Ejecuta `AG_Get_and_create_contact` para buscar o crear el Contact y setea `isVerified`, `verifiedContactId`, `contactRecord` e `isExistingContact` (nuevo). Guarda `pendingIntent` para retomar el subagente correcto post-verificación.",
-      activacion:
-        "Al inicio de la conversación, o cuando cualquier subagente detecta isVerified != True antes de ejecutar su propio reasoning. El cliente puede dictar su intención en el mismo turno; se guarda con `capture_pending_intent`.",
-      respuestas:
-        "Normaliza correo (sin acentos, minúsculas) y valida formato. Pide solo los datos faltantes y jamás repite uno ya capturado. Cuando están todos los datos, responde 'Gracias. Estoy validando su información; en un momento continúo con su solicitud. ¿Me confirma en qué puedo ayudarle?' y espera. Al verificarse: si el contacto ya existía responde '¡Hola de nuevo, {firstName}! ¿En qué puedo ayudarte hoy?', si fue creado responde '¡Gracias! ¿En qué puedo ayudarte hoy?'.",
-      acciones: [
-        { name: "capture_customer_details", target: "@utils.setVariables", description: "Registra customerFirstName, customerLastName y customerEmail (sin acentos, minúsculas)." },
-        { name: "capture_phone", target: "@utils.setVariables", description: "Registra customerPhone (web/voice). En WhatsApp no se usa — ya se tomó del remitente." },
-        { name: "capture_pending_intent", target: "@utils.setVariables", description: "Guarda la intención original del cliente (Quote, Order, Case, GeneralInfo, JobBranch, Escalation)." },
-        { name: "AG_Get_and_create_contact", target: "flow://AG_Get_and_create_contact", description: "Busca por correo; si no existe lo crea con FirstName + LastName + Phone. Devuelve contactId, isVerified, isExistingContact y recordContact." },
-      ],
-      criterios: [
-        "Dado que ChannelType == 'WhatsApp' y WhatsAppPhone tiene valor, cuando se evalúa el reasoning, entonces customerPhone se setea desde WhatsAppPhone sin pedirlo al cliente.",
-        "Dado que la verificación aún no termina, cuando el agente responde, entonces NO confirma al cliente que ya está verificado y NO usa frases de bienvenida completas.",
-        "Dado que el cliente dicta nombre completo en un mensaje (p.ej. 'Regina Segura'), cuando el agente captura, entonces toma la primera palabra como nombre y el resto como apellido — no vuelve a pedir el apellido.",
-        "Dado que isVerified ya fue True durante la sesión, cuando el cliente intenta cambiar de identidad, entonces el agente mantiene la verificación original y no permite el cambio.",
-      ],
-    },
-    {
-      id: "quote_management",
-      number: 3,
-      name: "Gestión de Cotización (Nacional + Clasificador)",
-      developerName: "Quote_Management",
-      category: "Cotización",
-      estado: "Implementado · Active",
-      descripcion:
-        "Clasifica el envío como Domestic (dentro de México) o International (manda a subagente dedicado). Para Domestic recorre un cuestionario determinista pregunta-por-pregunta (CP origen → CP destino → tipo Paquete/Sobre → peso → largo → ancho → alto → RAD → EAD → IVPF → monto asegurado), valida CPs con flows PE_GetValid*, invoca `Obtener_Cotizaci_n_Paqueteria_V2` y crea un caso de cotización nacional. Tiene reset explícito vía `newQuoteRequested` para reiniciar cotizaciones y una lista larga de normalizaciones (Nacional→Domestic, Sobre→Envelope, Sí→Yes).",
-      activacion:
-        "pendingIntent == 'Quote' o palabras clave (cotizar, cotización, precio, tarifa, budget, price, rate, quotation). Si el cliente ya dijo 'internacional' el router manda directo a International_Quote_Management.",
-      respuestas:
-        "Mientras shipmentType esté vacío, PROHIBIDO pedir cualquier detalle del envío — solo clasifica. Al obtener la tarifa, muestra `quoteResult` palabra por palabra limpiando HTML (no inventa opciones, no colapsa a la más barata), informa el CaseNumber si está disponible y linkea la PAM.",
-      acciones: [
-        { name: "capture_shipment_classification", target: "@utils.setVariables", description: "shipmentType = 'Domestic' | 'International' (tokens en inglés exactos)." },
-        { name: "request_new_quote", target: "@utils.setVariables", description: "Reinicia TODO el flujo de cotización. Solo cuando el cliente pide una nueva cotización desde cero." },
-        { name: "capture_cp_origen / capture_cp_destino", target: "@utils.setVariables", description: "CPs origen y destino ya validados." },
-        { name: "capture_tipo / capture_peso / capture_largo / capture_ancho / capture_alto", target: "@utils.setVariables", description: "Captura paso-a-paso del paquete." },
-        { name: "capture_rad / capture_ead / capture_ivpf / capture_amt", target: "@utils.setVariables", description: "Servicios adicionales (recolección, entrega, seguro, importe)." },
-        { name: "Obtener_Codigo_postal_origen_valido_v2A", target: "flow://PE_GetValidOriginPostalCode", description: "Valida CP origen." },
-        { name: "Obtener_Codigo_postal_destino_valido_v2A", target: "flow://PE_GetValidDestinationPostalCode", description: "Valida CP destino." },
-        { name: "Obtener_Cotizaci_n_Paqueteria_V2", target: "flow://Obtener_Cotizaci_n_Paqueter_a", description: "Devuelve `quoteResult` con opciones de servicio." },
-        { name: "Crea_caso_cotizacion_nacional_v2", target: "flow://Crea_caso_cotizacion_nacional", description: "Crea el caso cuando la cotización ya tiene resultado." },
-      ],
-      criterios: [
-        "Dado que shipmentType == '', cuando el cliente aún no clasifica, entonces el agente SOLO pregunta '¿El envío que deseas cotizar es Nacional o Internacional?' y nada más.",
-        "Dado que quoteTipo == 'Envelope', cuando se piden detalles, entonces NUNCA se pregunta peso ni dimensiones (quedan autoset a 35.5×24×1 cm, 1 kg) ni IVPF (bloqueado).",
-        "Dado que quoteResult != '', cuando el agente muestra la cotización, entonces respeta el texto palabra-por-palabra, limpia HTML y convierte '**' en '*' — nunca resume ni colapsa a la opción más barata.",
-        "**Gap V14 (hallazgo A-3):** cuando quoteAmt > 50,000, entonces hoy el flujo continúa igual — en Ola 1 del plan RAD, agregar guardia que corte.",
-      ],
-    },
-    {
-      id: "international_quote_management",
-      number: 4,
-      name: "Cotización Internacional",
-      developerName: "International_Quote_Management",
-      category: "Cotización",
-      estado: "Implementado · Active",
-      descripcion:
-        "Subagente dedicado a cotizaciones internacionales. El ÚNICO dato que pide es el país de destino. Crea un caso 'Cotizacion internacional' con el país como Description y ofrece transferir a un agente humano. NUNCA pide código postal, tipo, peso, dimensiones ni valor declarado — es un gate explícito con PROHIBIDO literal en las instrucciones.",
-      activacion:
-        "Cuando shipmentType == 'International' o el router detecta mención de país extranjero. Entra desde Quote_Management si durante la clasificación el cliente da un país fuera de México.",
-      respuestas:
-        "Pide el país con la frase estándar '¿Podrías decirme el país de destino, por favor?'. Al capturarlo crea el caso y responde con el CaseNumber + oferta de transferencia. Si el cliente acepta → Escalation_v2. Si no → cierra ofreciendo ayuda adicional.",
-      acciones: [
-        { name: "capture_destination_country", target: "@utils.setVariables", description: "Registra ÚNICAMENTE el país de destino." },
-        { name: "capture_transfer_decision", target: "@utils.setVariables", description: "'Yes'/'No' sobre transferir al asesor humano tras crear el caso." },
-        { name: "request_new_quote", target: "@utils.setVariables", description: "Reinicia a Quote_Management si el cliente pide una nueva cotización." },
-        { name: "Crea_caso_cotizacion_internacional_v2A", target: "flow://Crea_caso_cotizacion_internacional", description: "Crea el caso internacional con el país como Description." },
-      ],
-      criterios: [
-        "Dado que shipmentType == 'International', cuando el agente responde, entonces NUNCA pide peso, dimensiones, código postal, valor declarado ni tipo de paquete — solo el país.",
-        "Dado que destinationCountry se captura, cuando se evalúa el reasoning, entonces el caso internacional se crea de forma determinista con `Crea_caso_cotizacion_internacional_v2A`.",
-        "Dado que internationalTransferDecision == 'Yes', cuando el agente responde, entonces transiciona a Escalation_v2 — nunca ejecuta la transferencia directa.",
-        "**Gap V14 (hallazgo A-2):** fuera de horario, el cliente queda con el caso pero sin SLA explícito; Ola 2 corrige el mensaje.",
+        "Dado que el cliente aún no está verificado, cuando el router recibe un mensaje, entonces transiciona a Customer_Verification sin importar el intent inicial — pendingIntent se preserva para retomarlo.",
+        "Dado que pendingIntent == 'RAD' y isVerified == True, cuando el router evalúa, entonces transiciona directo a RAD_Management_voice.",
+        "**Gap vs Active V14 (hallazgo C-3):** este router no tiene International_Quote_Management separado. Ola 0 lo porta.",
       ],
     },
     {
       id: "rad_management",
-      number: 5,
+      number: 2,
       name: "Gestión de Recolección a Domicilio (RAD)",
-      developerName: "RAD_Management (por construir)",
+      developerName: "RAD_Management_voice",
       category: "Recolección a domicilio",
-      estado: "No implementado · diseño pendiente",
+      estado: "Draft parcial · mocks",
       descripcion:
-        "⚠️ NO EXISTE EN EL BUNDLE V14 ACTIVE. El diseño del Excel especifica tres modalidades: **Normal** (agendar recolección desde cero y generar guía), **Prepago (RPP)** (cliente ya tiene guía prepagada por volumen) y **WW** (guía documentada en línea). Los pasos generales GE-001/GE-002/GE-003 son compartidos. Las clases Apex Glp* reales ya existen en la org pero están huérfanas (ver hallazgos C-1, C-2, C-3). Esta ficha documenta el diseño objetivo y los 3 escenarios de prueba para habilitar la Ola 1 del plan.",
+        "⭐ **Subagente clave de la Fase 2.** Soporta los tres tipos de recolección del Excel: **RPP** (guía prepagada — flujo corto con MOCK_GLP_BuscarGuia + MOCK_GLP_DatesToCollection + MOCK_GLP_RadCreate), **WW** (guía documentada en línea — hoy colapsado a escalación directa, ver hallazgo C-2), y **Normal** (recolección completa end-to-end con captura cliente → dirección → paquetes → cliente destino → entrega → forma de pago → cobertura → valor declarado → agendamiento). El intake común GE-001/GE-002/GE-003 (contenido + PAM + tipo) es compartido. **Hoy usa MOCK_GLP_* — la Ola 1 del plan los reemplaza por las 11 clases Glp* reales ya desplegadas en la org (hallazgo C-1).**",
       activacion:
-        "Objetivo: pendingIntent == 'RAD' o palabras clave (recolección, agendar recolección, pasar por mi paquete, guía prepagada, 'documenté en línea', WW). También como pivot desde Quote_Management cuando quoteRAD == 'Yes' y el cliente acepta agendar después de cotizar.",
+        "pendingIntent == 'RAD' o palabras clave (recolección, agendar recolección, pasar por mi paquete, guía prepagada, documenté en línea, WW). También como pivot desde Quote_Management cuando quoteRAD == 'Yes' y el cliente acepta.",
       respuestas:
-        "GE-001 preguntar contenido y validar contra la PAM (si prohibido, corte). GE-002 pedir aceptación de PAM. GE-003 preguntar modalidad (Normal/Prepago/WW). A partir de ahí ramifica. En voice usar 'guía prepagada' / 'recolección a domicilio' / 'OCURRE o recoger en sucursal' — nunca RPP/RAD/EAD como siglas. Readback dígito a dígito para números de guía.",
+        "GE-001 preguntar contenido + validar contra PAM (lista: armas, explosivos, drogas, dinero, joyería, animales, restos humanos, NOM 002 SCT, piratas, lotería extranjera). GE-002 pedir aceptación de PAM sin leer la URL. GE-003 preguntar modalidad: '¿Su recolección es con guía prepagada, con guía documentada en línea, o es una recolección normal?'. En voice usar 'guía prepagada'/'recolección a domicilio'/'OCURRE o recoger en sucursal' — nunca RPP/RAD/EAD como siglas. Readback dígito a dígito para números de guía.",
       acciones: [
-        { name: "capture_rad_content_pam", target: "@utils.setVariables", description: "Contenido del paquete y aceptación de la PAM." },
-        { name: "capture_rad_modalidad", target: "@utils.setVariables", description: "'Normal' | 'RPP' | 'WW'." },
-        { name: "GlpBuscarCliente", target: "apex://GlpBuscarCliente", description: "Busca por clave / RFC / teléfono / nombre; devuelve claveCliente, nombreCliente, hasta 5 domicilios, sucursal RAD y código de colonia." },
-        { name: "GlpCrearCliente", target: "apex://GlpCrearCliente", description: "Alta de cliente nuevo (sin site → GLP toma la plaza por CP). Reemplaza SIP_WebClient." },
-        { name: "GlpCrearDireccionFiscal", target: "apex://GlpCrearDireccionFiscal", description: "Actualiza fiscal (solo se usa en el camino 'transferir' de NO-030/NO-031 — no se llama desde el agente)." },
-        { name: "GlpConsultarGuia", target: "apex://GlpConsultarGuia", description: "Consulta guía por número (RPP + WW). Devuelve servicio, origen, medidas, tarifa, peso, CP; si no existe, 'Guide not found'." },
-        { name: "GlpConsultarZona", target: "apex://GlpConsultarZona", description: "Un CP → (isZonePlus, isZoneBorder, mensaje). Zona Plus corta flujo; zona fronteriza continúa con mensaje." },
-        { name: "GlpConsultarSucursalesOcurre", target: "apex://GlpConsultarSucursalesOcurre", description: "Sucursales OCURRE para CP destino + colonia + medidas. Devuelve lista con tope de medidas por sucursal." },
-        { name: "GlpConsultarFechas", target: "apex://GlpConsultarFechas", description: "Ventanas de recolección por sucursal origen + destino + fecha. (anterior datesToCollection)." },
-        { name: "GlpCotizar", target: "apex://GlpCotizar", description: "Cotización final (anterior getQuotation). Devuelve opciones de servicio con importe, impuesto, cargos RAD/EAD/seguro/COD. Solo Normal." },
-        { name: "GlpCrearRecoleccion", target: "apex://GlpCrearRecoleccion", description: "Crea/agenda recolección. docType=G (Normal, genera guía), docType=P (RPP, usa guía existente). Devuelve trackingNumber." },
+        { name: "capture_rad_content_accepted", target: "@utils.setVariables", description: "Contenido del paquete + validación PAM OK." },
+        { name: "capture_rad_policy_confirmed", target: "@utils.setVariables", description: "Cliente confirmó aceptación PAM." },
+        { name: "capture_rad_type", target: "@utils.setVariables", description: "'RPP' | 'WW' | 'Normal'." },
+        { name: "capture_rad_guia_number", target: "@utils.setVariables", description: "Número de guía (RPP) tras readback confirmado." },
+        { name: "capture_rad_selected_option", target: "@utils.setVariables", description: "OPT_1, OPT_2 u OPT_3 (RPP)." },
+        { name: "reset_rad_guia_state", target: "@utils.setVariables", description: "Limpiar guía RPP para reintentar." },
+        { name: "capture_orig_customer_search", target: "@utils.setVariables", description: "Normal · Identificadores del cliente origen (clave/RFC/nombre+tel)." },
+        { name: "capture_orig_address_manual / confirm_orig_address / capture_orig_postal_code", target: "@utils.setVariables", description: "Normal · dirección de recolección confirmada." },
+        { name: "capture_orig_contact", target: "@utils.setVariables", description: "Normal · nombre + teléfono + referencias del contacto en origen." },
+        { name: "capture_package_count / capture_packages_summary", target: "@utils.setVariables", description: "Normal · cantidad y resumen consolidado de paquetes + totales." },
+        { name: "capture_sat_key", target: "@utils.setVariables", description: "Normal · clave SAT ('01010101' si el cliente no la tiene) — ver A-2." },
+        { name: "capture_dest_customer_search / capture_dest_address_manual / confirm_dest_address / capture_dest_postal_code", target: "@utils.setVariables", description: "Normal · cliente y dirección de destino." },
+        { name: "capture_dest_contact", target: "@utils.setVariables", description: "Normal · contacto de entrega." },
+        { name: "capture_shipment_delivery / capture_branch_name", target: "@utils.setVariables", description: "Normal · 'Domicilio' o 'Ocurre' + sucursal elegida si Ocurre." },
+        { name: "capture_payment_method / capture_payment_mode", target: "@utils.setVariables", description: "Normal · 'Origin'|'FreightCollect'|'Requester'|'ThirdParty' + 'Cash'|'Transfer'|'Info'." },
+        { name: "capture_declared_value", target: "@utils.setVariables", description: "Normal · valor declarado entero. Si > 50k → escalar." },
+        { name: "capture_coverage / capture_additional_service", target: "@utils.setVariables", description: "Normal · cobertura + COD/Acuse." },
+        { name: "capture_pickup_datetime", target: "@utils.setVariables", description: "Normal · fecha + ventana. Dispara agendamiento automático." },
+        { name: "reset_rad_full_state", target: "@utils.setVariables", description: "Reset de 40+ variables para agendar otra recolección en la misma llamada." },
+        { name: "MOCK_GLP_BuscarGuia", target: "apex://MOCK_GLP_BuscarGuia", description: "⚠️ MOCK · Real pendiente: GlpConsultarGuia. RPP y WW." },
+        { name: "MOCK_GLP_BuscarCliente", target: "apex://MOCK_GLP_BuscarCliente", description: "⚠️ MOCK · Real pendiente: GlpBuscarCliente. Normal (origen + destino)." },
+        { name: "MOCK_GLP_ConsultarSucursalFronteriza", target: "apex://MOCK_GLP_ConsultarSucursalFronteriza", description: "⚠️ MOCK · Real pendiente: GlpConsultarZona (cubre fronteriza + Zona Plus — ver M-3)." },
+        { name: "MOCK_GLP_ValidarDimensiones", target: "apex://MOCK_GLP_ValidarDimensiones", description: "⚠️ MOCK · Real pendiente: absorbida por GlpConsultarSucursalesOcurre." },
+        { name: "MOCK_GLP_SucursalesDisponibles", target: "apex://MOCK_GLP_SucursalesDisponibles", description: "⚠️ MOCK · Real pendiente: GlpConsultarSucursalesOcurre." },
+        { name: "MOCK_GLP_DatesToCollection (datesToCollectionMock)", target: "apex://MOCK_GLP_DatesToCollection", description: "⚠️ MOCK · Real pendiente: GlpConsultarFechas." },
+        { name: "MOCK_GLP_RadCreate", target: "apex://MOCK_GLP_RadCreate", description: "⚠️ MOCK · Real pendiente: GlpCrearRecoleccion (docType=G Normal, P RPP)." },
       ],
       criterios: [
-        "Dado que el cliente aún no acepta la PAM, cuando el agente avanza, entonces NO ejecuta ninguna acción de GLP y espera la confirmación explícita.",
-        "Dado que modalidad == 'Normal' y quoteAmt > 50,000, cuando se registra el valor declarado, entonces el agente transfiere a Escalation_v2 — nunca llama GlpCrearRecoleccion.",
-        "Dado que GlpConsultarZona devuelve isZonePlus == True, cuando el agente responde, entonces muestra Mensaje GLP y transfiere — no continúa con cotización.",
-        "Dado que modalidad == 'RPP' y GlpConsultarGuia devuelve 'Guide not found', cuando el agente continúa, entonces NO corta; sigue a PP-006 pidiendo origen manualmente.",
-        "Dado que modalidad == 'RPP' y las medidas dictadas no coinciden con la guía, cuando el agente detecta la diferencia, entonces transfiere a Escalation_v2 (PP-021).",
-        "Dado que modalidad == 'WW' y GlpConsultarGuia devuelve éxito=False, cuando el agente responde, entonces corta y transfiere — no intenta construir el caso.",
-        "Dado que el agente obtiene el trackingNumber de GlpCrearRecoleccion, cuando cierra, entonces lo lee dígito por dígito en bloques de tres (voice) o lo muestra tal cual (chat) — nunca inventa un formato alternativo.",
+        "Dado que el cliente aún no acepta la PAM, cuando el agente avanza, entonces NO ejecuta ninguna acción GLP y espera la confirmación explícita.",
+        "Dado que la mercancía es prohibida por PAM, cuando el agente detecta, entonces dice el texto literal 'Lamento informarle que ese contenido no es transportable con nuestro servicio' y escala.",
+        "Dado que radType == 'RPP' y radGuiaFound == False, cuando el agente responde, entonces ofrece transferir o reintentar con otro número — nunca inventa datos.",
+        "Dado que radType == 'Normal' y radDeclaredValue > 50000, cuando se registra el valor, entonces el agente transfiere a Escalation_v2 — nunca llama RadCreate.",
+        "Dado que el agente obtiene el trackingNumber, cuando cierra, entonces lo lee dígito por dígito en bloques de tres — nunca lo pronuncia como número decimal.",
+        "**Gap C-2:** cuando radType == 'WW', entonces hoy solo escala; falta construir WW-003 → WW-010 (consultar guía, confirmar, contacto, Case, email).",
+        "**Gap A-3:** en RPP falta validar medidas del cliente vs. las de la guía (PP-020/PP-021).",
+        "**Gap A-4:** en Normal falta el paso de 'desea modificar facturación' (NO-030/NO-031).",
       ],
       escenarios: [
         {
@@ -507,7 +611,7 @@ export const paquetexpressAgentDocs: PaquetexpressAgentDocumentation = {
           precondiciones: [
             "Cliente verificado en Salesforce (nombre + correo + teléfono).",
             "Mercancía permitida por la PAM (ej. libros, ropa, documentos).",
-            "Cliente origen existente en GLP; destino se puede dictar como dirección libre.",
+            "Cliente origen existente en GLP; destino puede dictarse como dirección libre.",
             "Valor declarado ≤ 50,000 MXN (sobre ese umbral se transfiere a asesor por NO-032).",
           ],
           datosDePrueba: [
@@ -515,75 +619,94 @@ export const paquetexpressAgentDocs: PaquetexpressAgentDocumentation = {
             ...DATOS_DIRECCION_ORIGEN,
             ...DATOS_DIRECCION_DESTINO,
             { campo: "Paquete de ejemplo", valor: "1 paquete, libros, 1 kg, 30 x 20 x 10 cm" },
-            { campo: "Clave SAT (opcional)", valor: "01010101 (si el cliente no la tiene, GLP la asigna por contenido)" },
+            { campo: "Clave SAT (opcional)", valor: "01010101 — ⚠️ A-2: hoy el agente la auto-asigna; debería dejarse vacía" },
             { campo: "Valor declarado", valor: "1,000 MXN · cobertura N (sin seguro) | pruebas con 5,000 y cobertura A no agregaron cargo adicional" },
             { campo: "Forma de pago", valor: "PAID + N (origen efectivo) | TO_PAY + C (flete por cobrar) · TO_PAY + N lo rechaza GLP" },
             { campo: "Fecha/hora preferida", valor: "05/10/2026, ventana 10:00–18:30 (ventana real sale de GlpConsultarFechas)" },
-            { campo: "Rastreos ya creados en QA (solo leer, no re-ejecutar)", valor: "21168675514 (origen efectivo), 21168675515 (con SAT+COD+acuse), 21168675516 (TO_PAY/C), 21168675517 (dos paquetes), 21168674207" },
+            { campo: "Rastreos ya creados en QA (solo leer, no re-ejecutar)", valor: "21168675514 (origen efectivo), 21168675515 (SAT+COD+acuse), 21168675516 (TO_PAY/C), 21168675517 (dos paquetes), 21168674207" },
           ],
           conversacion: [
-            { speaker: "Agente", text: "Hola. Soy el asistente de servicio de IA de Paquetexpress. Para continuar con su solicitud, compártame su nombre completo, correo electrónico y teléfono, por favor." },
-            { speaker: "Cliente", text: "Jonathan Gómez, jonathan.gomez@salesforce.com, 5558649070." },
-            { speaker: "Agente", text: "Gracias. Estoy validando su información; en un momento continúo con su solicitud. ¿Me confirma en qué puedo ayudarle?" },
+            { speaker: "Agente", text: "Hola, buen día. Soy el asistente virtual de Paquetexpress. Para ayudarle mejor, ¿me indica su nombre completo, por favor?" },
+            { speaker: "Cliente", text: "Jonathan Gómez." },
+            { speaker: "Agente", text: "¿Jonathan Gómez, es correcto?" },
+            { speaker: "Cliente", text: "Sí." },
+            { speaker: "Agente", text: "Gracias. Y para completar la validación, ¿me dicta su correo electrónico? Puede decirlo despacio." },
+            { speaker: "Cliente", text: "jonathan punto gomez arroba salesforce punto com." },
+            { speaker: "Agente", text: "jonathan punto gomez arroba salesforce punto com, ¿es correcto?" },
+            { speaker: "Cliente", text: "Sí." },
+            { speaker: "Agente", text: "Gracias. Un momento mientras valido sus datos. Mientras tanto, ¿en qué le puedo ayudar hoy?" },
             { speaker: "Cliente", text: "Quiero agendar una recolección a domicilio normal." },
             { speaker: "Agente", text: "Claro. Primero, ¿qué contiene el paquete que va a enviar?", nota: "GE-001 — validar contra PAM." },
             { speaker: "Cliente", text: "Son libros." },
             { speaker: "Agente", text: "Perfecto. Antes de continuar, necesito confirmar que su envío cumple con nuestra política de aceptación de mercancía. ¿Podemos continuar con ese entendido?", nota: "GE-002." },
             { speaker: "Cliente", text: "Sí." },
-            { speaker: "Agente", text: "Gracias. ¿La recolección es Normal, con guía prepagada, o con guía documentada en línea?", nota: "GE-003." },
+            { speaker: "Agente", text: "¿Su recolección es con guía prepagada, con guía documentada en línea, o es una recolección normal?", nota: "GE-003." },
             { speaker: "Cliente", text: "Normal." },
-            { speaker: "Agente", text: "Para localizarlo en nuestro sistema, ¿me proporciona su clave de cliente? Si no la tiene, puedo usar su RFC, o su nombre y teléfono.", nota: "NO-001." },
+            { speaker: "Agente", text: "Muy bien, comencemos con los datos del origen. ¿Me proporciona su llave de cliente? Si no la tiene a la mano, con su RFC también puedo buscarlo.", nota: "NO-001." },
             { speaker: "Cliente", text: "Mi clave es cinco, seis, uno, nueve, nueve, cuatro, seis." },
-            { speaker: "Sistema", text: "GlpBuscarCliente(clave=5619946) → cliente 5619946 PRUEBA SALESFORCE RAD · HIDALGO 10, JUAREZ, 06600 · sucursal MEX14 · colonia 25655." },
-            { speaker: "Agente", text: "Encontré su cuenta. ¿La recolección es en Hidalgo diez, colonia Juárez, código postal cero seis seis cero cero?" },
+            { speaker: "Sistema", text: "GlpBuscarCliente(clave=5619946) → cliente 5619946 PRUEBA SALESFORCE RAD · HIDALGO 10 JUAREZ 06600 · sucursal MEX14 · colonia 25655." },
+            { speaker: "Agente", text: "Encontré su cuenta. La dirección registrada es Hidalgo diez, colonia Juárez, código postal cero seis seis cero cero. ¿Es esta la dirección para la recolección, o me indica otra?" },
             { speaker: "Cliente", text: "Sí, en esa dirección." },
-            { speaker: "Sistema", text: "GlpConsultarZona(CP=06600) → fronteriza=sí, plus=no → se muestra mensaje y continúa." },
-            { speaker: "Agente", text: "La zona es fronteriza; nuestros operadores aplican la revisión documental correspondiente al llegar. ¿Cuántos paquetes son?" },
-            { speaker: "Cliente", text: "Uno. Un paquete con libros, un kilo, treinta por veinte por diez centímetros." },
-            { speaker: "Agente", text: "Gracias. Le recuerdo que no debe utilizar cajas o cartones de huevo. ¿Cuál es la clave del producto ante el SAT? Si no la tiene, puedo omitirla y GLP la asigna por el contenido." },
+            { speaker: "Sistema", text: "GlpConsultarZona(CP=06600) → fronteriza=sí, plus=no → se continúa." },
+            { speaker: "Agente", text: "¿Me indica el nombre completo y teléfono de la persona que estará en el domicilio para entregar el paquete, más alguna referencia útil?" },
+            { speaker: "Cliente", text: "María López, cinco cinco cinco ocho seis cuatro nueve cero siete cero. Entre Juárez y Reforma." },
+            { speaker: "Agente", text: "Cinco cinco cinco, ocho seis cuatro, nueve cero, siete cero. ¿Es correcto?" },
+            { speaker: "Cliente", text: "Sí." },
+            { speaker: "Agente", text: "¿Cuántos paquetes va a enviar en esta recolección?" },
+            { speaker: "Cliente", text: "Uno." },
+            { speaker: "Agente", text: "Le pido de favor no usar cartones de huevo como empaque para su envío. Vamos con el paquete uno. ¿De qué es el empaque?" },
+            { speaker: "Cliente", text: "Caja de cartón, con libros." },
+            { speaker: "Agente", text: "¿Cuánto pesa aproximadamente, en kilos?" },
+            { speaker: "Cliente", text: "Un kilo." },
+            { speaker: "Agente", text: "¿Cuál es el largo en centímetros?" },
+            { speaker: "Cliente", text: "Treinta." },
+            { speaker: "Agente", text: "¿Y el ancho?" },
+            { speaker: "Cliente", text: "Veinte." },
+            { speaker: "Agente", text: "¿Y el alto?" },
+            { speaker: "Cliente", text: "Diez centímetros." },
+            { speaker: "Agente", text: "¿Me proporciona la clave del producto del SAT? Si no la tiene, con gusto uso una clave genérica." },
             { speaker: "Cliente", text: "No la tengo." },
-            { speaker: "Agente", text: "¿Desea agregar más artículos?" },
-            { speaker: "Cliente", text: "No, solo ese." },
-            { speaker: "Agente", text: "Para el destino, ¿tiene la clave del cliente destino? Si no, su RFC, o puede dictarme la dirección." },
-            { speaker: "Cliente", text: "La dirección: Calle Industrial dos, número catorce, Centro Sinaloa, código postal ocho cero cero cero cero, Culiacán." },
-            { speaker: "Agente", text: "¿La entrega es a domicilio u OCURRE en sucursal?" },
-            { speaker: "Cliente", text: "A domicilio." },
-            { speaker: "Agente", text: "¿Me proporciona el nombre y teléfono de contacto en el destino?" },
+            { speaker: "Sistema", text: "GlpConsultarSucursalesOcurre valida dimensiones vs cap de sucursal → OK." },
+            { speaker: "Agente", text: "Perfecto. Ahora los datos de destino. ¿Me proporciona la llave de cliente del destinatario?" },
+            { speaker: "Cliente", text: "No tengo. La dirección es Calle Industrial dos, número catorce, Centro Sinaloa, código postal ocho cero cero cero cero, Culiacán." },
+            { speaker: "Sistema", text: "GlpConsultarZona(CP=80000) → sin cortes." },
+            { speaker: "Agente", text: "¿Me proporciona el nombre y teléfono del contacto de entrega?" },
             { speaker: "Cliente", text: "Pedro Díaz, cinco cinco cinco ocho seis cuatro nueve cero siete cero." },
-            { speaker: "Sistema", text: "GlpConsultarZona(CP=80000) → sin corte." },
-            { speaker: "Agente", text: "¿El pago es en origen, flete por cobrar, o lo paga un tercero?" },
-            { speaker: "Cliente", text: "Pago en origen. Efectivo." },
-            { speaker: "Agente", text: "La factura sale a nombre de quien realiza el pago. ¿Desea modificar la información de facturación?" },
-            { speaker: "Cliente", text: "No." },
-            { speaker: "Agente", text: "¿Cuál es el valor declarado del paquete, en pesos?" },
+            { speaker: "Agente", text: "¿La entrega será en el domicilio del destinatario, o prefiere que se recoja en sucursal?" },
+            { speaker: "Cliente", text: "A domicilio." },
+            { speaker: "Agente", text: "¿La forma de pago será en origen, flete por cobrar, por el solicitante, o por un tercero?" },
+            { speaker: "Cliente", text: "En origen." },
+            { speaker: "Agente", text: "¿Será en efectivo o por transferencia bancaria?" },
+            { speaker: "Cliente", text: "Efectivo.", nota: "Se guarda PAID + N (NO-028, NO-029)." },
+            { speaker: "Agente", text: "¿Cuál es el valor declarado del paquete, en pesos mexicanos?" },
             { speaker: "Cliente", text: "Mil pesos." },
-            { speaker: "Agente", text: "¿Qué tipo de cobertura desea? Puede ser sin seguro, amplia o limitada.", nota: "Si cliente diera > 50,000 MXN aquí, corte y transferir (NO-032)." },
-            { speaker: "Cliente", text: "Sin seguro." },
-            { speaker: "Agente", text: "¿Requiere servicios adicionales como pago contra entrega o acuse?" },
-            { speaker: "Cliente", text: "No." },
-            { speaker: "Agente", text: "¿Qué día y en qué horario le gustaría la recolección?" },
+            { speaker: "Agente", text: "Mil pesos, ¿es correcto?", nota: "Si cliente dijera > 50,000 aquí, corte y escalar (NO-032)." },
+            { speaker: "Cliente", text: "Sí." },
+            { speaker: "Agente", text: "¿Desea contratar cobertura adicional para el envío?" },
+            { speaker: "Cliente", text: "No, sin seguro." },
+            { speaker: "Agente", text: "¿Requiere algún servicio adicional? Por ejemplo, contra entrega, acuse de recibo, o ninguno." },
+            { speaker: "Cliente", text: "Ninguno." },
+            { speaker: "Agente", text: "¿Qué día y en qué horario le viene bien la recolección?" },
             { speaker: "Cliente", text: "Mañana cinco de octubre, por la mañana." },
             { speaker: "Sistema", text: "GlpCotizar(06600→80000, Paquete 30×20×10, 1kg, EAD=1, PAID) → Standard STD-T 696.61 MXN · GlpConsultarFechas(MEX14, CUL01, 05/10/2026) → ventana 10:00–18:30." },
-            { speaker: "Agente", text: "Tengo disponible el cinco de octubre, servicio Standard, por seiscientos noventa y seis pesos con sesenta y un centavos, ventana de diez de la mañana a seis y media de la tarde. ¿Confirma?" },
-            { speaker: "Cliente", text: "Sí, confirma." },
             { speaker: "Sistema", text: "GlpCrearRecoleccion(docType=G, PAID+N, cliente=5619946, MEX14→CUL01, 05/10/2026, 696.61, EAD=1) → trackingNumber 21168675514." },
-            { speaker: "Agente", text: "Listo. Su recolección quedó agendada. Le confirmo su número de rastreo: dos uno uno, seis ocho seis, siete cinco, uno cuatro. ¿Desea programar otra recolección o le ayudo con algo más?" },
+            { speaker: "Agente", text: "Listo. Su recolección quedó agendada y recibirá un correo electrónico con la confirmación. El número de rastreo es: dos uno uno, seis ocho seis, siete cinco, uno cuatro. ¿Le ayudo con algo más?", nota: "⚠️ M-1: verificar que el email realmente se dispara." },
             { speaker: "Cliente", text: "No, muchas gracias." },
           ],
           resultadoEsperado:
-            "GLP crea una recolección docType=G asociada al cliente 5619946, HIDALGO 10 → CALLE INDUSTRIAL 2, importe 696.61 MXN, PAID + N, fecha 05/10/2026, ventana 10:00–18:30. El agente lee el trackingNumber dígito por dígito y cierra ofreciendo otra recolección (GE-004).",
+            "GLP crea recolección docType=G asociada al cliente 5619946, HIDALGO 10 → CALLE INDUSTRIAL 2, importe 696.61 MXN, PAID + N, fecha 05/10/2026, ventana 10:00–18:30. Agente lee el trackingNumber dígito por dígito y cierra ofreciendo otra recolección (reset_rad_full_state disponible).",
         },
         {
           id: "rad-prepago-01",
           flujo: "Prepago (RPP)",
           titulo: "RAD Prepago · agendamiento con guía prepagada única",
           descripcion:
-            "El cliente ya tiene una guía prepagada emitida por volumen/frecuencia y solo necesita que un operador pase por el paquete. El flujo invoca GlpConsultarGuia + GlpConsultarFechas + GlpCrearRecoleccion (docType=P). En RPP no se envían clave SAT, acuse ni COD.",
+            "El cliente ya tiene una guía prepagada emitida por volumen/frecuencia y solo necesita que un operador pase por el paquete. El flujo invoca BuscarGuia → DatesToCollection → RadCreate (docType=P). En RPP no se envían clave SAT, acuse ni COD. **Gap A-3: hoy no valida medidas vs. guía — Ola 3 lo arregla.**",
           precondiciones: [
             "Cliente verificado en Salesforce.",
             "El cliente tiene al menos un número de guía prepagada no agendada (ver 'siguiente número' en Datos de prueba).",
             "Mercancía permitida por la PAM.",
-            "Las medidas que el cliente dicta coinciden con las de la guía (si no, PP-021 transfiere).",
+            "Las medidas que el cliente dicta coinciden con las de la guía (si no, PP-021 debería transferir — gap actual).",
           ],
           datosDePrueba: [
             { campo: "Guía prepagada no usada (siguiente)", valor: "13167470703 — rango disponible 13167470703 a 13167471693" },
@@ -591,57 +714,54 @@ export const paquetexpressAgentDocs: PaquetexpressAgentDocumentation = {
             { campo: "Guías ya agendadas (NO re-agendar)", valor: "13167470700, 13167470701, 13167470702, 13167471000" },
             { campo: "Pago para pruebas", valor: "PAID + N (en prepago no se envían clave SAT, acuse ni COD)" },
             { campo: "Fechas que ya funcionaron en QA", valor: "07/10/2026, 08/10/2026, 09/10/2026, 12/10/2026 · ventana 10:00–18:30" },
-            { campo: "Paquete de ejemplo", valor: "1 paquete, ropa, 1 kg, 30 x 20 x 10 cm · referencias quedan solo en la conversación (GLP no las recibe)" },
+            { campo: "Paquete de ejemplo", valor: "1 paquete, ropa, 1 kg, 30 x 20 x 10 cm · referencias quedan solo en la conversación" },
             ...DATOS_IDENTIFICACION.slice(0, 2),
             ...DATOS_DIRECCION_ORIGEN,
             ...DATOS_DIRECCION_DESTINO,
           ],
           conversacion: [
-            { speaker: "Agente", text: "Hola. Soy el asistente de servicio de IA de Paquetexpress. Para continuar con su solicitud, compártame su nombre completo, correo electrónico y teléfono, por favor." },
-            { speaker: "Cliente", text: "Ana Torres López, a.torres@empaques-hb2.com, 5551234567." },
-            { speaker: "Agente", text: "Gracias. Estoy validando su información; ¿me confirma en qué puedo ayudarle?" },
+            { speaker: "Agente", text: "Hola, buen día. Soy el asistente virtual de Paquetexpress. Para ayudarle mejor, ¿me indica su nombre completo, por favor?" },
+            { speaker: "Cliente", text: "Ana Torres López." },
+            { speaker: "Agente", text: "¿Ana Torres López, es correcto?" },
+            { speaker: "Cliente", text: "Sí." },
+            { speaker: "Agente", text: "Gracias. Y para completar la validación, ¿me dicta su correo electrónico?" },
+            { speaker: "Cliente", text: "a punto torres arroba empaques h b dos punto com." },
+            { speaker: "Agente", text: "Gracias. Un momento mientras valido sus datos. ¿En qué le puedo ayudar hoy?" },
             { speaker: "Cliente", text: "Necesito agendar una recolección con guía prepagada." },
-            { speaker: "Agente", text: "Claro. Primero, ¿qué contiene el paquete?" },
+            { speaker: "Agente", text: "Claro. Primero, ¿qué contiene el paquete?", nota: "GE-001." },
             { speaker: "Cliente", text: "Ropa." },
-            { speaker: "Agente", text: "Gracias. ¿Confirma que su envío cumple con nuestra política de aceptación de mercancía?" },
+            { speaker: "Agente", text: "Gracias. Antes de continuar, necesito confirmar que su envío cumple con nuestra política de aceptación de mercancía. ¿Podemos continuar con ese entendido?", nota: "GE-002." },
             { speaker: "Cliente", text: "Sí, confirmo." },
-            { speaker: "Agente", text: "¿La recolección es Normal, con guía prepagada o con guía documentada en línea?" },
-            { speaker: "Cliente", text: "Prepago." },
-            { speaker: "Agente", text: "¿Cuántas guías va a registrar?", nota: "PP-001." },
-            { speaker: "Cliente", text: "Una." },
-            { speaker: "Agente", text: "¿Me dicta el número de guía prepagada, por favor?" },
+            { speaker: "Agente", text: "¿Su recolección es con guía prepagada, con guía documentada en línea, o es una recolección normal?", nota: "GE-003." },
+            { speaker: "Cliente", text: "Con guía prepagada." },
+            { speaker: "Agente", text: "Perfecto. ¿Me dicta el número de guía prepagada, por favor?" },
             { speaker: "Cliente", text: "Uno tres uno seis siete cuatro siete cero siete cero tres." },
             { speaker: "Agente", text: "Uno tres uno, seis siete cuatro, siete cero siete, cero tres. ¿Es correcto?", nota: "Readback dígito por dígito en bloques de tres." },
             { speaker: "Cliente", text: "Sí." },
-            { speaker: "Sistema", text: "GlpConsultarGuia(13167470703) → found=True, cliente Ana Torres, origen HIDALGO 10 Juárez, destino CALLE INDUSTRIAL 2 Culiacán, contenido ROPA, peso 1 kg, distancia 1,300 km." },
-            { speaker: "Agente", text: "La guía está a nombre de Ana Torres, ropa, un kilo, de Ciudad de México a Culiacán. ¿Los datos son correctos?" },
+            { speaker: "Sistema", text: "MOCK_GLP_BuscarGuia(13167470703) → found=True, voiceSummary='Guía a nombre de Ana Torres López, con ropa, un kilo, origen Hidalgo 10 Juárez, destino Calle Industrial 2 Culiacán.'" },
+            { speaker: "Agente", text: "Guía a nombre de Ana Torres López, con ropa, un kilo, origen Hidalgo diez Juárez, destino Calle Industrial dos Culiacán. ¿Los datos son correctos?" },
             { speaker: "Cliente", text: "Sí." },
-            { speaker: "Agente", text: "Para coordinar al operador, ¿me proporciona el nombre y teléfono de contacto en la recolección?" },
-            { speaker: "Cliente", text: "María López, 5558649070." },
-            { speaker: "Agente", text: "Le recuerdo que no debe utilizar cajas o cartones de huevo. ¿El pago es en origen o lo cubre la guía?" },
-            { speaker: "Cliente", text: "Lo cubre la guía." },
-            { speaker: "Sistema", text: "GlpConsultarZona(06600) + GlpConsultarZona(80000) → sin cortes." },
-            { speaker: "Sistema", text: "GlpConsultarFechas(MEX14, CUL01, hoy) → opciones: '7 oct de 9 a 11' · '8 oct de 10 a 12' · '9 oct de 8 a 10'." },
+            { speaker: "Sistema", text: "MOCK_GLP_DatesToCollection → OPT_1 'mañana jueves siete de octubre, de nueve a once' · OPT_2 'viernes ocho de octubre, de diez a doce' · OPT_3 'sábado nueve de octubre, de ocho a diez'." },
             { speaker: "Agente", text: "Tengo disponible mañana jueves siete de octubre de nueve a once, viernes ocho de octubre de diez a doce, o sábado nueve de octubre de ocho a diez. ¿Cuál prefiere?" },
             { speaker: "Cliente", text: "La del viernes." },
-            { speaker: "Sistema", text: "GlpCrearRecoleccion(docType=P, guía=13167470703, PAID+N, ventana 08/10/2026 10:00–12:00) → trackingNumber 21168675515." },
-            { speaker: "Agente", text: "Listo. Su recolección quedó agendada. Le confirmo el número de rastreo: dos uno uno, seis ocho seis, siete cinco, uno cinco. ¿Le ayudo con algo más?" },
+            { speaker: "Sistema", text: "capture_rad_selected_option = OPT_2 → MOCK_GLP_RadCreate(13167470703, OPT_2) → trackingNumber 21168675515." },
+            { speaker: "Agente", text: "Listo. Su recolección quedó agendada y recibirá un correo electrónico con la confirmación. El número de rastreo es: dos uno uno, seis ocho seis, siete cinco, uno cinco. ¿Le ayudo con algo más?" },
             { speaker: "Cliente", text: "No, gracias." },
           ],
           resultadoEsperado:
-            "GLP crea la recolección asociada a la guía 13167470703 con docType=P, formaPago=PAID, tipoPago=N, ventana 08/10/2026 10:00–12:00. El agente comunica el trackingNumber dígito por dígito. La guía queda marcada 'en uso' — si el cliente intenta re-agendarla, el flujo se corta en PP-037 ('esa guía ya no se puede agendar').",
+            "GLP crea la recolección asociada a la guía 13167470703 con docType=P, formaPago=PAID, tipoPago=N, ventana 08/10/2026 10:00–12:00. Agente comunica el trackingNumber dígito por dígito. La guía queda 'en uso' — si el cliente intenta re-agendarla, PP-037 corta ('esa guía ya no se puede agendar').",
         },
         {
           id: "rad-ww-01",
           flujo: "WW",
           titulo: "RAD WW · recolección para guía generada en línea con Case en Salesforce",
           descripcion:
-            "El cliente generó la guía por su cuenta en el portal/app; solo falta agendar que un operador pase por el paquete. Flujo documentado en diseño; el cierre NO es un trackingNumber inmediato: el agente crea un Case en Salesforce (flow autolanzado por construir en WW-007) y notifica al departamento RAD por correo (WW-008). GlpConsultarGuia (SIPWEB) devuelve los datos de la guía documentada en línea.",
+            "El cliente generó la guía por su cuenta en el portal/app. **⚠️ Hallazgo C-2: hoy el Draft colapsa este flujo a escalación directa — solo da el aviso de 'no cajas de huevo' y transfiere.** Este escenario documenta cómo DEBE funcionar según WW-002 → WW-010 del Excel; es lo que la Ola 2 construye.",
           precondiciones: [
             "Cliente verificado en Salesforce.",
-            "La guía ya fue generada en línea y aparece en SIPWEB vía SalesForceRestFul/sipwebClient.",
-            "Mercancía permitida por la PAM; no utilizar cajas de huevo (aviso WW-001 obligatorio).",
-            "La dirección de recolección debe coincidir con la Dirección origen devuelta por la guía — cualquier cambio de plaza corta el flujo y transfiere a asesor (WW-007).",
+            "La guía ya fue generada en línea y aparece en SIPWEB vía GlpConsultarGuia.",
+            "Mercancía permitida por la PAM; aviso 'no cajas de huevo' obligatorio.",
+            "La dirección de recolección debe coincidir con la Dirección origen devuelta por la guía — cualquier cambio de plaza corta el flujo (WW-007).",
           ],
           datosDePrueba: [
             { campo: "Guía documentada en línea (solo consultar)", valor: "19168671204" },
@@ -653,26 +773,30 @@ export const paquetexpressAgentDocs: PaquetexpressAgentDocumentation = {
             ...DATOS_DIRECCION_ORIGEN,
           ],
           conversacion: [
-            { speaker: "Agente", text: "Hola. Soy el asistente de servicio de IA de Paquetexpress. Para continuar con su solicitud, compártame su nombre completo, correo electrónico y teléfono, por favor." },
-            { speaker: "Cliente", text: "Juan Pérez López, j.perez@bodega-garcia.com, 8110000000." },
-            { speaker: "Agente", text: "Gracias. Estoy validando su información; ¿me confirma en qué puedo ayudarle?" },
+            { speaker: "Agente", text: "Hola, buen día. Soy el asistente virtual de Paquetexpress. Para ayudarle mejor, ¿me indica su nombre completo, por favor?" },
+            { speaker: "Cliente", text: "Juan Pérez López." },
+            { speaker: "Agente", text: "¿Juan Pérez López, es correcto?" },
+            { speaker: "Cliente", text: "Sí." },
+            { speaker: "Agente", text: "Gracias. ¿Me dicta su correo electrónico?" },
+            { speaker: "Cliente", text: "j punto perez arroba bodega garcia punto com." },
+            { speaker: "Agente", text: "Gracias. Un momento mientras valido sus datos. ¿En qué le puedo ayudar hoy?" },
             { speaker: "Cliente", text: "Quiero agendar una recolección; ya documenté la guía en línea." },
             { speaker: "Agente", text: "Claro. Primero, ¿qué contiene el paquete?" },
             { speaker: "Cliente", text: "Ropa." },
             { speaker: "Agente", text: "¿Confirma que su envío cumple con nuestra política de aceptación de mercancía?" },
             { speaker: "Cliente", text: "Sí." },
-            { speaker: "Agente", text: "¿La recolección es Normal, con guía prepagada o con guía documentada en línea?" },
+            { speaker: "Agente", text: "¿Su recolección es con guía prepagada, con guía documentada en línea, o es una recolección normal?" },
             { speaker: "Cliente", text: "Con guía documentada en línea." },
-            { speaker: "Agente", text: "Le recuerdo que no debe utilizar cajas o cartones de huevo. ¿Cuál es el número de guía o de rastreo?", nota: "WW-001 + WW-002." },
+            { speaker: "Agente", text: "Le pido de favor no usar cartones de huevo como empaque. ¿Cuál es el número de guía o de rastreo?", nota: "WW-001 + WW-002." },
             { speaker: "Cliente", text: "Uno nueve uno seis ocho seis siete uno dos cero cuatro." },
             { speaker: "Agente", text: "Uno nueve uno, seis ocho seis, siete uno dos, cero cuatro. ¿Es correcto?" },
             { speaker: "Cliente", text: "Sí." },
-            { speaker: "Sistema", text: "GlpConsultarGuia(19168671204) → éxito, nombre BODEGA GARCIA, servicio EAD, dirección origen Hidalgo 10 Juárez, CP destino 66023, peso 29.85 kg, medidas 72×50×40 cm, distancia 200 km." },
-            { speaker: "Agente", text: "La guía está a nombre de BODEGA GARCIA, con origen en Hidalgo diez, Juárez, destino al código postal seis seis cero dos tres, peso veintinueve con ochenta y cinco kilos, medidas setenta y dos por cincuenta por cuarenta centímetros. ¿Los datos son correctos?" },
+            { speaker: "Sistema", text: "GlpConsultarGuia(19168671204) → éxito=True, BODEGA GARCIA, servicio EAD, Hidalgo 10 Juárez, CP destino 66023, 29.85 kg, 72×50×40 cm, distancia 200 km. (WW-003)" },
+            { speaker: "Agente", text: "La guía está a nombre de BODEGA GARCIA, con origen en Hidalgo diez Juárez, destino al código postal seis seis cero dos tres, peso veintinueve con ochenta y cinco kilos, medidas setenta y dos por cincuenta por cuarenta centímetros. ¿Los datos son correctos?", nota: "WW-004." },
             { speaker: "Cliente", text: "Sí, son correctos." },
-            { speaker: "Agente", text: "¿La recolección es en Hidalgo diez, Juárez, código postal cero seis seis cero cero?", nota: "WW-005 (confirmar dirección RAD devuelta por la guía)." },
+            { speaker: "Agente", text: "¿La recolección es en Hidalgo diez, Juárez, código postal cero seis seis cero cero?", nota: "WW-005." },
             { speaker: "Cliente", text: "Sí, en esa dirección." },
-            { speaker: "Agente", text: "Para coordinar al operador, ¿me proporciona el nombre completo de contacto en la recolección?", nota: "WW-006: nombre + apellidos uno a uno." },
+            { speaker: "Agente", text: "Para coordinar al operador, ¿me proporciona el nombre completo de contacto en la recolección?", nota: "WW-006." },
             { speaker: "Cliente", text: "Juan Pérez López." },
             { speaker: "Agente", text: "¿En qué ventana horaria lo esperamos?" },
             { speaker: "Cliente", text: "De diez a dos de la tarde." },
@@ -680,169 +804,189 @@ export const paquetexpressAgentDocs: PaquetexpressAgentDocumentation = {
             { speaker: "Cliente", text: "Ocho uno, uno cero, cero cero, cero cero, cero cero." },
             { speaker: "Agente", text: "Ocho uno, uno cero, cero cero, cero cero, cero cero. ¿Es correcto?" },
             { speaker: "Cliente", text: "Sí." },
-            { speaker: "Sistema", text: "WW-007 (por construir): flow autolanzado crea Case con guía, dirección confirmada y contacto. WW-008 (por construir): dispara email a la Sucursal RAD origen (MEX14) con plantilla de recolección." },
-            { speaker: "Agente", text: "Listo. Su solicitud quedó registrada y el equipo de recolección fue notificado. ¿Desea programar otra recolección o le ayudo con algo más?" },
+            { speaker: "Sistema", text: "WW-007: flow autolanzado Create_case_RAD_WW crea Case 00001234 con guía, dirección, contacto. WW-008: Email Alert dispara correo a sucursal MEX14 con los datos de la recolección." },
+            { speaker: "Agente", text: "Listo. Su solicitud quedó registrada con el número de caso cero cero cero uno dos tres cuatro, y el equipo de recolección fue notificado. ¿Le ayudo con algo más?" },
             { speaker: "Cliente", text: "No, gracias." },
           ],
           resultadoEsperado:
-            "GlpConsultarGuia(19168671204) confirma la guía. Se registra un Case en Salesforce (origen WW), se envía un correo a la sucursal RAD de origen con los datos de contacto, dirección y ventana horaria. NO se crea un nuevo trackingNumber en GLP: el número a comunicar al cliente, cuando el caso exista, será el número de Case. En V14 este flujo todavía no está construido (WW-007 y WW-008 pendientes).",
+            "GlpConsultarGuia(19168671204) confirma la guía. Se crea un Case en Salesforce (origen WW) y se envía un correo a la sucursal RAD de origen con los datos de contacto, dirección y ventana horaria. NO se crea un nuevo trackingNumber en GLP: el número a comunicar al cliente, cuando WW-007 esté construido, será el número de Case. **Hoy el Draft solo da el aviso y escala — ver Ola 2 del plan.**",
         },
       ],
     },
     {
-      id: "orden_management",
-      number: 6,
-      name: "Gestión de Órdenes",
-      developerName: "Orden_Management",
-      category: "Rastreo y envíos",
-      estado: "Implementado · Active",
+      id: "customer_verification",
+      number: 3,
+      name: "Verificación del Cliente",
+      developerName: "Customer_Verification_16j1dade3eb0b10",
+      category: "Entrada y verificación",
+      estado: "Implementado · Draft",
       descripcion:
-        "Rastrea envíos usando el número de guía/rastreo. Captura el número con `capture_tracking_number`, consulta el estatus con `PE_GetOrderStatus` y comparte el mensaje devuelto. Crea de forma determinista un caso de seguimiento con `Crea_caso_seguimiento_de_una_orden_v2A` — nunca comunica el número de caso al cliente.",
-      activacion:
-        "pendingIntent == 'Order' o palabras clave (rastreo, guía, estatus, dónde está mi paquete, localizar). También cuando el cliente envía SOLO dígitos — el router lo trata como tracking.",
+        "Gate de identidad obligatorio antes de abrir cualquier subagente de dominio. Captura nombre + apellido + correo. Ejecuta `AG_Get_and_create_contact` para buscar o crear el Contact y setea `isVerified`, `verifiedContactId`, `contactRecord`. Guarda `pendingIntent` (incluye 'RAD') para retomar el subagente correcto post-verificación. **Gap vs Active V14 (C-3):** este Draft NO pide teléfono ni usa isExistingContact — Ola 0 lo porta.",
+      activacion: "Al inicio de la conversación, o cuando cualquier subagente detecta isVerified != True.",
       respuestas:
-        "Pide el número de guía con lenguaje natural, hace readback dígito por dígito en bloques de tres (voice) y comparte el OutpoutMessage devuelto por la acción. Si una acción falla, reintenta una vez y, si persiste, informa al cliente sin exponer el error técnico.",
+        "Regla de dos turnos: primero nombre completo, luego correo. Readback silábico para el correo. Al capturar los datos responde 'Gracias. Un momento mientras valido sus datos. Mientras tanto, ¿en qué le puedo ayudar hoy?'",
       acciones: [
-        { name: "capture_tracking_number", target: "@utils.setVariables", description: "Captura el número de rastreo/guía antes de consultar." },
-        { name: "Obtener_estatus_de_la_orden", target: "flow://PE_GetOrderStatus", description: "Devuelve OutpoutMessage con el estatus formateado." },
-        { name: "Crea_caso_seguimiento_de_una_orden_v2A", target: "flow://Crea_caso_seguimiento_de_una_orden", description: "Crea el caso de seguimiento asociado al contacto verificado." },
+        { name: "capture_customer_details", target: "@utils.setVariables" },
+        { name: "capture_pending_intent", target: "@utils.setVariables", description: "Valores: Quote, Order, Case, GeneralInfo, JobBranch, Escalation, **RAD**." },
+        { name: "AG_Get_and_create_contact", target: "flow://AG_Get_and_create_contact" },
       ],
       criterios: [
-        "Dado que el cliente proporciona un número de rastreo, cuando el agente lo captura, entonces hace readback dígito por dígito en bloques de tres antes de consultar.",
-        "Dado que PE_GetOrderStatus devuelve un OutpoutMessage, cuando el agente responde, entonces comparte ese mensaje literal — nunca inventa estado ni fecha de entrega.",
-        "Dado que caseCreated == False después de registrar el tracking, cuando se cumple la condición del reasoning, entonces Crea_caso_seguimiento_de_una_orden_v2A se ejecuta automáticamente y el agente NO menciona el número de caso.",
+        "Dado que el cliente dicta nombre y correo, cuando ambos están capturados, entonces el flow verifica/crea el contacto y setea isVerified = True.",
+        "Dado que la verificación aún no termina, cuando el agente responde, entonces NO confirma al cliente que ya está verificado.",
+      ],
+    },
+    {
+      id: "quote_management",
+      number: 4,
+      name: "Gestión de Cotización",
+      developerName: "Quote_Management_16j9427bc776003",
+      category: "Cotización",
+      estado: "Implementado · Draft",
+      descripcion:
+        "Clasifica el envío como Domestic o International. Para Domestic recorre el cuestionario determinista. Para International crea caso + ofrece transferir. **Gap vs Active V14 (C-3):** en el Draft la rama internacional vive dentro de este subagente — en el Active V14 se separó en International_Quote_Management; Ola 0 lo porta. También incluye un capture_pending_intent_quote_to_rad para pivotar al subagente RAD cuando quoteRAD == 'Yes' y el cliente acepta.",
+      activacion: "pendingIntent == 'Quote' o palabras clave (cotizar, cotización, precio, tarifa).",
+      respuestas: "Pregunta-por-pregunta determinista: CP origen → CP destino → tipo → dimensiones → RAD → EAD → IVPF → importe. Al obtener la tarifa comparte quoteResult sin inventar números.",
+      acciones: [
+        { name: "capture_shipment_classification", target: "@utils.setVariables" },
+        { name: "capture_cp_origen / capture_cp_destino / capture_tipo / capture_peso / capture_largo / capture_ancho / capture_alto / capture_rad / capture_ead / capture_ivpf / capture_amt", target: "@utils.setVariables" },
+        { name: "capture_pending_intent_quote_to_rad", target: "@utils.setVariables", description: "Post-cotización: si quoteRAD = Yes y el cliente acepta → pendingIntent = 'RAD'." },
+        { name: "Obtener_Cotizaci_n_Paqueteria_V2", target: "flow://Obtener_Cotizaci_n_Paqueter_a" },
+        { name: "Crea_caso_cotizacion_nacional_v2", target: "flow://Crea_caso_cotizacion_nacional" },
+        { name: "Crea_caso_cotizacion_internacional_v2A", target: "flow://Crea_caso_cotizacion_internacional" },
+      ],
+      criterios: [
+        "Dado que quoteRAD == 'Yes' y la cotización ya se compartió, cuando el cliente acepta agendar, entonces pendingIntent='RAD' y transiciona a RAD_Management_voice.",
+      ],
+    },
+    {
+      id: "orden_management",
+      number: 5,
+      name: "Gestión de Órdenes",
+      developerName: "Orden_Management_16je7f3f3223af5",
+      category: "Rastreo y envíos",
+      estado: "Implementado · Draft",
+      descripcion:
+        "Rastrea envíos usando el número de guía o rastreo. Captura con capture_tracking_number, consulta con PE_GetOrderStatus. Crea caso de seguimiento automático.",
+      activacion: "pendingIntent == 'Order' o palabras clave (rastreo, guía, estatus).",
+      respuestas: "Readback dígito por dígito en voice. Comparte el OutpoutMessage devuelto sin inventar.",
+      acciones: [
+        { name: "capture_tracking_number", target: "@utils.setVariables" },
+        { name: "Obtener_estatus_de_la_orden", target: "flow://PE_GetOrderStatus" },
+        { name: "Crea_caso_seguimiento_de_una_orden_v2A", target: "flow://Crea_caso_seguimiento_de_una_orden" },
+      ],
+      criterios: [
+        "Dado que PE_GetOrderStatus devuelve OutpoutMessage, cuando el agente responde, entonces lo comparte literal — nunca inventa estado.",
       ],
     },
     {
       id: "case_management",
-      number: 7,
+      number: 6,
       name: "Gestión de Casos",
-      developerName: "CaseManagement_v2",
+      developerName: "CaseManagement_v2_16jf9db4b526803",
       category: "Casos y escalamiento",
-      estado: "Implementado · Active",
+      estado: "Implementado · Draft",
       descripcion:
-        "Atiende consultas y acciones sobre casos: consulta por número, consulta de todos los casos del contacto, actualización con comentarios y creación de nuevos casos cuando el cliente levanta una reclamación o queja explícita. Captura automáticamente caseSubject (<7 palabras) y caseDescription (≤3 oraciones) con capture_case_details, y el reasoning dispara la creación con Crea_caso_solicitud_de_servicio_v2A.",
-      activacion:
-        "pendingIntent == 'Case' o expresiones explícitas ('levantar reclamación', 'abrir un caso', 'quiero quejarme') o consulta de estatus de caso existente. Si solo pide información sobre cómo levantar un caso, deriva a General_Information_Management.",
-      respuestas:
-        "Si el caso ya se creó (caseCreated == True) responde con la frase estándar: 'Gracias por compartir su información; su caso ha sido registrado con el número de caso: [case number]. Dentro de las próximas 24 horas su caso será atendido. ¿Hay algo más en lo que pueda ayudarle?'. Nunca comparte el ID interno del caso ni fechas técnicas.",
+        "Consulta por número, lista todos los casos del contacto, comentarios y creación de nuevos casos (reclamación explícita). Captura caseSubject (<7 palabras) + caseDescription (≤3 oraciones). Nunca comparte CaseId.",
+      activacion: "pendingIntent == 'Case' o solicitud explícita de levantar caso.",
+      respuestas: "Al crear caso: 'Gracias por compartir su información; su caso ha sido registrado con el número de caso: [case number]. Dentro de las próximas 24 horas su caso será atendido.'",
       acciones: [
-        { name: "capture_case_details", target: "@utils.setVariables", description: "caseSubject (<7 palabras) + caseDescription (≤3 oraciones)." },
-        { name: "AddCaseComment_179e67ef5aa18da", target: "flow://SvcCopilotTmpl__AddCaseComment", description: "Agrega un comentario a un caso existente." },
-        { name: "GetCaseByCaseNumber_1792c1c327ab424", target: "flow://SvcCopilotTmpl__GetCaseByCaseNumber", description: "Obtiene un caso por su número." },
-        { name: "GetAllCasesForContact", target: "flow://SvcCopilotTmpl__GetCasesForContact", description: "Lista todos los casos del contacto." },
-        { name: "Crea_caso_solicitud_de_servicio_v2A", target: "flow://Crea_caso_solicitud_de_servicio", description: "Crea el caso con subject + description capturados." },
+        { name: "capture_case_details", target: "@utils.setVariables" },
+        { name: "GetCaseByCaseNumber_1792c1c327ab424", target: "flow://SvcCopilotTmpl__GetCaseByCaseNumber" },
+        { name: "GetAllCasesForContact", target: "flow://SvcCopilotTmpl__GetCasesForContact" },
+        { name: "AddCaseComment_179e67ef5aa18da", target: "flow://SvcCopilotTmpl__AddCaseComment" },
+        { name: "Crea_caso_solicitud_de_servicio_v2A", target: "flow://Crea_caso_solicitud_de_servicio" },
       ],
       criterios: [
-        "Dado que el cliente pide crear un caso, cuando el agente captura caseSubject y caseDescription, entonces el caso se crea automáticamente en el mismo reasoning — el agente NO afirma al cliente que el caso existe antes de recibir caseCreated == True.",
-        "Dado que caseCreated == True, cuando el agente responde al cliente, entonces usa la plantilla estándar y comunica el CaseNumber (nunca el ID interno).",
-        "Dado que el cliente pide información genérica sobre reclamaciones, cuando el agente lo detecta, entonces transiciona a General_Information_Management en vez de crear un caso.",
+        "Dado que caseCreated == True, cuando el agente responde, entonces usa la plantilla estándar y comunica el CaseNumber — nunca el ID interno.",
       ],
     },
     {
       id: "general_information",
-      number: 8,
+      number: 7,
       name: "Gestión de Información General",
-      developerName: "General_Information_Management",
+      developerName: "General_Information_Management_16jeb86fca18701",
       category: "Información y servicios",
-      estado: "Implementado · Active",
+      estado: "Implementado · Draft",
       descripcion:
-        "Atiende preguntas frecuentes y preguntas informativas (identificaciones oficiales, formas de pago, requisitos de frontera, requisitos para OCURRE, requisitos RAD, mercancías prohibidas, proceso de envío). Captura la pregunta con capture_faq_question y crea un caso 'Consulta de información general' de forma determinista. En V14 el agente **crea caso siempre que haya faqQuestion** aunque la respuesta sea texto predefinido (hallazgo M-2).",
-      activacion:
-        "pendingIntent == 'GeneralInfo' o cuando el cliente pregunta algo informativo que no requiere datos de su cuenta (políticas, FAQ, requisitos, procesos).",
-      respuestas:
-        "Para cada FAQ reconocida entrega el texto fijo del subagente (p.ej. 'INE, pasaporte mexicano o cédula profesional.'). Nunca inventa ni añade detalle fuera de los textos definidos. Si el cliente pregunta por el sitio web, lo linkea en texto plano.",
+        "FAQs predefinidas (identificaciones, formas de pago, frontera, OCURRE, RAD requisitos, proceso envío). Captura la pregunta y crea Case 'Consulta de información general'. En voice no lee URLs.",
+      activacion: "pendingIntent == 'GeneralInfo' o pregunta informativa que no requiere cuenta.",
+      respuestas: "Texto fijo por FAQ. Si no cae en texto fijo, FAQ_Search sobre Knowledge.",
       acciones: [
-        { name: "capture_faq_question", target: "@utils.setVariables", description: "Registra una versión concisa de la pregunta antes de responder." },
-        { name: "Create_case_Agent_paquete_v2", target: "flow://Create_case_Agent_paquete", description: "Crea el caso 'Consulta de información general'." },
-        { name: "FAQ_Search", target: "generatePromptResponse://FAQ_Search", description: "Búsqueda sobre Knowledge cuando la pregunta no cae en los textos predefinidos." },
+        { name: "capture_faq_question", target: "@utils.setVariables" },
+        { name: "Create_case_Agent_paquete_v2", target: "flow://Create_case_Agent_paquete" },
+        { name: "FAQ_Search", target: "generatePromptResponse://FAQ_Search" },
       ],
       criterios: [
-        "Dado que el cliente hace una pregunta general, cuando el agente va a responder, entonces primero registra faqQuestion con capture_faq_question.",
         "Dado que la pregunta coincide con una FAQ predefinida, cuando el agente responde, entonces devuelve el texto exacto y nada más.",
-        "**Gap V14 (hallazgo M-2):** cuando la respuesta sale 100% del texto predefinido, entonces hoy igual se crea caso — Ola 2 agrega flag faqResolvedInline para no crear ruido.",
       ],
     },
     {
       id: "job_search",
-      number: 9,
+      number: 8,
       name: "Información de Empleo/Sucursales",
-      developerName: "Job_Search",
+      developerName: "Job_Search_16jfb5eb38adcd9",
       category: "Información y servicios",
-      estado: "Implementado · Active",
-      descripcion:
-        "Entrega información sobre sucursales (link a /sucursales) o vacantes de empleo (link al portal Pandape). Captura jobBranchType = 'Branch' o 'Job' con capture_job_branch_type y crea el caso correspondiente.",
-      activacion: "pendingIntent == 'JobBranch' o cuando el cliente pregunta por sucursales/direcciones o por vacantes de empleo.",
-      respuestas:
-        "Para 'Branch' responde con texto predefinido + URL /sucursales y crea el caso 'Consulta de sucursales'. Para 'Job' responde con texto predefinido + URL Pandape y crea el caso 'Consulta de vacantes de empleo'. Al cerrar pregunta si puede ayudar con algo más.",
+      estado: "Implementado · Draft",
+      descripcion: "Sucursales (URL /sucursales) o vacantes (portal Pandape). Captura jobBranchType = 'Branch' | 'Job'.",
+      activacion: "pendingIntent == 'JobBranch' o pregunta por sucursales/empleo.",
+      respuestas: "Texto predefinido + URL. Crea caso automático según tipo.",
       acciones: [
-        { name: "capture_job_branch_type", target: "@utils.setVariables", description: "'Branch' o 'Job'." },
-        { name: "Crea_caso_b_squeda_de_empleo_v2A", target: "flow://Crea_caso_b_squeda_de_empleo", description: "Caso de consulta de vacantes." },
-        { name: "Crea_caso_ver_sucursales_v2A", target: "flow://Crea_caso_ver_sucursales", description: "Caso de consulta de sucursales." },
+        { name: "capture_job_branch_type", target: "@utils.setVariables" },
+        { name: "Crea_caso_b_squeda_de_empleo_v2A", target: "flow://Crea_caso_b_squeda_de_empleo" },
+        { name: "Crea_caso_ver_sucursales_v2A", target: "flow://Crea_caso_ver_sucursales" },
       ],
       criterios: [
-        "Dado que el cliente pregunta por sucursales, cuando el agente responde, entonces registra jobBranchType = 'Branch' y el caso se crea automáticamente.",
-        "Dado que el cliente pregunta por empleo, cuando el agente responde, entonces registra jobBranchType = 'Job' y el caso se crea automáticamente.",
+        "Dado que el cliente pregunta por sucursales, cuando el agente responde, entonces registra 'Branch' y el caso se crea solo.",
       ],
     },
     {
       id: "escalation",
-      number: 10,
+      number: 9,
       name: "Escalamiento",
-      developerName: "Escalation_v2",
+      developerName: "Escalation_v2_16j6b2f5f1ead75",
       category: "Casos y escalamiento",
-      estado: "Implementado · Active",
+      estado: "Implementado · Draft",
       descripcion:
-        "Transfiere la conversación a un agente en vivo. Antes de transferir ejecuta obligatoriamente Check_Now_is_within_Business_Hours_by_Name con 'Horario Paquete' y solo invoca @utils.escalate si el horario está abierto. En V14 cubre también escalamientos OPERATIVOS inmediatos (cambio de dirección, instalación, modificar/reprogramar envío) sin volver a preguntar al cliente.",
-      activacion:
-        "pendingIntent == 'Escalation' o cuando el cliente pide 'hablar con una persona / asesor / humano / supervisor'. También al final de otros flujos (cotización internacional 'Yes', cuando una acción falla reiteradamente, o solicitudes operativas).",
-      respuestas:
-        "Si business hours está abierto, responde 'Un momento mientras lo conecto con el próximo representante de servicio disponible.' y transfiere. Si está cerrado, usa texto exacto 'Por el momento no tenemos asesores disponibles. Nuestros horarios de atención son de lunes a viernes de 7:00 a.m. a 8:00 p.m. y sábados de 7:00 a.m. a 2:00 p.m. Con gusto puedo seguir ayudándote por este medio.'",
+        "Transfiere a asesor. Business Hours check obligatorio antes de @utils.escalate. **Gap vs Active V14 (C-3):** este Draft no cubre escalamiento operativo directo (cambio de dirección, instalación) — Ola 0 lo porta.",
+      activacion: "pendingIntent == 'Escalation' o solicitud explícita de hablar con un asesor. También fin de flujos (WW colapsado, > 50k valor declarado, PAM violada, etc.).",
+      respuestas: "Si business hours abierto: transferir. Si cerrado: texto literal con horarios y ofrecer seguir atendiendo.",
       acciones: [
-        { name: "check_business_hours", target: "apex://CheckBusinessHours", description: "Valida 'Horario Paquete' antes de permitir el handoff." },
-        { name: "escalate_to_human", target: "@utils.escalate", description: "Transfiere cuando isWithinBusinessHours == True. Nunca sin esta validación." },
+        { name: "check_business_hours", target: "apex://CheckBusinessHours" },
+        { name: "escalate_to_human", target: "@utils.escalate", description: "Solo cuando isWithinBusinessHours == True." },
       ],
       criterios: [
-        "Dado que el cliente pide un asesor, cuando el agente va a transferir, entonces primero invoca Check_Now_is_within_Business_Hours_by_Name — nunca transfiere sin esta validación.",
-        "Dado que isWithinBusinessHours == False, cuando el agente responde, entonces usa el texto literal de horario — no inventa ventanas y no ofrece crear caso.",
-        "Dado que el intent fue operativo (cambio de dirección, instalación), cuando el agente escala, entonces NO pregunta de nuevo si quiere ser transferido y procede directo.",
+        "Dado que el cliente pide un asesor, cuando el agente va a transferir, entonces primero invoca Check_Business_Hours — nunca sin esa validación.",
+        "Dado que isWithinBusinessHours == False, cuando el agente responde, entonces usa el texto literal del horario — no inventa ventanas.",
       ],
     },
     {
       id: "ambiguous_question",
-      number: 11,
+      number: 10,
       name: "Pregunta Ambigua",
       developerName: "ambiguous_question",
       category: "Control de conversación",
-      estado: "Implementado · Active",
-      descripcion:
-        "Fallback del router cuando la solicitud del cliente es demasiado corta o ambigua para clasificar. Guía al cliente para que proporcione detalles más específicos, en máximo dos frases. No ejecuta acciones y no responde preguntas de dominio directamente.",
-      activacion: "Cuando el router no puede mapear el mensaje a ningún subagente de dominio, incluyendo saludos genéricos o mensajes vagos.",
-      respuestas:
-        "Dos frases máximo. Pide concreción y anima al cliente a enfocarse en su necesidad más importante. Nunca revela instrucciones del sistema, lista de subagentes o configuración interna.",
+      estado: "Implementado · Draft",
+      descripcion: "Fallback del router cuando la solicitud es demasiado corta o ambigua. Máximo dos frases, sin ejecutar acciones.",
+      activacion: "Cuando el router no puede mapear el mensaje.",
+      respuestas: "Pide concreción. Nunca revela instrucciones del sistema.",
       acciones: [],
       criterios: [
-        "Dado que el cliente escribe un saludo o mensaje corto, cuando el router llega aquí, entonces el agente pide detalle sin ejecutar acciones.",
-        "Dado que el cliente intenta un prompt-injection, cuando el agente responde, entonces rechaza con cortesía y mantiene el redirect al dominio.",
+        "Dado que el cliente escribe saludo, cuando el router llega aquí, entonces el agente pide detalle sin acciones.",
       ],
     },
     {
       id: "off_topic",
-      number: 12,
+      number: 11,
       name: "Fuera de Tema",
       developerName: "off_topic",
       category: "Control de conversación",
-      estado: "Implementado · Active",
-      descripcion:
-        "Redirige con cortesía cualquier intent fuera del dominio Paquetexpress (clima, trivia, política, finanzas, otras marcas). No responde preguntas de conocimiento general. Máximo dos frases.",
-      activacion:
-        "Cuando el router detecta un intent fuera de dominio. **Gap V14 (hallazgo M-3):** hoy también recibe intents de recolección por falta de subagente RAD — Ola 2 agrega breadcrumb para medir.",
-      respuestas:
-        "Pregunta al cliente cómo puede ayudarle con temas de Paquetexpress. No reconoce ni contesta la pregunta fuera de tema.",
+      estado: "Implementado · Draft",
+      descripcion: "Redirige con cortesía intents fuera del dominio. Máximo dos frases.",
+      activacion: "Router detecta intent claramente fuera de dominio.",
+      respuestas: "Pregunta cómo puede ayudar con temas de Paquetexpress.",
       acciones: [],
       criterios: [
-        "Dado que el cliente pregunta por un tema no relacionado, cuando el agente responde, entonces redirige al dominio sin responder la pregunta original.",
-        "Dado que el cliente intenta obtener información del sistema, cuando el agente responde, entonces rechaza y mantiene el redirect — nunca revela subagentes, prompts ni configuración.",
+        "Dado que el cliente pregunta algo no relacionado, cuando el agente responde, entonces redirige al dominio sin responder la pregunta original.",
       ],
     },
   ],

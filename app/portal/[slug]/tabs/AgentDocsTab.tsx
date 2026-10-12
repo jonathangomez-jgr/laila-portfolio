@@ -15,6 +15,7 @@ import {
   type PaquetexpressGapWave,
   type PaquetexpressSubagentDoc,
   type PaquetexpressTestScenario,
+  type PaquetexpressTimelineMilestone,
 } from "@/data/paquetexpressAgentDocumentation";
 
 // -----------------------------------------------------------------------------
@@ -47,9 +48,11 @@ type DocLite = {
   revision: string;
   canal?: string;
   base: string;
+  iniciativaResumen?: string;
   resumenAudit?: string;
   hallazgos?: PaquetexpressAuditFinding[];
   planOlas?: PaquetexpressGapWave[];
+  timeline?: PaquetexpressTimelineMilestone[];
   categories: string[];
   subagents: SubagentLite[];
 };
@@ -86,9 +89,11 @@ function adaptPaquetexpress(): DocLite {
     revision: paquetexpressAgentDocs.revision,
     canal: paquetexpressAgentDocs.canal,
     base: paquetexpressAgentDocs.base,
+    iniciativaResumen: paquetexpressAgentDocs.iniciativaResumen,
     resumenAudit: paquetexpressAgentDocs.resumenAudit,
     hallazgos: paquetexpressAgentDocs.hallazgos,
     planOlas: paquetexpressAgentDocs.planOlas,
+    timeline: paquetexpressAgentDocs.timeline,
     categories: PAQUETEXPRESS_CATEGORIES as unknown as string[],
     subagents: paquetexpressAgentDocs.subagents.map((s: PaquetexpressSubagentDoc) => ({
       id: s.id,
@@ -142,9 +147,19 @@ type ViewMode = "subagents" | "audit";
 export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
   const doc = useMemo(() => pickDoc(slug ?? ""), [slug]);
   const hasAudit = Boolean(doc.hallazgos && doc.hallazgos.length > 0);
-  const [mode, setMode] = useState<ViewMode>(hasAudit ? "audit" : "subagents");
-  const [selectedId, setSelectedId] = useState<string>(doc.subagents[0].id);
-  const [activeSection, setActiveSection] = useState<SectionId>("descripcion");
+  // Default: Subagentes (donde se ven los escenarios). Audit disponible si existe.
+  const [mode, setMode] = useState<ViewMode>("subagents");
+  // Auto-seleccionar el primer subagente que tenga escenarios (= RAD_Management
+  // para el Draft de Paquetexpress), si no, el primero.
+  const defaultSubagent = useMemo(
+    () => doc.subagents.find((s) => s.escenarios && s.escenarios.length > 0) ?? doc.subagents[0],
+    [doc.subagents],
+  );
+  const [selectedId, setSelectedId] = useState<string>(defaultSubagent.id);
+  // Si el subagente default tiene escenarios, abrir en esa sección.
+  const [activeSection, setActiveSection] = useState<SectionId>(
+    defaultSubagent.escenarios && defaultSubagent.escenarios.length > 0 ? "escenarios" : "descripcion",
+  );
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("");
 
@@ -235,13 +250,15 @@ export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
 
       {mode === "audit" && doc.hallazgos && doc.planOlas && (
         <AuditView
+          iniciativa={doc.iniciativaResumen}
           resumen={doc.resumenAudit ?? ""}
           hallazgos={doc.hallazgos}
           planOlas={doc.planOlas}
+          timeline={doc.timeline}
           onJumpToSubagent={(id) => {
             setMode("subagents");
             setSelectedId(id);
-            setActiveSection("descripcion");
+            setActiveSection("escenarios");
           }}
         />
       )}
@@ -1061,14 +1078,18 @@ export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
 // -----------------------------------------------------------------------------
 
 function AuditView({
+  iniciativa,
   resumen,
   hallazgos,
   planOlas,
+  timeline,
   onJumpToSubagent,
 }: {
+  iniciativa?: string;
   resumen: string;
   hallazgos: PaquetexpressAuditFinding[];
   planOlas: PaquetexpressGapWave[];
+  timeline?: PaquetexpressTimelineMilestone[];
   onJumpToSubagent: (id: string) => void;
 }) {
   const criticos = hallazgos.filter((h) => h.severidad === "Crítico");
@@ -1078,6 +1099,12 @@ function AuditView({
 
   return (
     <section className="audit-view">
+      {iniciativa && (
+        <div className="audit-initiative">
+          <h2>Iniciativas en curso</h2>
+          <p>{iniciativa}</p>
+        </div>
+      )}
       <div className="audit-summary">
         <h2>Resumen ejecutivo</h2>
         <p>{resumen}</p>
@@ -1145,11 +1172,34 @@ function AuditView({
         ))}
       </div>
 
+      {timeline && timeline.length > 0 && (
+        <>
+          <h2 className="audit-h2">Timeline de actividades</h2>
+          <div className="timeline">
+            {timeline.map((m, i) => (
+              <article key={i} className={`milestone est-${m.estado.toLowerCase()} ini-${m.iniciativa.replace(/[^a-z0-9]/gi, "-").toLowerCase()}`}>
+                <header>
+                  <span className="milestone-sem">{m.semana}</span>
+                  <span className="milestone-date">{m.fecha}</span>
+                  <span className={`milestone-ini ini-badge-${m.iniciativa.replace(/[^a-z0-9]/gi, "-").toLowerCase()}`}>
+                    {m.iniciativa}
+                  </span>
+                  <span className={`milestone-estado estado-${m.estado.toLowerCase().replace(/\s+/g, "-")}`}>{m.estado}</span>
+                </header>
+                <h4>{m.titulo}</h4>
+                <p>{m.descripcion}</p>
+                <p className="milestone-del"><strong>Entregable:</strong> {m.entregable}</p>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+
       <div className="audit-cta">
         <p>
-          Para ver el detalle de un subagente mencionado en el audit, abre la pestaña
+          Los escenarios de prueba viven en la vista
           <button type="button" className="link-btn" onClick={() => onJumpToSubagent("rad_management")}>
-            Subagentes → RAD Management
+            Subagentes → RAD Management → Escenarios de prueba
           </button>
           .
         </p>
@@ -1162,6 +1212,27 @@ function AuditView({
           gap: 22px;
           margin-bottom: 28px;
           color: #23394d;
+        }
+        .audit-initiative {
+          background: #ecfeff;
+          border: 1px solid #a5f3fc;
+          border-left: 4px solid #0891b2;
+          border-radius: 8px;
+          padding: 18px 22px;
+        }
+        .audit-initiative h2 {
+          margin: 0 0 8px;
+          font-size: 13px;
+          color: #0891b2;
+          font-weight: 650;
+          text-transform: uppercase;
+          letter-spacing: 0.6px;
+        }
+        .audit-initiative p {
+          margin: 0;
+          font-size: 13px;
+          line-height: 1.75;
+          color: #164b57;
         }
         .audit-summary {
           background: #ffffff;
@@ -1382,6 +1453,114 @@ function AuditView({
           line-height: 1.7;
           color: #456572;
         }
+        .timeline {
+          display: grid;
+          gap: 12px;
+        }
+        .milestone {
+          background: white;
+          border: 1px solid #dce5ed;
+          border-radius: 7px;
+          padding: 16px 20px;
+          border-left-width: 4px;
+          border-left-style: solid;
+        }
+        .milestone.ini-iniciativa-1---uat {
+          border-left-color: #a855f7;
+        }
+        .milestone.ini-iniciativa-2---rad {
+          border-left-color: #0891b2;
+        }
+        .milestone.ini-transversal {
+          border-left-color: #475569;
+        }
+        .milestone header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          margin-bottom: 8px;
+          font-size: 11px;
+        }
+        .milestone-sem {
+          font-family: ui-monospace, monospace;
+          font-size: 11px;
+          background: #f3f6f9;
+          color: #075464;
+          padding: 3px 8px;
+          border-radius: 4px;
+          font-weight: 650;
+        }
+        .milestone-date {
+          color: #667b8e;
+          font-size: 11px;
+        }
+        .milestone-ini {
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.4px;
+          padding: 3px 9px;
+          border-radius: 999px;
+          color: white;
+          font-weight: 650;
+        }
+        .ini-badge-iniciativa-1---uat {
+          background: #a855f7;
+        }
+        .ini-badge-iniciativa-2---rad {
+          background: #0891b2;
+        }
+        .ini-badge-transversal {
+          background: #475569;
+        }
+        .milestone-estado {
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.4px;
+          padding: 3px 9px;
+          border-radius: 999px;
+          font-weight: 650;
+        }
+        .estado-hecho {
+          background: #dcfce7;
+          color: #166534;
+        }
+        .estado-en-curso {
+          background: #fef3c7;
+          color: #92400e;
+        }
+        .estado-pendiente {
+          background: #e0e7ff;
+          color: #3730a3;
+        }
+        .estado-riesgo {
+          background: #fee2e2;
+          color: #991b1b;
+        }
+        .milestone h4 {
+          margin: 0 0 6px;
+          font-size: 14px;
+          font-weight: 650;
+          color: #075464;
+        }
+        .milestone p {
+          margin: 0 0 6px;
+          font-size: 12.5px;
+          line-height: 1.7;
+          color: #334455;
+        }
+        .milestone-del {
+          background: #f8fbfc;
+          border-left: 3px solid #0891b2;
+          padding: 7px 10px;
+          margin: 8px 0 0 !important;
+          font-size: 12px !important;
+          color: #164b57;
+        }
+        .milestone-del strong {
+          color: #075464;
+        }
+
         .audit-cta {
           background: #ecfeff;
           border: 1px solid #a5f3fc;
