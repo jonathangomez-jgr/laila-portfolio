@@ -208,16 +208,6 @@ const TELASIST_RETENCION_DOCS: DocEntry[] = [
     icon: "📘",
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
-  {
-    slug: "matriz-preguntas-tecnicas",
-    label: "Matriz de preguntas técnicas · interna del equipo Salesforce",
-    description:
-      "9 preguntas con contexto detallado sobre lo encontrado en el sandbox del 12-oct: convenciones de nombres, dónde viven Build_Folio y Build_Analyst_Comment, propósito del Baseline Águila, cobertura de tests, modelo elegido, suite Agent Script y preview end-to-end. Para la 1:1 técnica Jonatas + FDE.",
-    url: "/Customers/Telasist/files/Telasist-Invex-Retencion-Matriz-Preguntas-Tecnicas.pdf",
-    category: "Técnico",
-    icon: "🔬",
-    visibleTo: ["Salesforce", "Partner"],
-  },
 ];
 
 // ----------------------------------------------------------------------------
