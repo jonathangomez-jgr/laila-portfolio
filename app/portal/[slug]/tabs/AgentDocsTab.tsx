@@ -105,6 +105,26 @@ export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
 
   return (
     <div className="agent-docs">
+      {/* Header estructural del agente — Agent Name · Developer Name · Versión */}
+      <header className="agent-header">
+        <div className="agent-header-main">
+          <div className="agent-header-eyebrow">Agente documentado</div>
+          <h1 className="agent-header-name">{doc.name}</h1>
+          <div className="agent-header-meta">
+            <span className="agent-header-dev">
+              Developer Name:&nbsp;<code>{doc.developerName}</code>
+            </span>
+            <span className="agent-header-sep" aria-hidden="true">·</span>
+            <span className="agent-header-version">
+              Versión:&nbsp;<strong>{doc.version}</strong>
+            </span>
+            <span className="agent-header-sep" aria-hidden="true">·</span>
+            <span className="agent-header-rev">Revisión: {doc.revision}</span>
+          </div>
+        </div>
+        <p className="agent-header-base">{doc.base}</p>
+      </header>
+
       {/* Dashboard de categorías */}
       <div className="dash-grid">
         <button
@@ -315,6 +335,61 @@ export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
           color: var(--ink);
           font-size: 14px;
           line-height: 1.65;
+        }
+        .agent-header {
+          background: linear-gradient(135deg, #075464 0%, #0b7a90 100%);
+          color: #e2f6f9;
+          padding: 20px 26px;
+          border-radius: 9px;
+          margin-bottom: 22px;
+        }
+        .agent-header-eyebrow {
+          font-size: 10px;
+          letter-spacing: 0.6px;
+          text-transform: uppercase;
+          color: #a3dde6;
+          margin-bottom: 6px;
+          font-weight: 650;
+        }
+        .agent-header-name {
+          margin: 0;
+          font-size: 24px;
+          font-weight: 650;
+          color: #ffffff;
+          letter-spacing: -0.4px;
+        }
+        .agent-header-meta {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: baseline;
+          gap: 6px;
+          margin-top: 8px;
+          font-size: 12px;
+          color: #c7edf3;
+        }
+        .agent-header-meta code {
+          font-family: ui-monospace, monospace;
+          font-size: 11.5px;
+          background: rgba(255, 255, 255, 0.12);
+          color: #ffffff;
+          padding: 2px 7px;
+          border-radius: 3px;
+        }
+        .agent-header-meta strong {
+          color: #ffffff;
+          font-weight: 650;
+        }
+        .agent-header-sep {
+          color: #6ab7c5;
+        }
+        .agent-header-rev {
+          color: #a3dde6;
+        }
+        .agent-header-base {
+          margin: 12px 0 0;
+          font-size: 12.5px;
+          line-height: 1.7;
+          color: #e8f5f8;
         }
         .dash-grid {
           display: grid;
