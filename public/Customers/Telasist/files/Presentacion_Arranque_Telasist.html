@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sesión de arranque · Telasist × Skala × Salesforce — Voice AI Retención Invex TDC</title>
+<title>Sesión de arranque · Telasist × Salesforce (+ partner Skala) — Voice AI Retención Invex TDC</title>
 <style>
   @font-face { font-family: 'AvantGarde'; src: url('../../../Assets Salesforce Brand/Fonts/Titles/AvantGardeForSalesforceW05-Dm.woff') format('woff'); }
   @font-face { font-family: 'SalesforceSans'; src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Regular.woff') format('woff'); font-weight: 400; }
@@ -262,7 +262,7 @@
     <div class="left">
       <span class="eyebrow">Sesión de arranque</span>
       <h1>Voice AI Agent<br><span class="accent">Retención Invex TDC</span></h1>
-      <p class="subtitle">Qué estamos construyendo, qué ya tenemos, y las decisiones que necesitamos cerrar hoy entre Telasist, Skala, Invex y Salesforce.</p>
+      <p class="subtitle">Qué estamos construyendo, qué ya tenemos, y las decisiones que necesitamos cerrar hoy entre Telasist, Salesforce, Invex y el partner Skala.</p>
       <div class="cover-authors">
         <div class="cover-author">
           <div class="name">Jonathan Gómez</div>
@@ -274,7 +274,7 @@
         </div>
         <div class="cover-author">
           <div class="name">Jonatas Amorim</div>
-          <div class="role">Lead Technical · Skala (Partner)</div>
+          <div class="role">Forward Deployed Engineer · Salesforce</div>
         </div>
       </div>
     </div>
@@ -308,7 +308,7 @@
           <tr>
             <td>15 min</td>
             <td style="text-align:left;">Demo del agente en el sandbox</td>
-            <td style="text-align:left;">Go para code review conjunto FDE + Skala la próxima semana.</td>
+            <td style="text-align:left;">Go para code review conjunto interno del equipo Salesforce la próxima semana.</td>
           </tr>
           <tr>
             <td>20 min</td>
@@ -371,7 +371,7 @@
     <span class="slide-num"><span class="current">04</span> / 09</span>
     <span class="section-eyebrow">02 · Dónde estamos hoy</span>
     <h2>14 de 17 actividades F1 completas en 4 días</h2>
-    <p class="lead">Jonatas (Skala) construyó la capa Apex + el agente de voz en el sandbox entre el 10 y el 11 de octubre. Lo que falta son decisiones que dependen de Invex y Telasist.</p>
+    <p class="lead">Jonatas (equipo Salesforce) construyó la capa Apex + el agente de voz en el sandbox entre el 10 y el 11 de octubre. Lo que falta son decisiones que dependen de Invex y Telasist, y la definición del rol operativo de Skala.</p>
     <div class="triad">
       <div class="triad-card ok">
         <h3><span class="dot"></span>Listo</h3>
@@ -391,7 +391,7 @@
         <h3><span class="dot"></span>Para cerrar entre nosotros</h3>
         <ul>
           <li>Suite de 12 pruebas Agent Script end-to-end</li>
-          <li>Code review conjunto FDE + Skala</li>
+          <li>Code review conjunto interno (FDE + Jonatas)</li>
           <li>Deploy + 1 llamada real end-to-end</li>
           <li>Documentar convención de nombres de acciones duplicadas</li>
           <li>Confirmar dónde viven Build_Folio y Build_Analyst_Comment</li>
@@ -414,7 +414,7 @@
   <section class="slide" id="slide-5">
     <span class="brand-chip">Dos agentes · un propósito</span>
     <span class="slide-num"><span class="current">05</span> / 09</span>
-    <span class="section-eyebrow">03 · Qué construyó Skala en el sandbox</span>
+    <span class="section-eyebrow">03 · Qué construyó el equipo Salesforce en el sandbox</span>
     <h2>Un agente productivo y una línea base</h2>
     <p class="lead">La convención: construir dos agentes paralelos — uno minimal (<em>Baseline</em>) y uno completo (<em>Retenciones</em>) — para tener comparación y rollback claros desde día 1.</p>
     <div class="agents-grid">
@@ -464,7 +464,7 @@
     <span class="slide-num"><span class="current">06</span> / 09</span>
     <span class="section-eyebrow">04 · Plan vivo</span>
     <h2>De hoy a GA en 100 % del tráfico</h2>
-    <p class="lead">F1 avanzó 4 semanas en 4 días gracias al trabajo de Skala. Las siguientes 3 fases dependen de que Invex entregue las 4 definiciones y de que Telasist firme las 3 decisiones operativas.</p>
+    <p class="lead">F1 avanzó 4 semanas en 4 días gracias al trabajo del equipo Salesforce. Las siguientes 3 fases dependen de que Invex entregue las 4 definiciones y de que Telasist firme las 3 decisiones operativas.</p>
     <div class="timeline-wrap">
       <div class="timeline-grid">
         <div class="ph inprogress">
@@ -539,12 +539,13 @@
         </ul>
       </div>
       <div class="req-col skala">
-        <h3>Skala <span class="owner-tag">Partner</span></h3>
+        <h3>Equipo Salesforce <span class="owner-tag">Interno</span></h3>
         <ul class="req-list">
-          <li><span class="title">① Suite de pruebas Agent Script</span><span class="desc">12 escenarios end-to-end con <code>sf agent generate test-spec</code>. Owner conjunto con FDE.</span></li>
-          <li><span class="title">② Convención de nombres duplicados</span><span class="desc">7 pares de acciones con casing distinto en el DSL — intencional o cleanup.</span></li>
-          <li><span class="title">③ Documentar Build_Folio y Build_Analyst_Comment</span><span class="desc">Confirmar si viven dentro de InvexCaseWriter / InvexRegistrarResultado.</span></li>
-          <li><span class="title">④ Code review conjunto</span><span class="desc">Sesión de 2 horas la semana del 20-oct con FDE.</span></li>
+          <li><span class="title">① Suite de pruebas Agent Script</span><span class="desc">12 escenarios end-to-end con <code>sf agent generate test-spec</code>. Owner conjunto Jonatas + FDE.</span></li>
+          <li><span class="title">② Convención de nombres duplicados</span><span class="desc">7 pares de acciones con casing distinto en el DSL — intencional o cleanup. Owner: Jonatas.</span></li>
+          <li><span class="title">③ Documentar Build_Folio y Build_Analyst_Comment</span><span class="desc">Confirmar si viven dentro de InvexCaseWriter / InvexRegistrarResultado. Owner: Jonatas.</span></li>
+          <li><span class="title">④ Code review conjunto interno</span><span class="desc">Sesión de 2 horas la semana del 20-oct · FDE + Jonatas.</span></li>
+          <li><span class="title">⑤ Definir rol operativo de Skala (partner)</span><span class="desc">Skala estará en la reunión. Su scope de participación se cierra hoy.</span></li>
         </ul>
       </div>
     </div>
@@ -568,8 +569,8 @@
         <thead>
           <tr>
             <th>Actividad</th>
-            <th>Salesforce FDE</th>
-            <th>Skala Partner</th>
+            <th>Salesforce (FDE + equipo)</th>
+            <th>Skala (partner)</th>
             <th>Telasist</th>
             <th>Invex</th>
           </tr>
@@ -577,22 +578,22 @@
         <tbody>
           <tr>
             <td>Arquitectura del agente y DSL</td>
-            <td><span class="rc rc-a">A</span></td>
             <td><span class="rc rc-r">R</span></td>
+            <td><span class="rc rc-i">I</span></td>
             <td><span class="rc rc-i">I</span></td>
             <td><span class="rc rc-i">I</span></td>
           </tr>
           <tr>
             <td>Implementación Apex y Custom Metadata</td>
-            <td><span class="rc rc-c">C</span></td>
             <td><span class="rc rc-r">R</span></td>
+            <td><span class="rc rc-i">I</span></td>
             <td><span class="rc rc-i">I</span></td>
             <td><span class="rc rc-i">I</span></td>
           </tr>
           <tr>
             <td>Reglas de negocio y catálogo de beneficios</td>
             <td><span class="rc rc-c">C</span></td>
-            <td><span class="rc rc-c">C</span></td>
+            <td><span class="rc rc-i">I</span></td>
             <td><span class="rc rc-c">C</span></td>
             <td><span class="rc rc-r">R</span></td>
           </tr>
@@ -606,14 +607,14 @@
           <tr>
             <td>Operación del contact center (sandbox + prod)</td>
             <td><span class="rc rc-c">C</span></td>
-            <td><span class="rc rc-c">C</span></td>
+            <td><span class="rc rc-i">I</span></td>
             <td><span class="rc rc-r">R</span></td>
             <td><span class="rc rc-i">I</span></td>
           </tr>
           <tr>
             <td>Shadow pilot y métricas vs baseline humano</td>
             <td><span class="rc rc-r">R</span></td>
-            <td><span class="rc rc-c">C</span></td>
+            <td><span class="rc rc-i">I</span></td>
             <td><span class="rc rc-c">C</span></td>
             <td><span class="rc rc-a">A</span></td>
           </tr>
@@ -625,10 +626,17 @@
             <td><span class="rc rc-a">A</span></td>
           </tr>
           <tr>
-            <td>Code review conjunto antes del cutover</td>
-            <td><span class="rc rc-r">R</span></td>
+            <td>Code review interno antes del cutover</td>
             <td><span class="rc rc-r">R</span></td>
             <td><span class="rc rc-i">I</span></td>
+            <td><span class="rc rc-i">I</span></td>
+            <td><span class="rc rc-i">I</span></td>
+          </tr>
+          <tr>
+            <td>Rol operativo del partner Skala</td>
+            <td><span class="rc rc-c">C</span></td>
+            <td><span class="rc rc-r">R</span></td>
+            <td><span class="rc rc-c">C</span></td>
             <td><span class="rc rc-i">I</span></td>
           </tr>
         </tbody>
@@ -650,11 +658,11 @@
           <li>Plan maestro F0 → F4 con las 55 actividades, filtros, status y comentarios</li>
           <li>Calendario con los 12 milestones ejecutivos</li>
           <li>Pruebas · matriz de testing con evidencia adjuntable</li>
-          <li>Documentos · Snapshot externo, Follow-up #1, Matriz de preguntas Skala</li>
+          <li>Documentos · Snapshot externo, Follow-up #1, Matriz de preguntas técnicas</li>
           <li>Overview · health check en tiempo real · dashboard de KPIs</li>
         </ul>
         <div class="callout" style="margin-top:16px;">
-          <strong>Acceso hoy.</strong> Jonathan Gómez, Carlos Sosa, Moises Quintana, Ximena Macías (Salesforce) y Jonatas Amorim (Skala). Si falta alguien de Telasist o Invex, se agrega en 30 segundos — magic link al correo autorizado.
+          <strong>Acceso hoy.</strong> Jonathan Gómez, Jonatas Amorim, Carlos Sosa, Moises Quintana y Ximena Macías — todos del equipo Salesforce. Si falta alguien de Telasist, Invex o Skala, se agrega en 30 segundos — magic link al correo autorizado.
         </div>
       </div>
       <div class="browser-frame">
