@@ -216,10 +216,10 @@ const TELASIST_RETENCION_DOCS: DocEntry[] = [
 const PAM_DOCS: DocEntry[] = [
   {
     slug: "estado-actual-agente",
-    label: "Deck · Estado actual del Agente Concierge Digital (12-oct)",
+    label: "Deck · Estado del Agente Concierge Digital (12-oct)",
     description:
-      "Snapshot ejecutivo del Agente_ConciergeDigital (BotDefinition 0XxO40000006sVZKAY · V5 Active desde 2026-07-08). Cubre los 8 subagentes productivos, las 15 acciones conectadas, la autenticación de 3 fases, el inventario KB (44 Online + 7 Draft), los 4 open items técnicos del .agent, los 10 pendientes editoriales y el plan a 7 semanas hasta go-live pre Legends of Paradise.",
-    url: "/Customers/PAM/files/PAM_Estado_Agente_ConciergeDigital.pdf",
+      "Snapshot ejecutivo del Agente_ConciergeDigital (BotDefinition 0XxO40000006sVZKAY · V5 Active desde 2026-07-08). 10 slides horizontales con brand Salesforce. Cubre: TL;DR a 60 seg, ficha técnica del agente, los 8 subagentes productivos con sus acciones, inventario KB (44 Online + 7 Draft) con los bloqueantes por bucket, los 4 open items técnicos del .agent, timeline F0→F5 a 7 semanas de go-live, 7 riesgos activos y los 4 asks a PAM para la semana. Abre como presentación horizontal — navegación con flechas, teclado o click en los dots.",
+    url: "/Customers/PAM/files/PAM_Estado_Agente_ConciergeDigital.html",
     category: "Ejecutivo",
     icon: "🎯",
     visibleTo: ["Salesforce", "Partner", "Client"],
