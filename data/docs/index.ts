@@ -179,14 +179,44 @@ const JAFRA_DOCS: DocEntry[] = [
 // ----------------------------------------------------------------------------
 const TELASIST_RETENCION_DOCS: DocEntry[] = [
   {
-    slug: "snapshot-externo",
-    label: "Snapshot de preparación · versión externa",
+    slug: "presentacion-arranque",
+    label: "Presentación · Sesión de arranque Telasist × Skala × Invex",
     description:
-      "Documento compartible con Telasist y Partner. 12 páginas. Qué tenemos en la plataforma, qué necesitamos definir, 6 decisiones para la próxima sesión y plan de fases con duración orientativa. Sin IDs, sin usernames, sin PII — apto para compartir bajo NDA.",
+      "Deck ejecutivo de la sesión del 12-oct. 10 slides horizontales con brand Salesforce. Cubre: contexto de la campaña (~930 llamadas/día), estado F1 (14/17 completas en 4 días), los dos agentes del sandbox, timeline F0→F4, qué necesitamos de cada parte, RACI y portal walkthrough. Abre como presentación horizontal.",
+    url: "/Customers/Telasist/files/Presentacion_Arranque_Telasist.html",
+    category: "Ejecutivo",
+    icon: "🎤",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "followup-01",
+    label: "Follow-up #1 · Estado del proyecto",
+    description:
+      "Seguimiento al Snapshot externo. 5 páginas. Qué construyó Skala desde el 10-oct, qué está completo, qué necesitamos de Invex (4 bloqueantes), qué necesitamos de Skala (5 preguntas técnicas) y qué necesitamos de Telasist (3 decisiones operativas). Para la reunión del 12-oct.",
+    url: "/Customers/Telasist/files/Telasist-Invex-Retencion-TDC-Followup-01.pdf",
+    category: "Ejecutivo",
+    icon: "📊",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "snapshot-externo",
+    label: "Snapshot de preparación · versión externa (v1)",
+    description:
+      "Documento original compartido con Telasist antes del arranque. 12 páginas. Qué tenemos en la plataforma, qué necesitamos definir, 6 decisiones iniciales y plan de fases con duración orientativa. Sin IDs, sin usernames, sin PII.",
     url: "/Customers/Telasist/files/Telasist-Invex-Retencion-TDC-Snapshot-Externo.pdf",
     category: "Ejecutivo",
     icon: "📘",
     visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "matriz-preguntas-skala",
+    label: "Matriz de preguntas técnicas · Skala",
+    description:
+      "9 preguntas con contexto detallado sobre lo encontrado en el sandbox del 12-oct: convenciones de nombres, dónde viven Build_Folio y Build_Analyst_Comment, propósito del Baseline Águila, cobertura de tests, modelo elegido, suite Agent Script y preview end-to-end. Para 1:1 técnica con Jonatas.",
+    url: "/Customers/Telasist/files/Telasist-Invex-Retencion-Matriz-Preguntas-Skala.pdf",
+    category: "Técnico",
+    icon: "🔬",
+    visibleTo: ["Salesforce", "Partner"],
   },
 ];
 
