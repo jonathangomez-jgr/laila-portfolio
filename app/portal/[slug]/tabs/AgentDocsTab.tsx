@@ -11,6 +11,8 @@ import {
   PAQUETEXPRESS_CATEGORIES,
   paquetexpressAgentDocs,
   type PaquetexpressAgentCategory,
+  type PaquetexpressAuditFinding,
+  type PaquetexpressGapWave,
   type PaquetexpressSubagentDoc,
   type PaquetexpressTestScenario,
 } from "@/data/paquetexpressAgentDocumentation";
@@ -39,11 +41,15 @@ type SubagentLite = {
 type DocLite = {
   name: string;
   developerName: string;
+  botId?: string;
   version: string;
   estado?: string;
   revision: string;
   canal?: string;
   base: string;
+  resumenAudit?: string;
+  hallazgos?: PaquetexpressAuditFinding[];
+  planOlas?: PaquetexpressGapWave[];
   categories: string[];
   subagents: SubagentLite[];
 };
@@ -74,11 +80,15 @@ function adaptPaquetexpress(): DocLite {
   return {
     name: paquetexpressAgentDocs.name,
     developerName: paquetexpressAgentDocs.developerName,
+    botId: paquetexpressAgentDocs.botId,
     version: paquetexpressAgentDocs.version,
     estado: paquetexpressAgentDocs.estado,
     revision: paquetexpressAgentDocs.revision,
     canal: paquetexpressAgentDocs.canal,
     base: paquetexpressAgentDocs.base,
+    resumenAudit: paquetexpressAgentDocs.resumenAudit,
+    hallazgos: paquetexpressAgentDocs.hallazgos,
+    planOlas: paquetexpressAgentDocs.planOlas,
     categories: PAQUETEXPRESS_CATEGORIES as unknown as string[],
     subagents: paquetexpressAgentDocs.subagents.map((s: PaquetexpressSubagentDoc) => ({
       id: s.id,
@@ -127,8 +137,12 @@ const BASE_SECTIONS: Array<{ id: SectionId; label: string }> = [
 const norm = (s: string) =>
   s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
+type ViewMode = "subagents" | "audit";
+
 export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
   const doc = useMemo(() => pickDoc(slug ?? ""), [slug]);
+  const hasAudit = Boolean(doc.hallazgos && doc.hallazgos.length > 0);
+  const [mode, setMode] = useState<ViewMode>(hasAudit ? "audit" : "subagents");
   const [selectedId, setSelectedId] = useState<string>(doc.subagents[0].id);
   const [activeSection, setActiveSection] = useState<SectionId>("descripcion");
   const [search, setSearch] = useState("");
@@ -192,9 +206,48 @@ export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
             </span>
           )}
           <span className="badge revision">Rev. {doc.revision}</span>
+          {doc.botId && <span className="badge botid">{doc.botId}</span>}
         </div>
       </header>
 
+      {hasAudit && (
+        <nav className="mode-switch" role="tablist">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "audit"}
+            className={mode === "audit" ? "active" : ""}
+            onClick={() => setMode("audit")}
+          >
+            🔍 Audit del agente
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "subagents"}
+            className={mode === "subagents" ? "active" : ""}
+            onClick={() => setMode("subagents")}
+          >
+            🧩 Subagentes ({doc.subagents.length})
+          </button>
+        </nav>
+      )}
+
+      {mode === "audit" && doc.hallazgos && doc.planOlas && (
+        <AuditView
+          resumen={doc.resumenAudit ?? ""}
+          hallazgos={doc.hallazgos}
+          planOlas={doc.planOlas}
+          onJumpToSubagent={(id) => {
+            setMode("subagents");
+            setSelectedId(id);
+            setActiveSection("descripcion");
+          }}
+        />
+      )}
+
+      {mode === "subagents" && (
+      <>
       {/* Dashboard de categorías */}
       <div className="dash-grid">
         <button
@@ -413,6 +466,8 @@ export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
           </div>
         </article>
       </div>
+      </>
+      )}
 
       <footer className="docs-foot">
         <span>
@@ -530,6 +585,37 @@ export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
         .badge.revision {
           background: rgba(255, 255, 255, 0.14);
           color: #e2f6f9;
+        }
+        .badge.botid {
+          background: rgba(255, 255, 255, 0.08);
+          color: #b4e2eb;
+          font-family: ui-monospace, monospace;
+          font-size: 10px;
+        }
+        .mode-switch {
+          display: flex;
+          gap: 8px;
+          margin-bottom: 20px;
+          border-bottom: 1px solid #dce5ed;
+          padding-bottom: 10px;
+        }
+        .mode-switch button {
+          background: white;
+          border: 1px solid #dce5ed;
+          padding: 9px 16px;
+          border-radius: 6px;
+          font-size: 13px;
+          color: #475569;
+          cursor: pointer;
+          font-weight: 600;
+        }
+        .mode-switch button:hover {
+          background: #f3f6f9;
+        }
+        .mode-switch button.active {
+          background: #075464;
+          color: white;
+          border-color: #075464;
         }
         .dash-grid {
           display: grid;
@@ -967,6 +1053,357 @@ export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
         }
       `}</style>
     </div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// AuditView — vista de hallazgos + plan por olas
+// -----------------------------------------------------------------------------
+
+function AuditView({
+  resumen,
+  hallazgos,
+  planOlas,
+  onJumpToSubagent,
+}: {
+  resumen: string;
+  hallazgos: PaquetexpressAuditFinding[];
+  planOlas: PaquetexpressGapWave[];
+  onJumpToSubagent: (id: string) => void;
+}) {
+  const criticos = hallazgos.filter((h) => h.severidad === "Crítico");
+  const altos = hallazgos.filter((h) => h.severidad === "Alto");
+  const medios = hallazgos.filter((h) => h.severidad === "Medio");
+  const obs = hallazgos.filter((h) => h.severidad === "Observación");
+
+  return (
+    <section className="audit-view">
+      <div className="audit-summary">
+        <h2>Resumen ejecutivo</h2>
+        <p>{resumen}</p>
+      </div>
+
+      <div className="audit-counts">
+        <div className="count-card critico">
+          <strong>{criticos.length}</strong>
+          <span>Críticos</span>
+        </div>
+        <div className="count-card alto">
+          <strong>{altos.length}</strong>
+          <span>Altos</span>
+        </div>
+        <div className="count-card medio">
+          <strong>{medios.length}</strong>
+          <span>Medios</span>
+        </div>
+        <div className="count-card obs">
+          <strong>{obs.length}</strong>
+          <span>Observaciones</span>
+        </div>
+      </div>
+
+      <h2 className="audit-h2">Hallazgos</h2>
+      <div className="findings">
+        {hallazgos.map((h) => (
+          <article key={h.id} className={`finding sev-${h.severidad.toLowerCase().replace("ó", "o")}`}>
+            <header>
+              <span className="finding-id">{h.id}</span>
+              <span className={`finding-sev sev-badge-${h.severidad.toLowerCase().replace("ó", "o")}`}>
+                {h.severidad}
+              </span>
+              <h3>{h.titulo}</h3>
+            </header>
+            <dl>
+              <dt>Evidencia</dt>
+              <dd>{h.evidencia}</dd>
+              <dt>Impacto</dt>
+              <dd>{h.impacto}</dd>
+              <dt>Fix propuesto</dt>
+              <dd>{h.fix}</dd>
+            </dl>
+          </article>
+        ))}
+      </div>
+
+      <h2 className="audit-h2">Plan por olas</h2>
+      <div className="waves">
+        {planOlas.map((w, i) => (
+          <article key={i} className="wave">
+            <header>
+              <h3>{w.nombre}</h3>
+              <p>{w.objetivo}</p>
+            </header>
+            <ul>
+              {w.items.map((item, j) => (
+                <li key={j}>
+                  <strong>{item.titulo}</strong>
+                  <p>{item.detalle}</p>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+
+      <div className="audit-cta">
+        <p>
+          Para ver el detalle de un subagente mencionado en el audit, abre la pestaña
+          <button type="button" className="link-btn" onClick={() => onJumpToSubagent("rad_management")}>
+            Subagentes → RAD Management
+          </button>
+          .
+        </p>
+      </div>
+
+      <style jsx>{`
+        .audit-view {
+          display: flex;
+          flex-direction: column;
+          gap: 22px;
+          margin-bottom: 28px;
+          color: #23394d;
+        }
+        .audit-summary {
+          background: #ffffff;
+          border: 1px solid #dce5ed;
+          border-left: 4px solid #075464;
+          border-radius: 8px;
+          padding: 20px 24px;
+        }
+        .audit-summary h2 {
+          margin: 0 0 8px;
+          font-size: 15px;
+          color: #075464;
+          font-weight: 650;
+          text-transform: uppercase;
+          letter-spacing: 0.6px;
+        }
+        .audit-summary p {
+          margin: 0;
+          font-size: 13.5px;
+          line-height: 1.75;
+          color: #334455;
+        }
+        .audit-counts {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 12px;
+        }
+        @media (max-width: 700px) {
+          .audit-counts {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+        .count-card {
+          background: #ffffff;
+          border: 1px solid #dce5ed;
+          border-radius: 7px;
+          padding: 14px 18px;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+        .count-card strong {
+          font-size: 28px;
+          font-weight: 650;
+          line-height: 1;
+        }
+        .count-card span {
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          color: #667b8e;
+          font-weight: 650;
+        }
+        .count-card.critico {
+          border-left: 4px solid #dc2626;
+        }
+        .count-card.critico strong {
+          color: #dc2626;
+        }
+        .count-card.alto {
+          border-left: 4px solid #ea580c;
+        }
+        .count-card.alto strong {
+          color: #ea580c;
+        }
+        .count-card.medio {
+          border-left: 4px solid #ca8a04;
+        }
+        .count-card.medio strong {
+          color: #ca8a04;
+        }
+        .count-card.obs {
+          border-left: 4px solid #0891b2;
+        }
+        .count-card.obs strong {
+          color: #0891b2;
+        }
+        .audit-h2 {
+          margin: 12px 0 4px;
+          font-size: 20px;
+          font-weight: 650;
+          color: #075464;
+        }
+        .findings {
+          display: grid;
+          gap: 12px;
+        }
+        .finding {
+          background: white;
+          border: 1px solid #dce5ed;
+          border-radius: 7px;
+          padding: 18px 22px;
+          border-left-width: 4px;
+          border-left-style: solid;
+        }
+        .finding.sev-critico {
+          border-left-color: #dc2626;
+        }
+        .finding.sev-alto {
+          border-left-color: #ea580c;
+        }
+        .finding.sev-medio {
+          border-left-color: #ca8a04;
+        }
+        .finding.sev-observacion {
+          border-left-color: #0891b2;
+        }
+        .finding header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          margin-bottom: 10px;
+        }
+        .finding-id {
+          font-family: ui-monospace, monospace;
+          font-size: 11px;
+          background: #f3f6f9;
+          color: #075464;
+          padding: 2px 8px;
+          border-radius: 3px;
+          border: 1px solid #e5edf0;
+          font-weight: 650;
+        }
+        .finding-sev {
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.4px;
+          padding: 3px 9px;
+          border-radius: 999px;
+          color: white;
+          font-weight: 650;
+        }
+        .sev-badge-critico {
+          background: #dc2626;
+        }
+        .sev-badge-alto {
+          background: #ea580c;
+        }
+        .sev-badge-medio {
+          background: #ca8a04;
+        }
+        .sev-badge-observacion {
+          background: #0891b2;
+        }
+        .finding h3 {
+          margin: 0;
+          font-size: 15px;
+          font-weight: 650;
+          color: #075464;
+          flex: 1;
+          min-width: 240px;
+        }
+        .finding dl {
+          margin: 0;
+          display: grid;
+          grid-template-columns: 115px minmax(0, 1fr);
+          gap: 7px 14px;
+        }
+        .finding dt {
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          color: #667b8e;
+          font-weight: 650;
+          padding-top: 2px;
+        }
+        .finding dd {
+          margin: 0;
+          font-size: 13px;
+          line-height: 1.7;
+          color: #334455;
+        }
+        .waves {
+          display: grid;
+          gap: 14px;
+        }
+        .wave {
+          background: #f8fbfc;
+          border: 1px solid #dce9ec;
+          border-left: 4px solid #0891b2;
+          border-radius: 7px;
+          padding: 18px 22px;
+        }
+        .wave header h3 {
+          margin: 0;
+          font-size: 15px;
+          font-weight: 650;
+          color: #075464;
+        }
+        .wave header p {
+          margin: 5px 0 14px;
+          font-size: 12px;
+          color: #667b8e;
+          line-height: 1.65;
+        }
+        .wave ul {
+          margin: 0;
+          padding-left: 0;
+          list-style: none;
+          display: grid;
+          gap: 10px;
+        }
+        .wave li {
+          background: white;
+          border: 1px solid #e5edf0;
+          border-radius: 5px;
+          padding: 10px 14px;
+        }
+        .wave li strong {
+          font-size: 13px;
+          color: #164b57;
+          font-weight: 650;
+        }
+        .wave li p {
+          margin: 5px 0 0;
+          font-size: 12px;
+          line-height: 1.7;
+          color: #456572;
+        }
+        .audit-cta {
+          background: #ecfeff;
+          border: 1px solid #a5f3fc;
+          border-radius: 7px;
+          padding: 14px 18px;
+          font-size: 13px;
+          color: #164b57;
+        }
+        .audit-cta p {
+          margin: 0;
+        }
+        .link-btn {
+          background: transparent;
+          border: 0;
+          color: #0891b2;
+          font-weight: 650;
+          padding: 0 4px;
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      `}</style>
+    </section>
   );
 }
 
