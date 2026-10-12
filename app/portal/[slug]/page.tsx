@@ -174,7 +174,7 @@ export default async function PortalSlugPage({
         {activeTab === "pruebas" && <PruebasTab user={user} slug={slug} />}
         {activeTab === "calendario" && <CalendarioTab user={user} slug={slug} />}
         {activeTab === "admin" && <AdminTab slug={slug} />}
-        {activeTab === "agent-docs" && <AgentDocsTab />}
+        {activeTab === "agent-docs" && <AgentDocsTab slug={slug} />}
       </section>
     </main>
   );

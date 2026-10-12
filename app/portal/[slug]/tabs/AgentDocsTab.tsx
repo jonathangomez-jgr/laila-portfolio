@@ -2,15 +2,120 @@
 
 import { useMemo, useState } from "react";
 import {
-  CATEGORIES,
+  CATEGORIES as BW_CATEGORIES,
   betterwareAgentDocs,
-  type AgentCategory,
-  type AgentSubagentDoc,
+  type AgentCategory as BWAgentCategory,
+  type AgentSubagentDoc as BWAgentSubagentDoc,
 } from "@/data/betterwareAgentDocumentation";
+import {
+  PAQUETEXPRESS_CATEGORIES,
+  paquetexpressAgentDocs,
+  type PaquetexpressAgentCategory,
+  type PaquetexpressSubagentDoc,
+  type PaquetexpressTestScenario,
+} from "@/data/paquetexpressAgentDocumentation";
 
-type SectionId = "descripcion" | "activacion" | "respuestas" | "acciones" | "criterios" | "todo";
+// -----------------------------------------------------------------------------
+// Adaptador común entre los docs de Betterware y Paquetexpress
+// -----------------------------------------------------------------------------
 
-const SECTIONS: Array<{ id: SectionId; label: string }> = [
+type ActionLite = { name: string; target: string; description?: string };
+
+type SubagentLite = {
+  id: string;
+  number: number;
+  name: string;
+  category: string;
+  developerName?: string;
+  estado?: string;
+  descripcion: string;
+  activacion: string;
+  respuestas: string;
+  acciones: ActionLite[];
+  criterios: string[];
+  escenarios?: PaquetexpressTestScenario[];
+};
+
+type DocLite = {
+  name: string;
+  developerName: string;
+  version: string;
+  estado?: string;
+  revision: string;
+  canal?: string;
+  base: string;
+  categories: string[];
+  subagents: SubagentLite[];
+};
+
+function adaptBetterware(): DocLite {
+  return {
+    name: betterwareAgentDocs.name,
+    developerName: betterwareAgentDocs.developerName,
+    version: betterwareAgentDocs.version,
+    revision: betterwareAgentDocs.revision,
+    base: betterwareAgentDocs.base,
+    categories: BW_CATEGORIES as unknown as string[],
+    subagents: betterwareAgentDocs.subagents.map((s: BWAgentSubagentDoc) => ({
+      id: s.id,
+      number: s.number,
+      name: s.name,
+      category: s.category as BWAgentCategory,
+      descripcion: s.descripcion,
+      activacion: s.activacion,
+      respuestas: s.respuestas,
+      acciones: s.acciones,
+      criterios: s.criterios,
+    })),
+  };
+}
+
+function adaptPaquetexpress(): DocLite {
+  return {
+    name: paquetexpressAgentDocs.name,
+    developerName: paquetexpressAgentDocs.developerName,
+    version: paquetexpressAgentDocs.version,
+    estado: paquetexpressAgentDocs.estado,
+    revision: paquetexpressAgentDocs.revision,
+    canal: paquetexpressAgentDocs.canal,
+    base: paquetexpressAgentDocs.base,
+    categories: PAQUETEXPRESS_CATEGORIES as unknown as string[],
+    subagents: paquetexpressAgentDocs.subagents.map((s: PaquetexpressSubagentDoc) => ({
+      id: s.id,
+      number: s.number,
+      name: s.name,
+      developerName: s.developerName,
+      estado: s.estado,
+      category: s.category as PaquetexpressAgentCategory,
+      descripcion: s.descripcion,
+      activacion: s.activacion,
+      respuestas: s.respuestas,
+      acciones: s.acciones,
+      criterios: s.criterios,
+      escenarios: s.escenarios,
+    })),
+  };
+}
+
+function pickDoc(slug: string): DocLite {
+  if (slug === "paquetexpress") return adaptPaquetexpress();
+  return adaptBetterware();
+}
+
+// -----------------------------------------------------------------------------
+// Componente
+// -----------------------------------------------------------------------------
+
+type SectionId =
+  | "descripcion"
+  | "activacion"
+  | "respuestas"
+  | "acciones"
+  | "criterios"
+  | "escenarios"
+  | "todo";
+
+const BASE_SECTIONS: Array<{ id: SectionId; label: string }> = [
   { id: "descripcion", label: "Descripción" },
   { id: "activacion", label: "Activación" },
   { id: "respuestas", label: "Respuestas" },
@@ -22,23 +127,17 @@ const SECTIONS: Array<{ id: SectionId; label: string }> = [
 const norm = (s: string) =>
   s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
-export default function AgentDocsTab() {
-  const doc = betterwareAgentDocs;
+export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
+  const doc = useMemo(() => pickDoc(slug ?? ""), [slug]);
   const [selectedId, setSelectedId] = useState<string>(doc.subagents[0].id);
   const [activeSection, setActiveSection] = useState<SectionId>("descripcion");
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState<AgentCategory | "">("");
+  const [category, setCategory] = useState<string>("");
 
   const countsByCategory = useMemo(() => {
-    const counts: Record<AgentCategory, number> = {
-      "Atención y seguridad": 0,
-      "Servicio y trámites": 0,
-      "Puntos y programas": 0,
-      "Pedidos y logística": 0,
-      "Red y datos comerciales": 0,
-      "Saldos y pagos": 0,
-    };
-    for (const s of doc.subagents) counts[s.category]++;
+    const counts: Record<string, number> = {};
+    for (const cat of doc.categories) counts[cat] = 0;
+    for (const s of doc.subagents) counts[s.category] = (counts[s.category] ?? 0) + 1;
     return counts;
   }, [doc]);
 
@@ -52,18 +151,50 @@ export default function AgentDocsTab() {
   }, [doc, search, category]);
 
   const grouped = useMemo(() => {
-    const groups: Array<[AgentCategory, AgentSubagentDoc[]]> = [];
-    for (const cat of CATEGORIES) {
+    const groups: Array<[string, SubagentLite[]]> = [];
+    for (const cat of doc.categories) {
       const items = filtered.filter((a) => a.category === cat);
       if (items.length > 0) groups.push([cat, items]);
     }
     return groups;
-  }, [filtered]);
+  }, [doc, filtered]);
 
   const selected = doc.subagents.find((s) => s.id === selectedId) ?? doc.subagents[0];
+  const sections = useMemo<Array<{ id: SectionId; label: string }>>(() => {
+    if (!selected.escenarios || selected.escenarios.length === 0) return BASE_SECTIONS;
+    return [
+      ...BASE_SECTIONS.slice(0, 5),
+      { id: "escenarios", label: `Escenarios de prueba (${selected.escenarios.length})` },
+      BASE_SECTIONS[5],
+    ];
+  }, [selected]);
+
+  const statusLabel = doc.estado ?? "";
 
   return (
     <div className="agent-docs">
+      {/* Encabezado con versión + estado */}
+      <header className="doc-header">
+        <div className="doc-head-main">
+          <div className="doc-eyebrow">Documentación del agente</div>
+          <h1>{doc.name}</h1>
+          <p className="doc-dev">
+            <code>{doc.developerName}</code>
+          </p>
+          {doc.canal && <p className="doc-channel">Canal: {doc.canal}</p>}
+          <p className="doc-base">{doc.base}</p>
+        </div>
+        <div className="doc-head-badges">
+          <span className="badge version">{doc.version}</span>
+          {statusLabel && (
+            <span className={`badge status status-${statusLabel.toLowerCase()}`}>
+              {statusLabel}
+            </span>
+          )}
+          <span className="badge revision">Rev. {doc.revision}</span>
+        </div>
+      </header>
+
       {/* Dashboard de categorías */}
       <div className="dash-grid">
         <button
@@ -77,14 +208,14 @@ export default function AgentDocsTab() {
           <strong>{doc.subagents.length}</strong>
           <span>Subagentes en total</span>
         </button>
-        {CATEGORIES.map((cat) => (
+        {doc.categories.map((cat) => (
           <button
             key={cat}
             type="button"
             onClick={() => setCategory(category === cat ? "" : cat)}
             className={`dash-cat ${category === cat ? "is-selected" : ""}`}
           >
-            <strong>{countsByCategory[cat]}</strong>
+            <strong>{countsByCategory[cat] ?? 0}</strong>
             <span>{cat}</span>
           </button>
         ))}
@@ -105,10 +236,10 @@ export default function AgentDocsTab() {
           <select
             id="agent-cat"
             value={category}
-            onChange={(e) => setCategory(e.target.value as AgentCategory | "")}
+            onChange={(e) => setCategory(e.target.value)}
           >
             <option value="">Todas las categorías</option>
-            {CATEGORIES.map((c) => (
+            {doc.categories.map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>
@@ -151,6 +282,11 @@ export default function AgentDocsTab() {
                     >
                       <span className="list-num">{String(a.number).padStart(2, "0")}</span>
                       <span className="list-name">{a.name}</span>
+                      {a.estado && (
+                        <span className={`list-badge badge-${(a.estado || "").toLowerCase().replace(/[^a-z0-9]/g, "-")}`}>
+                          {a.estado}
+                        </span>
+                      )}
                       <span className="list-chev" aria-hidden="true">
                         ›
                       </span>
@@ -168,8 +304,16 @@ export default function AgentDocsTab() {
             <div>
               <div className="eyebrow">
                 {selected.category.toUpperCase()} · {String(selected.number).padStart(2, "0")}
+                {selected.estado && (
+                  <span className="eyebrow-status">· {selected.estado}</span>
+                )}
               </div>
               <h1>{selected.name}</h1>
+              {selected.developerName && (
+                <p className="sheet-dev">
+                  <code>{selected.developerName}</code>
+                </p>
+              )}
             </div>
             <button
               type="button"
@@ -187,7 +331,7 @@ export default function AgentDocsTab() {
           </header>
 
           <nav className="section-tabs" role="tablist">
-            {SECTIONS.map((s) => (
+            {sections.map((s) => (
               <button
                 key={s.id}
                 type="button"
@@ -251,14 +395,29 @@ export default function AgentDocsTab() {
                 </ol>
               </section>
             )}
+            {(activeSection === "escenarios" || activeSection === "todo") &&
+              selected.escenarios &&
+              selected.escenarios.length > 0 && (
+                <section className="field">
+                  <h2>Escenarios de prueba</h2>
+                  <p className="field-hint">
+                    Flujos completos con datos reales de la hoja <em>Datos de prueba</em> y conversación de ejemplo.
+                  </p>
+                  <div className="scenarios">
+                    {selected.escenarios.map((e) => (
+                      <ScenarioCard key={e.id} escenario={e} />
+                    ))}
+                  </div>
+                </section>
+              )}
           </div>
         </article>
       </div>
 
       <footer className="docs-foot">
         <span>
-          <strong>Agente:</strong> {doc.name} ({doc.developerName}) · Versión {doc.version} · Revisión{" "}
-          {doc.revision}
+          <strong>Agente:</strong> {doc.name} ({doc.developerName}) · Versión {doc.version}
+          {statusLabel ? ` · ${statusLabel}` : ""} · Revisión {doc.revision}
         </span>
         <p className="base-note">{doc.base}</p>
       </footer>
@@ -271,13 +430,110 @@ export default function AgentDocsTab() {
           --muted: #667b8e;
           --line: #dce5ed;
           --bg: #f3f6f9;
+          --accent: #d97706;
           color: var(--ink);
           font-size: 14px;
           line-height: 1.65;
         }
+        .doc-header {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          gap: 24px;
+          align-items: start;
+          background: linear-gradient(135deg, #075464 0%, #0b7a90 100%);
+          color: #e2f6f9;
+          padding: 22px 26px;
+          border-radius: 9px;
+          margin-bottom: 20px;
+        }
+        @media (max-width: 820px) {
+          .doc-header {
+            grid-template-columns: 1fr;
+          }
+        }
+        .doc-eyebrow {
+          font-size: 10px;
+          letter-spacing: 0.6px;
+          text-transform: uppercase;
+          color: #a3dde6;
+          margin-bottom: 6px;
+        }
+        .doc-head-main h1 {
+          margin: 0;
+          font-size: 24px;
+          font-weight: 650;
+          color: #ffffff;
+          letter-spacing: -0.4px;
+        }
+        .doc-dev {
+          margin: 6px 0 0;
+          font-size: 12px;
+          color: #c7edf3;
+        }
+        .doc-dev code,
+        .sheet-dev code {
+          background: rgba(255, 255, 255, 0.1);
+          padding: 1px 6px;
+          border-radius: 3px;
+          font-family: ui-monospace, monospace;
+          font-size: 11px;
+        }
+        .doc-channel {
+          margin: 6px 0 0;
+          font-size: 11px;
+          color: #b4e2eb;
+        }
+        .doc-base {
+          margin: 10px 0 0;
+          font-size: 12.5px;
+          color: #e8f5f8;
+          line-height: 1.65;
+        }
+        .doc-head-badges {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 8px;
+        }
+        @media (max-width: 820px) {
+          .doc-head-badges {
+            flex-direction: row;
+            align-items: center;
+          }
+        }
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          padding: 6px 11px;
+          border-radius: 999px;
+          font-size: 11px;
+          font-weight: 650;
+          letter-spacing: 0.3px;
+        }
+        .badge.version {
+          background: #ffffff;
+          color: #075464;
+          font-size: 13px;
+          padding: 7px 15px;
+        }
+        .badge.status {
+          background: var(--accent);
+          color: #ffffff;
+          text-transform: uppercase;
+        }
+        .badge.status-draft {
+          background: #d97706;
+        }
+        .badge.status-published {
+          background: #15803d;
+        }
+        .badge.revision {
+          background: rgba(255, 255, 255, 0.14);
+          color: #e2f6f9;
+        }
         .dash-grid {
           display: grid;
-          grid-template-columns: 1.05fr repeat(6, minmax(0, 1fr));
+          grid-template-columns: 1.05fr repeat(auto-fit, minmax(100px, 1fr));
           gap: 10px;
           margin-bottom: 24px;
         }
@@ -348,7 +604,7 @@ export default function AgentDocsTab() {
 
         .agent-workspace {
           display: grid;
-          grid-template-columns: 300px minmax(0, 1fr);
+          grid-template-columns: 320px minmax(0, 1fr);
           gap: 24px;
           align-items: start;
         }
@@ -430,7 +686,7 @@ export default function AgentDocsTab() {
         }
         .list-item {
           display: flex;
-          align-items: flex-start;
+          align-items: center;
           gap: 9px;
           padding: 11px 9px;
           border-radius: 5px;
@@ -466,6 +722,30 @@ export default function AgentDocsTab() {
         }
         .list-name {
           flex: 1;
+        }
+        .list-badge {
+          font-size: 9px;
+          padding: 2px 6px;
+          border-radius: 10px;
+          background: #e2f6f9;
+          color: #075464;
+          font-weight: 650;
+          text-transform: uppercase;
+          letter-spacing: 0.3px;
+        }
+        .list-badge.badge-draft {
+          background: #fef3c7;
+          color: #92400e;
+        }
+        .list-badge.badge-implementado,
+        .list-badge.badge-implementado--voice- {
+          background: #dcfce7;
+          color: #166534;
+        }
+        .list-badge.badge-diseño-pendiente,
+        .list-badge.badge-dise-o-pendiente {
+          background: #fee2e2;
+          color: #991b1b;
         }
         .list-chev {
           margin-left: auto;
@@ -506,6 +786,11 @@ export default function AgentDocsTab() {
           color: #70899c;
           font-size: 10px;
         }
+        .eyebrow-status {
+          margin-left: 5px;
+          color: #d97706;
+          font-weight: 650;
+        }
         .sheet h1 {
           margin: 8px 0 0;
           font-size: 26px;
@@ -513,6 +798,15 @@ export default function AgentDocsTab() {
           letter-spacing: -0.6px;
           color: var(--deep);
           font-weight: 650;
+        }
+        .sheet-dev {
+          margin: 4px 0 0;
+          font-size: 11px;
+          color: var(--muted);
+        }
+        .sheet-dev code {
+          background: #f3f6f9;
+          color: var(--deep);
         }
         .copy-btn {
           white-space: nowrap;
@@ -640,6 +934,11 @@ export default function AgentDocsTab() {
           color: #164b57;
         }
 
+        .scenarios {
+          display: grid;
+          gap: 18px;
+        }
+
         .empty {
           padding: 25px 7px;
           font-size: 12px;
@@ -680,4 +979,289 @@ function emphasize(s: string): string {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
   return escaped.replace(EMPHASIS_PATTERNS, "<strong>$1</strong>");
+}
+
+// -----------------------------------------------------------------------------
+// Escenario — tarjeta expandible
+// -----------------------------------------------------------------------------
+
+function ScenarioCard({ escenario }: { escenario: PaquetexpressTestScenario }) {
+  const [open, setOpen] = useState(true);
+  const flujoClass = escenario.flujo
+    .toLowerCase()
+    .replace(/\s|\(|\)/g, "-")
+    .replace(/-+/g, "-");
+
+  return (
+    <article className={`scenario scenario-${flujoClass}`}>
+      <header
+        className="scenario-head"
+        role="button"
+        tabIndex={0}
+        onClick={() => setOpen((v) => !v)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setOpen((v) => !v);
+          }
+        }}
+      >
+        <div className="scenario-head-left">
+          <span className={`scenario-flujo flujo-${flujoClass}`}>{escenario.flujo}</span>
+          <span className="scenario-id">{escenario.id}</span>
+          <h3>{escenario.titulo}</h3>
+        </div>
+        <span className="scenario-toggle" aria-hidden="true">
+          {open ? "−" : "+"}
+        </span>
+      </header>
+      {open && (
+        <div className="scenario-body">
+          <p className="scenario-desc">{escenario.descripcion}</p>
+
+          <h4>Precondiciones</h4>
+          <ul className="scenario-list">
+            {escenario.precondiciones.map((p, i) => (
+              <li key={i}>{p}</li>
+            ))}
+          </ul>
+
+          <h4>Datos de prueba</h4>
+          <table className="scenario-data">
+            <tbody>
+              {escenario.datosDePrueba.map((d, i) => (
+                <tr key={i}>
+                  <th>{d.campo}</th>
+                  <td>{d.valor}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <h4>Conversación de ejemplo</h4>
+          <div className="scenario-convo">
+            {escenario.conversacion.map((t, i) => (
+              <div key={i} className={`turn turn-${t.speaker.toLowerCase()}`}>
+                <span className="turn-speaker">{t.speaker}</span>
+                <div className="turn-content">
+                  <p className="turn-text">{t.text}</p>
+                  {t.nota && <p className="turn-nota">{t.nota}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <h4>Resultado esperado</h4>
+          <p className="scenario-result">{escenario.resultadoEsperado}</p>
+        </div>
+      )}
+
+      <style jsx>{`
+        .scenario {
+          border: 1px solid #dce9ec;
+          border-radius: 7px;
+          background: white;
+          overflow: hidden;
+        }
+        .scenario-flujo-normal {
+          border-left: 4px solid #15803d;
+        }
+        .scenario-flujo-prepago-rpp- {
+          border-left: 4px solid #0891b2;
+        }
+        .scenario-flujo-prepago-rpp,
+        .scenario-flujo-prepago- {
+          border-left: 4px solid #0891b2;
+        }
+        .scenario-flujo-ww {
+          border-left: 4px solid #a855f7;
+        }
+        .scenario-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 15px 18px;
+          background: #f8fbfc;
+          cursor: pointer;
+          gap: 12px;
+        }
+        .scenario-head:hover {
+          background: #eaf4fc;
+        }
+        .scenario-head-left {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          flex: 1;
+        }
+        .scenario-head-left h3 {
+          margin: 0;
+          font-size: 14px;
+          font-weight: 650;
+          color: var(--deep);
+          flex: 1;
+          min-width: 220px;
+        }
+        .scenario-flujo {
+          display: inline-flex;
+          font-size: 10px;
+          letter-spacing: 0.4px;
+          padding: 3px 8px;
+          border-radius: 999px;
+          font-weight: 650;
+          text-transform: uppercase;
+          color: white;
+        }
+        .flujo-normal {
+          background: #15803d;
+        }
+        .flujo-prepago-rpp-,
+        .flujo-prepago-rpp,
+        .flujo-prepago- {
+          background: #0891b2;
+        }
+        .flujo-ww {
+          background: #a855f7;
+        }
+        .flujo-general {
+          background: #4b5563;
+        }
+        .scenario-id {
+          font-family: ui-monospace, monospace;
+          font-size: 10px;
+          color: var(--muted);
+          background: white;
+          padding: 2px 7px;
+          border-radius: 3px;
+          border: 1px solid #e5edf0;
+        }
+        .scenario-toggle {
+          font-size: 20px;
+          color: var(--muted);
+          font-weight: 400;
+        }
+        .scenario-body {
+          padding: 18px 22px 22px;
+          border-top: 1px solid #e5edf0;
+        }
+        .scenario-body h4 {
+          margin: 20px 0 10px;
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.6px;
+          color: #456775;
+          font-weight: 650;
+        }
+        .scenario-body h4:first-child {
+          margin-top: 0;
+        }
+        .scenario-desc {
+          margin: 0 0 10px;
+          font-size: 13px;
+          line-height: 1.7;
+          color: #334455;
+        }
+        .scenario-list {
+          padding-left: 20px;
+          margin: 0;
+        }
+        .scenario-list li {
+          font-size: 12.5px;
+          line-height: 1.7;
+          margin-bottom: 4px;
+        }
+        .scenario-data {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 12px;
+          margin-top: 4px;
+          border: 1px solid #e5edf0;
+          border-radius: 5px;
+          overflow: hidden;
+        }
+        .scenario-data th,
+        .scenario-data td {
+          border-top: 1px solid #e5edf0;
+          padding: 8px 12px;
+          text-align: left;
+          vertical-align: top;
+        }
+        .scenario-data tr:first-child th,
+        .scenario-data tr:first-child td {
+          border-top: 0;
+        }
+        .scenario-data th {
+          background: #f8fbfc;
+          font-weight: 650;
+          color: var(--deep);
+          width: 32%;
+          font-size: 11.5px;
+        }
+        .scenario-data td {
+          font-size: 12px;
+          color: #334455;
+          font-family: ui-monospace, monospace;
+        }
+        .scenario-convo {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .turn {
+          display: grid;
+          grid-template-columns: 90px minmax(0, 1fr);
+          gap: 10px;
+          align-items: start;
+          padding: 7px 10px;
+          border-radius: 5px;
+        }
+        .turn-agente {
+          background: #ecfeff;
+        }
+        .turn-cliente {
+          background: #fef9c3;
+        }
+        .turn-sistema {
+          background: #f3f4f6;
+        }
+        .turn-speaker {
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.4px;
+          font-weight: 650;
+          padding-top: 2px;
+          color: #334455;
+        }
+        .turn-content {
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+        }
+        .turn-text {
+          margin: 0;
+          font-size: 13px;
+          line-height: 1.65;
+          color: #1f2937;
+        }
+        .turn-nota {
+          margin: 0;
+          font-size: 10.5px;
+          color: #6b7280;
+          font-style: italic;
+        }
+        .scenario-result {
+          background: #ecfdf5;
+          border: 1px solid #a7f3d0;
+          border-left: 4px solid #15803d;
+          padding: 12px 15px;
+          border-radius: 5px;
+          font-size: 12.5px;
+          line-height: 1.7;
+          color: #065f46;
+          margin: 0;
+        }
+      `}</style>
+    </article>
+  );
 }
