@@ -323,7 +323,7 @@
           <tr>
             <td>5 min</td>
             <td style="text-align:left;">Siguientes 2 semanas · plan vivo</td>
-            <td style="text-align:left;">Confirmar fechas de F1.5 (10-nov) y F2 shadow (17-nov).</td>
+            <td style="text-align:left;">Confirmar fechas de F1.5 (20-oct), F2 shadow (26-oct), F3 soft (2-nov) y GA 100 % (22-nov).</td>
           </tr>
           <tr>
             <td>5 min</td>
@@ -410,48 +410,44 @@
     </div>
   </section>
 
-  <!-- SLIDE 5 · DOS AGENTES -->
+  <!-- SLIDE 5 · AGENTE RETENCIÓN TDC -->
   <section class="slide" id="slide-5">
-    <span class="brand-chip">Dos agentes · un propósito</span>
+    <span class="brand-chip">El agente · Retención Invex TDC</span>
     <span class="slide-num"><span class="current">05</span> / 09</span>
     <span class="section-eyebrow">03 · Qué construyó el Equipo FDE Salesforce en el sandbox</span>
-    <h2>Un agente productivo y una línea base</h2>
-    <p class="lead">La convención: construir dos agentes paralelos — uno minimal (<em>Baseline</em>) y uno completo (<em>Retenciones</em>) — para tener comparación y rollback claros desde día 1.</p>
-    <div class="agents-grid">
-      <div class="agent-card baseline">
-        <div class="agent-hero"><span class="label">Baseline · Águila</span></div>
-        <div class="agent-body">
-          <div class="agent-tag">Línea base · scaffold mínimo</div>
-          <h3>AF_Voice_Invex_Baseline_Aguila</h3>
-          <div class="meta-row">
-            <span class="k">Tamaño DSL</span><span class="v">22 KB · 414 líneas</span>
-            <span class="k">Modelo</span><span class="v">Hyper Classifier</span>
-            <span class="k">Subagents de dominio</span><span class="v">1</span>
-            <span class="k">Variables de estado</span><span class="v">0</span>
-          </div>
-          <ul class="features">
-            <li>Clon directo del patrón El Águila con dominio Invex</li>
-            <li>Útil para A/B o archivarse (decisión pendiente del Equipo FDE Salesforce)</li>
-            <li>Mismo stack de voz (Marisa, speed 1.1, stability 0.82)</li>
-          </ul>
-        </div>
-      </div>
+    <h2>Agente productivo · 5 iteraciones en 2 días</h2>
+    <p class="lead">El Equipo FDE Salesforce clonó el patrón de voice agent interno (33 versiones iteradas) y en 48 horas lo instanció completo con 6 subagents, 42 variables de estado y 5 iteraciones del DSL.</p>
+    <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; max-width: 1400px;">
       <div class="agent-card retention">
         <div class="agent-hero"><span class="label">Retención TDC · v5</span></div>
         <div class="agent-body">
-          <div class="agent-tag">Agente productivo · 5 iteraciones</div>
-          <h3>AF_Voice_Invex_Retenciones_TDC</h3>
+          <div class="agent-tag">AF_Voice_Invex_Retenciones_TDC</div>
+          <h3>Ficha técnica</h3>
           <div class="meta-row">
             <span class="k">Tamaño DSL</span><span class="v">54 KB · 877 líneas</span>
-            <span class="k">Modelo</span><span class="v">Claude Opus 4.7</span>
-            <span class="k">Subagents de dominio</span><span class="v">6</span>
-            <span class="k">Variables de estado</span><span class="v">42</span>
+            <span class="k">Modelo LLM</span><span class="v">Claude Opus 4.7</span>
+            <span class="k">STT · TTS</span><span class="v">Nova 2 · ElevenLabs</span>
+            <span class="k">Idioma · tono</span><span class="v">es_MX · usted · casual</span>
+            <span class="k">Subagents dominio</span><span class="v">6</span>
+            <span class="k">Variables estado</span><span class="v">42</span>
+            <span class="k">Acciones Apex</span><span class="v">5 invocables + 2 flows</span>
+            <span class="k">Tests Apex</span><span class="v">61 pass · 100 %</span>
           </div>
-          <ul class="features">
-            <li>Recepción · Identificación · Sondeo · Oferta · Cierre · Escalamiento</li>
-            <li>Flujo determinista con guardas booleanas por etapa</li>
-            <li>Guardrails de prompt injection y privacidad hard-coded</li>
-            <li>Rotación de ofertas con <code>Siguiente_oferta</code> para objeciones</li>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 16px; justify-content: center;">
+        <div class="agent-card" style="border-left: 4px solid var(--eb50); padding: 20px 24px;">
+          <div class="agent-tag" style="color: var(--eb50);">Subagents de dominio · flujo determinista</div>
+          <h3 style="font-size: 20px; margin: 6px 0;">Recepción → Identificación → Sondeo → Oferta → Cierre → Escalamiento</h3>
+          <p style="font-size: 13.5px; color: var(--slate); margin: 6px 0 0 0;">Guardas booleanas por etapa (<code>intencion_confirmada</code>, <code>rfc_confirmado</code>, <code>verificado</code>, <code>consentimiento</code>…). Transición solo cuando la etapa anterior está resuelta.</p>
+        </div>
+        <div class="agent-card" style="border-left: 4px solid var(--ok); padding: 20px 24px;">
+          <div class="agent-tag" style="color: var(--ok);">Diferenciadores clave</div>
+          <ul style="font-size: 13.5px; line-height: 1.5; margin: 6px 0 0 0; padding-left: 18px;">
+            <li>Disclosure de IA explícito en el welcome ("le atiende una asistente virtual")</li>
+            <li>Rotación de ofertas con <code>Siguiente_oferta</code> para manejar objeciones</li>
+            <li>Guardrails hard-coded de prompt injection y privacidad</li>
+            <li>Reglas éticas de retención (no insistir tras negativa, no promesas, no comparar bancos)</li>
           </ul>
         </div>
       </div>
@@ -462,51 +458,51 @@
   <section class="slide" id="slide-6">
     <span class="brand-chip">Timeline · F0 → F4 · 4 meses</span>
     <span class="slide-num"><span class="current">06</span> / 09</span>
-    <span class="section-eyebrow">04 · Plan vivo</span>
-    <h2>De hoy a GA en 100 % del tráfico</h2>
-    <p class="lead">F1 avanzó 4 semanas en 4 días gracias al trabajo del Equipo FDE Salesforce. Las siguientes 3 fases dependen de que Invex entregue las 4 definiciones y de que Telasist firme las 3 decisiones operativas.</p>
+    <span class="section-eyebrow">04 · Plan comprimido · 6 semanas</span>
+    <h2>De hoy a GA en 6 semanas · vie 22-nov</h2>
+    <p class="lead">Timeline agresivo: GA el 22-nov. F1 ya al 85 % cierra esta semana. F1.5 arranca en cuanto Invex entregue las reglas. Las siguientes 4 fases ocurren en semanas consecutivas sin pausas intermedias.</p>
     <div class="timeline-wrap">
       <div class="timeline-grid">
         <div class="ph inprogress">
           <div class="ph-dot">F0</div>
           <h4>Discovery</h4>
-          <div class="ph-date">13 Oct · 3 sem</div>
-          <div class="ph-text">Cerrar 3 bloqueantes de Invex + 6 decisiones operativas.</div>
+          <div class="ph-date">12 → 18 Oct · 1 sem</div>
+          <div class="ph-text">Cerrar 3 bloqueantes de Invex + 6 decisiones operativas en paralelo con cierre de F1.</div>
           <span class="ph-status">En curso</span>
         </div>
-        <div class="ph done">
+        <div class="ph inprogress">
           <div class="ph-dot">F1</div>
           <h4>Build</h4>
-          <div class="ph-date">13 Oct → 7 Nov</div>
-          <div class="ph-text">Agente + Apex + Custom Metadata. 14/17 completas.</div>
+          <div class="ph-date">12 → 19 Oct · 1 sem</div>
+          <div class="ph-text">Cierre del 15 % restante: test spec, code review, deploy + 1 llamada real.</div>
           <span class="ph-status">85 %</span>
         </div>
         <div class="ph future">
           <div class="ph-dot">F1.5</div>
           <h4>Replace mocks</h4>
-          <div class="ph-date">10 Nov · 1 sem</div>
-          <div class="ph-text">Poblar reglas reales con la matriz Invex. Accuracy ≥ 95 %.</div>
+          <div class="ph-date">20 → 25 Oct · 5 d</div>
+          <div class="ph-text">Poblar reglas reales con la matriz Invex. Accuracy ≥ 95 % sobre 50 escenarios.</div>
           <span class="ph-status">Depende Invex</span>
         </div>
         <div class="ph future">
           <div class="ph-dot">F2</div>
           <h4>Shadow</h4>
-          <div class="ph-date">17 Nov · 2 sem</div>
-          <div class="ph-text">Agente observa el 5–10 % del tráfico. Comparación vs humano.</div>
+          <div class="ph-date">26 Oct → 1 Nov · 1 sem</div>
+          <div class="ph-text">Agente observa el 5–10 % del tráfico. Comparación vs humano con 300+ llamadas.</div>
           <span class="ph-status">Depende legal</span>
         </div>
         <div class="ph future">
           <div class="ph-dot">F3</div>
           <h4>Soft launch</h4>
-          <div class="ph-date">1 Dic · 2 sem</div>
-          <div class="ph-text">10 % del tráfico en horario valle con rollback automático.</div>
+          <div class="ph-date">2 → 8 Nov · 1 sem</div>
+          <div class="ph-text">10 % del tráfico en horario valle con rollback automático. ~100 llamadas reales.</div>
           <span class="ph-status">Pendiente</span>
         </div>
         <div class="ph future">
           <div class="ph-dot">F4</div>
-          <h4>Rollout</h4>
-          <div class="ph-date">12 Ene · 5 sem</div>
-          <div class="ph-text">25 → 50 → 75 → 100 %. GA el 6 de febrero 2027.</div>
+          <h4>Rollout GA</h4>
+          <div class="ph-date">9 → 22 Nov · 2 sem</div>
+          <div class="ph-text">25 → 50 → 75 → 100 %. 🎯 GA 100 % vie 22-nov. QBR cierre.</div>
           <span class="ph-status">Target GA</span>
         </div>
       </div>
@@ -524,10 +520,10 @@
       <div class="req-col invex">
         <h3>Invex <span class="owner-tag">Cliente final</span></h3>
         <ul class="req-list">
-          <li><span class="title" style="color:var(--invex);">① Matriz de decisión del beneficio</span><span class="desc">Tabla semáforo + VPN + segmento + standing → beneficio permitido. Formato CSV listo para Custom Metadata. <strong>Fecha: 24-oct.</strong></span></li>
-          <li><span class="title" style="color:var(--invex);">② Aprobación legal IA</span><span class="desc">Política de disclosure, grabación y residencia de datos firmada por Legal + Compliance. <strong>Fecha: 7-nov.</strong></span></li>
-          <li><span class="title" style="color:var(--invex);">③ Política de fallo de identidad</span><span class="desc">Reintentos máximo + mensaje al cliente + lista completa de escalamientos forzados. <strong>Fecha: 31-oct.</strong></span></li>
-          <li><span class="title">④ Catálogo 2026 oficial</span><span class="desc">Montos exactos de los 12 beneficios A–J + confirmación de tabla de fees vigente. <strong>Fecha: 31-oct.</strong></span></li>
+          <li><span class="title" style="color:var(--invex);">① Matriz de decisión del beneficio</span><span class="desc">Tabla semáforo + VPN + segmento + standing → beneficio permitido. Formato CSV listo para Custom Metadata. <strong>Fecha: 19-oct.</strong></span></li>
+          <li><span class="title" style="color:var(--invex);">② Aprobación legal IA</span><span class="desc">Política de disclosure, grabación y residencia de datos firmada por Legal + Compliance. <strong>Fecha: 25-oct.</strong></span></li>
+          <li><span class="title" style="color:var(--invex);">③ Política de fallo de identidad</span><span class="desc">Reintentos máximo + mensaje al cliente + lista completa de escalamientos forzados. <strong>Fecha: 18-oct.</strong></span></li>
+          <li><span class="title">④ Catálogo 2026 oficial</span><span class="desc">Montos exactos de los 12 beneficios A–J + confirmación de tabla de fees vigente. <strong>Fecha: 18-oct.</strong></span></li>
         </ul>
       </div>
       <div class="req-col telasist">
@@ -690,8 +686,8 @@
           </div>
           <div style="font-size:12px; color:var(--slate); line-height:1.5;">
             <strong style="color:var(--eb15);">F0 · Discovery closure</strong> · 10 de 15 actividades.<br>
-            <strong style="color:var(--eb15);">F1.5 · Replace mocks</strong> · pendiente · 10-nov.<br>
-            <strong style="color:var(--eb15);">F2 · Shadow pilot</strong> · pendiente · 17-nov.
+            <strong style="color:var(--eb15);">F1.5 · Replace mocks</strong> · pendiente · 20-oct.<br>
+            <strong style="color:var(--eb15);">F2 · Shadow pilot</strong> · pendiente · 26-oct.
           </div>
         </div>
       </div>
@@ -701,7 +697,7 @@
   <!-- SLIDE 10 · GRACIAS -->
   <section class="slide gracias" id="slide-10">
     <h1 class="gracias-h1">Gracias</h1>
-    <p class="gracias-sub">Las decisiones de hoy destraban el shadow pilot del 17 de noviembre y el GA del 6 de febrero. Nos vemos en el portal.</p>
+    <p class="gracias-sub">Las decisiones de hoy destraban el shadow pilot del 26-oct y el GA del vie 22-nov. Nos vemos en el portal.</p>
     <div class="gracias-contacts" style="grid-template-columns: repeat(4, 1fr); max-width: 1300px;">
       <div class="gracias-contact"><div class="name">Jonathan Gómez</div><div class="role">jonathan.gomez@salesforce.com</div></div>
       <div class="gracias-contact"><div class="name">Carlos Sosa</div><div class="role">carlos.sosa@salesforce.com</div></div>
