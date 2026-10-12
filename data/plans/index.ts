@@ -14,6 +14,7 @@ import {
   paquetexpressPlan,
   type PaquetexpressPlan,
 } from "../paquetexpressPlan";
+import { pamPlan, type PamPlan } from "../pamPlan";
 
 // Union of all project plans. All share the same structural shape; only the
 // literal `slug` type differs. Downstream consumers (canvas, tabs) treat this
@@ -22,13 +23,15 @@ export type ProjectPlan =
   | BetterwarePlan
   | JafraPlan
   | TelasistRetencionPlan
-  | PaquetexpressPlan;
+  | PaquetexpressPlan
+  | PamPlan;
 
 const PLANS: Record<string, ProjectPlan> = {
   betterware: betterwarePlan,
   jafra: jafraPlan,
   "telasist-retencion": telasistRetencionPlan,
   paquetexpress: paquetexpressPlan,
+  pam: pamPlan,
 };
 
 export function getPlanForSlug(slug: string): ProjectPlan | null {

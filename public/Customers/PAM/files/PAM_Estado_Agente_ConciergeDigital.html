@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Estado del Agente Concierge Digital · PAM Hotels</title>
+<style>
+  @font-face {
+    font-family: 'AvantGarde';
+    src: url('../../../Assets Salesforce Brand/Fonts/Titles/AvantGardeForSalesforceW05-Dm.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Regular.woff') format('woff');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Semibold.woff') format('woff');
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Bold.woff') format('woff');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'SalesforceSans';
+    src: url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Light.woff') format('woff');
+    font-weight: 300;
+  }
+
+  :root {
+    --eb15: #001E5B;
+    --eb30: #022AC0;
+    --eb50: #066AFE;
+    --cb68: #00B3FF;
+    --cb80: #90D0FE;
+    --cb95: #EAF5FE;
+    --rose: #E8275A;
+    --orange: #F28B42;
+    --green: #15803D;
+    --green-bg: #F0FDF4;
+    --green-rule: #BBF7D0;
+    --amber: #B45309;
+    --amber-bg: #FFFBEB;
+    --amber-rule: #FDE68A;
+    --red-bg: #FEF2F2;
+    --red-rule: #FECACA;
+    --red: #B91C1C;
+    --ink: #0A1F44;
+    --slate: #4B5563;
+    --mist: #F3F6FB;
+    --rule: #E2E8F0;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'SalesforceSans', -apple-system, system-ui, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    font-size: 10.5pt;
+    line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @page { size: letter; margin: 0; }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 0.6in 0.7in;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  h1, h2, h3, h4 {
+    font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+    color: var(--eb15);
+    margin: 0 0 0.4em 0;
+    line-height: 1.15;
+  }
+
+  /* COVER */
+  .cover {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 55%, var(--eb50) 100%);
+    color: #fff;
+    padding: 0.9in 0.9in;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover h1 { color: #fff; font-size: 40pt; letter-spacing: -0.01em; line-height: 1.05; margin-bottom: 0.3em; }
+  .cover .subtitle { font-weight: 300; font-size: 15pt; color: var(--cb80); margin-bottom: 1.1em; }
+  .cover .eyebrow {
+    display: inline-block;
+    font-size: 9pt; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--cb68);
+    padding: 0.4em 0.9em;
+    border: 1px solid rgba(144,208,254,0.5);
+    border-radius: 100px;
+    margin-bottom: 2.2em;
+  }
+  .cover .top-row { display: flex; justify-content: space-between; align-items: center; }
+  .cover-logo { height: 32px; filter: brightness(0) invert(1); }
+  .cover-date { font-size: 10pt; color: var(--cb80); letter-spacing: 0.05em; }
+  .cover-sparkles { position: absolute; top: 1.5in; right: 0.6in; opacity: 0.5; width: 180px; }
+  .cover-astro { position: absolute; right: -40px; bottom: -30px; width: 320px; opacity: 0.95; }
+  .cover-author { border-top: 1px solid rgba(144,208,254,0.3); padding-top: 0.9em; font-size: 10pt; }
+  .cover-author .name { font-weight: 600; color: #fff; font-size: 11pt; margin-bottom: 0.1em; }
+  .cover-author .role { color: var(--cb80); }
+  .cover-tagline { max-width: 5.5in; font-size: 12pt; line-height: 1.5; color: #fff; font-weight: 300; }
+
+  /* INNER PAGES */
+  .section-eyebrow {
+    display: inline-block;
+    font-size: 8.5pt; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--eb50);
+    margin-bottom: 0.6em;
+  }
+  h2 { font-size: 22pt; margin-bottom: 0.25em; }
+  h2 + .lead { font-size: 12pt; color: var(--slate); max-width: 6.5in; margin: 0 0 1.1em 0; line-height: 1.5; }
+
+  .page-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.1em; padding-bottom: 0.5em;
+    border-bottom: 1px solid var(--rule);
+    font-size: 8.5pt; color: var(--slate);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .page-head .brand { font-weight: 700; color: var(--eb30); }
+
+  .page-footer {
+    position: absolute; bottom: 0.35in; left: 0.7in; right: 0.7in;
+    font-size: 8pt; color: #9CA3AF;
+    display: flex; justify-content: space-between;
+    border-top: 1px solid var(--rule); padding-top: 0.4em;
+  }
+
+  .narrative {
+    background: var(--cb95);
+    border-left: 4px solid var(--eb50);
+    padding: 0.9em 1.1em;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1em;
+  }
+  .narrative p { margin: 0; font-size: 11pt; color: var(--ink); line-height: 1.55; }
+  .narrative .quote {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 14pt; color: var(--eb15);
+    line-height: 1.3; margin-bottom: 0.5em;
+  }
+
+  ul.clean { list-style: none; padding-left: 0; margin: 0.6em 0; }
+  ul.clean li {
+    padding: 0.4em 0 0.4em 1.4em;
+    position: relative; font-size: 10.5pt; line-height: 1.5;
+  }
+  ul.clean li::before {
+    content: ""; width: 6px; height: 6px;
+    border-radius: 50%; background: var(--eb50);
+    position: absolute; left: 0.3em; top: 0.8em;
+  }
+
+  /* stats callout */
+  .stats-callout {
+    background: linear-gradient(135deg, var(--eb15) 0%, var(--eb30) 100%);
+    color: #fff;
+    padding: 1.1em 1.3em;
+    border-radius: 12px;
+    margin: 1em 0;
+  }
+  .stats-callout .stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8em;
+  }
+  .stat-cell { text-align: center; }
+  .stat-cell .num {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 28pt; color: var(--cb68);
+    line-height: 1; display: block;
+    margin-bottom: 0.2em;
+  }
+  .stat-cell .label {
+    font-size: 8.5pt; color: var(--cb80);
+    letter-spacing: 0.05em; line-height: 1.3;
+  }
+
+  /* two columns */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; margin: 1em 0; }
+  .scope-card {
+    padding: 1em 1.2em;
+    border-radius: 10px;
+    border: 1px solid var(--rule);
+  }
+  .scope-card.ok {
+    background: linear-gradient(180deg, var(--green-bg) 0%, #fff 100%);
+    border-color: var(--green-rule);
+  }
+  .scope-card.open {
+    background: linear-gradient(180deg, var(--amber-bg) 0%, #fff 100%);
+    border-color: var(--amber-rule);
+  }
+  .scope-card.risk {
+    background: linear-gradient(180deg, var(--red-bg) 0%, #fff 100%);
+    border-color: var(--red-rule);
+  }
+  .scope-card h3 { font-size: 13pt; margin-bottom: 0.4em; }
+  .scope-card.ok h3 { color: #166534; }
+  .scope-card.open h3 { color: var(--amber); }
+  .scope-card.risk h3 { color: var(--red); }
+  .scope-card ul { list-style: none; padding-left: 0; margin: 0.4em 0 0 0; font-size: 9.8pt; }
+  .scope-card ul li {
+    padding: 0.3em 0 0.3em 1.3em;
+    position: relative;
+    line-height: 1.45;
+  }
+  .scope-card.ok ul li::before {
+    content: "✓"; position: absolute; left: 0; top: 0.3em;
+    color: var(--green); font-weight: 700;
+  }
+  .scope-card.open ul li::before {
+    content: "◐"; position: absolute; left: 0; top: 0.3em;
+    color: var(--amber); font-weight: 700;
+  }
+  .scope-card.risk ul li::before {
+    content: "!"; position: absolute; left: 0; top: 0.3em;
+    color: var(--red); font-weight: 700;
+  }
+
+  /* subagent grid */
+  .subagent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8em; margin: 1em 0; }
+  .subagent-card {
+    padding: 0.8em 1em;
+    border-radius: 10px;
+    border: 1px solid var(--rule);
+    background: #fff;
+    font-size: 9.5pt;
+  }
+  .subagent-card .sa-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 0.4em; padding-bottom: 0.4em;
+    border-bottom: 1px solid var(--rule);
+  }
+  .subagent-card .sa-name {
+    font-family: 'AvantGarde', sans-serif;
+    font-size: 11pt; color: var(--eb30);
+  }
+  .subagent-card .sa-status {
+    font-size: 8pt; font-weight: 700;
+    padding: 0.15em 0.6em; border-radius: 10px;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .subagent-card .sa-status.done {
+    background: var(--green-bg); color: var(--green);
+  }
+  .subagent-card .sa-status.open {
+    background: var(--amber-bg); color: var(--amber);
+  }
+  .subagent-card .sa-desc {
+    font-size: 9pt; color: var(--slate); line-height: 1.4;
+    margin-bottom: 0.4em;
+  }
+  .subagent-card .sa-actions {
+    font-size: 8.5pt; color: var(--eb30);
+    font-weight: 600;
+  }
+
+  /* program table */
+  table.program {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.7em 0 1em 0;
+    font-size: 10pt;
+  }
+  table.program td {
+    padding: 0.55em 0.9em;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  table.program td:first-child {
+    font-weight: 600; color: var(--eb30);
+    width: 2in; background: var(--mist);
+  }
+
+  /* kb matrix */
+  .kb-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.7em 0 1em 0;
+    font-size: 9.5pt;
+  }
+  .kb-matrix th {
+    text-align: left; padding: 0.5em 0.7em;
+    background: var(--mist); color: var(--eb15);
+    font-size: 8.5pt; letter-spacing: 0.08em; text-transform: uppercase;
+    border-bottom: 1px solid var(--rule);
+  }
+  .kb-matrix td {
+    padding: 0.5em 0.7em;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top; line-height: 1.4;
+  }
+  .kb-matrix td:first-child { font-weight: 600; color: var(--eb30); }
+  .kb-matrix td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .kb-matrix tr.total td { font-weight: 700; background: var(--cb95); color: var(--eb15); }
+
+  /* timeline */
+  .timeline {
+    position: relative;
+    padding-left: 1.2em;
+    margin: 1em 0 0.5em 0;
+    border-left: 2px solid var(--cb80);
+  }
+  .timeline-item { position: relative; padding: 0.4em 0 0.9em 0.6em; }
+  .timeline-item::before {
+    content: ""; position: absolute; left: -1.6em; top: 0.5em;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--eb50); border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--eb50);
+  }
+  .timeline-item.done::before { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+  .timeline-item.current::before { background: var(--orange); box-shadow: 0 0 0 2px var(--orange); }
+  .timeline-item.critical::before { background: var(--rose); box-shadow: 0 0 0 2px var(--rose); }
+  .timeline-item .date {
+    font-weight: 700; color: var(--eb30);
+    font-size: 10.5pt; display: inline-block; margin-right: 0.5em;
+  }
+  .timeline-item .label { font-size: 10.5pt; line-height: 1.45; }
+  .timeline-item .note {
+    font-size: 9.5pt; color: var(--slate);
+    line-height: 1.4; margin-top: 0.15em;
+  }
+
+  /* risk table */
+  .risk-table {
+    width: 100%; border-collapse: collapse;
+    margin: 0.7em 0 1em 0; font-size: 9.5pt;
+  }
+  .risk-table th {
+    text-align: left; padding: 0.5em 0.7em;
+    background: var(--mist); color: var(--eb15);
+    font-size: 8.5pt; letter-spacing: 0.08em; text-transform: uppercase;
+    border-bottom: 1px solid var(--rule);
+  }
+  .risk-table td {
+    padding: 0.5em 0.7em;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top; line-height: 1.4;
+  }
+  .risk-table td.id { font-weight: 700; color: var(--eb30); white-space: nowrap; }
+  .risk-table .chip {
+    display: inline-block; padding: 0.1em 0.5em;
+    border-radius: 10px; font-size: 8pt; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .chip.high { background: #FEE2E2; color: var(--red); }
+  .chip.med { background: #FEF3C7; color: var(--amber); }
+  .chip.low { background: var(--green-bg); color: var(--green); }
+
+  .notice {
+    background: var(--amber-bg);
+    border-left: 4px solid var(--amber);
+    padding: 0.8em 1em;
+    border-radius: 0 8px 8px 0;
+    margin: 1em 0;
+    font-size: 10.2pt; line-height: 1.5;
+  }
+  .notice strong { color: var(--amber); font-weight: 700; }
+
+  .next-step {
+    background: linear-gradient(135deg, var(--cb95) 0%, #fff 100%);
+    border: 2px solid var(--eb50);
+    border-radius: 14px;
+    padding: 1.1em 1.3em;
+    margin-top: 1.2em;
+  }
+  .next-step h3 {
+    color: var(--eb50); font-size: 13pt;
+    margin-bottom: 0.6em;
+  }
+  .next-step .step {
+    display: flex; gap: 0.9em; padding: 0.3em 0;
+    font-size: 10pt; line-height: 1.45;
+  }
+  .next-step .step .day {
+    font-weight: 700; color: var(--eb30);
+    min-width: 2.1in;
+  }
+
+  .inline-chip {
+    display: inline-block; padding: 0.1em 0.55em;
+    border-radius: 10px; font-size: 8.5pt;
+    font-weight: 700; letter-spacing: 0.03em;
+    background: var(--cb95); color: var(--eb30);
+    margin-right: 0.3em;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ============== PÁGINA 1 · PORTADA ============== -->
+<section class="page cover">
+  <div class="top-row">
+    <img class="cover-logo" src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" alt="Salesforce">
+    <span class="cover-date">OCTUBRE 2026</span>
+  </div>
+
+  <img class="cover-sparkles" src="../../../Assets Salesforce Brand/Sparkles/Sparkles Blue Main.svg" alt="">
+  <img class="cover-astro" src="../../../Assets Salesforce Brand/Carachters/Agent Astro/Agent Astro 3D 10 R.png" alt="">
+
+  <div>
+    <span class="eyebrow">Estado del proyecto · PAM Hotels</span>
+    <h1>Agente Concierge<br>Digital</h1>
+    <p class="subtitle">Paradise Pass · V5 Active en PAM-Sandbox · camino al go-live pre Legends of Paradise</p>
+    <p class="cover-tagline">Snapshot ejecutivo al 12-oct-2026. Lo que está construido, lo que queda abierto y la ruta de cierre a las 7 semanas que faltan.</p>
+  </div>
+
+  <div class="cover-author">
+    <div class="name">Jonathan Gomez</div>
+    <div class="role">Salesforce · Forward Deployed Engineer</div>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 2 · TL;DR ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · PAM Hotels</span>
+    <span>Estado del Agente · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">1 · TL;DR</span>
+  <h2>En 60 segundos</h2>
+  <p class="lead">
+    El Concierge Digital de Paradise Pass lleva <strong>V5 Active en Sandbox desde el 2026-07-08</strong>. Los 8 subagentes del MVP están construidos, enganchados a 15 acciones reales (Apex + Flow + Prompt Templates) y pasan el gate de autenticación de 3 fases. Lo que queda es <strong>cerrar 4 open items técnicos</strong>, publicar <strong>7 KB Articles aún en Draft</strong> y correr <strong>UAT con operación PAM</strong> antes del evento ancla de diciembre.
+  </p>
+
+  <div class="narrative">
+    <p class="quote">El agente ya estaba por finalizarse. Hoy la ruta a producción se mide en semanas, no en meses.</p>
+    <p>Al 12-oct quedan 7 semanas de calendario hasta el go-live pre Legends of Paradise (6-13 dic). F3 Pre-prod hardening está en curso, F4 UAT arranca 2026-11-03, F5 Go-live aterriza antes del 2026-12-05.</p>
+  </div>
+
+  <div class="stats-callout">
+    <div class="stats-grid">
+      <div class="stat-cell">
+        <span class="num">8</span>
+        <span class="label">Subagentes productivos</span>
+      </div>
+      <div class="stat-cell">
+        <span class="num">15</span>
+        <span class="label">Acciones conectadas<br>(10 Apex + 6 Flow + 2 Prompt)</span>
+      </div>
+      <div class="stat-cell">
+        <span class="num">44</span>
+        <span class="label">KB Articles Online<br>(+ 7 Draft)</span>
+      </div>
+      <div class="stat-cell">
+        <span class="num">3</span>
+        <span class="label">Idiomas en producción<br>es · en · pt</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="scope-card ok">
+      <h3>Lo que ya funciona</h3>
+      <ul>
+        <li>Autenticación 3 fases (identify fuzzy + challenge personal + OTP email)</li>
+        <li>Dashboard de certificados Paradise Pass a nivel socio</li>
+        <li>Programa de referidos con creación de Lead al owner del contrato</li>
+        <li>Entrega de formulario de beneficiarios en es/en/pt</li>
+        <li>Políticas críticas (huracán, reventa, phishing) citables desde KB</li>
+        <li>Ruteo preferente al asesor del contrato en handoff</li>
+        <li>Multicanal: WhatsApp, Embedded Messaging, Email, Facebook, Line, Apple Business Chat</li>
+      </ul>
+    </div>
+    <div class="scope-card open">
+      <h3>Lo que queda abierto</h3>
+      <ul>
+        <li>Integración OWS (Opera Web Services) para notificación automática al hotel</li>
+        <li>Creación automática de Case para disputas/reembolsos (pendiente queue)</li>
+        <li>Retriever R2 UDMO-Destinations para enganchar KB a Destinations</li>
+        <li>7 KB Articles Draft por validar (incluye UNICO Jamaica y Paradise Pass mechanics)</li>
+        <li>Matriz UAT y UAT formal con operación PAM</li>
+        <li>Deployment Sandbox → Production + comunicación al Contact Center</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Estado del Agente Concierge Digital</span>
+    <span>Página 2 · TL;DR</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 3 · QUÉ ES EL AGENTE ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · PAM Hotels</span>
+    <span>Estado del Agente · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">2 · El agente</span>
+  <h2>Qué es el Concierge Digital</h2>
+  <p class="lead">
+    Un Anfitrión Exclusivo y Concierge Experto para socios autenticados de Paradise Pass. Resuelve consultas 24/7 sobre membresía y certificados, beneficiarios, referidos, destinos, estado de cuenta, cambios de llegada y políticas críticas — y enruta temas complejos al equipo humano correcto.
+  </p>
+
+  <table class="program">
+    <tr>
+      <td>BotDefinition</td>
+      <td><code>Agente_ConciergeDigital</code> · ID <code>0XxO40000006sVZKAY</code></td>
+    </tr>
+    <tr>
+      <td>Autor inicial</td>
+      <td>Regina Segura (2026-06-23) · modificado por Jonathan Gomez (2026-07-08)</td>
+    </tr>
+    <tr>
+      <td>Versión activa</td>
+      <td><strong>V5 Active desde 2026-07-08</strong> (BotVersion <code>0X9O40000003gNhKAI</code>) · 5 versiones iteradas</td>
+    </tr>
+    <tr>
+      <td>Agent Template</td>
+      <td><code>SvcCopilotTmpl__AgentforceServiceAgent</code> · Agent Script DSL</td>
+    </tr>
+    <tr>
+      <td>Org</td>
+      <td>PAM-Sandbox (<code>00DO400000YzKHZMA3</code>) · 90 objetos custom · 220 record types</td>
+    </tr>
+    <tr>
+      <td>Audiencia</td>
+      <td>Socios <strong>autenticados</strong> de Paradise Pass (no clientes LVC, no público general)</td>
+    </tr>
+    <tr>
+      <td>Idiomas</td>
+      <td>Primary <code>en_US</code> · secondary <code>es_MX</code>, <code>pt_BR</code>, <code>en_GB</code> · adaptive=true</td>
+    </tr>
+    <tr>
+      <td>Canales</td>
+      <td>Text, WhatsApp, Email, Facebook, Line, Apple Business Chat, Embedded Messaging, Custom</td>
+    </tr>
+    <tr>
+      <td>Tono</td>
+      <td>Casual · cálido, exclusivo, consultivo · frases breves · sin markdown · empatía + transparencia + alternativa</td>
+    </tr>
+    <tr>
+      <td>Bot user</td>
+      <td><code>lvc_digital_concierge@00do400000yzkhz2118844205.ext</code></td>
+    </tr>
+    <tr>
+      <td>MLDomain</td>
+      <td><code>LVC_ConciergeDigital</code></td>
+    </tr>
+  </table>
+
+  <div class="narrative">
+    <p class="quote">Diseñado para no confundir audiencias.</p>
+    <p>Paradise Pass es producto de descubrimiento y activación; LVC es producto de pertenencia. El bot nunca cita LVC a un cliente PPass salvo en flujos explícitos de upgrade. Audiencia detectada en sesión + idioma del Account.Language__pc normalizado a es/en/pt.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Estado del Agente Concierge Digital</span>
+    <span>Página 3 · El agente</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 4 · 8 SUBAGENTES ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · PAM Hotels</span>
+    <span>Estado del Agente · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">3 · Arquitectura</span>
+  <h2>Los 8 subagentes productivos</h2>
+  <p class="lead">
+    Agent Router aplica <code>before_reasoning</code> para forzar autenticación antes de cualquier acceso a datos. Cada subagente tiene instrucciones propias, un set acotado de acciones, guardrails explícitos y una transición clara al enrutador o a Human_Handoff.
+  </p>
+
+  <div class="subagent-grid">
+    <div class="subagent-card">
+      <div class="sa-header">
+        <span class="sa-name">1 · Authentication</span>
+        <span class="sa-status done">Done</span>
+      </div>
+      <div class="sa-desc">3 fases: identify by name+phone fuzzy → desafío personal (4 campos privados) → OTP email con PAM_OTP__c (TTL 5 min, bloqueo tras 3 fallos, reenvío con contador).</div>
+      <div class="sa-actions">5 Apex: PAM_IdentifyMemberByNameAndPhone · PAM_GetChallengeQuestion · PAM_VerifyPersonalChallenge · PAM_SendOtpEmail · PAM_VerifyOtp</div>
+    </div>
+
+    <div class="subagent-card">
+      <div class="sa-header">
+        <span class="sa-name">2 · Membership_Account</span>
+        <span class="sa-status done">Done</span>
+      </div>
+      <div class="sa-desc">Dashboard de certificados a nivel socio: todos los contratos PPass con counts por categoría (Paid in Full · Balance Due · Expiring Soon · Cancelled · Redeemed). Beneficiarios solo lectura. Statement por email con confirmación.</div>
+      <div class="sa-actions">4 Flows: PAM_DG_GetActiveContract · PAM_DG_GetMembershipAndBalance · PAM_DG_GetBeneficiaries · PAM_DG_SendStatementEmail</div>
+    </div>
+
+    <div class="subagent-card">
+      <div class="sa-header">
+        <span class="sa-name">3 · Beneficiary_Modification</span>
+        <span class="sa-status done">Done</span>
+      </div>
+      <div class="sa-desc">Entrega formulario oficial en idioma del socio (es/en/pt). NO procesa cambios en línea · requiere documento firmado enviado por email. Prohíbe recoger datos de beneficiarios.</div>
+      <div class="sa-actions">1 Flow: PAM_DG_GetBeneficiaryFormLink</div>
+    </div>
+
+    <div class="subagent-card">
+      <div class="sa-header">
+        <span class="sa-name">4 · Benefits_Referrals</span>
+        <span class="sa-status done">Done</span>
+      </div>
+      <div class="sa-desc">Certificados + programa de referidos. Regla crítica: certificado "Expired" aún es utilizable. Lead creation con validación de teléfono local (sin lada internacional) y país normalizado automáticamente.</div>
+      <div class="sa-actions">3 Flows: PAM_DG_GetActiveContract · PAM_DG_GetMembershipAndBalance · PAM_DG_CreateReferralLead (RT VCL_Referral_Leads_PPASS)</div>
+    </div>
+
+    <div class="subagent-card">
+      <div class="sa-header">
+        <span class="sa-name">5 · Destinations</span>
+        <span class="sa-status open">Partial</span>
+      </div>
+      <div class="sa-desc">Primer filtro conversacional: 3 preguntas de descubrimiento (semana prepagada vs. descuento · zona + fechas · personas) → handoff al asesor. <strong>Pendiente: retriever R2 UDMO-Destinations.</strong></div>
+      <div class="sa-actions">Solo transiciones. Sin acciones de datos. Diseño R2 pendiente de implementación.</div>
+    </div>
+
+    <div class="subagent-card">
+      <div class="sa-header">
+        <span class="sa-name">6 · Preferences</span>
+        <span class="sa-status done">Done</span>
+      </div>
+      <div class="sa-desc">Cambio de idioma de la sesión actual (es/en/pt). Sin DML · no persiste cambios en el Account. Si pide otro idioma, continúa en el más cercano.</div>
+      <div class="sa-actions">Solo <code>setVariables</code> interno. 0 acciones externas.</div>
+    </div>
+
+    <div class="subagent-card">
+      <div class="sa-header">
+        <span class="sa-name">7 · Arrival_Support</span>
+        <span class="sa-status open">Partial</span>
+      </div>
+      <div class="sa-desc">Lista reservas, pregunta explícitamente por fecha de salida. Si salida NO cambia → avisa al hotel. <strong>Fallback actual escala a asesor humano · integración OWS en construcción.</strong></div>
+      <div class="sa-actions">1 Apex: PAM_GetMemberReservations · pendiente Flow PAM_DG_NotifyHotelArrivalChange con OWS</div>
+    </div>
+
+    <div class="subagent-card">
+      <div class="sa-header">
+        <span class="sa-name">8 · Critical_Policies</span>
+        <span class="sa-status done">Done</span>
+      </div>
+      <div class="sa-desc">Huracán · reventa · phishing. Fuente ÚNICA KB. Califica si el socio ya fue víctima (si sí → escala directo). Nunca parafrasea · si no hay artículo crea Case.</div>
+      <div class="sa-actions">1 Apex: PAM_CreateCaseForKBEmpty · 2 Prompt Templates: FWD_PPass_KB_Policies_Response · FWD_PPass_KB_Security_Response</div>
+    </div>
+
+    <div class="subagent-card" style="grid-column: 1 / span 2;">
+      <div class="sa-header">
+        <span class="sa-name">9 · Human_Handoff</span>
+        <span class="sa-status open">Partial</span>
+      </div>
+      <div class="sa-desc">Ruteo preferente al owner del contrato vía Omni-Channel. Si no hay owner → cola general. Creación de Case de cancelación para Reservaciones. <strong>Pendiente: queue y Case automation para disputas/reembolsos.</strong></div>
+      <div class="sa-actions">3 Apex: PAM_SetSessionContractOwner · PAM_RouteToSpecificAgent · PAM_CreateCaseForCancellation · pendiente PAM_CreateCaseForDispute</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Estado del Agente Concierge Digital</span>
+    <span>Página 4 · 8 subagentes</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 5 · KB STATUS ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · PAM Hotels</span>
+    <span>Estado del Agente · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">4 · Knowledge Base</span>
+  <h2>Inventario KB · 44 Online + 7 Draft</h2>
+  <p class="lead">
+    Al 12-oct hay 44 artículos publicados Online + 7 Draft (de 42 master en español, 126 versiones con traducciones a inglés y portugués). El cuello de botella hoy no es el contenido — es validar los 7 Draft con el Content Owner de PAM.
+  </p>
+
+  <table class="kb-matrix">
+    <thead>
+      <tr>
+        <th>Record Type</th>
+        <th class="num">Total master</th>
+        <th class="num">Validated</th>
+        <th class="num">In Review</th>
+        <th class="num">Planned</th>
+        <th>Bloqueantes clave</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Property Fact Sheet</td>
+        <td class="num">9</td>
+        <td class="num">8</td>
+        <td class="num">1</td>
+        <td class="num">0</td>
+        <td>KA-PFS-009 UNICO Jamaica · pendiente confirmar si aplica Paradise Pass</td>
+      </tr>
+      <tr>
+        <td>Policy</td>
+        <td class="num">9</td>
+        <td class="num">8</td>
+        <td class="num">1</td>
+        <td class="num">0</td>
+        <td>KA-POL-003 No-Show · PND-001 contradicción documental 1,200 vs 1,500 USD</td>
+      </tr>
+      <tr>
+        <td>Benefit &amp; Program</td>
+        <td class="num">4</td>
+        <td class="num">1</td>
+        <td class="num">0</td>
+        <td class="num">3</td>
+        <td>Sin fuente oficial de mecánica Paradise Pass (PND-008) · KA-BEN-001/002/004 bloqueados</td>
+      </tr>
+      <tr>
+        <td>FAQ Article</td>
+        <td class="num">10</td>
+        <td class="num">10</td>
+        <td class="num">0</td>
+        <td class="num">0</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>How-To / Self-Service</td>
+        <td class="num">7</td>
+        <td class="num">6</td>
+        <td class="num">0</td>
+        <td class="num">1</td>
+        <td>KA-HOW-001 Estado de Cuenta por Email · plantilla no entregada (PND-009)</td>
+      </tr>
+      <tr>
+        <td>Security</td>
+        <td class="num">3</td>
+        <td class="num">3</td>
+        <td class="num">0</td>
+        <td class="num">0</td>
+        <td>Carpetas Phishing/ y Llamada Sospechosa/ VACÍAS (PND-005)</td>
+      </tr>
+      <tr class="total">
+        <td>Total MVP</td>
+        <td class="num">42</td>
+        <td class="num">36</td>
+        <td class="num">2</td>
+        <td class="num">4</td>
+        <td>86% Online · faltan 6 piezas de contenido oficial</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="notice">
+    <strong>PND-010 · Validation Status desalineado.</strong> Los 36 artículos ya Online quedaron con <code>FWD_Validation_Status__c = Draft</code> porque se publicaron antes de implementar el ciclo editorial. Re-versionar en F3 para alinear picklist y PublishStatus (impacto: solo reporting interno · no afecta el bot).
+  </div>
+
+  <h3 style="margin-top: 1em; font-size: 14pt;">Los 7 Draft en PublishStatus — detalle</h3>
+  <ul class="clean">
+    <li><strong>KA-PFS-009</strong> UNICO Jamaica Montego Bay · fact sheet oficial no menciona Paradise Pass. Decisión: Lifecycle=Legacy o esperar confirmación cliente.</li>
+    <li><strong>KA-POL-003</strong> Política de No-Show Fechas Especiales · contradicción 1,200 vs 1,500 USD en el mismo PDF. Pide a Legal firmar monto 2026.</li>
+    <li><strong>KA-BEN-001</strong> Paradise Pass · Cómo Funciona · bloqueado por falta de doc oficial de mecánica (certificado, activación, vencimiento, 4/5 vs 7/8 noches). Alternativa: autorizar scraping de paradisepass.com como fuente citable.</li>
+    <li><strong>KA-BEN-002</strong> Member's Bracelet &amp; Resort Credits · bloqueado por la misma causa (PND-008).</li>
+    <li><strong>KA-BEN-004</strong> Legends of Paradise 2026 · bloqueado por la misma causa + brief oficial del evento pendiente.</li>
+    <li><strong>KA-HOW-001</strong> Estado de Cuenta por Email · bloqueado por plantilla de correo no entregada (PND-009).</li>
+    <li>+1 legacy pre-rebranding (Procedure RT) · marcar Lifecycle=Legacy y mover.</li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Estado del Agente Concierge Digital</span>
+    <span>Página 5 · KB Status</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 6 · OPEN ITEMS TÉCNICOS ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · PAM Hotels</span>
+    <span>Estado del Agente · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">5 · Open items técnicos</span>
+  <h2>Lo que falta cerrar antes de UAT</h2>
+  <p class="lead">
+    Cuatro open items quedaron explícitamente marcados en el bundle V5 Active. Tres son dependencias de PAM IT u Operación · el cuarto es desarrollo pendiente. Ninguno es bloqueante del go-live si entregamos con sus fallbacks actuales — pero son los que elevan la propuesta de valor del agente.
+  </p>
+
+  <div class="two-col">
+    <div class="scope-card open">
+      <h3>OI-01 · Integración OWS para Arrival_Support</h3>
+      <ul>
+        <li><strong>Qué</strong> — Connector a Opera Web Services (Oracle Hospitality) para notificar automáticamente al hotel cuando solo cambia el itinerario de llegada</li>
+        <li><strong>Hoy</strong> — Arrival_Support captura el cambio y escala a asesor humano (fallback funcional)</li>
+        <li><strong>Owner</strong> — PAM IT Lead · bloqueado por entrega de credenciales + endpoint</li>
+        <li><strong>Entrega</strong> — Flow PAM_DG_NotifyHotelArrivalChange · plan F3.2 ventana 2026-10-13 → 2026-10-31</li>
+      </ul>
+    </div>
+
+    <div class="scope-card open">
+      <h3>OI-02 · Case automation para disputas/reembolsos</h3>
+      <ul>
+        <li><strong>Qué</strong> — Configurar queue "Disputes &amp; Refunds" + Apex PAM_CreateCaseForDispute · reemplaza el escalate genérico</li>
+        <li><strong>Hoy</strong> — Human_Handoff usa <code>escalate_to_human</code> para dejar al socio en cola general</li>
+        <li><strong>Owner</strong> — Salesforce FDE (dev) + PAM Customer Service (queue config)</li>
+        <li><strong>Entrega</strong> — Plan F3.3 ventana 2026-10-20 → 2026-10-28</li>
+      </ul>
+    </div>
+
+    <div class="scope-card open">
+      <h3>OI-03 · Retriever R2 UDMO-Destinations</h3>
+      <ul>
+        <li><strong>Qué</strong> — Enganchar KB a Destinations: Prompt Template <code>FWD_PPass_KB_Destinations_Response</code> contra UDMO Files en Data Cloud (9 fact sheets ricos)</li>
+        <li><strong>Hoy</strong> — Destinations opera solo como primer filtro conversacional sin fuente KB</li>
+        <li><strong>Owner</strong> — Salesforce FDE</li>
+        <li><strong>Entrega</strong> — Plan F3.4 ventana 2026-10-21 → 2026-10-30 · depende de F3.1 (KB 7 Draft cerrados)</li>
+      </ul>
+    </div>
+
+    <div class="scope-card open">
+      <h3>OI-04 · Smoke tests end-to-end 15/15 acciones</h3>
+      <ul>
+        <li><strong>Qué</strong> — Ejecutar las 15 acciones del bundle contra datos reales de sandbox: 10 Apex + 6 Flows + 2 Prompt Templates (R1, R5)</li>
+        <li><strong>Hoy</strong> — Probadas individualmente en Preview Builder · falta validación end-to-end con persistencia de variables de sesión</li>
+        <li><strong>Owner</strong> — Salesforce FDE</li>
+        <li><strong>Entrega</strong> — Plan F3.5 ventana 2026-10-27 → 2026-10-31 (bloquea arranque de F4)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="narrative">
+    <p class="quote">Fallback-first — todos los open items tienen plan B operando hoy.</p>
+    <p>El diseño del V5 ya absorbió los open items como escalamiento humano. Si OI-01 o OI-02 no cierran para el go-live, el agente sigue funcionando: solo cae a asesor en lugar de automatizar. Esto permite priorizar OI-03 (R2) y OI-04 (smoke) como pre-requisitos duros, y tratar OI-01/OI-02 como mejoras post-launch si se demoran.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Estado del Agente Concierge Digital</span>
+    <span>Página 6 · Open items técnicos</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 7 · TIMELINE ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · PAM Hotels</span>
+    <span>Estado del Agente · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">6 · Ruta a producción</span>
+  <h2>Timeline · 7 semanas al go-live</h2>
+  <p class="lead">
+    Las 3 fases iniciales (Discovery · Foundation · Build V5) cerraron en junio-julio. Las 3 siguientes se ejecutan en octubre-diciembre. El evento Legends of Paradise (6-13 dic) es el ancla operativa que fija el deadline.
+  </p>
+
+  <div class="timeline">
+    <div class="timeline-item done">
+      <span class="date">01 — 30 jun 2026</span>
+      <span class="label"><strong>F0 · Discovery &amp; diseño</strong></span>
+      <div class="note">13 Job Stories mapeadas · 74 docs catalogados · 6 Record Types + 4 DCGs + 5 Retrievers propuestos. Sign-off del Sponsor PAM.</div>
+    </div>
+    <div class="timeline-item done">
+      <span class="date">01 — 10 jul 2026</span>
+      <span class="label"><strong>F1 · KB Foundation</strong></span>
+      <div class="note">Foundation desplegada 2-jul en PAM-Sandbox. 42 artículos master + traducciones. 36 Online + 2 In Review + 4 Planned al cierre.</div>
+    </div>
+    <div class="timeline-item done">
+      <span class="date">23 jun — 08 jul 2026</span>
+      <span class="label"><strong>F2 · Agent Build V1 → V5</strong></span>
+      <div class="note">5 versiones iteradas. V5 Active desde 2026-07-08 con 8 subagentes + 15 acciones + auth 3 fases + guardrails estrictos.</div>
+    </div>
+    <div class="timeline-item current">
+      <span class="date">13 — 31 oct 2026</span>
+      <span class="label"><strong>F3 · Pre-prod hardening (CURRENT)</strong></span>
+      <div class="note">Cerrar OI-01 OWS · OI-02 disputes queue · OI-03 R2 Destinations · OI-04 smoke tests · validar 7 KB Draft. Sign-off interno FDE al cierre.</div>
+    </div>
+    <div class="timeline-item">
+      <span class="date">03 — 21 nov 2026</span>
+      <span class="label"><strong>F4 · UAT con operación PAM</strong></span>
+      <div class="note">Matriz de ~40 escenarios × Customer Service + Reservations + Fraud Prevention. 3 semanas con daily standup. Reporte UAT ≥90% pass rate para sign-off.</div>
+    </div>
+    <div class="timeline-item critical">
+      <span class="date">24 nov — 05 dic 2026</span>
+      <span class="label"><strong>F5 · Go-live producción</strong></span>
+      <div class="note">Change Set validation Sandbox → Prod · Publish Active · Embedded Messaging en Experience Cloud · dashboards KPIs · monitoreo primera semana. Target: antes del 2026-12-05.</div>
+    </div>
+    <div class="timeline-item critical">
+      <span class="date">06 — 13 dic 2026</span>
+      <span class="label"><strong>Legends of Paradise · AVA Resort Cancún</strong></span>
+      <div class="note">Evento ancla. Pico de preguntas sobre acceso, horarios y actividades para portadores activos de Paradise Pass. El agente debe estar atendiendo tráfico real antes de esta fecha.</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Estado del Agente Concierge Digital</span>
+    <span>Página 7 · Timeline</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 8 · RIESGOS ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · PAM Hotels</span>
+    <span>Estado del Agente · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">7 · Riesgos activos</span>
+  <h2>Riesgos monitoreados</h2>
+  <p class="lead">
+    7 riesgos abiertos al 12-oct. Dos (R-03 schema delta Sandbox→Prod · R-04 presión del evento) son los más altos. El resto cuenta con mitigación activa o fallback funcional.
+  </p>
+
+  <table class="risk-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Riesgo</th>
+        <th>Prob.</th>
+        <th>Impacto</th>
+        <th>Mitigación</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="id">R-01</td>
+        <td>OWS no entrega credenciales a tiempo para F3 · Arrival_Support queda en fallback humano</td>
+        <td><span class="chip med">Media</span></td>
+        <td><span class="chip med">Medio</span></td>
+        <td>Fallback humano ya funciona en V5. Si no entregan, publish igual con flujo manual y OWS en V6 post-launch.</td>
+      </tr>
+      <tr>
+        <td class="id">R-02</td>
+        <td>7 KB Draft sin Content Owner firme en PAM bloquean cobertura 42/42 pre-UAT</td>
+        <td><span class="chip med">Media</span></td>
+        <td><span class="chip med">Medio</span></td>
+        <td>Pedir al Sponsor PAM designar Content Owner único. Si no se consigue antes del 2026-10-24, marcar como Lifecycle=Legacy.</td>
+      </tr>
+      <tr>
+        <td class="id">R-03</td>
+        <td>Divergencia schema Sandbox → Production (90 custom objects · 220 record types en Prod)</td>
+        <td><span class="chip high">Alta</span></td>
+        <td><span class="chip high">Alto</span></td>
+        <td>F5.1 validation run completo + schema diff entre Sandbox y Prod en semana del 24-nov. Rollback plan documentado.</td>
+      </tr>
+      <tr>
+        <td class="id">R-04</td>
+        <td>Legends of Paradise (6-13 dic) presiona el calendario · si F4 no cierra con sign-off antes del 21-nov, no hay buffer</td>
+        <td><span class="chip med">Media</span></td>
+        <td><span class="chip high">Alto</span></td>
+        <td>Freeze de cambios al bundle desde el 2026-11-24. Plan B: publicar solo subagentes bajo riesgo (Auth + Membership + Critical Policies) y mantener el resto deshabilitado.</td>
+      </tr>
+      <tr>
+        <td class="id">R-05</td>
+        <td>Prompt injection expone datos de otro socio tras login legítimo</td>
+        <td><span class="chip low">Baja</span></td>
+        <td><span class="chip high">Alto</span></td>
+        <td>Guardrails explícitos en system prompt + escenario dedicado en F4 UAT. Estado: mitigated.</td>
+      </tr>
+      <tr>
+        <td class="id">R-06</td>
+        <td>OTP email falla por bloqueo del dominio Linx9 MaskEmail · autenticación sin fallback</td>
+        <td><span class="chip low">Baja</span></td>
+        <td><span class="chip med">Medio</span></td>
+        <td>Monitorear tasa de errorMessage en PAM_SendOtpEmail durante F3-F4. Agregar circuit breaker + retry con backoff.</td>
+      </tr>
+      <tr>
+        <td class="id">R-07</td>
+        <td>Rollback no probado antes del go-live · equipo sin runbook si aparece regresión crítica</td>
+        <td><span class="chip med">Media</span></td>
+        <td><span class="chip high">Alto</span></td>
+        <td>En F5.1 simular rollback a BotVersion sin actions en 10 minutos. Entregar runbook al IT Lead de PAM.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span>Estado del Agente Concierge Digital</span>
+    <span>Página 8 · Riesgos</span>
+  </div>
+</section>
+
+<!-- ============== PÁGINA 9 · PRÓXIMOS PASOS ============== -->
+<section class="page">
+  <div class="page-head">
+    <span class="brand">Salesforce · PAM Hotels</span>
+    <span>Estado del Agente · Octubre 2026</span>
+  </div>
+
+  <span class="section-eyebrow">8 · Próximos pasos</span>
+  <h2>Qué pedimos esta semana</h2>
+  <p class="lead">
+    Para que F3 cierre en calendario, necesitamos 4 cosas de PAM esta misma semana. Nada bloquea construir en paralelo lo que sí depende solo de Salesforce FDE — pero sí mueve la fecha de go-live si se retrasan.
+  </p>
+
+  <div class="next-step">
+    <h3>Semana del 2026-10-13 · asks a PAM</h3>
+    <div class="step">
+      <span class="day">PAM IT Lead</span>
+      <span>Confirmar fecha de entrega de credenciales + endpoint OWS. Si no se puede antes del 24-oct, mover OI-01 a V6 post-launch (fallback humano para go-live).</span>
+    </div>
+    <div class="step">
+      <span class="day">PAM Content Owner</span>
+      <span>Designar responsable único de los 7 KB Draft. Decidir caso por caso: validar vs. Lifecycle=Legacy. Fecha límite 2026-10-24.</span>
+    </div>
+    <div class="step">
+      <span class="day">PAM Customer Service</span>
+      <span>Configurar queue "Disputes &amp; Refunds" en Service Cloud + confirmar RT y tipificación de Case. Habilita OI-02.</span>
+    </div>
+    <div class="step">
+      <span class="day">PAM Sponsor</span>
+      <span>Confirmar disponibilidad de equipos (CS + Reservations + Fraud) para UAT 03-21 nov. Si hay conflicto con cierre de mes o auditorías, acordar Plan B asincrónico.</span>
+    </div>
+  </div>
+
+  <h3 style="margin-top: 1.3em; font-size: 14pt;">Qué avanza Salesforce FDE en paralelo</h3>
+  <ul class="clean">
+    <li><strong>F3.1</strong> — Arrancar coordinación con Content Owner para validar los 7 KB Draft</li>
+    <li><strong>F3.3</strong> — Diseñar Apex PAM_CreateCaseForDispute mientras PAM Customer Service configura la queue</li>
+    <li><strong>F3.4</strong> — Construir Prompt Template FWD_PPass_KB_Destinations_Response + enganchar R2 al subagente Destinations</li>
+    <li><strong>F3.5</strong> — Preparar batería de smoke tests · ejecutar la semana del 27-oct contra datos reales de sandbox</li>
+    <li><strong>F4.1</strong> — Sembrar la matriz de ~40 test cases en el portal Laila para UAT (gracias a la foundation ya construida en el portal, esto es registro + no setup)</li>
+  </ul>
+
+  <div class="narrative">
+    <p class="quote">Si los 4 asks aterrizan esta semana, go-live el 2026-12-05 es realista.</p>
+    <p>Si alguno se retrasa &gt;7 días, el riesgo R-04 (presión Legends of Paradise) sube de amarillo a rojo y se activa el Plan B: publicar solo Auth + Membership + Critical_Policies, mantener Destinations/Arrival/Dispute deshabilitados y abrir V6 en enero.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Estado del Agente Concierge Digital</span>
+    <span>Página 9 · Próximos pasos</span>
+  </div>
+</section>
+
+</body>
+</html>

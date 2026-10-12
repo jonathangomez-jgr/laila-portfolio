@@ -211,12 +211,59 @@ const TELASIST_RETENCION_DOCS: DocEntry[] = [
 ];
 
 // ----------------------------------------------------------------------------
+// PAM Hotels · Agente Concierge Digital Paradise Pass docs
+// ----------------------------------------------------------------------------
+const PAM_DOCS: DocEntry[] = [
+  {
+    slug: "estado-actual-agente",
+    label: "Deck · Estado actual del Agente Concierge Digital (12-oct)",
+    description:
+      "Snapshot ejecutivo del Agente_ConciergeDigital (BotDefinition 0XxO40000006sVZKAY · V5 Active desde 2026-07-08). Cubre los 8 subagentes productivos, las 15 acciones conectadas, la autenticación de 3 fases, el inventario KB (44 Online + 7 Draft), los 4 open items técnicos del .agent, los 10 pendientes editoriales y el plan a 7 semanas hasta go-live pre Legends of Paradise.",
+    url: "/Customers/PAM/files/PAM_Estado_Agente_ConciergeDigital.pdf",
+    category: "Ejecutivo",
+    icon: "🎯",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "concierge-presentation",
+    label: "Deck · Paradise Pass Concierge Digital",
+    description:
+      "Presentación original del diseño del Concierge Digital de Paradise Pass: audiencias (PPass descubrimiento vs. LVC pertenencia), arquitectura híbrida (KB + UDMO Files Data Cloud), 5 Custom Retrievers, Data Categories ortogonales y mapping a los 9 resorts.",
+    url: "/Customers/PAM/PAM_Concierge_Digital_Presentation.html",
+    category: "Ejecutivo",
+    icon: "🎤",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "data-model-overview",
+    label: "Data Model Overview · 6 Record Types + 4 Data Category Groups",
+    description:
+      "Modelo de datos del Knowledge para PAM. 6 Record Types FWD_* (Property Fact Sheet, Room Description, Policy, FAQ Article, Benefit & Program, How-To). 3 DCGs activos (Audience · Topic · Property) + Lifecycle como picklist por hard-limit. Desplegado en PAM-Sandbox 2026-07-02.",
+    url: "/Customers/PAM/PAM_DataModel_Overview.html",
+    category: "Arquitectura",
+    icon: "🧩",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "paradise-pass-kb-analysis",
+    label: "Paradise Pass · KB Analysis",
+    description:
+      "Catalogación verificada del repositorio PAM_Hotels_Knowledge_Base_RAG (74 documentos en 16 carpetas tras la entrega actualizada de junio 2026). Mapping documento → destino: KB Article citable, UDMO File para RAG, Form adjunto o System Prompt.",
+    url: "/Customers/PAM/Paradise_Pass_KB_Analysis.html",
+    category: "Técnico",
+    icon: "📚",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+];
+
+// ----------------------------------------------------------------------------
 // Lookup
 // ----------------------------------------------------------------------------
 const DOCS_BY_SLUG: Record<string, DocEntry[]> = {
   betterware: BETTERWARE_DOCS,
   jafra: JAFRA_DOCS,
   "telasist-retencion": TELASIST_RETENCION_DOCS,
+  pam: PAM_DOCS,
 };
 
 export function getDocsForSlug(slug: string): DocEntry[] {
