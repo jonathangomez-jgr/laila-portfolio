@@ -6,6 +6,7 @@ import {
   betterwareAgentDocs,
 } from "@/data/betterwareAgentDocumentation";
 import { paquetexpressAgentDocs } from "@/data/paquetexpressAgentDocumentation";
+import { pamAgentDocs } from "@/data/pamAgentDocumentation";
 
 type ActionDoc = { name: string; target: string; description?: string };
 
@@ -34,6 +35,18 @@ type Doc = {
 function pickDoc(slug?: string): Doc {
   if (slug === "paquetexpress") {
     const d = paquetexpressAgentDocs;
+    return {
+      name: d.name,
+      developerName: d.developerName,
+      version: d.version,
+      revision: d.revision,
+      base: d.base,
+      categories: d.categories,
+      subagents: d.subagents as Subagent[],
+    };
+  }
+  if (slug === "pam") {
+    const d = pamAgentDocs;
     return {
       name: d.name,
       developerName: d.developerName,
