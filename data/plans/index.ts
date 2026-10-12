@@ -10,16 +10,25 @@ import {
   telasistRetencionPlan,
   type TelasistRetencionPlan,
 } from "../telasistRetencionPlan";
+import {
+  paquetexpressPlan,
+  type PaquetexpressPlan,
+} from "../paquetexpressPlan";
 
 // Union of all project plans. All share the same structural shape; only the
 // literal `slug` type differs. Downstream consumers (canvas, tabs) treat this
 // as a structural type and don't care about the discriminator.
-export type ProjectPlan = BetterwarePlan | JafraPlan | TelasistRetencionPlan;
+export type ProjectPlan =
+  | BetterwarePlan
+  | JafraPlan
+  | TelasistRetencionPlan
+  | PaquetexpressPlan;
 
 const PLANS: Record<string, ProjectPlan> = {
   betterware: betterwarePlan,
   jafra: jafraPlan,
   "telasist-retencion": telasistRetencionPlan,
+  paquetexpress: paquetexpressPlan,
 };
 
 export function getPlanForSlug(slug: string): ProjectPlan | null {
