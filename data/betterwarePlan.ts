@@ -645,6 +645,95 @@ const ACTIVITIES: Activity[] = [
     tags: ["deploy", "executive", "critical-path"],
   }),
 
+  // ============== F1 · Sprint "Observaciones Betty Bot" (13-15 oct) ==============
+  act({
+    id: "1.8",
+    phaseId: "f1",
+    number: "1.8",
+    title: "Sprint S1 · Fixes raíz del audit Betterware · v14",
+    description:
+      "Atacar los 3 bugs raíz detectados por el equipo Betterware (documento Observaciones_Betty_Bot_Revision.pdf, 12 hallazgos). BET-001 pedido extemporáneo: eliminar actions con target corrupto (flow://Registrar_Pedid) y reemplazar por escalation silenciosa al bot especializado downstream (patrón contenido digital). BET-002 pago fuera de tiempo: agregar acción escalate_pago_fuera_de_tiempo en PaymentsAndFinance. BET-003 contenido digital: re-validar en v13 (las pruebas del PDF son del 12-oct 22:15, probablemente contra versión anterior al fix). Publish + activate v14.",
+    owner: "Salesforce - FDE",
+    collaborators: ["Partner"],
+    delegableToPartner: false,
+    type: "Dev",
+    week: 2,
+    plannedStart: "2026-10-13",
+    plannedEnd: "2026-10-14",
+    dependencies: ["1.5"],
+    deliverables: [
+      "Items BET-001, BET-002, BET-003 cerrados en código",
+      "v14 publicada y activa",
+      "Suite de pruebas específicas pasando (pedido extemporáneo, pago fuera de tiempo, 5 categorías contenido digital)",
+    ],
+    references: [
+      {
+        label: "Observaciones Betty Bot · PDF del cliente",
+        url: "/Customers/Betterware/files/Observaciones_Betty_Bot_Revision.pdf",
+        kind: "pdf",
+      },
+    ],
+    tags: ["audit-fix", "critical-path"],
+  }),
+  act({
+    id: "1.9",
+    phaseId: "f1",
+    number: "1.9",
+    title: "Sprint S2 · Routing + comportamiento · v15",
+    description:
+      "BET-004 fix routing saldos vs descuentos (reasoning PaymentsAndFinance). BET-008 verificar + endurecer triggers de escalación directa en router y Escalation. BET-009 OV vs FC — antes de rastreo, si el folio es OV* resolver la factura primero. BET-011 cuando isAuthenticated=True ignorar códigos ajenos como login. BET-012 encadenar validar_linaje → consulta real downstream. Publish + activate v15.",
+    owner: "Salesforce - FDE",
+    collaborators: ["Partner"],
+    delegableToPartner: false,
+    type: "Dev",
+    week: 2,
+    plannedStart: "2026-10-14",
+    plannedEnd: "2026-10-15",
+    dependencies: ["1.8"],
+    deliverables: [
+      "Items BET-004, BET-008, BET-009, BET-011, BET-012 cerrados en código",
+      "v15 publicada y activa",
+      "Suite de regresión sin confusiones de intent · consulta de linaje devuelve datos reales",
+    ],
+    references: [
+      {
+        label: "Observaciones Betty Bot · PDF del cliente",
+        url: "/Customers/Betterware/files/Observaciones_Betty_Bot_Revision.pdf",
+        kind: "pdf",
+      },
+    ],
+    tags: ["audit-fix", "critical-path"],
+  }),
+  act({
+    id: "1.10",
+    phaseId: "f1",
+    number: "1.10",
+    title: "Sprint S3 · Comunicación y guardarraíles · v16",
+    description:
+      "BET-005 afinar reasoning por subagente para solo ofrecer siguientes-pasos ejecutables (lista blanca). BET-006 aplicar pautas de tono de la Guía Betty (calidez, personalización, emojis puntuales). BET-007 formato V42 (etiquetas en negritas, un dato por línea, emoji de cierre). BET-010 guardarraíl global contra sugerir líder/staff/mamá de linaje. Publish + activate v16 — versión final pre-cutover.",
+    owner: "Salesforce - FDE",
+    collaborators: ["Partner"],
+    delegableToPartner: false,
+    type: "Dev",
+    week: 2,
+    plannedStart: "2026-10-15",
+    plannedEnd: "2026-10-15",
+    dependencies: ["1.9"],
+    deliverables: [
+      "Items BET-005, BET-006, BET-007, BET-010 cerrados en código",
+      "v16 publicada y activa como versión del cutover",
+      "Side-by-side de 10+ interacciones vs V42 con calidad equivalente",
+    ],
+    references: [
+      {
+        label: "Observaciones Betty Bot · PDF del cliente",
+        url: "/Customers/Betterware/files/Observaciones_Betty_Bot_Revision.pdf",
+        kind: "pdf",
+      },
+    ],
+    tags: ["audit-fix", "polish", "critical-path"],
+  }),
+
   // ============== FASE 1.5 — A/B PRODUCCIÓN (Vie 2026-10-16 → Vie 2026-10-30) ==============
   act({
     id: "1.5.1",
