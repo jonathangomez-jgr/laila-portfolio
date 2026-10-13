@@ -42,9 +42,9 @@ export const CATEGORIES: AgentCategory[] = [
 export const betterwareAgentDocs: AgentDocumentation = {
   name: "Betty",
   developerName: "FDE_BW_Service_Agent_V2",
-  version: "v6 Draft",
-  revision: "08-oct-2026",
-  base: "Prod rebuild de BW_AGENT_N v42: 26 subagentes consolidados en 11 (10 + router), reutilizando Apex y Flow existentes. 25 fixes de orquestación del audit deep-dive sobre V40.",
+  version: "v13",
+  revision: "13-oct-2026",
+  base: "Rebuild directo en producción de BW_AGENT_N v43. 12 subagentes (11 + router), reutiliza el 100% de Apex y Flow vigentes en producción. Modelo pinned a GPT-4.1 para habilitar procesamiento nativo de archivos (fotos + PDFs). Patrones productivos replicados end-to-end: autenticación con reglas duras de orden/formato (5 intentos globales), entrega de contenido digital por 7 categorías con escalation silenciosa + clasificador IA downstream, escalation canónica con wording fijo 'Enseguida continuamos con tu solicitud. 💙🤗'.",
   subagents: [
     {
       id: "agent_router",
@@ -68,6 +68,7 @@ export const betterwareAgentDocs: AgentDocumentation = {
         { name: "go_to_escalation", target: "@utils.transition", description: "A Transferencia con Asesor (solo 5 triggers)" },
         { name: "go_to_off_topic", target: "@utils.transition", description: "A Fuera de Tema" },
         { name: "go_to_ambiguous", target: "@utils.transition", description: "A Pregunta Ambigua (default fallback)" },
+        { name: "go_to_adjuntos", target: "@utils.transition", description: "A Analizar Adjuntos (fotos o PDFs enviados por el usuario)" },
       ],
       criterios: [
         "Dado que el usuario escribe un saludo o mensaje corto, cuando el router recibe el mensaje, entonces transfiere a Ambiguous — nunca a Escalation.",
@@ -81,21 +82,23 @@ export const betterwareAgentDocs: AgentDocumentation = {
       name: "Autenticación y Recuperación de Acceso",
       category: "Atención y seguridad",
       descripcion:
-        "Verifica la identidad del distribuidor por código o referencia bancaria, y genera deep-link seguro de reset de contraseña con compuerta de propiedad. Guarda el contexto de la sesión (código, nombre, teléfono) para que los subagentes downstream consulten sin pedir re-identificación.",
+        "Verifica la identidad del distribuidor por código o referencia bancaria, y entrega el link de recuperación de contraseña. Opera bajo tres reglas duras: (1) orden fijo con primer intento SIEMPRE por código; (2) validación estricta de formato ANTES de cualquier callout; (3) comunicación del formato solo cuando el input ya es inválido, nunca en el saludo. Guarda contexto de la sesión (código, nombre, teléfono) para que los subagentes downstream consulten sin pedir re-identificación.",
       activacion:
         "Al inicio cuando el usuario pide un dato autenticado y aún no se ha identificado. También cuando el usuario pide reset de contraseña. La ruta de referencia bancaria se ofrece SOLO después de que el login por código falla.",
       respuestas:
-        "Pide el código de distribuidor con cortesía. Al éxito, saluda al usuario por su primer nombre (campo v_NombreDistribuidor del output) y le pregunta en qué le apoya. Para reset confirma solo el canal de entrega — nunca imprime la URL ni el token en el chat.",
+        "Pide el código con una frase corta sin detalles técnicos. Si el valor que manda el usuario no matchea el patrón (código: letra + 6 dígitos o 4 alfanuméricos; referencia: 10 dígitos consecutivos), responde con el formato detallado y pide reintentar sin invocar la acción. Al éxito, emite un saludo personalizado canónico: '¡Listo, [primer nombre]! ✅ Puedo ayudarte con tus pedidos, pagos, puntos y muchas otras consultas. Cuéntame, ¿qué necesitas hoy?'. Para reset entrega la recoveryURL en el chat (paridad etapa 1 con V42 productivo). El cambio a canal alterno (email/SMS) está planeado post-cutover · actividad 4.3 del plan.",
       acciones: [
         { name: "auth_check_login_codigo", target: "flow://BW_Auth_Check_Login_Codigo", description: "Login principal: valida código contra teléfono del canal." },
-        { name: "auth_login_referencia", target: "flow://BW_Auth_Login_Referencia", description: "Autenticación alternativa por referencia bancaria." },
-        { name: "generar_url_reset", target: "apex://BW_InvGenerarURLResetChatbotV2", description: "Genera link de reset con ownership gate interno." },
+        { name: "auth_login_referencia", target: "flow://BW_Auth_Login_Referencia", description: "Autenticación alternativa por referencia bancaria. Solo tras fallar código." },
+        { name: "generar_url_reset", target: "apex://BW_InvGenerarURLResetChatbotV2", description: "Reset de contraseña con ownership gate interno. Entrega recoveryURL en el chat (etapa 1 del piloto)." },
       ],
       criterios: [
         "Dado que el usuario está sin autenticar, cuando pide un dato de su cuenta, entonces Betty transfiere al subagente de autenticación y pide código antes de ejecutar la consulta.",
+        "Dado que el valor que manda el usuario no matchea el patrón esperado (código o referencia), cuando Betty lo detecta, entonces responde con el formato detallado y pide reintentar sin invocar la acción.",
         "Dado que el login por código falla una vez, cuando el usuario reintenta, entonces Betty ofrece la referencia bancaria como ruta alternativa — nunca antes.",
-        "Dado que el agente obtiene recoveryURL del reset, cuando responde al usuario, entonces NO imprime el token ni la URL — solo confirma que se envió el enlace.",
-        "Dado que fallan dos intentos de autenticación consecutivos, cuando ocurre el segundo fallo, entonces Betty transfiere a Escalation sin seguir reintentando.",
+        "Dado que la autenticación es exitosa, cuando Betty responde al usuario, entonces usa el saludo canónico con su primer nombre y el call-to-action corto ('pedidos, pagos, puntos y muchas otras consultas') — nunca el saludo genérico de bienvenida.",
+        "Dado que el usuario pide reset de contraseña, cuando el ownership gate aprueba, entonces Betty cita el campo recoveryURL del output en el chat (paridad etapa 1 con V42 productivo).",
+        "Dado que el usuario acumula 5 intentos globales fallidos (contador combinado de código + referencia), cuando ocurre el quinto fallo, entonces Betty termina la interacción sin escalar y sin texto adicional. · NOTA v13: hasta implementar la Apex de cierre técnico, aún transita a Escalation al 5° — ver item en backlog.",
       ],
     },
     {
@@ -104,20 +107,19 @@ export const betterwareAgentDocs: AgentDocumentation = {
       name: "Transferencia con Asesor",
       category: "Atención y seguridad",
       descripcion:
-        "Transferencia a asesor humano SOLO ante 5 triggers específicos: lenguaje agresivo del usuario, emergencia física, petición literal de 'hablar con asesor humano', mención de 'Compra con Confianza' o mención de 'Garantía Betterware'. Antes de transferir, verifica horario del queue y pide confirmación afirmativa del usuario.",
+        "Transferencia silenciosa al queue de asesor humano. Al activarse, dispara automáticamente el escalation_message canónico 'Enseguida continuamos con tu solicitud. 💙🤗' vía connection.messaging.escalation_message y hace handoff al flow BW_TransferirConversacion. Patrón de paridad con V40 productivo — SIN confirmación, SIN texto conversacional previo, SIN variación.",
       activacion:
-        "Cuando el router o un subagente detecta uno de los 5 triggers. También cuando otro subagente agota reintentos (ej. auth con 2 fallos) o encuentra una condición que no puede resolver.",
+        "Cuando el router o un subagente detecta uno de los 5 triggers literales (lenguaje agresivo, emergencia física, 'hablar con asesor humano', 'Compra con Confianza' o 'Garantía Betterware'). También cuando otro subagente ejecuta su escalation silenciosa (ej. DigitalContent para catálogo/flyer/premios/combos/reglas comerciales) o cuando se agotan los 5 intentos globales de autenticación.",
       respuestas:
-        "Resume brevemente el motivo detectado, cita la ventana de horario real del queue (MensajeSalida del output de BW_CheckBusinessHours) y pregunta '¿Confirmas que quieres que te transfiera con un asesor?'. Solo con el 'sí' explícito ejecuta la transferencia. Si está fuera de horario, ofrece dejar mensaje.",
+        "El agente NO escribe texto. El sistema emite automáticamente 'Enseguida continuamos con tu solicitud. 💙🤗' vía connection.messaging.escalation_message y transfiere al flow BW_TransferirConversacion. Downstream, el clasificador IA (BW_ClasificarConversacionIA) rutea a la cola o bot especializado correcto (CD-Flyer Semanal, CD-Catalogo, etc.) y el bot joined entrega el PDF/contenido al usuario.",
       acciones: [
-        { name: "check_business_hours_esc", target: "flow://BW_CheckBusinessHours", description: "Verifica horario antes de ofrecer transferencia." },
-        { name: "handoff_asesor", target: "@utils.escalate", description: "Transferencia al asesor humano." },
-        { name: "back_to_ambiguous", target: "@utils.transition", description: "Si llegó por error, vuelve a Ambiguous." },
+        { name: "check_business_hours_esc", target: "flow://BW_CheckBusinessHours", description: "Verifica horario del queue." },
+        { name: "handoff_asesor", target: "@utils.escalate", description: "Transferencia silenciosa al queue + handoff a BW_TransferirConversacion." },
       ],
       criterios: [
-        "Dado que el usuario pide un tema de escalación válido (p. ej. 'quiero hablar con una persona'), cuando Betty lo detecta, entonces consulta primero el horario de servicio y solo transfiere si está dentro de horario.",
-        "Dado que el horario del queue está cerrado, cuando el usuario confirma querer transfer, entonces Betty cita la ventana real del output y ofrece dejar mensaje — nunca inventa horarios.",
-        "Dado que el router transfirió aquí sin un trigger válido, cuando el subagente detecta el intent real, entonces retorna a Ambiguous sin ejecutar handoff.",
+        "Dado que llega a Escalation por un trigger literal o por escalation silenciosa de un subagente, cuando Betty activa el handoff, entonces NO escribe texto conversacional — el sistema emite automáticamente 'Enseguida continuamos con tu solicitud. 💙🤗' vía connection.messaging.escalation_message.",
+        "Dado que business_hours_open=True, cuando Betty ejecuta handoff_asesor, entonces hace la transferencia inmediata al flow BW_TransferirConversacion sin pedir confirmación.",
+        "Dado que el horario del queue está cerrado, cuando ocurre la escalación, entonces el flow downstream maneja la salida fuera de horario (no se intenta transferir forzadamente).",
       ],
     },
     {
@@ -143,15 +145,16 @@ export const betterwareAgentDocs: AgentDocumentation = {
       name: "Pregunta Ambigua",
       category: "Atención y seguridad",
       descripcion:
-        "Fallback por defecto para saludos y mensajes cortos. Saluda al usuario, se presenta como Betty y lista las capacidades principales para que el usuario pueda precisar su solicitud.",
+        "Fallback por defecto para saludos y mensajes cortos. Dos modos según el estado de la sesión: si el usuario NO está autenticado, saluda, se presenta como Betty y lista las capacidades. Si YA está autenticado, pide contexto breve sin repetir la bienvenida ni la lista larga.",
       activacion:
         "Cuando el router recibe un mensaje demasiado corto para clasificar (saludo tipo 'hola', 'buenos días') o cuando no cabe en ninguno de los dominios de servicio.",
       respuestas:
-        "Mensaje de bienvenida con el emoji 💙, se identifica como Betty y lista las capacidades: saldo, pedidos, pagos, puntos BW+, premios, altas de asociados, políticas y programas. Menciona que si el usuario prefiere hablar con un asesor humano, también lo diga.",
+        "Modo NO autenticado · mensaje de bienvenida con el emoji 💙, se identifica como Betty y lista las capacidades: saldo, pedidos, pagos, puntos BW+, premios, altas de asociados, políticas y programas. Modo autenticado · pide contexto breve con 'Cuéntame un poco más, ¿en qué te apoyo? 🤗' SIN repetir el saludo largo ni la lista completa de capacidades.",
       acciones: [],
       criterios: [
-        "Dado que el usuario escribe 'hola' o un saludo breve, cuando Betty responde, entonces se presenta y lista las capacidades principales sin pedir código de distribuidor aún.",
-        "Dado que Ambiguous entregó la lista de opciones, cuando el usuario responde con una capacidad concreta, entonces el router rutea al subagente de dominio apropiado.",
+        "Dado que el usuario escribe 'hola' o un saludo breve y NO está autenticado, cuando Betty responde, entonces se presenta como Betty y lista las capacidades principales sin pedir código de distribuidor aún.",
+        "Dado que el usuario está autenticado y cae en Ambiguous (p. ej. tras un 'gracias' u 'ok'), cuando Betty responde, entonces usa la variante corta — NUNCA el saludo genérico de bienvenida.",
+        "Dado que Ambiguous entregó la invitación, cuando el usuario responde con una capacidad concreta, entonces el router rutea al subagente de dominio apropiado.",
       ],
     },
     {
@@ -180,17 +183,18 @@ export const betterwareAgentDocs: AgentDocumentation = {
       name: "Contenido Digital Comercial",
       category: "Servicio y trámites",
       descripcion:
-        "Entrega material comercial del período activo: catálogo de venta, flyer, oportunidades y premios, combos, reglas comerciales, Última Oportunidad, guía de nuevos productos y videos.",
+        "Entrega material comercial del período activo con 7 categorías replicadas del patrón V40 productivo. Para 6 de 7 categorías (catálogo, flyer semanal, premios, nuevos productos, última oportunidad, combos, reglas comerciales) ejecuta escalation silenciosa — el clasificador IA (BW_ClasificarConversacionIA) y el flow BW_TransferirConversacion delegan al bot especializado downstream (CD-Flyer Semanal, CD-Catalogo, etc.) que entrega el PDF/archivo al usuario. La categoría VIDEOS es la ÚNICA excepción: entrega el link textual directamente en el chat (acortar.link/bmknDT) sin escalar.",
       activacion:
-        "Cuando el usuario pide un material comercial concreto (catálogo, flyer, promociones) o pregunta por los contenidos del período.",
+        "Cuando el usuario pide un material comercial concreto (catálogo, flyer, promociones, premios, combos, reglas comerciales, nuevos productos, videos) o pregunta por los contenidos del período.",
       respuestas:
-        "Usa BW_AnswerQuestionsWithKnwoledge con la Query del usuario y entrega el contenido oficial. Para videos de producto, cita solo enlaces que vengan del output — nunca inventa URLs ni precios.",
+        "Detecta la categoría por triggers específicos y ejecuta la acción canónica. Para flyer/catálogo/premios/combos/reglas/nuevos productos/última oportunidad invoca escalate_contenido (escalation silenciosa — el usuario ve el escalation_message canónico y recibe el archivo del bot downstream). Para VIDEOS entrega directamente el link con backticks. NUNCA inventa URLs, placeholders ni redirecciones a terceros.",
       acciones: [
-        { name: "knowledge_content", target: "flow://BW_AnswerQuestionsWithKnwoledge", description: "Material comercial vigente vía Knowledge." },
+        { name: "escalate_contenido", target: "@utils.escalate", description: "Escalation silenciosa que delega al bot downstream (CD-Flyer Semanal, CD-Catalogo, etc.) vía BW_ClasificarConversacionIA + BW_TransferirConversacion." },
       ],
       criterios: [
-        "Dado que el usuario pide un material comercial, cuando Betty responde, entonces entrega el contenido oficial del Knowledge y nunca inventa precios ni disponibilidad.",
-        "Dado que el usuario pide un enlace de video, cuando Betty responde, entonces solo cita URLs que estén en el output — jamás fabrica enlaces.",
+        "Dado que el usuario pide flyer, catálogo, premios, combos, nuevos productos, última oportunidad o reglas comerciales, cuando Betty detecta la categoría, entonces ejecuta escalation silenciosa — el escalation_message canónico sale automático y el bot downstream entrega el archivo real.",
+        "Dado que el usuario pide un video, cuando Betty responde, entonces entrega el link textual con backticks sin escalar — es la única excepción del subagente.",
+        "Dado que la clasificación de la categoría es ambigua, cuando Betty responde, entonces no inventa URLs, placeholders ni redirecciones — pide al usuario precisar antes de ejecutar la acción.",
       ],
     },
     {
@@ -316,6 +320,24 @@ export const betterwareAgentDocs: AgentDocumentation = {
         "Dado que el usuario pregunta por su convenio o Credilazos, cuando se muestra el resultado, entonces Betty informa solo los datos devueltos, pregunta si desea un asesor y, si dice que sí, transfiere sin pedir una segunda confirmación.",
         "Dado que el usuario quiere registrar un pago fuera de tiempo, cuando Betty lo detecta, entonces pide confirmación y solo transfiere si responde afirmativamente — nunca registra el pago aquí.",
         "Dado que el usuario pregunta por qué no se le transfiere, cuando Betty responde, entonces no revela criterios internos y solo ofrece apoyo con calidez.",
+      ],
+    },
+    {
+      id: "analizar_adjuntos",
+      number: 12,
+      name: "Analizar Adjuntos",
+      category: "Servicio y trámites",
+      descripcion:
+        "Procesa archivos adjuntos enviados por el usuario (fotos y PDFs) usando el modelo nativo GPT-4.1 con config file_upload: managed. Describe el contenido de las imágenes y extrae texto de los PDFs. No procesa audios ni stickers — para esos pide al usuario escribir su solicitud.",
+      activacion:
+        "Cuando el router detecta que el usuario adjuntó un archivo (foto o PDF) junto con su mensaje. El modelo del agente está pinned a GPT-4.1 (model://sfdc_ai__DefaultGPT41) para soportar nativamente el procesamiento multimodal.",
+      respuestas:
+        "Describe el contenido del archivo (qué muestra la foto, qué dice el PDF) y conecta con el intent del usuario. Si el adjunto es un audio o sticker, no lo procesa — pide amablemente escribir la solicitud. Si el adjunto es una foto de un documento con información sensible, no la cita literalmente.",
+      acciones: [],
+      criterios: [
+        "Dado que el usuario envía una foto o PDF, cuando Betty lo detecta, entonces usa el procesamiento nativo del modelo GPT-4.1 y describe el contenido en respuesta.",
+        "Dado que el adjunto es un audio o sticker, cuando Betty lo detecta, entonces pide amablemente al usuario que escriba su solicitud en texto — no intenta transcribir.",
+        "Dado que la foto contiene información sensible (ej. estado de cuenta), cuando Betty responde, entonces no cita literalmente datos personales y mantiene la cortesía.",
       ],
     },
   ],
