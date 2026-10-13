@@ -8,6 +8,9 @@ import {
 import { getKeyDocsForSlug } from "@/data/docs";
 import { getEffectivePlan } from "@/lib/portalPlan";
 import type { PortalUser } from "@/lib/portalAuth";
+import { getSalesforceTeamForSlug } from "@/data/salesforceTeam";
+import { customerProjects } from "@/data/customerProjects";
+import SalesforceTeamCard from "@/components/SalesforceTeamCard";
 
 const HEALTH_LABEL: Record<string, { label: string; cls: string }> = {
   green: { label: "En verde", cls: "bg-emerald-100 text-emerald-800" },
@@ -54,6 +57,8 @@ export default async function OverviewTab({
   const health = overallHealth(plan);
   const healthMeta = HEALTH_LABEL[health];
   const docs = getKeyDocsForSlug(slug, user.role);
+  const team = getSalesforceTeamForSlug(slug);
+  const customerName = customerProjects.find((p) => p.slug === slug)?.customerName;
 
   return (
     <div className="space-y-6">
@@ -176,6 +181,9 @@ export default async function OverviewTab({
           </ul>
         )}
       </div>
+
+      {/* Salesforce Team */}
+      <SalesforceTeamCard members={team} customerName={customerName} />
 
       {/* Documentos clave */}
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
