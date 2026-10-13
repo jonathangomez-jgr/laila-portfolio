@@ -353,19 +353,66 @@ function ExecutionForm({ testCase, slug, onDone, onCancel }: { testCase: FDETest
   );
 }
 
-function TestCaseDetail({ testCase, slug, onClose, onExecutionRecorded, readOnly = false }: { testCase: FDETestCase; slug: string; onClose: () => void; onExecutionRecorded: () => void; readOnly?: boolean }) {
+function TestCaseDetail({ testCase, slug, onClose, onExecutionRecorded, onNavigate, index, total, readOnly = false }: { testCase: FDETestCase; slug: string; onClose: () => void; onExecutionRecorded: () => void; onNavigate?: (direction: "prev" | "next") => void; index?: number; total?: number; readOnly?: boolean }) {
   const [recording, setRecording] = useState(false);
   const lastStatus = lastExecutionStatus(testCase);
+  const hasNav = typeof onNavigate === "function" && typeof index === "number" && typeof total === "number" && total > 1;
+  const canPrev = hasNav && (index ?? 0) > 0;
+  const canNext = hasNav && (index ?? 0) < (total ?? 0) - 1;
+
+  // Keyboard shortcuts · ← anterior · → siguiente · Esc cerrar
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      // Avoid interfering with form inputs
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable)) return;
+      if (e.key === "Escape") { onClose(); return; }
+      if (!hasNav) return;
+      if (e.key === "ArrowLeft" && canPrev) { onNavigate?.("prev"); setRecording(false); }
+      if (e.key === "ArrowRight" && canNext) { onNavigate?.("next"); setRecording(false); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [canPrev, canNext, hasNav, onNavigate, onClose]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-end bg-slate-900/40 p-0 sm:items-center sm:justify-center sm:p-6">
       <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-t-2xl bg-white p-6 shadow-xl sm:rounded-2xl">
         <div className="mb-4 flex items-start justify-between gap-3">
           <div>
-            <p className="font-mono text-xs text-slate-500">{testCase.JGR_FDE_Test_Code__c} · {testCase.Name}</p>
+            <p className="font-mono text-xs text-slate-500">
+              {testCase.JGR_FDE_Test_Code__c} · {testCase.Name}
+              {hasNav && (
+                <span className="ml-2 inline-block rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
+                  {(index ?? 0) + 1} de {total}
+                </span>
+              )}
+            </p>
             <h3 className="text-lg font-semibold text-slate-900">{testCase.JGR_FDE_Title__c}</h3>
           </div>
-          <button onClick={onClose} className="rounded-md border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600 hover:bg-slate-50">Cerrar</button>
+          <div className="flex items-center gap-1 shrink-0">
+            {hasNav && (
+              <>
+                <button
+                  onClick={() => { setRecording(false); onNavigate?.("prev"); }}
+                  disabled={!canPrev}
+                  className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                  title="Anterior (←)"
+                >
+                  ← Anterior
+                </button>
+                <button
+                  onClick={() => { setRecording(false); onNavigate?.("next"); }}
+                  disabled={!canNext}
+                  className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                  title="Siguiente (→)"
+                >
+                  Siguiente →
+                </button>
+              </>
+            )}
+            <button onClick={onClose} className="rounded-md border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600 hover:bg-slate-50" title="Cerrar (Esc)">Cerrar</button>
+          </div>
         </div>
 
         <div className="mb-4 flex flex-wrap gap-2">
@@ -588,6 +635,15 @@ export default function BetterwareTestMatrixCanvas({
     }
   }
 
+  // Re-sync `selected` when `cases` reloads (so the modal shows fresh executions
+  // after a user saves a new one without having to close/reopen).
+  useEffect(() => {
+    if (!selected) return;
+    const fresh = cases.find((c) => c.Id === selected.Id);
+    if (fresh && fresh !== selected) setSelected(fresh);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cases]);
+
   useEffect(() => {
     load();
   }, []);
@@ -759,17 +815,29 @@ export default function BetterwareTestMatrixCanvas({
         </div>
       )}
 
-      {selected && (
-        <TestCaseDetail slug={slug}
-          testCase={selected}
-          onClose={() => setSelected(null)}
-          onExecutionRecorded={() => {
-            setSelected(null);
-            load();
-          }}
-          readOnly={readOnly}
-        />
-      )}
+      {selected && (() => {
+        const currentIdx = filtered.findIndex((c) => c.Id === selected.Id);
+        return (
+          <TestCaseDetail slug={slug}
+            testCase={selected}
+            index={currentIdx >= 0 ? currentIdx : undefined}
+            total={filtered.length}
+            onClose={() => setSelected(null)}
+            onExecutionRecorded={async () => {
+              // Reload data, re-locate current test case (now with updated executions)
+              // and keep the modal open on the same case.
+              await load();
+            }}
+            onNavigate={(direction) => {
+              if (currentIdx < 0) return;
+              const nextIdx = direction === "next" ? currentIdx + 1 : currentIdx - 1;
+              if (nextIdx < 0 || nextIdx >= filtered.length) return;
+              setSelected(filtered[nextIdx]);
+            }}
+            readOnly={readOnly}
+          />
+        );
+      })()}
     </div>
   );
 }
