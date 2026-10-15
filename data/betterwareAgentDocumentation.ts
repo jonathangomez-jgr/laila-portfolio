@@ -42,9 +42,9 @@ export const CATEGORIES: AgentCategory[] = [
 export const betterwareAgentDocs: AgentDocumentation = {
   name: "Betty",
   developerName: "FDE_BW_Service_Agent_V2",
-  version: "v13",
-  revision: "13-oct-2026",
-  base: "Rebuild directo en producción de BW_AGENT_N v43. 12 subagentes (11 + router), reutiliza el 100% de Apex y Flow vigentes en producción. Modelo pinned a GPT-4.1 para habilitar procesamiento nativo de archivos (fotos + PDFs). Patrones productivos replicados end-to-end: autenticación con reglas duras de orden/formato (5 intentos globales), entrega de contenido digital por 7 categorías con escalation silenciosa + clasificador IA downstream, escalation canónica con wording fijo 'Enseguida continuamos con tu solicitud. 💙🤗'.",
+  version: "v25",
+  revision: "15-oct-2026",
+  base: "Agente productivo con arquitectura determinística. 12 subagentes (11 + router) y reutiliza el 100% del Apex y Flow que ya está probado en producción. Modelo pinned a GPT-4.1 para habilitar procesamiento nativo de archivos (fotos + PDFs). En esta versión los 9 cerebros especializados (autenticación, cuenta/altas, pedidos y entregas, pagos y finanzas, premios y lealtad, contenido digital, preguntas generales, escalación y enrutador) quedan en paridad funcional con la operación vigente — equivalente a 26 áreas de atención. Resultado: 87.5% de los hallazgos del audit externo cubiertos, 58 acciones únicas con validación de linaje transversal, flujos guiados multi-turno para pedido extemporáneo con confirmación, saludo canónico garantizado después del login, escalación silenciosa con wording fijo 'Enseguida continuamos con tu solicitud. 💙🤗' y reglas duras contra inventos de URLs o criterios internos.",
   subagents: [
     {
       id: "agent_router",
@@ -52,9 +52,9 @@ export const betterwareAgentDocs: AgentDocumentation = {
       name: "Agent Router",
       category: "Atención y seguridad",
       descripcion:
-        "Punto de entrada de cada conversación. Clasifica la intención del usuario y transfiere al subagente apropiado según el dominio de la solicitud. Nunca ejecuta acciones ni responde preguntas directamente — su única tarea es ruteo determinista.",
+        "Punto de entrada de cada conversación. Clasifica la intención del usuario y transfiere al subagente apropiado según el dominio de la solicitud. Nunca ejecuta acciones ni responde preguntas directamente — su única tarea es ruteo determinista. Antes del ruteo evalúa un gate estructural: si hay un flujo guiado en curso (ej. pedido extemporáneo) o un saludo canónico pendiente (post-login), fuerza la transición al subagente dueño sin que el modelo pueda decidir otra cosa.",
       activacion:
-        "En cada turno nuevo de conversación, cuando el usuario envía un mensaje y Betty no está dentro de un subagente de dominio. Si llega un saludo o mensaje ambiguo, prefiere Pregunta Ambigua. Solo escala directo con 5 triggers literales: lenguaje agresivo, emergencia física, 'hablar con asesor humano', 'Compra con Confianza' o 'Garantía Betterware'.",
+        "En cada turno nuevo de conversación, cuando el usuario envía un mensaje y Betty no está dentro de un subagente de dominio. Si llega un saludo o mensaje ambiguo, prefiere Pregunta Ambigua. Solo escala directo con 5 triggers literales: lenguaje agresivo, emergencia física, 'hablar con asesor humano', 'Compra con Confianza' o 'Garantía Betterware'. Si el mensaje menciona catálogo, flyer, premios, combos, ofertas, reglas comerciales, nuevos productos o última oportunidad, rutea OBLIGATORIAMENTE a Contenido Digital — nunca a Preguntas Generales ni a Ambigua.",
       respuestas:
         "No produce mensajes al usuario. Transfiere silenciosamente al subagente destino, que a su vez saluda o pide información según su propio flujo.",
       acciones: [
@@ -74,6 +74,8 @@ export const betterwareAgentDocs: AgentDocumentation = {
         "Dado que el usuario escribe un saludo o mensaje corto, cuando el router recibe el mensaje, entonces transfiere a Ambiguous — nunca a Escalation.",
         "Dado que el mensaje contiene palabras literales de los 5 triggers de escalación, cuando el router lo detecta, entonces transfiere a Escalation.",
         "Dado que el usuario pide un dato específico de su cuenta, cuando el router recibe el intent, entonces rutea al subagente de dominio correspondiente, el cual exigirá autenticación si aplica.",
+        "Dado que el mensaje menciona cualquiera de las categorías de contenido comercial (catálogo, flyer, premios, combos, ofertas, reglas comerciales, nuevos productos, última oportunidad), cuando el router lo detecta, entonces rutea obligatoriamente a Contenido Digital — bypass de Preguntas Generales y Ambigua.",
+        "Dado que hay un flujo guiado en curso o un saludo canónico post-login pendiente, cuando el router recibe el próximo mensaje, entonces el gate estructural fuerza la transición al subagente dueño antes de que el modelo evalúe cualquier otro ruteo.",
       ],
     },
     {
@@ -82,7 +84,7 @@ export const betterwareAgentDocs: AgentDocumentation = {
       name: "Autenticación y Recuperación de Acceso",
       category: "Atención y seguridad",
       descripcion:
-        "Verifica la identidad del distribuidor por código o referencia bancaria, y entrega el link de recuperación de contraseña. Opera bajo tres reglas duras: (1) orden fijo con primer intento SIEMPRE por código; (2) validación estricta de formato ANTES de cualquier callout; (3) comunicación del formato solo cuando el input ya es inválido, nunca en el saludo. Guarda contexto de la sesión (código, nombre, teléfono) para que los subagentes downstream consulten sin pedir re-identificación.",
+        "Verifica la identidad del distribuidor por código o referencia bancaria, y entrega el link de recuperación de contraseña. Opera como una máquina de estados determinística entre turnos: cada paso del flujo (código, formato inválido, ofrecer alternativa, referencia bancaria, éxito, reset) se gatea con variables de estado — el modelo nunca decide a solas cuál es el siguiente paso. Después de un login exitoso un flag estructural fuerza el saludo canónico personalizado antes de que el router procese el siguiente mensaje, para que el distribuidor reciba siempre '¡Listo, [primer nombre]!' y nunca un saludo genérico. Reglas duras vigentes: (1) orden fijo con primer intento SIEMPRE por código; (2) validación estricta de formato ANTES de cualquier callout; (3) comunicación del formato solo cuando el input ya es inválido, nunca en el saludo. Guarda contexto de la sesión (código, nombre, teléfono) para que los subagentes downstream consulten sin pedir re-identificación.",
       activacion:
         "Al inicio cuando el usuario pide un dato autenticado y aún no se ha identificado. También cuando el usuario pide reset de contraseña. La ruta de referencia bancaria se ofrece SOLO después de que el login por código falla.",
       respuestas:
@@ -120,6 +122,9 @@ export const betterwareAgentDocs: AgentDocumentation = {
         "Dado que llega a Escalation por un trigger literal o por escalation silenciosa de un subagente, cuando Betty activa el handoff, entonces NO escribe texto conversacional — el sistema emite automáticamente 'Enseguida continuamos con tu solicitud. 💙🤗' vía connection.messaging.escalation_message.",
         "Dado que business_hours_open=True, cuando Betty ejecuta handoff_asesor, entonces hace la transferencia inmediata al flow BW_TransferirConversacion sin pedir confirmación.",
         "Dado que el horario del queue está cerrado, cuando ocurre la escalación, entonces el flow downstream maneja la salida fuera de horario (no se intenta transferir forzadamente).",
+        "Dado que el usuario solo dice 'quiero hablar con un ejecutivo' sin especificar una necesidad real, cuando Betty responde, entonces NO escala — primero averigua con calidez qué necesita y recién después evalúa si corresponde escalación.",
+        "Dado que el usuario insiste varias veces en que lo escalen sin encajar en los 5 triggers válidos, cuando Betty responde, entonces mantiene los mismos criterios sin ceder — la insistencia no cambia la regla.",
+        "Dado que el usuario pregunta por qué no fue transferido o cuáles son los criterios de escalación, cuando Betty responde, entonces no revela los criterios internos y ofrece apoyo con calidez.",
       ],
     },
     {
@@ -167,7 +172,7 @@ export const betterwareAgentDocs: AgentDocumentation = {
       activacion:
         "Cuando el router detecta una pregunta general que no requiere datos específicos del distribuidor (p. ej. '¿cómo funciona el programa de puntos?', '¿cuál es la política de devoluciones?').",
       respuestas:
-        "Entrega la respuesta directa desde el output de Knowledge (campo Respuesta). Si Knowledge no tiene información suficiente, lo reconoce explícitamente. Nunca inventa políticas ni acepta excepciones por insistencia del usuario.",
+        "Entrega la respuesta directa desde el output de Knowledge (campo Respuesta). Aplica un filtro post-Knowledge: aunque un artículo mencione a 'líder' o 'mamá de linaje' en un contexto distinto, Betty NO sugiere al distribuidor contactarlos y nunca inventa URLs ni placeholders. Si Knowledge no tiene información suficiente, lo reconoce explícitamente. Nunca inventa políticas ni acepta excepciones por insistencia del usuario.",
       acciones: [
         { name: "knowledge_faq", target: "flow://BW_AnswerQuestionsWithKnwoledge", description: "Búsqueda y respuesta en artículos oficiales de Knowledge." },
       ],
@@ -175,6 +180,8 @@ export const betterwareAgentDocs: AgentDocumentation = {
         "Dado que el usuario pregunta sobre una política general, cuando Betty responde, entonces usa el output de Knowledge y cita solo lo que esté en los artículos oficiales.",
         "Dado que la respuesta de Knowledge no cubre la pregunta, cuando Betty responde, entonces lo reconoce y ofrece transferir a un asesor si el usuario lo pide.",
         "Dado que la pregunta requiere un dato de cuenta específico, cuando Betty lo detecta, entonces indica al usuario que debe autenticarse y rutea al subagente correspondiente.",
+        "Dado que un artículo de Knowledge menciona a 'líder' o 'mamá de linaje', cuando Betty prepara la respuesta, entonces aplica el filtro post-Knowledge: no sugiere al distribuidor contactarlos y reformula la respuesta sin esas referencias.",
+        "Dado que la pregunta roza alguna categoría de Contenido Digital (catálogo, flyer, premios, combos, reglas comerciales, nuevos productos, última oportunidad), cuando Betty lo detecta, entonces transiciona al subagente de Contenido Digital en lugar de responder con prosa de Knowledge.",
       ],
     },
     {
@@ -183,11 +190,11 @@ export const betterwareAgentDocs: AgentDocumentation = {
       name: "Contenido Digital Comercial",
       category: "Servicio y trámites",
       descripcion:
-        "Entrega material comercial del período activo con 7 categorías replicadas del patrón V40 productivo. Para 6 de 7 categorías (catálogo, flyer semanal, premios, nuevos productos, última oportunidad, combos, reglas comerciales) ejecuta escalation silenciosa — el clasificador IA (BW_ClasificarConversacionIA) y el flow BW_TransferirConversacion delegan al bot especializado downstream (CD-Flyer Semanal, CD-Catalogo, etc.) que entrega el PDF/archivo al usuario. La categoría VIDEOS es la ÚNICA excepción: entrega el link textual directamente en el chat (acortar.link/bmknDT) sin escalar.",
+        "Entrega material comercial del período activo con 8 categorías vigentes en producción. Para 7 de 8 categorías (catálogo, flyer semanal, premios, nuevos productos, última oportunidad, combos, reglas comerciales, programa de referidos) ejecuta escalation silenciosa — el clasificador IA (BW_ClasificarConversacionIA) y el flow BW_TransferirConversacion delegan al bot especializado downstream (CD-Flyer Semanal, CD-Catalogo, etc.) que entrega el PDF/archivo al usuario. La categoría VIDEOS es la ÚNICA excepción: entrega el link textual directamente en el chat (acortar.link/bmknDT) sin escalar. En esta versión se ampliaron los triggers para capturar variantes reales del canal productivo ('tienes el catálogo', 'me compartes el catálogo', 'catalogo' sin acento, 'reglas comerciales', 'nuevos productos', etc.).",
       activacion:
-        "Cuando el usuario pide un material comercial concreto (catálogo, flyer, promociones, premios, combos, reglas comerciales, nuevos productos, videos) o pregunta por los contenidos del período.",
+        "Cuando el usuario pide un material comercial concreto (catálogo, flyer, promociones, premios, combos, reglas comerciales, nuevos productos, programa de referidos, videos) o pregunta por los contenidos del período.",
       respuestas:
-        "Detecta la categoría por triggers específicos y ejecuta la acción canónica. Para flyer/catálogo/premios/combos/reglas/nuevos productos/última oportunidad invoca escalate_contenido (escalation silenciosa — el usuario ve el escalation_message canónico y recibe el archivo del bot downstream). Para VIDEOS entrega directamente el link con backticks. NUNCA inventa URLs, placeholders ni redirecciones a terceros.",
+        "Detecta la categoría por triggers específicos y ejecuta la acción canónica. Para flyer/catálogo/premios/combos/reglas/nuevos productos/última oportunidad/referidos invoca escalate_contenido (escalation silenciosa — el usuario ve el escalation_message canónico y recibe el archivo del bot downstream). Para VIDEOS entrega directamente el link literal acortar.link/bmknDT con backticks. NUNCA inventa URLs, placeholders ni redirecciones a terceros.",
       acciones: [
         { name: "escalate_contenido", target: "@utils.escalate", description: "Escalation silenciosa que delega al bot downstream (CD-Flyer Semanal, CD-Catalogo, etc.) vía BW_ClasificarConversacionIA + BW_TransferirConversacion." },
       ],
@@ -232,11 +239,11 @@ export const betterwareAgentDocs: AgentDocumentation = {
       name: "Pedidos y Entregas",
       category: "Pedidos y logística",
       descripcion:
-        "Operación completa de pedidos: estatus por folio, facturación, último pedido, tracking Drivin, guías de paquetería (M024), coberturas por CP, bodega asignada y directorio (M036), venta retenida (M028), devoluciones (bonificación, reenvío, recolección por RMA) y solicitud de pedido extemporáneo con confirmación afirmativa.",
+        "Operación completa de pedidos: estatus por folio, facturación, último pedido, tracking Drivin, guías de paquetería (M024), coberturas por CP, bodega asignada y directorio (M036), venta retenida (M028), devoluciones (bonificación, reenvío, recolección por RMA) y flujo guiado multi-turno para registro de pedido extemporáneo. El flujo guiado de pedido extemporáneo opera como máquina de estados determinística: captura tipo de solicitud, motivo, importe, horario y confirmación en pasos separados y gatea el registro final solo si todos los datos están completos y el horario fue validado. Los valores de picklist (tipo y motivo) se asignan por acciones literales con valor hardcodeado — Betty elige cuál invocar según la respuesta del distribuidor, el valor exacto nunca lo redacta el modelo.",
       activacion:
         "Cuando el usuario pregunta por un pedido, su facturación, su estado de entrega, cobertura, bodegas, venta retenida, devoluciones o quiere registrar un pedido extemporáneo. Requiere autenticación.",
       respuestas:
-        "Cita campos específicos según la consulta: estatusEntrega y fechaPlaneada para Drivin; codigoRastreo + paqueteria + fechaEnvio + urlRastreo para guía; nombreBodega + direccion + horario + urlMapa para bodega. Para evidencia de Drivin no imprime URLs firmadas — solo dice 'adjunto la evidencia'. Para pedido extemporáneo resume la nota, pide confirmación afirmativa y solo entonces registra.",
+        "Cita campos específicos según la consulta: estatusEntrega y fechaPlaneada para Drivin; codigoRastreo + paqueteria + fechaEnvio + urlRastreo para guía; nombreBodega + direccion + horario + urlMapa para bodega. Para evidencia de Drivin no imprime URLs firmadas — solo dice 'adjunto la evidencia'. Para pedido extemporáneo recorre el flujo guiado paso a paso: pregunta tipo (Propia / Linaje), motivo (opciones literales), importe, valida horario, resume y pide confirmación afirmativa explícita; solo entonces ejecuta el registro final. Si falta algún dato o la validación de horario no permite registrar, cierra con cortesía y limpia el estado para no bloquear futuros flujos.",
       acciones: [
         { name: "tracking_drivin", target: "apex://BW_InvConsultarDrivin", description: "Seguimiento de entrega Drivin." },
         { name: "guia_paqueteria", target: "apex://BW_ConsultarGuiaPaqueteria", description: "Número de guía por factura." },
@@ -247,7 +254,14 @@ export const betterwareAgentDocs: AgentDocumentation = {
         { name: "consultar_bodega", target: "apex://BW_ConsultarBodegaAction", description: "Directorio de bodegas." },
         { name: "venta_retenida", target: "flow://BW_ConsultarVentaRetenida", description: "Venta/pedido retenido." },
         { name: "validar_horario_extemporaneo", target: "flow://Validar_Horario_Pedido_Extemporaneo", description: "Verifica ventana del extemporáneo." },
-        { name: "registrar_pedido_extemporaneo", target: "flow://Registrar_Pedid", description: "Registra el pedido extemporáneo (write, con confirmación)." },
+        { name: "SetTipoSolicitudPropia", target: "@utils.setVariables", description: "Fija tipo de solicitud = 'Propia' (valor literal del picklist)." },
+        { name: "SetTipoSolicitudLinaje", target: "@utils.setVariables", description: "Fija tipo de solicitud = 'Linaje' (valor literal del picklist)." },
+        { name: "SetMotivoPedidoFueraTiempo", target: "@utils.setVariables", description: "Fija motivo = 'Pedido enviado fuera de tiempo' (valor literal del picklist)." },
+        { name: "SetMotivoPedidoAnexo", target: "@utils.setVariables", description: "Fija motivo = 'Pedido adicional (Anexo)' (valor literal del picklist)." },
+        { name: "SetMotivoPagoVencido", target: "@utils.setVariables", description: "Fija motivo = 'Pago de saldo vencido fuera de tiempo' (valor literal del picklist)." },
+        { name: "SetMotivoOtros", target: "@utils.setVariables", description: "Fija motivo = 'Otros' (valor literal del picklist)." },
+        { name: "registrar_pedido_extemporaneo", target: "flow://Registrar_Pedid", description: "Registra el pedido extemporáneo (write final, gated por estado completo + confirmación afirmativa)." },
+        { name: "limpiar_pedido_extemporaneo", target: "@utils.setVariables", description: "Resetea las variables del flujo guiado para no bloquear futuras solicitudes." },
         { name: "devoluciones_bwplus", target: "apex://BW_InvConsultarDevolucionesBwPlus", description: "Lista de devoluciones." },
         { name: "recoger_devolucion", target: "apex://BW_ConsulaRecogerDevoluciones", description: "Recolección de devolución por folio RMA." },
         { name: "revision_bonificacion", target: "apex://BWPlusBonificacionAction", description: "Revisión de bonificación de devolución." },
@@ -257,6 +271,8 @@ export const betterwareAgentDocs: AgentDocumentation = {
         "Dado que el usuario pregunta '¿dónde está mi pedido?', cuando Betty consulta Drivin, entonces cita estatusEntrega y fechaPlaneada del output y nunca imprime la URL firmada de la evidencia.",
         "Dado que el usuario pide número de guía de una factura, cuando Betty consulta BW_ConsultarGuiaPaqueteria, entonces cita paqueteria, codigoRastreo y urlRastreo — y no lo confunde con tracking.",
         "Dado que el usuario pide un pedido extemporáneo, cuando Betty prepara el write, entonces primero valida horario y solo registra tras un 'sí' explícito del usuario — nunca registra en el mismo turno de la aclaración.",
+        "Dado que Betty necesita capturar tipo o motivo del pedido extemporáneo, cuando el distribuidor responde, entonces Betty invoca la acción literal correspondiente (SetTipoSolicitudPropia/Linaje, SetMotivoPedidoFueraTiempo/Anexo/PagoVencido/Otros) — el valor del picklist nunca lo redacta el modelo, lo asigna la acción.",
+        "Dado que el flujo guiado termina (registro exitoso, cancelación o datos insuficientes), cuando Betty cierra, entonces ejecuta la limpieza de las variables del flujo para que el distribuidor pueda iniciar una nueva solicitud sin arrastre de estado.",
         "Dado que el usuario pregunta por venta retenida, cuando Betty consulta BW_ConsultarVentaRetenida, entonces si vo_VentaRetenidaEncontrada=True cita vo_RegistrosPermitidos sin exponer motivo sensible.",
       ],
     },
