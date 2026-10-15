@@ -718,6 +718,10 @@ const ACTIVITIES: Activity[] = [
     week: 2,
     plannedStart: "2026-10-15",
     plannedEnd: "2026-10-15",
+    actualStart: "2026-10-13",
+    actualEnd: "2026-10-14",
+    status: "done",
+    progressPercent: 100,
     dependencies: ["1.9"],
     deliverables: [
       "Items BET-005, BET-006, BET-007, BET-010 cerrados en código",
@@ -733,15 +737,42 @@ const ACTIVITIES: Activity[] = [
     ],
     tags: ["audit-fix", "polish", "critical-path"],
   }),
+  act({
+    id: "1.11",
+    phaseId: "f1",
+    number: "1.11",
+    title: "Rework V42 · Expansión de reasoning en 9 subagentes core",
+    description:
+      "Expansión del reasoning por subagente para alcanzar paridad funcional con las 349 instrucciones productivas de BW_AGENT_N v42 (26 topics). Delegación paralela a 4 fde-engineer agents + edits quirúrgicos secuenciales. Subagentes core adaptados: AuthAndSecurity (state machine deterministic), AccountAndInfo (451 líneas · 4 topics), OrdersAndDelivery (499 líneas · 7 topics), PaymentsAndFinance (323 líneas · 5 topics · 10 bloques nombrados), RewardsAndLoyalty (263 líneas · 3 topics), DigitalContent (8 categorías con triggers V42 + URL videos literal), GeneralFAQ (filtro post-Knowledge anti-líder/mamá-linaje), Escalation (3 reglas V42: 'quiero ejecutivo' solo no escala, insistencia no cambia criterio, no revelar criterios). Publish de v24 y v25 + activate v25 ejecutados 2026-10-15. Validate OK. State machine de autenticación confirmado en preview.",
+    owner: "Salesforce - FDE",
+    collaborators: [],
+    delegableToPartner: false,
+    type: "Dev",
+    week: 2,
+    plannedStart: "2026-10-14",
+    plannedEnd: "2026-10-15",
+    actualStart: "2026-10-14",
+    actualEnd: "2026-10-15",
+    status: "done",
+    progressPercent: 100,
+    dependencies: ["1.10"],
+    deliverables: [
+      "9 subagentes core con reasoning V42 adaptado",
+      "BotVersion v25 publicada y activa en Betterware-Prod",
+      "Smoke test de auth validado en preview session",
+    ],
+    references: [],
+    tags: ["parity-v42", "polish", "critical-path"],
+  }),
 
   // ============== FASE 1.5 — A/B PRODUCCIÓN (Vie 2026-10-16 → Vie 2026-10-30) ==============
   act({
     id: "1.5.1",
     phaseId: "f1_5",
     number: "1.5.1",
-    title: "🚀 CUTOVER: Programa Insiders al 10%",
+    title: "🚀 CUTOVER: Programa Insiders arranque técnico",
     description:
-      "Viernes 16-oct AM: arranque del Programa Insiders en producción con el 10% inicial de la lista cerrada (primeras distribuidoras marcadas con MessagingEndUser.FDE_Pilot__c = true). Equipo completo en war room para los primeros 90 minutos monitoreando conversaciones minuto a minuto. Si Error Rate > 2% o Abandon crece > 10 pp en primera hora: rollback inmediato desmarcando el checkbox en las distribuidoras activas.",
+      "Arranque técnico del Programa Insiders en producción con la cohorte inicial de usuarios Salesforce + Betterware marcados con MessagingEndUser.FDE_Pilot__c = true. El resto del tráfico sigue en BW_AGENT_N v42 vía omni-flow FDE_BW_routeAgent. Monitoreo activo con rollback operativo (desmarcar checkbox) ante cualquier regresión. La escalada a más distribuidoras depende del sign-off de pruebas por parte de Betterware.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner", "Betterware - IT Lead", "Betterware - Sponsor"],
     delegableToPartner: false,
@@ -749,8 +780,15 @@ const ACTIVITIES: Activity[] = [
     week: 2,
     plannedStart: "2026-10-16",
     plannedEnd: "2026-10-16",
+    actualStart: "2026-10-15",
+    actualEnd: "2026-10-15",
+    status: "done",
+    progressPercent: 100,
     dependencies: ["1.7"],
-    deliverables: ["Programa Insiders activo al 10% · primeros KPIs capturados"],
+    deliverables: [
+      "FDE_BW_Service_Agent_V2 v25 recibiendo tráfico de Insiders Salesforce + Betterware",
+      "Omni-flow FDE_BW_routeAgent operativo con decisión por FDE_Pilot__c",
+    ],
     references: [],
     tags: ["deploy", "cutover", "critical-path"],
   }),
@@ -1665,15 +1703,17 @@ const MILESTONES: Milestone[] = [
     kind: "Executive Review",
     phaseId: "f1",
     participants: ["Salesforce - FDE", "Partner", "Betterware - Sponsor", "Betterware - IT Lead"],
-    status: "scheduled",
+    status: "completed",
+    outcome:
+      "Publish + activate ejecutados 2026-10-15 sobre FDE_BW_Service_Agent_V2. BotVersion v25 activa en Betterware-Prod. Validate del bundle OK. Preview session confirmó state machine de autenticación funcional (código inválido → oferta de login alternativo sin exponer referencia bancaria, paridad V42).",
     references: [],
   },
   {
     id: "cutover",
-    title: "🚀 CUTOVER — Programa Insiders al 10%",
+    title: "🚀 CUTOVER — Programa Insiders arranque técnico",
     description:
-      "Arranque del Programa Insiders con el 10% inicial de la lista de distribuidoras marcadas con MessagingEndUser.FDE_Pilot__c. Primer hito tangible del proyecto en producción. War room primeras 48h con equipo completo.",
-    date: "2026-10-16",
+      "Arranque del Programa Insiders con la cohorte inicial de Insiders (usuarios Salesforce + Betterware marcados con MessagingEndUser.FDE_Pilot__c=true) tomando tráfico real en WhatsApp productivo. Escalada a más distribuidoras bloqueada hasta sign-off de pruebas Betterware.",
+    date: "2026-10-15",
     kind: "Go-live",
     phaseId: "f1_5",
     participants: [
@@ -1682,7 +1722,9 @@ const MILESTONES: Milestone[] = [
       "Betterware - IT Lead",
       "Betterware - Sponsor",
     ],
-    status: "scheduled",
+    status: "completed",
+    outcome:
+      "Cutover técnico anticipado 1 día (plan original 16-oct). FDE_BW_Service_Agent_V2 v25 activa y recibiendo tráfico de los Insiders Salesforce + Betterware. Omni-flow FDE_BW_routeAgent operativo. Resto del tráfico sigue en BW_AGENT_N v42. Escalada +10% diaria queda bloqueada hasta UAT sign-off de Betterware.",
     references: [],
   },
   {
@@ -2033,7 +2075,29 @@ const STABLE_CRITERIA: StableCriterion[] = [
 // STATUS UPDATES (histórico, se agregan semanalmente)
 // ============================================================================
 
-const STATUS_UPDATES: StatusUpdate[] = [];
+const STATUS_UPDATES: StatusUpdate[] = [
+  {
+    id: "status-2026-10-12",
+    weekOf: "2026-10-12",
+    author: "Salesforce - FDE",
+    overallHealth: "green",
+    phaseId: "f1_5",
+    highlights: [
+      "Rework V42 completado: 9 subagentes core con reasoning expandido para paridad funcional con las 349 instrucciones productivas (26 topics).",
+      "Publish de v24 y v25 ejecutado 2026-10-15. BotVersion v25 activa en Betterware-Prod.",
+      "Cutover técnico anticipado 1 día (plan original 16-oct): Insiders Salesforce + Betterware ya reciben tráfico de v25 en WhatsApp productivo.",
+      "Validate del bundle OK. State machine de autenticación confirmado en preview (código inválido → oferta de login alternativo sin exponer referencia bancaria, paridad V42).",
+    ],
+    nextWeek: [
+      "Pruebas internas Salesforce + Betterware sobre v25 con la cohorte Insiders inicial.",
+      "Esperar sign-off de Betterware antes de escalar la cohorte a más distribuidoras.",
+      "Monitoreo de regresiones vs V42 en los flujos de saldos, descuentos, pagos, puntos.",
+    ],
+    activeBlockers: [],
+    activeRisks: ["R2", "R6"],
+    references: [],
+  },
+];
 
 // ============================================================================
 // EXPORT
