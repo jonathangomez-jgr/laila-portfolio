@@ -1756,8 +1756,8 @@ const MILESTONES: Milestone[] = [
       "Snapshot publicado en el portal de Laila. Formato de referencia para la cadencia semanal de los viernes y plantilla homologada para Jafra.",
     references: [
       {
-        label: "Snapshot Semanal · 16-oct",
-        url: "/Customers/Betterware/files/Snapshot_Viernes_2026_10_16.html",
+        label: "Snapshot Semanal · 16-oct (PDF)",
+        url: "/Customers/Betterware/files/Snapshot_Viernes_2026_10_16.pdf",
         kind: "document",
       },
     ],
