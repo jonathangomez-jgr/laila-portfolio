@@ -37,7 +37,7 @@
 
   .page {
     width: 330mm;
-    min-height: 210mm;
+    height: 210mm;
     background: var(--bg);
     margin: 0 auto;
     padding: 10mm 12mm;
@@ -45,6 +45,9 @@
     grid-template-rows: auto auto auto 1fr auto;
     gap: 9px;
     position: relative;
+    overflow: hidden;
+    page-break-after: avoid;
+    break-after: avoid;
   }
   .page::before {
     content: "";
@@ -379,8 +382,23 @@
   .powered-logo { height: 30px; width: auto; }
 
   @media print {
-    body { background: var(--bg); }
-    .page { margin: 0; box-shadow: none; width: 330mm; min-height: 210mm; }
+    html, body {
+      background: var(--bg);
+      width: 330mm;
+      height: 210mm;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .page {
+      margin: 0;
+      box-shadow: none;
+      width: 330mm;
+      height: 210mm;
+      overflow: hidden;
+      page-break-after: avoid;
+      break-after: avoid;
+    }
   }
 </style>
 </head>
