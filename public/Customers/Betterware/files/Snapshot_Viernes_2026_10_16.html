@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Snapshot Semanal · Betty · 16-oct-2026</title>
+<style>
+  :root {
+    --brand-primary: #00AEC7;
+    --brand-primary-dark: #008CA3;
+    --brand-primary-soft: #E6F7FA;
+    --brand-accent: #FFC43D;
+
+    --ink: #0F172A;
+    --ink-soft: #475569;
+    --ink-mute: #64748B;
+    --border: #E2E8F0;
+    --bg: #FFFFFF;
+    --bg-soft: #F8FAFC;
+    --ok: #16A34A;
+    --ok-soft: #DCFCE7;
+    --warn: #D97706;
+    --warn-soft: #FEF3C7;
+    --mute-soft: #E2E8F0;
+  }
+
+  @page { size: 330mm 210mm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg-soft);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .page {
+    width: 330mm;
+    min-height: 210mm;
+    background: var(--bg);
+    margin: 0 auto;
+    padding: 10mm 12mm;
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: 9px;
+    position: relative;
+  }
+  .page::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 220px;
+    height: 6px;
+    background: linear-gradient(90deg, var(--brand-primary), var(--brand-primary-dark));
+  }
+
+  /* HEADER */
+  header {
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    gap: 24px;
+    align-items: center;
+    padding-bottom: 9px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-slot img { max-height: 54px; max-width: 180px; object-fit: contain; }
+  .agent-block { display: flex; flex-direction: column; gap: 4px; }
+  .agent-row { display: flex; align-items: baseline; gap: 10px; }
+  .agent-name { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  .version-pill {
+    font-size: 12px; font-weight: 700;
+    color: var(--brand-primary);
+    background: var(--brand-primary-soft);
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+  .report-label { font-size: 13px; color: var(--ink-soft); font-weight: 600; }
+  .report-label strong { color: var(--ink); font-weight: 700; }
+  .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .report-type {
+    font-size: 10px; color: var(--ink-mute);
+    letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700;
+  }
+  .health-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: var(--ok-soft); color: var(--ok);
+    border: 1px solid rgba(22, 163, 74, 0.3);
+  }
+  .health-badge .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+  }
+
+  /* PROGRESS HERO · 3 cols */
+  .progress-hero {
+    background: linear-gradient(135deg, var(--brand-primary-soft) 0%, var(--bg) 100%);
+    border: 1px solid var(--brand-primary);
+    border-radius: 12px;
+    padding: 13px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+  .progress-item {
+    display: flex; flex-direction: column; gap: 5px;
+    padding: 0 14px;
+    border-left: 1px solid rgba(0, 174, 199, 0.2);
+  }
+  .progress-item:first-child { border-left: none; padding-left: 0; }
+  .progress-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .progress-label {
+    font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-mute); font-weight: 700;
+  }
+  .progress-value {
+    font-size: 26px; font-weight: 700;
+    color: var(--brand-primary-dark);
+    letter-spacing: -0.02em; line-height: 1;
+  }
+  .progress-sub {
+    font-size: 12px; font-weight: 700;
+    color: var(--ink); margin-top: -2px;
+    line-height: 1.25;
+  }
+  .progress-bar {
+    position: relative; height: 10px;
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 999px; overflow: hidden;
+  }
+  .progress-fill {
+    position: absolute; inset: 0 auto 0 0;
+    background: linear-gradient(90deg, var(--brand-primary), var(--brand-primary-dark));
+    border-radius: 999px;
+  }
+  .progress-ticks {
+    display: flex; justify-content: space-between;
+    font-size: 9px; color: var(--ink-mute);
+    font-weight: 600; letter-spacing: 0.02em;
+  }
+
+  /* NEXT MILESTONE */
+  .milestone-strip {
+    display: grid; grid-template-columns: auto 1fr auto;
+    gap: 18px; align-items: center;
+    background: var(--ink); color: #fff;
+    border-radius: 10px; padding: 10px 18px;
+  }
+  .milestone-strip .label {
+    font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; opacity: 0.65; font-weight: 700;
+  }
+  .milestone-strip .main { display: flex; align-items: baseline; gap: 14px; }
+  .milestone-strip .big-date {
+    font-size: 20px; font-weight: 700;
+    color: var(--brand-primary); letter-spacing: -0.02em; line-height: 1;
+  }
+  .milestone-strip .title { font-size: 14px; font-weight: 700; }
+  .milestone-strip .rocket { font-size: 22px; }
+  .mini-chips { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
+  .mini-chip {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 6px; padding: 3px 9px;
+    font-size: 10px; font-weight: 600;
+  }
+  .mini-chip .d { opacity: 0.6; margin-right: 5px; }
+
+  /* BODY · 3 cols */
+  .body {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 0.9fr;
+    gap: 10px;
+  }
+  .panel {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .panel-header {
+    display: flex; align-items: center; gap: 8px;
+    padding-bottom: 8px; margin-bottom: 6px;
+    border-bottom: 2px solid var(--brand-primary);
+  }
+  .panel-icon {
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    background: var(--brand-primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+  .panel-title {
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.01em; color: var(--ink);
+    line-height: 1.2;
+  }
+  .panel-question {
+    font-size: 9.5px; color: var(--ink-mute);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    font-weight: 700; margin-top: 2px;
+    display: block;
+  }
+
+  /* Deliverables col 1 */
+  .delivery { padding: 8px 0; border-bottom: 1px dashed var(--border); }
+  .delivery:last-child { border-bottom: none; }
+  .delivery-title {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .delivery-title .check {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--ok); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .delivery-impact {
+    font-size: 11px; color: var(--ink-soft);
+    line-height: 1.35; padding-left: 26px;
+  }
+
+  /* Value col 2 */
+  .value-card { padding: 8px 0; border-bottom: 1px dashed var(--border); }
+  .value-card:last-child { border-bottom: none; }
+  .value-headline {
+    font-size: 12.5px; font-weight: 700;
+    color: var(--brand-primary-dark);
+    line-height: 1.3; margin-bottom: 2px;
+    display: flex; align-items: baseline; gap: 6px;
+  }
+  .value-headline .num {
+    font-size: 10.5px;
+    color: var(--brand-primary);
+    font-weight: 700;
+    background: var(--brand-primary-soft);
+    padding: 2px 7px;
+    border-radius: 5px;
+    letter-spacing: 0.02em;
+  }
+  .value-detail {
+    font-size: 11px; color: var(--ink-soft);
+    line-height: 1.35;
+  }
+
+  /* Gauge col 3 */
+  .gauge-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0 2px;
+  }
+  .gauge-svg {
+    width: 140px; height: 140px;
+    position: relative;
+  }
+  .gauge-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+  }
+  .gauge-big {
+    font-size: 24px; font-weight: 700;
+    color: var(--brand-primary-dark);
+    letter-spacing: -0.03em; line-height: 1;
+  }
+  .gauge-of {
+    font-size: 11px; font-weight: 600;
+    color: var(--ink-mute);
+  }
+  .gauge-label {
+    font-size: 8.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-mute);
+    font-weight: 700; margin-top: 1px;
+  }
+
+  .legend {
+    display: flex; flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    margin-top: 2px;
+  }
+  .legend-row {
+    display: grid;
+    grid-template-columns: 14px 1fr auto;
+    gap: 8px; align-items: center;
+    font-size: 11.5px;
+    padding: 4px 2px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .legend-row:last-child { border-bottom: none; }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+  }
+  .legend-dot.done { background: var(--brand-primary); }
+  .legend-dot.wip { background: var(--warn); }
+  .legend-dot.pend { background: var(--mute-soft); border: 1px solid var(--ink-mute); }
+  .legend-text { color: var(--ink); font-weight: 600; }
+  .legend-count { color: var(--ink); font-weight: 700; }
+
+  .gauge-footnote {
+    font-size: 9.5px; color: var(--ink-mute);
+    text-align: center;
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  .critical-section {
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+  .critical-label {
+    font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-mute);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .critical-row {
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    gap: 8px; align-items: center;
+    padding: 4px 2px;
+    font-size: 11px;
+  }
+  .critical-text {
+    color: var(--ink); font-weight: 600;
+    line-height: 1.3;
+  }
+
+  /* Footer */
+  footer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px; align-items: center;
+    padding-top: 9px;
+    border-top: 1px solid var(--border);
+  }
+  .footer-left {
+    font-size: 11px; color: var(--ink-mute);
+    display: flex; gap: 14px; align-items: center;
+  }
+  .footer-left strong { color: var(--ink); font-size: 12px; font-weight: 700; }
+  .footer-left .sep { width: 1px; height: 14px; background: var(--border); }
+  .powered-block {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .powered-team {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .powered-sep {
+    width: 1px;
+    height: 22px;
+    background: var(--border);
+  }
+  .powered-logo { height: 30px; width: auto; }
+
+  @media print {
+    body { background: var(--bg); }
+    .page { margin: 0; box-shadow: none; width: 330mm; min-height: 210mm; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- HEADER -->
+    <header>
+      <div class="logo-slot"><img src="/Customers/Betterware/images/Logo-betterware.png" alt="Betterware" /></div>
+      <div class="agent-block">
+        <div class="agent-row">
+          <span class="agent-name">Betty</span>
+          <span class="version-pill">v25 Activa</span>
+        </div>
+        <div class="report-label"><strong>Reporte de avances</strong> · semana 12 al 16 de octubre</div>
+      </div>
+      <div class="header-right">
+        <div class="report-type">Snapshot Semanal</div>
+        <div class="health-badge"><span class="pulse"></span>Health · Verde</div>
+      </div>
+    </header>
+
+    <!-- PROGRESS HERO · 3 cols -->
+    <section class="progress-hero">
+      <div class="progress-item">
+        <div class="progress-head">
+          <span class="progress-label">Fase Actual · F1</span>
+          <span class="progress-value">90%</span>
+        </div>
+        <div class="progress-sub">Pruebas internas + preparación Insiders</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:90%"></div></div>
+        <div class="progress-ticks">
+          <span>Inicio 06-oct</span>
+          <span>Cierre 18-oct</span>
+        </div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-head">
+          <span class="progress-label">Etapa 1 · Eficacia</span>
+          <span class="progress-value">65%</span>
+        </div>
+        <div class="progress-sub">Go-live con cohorte Insiders → GA</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+        <div class="progress-ticks">
+          <span>Kickoff 06-oct</span>
+          <span>GA 26-oct</span>
+        </div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-head">
+          <span class="progress-label">Progreso Global</span>
+          <span class="progress-value">30%</span>
+        </div>
+        <div class="progress-sub">Eficacia + Eficiencia · entrega final</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div>
+        <div class="progress-ticks">
+          <span>Kickoff 06-oct</span>
+          <span>Entrega 04-dic</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEXT MILESTONE -->
+    <section class="milestone-strip">
+      <span class="rocket">🚀</span>
+      <div>
+        <div class="label">Próximo hito</div>
+        <div class="main">
+          <span class="big-date">Lun 19-oct</span>
+          <span class="title">Cutover formal · Programa Insiders</span>
+        </div>
+      </div>
+      <div class="mini-chips">
+        <span class="mini-chip"><span class="d">Mar 20</span>20%</span>
+        <span class="mini-chip"><span class="d">Mié 21</span>30%</span>
+        <span class="mini-chip"><span class="d">Jue 22</span>40%</span>
+        <span class="mini-chip"><span class="d">Vie 23</span>50%</span>
+        <span class="mini-chip"><span class="d">Lun 26</span>GA</span>
+      </div>
+    </section>
+
+    <!-- BODY -->
+    <section class="body">
+
+      <!-- COL 1 · Qué entregamos -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-icon">◉</div>
+          <div>
+            <div class="panel-title">Qué entregamos esta semana</div>
+            <span class="panel-question">12 al 16 de octubre</span>
+          </div>
+        </div>
+
+        <div class="delivery">
+          <div class="delivery-title"><span class="check">✓</span>Mecanismo de diferenciación de códigos</div>
+          <div class="delivery-impact">Se incorporó un método determinístico que distingue el código propio del distribuidor del código de linaje. Esta mitigación evita la confusión entre ambos y asegura que cada consulta se dirija al distribuidor correcto.</div>
+        </div>
+        <div class="delivery">
+          <div class="delivery-title"><span class="check">✓</span>Afinación del "cerebro" del agente</div>
+          <div class="delivery-impact">Las 9 áreas de atención (saldos, pedidos, pagos, premios, contenido, autenticación, cuenta, soporte, enrutador) llegaron a paridad funcional con la versión productiva actual.</div>
+        </div>
+        <div class="delivery">
+          <div class="delivery-title"><span class="check">✓</span>Reconstrucción propia de acciones</div>
+          <div class="delivery-impact">Las piezas críticas del agente se reconstruyeron bajo control del equipo técnico, con capacidad de extender funcionalidad e incorporar nuevos campos de salida cuando el agente lo requiera.</div>
+        </div>
+        <div class="delivery">
+          <div class="delivery-title"><span class="check">✓</span>Diagnóstico en vivo de conversaciones</div>
+          <div class="delivery-impact">Ahora podemos reconstruir cualquier conversación reportada en WhatsApp paso a paso para identificar la causa raíz exacta sin esperar reproducción en pruebas.</div>
+        </div>
+      </div>
+
+      <!-- COL 2 · Qué significa -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-icon">★</div>
+          <div>
+            <div class="panel-title">Qué significa para Betterware</div>
+            <span class="panel-question">Valor que gana el negocio</span>
+          </div>
+        </div>
+
+        <div class="value-card">
+          <div class="value-headline"><span class="num">01</span>Cero fuga de información cruzada</div>
+          <div class="value-detail">Un distribuidor nunca verá por accidente información de otro distribuidor de su red. La validación es ahora obligatoria por diseño.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-headline"><span class="num">02</span>Respuestas consistentes y predecibles</div>
+          <div class="value-detail">El distribuidor sabe qué esperar en cada conversación · menos escalaciones a asesor humano por conversaciones que se descarrilan.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-headline"><span class="num">03</span>Diagnóstico de incidencias en minutos</div>
+          <div class="value-detail">Si un distribuidor reporta un problema, no dependemos de reproducirlo · tenemos la grabación completa de su conversación.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-headline"><span class="num">04</span>Cero inventos de información</div>
+          <div class="value-detail">El agente ya no completa frases con enlaces o datos que no existen. Si no tiene el dato, lo reconoce explícitamente.</div>
+        </div>
+      </div>
+
+      <!-- COL 3 · Gauge radial del Deep Dive -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-icon">◆</div>
+          <div>
+            <div class="panel-title">Reporte de descubrimientos</div>
+            <span class="panel-question">Avance total · 110 hallazgos</span>
+          </div>
+        </div>
+
+        <div class="gauge-wrap">
+          <div class="gauge-svg">
+            <svg viewBox="0 0 100 100" width="140" height="140" xmlns="http://www.w3.org/2000/svg">
+              <!-- Base ring (gray / pending) -->
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#E2E8F0" stroke-width="14"/>
+              <!-- Completed arc · 70/110 = 63.6% · 229° -->
+              <circle cx="50" cy="50" r="40" fill="none"
+                      stroke="#00AEC7" stroke-width="14"
+                      stroke-dasharray="159.9 251.3"
+                      stroke-dashoffset="0"
+                      transform="rotate(-90 50 50)"
+                      stroke-linecap="butt"/>
+              <!-- In-progress arc · 26/110 = 23.6% · starts after completed -->
+              <circle cx="50" cy="50" r="40" fill="none"
+                      stroke="#D97706" stroke-width="14"
+                      stroke-dasharray="59.4 251.3"
+                      stroke-dashoffset="-159.9"
+                      transform="rotate(-90 50 50)"
+                      stroke-linecap="butt"/>
+              <!-- Pending stays as the base ring (remaining 14/110 = 12.7%) -->
+            </svg>
+            <div class="gauge-center">
+              <div class="gauge-big">64%</div>
+              <div class="gauge-of">70 de 110</div>
+              <div class="gauge-label">Cubiertos</div>
+            </div>
+          </div>
+
+          <div class="legend">
+            <div class="legend-row">
+              <span class="legend-dot done"></span>
+              <span class="legend-text">Cubiertos en totalidad</span>
+              <span class="legend-count">70</span>
+            </div>
+            <div class="legend-row">
+              <span class="legend-dot wip"></span>
+              <span class="legend-text">En curso / Parcial</span>
+              <span class="legend-count">26</span>
+            </div>
+            <div class="legend-row">
+              <span class="legend-dot pend"></span>
+              <span class="legend-text">Pendientes</span>
+              <span class="legend-count">14</span>
+            </div>
+          </div>
+
+          <div class="critical-section">
+            <div class="critical-label">Top 3 críticos del análisis</div>
+            <div class="critical-row">
+              <span class="legend-dot done"></span>
+              <span class="critical-text">Riesgo de fuga de información entre distribuidores</span>
+            </div>
+            <div class="critical-row">
+              <span class="legend-dot done"></span>
+              <span class="critical-text">Entrada del agente concentrada en autenticación</span>
+            </div>
+            <div class="critical-row">
+              <span class="legend-dot wip"></span>
+              <span class="critical-text">Exceso de escalaciones automáticas a asesor humano</span>
+            </div>
+          </div>
+
+          <div class="gauge-footnote">Base: 110 hallazgos del análisis Agent Deep Dive · Sesión 2</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-left">
+        <strong>Corte · Vie 16-oct-2026 · 10:40 hrs CDMX</strong>
+        <span class="sep"></span>
+        <span>Snapshot semanal · cadencia Viernes</span>
+      </div>
+      <div class="powered-block">
+        <span class="powered-team">Salesforce · Forward Deployed Engineers</span>
+        <span class="powered-sep"></span>
+        <img src="/sfdc-logos/corporate-logo-horiz.png" alt="Salesforce" class="powered-logo" />
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>

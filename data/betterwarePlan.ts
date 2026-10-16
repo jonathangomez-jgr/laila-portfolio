@@ -1743,6 +1743,26 @@ const MILESTONES: Milestone[] = [
     references: [],
   },
   {
+    id: "snapshot-16-oct",
+    title: "📊 Snapshot Semanal · Reporte de avances",
+    description:
+      "Vie 16-oct · publicación del snapshot ejecutivo de 1 página con el estado del agente al cierre de la semana (12 al 16 de octubre). Primer reporte de la cadencia semanal de los viernes. Formato institucional Salesforce FDE con progreso de fase, Etapa 1 y global, entregables de la semana, valor para el negocio y gauge radial del avance del Reporte de Descubrimientos (110 hallazgos).",
+    date: "2026-10-16",
+    kind: "Internal Review",
+    phaseId: "f1",
+    participants: ["Salesforce - FDE", "Betterware - Sponsor", "Betterware - IT Lead"],
+    status: "completed",
+    outcome:
+      "Snapshot publicado en el portal de Laila. Formato de referencia para la cadencia semanal de los viernes y plantilla homologada para Jafra.",
+    references: [
+      {
+        label: "Snapshot Semanal · 16-oct",
+        url: "/Customers/Betterware/files/Snapshot_Viernes_2026_10_16.html",
+        kind: "document",
+      },
+    ],
+  },
+  {
     id: "cutover",
     title: "🚀 CUTOVER — Programa Insiders arranque formal",
     description:

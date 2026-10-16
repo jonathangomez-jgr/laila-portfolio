@@ -30,6 +30,16 @@ export const CATEGORY_ORDER: DocCategory[] = [
 // ----------------------------------------------------------------------------
 const BETTERWARE_DOCS: DocEntry[] = [
   {
+    slug: "snapshot-viernes-16-oct",
+    label: "Snapshot Semanal · Viernes 16-oct",
+    description:
+      "Reporte ejecutivo de 1 página con el estado del agente al cierre de la semana del 12 al 16 de octubre. Progreso de fase actual, Etapa 1 (Eficacia) y global · entregables de la semana · valor para el negocio · gauge radial con avance del Reporte de Descubrimientos (110 hallazgos). Formato institucional Salesforce FDE · cadencia Viernes.",
+    url: "/Customers/Betterware/files/Snapshot_Viernes_2026_10_16.html",
+    category: "Ejecutivo",
+    icon: "📊",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "presentacion-kickoff",
     label: "Presentación · Kick-off CS (compartida con Jafra)",
     description:
