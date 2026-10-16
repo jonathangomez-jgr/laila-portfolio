@@ -1,8 +1,7 @@
 import Link from "next/link";
-import type { FDEActivity, FDEItem, FDEProject } from "@/lib/salesforce/fdeTracker";
-import FDEItemCreator from "@/components/FDEItemCreator";
-import FDEItemStatusEditor from "@/components/FDEItemStatusEditor";
+import type { FDEActivity, FDEProject } from "@/lib/salesforce/fdeTracker";
 import FDEActivityCreator from "@/components/FDEActivityCreator";
+import FDEProjectBacklogBoard from "@/components/FDEProjectBacklogBoard";
 import type {
   CreateActivityResult,
   CreateItemResult,
@@ -10,38 +9,6 @@ import type {
 } from "@/app/[lang]/customer-projects/[slug]/tracker/actions";
 
 export type TrackerTab = "backlog" | "activities";
-
-const STATUS_ORDER: Array<FDEItem["JGR_FDE_Status__c"]> = [
-  "En Progreso",
-  "Bloqueado",
-  "En Revisión",
-  "Backlog",
-  "Cerrado",
-  "Descartado",
-];
-
-const STATUS_STYLES: Record<string, string> = {
-  "En Progreso": "bg-emerald-50 text-emerald-700 border-emerald-200",
-  Bloqueado: "bg-rose-50 text-rose-700 border-rose-200",
-  "En Revisión": "bg-amber-50 text-amber-800 border-amber-200",
-  Backlog: "bg-slate-50 text-slate-700 border-slate-200",
-  Cerrado: "bg-indigo-50 text-indigo-700 border-indigo-200",
-  Descartado: "bg-neutral-50 text-neutral-500 border-neutral-200",
-};
-
-const PRIORITY_STYLES: Record<string, string> = {
-  Alta: "bg-rose-100 text-rose-800",
-  Media: "bg-amber-100 text-amber-800",
-  Baja: "bg-slate-100 text-slate-700",
-};
-
-const TYPE_STYLES: Record<string, string> = {
-  Mejora: "bg-indigo-100 text-indigo-800",
-  Bug: "bg-rose-100 text-rose-800",
-  Riesgo: "bg-orange-100 text-orange-800",
-  Decisión: "bg-violet-100 text-violet-800",
-  Tarea: "bg-sky-100 text-sky-800",
-};
 
 const CATEGORY_STYLES: Record<string, string> = {
   Discovery: "bg-violet-100 text-violet-800",
@@ -73,26 +40,6 @@ function Chip({ label, className }: { label: string; className: string }) {
   );
 }
 
-function Section({
-  label,
-  value,
-}: {
-  label: string;
-  value: string | null | undefined;
-}) {
-  if (!value?.trim()) return null;
-  return (
-    <div>
-      <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
-        {label}
-      </p>
-      <p className="whitespace-pre-line text-sm leading-6 text-gray-700">
-        {value}
-      </p>
-    </div>
-  );
-}
-
 type BoundCreateItemAction = (
   prev: CreateItemResult | null,
   formData: FormData,
@@ -107,109 +54,6 @@ type BoundCreateActivityAction = (
   prev: CreateActivityResult | null,
   formData: FormData,
 ) => Promise<CreateActivityResult>;
-
-function ItemCard({
-  item,
-  boundUpdateStatusAction,
-}: {
-  item: FDEItem;
-  boundUpdateStatusAction: BoundUpdateStatusAction;
-}) {
-  const code = item.JGR_FDE_Item_Code__c ?? item.Name;
-  return (
-    <article className="soft-card overflow-hidden p-6">
-      <header className="mb-4 flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="mb-1 text-xs font-mono uppercase tracking-wider text-indigo-600">
-            {code}
-          </p>
-          <h3 className="text-lg font-semibold text-gray-950">
-            {item.JGR_FDE_Title__c}
-          </h3>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {item.JGR_FDE_Priority__c && (
-            <Chip
-              label={item.JGR_FDE_Priority__c}
-              className={
-                PRIORITY_STYLES[item.JGR_FDE_Priority__c] ??
-                "bg-gray-100 text-gray-700"
-              }
-            />
-          )}
-          {item.JGR_FDE_Type__c && (
-            <Chip
-              label={item.JGR_FDE_Type__c}
-              className={
-                TYPE_STYLES[item.JGR_FDE_Type__c] ?? "bg-gray-100 text-gray-700"
-              }
-            />
-          )}
-          {item.JGR_FDE_Owner_Party__c && (
-            <Chip
-              label={item.JGR_FDE_Owner_Party__c}
-              className="bg-gray-100 text-gray-700"
-            />
-          )}
-        </div>
-      </header>
-
-      <div className="mb-4">
-        <FDEItemStatusEditor
-          itemId={item.Id}
-          currentStatus={item.JGR_FDE_Status__c ?? "Backlog"}
-          boundAction={boundUpdateStatusAction}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Section
-          label="Comportamiento actual"
-          value={item.JGR_FDE_Description__c}
-        />
-        <Section label="Riesgo potencial" value={item.JGR_FDE_Risk__c} />
-        <Section label="Recomendación" value={item.JGR_FDE_Recommendation__c} />
-        <Section label="Acciones a realizar" value={item.JGR_FDE_Actions__c} />
-      </div>
-
-      {(item.JGR_FDE_Last_Update_Note__c ||
-        item.JGR_FDE_Dependency__c ||
-        item.JGR_FDE_Target_Date__c) && (
-        <div className="mt-4 border-t border-gray-100 pt-4">
-          {item.JGR_FDE_Last_Update_Note__c && (
-            <div className="mb-2">
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                Último avance
-                {item.JGR_FDE_Last_Update_Date__c && (
-                  <span className="ml-2 font-normal normal-case text-gray-400">
-                    · {formatDate(item.JGR_FDE_Last_Update_Date__c)}
-                  </span>
-                )}
-              </p>
-              <p className="whitespace-pre-line text-sm leading-6 text-gray-700">
-                {item.JGR_FDE_Last_Update_Note__c}
-              </p>
-            </div>
-          )}
-          <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-gray-500">
-            {item.JGR_FDE_Dependency__c && (
-              <span>
-                <span className="font-semibold">Dependencia:</span>{" "}
-                {item.JGR_FDE_Dependency__c}
-              </span>
-            )}
-            {item.JGR_FDE_Target_Date__c && (
-              <span>
-                <span className="font-semibold">Fecha objetivo:</span>{" "}
-                {formatDate(item.JGR_FDE_Target_Date__c)}
-              </span>
-            )}
-          </div>
-        </div>
-      )}
-    </article>
-  );
-}
 
 function ActivityCard({ activity }: { activity: FDEActivity }) {
   return (
@@ -282,60 +126,14 @@ function ProjectBacklog({
   boundCreateItemAction: BoundCreateItemAction;
   boundUpdateStatusAction: BoundUpdateStatusAction;
 }) {
-  const grouped = new Map<string, FDEItem[]>();
-  for (const item of project.items) {
-    const key = item.JGR_FDE_Status__c ?? "Backlog";
-    const bucket = grouped.get(key) ?? [];
-    bucket.push(item);
-    grouped.set(key, bucket);
-  }
-  const orderedStatuses = STATUS_ORDER.filter(
-    (s) => s && grouped.has(s),
-  ) as string[];
-
   return (
-    <>
-      <FDEItemCreator
-        projectId={project.Id}
-        projectName={project.JGR_FDE_Project_Name__c}
-        boundAction={boundCreateItemAction}
-      />
-
-      {project.items.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-gray-200 p-8 text-center text-sm text-gray-500">
-          Aún no hay items visibles para este proyecto.
-        </p>
-      ) : (
-        <div className="space-y-8">
-          {orderedStatuses.map((status) => {
-            const items = grouped.get(status) ?? [];
-            return (
-              <div key={status}>
-                <div className="mb-3 flex items-center gap-3">
-                  <span
-                    className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${STATUS_STYLES[status] ?? "bg-gray-50 text-gray-700 border-gray-200"}`}
-                  >
-                    {status}
-                  </span>
-                  <span className="text-xs text-gray-400">
-                    {items.length} {items.length === 1 ? "item" : "items"}
-                  </span>
-                </div>
-                <div className="space-y-4">
-                  {items.map((item) => (
-                    <ItemCard
-                      key={item.Id}
-                      item={item}
-                      boundUpdateStatusAction={boundUpdateStatusAction}
-                    />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </>
+    <FDEProjectBacklogBoard
+      projectId={project.Id}
+      projectName={project.JGR_FDE_Project_Name__c}
+      items={project.items}
+      boundCreateItemAction={boundCreateItemAction}
+      boundUpdateStatusAction={boundUpdateStatusAction}
+    />
   );
 }
 

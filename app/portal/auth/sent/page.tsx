@@ -33,8 +33,8 @@ export default function PortalAuthSentPage() {
 
         <ul className="mt-4 space-y-1.5 text-xs text-slate-600">
           <li>⏳ El enlace es válido por <strong>15 minutos</strong>.</li>
-          <li>📨 Si no lo ves, revisá tu carpeta de <strong>spam</strong>.</li>
-          <li>↻ Si expira, podés pedir uno nuevo desde la pantalla de login.</li>
+          <li>📨 Si no lo ves, revisa tu carpeta de <strong>spam</strong>.</li>
+          <li>↻ Si expira, puedes pedir uno nuevo desde la pantalla de login.</li>
         </ul>
 
         <Link

@@ -20,11 +20,11 @@ const HEALTH_LABEL: Record<string, { label: string; cls: string }> = {
 
 const INTRO_BY_ROLE: Record<string, string> = {
   Salesforce:
-    "Vista completa del proyecto. Desde acá podés navegar al Plan maestro, la Matriz de pruebas y los documentos ejecutivos.",
+    "Vista completa del proyecto. Desde aquí puedes navegar al Plan maestro, la Matriz de pruebas y los documentos ejecutivos.",
   Partner:
-    "Acá vas a seguir el avance del proyecto y las sesiones del piloto. Tenés acceso al Plan y a las pruebas.",
+    "Aquí vas a seguir el avance del proyecto y las sesiones del piloto. Tienes acceso al Plan y a las pruebas.",
   Client:
-    "Resumen ejecutivo del proyecto. Acá vas a ver avances semanales, documentos compartibles y los hitos clave del piloto.",
+    "Resumen ejecutivo del proyecto. Aquí vas a ver avances semanales, documentos compartibles y los hitos clave del piloto.",
 };
 
 function fmtDate(iso: string): string {

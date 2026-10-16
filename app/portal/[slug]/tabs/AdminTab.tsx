@@ -139,7 +139,7 @@ export default function AdminTab({ slug }: { slug: string }) {
               Lista blanca del portal
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-slate-600">
-              Las personas acá listadas pueden pedir magic link al portal. Al
+              Las personas aquí listadas pueden pedir magic link al portal. Al
               desactivar a alguien, no podrá volver a entrar hasta que lo
               reactives.
             </p>

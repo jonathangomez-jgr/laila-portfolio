@@ -82,7 +82,15 @@ export default async function PortalSlugPage({
     <main className="min-h-screen bg-slate-50">
       {/* Header */}
       <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5 sm:py-4">
+        <div className="mx-auto max-w-6xl px-4 pt-3 sm:px-5 sm:pt-4">
+          <Link
+            href="/portal"
+            className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 transition hover:text-blue-700"
+          >
+            <span aria-hidden>←</span> Mis proyectos
+          </Link>
+        </div>
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pb-3 pt-2 sm:px-5 sm:pb-4">
           <Link href="/portal" className="flex min-w-0 items-center gap-3">
             {project.logo && (
               <Image

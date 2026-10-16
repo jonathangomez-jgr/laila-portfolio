@@ -133,14 +133,14 @@ function LoginForm() {
       <p className="mb-4 text-sm text-slate-600">
         {project ? (
           <>
-            Ingresá tu correo autorizado para acceder al portal de{" "}
+            Ingresa tu correo autorizado para acceder al portal de{" "}
             <strong className="text-slate-900">{project.customerName}</strong>.
             Te enviamos un enlace de un solo clic.
           </>
         ) : (
           <>
-            Ingresá tu correo autorizado para recibir un enlace de acceso al
-            portal del proyecto que tenés asignado.
+            Ingresa tu correo autorizado para recibir un enlace de acceso al
+            portal del proyecto que tengas asignado.
           </>
         )}
       </p>

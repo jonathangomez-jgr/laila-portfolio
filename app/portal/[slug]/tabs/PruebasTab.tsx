@@ -18,7 +18,7 @@ export default function PruebasTab({
         <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">
           <p className="font-semibold">Vista de alto nivel</p>
           <p className="mt-0.5 text-amber-800">
-            Podés ver el dashboard y la lista de casos. El registro de nuevas
+            Puedes ver el dashboard y la lista de casos. El registro de nuevas
             ejecuciones queda a cargo del equipo Salesforce + Partner.
           </p>
         </div>
