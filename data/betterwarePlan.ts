@@ -1,6 +1,6 @@
 // ============================================================================
 // Betterware · FDE_BW_Service_Agent — Plan de reconstrucción (COMPRIMIDO)
-// Arranque: Dom 2026-10-04 · Cutover 5%: Vie 2026-10-16 · Go-live 100%: Vie 2026-12-11
+// Arranque: Dom 2026-10-04 · Cutover 10%: Lun 2026-10-19 · Go-live 100%: Vie 2026-12-11
 // Autor: Jonathan Gomez (Salesforce FDE)
 // ============================================================================
 
@@ -233,7 +233,7 @@ const PHASES: Phase[] = [
     objective:
       "Agente completamente validado por Capptus y Betterware, publicado en producción como bot activo con la lista de Insiders cargada y lista para activar.",
     startDate: "2026-10-06",
-    endDate: "2026-10-15",
+    endDate: "2026-10-18",
     requires: [
       "F0 cerrada · alineación con Capptus confirmada",
       "Insumos del proyecto entregados por Capptus (docs, requerimientos, escenarios, datos de prueba)",
@@ -242,9 +242,9 @@ const PHASES: Phase[] = [
       "Permissions de deploy a producción confirmados",
     ],
     outcome:
-      "20+ escenarios pasando · UAT sign-off de Betterware · lista de 15-25 Insiders marcada en MessagingEndUser · agente publicado en producción.",
+      "20+ escenarios pasando · UAT sign-off de Betterware · lista de 15-25 Insiders marcada en MessagingEndUser · agente publicado en producción · ventana de pruebas internas 16-18 oct previa al arranque formal de Insiders.",
     gate:
-      "Approval firmado (Jue 15-oct) · publish + activate del FDE_BW_Service_Agent en producción.",
+      "Approval firmado (Jue 15-oct) + pruebas internas de validación 16-18 oct · arranque formal del Programa Insiders el Lun 19-oct.",
     color: "#00B3FF",
   },
   {
@@ -253,13 +253,13 @@ const PHASES: Phase[] = [
     title: "Programa Insiders · Cutover 10% → GA",
     shortLabel: "F1.5 · Insiders → GA",
     description:
-      "Arranque Vie 16-oct AM con el 10% inicial de la lista de Insiders. Escalada diaria de +10% a partir del lunes 19 (20% → 30% → 40% → 50%) hasta el viernes 23-oct donde el agente nuevo pasa a flujo general (GA · 100%). 1 semana de observación intensiva con daily standups y monitoreo de conversaciones.",
+      "Arranque Lun 19-oct AM con el 10% inicial de la lista de Insiders. Escalada diaria de +10% (Mar 20 → Mie 21 → Jue 22 → Vie 23) hasta el Lun 26-oct donde el agente nuevo pasa a flujo general (GA · 100%). 1 semana de observación intensiva con daily standups y monitoreo de conversaciones.",
     objective:
       "Pasar de piloto cerrado a flujo general en 1 semana, con evidencia dura día a día de que el nuevo agente mejora KPIs vs BW_AGENT_N, y rollback inmediato (desmarcar FDE_Pilot__c) ante cualquier regresión significativa.",
-    startDate: "2026-10-16",
-    endDate: "2026-10-23",
+    startDate: "2026-10-19",
+    endDate: "2026-10-26",
     requires: [
-      "F1 cerrada · Approval publish firmado",
+      "F1 cerrada · Approval publish firmado · pruebas internas 16-18 oct completadas",
       "Lista de 15-25 Insiders curada y marcada en MessagingEndUser",
       "Dashboards de KPIs operativos con split por versión del agente",
       "Rollback operativo validado (desmarcar FDE_Pilot__c)",
@@ -267,7 +267,7 @@ const PHASES: Phase[] = [
     outcome:
       "Agente nuevo en GA (100% del tráfico), KPIs comparados contra baseline del agente actual, aprendizajes documentados para la Fase 2.",
     gate:
-      "Executive Review 3 (Vie 23-oct) · firma de GA + aprobar entrar a reemplazo gradual de acciones.",
+      "Executive Review 3 (Lun 26-oct) · firma de GA + aprobar entrar a reemplazo gradual de acciones.",
     color: "#F28B42",
   },
   {
@@ -279,7 +279,7 @@ const PHASES: Phase[] = [
       "Cortar la dependencia del legacy acción por acción, priorizando por riesgo. Cerrar los hallazgos críticos y altos del reporte en código propio.",
     objective:
       "Hallazgos críticos (03-06) + Alto 07 cerrados en código · ownership real sobre acciones críticas · deuda estructural absorbida.",
-    startDate: "2026-10-26",
+    startDate: "2026-10-27",
     endDate: "2026-11-13",
     requires: [
       "F1.5 cerrada · GA firmado",
@@ -765,28 +765,24 @@ const ACTIVITIES: Activity[] = [
     tags: ["parity-v42", "polish", "critical-path"],
   }),
 
-  // ============== FASE 1.5 — A/B PRODUCCIÓN (Vie 2026-10-16 → Vie 2026-10-30) ==============
+  // ============== FASE 1.5 — A/B PRODUCCIÓN (Lun 2026-10-19 → Lun 2026-10-26) ==============
   act({
     id: "1.5.1",
     phaseId: "f1_5",
     number: "1.5.1",
-    title: "🚀 CUTOVER: Programa Insiders arranque técnico",
+    title: "🚀 CUTOVER: Programa Insiders arranque formal",
     description:
-      "Arranque técnico del Programa Insiders en producción con la cohorte inicial de usuarios Salesforce + Betterware marcados con MessagingEndUser.FDE_Pilot__c = true. El resto del tráfico sigue en BW_AGENT_N v42 vía omni-flow FDE_BW_routeAgent. Monitoreo activo con rollback operativo (desmarcar checkbox) ante cualquier regresión. La escalada a más distribuidoras depende del sign-off de pruebas por parte de Betterware.",
+      "Arranque formal del Programa Insiders Lun 19-oct AM con la cohorte inicial de distribuidoras aliadas marcadas con MessagingEndUser.FDE_Pilot__c = true. El agente v25 ya está publicado y activo desde 15-oct; esta actividad marca el inicio de la cohorte real de Insiders tomando tráfico productivo (previo a esto, solo pruebas internas Salesforce + Betterware). El resto del tráfico sigue en BW_AGENT_N v42 vía omni-flow FDE_BW_routeAgent. Monitoreo activo con rollback operativo (desmarcar checkbox) ante cualquier regresión.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner", "Betterware - IT Lead", "Betterware - Sponsor"],
     delegableToPartner: false,
     type: "Deploy",
-    week: 2,
-    plannedStart: "2026-10-16",
-    plannedEnd: "2026-10-16",
-    actualStart: "2026-10-15",
-    actualEnd: "2026-10-15",
-    status: "done",
-    progressPercent: 100,
+    week: 3,
+    plannedStart: "2026-10-19",
+    plannedEnd: "2026-10-19",
     dependencies: ["1.7"],
     deliverables: [
-      "FDE_BW_Service_Agent_V2 v25 recibiendo tráfico de Insiders Salesforce + Betterware",
+      "Cohorte Insiders inicial (15-25 distribuidoras) tomando tráfico real sobre v25",
       "Omni-flow FDE_BW_routeAgent operativo con decisión por FDE_Pilot__c",
     ],
     references: [],
@@ -798,14 +794,14 @@ const ACTIVITIES: Activity[] = [
     number: "1.5.2",
     title: "War room primeras 48h",
     description:
-      "Equipo completo disponible en war room viernes 16 y sábado 17: FDE, Partner, Betterware IT Lead. Monitoreo minuto a minuto, decisiones rápidas de hotfix o rollback. Reporte cada 4 horas al Sponsor con snapshot de KPIs.",
+      "Equipo completo disponible en war room lunes 19 y martes 20: FDE, Partner, Betterware IT Lead. Monitoreo minuto a minuto, decisiones rápidas de hotfix o rollback. Reporte cada 4 horas al Sponsor con snapshot de KPIs.",
     owner: "Shared",
     collaborators: ["Salesforce - FDE", "Partner", "Betterware - IT Lead"],
     delegableToPartner: false,
     type: "Ops",
-    week: 2,
-    plannedStart: "2026-10-16",
-    plannedEnd: "2026-10-17",
+    week: 3,
+    plannedStart: "2026-10-19",
+    plannedEnd: "2026-10-20",
     dependencies: ["1.5.1"],
     deliverables: ["Log del war room · reportes cada 4h · decisiones documentadas"],
     references: [],
@@ -817,14 +813,14 @@ const ACTIVITIES: Activity[] = [
     number: "1.5.3",
     title: "Daily standup durante escalada",
     description:
-      "Standup diario de 15 min con FDE + Partner + Betterware IT Lead durante la ventana de escalada lunes 19 → viernes 23. Agenda fija: KPIs del día anterior, blockers vigentes, hotfixes necesarios, decisión de escalar al siguiente % o mantener.",
+      "Standup diario de 15 min con FDE + Partner + Betterware IT Lead durante la ventana de escalada martes 20 → lunes 26. Agenda fija: KPIs del día anterior, blockers vigentes, hotfixes necesarios, decisión de escalar al siguiente % o mantener.",
     owner: "Shared",
     collaborators: ["Salesforce - FDE", "Partner", "Betterware - IT Lead"],
     delegableToPartner: false,
     type: "Mgmt",
     week: 3,
-    plannedStart: "2026-10-19",
-    plannedEnd: "2026-10-23",
+    plannedStart: "2026-10-20",
+    plannedEnd: "2026-10-26",
     dependencies: ["1.5.2"],
     deliverables: ["5 minutas de standup"],
     references: [],
@@ -841,9 +837,9 @@ const ACTIVITIES: Activity[] = [
     collaborators: ["Partner"],
     delegableToPartner: true,
     type: "Ops",
-    week: 2,
-    plannedStart: "2026-10-16",
-    plannedEnd: "2026-10-23",
+    week: 3,
+    plannedStart: "2026-10-19",
+    plannedEnd: "2026-10-26",
     dependencies: ["1.5.1"],
     deliverables: ["Reporte diario de KPIs · PRs de hotfix merged"],
     references: [],
@@ -855,14 +851,14 @@ const ACTIVITIES: Activity[] = [
     number: "1.5.5",
     title: "Escalada al 20%",
     description:
-      "Lunes 19-oct AM: evaluar métricas del fin de semana post-cutover. Si cero regresión y Error Rate < 1%, incrementar la cohorte Insiders al 20% marcando más MessagingEndUser con FDE_Pilot__c. Monitoreo intensivo primeras 24h del nuevo porcentaje.",
+      "Martes 20-oct AM: evaluar métricas del primer día de Insiders (lunes 19). Si cero regresión y Error Rate < 1%, incrementar la cohorte Insiders al 20% marcando más MessagingEndUser con FDE_Pilot__c. Monitoreo intensivo primeras 24h del nuevo porcentaje.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: true,
     type: "Deploy",
     week: 3,
-    plannedStart: "2026-10-19",
-    plannedEnd: "2026-10-19",
+    plannedStart: "2026-10-20",
+    plannedEnd: "2026-10-20",
     dependencies: ["1.5.2"],
     deliverables: ["Cohorte Insiders al 20% · KPIs 24h capturados"],
     references: [],
@@ -874,14 +870,14 @@ const ACTIVITIES: Activity[] = [
     number: "1.5.6",
     title: "Escalada al 30%",
     description:
-      "Martes 20-oct: incremento diario de +10%. Review de KPIs del día previo antes de activar. Monitoreo intensivo.",
+      "Miércoles 21-oct: incremento diario de +10%. Review de KPIs del día previo antes de activar. Monitoreo intensivo.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: true,
     type: "Deploy",
     week: 3,
-    plannedStart: "2026-10-20",
-    plannedEnd: "2026-10-20",
+    plannedStart: "2026-10-21",
+    plannedEnd: "2026-10-21",
     dependencies: ["1.5.5"],
     deliverables: ["Cohorte Insiders al 30%"],
     references: [],
@@ -893,14 +889,14 @@ const ACTIVITIES: Activity[] = [
     number: "1.5.7",
     title: "Escalada al 40%",
     description:
-      "Miércoles 21-oct: incremento diario de +10%. Review de KPIs del día previo antes de activar. Monitoreo intensivo.",
+      "Jueves 22-oct: incremento diario de +10%. Review de KPIs del día previo antes de activar. Monitoreo intensivo.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: true,
     type: "Deploy",
     week: 3,
-    plannedStart: "2026-10-21",
-    plannedEnd: "2026-10-21",
+    plannedStart: "2026-10-22",
+    plannedEnd: "2026-10-22",
     dependencies: ["1.5.6"],
     deliverables: ["Cohorte Insiders al 40%"],
     references: [],
@@ -912,14 +908,14 @@ const ACTIVITIES: Activity[] = [
     number: "1.5.8",
     title: "Escalada al 50%",
     description:
-      "Jueves 22-oct: incremento diario de +10%. Review de KPIs del día previo antes de activar. Preparación del salto final a GA para el viernes.",
+      "Viernes 23-oct: incremento diario de +10%. Review de KPIs del día previo antes de activar. Preparación del salto final a GA para el lunes.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: true,
     type: "Deploy",
     week: 3,
-    plannedStart: "2026-10-22",
-    plannedEnd: "2026-10-22",
+    plannedStart: "2026-10-23",
+    plannedEnd: "2026-10-23",
     dependencies: ["1.5.7"],
     deliverables: ["Cohorte Insiders al 50%"],
     references: [],
@@ -931,14 +927,14 @@ const ACTIVITIES: Activity[] = [
     number: "1.5.9",
     title: "🎯 GA · Flujo total General Available",
     description:
-      "Viernes 23-oct: salto a GA. El agente nuevo (FDE_BW_Service_Agent) queda como el flujo general para todas las distribuidoras — ya no limitado a la cohorte Insiders marcada con FDE_Pilot__c. Review ejecutivo final con el Sponsor para firmar GA y aprobar la entrada a Fase 2 (reemplazo gradual de acciones legacy).",
+      "Lunes 26-oct: salto a GA. El agente nuevo (FDE_BW_Service_Agent) queda como el flujo general para todas las distribuidoras — ya no limitado a la cohorte Insiders marcada con FDE_Pilot__c. Review ejecutivo final con el Sponsor para firmar GA y aprobar la entrada a Fase 2 (reemplazo gradual de acciones legacy).",
     owner: "Shared",
     collaborators: ["Salesforce - FDE", "Partner", "Betterware - Sponsor", "Betterware - IT Lead"],
     delegableToPartner: false,
     type: "Deploy",
-    week: 3,
-    plannedStart: "2026-10-23",
-    plannedEnd: "2026-10-23",
+    week: 4,
+    plannedStart: "2026-10-26",
+    plannedEnd: "2026-10-26",
     dependencies: ["1.5.8"],
     deliverables: [
       "Agente nuevo en GA · 100% del tráfico",
@@ -1748,10 +1744,10 @@ const MILESTONES: Milestone[] = [
   },
   {
     id: "cutover",
-    title: "🚀 CUTOVER — Programa Insiders arranque técnico",
+    title: "🚀 CUTOVER — Programa Insiders arranque formal",
     description:
-      "Arranque del Programa Insiders con la cohorte inicial de Insiders (usuarios Salesforce + Betterware marcados con MessagingEndUser.FDE_Pilot__c=true) tomando tráfico real en WhatsApp productivo. Escalada a más distribuidoras bloqueada hasta sign-off de pruebas Betterware.",
-    date: "2026-10-15",
+      "Lun 19-oct AM. Arranque formal del Programa Insiders con la cohorte inicial de distribuidoras aliadas (MessagingEndUser.FDE_Pilot__c=true) tomando tráfico real en WhatsApp productivo. El agente v25 ya está publicado y activo desde 15-oct; esta semana (16-18 oct) se usa para pruebas internas Salesforce + Betterware previas al arranque formal del lunes.",
+    date: "2026-10-19",
     kind: "Go-live",
     phaseId: "f1_5",
     participants: [
@@ -1760,17 +1756,15 @@ const MILESTONES: Milestone[] = [
       "Betterware - IT Lead",
       "Betterware - Sponsor",
     ],
-    status: "completed",
-    outcome:
-      "Cutover técnico anticipado 1 día (plan original 16-oct). FDE_BW_Service_Agent_V2 v25 activa y recibiendo tráfico de los Insiders Salesforce + Betterware. Omni-flow FDE_BW_routeAgent operativo. Resto del tráfico sigue en BW_AGENT_N v42. Escalada +10% diaria queda bloqueada hasta UAT sign-off de Betterware.",
+    status: "scheduled",
     references: [],
   },
   {
     id: "escalada_20",
     title: "Escalada al 20%",
     description:
-      "Lunes 19-oct. Si los KPIs del fin de semana post-cutover son verdes, se marcan más MessagingEndUser con FDE_Pilot__c para subir la cohorte Insiders del 10% al 20%. Arranca la ventana de escalada diaria de +10% hasta GA.",
-    date: "2026-10-19",
+      "Martes 20-oct. Si los KPIs del primer día (lunes 19) son verdes, se marcan más MessagingEndUser con FDE_Pilot__c para subir la cohorte Insiders del 10% al 20%. Arranca la ventana de escalada diaria de +10% hasta GA.",
+    date: "2026-10-20",
     kind: "Go-live",
     phaseId: "f1_5",
     participants: ["Salesforce - FDE", "Partner", "Betterware - IT Lead"],
@@ -1781,8 +1775,8 @@ const MILESTONES: Milestone[] = [
     id: "escalada_30",
     title: "Escalada al 30%",
     description:
-      "Martes 20-oct. Incremento diario de +10% si los KPIs del día previo se mantuvieron verdes.",
-    date: "2026-10-20",
+      "Miércoles 21-oct. Incremento diario de +10% si los KPIs del día previo se mantuvieron verdes.",
+    date: "2026-10-21",
     kind: "Go-live",
     phaseId: "f1_5",
     participants: ["Salesforce - FDE", "Partner"],
@@ -1793,8 +1787,8 @@ const MILESTONES: Milestone[] = [
     id: "escalada_40",
     title: "Escalada al 40%",
     description:
-      "Miércoles 21-oct. Incremento diario de +10% si los KPIs del día previo se mantuvieron verdes.",
-    date: "2026-10-21",
+      "Jueves 22-oct. Incremento diario de +10% si los KPIs del día previo se mantuvieron verdes.",
+    date: "2026-10-22",
     kind: "Go-live",
     phaseId: "f1_5",
     participants: ["Salesforce - FDE", "Partner"],
@@ -1805,8 +1799,8 @@ const MILESTONES: Milestone[] = [
     id: "escalada_50",
     title: "Escalada al 50%",
     description:
-      "Jueves 22-oct. Incremento diario de +10%. Último escalón antes del salto a GA. Preparación de la comunicación interna para el flujo general.",
-    date: "2026-10-22",
+      "Viernes 23-oct. Incremento diario de +10%. Último escalón antes del salto a GA. Preparación de la comunicación interna para el flujo general.",
+    date: "2026-10-23",
     kind: "Go-live",
     phaseId: "f1_5",
     participants: ["Salesforce - FDE", "Partner", "Betterware - Sponsor"],
@@ -1817,8 +1811,8 @@ const MILESTONES: Milestone[] = [
     id: "ga",
     title: "🎯 GA · Flujo total General Available",
     description:
-      "Viernes 23-oct. El agente nuevo (FDE_BW_Service_Agent) queda como el flujo general para todas las distribuidoras — ya no limitado a la cohorte Insiders marcada con FDE_Pilot__c. Review ejecutivo final con el Sponsor para firmar GA y aprobar la entrada a Fase 2 (reemplazo gradual de acciones legacy).",
-    date: "2026-10-23",
+      "Lunes 26-oct. El agente nuevo (FDE_BW_Service_Agent) queda como el flujo general para todas las distribuidoras — ya no limitado a la cohorte Insiders marcada con FDE_Pilot__c. Review ejecutivo final con el Sponsor para firmar GA y aprobar la entrada a Fase 2 (reemplazo gradual de acciones legacy).",
+    date: "2026-10-26",
     kind: "Go-live",
     phaseId: "f1_5",
     participants: [
@@ -1834,8 +1828,8 @@ const MILESTONES: Milestone[] = [
     id: "er3",
     title: "ER3 — firma de GA + go/no-go reemplazo",
     description:
-      "Review ejecutivo al cierre del ciclo Insiders → GA. Firma formal de GA y decisión de entrar a Fase 2 (reemplazo gradual de acciones legacy) o ajustar según evidencia.",
-    date: "2026-10-23",
+      "Review ejecutivo al cierre del ciclo Insiders → GA (Lun 26-oct). Firma formal de GA y decisión de entrar a Fase 2 (reemplazo gradual de acciones legacy) o ajustar según evidencia.",
+    date: "2026-10-26",
     kind: "Executive Review",
     phaseId: "f1_5",
     participants: ["Shared"],
@@ -2130,6 +2124,29 @@ const STATUS_UPDATES: StatusUpdate[] = [
       "Pruebas internas Salesforce + Betterware sobre v25 con la cohorte Insiders inicial.",
       "Esperar sign-off de Betterware antes de escalar la cohorte a más distribuidoras.",
       "Monitoreo de regresiones vs V42 en los flujos de saldos, descuentos, pagos, puntos.",
+    ],
+    activeBlockers: [],
+    activeRisks: ["R2", "R6"],
+    references: [],
+  },
+  {
+    id: "status-2026-10-19",
+    weekOf: "2026-10-19",
+    author: "Salesforce - FDE",
+    overallHealth: "green",
+    phaseId: "f1",
+    highlights: [
+      "Replan del Programa Insiders: inicio formal recorrido de Vie 16-oct a Lun 19-oct. Esta semana (16-18 oct) seguimos en Fase 1 con pruebas internas Salesforce + Betterware sobre v25.",
+      "Observabilidad habilitada vía telemetría del org (sin ECA/JWT): podemos reconstruir cualquier sesión reportada contra los DMOs ssot__AiAgentSession__dlm / Interaction / Step / Message con SOQL directo.",
+      "Diagnóstico de la sesión 01a1407d-ae4c-7b50-afd2-c98c9f8dc9ed del 15-oct: V_CodigoLinaje se contaminaba durante autenticación porque el router invocaba setCodigoLinaje con el código de auth. Fix estructural aplicado.",
+      "Nuevo flow propio FDE_ValidarLinaje (clon de Partner) con output varCodigoValidado determinístico. Nueva variable varCodigoLinajeAuth en el agente que solo se puebla con códigos validados. 24 wirings cross-dominio apuntan al código validado, no al intento.",
+      "Fix adicional: setCodigoLinaje queda estructuralmente bloqueado hasta isAuthenticated=True. Reset de V_CodigoLinaje en auth success. Nueva action prep_consulta_propia por subagente para purgar contexto en el cambio linaje → propia.",
+      "Backlog etapa 2 documentado en actividades 4.9 (botones interactivos del canal) y 4.10 (duplicación de 27 actions en variantes propia/linaje si la telemetría del pilot muestra que la limpieza no basta).",
+    ],
+    nextWeek: [
+      "Lun 19-oct AM: cutover formal del Programa Insiders — cohorte inicial de distribuidoras aliadas marcadas con FDE_Pilot__c tomando tráfico real sobre v26 (con fix de linaje publicado).",
+      "Preview + pruebas del fix de linaje antes del lunes · validación de los 5 casos clave (linaje válido, inválido, múltiple, linaje→propia, auth con código propio).",
+      "Monitoreo de la primera jornada completa de Insiders con rollback operativo listo (desmarcar FDE_Pilot__c).",
     ],
     activeBlockers: [],
     activeRisks: ["R2", "R6"],
