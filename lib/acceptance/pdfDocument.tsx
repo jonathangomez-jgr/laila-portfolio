@@ -416,7 +416,7 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
                 {decisionLabel}
               </Text>
               <Text style={styles.decisionConfidence}>
-                Nivel de confianza:{" "}
+                Nivel de confianza para un Go-live al 100% de usuarios:{" "}
                 <Text style={styles.decisionConfidenceStrong}>
                   {evaluation.confidenceLevel != null
                     ? `${evaluation.confidenceLevel}%`
