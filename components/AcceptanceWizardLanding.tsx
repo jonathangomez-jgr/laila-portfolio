@@ -177,9 +177,9 @@ export default function AcceptanceWizardLanding({
             {otherEvals.map((ev) => (
               <div
                 key={ev.id}
-                className="flex items-center justify-between py-2.5"
+                className="flex items-center justify-between py-2.5 gap-3"
               >
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-slate-900">
                     {ev.evaluatorName ?? "Evaluador"}
                   </p>
@@ -189,7 +189,7 @@ export default function AcceptanceWizardLanding({
                       : `En curso · ${ev.progress.pct}%`}
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-shrink-0">
                   {ev.status === "Submitted" && ev.finalDecision && (
                     <span
                       className={
@@ -203,9 +203,20 @@ export default function AcceptanceWizardLanding({
                     </span>
                   )}
                   {ev.confidenceLevel != null && (
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-slate-500 hidden sm:inline">
                       Confianza {ev.confidenceLevel}%
                     </span>
+                  )}
+                  {ev.status === "Submitted" && (
+                    <a
+                      href={`/api/portal/acceptance/pdf?evaluationId=${encodeURIComponent(ev.id)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:border-cyan-400 hover:text-cyan-700 hover:bg-cyan-50 transition"
+                      title="Descargar PDF firmado"
+                    >
+                      📄 PDF
+                    </a>
                   )}
                 </div>
               </div>
