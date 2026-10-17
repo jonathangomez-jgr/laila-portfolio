@@ -18,6 +18,12 @@ export const portalProjectsMeta: PortalProjectMeta[] = [
     logo: "/Customers/Betterware/images/Logo-betterware.png",
     tagline: "Rewrite determinístico del Service Agent · FDE",
   },
+  {
+    slug: "jafra",
+    customerName: "Jafra",
+    logo: "/Customers/Jafra/images/jafra-logo.webp",
+    tagline: "Janet v2 · Agentforce determinístico para consultoras",
+  },
 ];
 
 export function getPortalProjectMeta(

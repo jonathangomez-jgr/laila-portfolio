@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { PortalUser } from "@/lib/portalAuth";
+import { getPortalProjectMeta } from "@/lib/portalProjectsMeta";
 import type {
   TemplateDTO,
   EvaluationDTO,
@@ -10,6 +11,16 @@ import type {
   CriterionDTO,
   FinalDecision,
 } from "@/lib/salesforce/acceptanceWizard";
+
+const CUSTOMER_LOGO_FALLBACK = "/Customers/Betterware/images/Logo-betterware.png";
+
+function customerLogoFor(slug: string): string {
+  return getPortalProjectMeta(slug)?.logo ?? CUSTOMER_LOGO_FALLBACK;
+}
+
+function customerNameFor(slug: string): string {
+  return getPortalProjectMeta(slug)?.customerName ?? "Cliente";
+}
 
 type Props = {
   user: PortalUser;
@@ -247,7 +258,7 @@ export default function AcceptanceWizard({
 function WizardHeader({
   page,
   totalPages,
-  template: _template,
+  template,
   evaluation,
   currentCategoryName,
   progressPct,
@@ -271,8 +282,8 @@ function WizardHeader({
   return (
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-5 px-6 py-3 border-b border-slate-200">
       <img
-        src="/Customers/Betterware/images/Logo-betterware.png"
-        alt="Betterware"
+        src={customerLogoFor(template.projectSlug)}
+        alt={customerNameFor(template.projectSlug)}
         className="h-7 object-contain"
       />
       <div className="flex flex-col gap-1">
@@ -326,8 +337,8 @@ function WelcomePage({
     <div className="max-w-2xl mx-auto py-10 text-center">
       <div className="flex items-center justify-center gap-5 mb-8">
         <img
-          src="/Customers/Betterware/images/Logo-betterware.png"
-          alt="Betterware"
+          src={customerLogoFor(template.projectSlug)}
+          alt={customerNameFor(template.projectSlug)}
           className="h-10 object-contain"
         />
         <span className="h-6 w-px bg-slate-300" />
