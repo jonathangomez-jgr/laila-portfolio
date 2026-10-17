@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { PortalUser } from "@/lib/portalAuth";
 import type {
   TemplateDTO,
@@ -712,7 +712,30 @@ function FinalPage({
     return list;
   }, [template.categories, responses]);
 
-  const canSubmit = finalDecision !== null && !submitting;
+  // Gate 1 · Si 3 o más Blockers no cumplen, Sí queda bloqueado y se fuerza "No"
+  const BLOCKER_THRESHOLD = 3;
+  const blockerGateTriggered = brokenBlockers.length >= BLOCKER_THRESHOLD;
+
+  useEffect(() => {
+    if (blockerGateTriggered && finalDecision === "Si") {
+      setFinalDecision("No");
+    }
+  }, [blockerGateTriggered, finalDecision, setFinalDecision]);
+
+  // Gate 2 · Progreso mínimo 95% para poder enviar
+  const PROGRESS_THRESHOLD = 95;
+  const answeredCount = useMemo(
+    () => Array.from(responses.values()).filter((r) => r.result != null).length,
+    [responses],
+  );
+  const progressPct =
+    template.totalCriteria === 0
+      ? 0
+      : Math.round((answeredCount / template.totalCriteria) * 100);
+  const progressGatePassed = progressPct >= PROGRESS_THRESHOLD;
+
+  const canSubmit =
+    finalDecision !== null && !submitting && progressGatePassed;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -761,13 +784,38 @@ function FinalPage({
       </div>
 
       {brokenBlockers.length > 0 && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4">
-          <p className="text-sm font-bold text-red-800">
+        <div
+          className={
+            "rounded-xl border p-4 " +
+            (blockerGateTriggered
+              ? "border-red-400 bg-red-50"
+              : "border-amber-200 bg-amber-50")
+          }
+        >
+          <p
+            className={
+              "text-sm font-bold " +
+              (blockerGateTriggered ? "text-red-800" : "text-amber-800")
+            }
+          >
             {brokenBlockers.length} criterio
             {brokenBlockers.length === 1 ? "" : "s"} Blocker marcado
             {brokenBlockers.length === 1 ? "" : "s"} como "no cumple"
           </p>
-          <ul className="mt-2 text-xs text-red-700 space-y-1 list-disc list-inside">
+          {blockerGateTriggered && (
+            <p className="mt-1 text-xs text-red-700">
+              Con {BLOCKER_THRESHOLD} o más Blockers sin cumplir, la decisión
+              queda fijada en <strong>No, aún no</strong>. Para habilitar la
+              opción "Sí, está lista" revisa los criterios Blocker marcados
+              como "no cumple" en las páginas correspondientes.
+            </p>
+          )}
+          <ul
+            className={
+              "mt-2 text-xs space-y-1 list-disc list-inside " +
+              (blockerGateTriggered ? "text-red-700" : "text-amber-700")
+            }
+          >
             {brokenBlockers.slice(0, 5).map((c) => (
               <li key={c.id}>{c.givenWhenThen.substring(0, 160)}…</li>
             ))}
@@ -787,7 +835,8 @@ function FinalPage({
           <DecisionBtn
             active={finalDecision === "Si"}
             activeClass="bg-green-600 text-white border-green-600"
-            onClick={() => setFinalDecision("Si")}
+            disabled={blockerGateTriggered}
+            onClick={() => !blockerGateTriggered && setFinalDecision("Si")}
           >
             Sí, está lista
           </DecisionBtn>
@@ -799,6 +848,12 @@ function FinalPage({
             No, aún no
           </DecisionBtn>
         </div>
+        {blockerGateTriggered && (
+          <p className="mt-2 text-[11px] text-slate-600">
+            🔒 "Sí, está lista" se habilitará cuando queden menos de{" "}
+            {BLOCKER_THRESHOLD} Blockers sin cumplir.
+          </p>
+        )}
       </div>
 
       {/* Confidence slider */}
@@ -839,12 +894,32 @@ function FinalPage({
         />
       </div>
 
-      <div className="flex justify-end">
+      {!progressGatePassed && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+          <p className="text-sm font-bold text-amber-800">
+            Progreso insuficiente para finalizar
+          </p>
+          <p className="mt-1 text-xs text-amber-700">
+            Para enviar la evaluación necesitas al menos{" "}
+            <strong>{PROGRESS_THRESHOLD}%</strong> de criterios respondidos.
+            Hoy llevas <strong>{progressPct}%</strong> ({answeredCount} de{" "}
+            {template.totalCriteria}). Responde los criterios faltantes antes
+            de firmar.
+          </p>
+        </div>
+      )}
+
+      <div className="flex justify-end items-center gap-3">
+        {progressGatePassed && finalDecision === null && (
+          <span className="text-xs text-slate-500">
+            Selecciona Sí o No para habilitar la firma
+          </span>
+        )}
         <button
           type="button"
           disabled={!canSubmit}
           onClick={onSubmit}
-          className="rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-cyan-700 transition disabled:opacity-40"
+          className="rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-cyan-700 transition disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {submitting ? "Enviando…" : "Finalizar y firmar"}
         </button>
@@ -856,11 +931,13 @@ function FinalPage({
 function DecisionBtn({
   active,
   activeClass,
+  disabled = false,
   onClick,
   children,
 }: {
   active: boolean;
   activeClass: string;
+  disabled?: boolean;
   onClick: () => void;
   children: React.ReactNode;
 }) {
@@ -868,11 +945,14 @@ function DecisionBtn({
     <button
       type="button"
       onClick={onClick}
+      disabled={disabled}
       className={
         "px-5 py-2 rounded-lg text-sm font-bold border-2 transition " +
-        (active
-          ? activeClass
-          : "bg-white text-slate-700 border-slate-300 hover:border-slate-400")
+        (disabled
+          ? "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed"
+          : active
+            ? activeClass
+            : "bg-white text-slate-700 border-slate-300 hover:border-slate-400")
       }
     >
       {children}
