@@ -7,6 +7,9 @@ import {
 } from "@/data/betterwareAgentDocumentation";
 import { paquetexpressAgentDocs } from "@/data/paquetexpressAgentDocumentation";
 import { pamAgentDocs } from "@/data/pamAgentDocumentation";
+import AgentActionsSubtab from "@/components/AgentActionsSubtab";
+
+type DocsSubtab = "subagents" | "actions";
 
 type ActionDoc = { name: string; target: string; description?: string };
 
@@ -84,6 +87,64 @@ const norm = (s: string) =>
 
 export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
   const doc = useMemo(() => pickDoc(slug), [slug]);
+  const [subtab, setSubtab] = useState<DocsSubtab>("subagents");
+  const [focusedAction, setFocusedAction] = useState<string | null>(null);
+
+  const navigateToAction = (actionName: string) => {
+    setFocusedAction(actionName);
+    setSubtab("actions");
+  };
+
+  return (
+    <div>
+      {/* Subtabs navigator */}
+      <div className="flex gap-1 border-b border-slate-200 mb-4">
+        <button
+          type="button"
+          onClick={() => setSubtab("subagents")}
+          className={
+            "px-4 py-2 text-sm font-semibold transition border-b-2 -mb-px " +
+            (subtab === "subagents"
+              ? "border-cyan-600 text-cyan-700"
+              : "border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300")
+          }
+        >
+          🧩 Subagentes
+        </button>
+        <button
+          type="button"
+          onClick={() => setSubtab("actions")}
+          className={
+            "px-4 py-2 text-sm font-semibold transition border-b-2 -mb-px " +
+            (subtab === "actions"
+              ? "border-cyan-600 text-cyan-700"
+              : "border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300")
+          }
+        >
+          ⚡ Acciones
+        </button>
+      </div>
+
+      {subtab === "subagents" ? (
+        <AgentSubagentsSubtab doc={doc} onNavigateToAction={navigateToAction} />
+      ) : (
+        <AgentActionsSubtab
+          doc={doc}
+          focusedActionName={focusedAction}
+          onClearFocus={() => setFocusedAction(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+function AgentSubagentsSubtab({
+  doc,
+  onNavigateToAction,
+}: {
+  doc: Doc;
+  onNavigateToAction: (name: string) => void;
+}) {
   const [selectedId, setSelectedId] = useState<string>(doc.subagents[0].id);
   const [activeSection, setActiveSection] = useState<SectionId>("descripcion");
   const [search, setSearch] = useState("");
@@ -304,7 +365,17 @@ export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
                     {selected.acciones.map((a) => (
                       <div key={a.name} className="action-block">
                         <div className="action-name">
-                          <strong>{a.name}</strong>
+                          <button
+                            type="button"
+                            className="action-name-link"
+                            onClick={() => onNavigateToAction(a.name)}
+                            title={`Ver detalle de ${a.name} en el catálogo de Acciones`}
+                          >
+                            <strong>{a.name}</strong>
+                            <span className="action-name-chev" aria-hidden="true">
+                              ↗
+                            </span>
+                          </button>
                           <code>{a.target}</code>
                         </div>
                         {a.description && <p>{a.description}</p>}
@@ -727,6 +798,33 @@ export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
           flex-wrap: wrap;
           align-items: baseline;
           gap: 10px;
+        }
+        .action-name-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          background: transparent;
+          border: none;
+          padding: 2px 4px;
+          margin: -2px -4px;
+          border-radius: 4px;
+          cursor: pointer;
+          color: #164b57;
+          font-weight: 650;
+          transition: background 0.15s ease, color 0.15s ease;
+        }
+        .action-name-link:hover {
+          background: #e6f7fa;
+          color: #006e82;
+        }
+        .action-name-chev {
+          font-size: 11px;
+          opacity: 0.6;
+          transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        .action-name-link:hover .action-name-chev {
+          opacity: 1;
+          transform: translate(2px, -2px);
         }
         .action-name strong {
           font-weight: 650;
