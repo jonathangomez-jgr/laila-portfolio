@@ -773,39 +773,63 @@ function FinalPage({
         </p>
       </div>
 
-      {/* Totals grid */}
-      <div className="grid grid-cols-3 gap-3">
-        {(["Blocker", "Critical", "Nice-to-have"] as const).map((sev) => {
-          const t = totals[sev];
-          const sevColor =
-            sev === "Blocker"
-              ? "border-red-200 bg-red-50"
-              : sev === "Critical"
-                ? "border-amber-200 bg-amber-50"
-                : "border-slate-200 bg-slate-50";
-          return (
-            <div key={sev} className={`rounded-xl border p-4 ${sevColor}`}>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-600">
-                {sev}
-              </p>
-              <p className="mt-1 text-2xl font-bold text-slate-900">
-                {t.Pass + t.NA}
-                <span className="text-sm text-slate-500 font-semibold">
-                  {" "}
-                  / {t.total}
-                </span>
-              </p>
-              <div className="mt-1 text-[11px] text-slate-600 flex gap-3">
-                <span>✓ {t.Pass}</span>
-                <span>✕ {t.Fail}</span>
-                <span>— {t.NA}</span>
-                {t.Unanswered > 0 && (
-                  <span className="text-slate-400">○ {t.Unanswered}</span>
-                )}
+      {/* Compliance bars per severity · neutral palette, % cumplimiento visible */}
+      <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-4">
+          Cumplimiento por severidad
+        </p>
+        <div className="space-y-3">
+          {(["Blocker", "Critical", "Nice-to-have"] as const).map((sev) => {
+            const t = totals[sev];
+            const applicable = t.Pass + t.Fail; // excluye NA e sin respuesta del denominador de compliance
+            const pct =
+              applicable === 0 ? 0 : Math.round((t.Pass / applicable) * 100);
+            const passPct = t.total === 0 ? 0 : (t.Pass / t.total) * 100;
+            const failPct = t.total === 0 ? 0 : (t.Fail / t.total) * 100;
+            const naPct = t.total === 0 ? 0 : (t.NA / t.total) * 100;
+            return (
+              <div key={sev}>
+                <div className="flex items-baseline justify-between mb-1">
+                  <span className="text-sm font-semibold text-slate-800">
+                    {sev}
+                    <span className="text-xs font-normal text-slate-500">
+                      {" "}
+                      · {t.total} criterios
+                    </span>
+                  </span>
+                  <span className="text-base font-bold text-slate-900">
+                    {pct}% cumplimiento
+                  </span>
+                </div>
+                <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200">
+                  <div className="bg-emerald-500" style={{ width: `${passPct}%` }} />
+                  <div className="bg-rose-500" style={{ width: `${failPct}%` }} />
+                  <div className="bg-slate-400" style={{ width: `${naPct}%` }} />
+                </div>
+                <div className="mt-1 text-[11px] text-slate-600 flex gap-4">
+                  <span>
+                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-1 align-middle" />
+                    {t.Pass} cumple
+                  </span>
+                  <span>
+                    <span className="inline-block w-2 h-2 rounded-full bg-rose-500 mr-1 align-middle" />
+                    {t.Fail} no cumple
+                  </span>
+                  <span>
+                    <span className="inline-block w-2 h-2 rounded-full bg-slate-400 mr-1 align-middle" />
+                    {t.NA} N/A
+                  </span>
+                  {t.Unanswered > 0 && (
+                    <span className="text-slate-400">
+                      {t.Unanswered} pendiente
+                      {t.Unanswered === 1 ? "" : "s"}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {brokenBlockers.length > 0 && (
@@ -848,33 +872,72 @@ function FinalPage({
         </div>
       )}
 
-      {/* Final decision */}
-      <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
-        <p className="text-xs font-bold uppercase tracking-wider text-blue-700">
-          Pregunta final · requerida
+      {/* Final decision — card hero · icono + 2 opciones grandes */}
+      <div
+        className={
+          "rounded-2xl border-2 p-6 transition-colors " +
+          (finalDecision === "Si"
+            ? "border-emerald-400 bg-emerald-50"
+            : finalDecision === "No"
+              ? "border-rose-400 bg-rose-50"
+              : "border-blue-200 bg-blue-50")
+        }
+      >
+        <p
+          className={
+            "text-[11px] font-bold uppercase tracking-wider " +
+            (finalDecision === "Si"
+              ? "text-emerald-700"
+              : finalDecision === "No"
+                ? "text-rose-700"
+                : "text-blue-700")
+          }
+        >
+          Decisión final · requerida
         </p>
-        <h3 className="mt-1 text-base font-bold text-slate-900">
-          ¿Betty está lista para arrancar con el Programa Insiders?
-        </h3>
-        <div className="mt-3 flex gap-2">
+        <div className="mt-3 flex items-center gap-5">
+          <div className="flex-shrink-0">
+            <div
+              className={
+                "w-16 h-16 rounded-full flex items-center justify-center text-3xl font-bold border-2 " +
+                (finalDecision === "Si"
+                  ? "bg-emerald-500 text-white border-emerald-500"
+                  : finalDecision === "No"
+                    ? "bg-rose-500 text-white border-rose-500"
+                    : "bg-white text-slate-400 border-dashed border-slate-300")
+              }
+            >
+              {finalDecision === "Si" ? "✓" : finalDecision === "No" ? "⏱" : "?"}
+            </div>
+          </div>
+          <div className="flex-1">
+            <h3 className="text-lg font-bold text-slate-900 leading-snug">
+              ¿Betty está lista para arrancar con el Programa Insiders?
+            </h3>
+            <p className="mt-0.5 text-xs text-slate-600">
+              Tu respuesta queda vinculada a tu firma con fecha y hora.
+            </p>
+          </div>
+        </div>
+        <div className="mt-5 grid grid-cols-2 gap-3">
           <DecisionBtn
             active={finalDecision === "Si"}
-            activeClass="bg-green-600 text-white border-green-600"
+            activeClass="bg-emerald-600 text-white border-emerald-600 shadow-md"
             disabled={blockerGateTriggered}
             onClick={() => !blockerGateTriggered && setFinalDecision("Si")}
           >
-            Sí, está lista
+            ✓ Sí, está lista
           </DecisionBtn>
           <DecisionBtn
             active={finalDecision === "No"}
-            activeClass="bg-red-600 text-white border-red-600"
+            activeClass="bg-rose-600 text-white border-rose-600 shadow-md"
             onClick={() => setFinalDecision("No")}
           >
-            No, aún no
+            ⏱ No, aún no
           </DecisionBtn>
         </div>
         {blockerGateTriggered && (
-          <p className="mt-2 text-[11px] text-slate-600">
+          <p className="mt-3 text-xs text-rose-700">
             🔒 "Sí, está lista" se habilitará cuando queden menos de{" "}
             {BLOCKER_THRESHOLD} Blockers sin cumplir.
           </p>

@@ -115,34 +115,42 @@ const styles = StyleSheet.create({
   },
   signatureBody: { fontSize: 10, color: INK, marginTop: 4, lineHeight: 1.5 },
 
-  totalsRow: {
+  // Compliance per severity (neutral · solo colores de barra pass/fail/na)
+  complianceRow: { marginTop: 10 },
+  complianceHeader: {
     flexDirection: "row",
-    marginTop: 6,
-    gap: 8,
+    justifyContent: "space-between",
+    marginBottom: 3,
   },
-  totalCard: {
-    flex: 1,
-    padding: 8,
-    borderWidth: 1,
-    borderRadius: 4,
+  complianceLabel: { fontSize: 10, color: INK, fontFamily: "Helvetica-Bold" },
+  complianceSub: { fontSize: 9, color: INK_MUTE },
+  compliancePct: { fontSize: 11, color: INK, fontFamily: "Helvetica-Bold" },
+  bar: {
+    height: 7,
+    flexDirection: "row",
+    backgroundColor: "#F1F5F9",
+    borderWidth: 0.5,
+    borderColor: BORDER,
+    borderRadius: 3,
+    overflow: "hidden",
   },
-  totalCardBlocker: { borderColor: "#FCA5A5", backgroundColor: "#FEF2F2" },
-  totalCardCritical: { borderColor: "#FCD34D", backgroundColor: "#FFFBEB" },
-  totalCardNice: { borderColor: BORDER, backgroundColor: "#F8FAFC" },
-  totalLabel: {
+  barPass: { backgroundColor: "#10B981" },
+  barFail: { backgroundColor: "#F43F5E" },
+  barNA: { backgroundColor: "#94A3B8" },
+  breakdown: {
+    flexDirection: "row",
+    marginTop: 3,
+    gap: 12,
     fontSize: 8,
-    letterSpacing: 1,
-    textTransform: "uppercase",
-    color: INK_MUTE,
-    fontFamily: "Helvetica-Bold",
+    color: INK_SOFT,
   },
-  totalNumber: {
-    fontSize: 20,
-    fontFamily: "Helvetica-Bold",
-    color: INK,
-    marginTop: 2,
+  breakdownDot: {
+    width: 5,
+    height: 5,
+    borderRadius: 3,
+    marginRight: 3,
   },
-  totalBreakdown: { fontSize: 8, color: INK_SOFT, marginTop: 2 },
+  breakdownItem: { flexDirection: "row", alignItems: "center" },
 
   failedList: {
     marginTop: 6,
@@ -171,19 +179,32 @@ const styles = StyleSheet.create({
   },
   criterionRow: {
     flexDirection: "row",
-    paddingVertical: 4,
+    paddingVertical: 5,
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER,
+    alignItems: "flex-start",
   },
-  critIcon: { width: 14, fontSize: 9, fontFamily: "Helvetica-Bold" },
   critText: { flex: 1, fontSize: 9, color: INK, lineHeight: 1.35 },
+  critResult: {
+    width: 70,
+    fontSize: 7,
+    textAlign: "center",
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
+    fontFamily: "Helvetica-Bold",
+    borderRadius: 2,
+    paddingVertical: 2,
+    marginLeft: 6,
+    marginRight: 4,
+  },
   critSev: {
-    width: 48,
+    width: 50,
     fontSize: 7,
     textAlign: "right",
     letterSpacing: 0.5,
     textTransform: "uppercase",
     fontFamily: "Helvetica-Bold",
+    color: INK_MUTE,
   },
 
   footer: {
@@ -372,35 +393,57 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
           </>
         )}
 
-        {/* TOTALS */}
-        <Text style={styles.sectionTitle}>Resumen por severidad</Text>
-        <View style={styles.totalsRow}>
-          {(["Blocker", "Critical", "Nice-to-have"] as const).map((sev) => {
-            const t = totals[sev];
-            const cardStyle =
-              sev === "Blocker"
-                ? styles.totalCardBlocker
-                : sev === "Critical"
-                  ? styles.totalCardCritical
-                  : styles.totalCardNice;
-            return (
-              <View key={sev} style={[styles.totalCard, cardStyle]}>
-                <Text style={styles.totalLabel}>{sev}</Text>
-                <Text style={styles.totalNumber}>
-                  {t.Pass + t.NA}
-                  <Text style={{ fontSize: 11, color: INK_MUTE }}>
+        {/* COMPLIANCE PER SEVERITY · neutral palette */}
+        <Text style={styles.sectionTitle}>Cumplimiento por severidad</Text>
+        {(["Blocker", "Critical", "Nice-to-have"] as const).map((sev) => {
+          const t = totals[sev];
+          const applicable = t.Pass + t.Fail;
+          const pct =
+            applicable === 0 ? 0 : Math.round((t.Pass / applicable) * 100);
+          const passPct = t.total === 0 ? 0 : (t.Pass / t.total) * 100;
+          const failPct = t.total === 0 ? 0 : (t.Fail / t.total) * 100;
+          const naPct = t.total === 0 ? 0 : (t.NA / t.total) * 100;
+          return (
+            <View key={sev} style={styles.complianceRow}>
+              <View style={styles.complianceHeader}>
+                <Text style={styles.complianceLabel}>
+                  {sev}
+                  <Text style={styles.complianceSub}>
                     {" "}
-                    / {t.total}
+                    · {t.total} criterios
                   </Text>
                 </Text>
-                <Text style={styles.totalBreakdown}>
-                  ✓ {t.Pass} · ✕ {t.Fail} · — {t.NA}
-                  {t.Unanswered > 0 ? ` · ○ ${t.Unanswered}` : ""}
-                </Text>
+                <Text style={styles.compliancePct}>{pct}% cumplimiento</Text>
               </View>
-            );
-          })}
-        </View>
+              <View style={styles.bar}>
+                <View style={[styles.barPass, { width: `${passPct}%` }]} />
+                <View style={[styles.barFail, { width: `${failPct}%` }]} />
+                <View style={[styles.barNA, { width: `${naPct}%` }]} />
+              </View>
+              <View style={styles.breakdown}>
+                <View style={styles.breakdownItem}>
+                  <View style={[styles.breakdownDot, { backgroundColor: "#10B981" }]} />
+                  <Text>{t.Pass} cumple</Text>
+                </View>
+                <View style={styles.breakdownItem}>
+                  <View style={[styles.breakdownDot, { backgroundColor: "#F43F5E" }]} />
+                  <Text>{t.Fail} no cumple</Text>
+                </View>
+                <View style={styles.breakdownItem}>
+                  <View style={[styles.breakdownDot, { backgroundColor: "#94A3B8" }]} />
+                  <Text>{t.NA} N/A</Text>
+                </View>
+                {t.Unanswered > 0 && (
+                  <View style={styles.breakdownItem}>
+                    <Text style={{ color: "#94A3B8" }}>
+                      {t.Unanswered} pendiente{t.Unanswered === 1 ? "" : "s"}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </View>
+          );
+        })}
 
         {/* FAILED CRITERIA */}
         {failedCriteria.length > 0 && (
@@ -455,38 +498,45 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
             <Text style={styles.categoryTitle}>{cat.name}</Text>
             {cat.criteria.map((c, i) => {
               const r = responsesByCrit.get(c.id);
-              const icon =
+              const resultLabel =
                 r?.result === "Pass"
-                  ? "✓"
+                  ? "CUMPLE"
                   : r?.result === "Fail"
-                    ? "✕"
+                    ? "NO CUMPLE"
                     : r?.result === "NA"
-                      ? "—"
-                      : "○";
-              const iconColor =
+                      ? "N/A"
+                      : "SIN RESP.";
+              const resultBg =
                 r?.result === "Pass"
-                  ? OK
+                  ? "#D1FAE5"
                   : r?.result === "Fail"
-                    ? RISK
+                    ? "#FFE4E6"
                     : r?.result === "NA"
-                      ? INK_MUTE
-                      : INK_MUTE;
-              const sevColor =
-                c.severity === "Blocker"
-                  ? RISK
-                  : c.severity === "Critical"
-                    ? WARN
-                    : INK_MUTE;
+                      ? "#E2E8F0"
+                      : "#F8FAFC";
+              const resultColor =
+                r?.result === "Pass"
+                  ? "#065F46"
+                  : r?.result === "Fail"
+                    ? "#9F1239"
+                    : r?.result === "NA"
+                      ? "#475569"
+                      : "#94A3B8";
               return (
                 <View key={c.id} style={styles.criterionRow} wrap={false}>
-                  <Text style={[styles.critIcon, { color: iconColor }]}>
-                    {icon}
-                  </Text>
                   <Text style={styles.critText}>
                     {String(i + 1).padStart(2, "0")}
                     {c.topic ? ` · ${c.topic}` : ""} · {c.givenWhenThen}
                   </Text>
-                  <Text style={[styles.critSev, { color: sevColor }]}>
+                  <Text
+                    style={[
+                      styles.critResult,
+                      { backgroundColor: resultBg, color: resultColor },
+                    ]}
+                  >
+                    {resultLabel}
+                  </Text>
+                  <Text style={styles.critSev}>
                     {c.severity === "Nice-to-have" ? "NTH" : c.severity.toUpperCase().slice(0, 3)}
                   </Text>
                 </View>
