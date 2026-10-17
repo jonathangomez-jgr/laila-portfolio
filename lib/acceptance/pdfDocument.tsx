@@ -63,14 +63,64 @@ const styles = StyleSheet.create({
   },
   reportSub: { fontSize: 9, color: INK_SOFT, marginTop: 2 },
   headerRight: { textAlign: "right" },
-  statusPill: {
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    letterSpacing: 1,
-    textTransform: "uppercase",
+  // Decision banner · hero
+  decisionBanner: {
+    marginTop: 14,
+    marginBottom: 2,
+    borderWidth: 1.5,
+    borderRadius: 6,
+    padding: 14,
   },
-  statusPillYes: { color: OK },
-  statusPillNo: { color: RISK },
+  decisionBannerYes: { backgroundColor: "#ECFDF5", borderColor: "#10B981" },
+  decisionBannerNo: { backgroundColor: "#FFF1F2", borderColor: "#F43F5E" },
+  decisionLabel: {
+    fontSize: 8,
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
+    fontFamily: "Helvetica-Bold",
+  },
+  decisionLabelYes: { color: "#047857" },
+  decisionLabelNo: { color: "#BE123C" },
+  decisionQuestion: {
+    fontSize: 13,
+    color: INK,
+    fontFamily: "Helvetica-Bold",
+    marginTop: 2,
+    marginBottom: 10,
+  },
+  decisionRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  decisionIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    textAlign: "center",
+    fontSize: 24,
+    fontFamily: "Helvetica-Bold",
+    color: "#FFFFFF",
+    paddingTop: 8,
+    marginRight: 14,
+  },
+  decisionIconYes: { backgroundColor: "#10B981" },
+  decisionIconNo: { backgroundColor: "#F43F5E" },
+  decisionTitle: {
+    fontSize: 18,
+    fontFamily: "Helvetica-Bold",
+    letterSpacing: 0.5,
+  },
+  decisionTitleYes: { color: "#047857" },
+  decisionTitleNo: { color: "#BE123C" },
+  decisionConfidence: {
+    fontSize: 9,
+    color: INK_SOFT,
+    marginTop: 2,
+  },
+  decisionConfidenceStrong: {
+    fontFamily: "Helvetica-Bold",
+    color: INK,
+  },
 
   sectionTitle: {
     fontSize: 10,
@@ -315,16 +365,65 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
             >
               {evaluation.name}
             </Text>
+            <Text style={{ fontSize: 8, color: INK_MUTE, marginTop: 2 }}>
+              {fmtDate(evaluation.submittedAt)}
+            </Text>
+          </View>
+        </View>
+
+        {/* DECISION BANNER · hero */}
+        <View
+          style={[
+            styles.decisionBanner,
+            evaluation.finalDecision === "Si"
+              ? styles.decisionBannerYes
+              : styles.decisionBannerNo,
+          ]}
+        >
+          <Text
+            style={[
+              styles.decisionLabel,
+              evaluation.finalDecision === "Si"
+                ? styles.decisionLabelYes
+                : styles.decisionLabelNo,
+            ]}
+          >
+            Decisión final · firmada
+          </Text>
+          <Text style={styles.decisionQuestion}>
+            ¿Betty está lista para arrancar con el Programa Insiders?
+          </Text>
+          <View style={styles.decisionRow}>
             <Text
               style={[
-                styles.statusPill,
+                styles.decisionIcon,
                 evaluation.finalDecision === "Si"
-                  ? styles.statusPillYes
-                  : styles.statusPillNo,
+                  ? styles.decisionIconYes
+                  : styles.decisionIconNo,
               ]}
             >
-              {decisionLabel}
+              {evaluation.finalDecision === "Si" ? "✓" : "!"}
             </Text>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={[
+                  styles.decisionTitle,
+                  evaluation.finalDecision === "Si"
+                    ? styles.decisionTitleYes
+                    : styles.decisionTitleNo,
+                ]}
+              >
+                {decisionLabel}
+              </Text>
+              <Text style={styles.decisionConfidence}>
+                Nivel de confianza:{" "}
+                <Text style={styles.decisionConfidenceStrong}>
+                  {evaluation.confidenceLevel != null
+                    ? `${evaluation.confidenceLevel}%`
+                    : "no proporcionado"}
+                </Text>
+              </Text>
+            </View>
           </View>
         </View>
 
@@ -351,29 +450,6 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
             <Text style={styles.metaLabel}>Firmada</Text>
             <Text style={styles.metaValue}>
               {fmtDate(evaluation.submittedAt)}
-            </Text>
-          </View>
-          <View style={styles.metaItem}>
-            <Text style={styles.metaLabel}>Decisión</Text>
-            <Text
-              style={[
-                styles.metaValue,
-                {
-                  fontFamily: "Helvetica-Bold",
-                  color:
-                    evaluation.finalDecision === "Si" ? OK : RISK,
-                },
-              ]}
-            >
-              {decisionLabel}
-            </Text>
-          </View>
-          <View style={styles.metaItem}>
-            <Text style={styles.metaLabel}>Confianza</Text>
-            <Text style={styles.metaValue}>
-              {evaluation.confidenceLevel != null
-                ? `${evaluation.confidenceLevel}%`
-                : "— (no proporcionada)"}
             </Text>
           </View>
         </View>
