@@ -65,7 +65,10 @@ export default function AcceptanceWizard({
   const [finalComment, setFinalComment] = useState<string>(
     evaluation.finalComment ?? "",
   );
+  const [signatureConfirmed, setSignatureConfirmed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  // After submit, holds the ContentDocumentId of the generated PDF (if any)
+  const [submittedPdfId, setSubmittedPdfId] = useState<string | null>(null);
 
   const persistResponse = useCallback(
     async (criterion: CriterionDTO, result: Result | null, comment: string | null) => {
@@ -127,7 +130,7 @@ export default function AcceptanceWizard({
   };
 
   const submit = async () => {
-    if (!finalDecision) return;
+    if (!finalDecision || !signatureConfirmed) return;
     setSubmitting(true);
     try {
       const res = await fetch("/api/portal/acceptance/submit", {
@@ -135,14 +138,20 @@ export default function AcceptanceWizard({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           evaluationId: evaluation.id,
+          slug: template.projectSlug,
           finalDecision,
           confidenceLevel: confidence,
           finalComment: finalComment.trim() || null,
+          signatureConfirmed: true,
         }),
       });
       if (!res.ok) throw new Error("submit failed");
-      const body = (await res.json()) as { evaluation: EvaluationDTO };
+      const body = (await res.json()) as {
+        evaluation: EvaluationDTO & { submittedPdfId?: string };
+        pdfReady?: boolean;
+      };
       setEvaluation(body.evaluation);
+      setSubmittedPdfId(body.evaluation.submittedPdfId ?? null);
       setPage(confirmationPage);
     } catch (err) {
       alert("No se pudo enviar la evaluación: " + (err instanceof Error ? err.message : "error"));
@@ -193,19 +202,26 @@ export default function AcceptanceWizard({
           <FinalPage
             template={template}
             responses={responses}
+            evaluator={evaluation.evaluatorName ?? "evaluador"}
             finalDecision={finalDecision}
             setFinalDecision={setFinalDecision}
             confidence={confidence}
             setConfidence={setConfidence}
             finalComment={finalComment}
             setFinalComment={setFinalComment}
+            signatureConfirmed={signatureConfirmed}
+            setSignatureConfirmed={setSignatureConfirmed}
             onSubmit={submit}
             submitting={submitting}
           />
         )}
 
         {page === confirmationPage && (
-          <ConfirmationPage evaluation={evaluation} onExit={onExit} />
+          <ConfirmationPage
+            evaluation={evaluation}
+            submittedPdfId={submittedPdfId}
+            onExit={onExit}
+          />
         )}
       </div>
 
@@ -659,23 +675,29 @@ function AttachmentUploader({ responseId }: { responseId: string }) {
 function FinalPage({
   template,
   responses,
+  evaluator,
   finalDecision,
   setFinalDecision,
   confidence,
   setConfidence,
   finalComment,
   setFinalComment,
+  signatureConfirmed,
+  setSignatureConfirmed,
   onSubmit,
   submitting,
 }: {
   template: TemplateDTO;
   responses: Map<string, ResponseState>;
+  evaluator: string;
   finalDecision: FinalDecision | null;
   setFinalDecision: (d: FinalDecision) => void;
   confidence: number | null;
   setConfidence: (c: number | null) => void;
   finalComment: string;
   setFinalComment: (s: string) => void;
+  signatureConfirmed: boolean;
+  setSignatureConfirmed: (b: boolean) => void;
   onSubmit: () => void;
   submitting: boolean;
 }) {
@@ -735,7 +757,10 @@ function FinalPage({
   const progressGatePassed = progressPct >= PROGRESS_THRESHOLD;
 
   const canSubmit =
-    finalDecision !== null && !submitting && progressGatePassed;
+    finalDecision !== null &&
+    !submitting &&
+    progressGatePassed &&
+    signatureConfirmed;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -909,10 +934,37 @@ function FinalPage({
         </div>
       )}
 
+      {/* Signature checkbox */}
+      <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          Firma implícita · requerida
+        </p>
+        <label className="mt-3 flex items-start gap-3 cursor-pointer group">
+          <input
+            type="checkbox"
+            className="mt-1 w-4 h-4 accent-cyan-600 cursor-pointer"
+            checked={signatureConfirmed}
+            onChange={(e) => setSignatureConfirmed(e.target.checked)}
+          />
+          <span className="text-sm text-slate-700 leading-relaxed group-hover:text-slate-900">
+            Yo, <strong className="text-slate-900">{evaluator}</strong>,
+            confirmo que los resultados mostrados en este reporte reflejan mi
+            evaluación honesta de los {template.totalCriteria} criterios y
+            asumo responsabilidad por la decisión final registrada. Entiendo
+            que esta firma queda vinculada a mi usuario con fecha y hora.
+          </span>
+        </label>
+      </div>
+
       <div className="flex justify-end items-center gap-3">
         {progressGatePassed && finalDecision === null && (
           <span className="text-xs text-slate-500">
             Selecciona Sí o No para habilitar la firma
+          </span>
+        )}
+        {progressGatePassed && finalDecision !== null && !signatureConfirmed && (
+          <span className="text-xs text-slate-500">
+            Marca la casilla de firma para continuar
           </span>
         )}
         <button
@@ -921,7 +973,7 @@ function FinalPage({
           onClick={onSubmit}
           className="rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-cyan-700 transition disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {submitting ? "Enviando…" : "Finalizar y firmar"}
+          {submitting ? "Firmando y generando PDF…" : "Finalizar y firmar"}
         </button>
       </div>
     </div>
@@ -966,11 +1018,17 @@ function DecisionBtn({
 
 function ConfirmationPage({
   evaluation,
+  submittedPdfId,
   onExit,
 }: {
   evaluation: EvaluationDTO;
+  submittedPdfId: string | null;
   onExit: () => void;
 }) {
+  const pdfUrl = submittedPdfId
+    ? `/api/portal/acceptance/pdf?evaluationId=${encodeURIComponent(evaluation.id)}`
+    : null;
+
   return (
     <div className="max-w-xl mx-auto py-10 text-center">
       <div className="mx-auto w-14 h-14 rounded-full bg-green-100 border-2 border-green-500 text-green-700 flex items-center justify-center text-2xl font-bold">
@@ -1003,14 +1061,33 @@ function ConfirmationPage({
             {evaluation.confidenceLevel}%
           </p>
         )}
+        <p>
+          <strong className="text-slate-800">Registro:</strong> {evaluation.name}
+        </p>
       </div>
-      <button
-        type="button"
-        onClick={onExit}
-        className="mt-6 rounded-lg bg-cyan-600 px-5 py-2 text-sm font-semibold text-white hover:bg-cyan-700 transition"
-      >
-        Volver al portal
-      </button>
+      <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
+        {pdfUrl ? (
+          <a
+            href={pdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-cyan-300 bg-white px-4 py-2 text-sm font-semibold text-cyan-700 hover:bg-cyan-50 transition"
+          >
+            📄 Descargar PDF firmado
+          </a>
+        ) : (
+          <span className="text-xs text-slate-500">
+            El PDF firmado se está generando…
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={onExit}
+          className="rounded-lg bg-cyan-600 px-5 py-2 text-sm font-semibold text-white hover:bg-cyan-700 transition"
+        >
+          Volver al portal
+        </button>
+      </div>
     </div>
   );
 }
