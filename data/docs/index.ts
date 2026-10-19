@@ -229,6 +229,16 @@ const JAFRA_DOCS: DocEntry[] = [
 // ----------------------------------------------------------------------------
 const TELASIST_RETENCION_DOCS: DocEntry[] = [
   {
+    slug: "plan-estado-agente",
+    label: "Plan de Estado · Agente de Voz Invex Retención TDC",
+    description:
+      "Fotografía al 19-oct del agente AF_Voice_Invex_Retenciones_TDC v7 en el sandbox. 10 páginas. Qué hace hoy el agente en lenguaje de negocio, inventario verificado contra la org (15 clases Apex productivas + 4 de prueba, 48 variables tipadas, 3 diálogos), línea base operativa, plan por 8 etapas con responsables, bloqueantes duros y 7 pendientes del Manual v2.0.",
+    url: "/Customers/Telasist/files/Plan_Estado_Agente_Invex_Retencion_TDC.pdf",
+    category: "Pilot",
+    icon: "🧭",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "presentacion-arranque",
     label: "Presentación · Sesión de arranque Telasist × Skala × Invex",
     description:
