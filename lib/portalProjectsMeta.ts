@@ -9,6 +9,8 @@ export type PortalProjectMeta = {
   customerName: string;
   logo: string;
   tagline?: string;
+  agentName?: string;
+  goLiveLabel?: string;
 };
 
 export const portalProjectsMeta: PortalProjectMeta[] = [
@@ -17,12 +19,16 @@ export const portalProjectsMeta: PortalProjectMeta[] = [
     customerName: "Betterware México",
     logo: "/Customers/Betterware/images/Logo-betterware.png",
     tagline: "Rewrite determinístico del Service Agent · FDE",
+    agentName: "Betty",
+    goLiveLabel: "arrancar con el Programa Insiders",
   },
   {
     slug: "jafra",
     customerName: "Jafra",
     logo: "/Customers/Jafra/images/jafra-logo.webp",
     tagline: "Janet v2 · Agentforce determinístico para consultoras",
+    agentName: "Janet",
+    goLiveLabel: "salir a producción",
   },
 ];
 

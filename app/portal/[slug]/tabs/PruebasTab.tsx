@@ -14,7 +14,9 @@ export default function PruebasTab({
   user: PortalUser;
   slug: string;
 }) {
-  const [subtab, setSubtab] = useState<SubtabId>("unitarias");
+  const [subtab, setSubtab] = useState<SubtabId>(
+    slug === "jafra" ? "aceptacion" : "unitarias"
+  );
   const canEditMatrix = user.role === "Salesforce" || user.role === "Partner";
 
   const subtabs: { id: SubtabId; label: string }[] = [

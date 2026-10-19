@@ -10,6 +10,15 @@ import type {
   EvaluationDTO,
   CriterionDTO,
 } from "@/lib/salesforce/acceptanceWizard";
+import { getPortalProjectMeta } from "@/lib/portalProjectsMeta";
+
+function agentNameFor(slug: string): string {
+  return getPortalProjectMeta(slug)?.agentName ?? "el agente";
+}
+
+function goLiveLabelFor(slug: string): string {
+  return getPortalProjectMeta(slug)?.goLiveLabel ?? "salir a producción";
+}
 
 // -----------------------------------------------------------------------------
 // Styles — institutional Salesforce FDE look
@@ -391,7 +400,8 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
             Decisión final · firmada
           </Text>
           <Text style={styles.decisionQuestion}>
-            ¿Betty está lista para arrancar con el Programa Insiders?
+            ¿{agentNameFor(template.projectSlug)} está lista para{" "}
+            {goLiveLabelFor(template.projectSlug)}?
           </Text>
           <View style={styles.decisionRow}>
             <Text

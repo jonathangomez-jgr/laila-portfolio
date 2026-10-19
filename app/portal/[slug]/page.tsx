@@ -75,8 +75,9 @@ export default async function PortalSlugPage({
 
   const canSeeAdmin = user.role !== "Client";
   const visibleTabs = TABS.filter((t) => !t.adminOnly || canSeeAdmin);
+  const defaultTabForSlug: TabId = slug === "jafra" ? "pruebas" : "overview";
   const activeTab: TabId = (visibleTabs.find((t) => t.id === tabParam)?.id ??
-    "overview") as TabId;
+    defaultTabForSlug) as TabId;
 
   return (
     <main className="min-h-screen bg-slate-50">

@@ -22,6 +22,14 @@ function customerNameFor(slug: string): string {
   return getPortalProjectMeta(slug)?.customerName ?? "Cliente";
 }
 
+function agentNameFor(slug: string): string {
+  return getPortalProjectMeta(slug)?.agentName ?? "el agente";
+}
+
+function goLiveLabelFor(slug: string): string {
+  return getPortalProjectMeta(slug)?.goLiveLabel ?? "salir a producción";
+}
+
 type Props = {
   user: PortalUser;
   template: TemplateDTO;
@@ -368,16 +376,16 @@ function WelcomePage({
           </p>
           <ul className="space-y-1.5 text-sm text-slate-700">
             <li>
-              · Avanza por cada categoría respondiendo si Betty <strong>cumple</strong>{" "}
-              👍 o <strong>no cumple</strong> 👎.
+              · Avanza por cada categoría respondiendo si {agentNameFor(template.projectSlug)}{" "}
+              <strong>cumple</strong> 👍 o <strong>no cumple</strong> 👎.
             </li>
             <li>
               · Si marcas "no cumple", agrega un comentario breve y, si quieres,
               un adjunto.
             </li>
             <li>
-              · Al final confirmas si Betty está lista para arrancar con
-              Insiders.
+              · Al final confirmas si {agentNameFor(template.projectSlug)} está
+              lista para {goLiveLabelFor(template.projectSlug)}.
             </li>
           </ul>
         </div>
@@ -923,7 +931,8 @@ function FinalPage({
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-bold text-slate-900 leading-snug">
-              ¿Betty está lista para arrancar con el Programa Insiders?
+              ¿{agentNameFor(template.projectSlug)} está lista para{" "}
+              {goLiveLabelFor(template.projectSlug)}?
             </h3>
             <p className="mt-0.5 text-xs text-slate-600">
               Tu respuesta queda vinculada a tu firma con fecha y hora.
