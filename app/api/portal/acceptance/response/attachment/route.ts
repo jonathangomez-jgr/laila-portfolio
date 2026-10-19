@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sfUploadFileToRecord } from "@/lib/salesforce";
 import { getCurrentUser } from "@/lib/portalAuth";
+import { getEvaluationRoleByResponseId } from "@/lib/salesforce/acceptanceWizard";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,18 @@ export async function POST(request: NextRequest) {
         { error: "responseId required" },
         { status: 400 },
       );
+    }
+
+    // Role guard: solo usuarios del mismo rol pueden adjuntar a la eval.
+    const evalRole = await getEvaluationRoleByResponseId(responseId);
+    if (evalRole === undefined) {
+      return NextResponse.json(
+        { error: "response not found" },
+        { status: 404 },
+      );
+    }
+    if (evalRole !== user.role) {
+      return NextResponse.json({ error: "forbidden" }, { status: 403 });
     }
 
     const formData = await request.formData();

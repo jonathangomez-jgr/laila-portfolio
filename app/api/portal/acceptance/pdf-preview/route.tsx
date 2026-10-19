@@ -142,6 +142,9 @@ function buildMockData(
         result: r.result,
         comment: r.comment,
         answeredAt: new Date().toISOString(),
+        answeredByPortalAccessId: null,
+        answeredByName: null,
+        answeredByEmail: null,
       };
     }),
   );
@@ -157,6 +160,7 @@ function buildMockData(
     evaluatorPortalAccessId: "preview",
     evaluatorName,
     evaluatorEmail: "preview@laila.demo",
+    evaluatorRole: "Client",
     status: "Submitted",
     startedAt: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
     submittedAt: new Date().toISOString(),
@@ -170,6 +174,7 @@ function buildMockData(
           : null,
     currentPage: 0,
     responses,
+    collaborators: [],
     progress: {
       answered,
       total: totalCriteria,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { PortalUser } from "@/lib/portalAuth";
 import { getPortalProjectMeta } from "@/lib/portalProjectsMeta";
 import type {
@@ -10,7 +10,31 @@ import type {
   CategoryDTO,
   CriterionDTO,
   FinalDecision,
+  CollaboratorDTO,
 } from "@/lib/salesforce/acceptanceWizard";
+
+const POLL_INTERVAL_MS = 7000;
+
+function initialsOf(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
+function timeAgo(iso: string | null): string {
+  if (!iso) return "";
+  const diff = Date.now() - new Date(iso).getTime();
+  if (diff < 60_000) return "ahora";
+  const m = Math.floor(diff / 60_000);
+  if (m < 60) return `hace ${m} min`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `hace ${h} h`;
+  const d = Math.floor(h / 24);
+  return `hace ${d} d`;
+}
 
 const CUSTOMER_LOGO_FALLBACK = "/Customers/Betterware/images/Logo-betterware.png";
 
@@ -44,10 +68,13 @@ type ResponseState = {
   id: string;
   result: Result | null;
   comment: string | null;
+  answeredByName: string | null;
+  answeredByPortalAccessId: string | null;
+  answeredAt: string | null;
 };
 
 export default function AcceptanceWizard({
-  user: _user,
+  user,
   template,
   evaluation: initialEval,
   onExit,
@@ -69,10 +96,22 @@ export default function AcceptanceWizard({
         id: r.id,
         result: r.result,
         comment: r.comment,
+        answeredByName: r.answeredByName,
+        answeredByPortalAccessId: r.answeredByPortalAccessId,
+        answeredAt: r.answeredAt,
       }),
     );
     return m;
   });
+
+  // Collaborators derived from last poll
+  const [collaborators, setCollaborators] = useState<CollaboratorDTO[]>(
+    initialEval.collaborators ?? [],
+  );
+
+  // IDs of response records with an in-flight PATCH — the poller skips these
+  // so it does not overwrite the user's optimistic edit with stale server state.
+  const pendingResponseIdsRef = useRef<Set<string>>(new Set());
 
   // Final page state
   const [finalDecision, setFinalDecision] = useState<FinalDecision | null>(
@@ -93,16 +132,22 @@ export default function AcceptanceWizard({
     async (criterion: CriterionDTO, result: Result | null, comment: string | null) => {
       const current = responses.get(criterion.id);
       if (!current) return;
-      // Optimistic UI
+      const nowIso = new Date().toISOString();
+      // Optimistic UI — stamp current user as author so the chip renders inmediately
       setResponses((prev) => {
         const next = new Map(prev);
         next.set(criterion.id, {
           id: current.id,
           result,
           comment,
+          answeredByName: user.name,
+          answeredByPortalAccessId: user.id,
+          answeredAt: nowIso,
         });
         return next;
       });
+      // Shield this record from the poller until the PATCH resolves
+      pendingResponseIdsRef.current.add(current.id);
       try {
         const res = await fetch("/api/portal/acceptance/response", {
           method: "PATCH",
@@ -120,10 +165,55 @@ export default function AcceptanceWizard({
         }
       } catch (err) {
         console.warn("response save error", err);
+      } finally {
+        pendingResponseIdsRef.current.delete(current.id);
       }
     },
-    [evaluation.id, responses],
+    [evaluation.id, responses, user.id, user.name],
   );
+
+  // Polling colaborativo · trae la eval cada 7s mientras el wizard esté abierto.
+  // Las respuestas con PATCH en vuelo quedan protegidas por pendingResponseIdsRef.
+  useEffect(() => {
+    if (evaluation.status !== "InProgress") return;
+    let cancelled = false;
+    const poll = async () => {
+      try {
+        const res = await fetch(
+          `/api/portal/acceptance/evaluation?id=${encodeURIComponent(evaluation.id)}`,
+          { cache: "no-store" },
+        );
+        if (!res.ok) return;
+        const body = (await res.json()) as { evaluation: EvaluationDTO };
+        if (cancelled) return;
+        const fresh = body.evaluation;
+        setCollaborators(fresh.collaborators ?? []);
+        setResponses((prev) => {
+          const next = new Map(prev);
+          const pending = pendingResponseIdsRef.current;
+          for (const r of fresh.responses) {
+            if (pending.has(r.id)) continue;
+            next.set(r.criterionId, {
+              id: r.id,
+              result: r.result,
+              comment: r.comment,
+              answeredByName: r.answeredByName,
+              answeredByPortalAccessId: r.answeredByPortalAccessId,
+              answeredAt: r.answeredAt,
+            });
+          }
+          return next;
+        });
+      } catch {
+        /* silencioso: red intermitente */
+      }
+    };
+    const timer = setInterval(poll, POLL_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [evaluation.id, evaluation.status]);
 
   const persistCurrentPage = useCallback(
     async (p: number) => {
@@ -202,6 +292,8 @@ export default function AcceptanceWizard({
         totalPages={totalPages}
         template={template}
         evaluation={evaluation}
+        collaborators={collaborators}
+        currentUserId={user.id}
         currentCategoryName={currentCategory?.name ?? null}
         progressPct={progressPct}
       />
@@ -268,6 +360,8 @@ function WizardHeader({
   totalPages,
   template,
   evaluation,
+  collaborators,
+  currentUserId,
   currentCategoryName,
   progressPct,
 }: {
@@ -275,6 +369,8 @@ function WizardHeader({
   totalPages: number;
   template: TemplateDTO;
   evaluation: EvaluationDTO;
+  collaborators: CollaboratorDTO[];
+  currentUserId: string;
   currentCategoryName: string | null;
   progressPct: number;
 }) {
@@ -309,17 +405,80 @@ function WizardHeader({
         </div>
       </div>
       <div className="flex items-center gap-3">
-        <div className="text-right text-[11px] leading-tight text-slate-500">
-          <strong className="block text-xs text-slate-900">
-            {evaluation.evaluatorName ?? "Evaluador"}
-          </strong>
-          UAT
-        </div>
+        <CollaboratorAvatars
+          collaborators={collaborators}
+          currentUserId={currentUserId}
+          evaluation={evaluation}
+        />
         <img
           src="/sfdc-logos/corporate-logo-horiz.png"
           alt="Salesforce"
           className="h-5 object-contain"
         />
+      </div>
+    </div>
+  );
+}
+
+function CollaboratorAvatars({
+  collaborators,
+  currentUserId,
+  evaluation,
+}: {
+  collaborators: CollaboratorDTO[];
+  currentUserId: string;
+  evaluation: EvaluationDTO;
+}) {
+  // Si todavía nadie ha respondido, mostramos al menos a quien abrió la eval.
+  const list: CollaboratorDTO[] =
+    collaborators.length > 0
+      ? collaborators
+      : evaluation.evaluatorPortalAccessId
+        ? [
+            {
+              portalAccessId: evaluation.evaluatorPortalAccessId,
+              name: evaluation.evaluatorName ?? "Evaluador",
+              email: evaluation.evaluatorEmail,
+              answeredCount: 0,
+              lastAnsweredAt: evaluation.startedAt,
+            },
+          ]
+        : [];
+  const shown = list.slice(0, 3);
+  const extra = list.length - shown.length;
+  return (
+    <div className="flex items-center gap-2" title="Colaboradores en esta evaluación">
+      <div className="flex -space-x-2">
+        {shown.map((c) => (
+          <span
+            key={c.portalAccessId}
+            className={
+              "w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold shadow-sm " +
+              (c.portalAccessId === currentUserId
+                ? "bg-cyan-600 text-white"
+                : "bg-slate-200 text-slate-700")
+            }
+            title={`${c.name}${c.answeredCount > 0 ? ` · ${c.answeredCount} respuestas` : ""}`}
+          >
+            {initialsOf(c.name)}
+          </span>
+        ))}
+        {extra > 0 && (
+          <span
+            className="w-7 h-7 rounded-full border-2 border-white bg-white text-slate-600 flex items-center justify-center text-[10px] font-bold shadow-sm"
+            title={`y ${extra} más`}
+          >
+            +{extra}
+          </span>
+        )}
+      </div>
+      <div className="text-right text-[11px] leading-tight text-slate-500 hidden md:block">
+        <strong className="block text-xs text-slate-900">
+          {list.length === 1
+            ? list[0].name
+            : `${list.length} colaboradores`}
+        </strong>
+        Evaluación compartida
       </div>
     </div>
   );
@@ -569,6 +728,14 @@ function CriterionCard({
       <p className="mt-2 text-sm text-slate-800 leading-relaxed pl-0.5">
         {renderGivenWhenThen(criterion.givenWhenThen)}
       </p>
+
+      {response?.answeredByName && response.result && (
+        <p className="mt-1.5 text-[10px] text-slate-500 pl-0.5">
+          Respondido por{" "}
+          <strong className="text-slate-700">{response.answeredByName}</strong>
+          {response.answeredAt ? ` · ${timeAgo(response.answeredAt)}` : ""}
+        </p>
+      )}
 
       {result === "Fail" && (
         <div className="mt-3 pt-3 border-t border-dashed border-red-200 space-y-2.5">

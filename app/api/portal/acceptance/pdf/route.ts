@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sfQuery, sfFetchFileBytes } from "@/lib/salesforce";
 import { getCurrentUser } from "@/lib/portalAuth";
+import type { EvaluatorRole } from "@/lib/salesforce/acceptanceWizard";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -31,9 +32,10 @@ export async function GET(request: NextRequest) {
     const evalRows = await sfQuery<{
       SubmittedPdfId__c: string | null;
       Evaluator__c: string | null;
+      EvaluatorRole__c: EvaluatorRole | null;
       Name: string;
     }>(
-      `SELECT SubmittedPdfId__c, Evaluator__c, Name
+      `SELECT SubmittedPdfId__c, Evaluator__c, EvaluatorRole__c, Name
        FROM JGR_FDE_AcceptanceEvaluation__c
        WHERE Id = '${evaluationId}' LIMIT 1`,
     );
@@ -41,7 +43,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "evaluation not found" }, { status: 404 });
     }
     const ev = evalRows[0];
-    if (user.role === "Client" && ev.Evaluator__c !== user.id) {
+    // Role guard: solo usuarios del mismo rol que firmó la eval pueden descargar el PDF.
+    if (ev.EvaluatorRole__c !== user.role) {
       return NextResponse.json({ error: "forbidden" }, { status: 403 });
     }
     if (!ev.SubmittedPdfId__c) {

@@ -8,6 +8,21 @@ import type {
 } from "@/lib/salesforce/acceptanceWizard";
 import AcceptanceWizard from "./AcceptanceWizard";
 
+const ROLE_LABEL: Record<string, string> = {
+  Client: "del cliente",
+  Partner: "del partner",
+  Salesforce: "del equipo Salesforce",
+};
+
+function initialsOf(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
 type ListingResponse = {
   templateId: string;
   inProgress: EvaluationDTO | null;
@@ -119,22 +134,59 @@ export default function AcceptanceWizardLanding({
   const otherEvals = (listing?.all ?? []).filter(
     (e) => !inProgress || e.id !== inProgress.id,
   );
+  const roleLabel = ROLE_LABEL[user.role] ?? "del equipo";
+  const openerIsMe =
+    inProgress?.evaluatorPortalAccessId === user.id;
 
   return (
     <div className="space-y-5">
       {/* Hero card */}
       <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-6">
         <p className="text-[11px] font-semibold uppercase tracking-wide text-blue-600">
-          Evaluación de aceptación
+          Evaluación de aceptación · colaborativa {roleLabel}
         </p>
         <h2 className="mt-1 text-xl font-semibold text-slate-900">
           {template.label}
         </h2>
         <p className="mt-2 max-w-2xl text-sm text-slate-600">
           Set integral de {template.totalCriteria} criterios en{" "}
-          {template.categories.length} categorías. Al finalizar, tu firma queda
-          registrada con fecha y hora.
+          {template.categories.length} categorías. Pueden trabajar en paralelo
+          varios evaluadores de tu equipo; cada respuesta queda estampada con
+          quién la registró. Un solo firmante cierra la evaluación.
         </p>
+
+        {inProgress && inProgress.collaborators.length > 0 && (
+          <div className="mt-4 flex items-center gap-3">
+            <div className="flex -space-x-2">
+              {inProgress.collaborators.slice(0, 5).map((c) => (
+                <span
+                  key={c.portalAccessId}
+                  className={
+                    "w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[11px] font-bold shadow-sm " +
+                    (c.portalAccessId === user.id
+                      ? "bg-cyan-600 text-white"
+                      : "bg-slate-200 text-slate-700")
+                  }
+                  title={`${c.name} · ${c.answeredCount} respuestas`}
+                >
+                  {initialsOf(c.name)}
+                </span>
+              ))}
+              {inProgress.collaborators.length > 5 && (
+                <span className="w-8 h-8 rounded-full border-2 border-white bg-white text-slate-600 flex items-center justify-center text-[11px] font-bold shadow-sm">
+                  +{inProgress.collaborators.length - 5}
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-slate-600">
+              {inProgress.collaborators.length}{" "}
+              {inProgress.collaborators.length === 1
+                ? "colaborador ha"
+                : "colaboradores han"}{" "}
+              respondido ya
+            </p>
+          </div>
+        )}
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
           {inProgress ? (
@@ -143,7 +195,9 @@ export default function AcceptanceWizardLanding({
               onClick={() => setActiveEvaluation(inProgress)}
               className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition"
             >
-              Continuar evaluación →
+              {openerIsMe || inProgress.collaborators.some((c) => c.portalAccessId === user.id)
+                ? "Continuar evaluación →"
+                : "Unirme a la evaluación →"}
             </button>
           ) : (
             <button
@@ -162,16 +216,24 @@ export default function AcceptanceWizardLanding({
                 {inProgress.progress.answered} de {inProgress.progress.total}
               </strong>{" "}
               ({inProgress.progress.pct}%)
+              {inProgress.evaluatorName && !openerIsMe && (
+                <>
+                  {" "}· iniciada por{" "}
+                  <strong className="text-slate-900">
+                    {inProgress.evaluatorName}
+                  </strong>
+                </>
+              )}
             </span>
           )}
         </div>
       </div>
 
-      {/* Previous evaluations */}
+      {/* Previous evaluations · firmadas por el mismo rol */}
       {otherEvals.length > 0 && (
         <div className="rounded-xl border border-slate-200 bg-white p-5">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-            Evaluaciones previas
+            Evaluaciones firmadas {roleLabel}
           </p>
           <div className="mt-3 divide-y divide-slate-100">
             {otherEvals.map((ev) => (

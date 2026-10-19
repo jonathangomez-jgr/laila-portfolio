@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   startEvaluation,
   getEvaluationById,
-  findInProgressEvaluation,
-  listEvaluationsForTemplate,
+  findInProgressEvaluationForRole,
+  listEvaluationsForTemplateAndRole,
   getActiveTemplateForSlug,
+  getEvaluationRoleById,
 } from "@/lib/salesforce/acceptanceWizard";
 import { getCurrentUser, userHasAccessToSlug } from "@/lib/portalAuth";
 
@@ -31,11 +32,9 @@ export async function GET(request: NextRequest) {
           { status: 404 },
         );
       }
-      // Simple ownership guard: evaluator can read their own eval; Salesforce/Partner can read any.
-      if (
-        user.role === "Client" &&
-        evaluation.evaluatorPortalAccessId !== user.id
-      ) {
+      // Visibilidad por rol: solo usuarios del mismo rol que inició la eval pueden verla.
+      // Fail-close si el role es null (datos legacy anteriores al cambio colaborativo).
+      if (evaluation.evaluatorRole !== user.role) {
         return NextResponse.json({ error: "forbidden" }, { status: 403 });
       }
       return NextResponse.json({ evaluation });
@@ -52,8 +51,14 @@ export async function GET(request: NextRequest) {
           { status: 404 },
         );
       }
-      const inProgress = await findInProgressEvaluation(template.id, user.id);
-      const all = await listEvaluationsForTemplate(template.id);
+      const inProgress = await findInProgressEvaluationForRole(
+        template.id,
+        user.role,
+      );
+      const all = await listEvaluationsForTemplateAndRole(
+        template.id,
+        user.role,
+      );
       return NextResponse.json({
         templateId: template.id,
         inProgress,
@@ -97,9 +102,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // If the user already has an InProgress evaluation, return it instead of
-    // creating a new one — multi-evaluator but single open eval per user.
-    const existing = await findInProgressEvaluation(template.id, user.id);
+    // Colaborativo por rol: si ya existe una eval abierta del mismo rol para este
+    // template, cualquier usuario del mismo rol se une a ella en lugar de crear otra.
+    const existing = await findInProgressEvaluationForRole(
+      template.id,
+      user.role,
+    );
     if (existing) {
       return NextResponse.json({ evaluation: existing, resumed: true });
     }
@@ -109,6 +117,7 @@ export async function POST(request: NextRequest) {
       evaluatorPortalAccessId: user.id,
       evaluatorName: user.name,
       evaluatorEmail: user.email,
+      evaluatorRole: user.role,
     });
     return NextResponse.json({ evaluation, resumed: false });
   } catch (err) {
@@ -139,6 +148,16 @@ export async function PATCH(request: NextRequest) {
         { error: "currentPage required (number)" },
         { status: 400 },
       );
+    }
+    const evalRole = await getEvaluationRoleById(id);
+    if (evalRole === undefined) {
+      return NextResponse.json(
+        { error: "evaluation not found" },
+        { status: 404 },
+      );
+    }
+    if (evalRole !== user.role) {
+      return NextResponse.json({ error: "forbidden" }, { status: 403 });
     }
     const { updateCurrentPage } = await import(
       "@/lib/salesforce/acceptanceWizard"

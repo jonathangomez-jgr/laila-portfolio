@@ -441,7 +441,7 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
         <Text style={styles.sectionTitle}>Datos de la firma</Text>
         <View style={styles.metaGrid}>
           <View style={styles.metaItem}>
-            <Text style={styles.metaLabel}>Evaluador</Text>
+            <Text style={styles.metaLabel}>Firmante</Text>
             <Text style={styles.metaValue}>
               {evaluation.evaluatorName ?? "—"}
             </Text>
@@ -463,6 +463,25 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
             </Text>
           </View>
         </View>
+
+        {evaluation.collaborators && evaluation.collaborators.length > 1 && (
+          <>
+            <Text style={styles.sectionTitle}>Colaboradores de la evaluación</Text>
+            <View style={{ flexDirection: "column", gap: 2 }}>
+              {evaluation.collaborators.map((c) => (
+                <Text
+                  key={c.portalAccessId}
+                  style={{ fontSize: 9, color: INK_SOFT, lineHeight: 1.4 }}
+                >
+                  • {c.name}
+                  {c.email ? ` (${c.email})` : ""} ·{" "}
+                  {c.answeredCount}{" "}
+                  {c.answeredCount === 1 ? "respuesta" : "respuestas"}
+                </Text>
+              ))}
+            </View>
+          </>
+        )}
 
         {/* SIGNATURE */}
         <View style={styles.signatureBox}>

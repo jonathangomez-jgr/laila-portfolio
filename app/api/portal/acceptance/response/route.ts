@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   updateResponse,
+  getEvaluationRoleById,
   type Result,
 } from "@/lib/salesforce/acceptanceWizard";
 import { getCurrentUser } from "@/lib/portalAuth";
@@ -43,11 +44,28 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
+    // Role guard: solo usuarios del mismo rol pueden editar respuestas de la eval.
+    const evalRole = await getEvaluationRoleById(body.evaluationId);
+    if (evalRole === undefined) {
+      return NextResponse.json(
+        { error: "evaluation not found" },
+        { status: 404 },
+      );
+    }
+    if (evalRole !== user.role) {
+      return NextResponse.json({ error: "forbidden" }, { status: 403 });
+    }
+
     await updateResponse({
       evaluationId: body.evaluationId,
       responseId: body.responseId,
       result,
       comment,
+      answeredBy: {
+        portalAccessId: user.id,
+        name: user.name,
+        email: user.email,
+      },
     });
     return NextResponse.json({ ok: true });
   } catch (err) {

@@ -3,6 +3,7 @@ import { renderToStream } from "@react-pdf/renderer";
 import {
   submitEvaluation,
   getActiveTemplateForSlug,
+  getEvaluationRoleById,
   type FinalDecision,
 } from "@/lib/salesforce/acceptanceWizard";
 import { sfUploadFileToRecord, sfUpdate } from "@/lib/salesforce";
@@ -72,12 +73,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 1) Submit the evaluation (status → Submitted, decision, confidence)
+    // Role guard: solo un usuario del mismo rol puede firmar la evaluación.
+    const evalRole = await getEvaluationRoleById(body.evaluationId);
+    if (evalRole === undefined) {
+      return NextResponse.json(
+        { error: "evaluation not found" },
+        { status: 404 },
+      );
+    }
+    if (evalRole !== user.role) {
+      return NextResponse.json({ error: "forbidden" }, { status: 403 });
+    }
+
+    // 1) Submit the evaluation (status → Submitted, decision, confidence).
+    // El firmante final es quien oprime "Finalizar y firmar" — se registra como Evaluator*
+    // para que el PDF y la lista de "Evaluaciones previas" muestren a quien firmó.
     const evaluation = await submitEvaluation({
       evaluationId: body.evaluationId,
       finalDecision: body.finalDecision,
       confidenceLevel: confidence,
       finalComment: body.finalComment ?? null,
+      signer: {
+        portalAccessId: user.id,
+        name: user.name,
+        email: user.email,
+      },
     });
 
     // 2) Generate PDF
