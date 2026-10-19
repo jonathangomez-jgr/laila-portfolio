@@ -30,6 +30,36 @@ export const CATEGORY_ORDER: DocCategory[] = [
 // ----------------------------------------------------------------------------
 const BETTERWARE_DOCS: DocEntry[] = [
   {
+    slug: "condiciones-betty-v28",
+    label: "Condiciones del Agente · Betty v28",
+    description:
+      "Documento oficial del estado del agente al momento de la aceptación. Arquitectura, reglas duras globales, capacidades por subagente, mejoras funcionales incluidas en v28 y riesgos conocidos aceptados para el release. 7 páginas.",
+    url: "/Customers/Betterware/files/Condiciones_Betty_v28.pdf",
+    category: "Pilot",
+    icon: "📘",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "gaps-v42-vs-betty-v28",
+    label: "Análisis Comparativo · Gaps V42 vs Betty v28",
+    description:
+      "Transparencia sobre divergencias intencionales respecto a V42 productivo. 9 fichas que explican qué hace V42, qué hace Betty v28, por qué divergimos y el beneficio para el distribuidor. Clasificación por tipo: mejora funcional, equivalente, paridad. 8 páginas.",
+    url: "/Customers/Betterware/files/Gaps_V42_vs_Betty_v28.pdf",
+    category: "Pilot",
+    icon: "🔍",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "backlog-cliente-betty-v28",
+    label: "Backlog Abierto · Preguntas para Betterware",
+    description:
+      "6 fichas de temas pendientes que requieren decisión o respuesta de Betterware. Cada ficha trae descripción, nuestra propuesta y una pregunta explícita destacada. Incluye temas pre-cutover (bloqueantes para pilot) y post-cutover (optimizaciones). 8 páginas.",
+    url: "/Customers/Betterware/files/Backlog_Cliente_Betty_v28.pdf",
+    category: "Pilot",
+    icon: "📋",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "snapshot-viernes-16-oct",
     label: "Snapshot Semanal · Viernes 16-oct",
     description:
