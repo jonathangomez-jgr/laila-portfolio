@@ -60,6 +60,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
+    slug: "matriz-escalamientos-v42-vs-betty-v28",
+    label: "Matriz de Escalamientos · V42 vs Betty v28",
+    description:
+      "Referencia operativa que inventaría cada escenario de escalamiento del agente productivo V42 y lo contrasta uno a uno contra Betty v28. Para cada escenario declara tipo (ofrecido · silencioso · forzado · condicional), precondiciones, destino final (humano o bot) y cita literal del instruction origen. Incluye top 10 brechas priorizadas y resumen ejecutivo. 11 páginas.",
+    url: "/Customers/Betterware/files/Matriz_Escalamientos_V42_vs_Betty_v28.pdf",
+    category: "Pilot",
+    icon: "🔀",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "snapshot-viernes-16-oct",
     label: "Snapshot Semanal · Viernes 16-oct",
     description:
