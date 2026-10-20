@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { getCurrentUser, userHasAccessToSlug } from "@/lib/portalAuth";
+import { getCurrentUser, userHasAccessToSlug, type PortalUser } from "@/lib/portalAuth";
 import { customerProjects } from "@/data/customerProjects";
 import OverviewTab from "./tabs/OverviewTab";
 import DocumentosTab from "./tabs/DocumentosTab";
@@ -10,6 +10,7 @@ import PruebasTab from "./tabs/PruebasTab";
 import CalendarioTab from "./tabs/CalendarioTab";
 import AdminTab from "./tabs/AdminTab";
 import AgentDocsTab from "./tabs/AgentDocsTab";
+import HandoverTab, { HANDOVER_ROLES, HANDOVER_SLUGS } from "./tabs/HandoverTab";
 
 export const dynamic = "force-dynamic";
 
@@ -26,9 +27,17 @@ type TabId =
   | "pruebas"
   | "documentos"
   | "admin"
-  | "agent-docs";
+  | "agent-docs"
+  | "handover";
 
-const TABS: Array<{ id: TabId; label: string; adminOnly?: boolean }> = [
+const TABS: Array<{
+  id: TabId;
+  label: string;
+  adminOnly?: boolean;
+  /** Si se define, el tab solo existe para estos proyectos / roles. */
+  slugs?: string[];
+  roles?: PortalUser["role"][];
+}> = [
   { id: "overview", label: "🏠 Overview" },
   { id: "calendario", label: "📅 Calendario" },
   { id: "plan", label: "📋 Plan" },
@@ -36,6 +45,7 @@ const TABS: Array<{ id: TabId; label: string; adminOnly?: boolean }> = [
   { id: "documentos", label: "📎 Documentos" },
   { id: "admin", label: "⚙️ Admin pruebas", adminOnly: true },
   { id: "agent-docs", label: "🤖 Documentación agente" },
+  { id: "handover", label: "🚀 Handover V18", slugs: HANDOVER_SLUGS, roles: HANDOVER_ROLES },
 ];
 
 export default async function PortalSlugPage({
@@ -43,10 +53,10 @@ export default async function PortalSlugPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ tab?: string }>;
+  searchParams: Promise<{ tab?: string; s?: string }>;
 }) {
   const { slug } = await params;
-  const { tab: tabParam } = await searchParams;
+  const { tab: tabParam, s: sectionParam } = await searchParams;
   const user = await getCurrentUser();
   if (!user) redirect(`/portal/login?returnTo=/portal/${slug}`);
 
@@ -74,7 +84,12 @@ export default async function PortalSlugPage({
   }
 
   const canSeeAdmin = user.role !== "Client";
-  const visibleTabs = TABS.filter((t) => !t.adminOnly || canSeeAdmin);
+  const visibleTabs = TABS.filter(
+    (t) =>
+      (!t.adminOnly || canSeeAdmin) &&
+      (!t.slugs || t.slugs.includes(slug)) &&
+      (!t.roles || t.roles.includes(user.role)),
+  );
   const defaultTabForSlug: TabId = slug === "jafra" ? "pruebas" : "overview";
   const activeTab: TabId = (visibleTabs.find((t) => t.id === tabParam)?.id ??
     defaultTabForSlug) as TabId;
@@ -184,6 +199,9 @@ export default async function PortalSlugPage({
         {activeTab === "calendario" && <CalendarioTab user={user} slug={slug} />}
         {activeTab === "admin" && <AdminTab slug={slug} />}
         {activeTab === "agent-docs" && <AgentDocsTab slug={slug} />}
+        {activeTab === "handover" && (
+          <HandoverTab slug={slug} user={user} section={sectionParam} />
+        )}
       </section>
     </main>
   );
