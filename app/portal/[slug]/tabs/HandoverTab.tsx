@@ -38,7 +38,7 @@ type SectionId = (typeof SECTIONS)[number]["id"];
 const DEP_PREFIXES = ["FLW", "APX", "TST", "MCK", "PT", "RET", "DC", "LBL", "RSS", "INT", "CINT", "OBJ", "FLD", "RT", "AUT", "WF", "VR", "EA", "TRG", "BH", "DATA", "QUE", "QRC", "SCH", "STD", "USR", "AR", "ARR", "ENT", "AGT", "PS", "CHN", "OMNI", "FEAT", "ENV"];
 const LINK_MAP: Record<string, string> = {
   ...Object.fromEntries(DEP_PREFIXES.map((p) => [p, "dependencias"])),
-  ACT: "acciones", R: "riesgos", OQ: "riesgos", MAN: "manifest",
+  ACT: "acciones", PP: "resumen", R: "riesgos", OQ: "riesgos", MAN: "manifest",
   PRE: "runbook", DEP: "runbook", POST: "runbook", RB: "runbook",
   HV18: "pruebas", GO: "entrega", SEC: "seguridad",
 };
@@ -238,7 +238,6 @@ type TableProps = { linkMap: Record<string, string>; baseHref: string };
 
 function Resumen() {
   const cov = computeCoverage();
-  const blockers = doc.risks.filter((r) => r.blocking);
   const metrics: Array<[string, string | number]> = [
     ["Subagentes", `${cov.subagents} + router`],
     ["Acciones definidas", `${cov.definedActions} (${cov.uniqueTargets} destinos)`],
@@ -248,7 +247,7 @@ function Resumen() {
     ["Pendientes / no verificados", cov.dependenciesPending],
     ["Específicos del ambiente", cov.envSpecific],
     ["Configuraciones manuales", cov.manualConfig],
-    ["Riesgos bloqueantes", cov.risksBlocking],
+    ["Pendientes previos a producción", doc.productionPrerequisites.length],
     ["Preguntas abiertas", cov.openQuestions],
   ];
   return (
@@ -257,6 +256,7 @@ function Resumen() {
         <p className="font-semibold">Estado de preparación: {doc.meta.readiness}</p>
         <p className="mt-1">{doc.meta.readinessSummary}</p>
       </div>
+      <PendientesPrevios />
       <Card eyebrow="A · Executive overview" title="Qué hace el agente">
         <p>{doc.overview.purpose}</p>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -300,19 +300,67 @@ function Resumen() {
           </dl>
         </Card>
       </div>
-      <Card title={`Bloqueantes para el go-live (${blockers.length})`}>
-        <ul className="space-y-1.5">
-          {blockers.map((r) => (
-            <li key={r.id}>
-              <Link href={`/portal/paquetexpress?tab=handover&s=riesgos#${r.id}`} className="font-mono text-xs text-cyan-700 hover:underline">
-                {r.id}
-              </Link>{" "}
-              <Pill tone={r.severity === "Crítica" ? "rose" : "amber"}>{r.severity}</Pill> {r.title}
-            </li>
-          ))}
-        </ul>
-      </Card>
     </div>
+  );
+}
+
+function PendientesPrevios() {
+  const sevTone = (id: string) => (doc.risks.find((r) => r.id === id)?.severity === "Crítica" ? "rose" : "amber");
+  return (
+    <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-cyan-700">Antes del go-live</p>
+      <h3 className="mt-0.5 text-base font-semibold text-slate-900">
+        Pendientes previos para salir a producción ({doc.productionPrerequisites.length})
+      </h3>
+      <p className="mt-1 text-sm text-slate-600">
+        Cada punto debe cerrarse (o aceptarse por escrito) antes de activar el agente en producción. Abre uno para ver qué pasa, por qué importa,
+        los pasos y cómo se da por cerrado.
+      </p>
+      <ol className="mt-4 space-y-2">
+        {doc.productionPrerequisites.map((p, idx) => {
+          const severity = doc.risks.find((r) => r.id === p.riskId)?.severity ?? "Alta";
+          return (
+            <li key={p.id} id={p.id}>
+              <details className="group rounded-lg border border-slate-200 open:border-cyan-200 open:bg-cyan-50/30">
+                <summary className="flex cursor-pointer flex-wrap items-center gap-2 px-4 py-3 text-sm">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-[11px] font-bold text-white">{idx + 1}</span>
+                  <span className="font-semibold text-slate-900">{p.title}</span>
+                  <Pill tone={sevTone(p.riskId)}>{severity}</Pill>
+                  <Pill tone="cyan">{p.owner}</Pill>
+                  <span className="ml-auto font-mono text-[11px] text-slate-500">{p.id} · {p.riskId}</span>
+                </summary>
+                <div className="grid gap-4 border-t border-slate-100 px-4 py-4 text-xs text-slate-700 lg:grid-cols-2">
+                  <div className="space-y-3">
+                    <Block title="Qué pasa"><p>{p.whatHappens}</p></Block>
+                    <Block title="Por qué importa"><p>{p.whyItMatters}</p></Block>
+                    <Block title="Evidencia"><p className="text-slate-600">{p.evidence}</p></Block>
+                  </div>
+                  <div className="space-y-3">
+                    <Block title="Pasos">
+                      <ol className="list-decimal space-y-1 pl-5">
+                        {p.steps.map((s, i) => (
+                          <li key={i}>{s}</li>
+                        ))}
+                      </ol>
+                    </Block>
+                    <Block title="Se da por cerrado cuando"><p>{p.doneWhen}</p></Block>
+                    <Block title="Relacionado">
+                      <p className="flex flex-wrap gap-x-2 gap-y-1">
+                        {p.related.map((r) => (
+                          <Link key={r} href={`/portal/paquetexpress?tab=handover&s=${LINK_MAP[r.split("-")[0]] ?? "resumen"}#${r}`} className="font-mono text-cyan-700 hover:underline">
+                            {r}
+                          </Link>
+                        ))}
+                      </p>
+                    </Block>
+                  </div>
+                </div>
+              </details>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
   );
 }
 
@@ -657,7 +705,7 @@ function Riesgos({ tableProps }: { tableProps: TableProps }) {
         columns={[
           { key: "title", label: "Riesgo" },
           { key: "severity", label: "Severidad", badge: true },
-          { key: "blocking", label: "Bloqueante", badge: true },
+          { key: "blocking", label: "Previo a producción", badge: true },
           { key: "uncertainty", label: "Certeza" },
           { key: "owner", label: "Responsable" },
         ]}

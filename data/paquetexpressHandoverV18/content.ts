@@ -10,7 +10,7 @@ export const meta: HandoverDoc["meta"] = {
   botVersion: "v18 · Active (0X9dh0000004yX3CAI)",
   bundle: "AiAuthoringBundle Paquete_Express_vX_18 · versionTag \"Version 9.2 final\"",
   versionTag: "Version 9.2 final",
-  sourceOrg: "paquetexpress--qa2020 (sandbox, Org Id 00Ddh000001pK4BEAU) · refrescado desde producción 00D2E0000013ExD",
+  sourceOrg: "paquetexpress--qa2020 (sandbox, Org Id 00Ddh000001pK4BEAU) · producción de origen deducida: 00D2E0000013ExD (no verificada)",
   auditDate: "2026-10-20",
   builder: "Agentforce Builder · Agent Script (agentDSLEnabled=true). No es Builder legacy: los topics/plugins del planner se compilan al publicar.",
   model: "sfdc_ai__DefaultGPT4Omni (agente) · FAQ_Search usa sfdc_ai__DefaultGPT5 · Case_Summary_Agentforce usa sfdc_ai__DefaultGPT5Mini",
@@ -18,7 +18,7 @@ export const meta: HandoverDoc["meta"] = {
   agentUser: "agentforce_paquete_express@00d2e0000013exd.ext.qa2020 (profile Einstein Agent User)",
   readiness: "No listo",
   readinessSummary:
-    "La V18 funciona en el sandbox, pero hoy no se puede promover sin cambios: hay un token del API de cotización en el código, cobertura de Apex registrada en 0%, IDs del sandbox en el flow de entrada de WhatsApp, un retriever de Data Cloud que no es portable y un usuario de agente con username de sandbox. Con esos 9 bloqueantes cerrados (ver Go/No-Go), el despliegue es reproducible siguiendo el runbook.",
+    "La V18 funciona en el sandbox, pero hay 9 pendientes previos para salir a producción (detalle abajo). Mientras sigan abiertos, el despliegue falla o el agente no opera correctamente en producción. Con los 9 cerrados y los criterios Go/No-Go cumplidos, el despliegue es reproducible siguiendo el runbook.",
 };
 
 export const overview: HandoverDoc["overview"] = {

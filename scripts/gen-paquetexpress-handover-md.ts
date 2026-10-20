@@ -48,7 +48,7 @@ ${HEADER}
 
 | Documento | Contenido |
 |---|---|
-| [01-executive-overview](01-executive-overview.md) | Qué hace el agente, alcance, canales, métricas |
+| [01-executive-overview](01-executive-overview.md) | Qué hace el agente, pendientes previos a producción, alcance, canales, métricas |
 | [02-agent-architecture](02-agent-architecture.md) | Diagrama, configuración general, variables |
 | [03-subagents](03-subagents.md) | Subagentes: lógica determinista vs LLM |
 | [04-actions-catalog](04-actions-catalog.md) | Acciones, cadena de implementación, inputs/outputs |
@@ -63,10 +63,35 @@ ${HEADER}
 | [evidence/README](evidence/README.md) | Fuentes y evidencia |
 `;
 
+const prereqMd = `## Pendientes previos para salir a producción (${doc.productionPrerequisites.length})
+
+Cada punto debe cerrarse (o aceptarse por escrito) antes de activar el agente en producción.
+
+${doc.productionPrerequisites
+  .map(
+    (p, i) => `### ${i + 1}. ${p.title} (${p.id} · ${p.riskId})
+- **Responsable:** ${p.owner}
+- **Qué pasa:** ${p.whatHappens}
+- **Por qué importa:** ${p.whyItMatters}
+- **Evidencia:** ${p.evidence}
+
+**Pasos**
+${p.steps.map((s, j) => `${j + 1}. ${s}`).join("\n")}
+
+- **Se da por cerrado cuando:** ${p.doneWhen}
+- **Relacionado:** ${p.related.join(", ")}
+`,
+  )
+  .join("\n")}`;
+
 files["01-executive-overview.md"] = `# 01 · Executive overview
 
 ${HEADER}
+**Estado de preparación: ${doc.meta.readiness}.** ${doc.meta.readinessSummary}
+
 ${doc.overview.purpose}
+
+${prereqMd}
 
 ## Alcance
 ${list(doc.overview.scope)}
@@ -89,7 +114,7 @@ ${table(["Métrica", "Valor"], [
   ["Componentes inventariados", String(cov.dependencies)],
   ["Componentes pendientes o no verificados", String(cov.dependenciesPending)],
   ["Específicos del ambiente", String(cov.envSpecific)],
-  ["Riesgos bloqueantes / críticos", `${cov.risksBlocking} / ${cov.risksCritical}`],
+  ["Pendientes previos a producción / riesgos críticos", `${doc.productionPrerequisites.length} / ${cov.risksCritical}`],
   ...Object.entries(cov.deployClasses).map(([k, v]) => [`Clase: ${k}`, String(v)]),
 ])}
 
@@ -287,14 +312,14 @@ ${table(["Id", "Subagente", "Funcionalidad", "Escenario", "Tipo", "Ejecución", 
 files["11-risks-open-items.md"] = `# 11 · Risks & open items
 
 ${HEADER}
-${table(["Id", "Riesgo", "Severidad", "Bloqueante", "Certeza", "Responsable"], doc.risks.map((r) => [r.id, r.title, r.severity, r.blocking ? "Sí" : "No", r.uncertainty, r.owner]))}
+${table(["Id", "Riesgo", "Severidad", "Previo a producción", "Certeza", "Responsable"], doc.risks.map((r) => [r.id, r.title, r.severity, r.blocking ? "Sí" : "No", r.uncertainty, r.owner]))}
 
 ${doc.risks
   .map(
     (r) => `## ${r.id} · ${r.title}
 - **Descripción:** ${r.description}
 - **Impacto:** ${r.impact}
-- **Certeza:** ${r.uncertainty} · **Severidad:** ${r.severity} · **Bloqueante:** ${r.blocking ? "Sí" : "No"}
+- **Certeza:** ${r.uncertainty} · **Severidad:** ${r.severity} · **Previo a producción:** ${r.blocking ? "Sí" : "No"}
 - **Evidencia:** ${r.evidence}
 - **Acción preventiva:** ${r.prevention}
 - **Validación requerida:** ${r.validation}
@@ -314,6 +339,8 @@ files["12-production-readiness.md"] = `# 12 · Production readiness
 
 ${HEADER}
 **Estado: ${doc.meta.readiness}.** ${doc.meta.readinessSummary}
+
+${prereqMd}
 
 ## Go / No-Go
 ${table(["Id", "Criterio", "Umbral", "Estado", "Relacionado"], doc.goNoGo.map((g) => [g.id, g.criterion, g.threshold, g.status, g.related.join(", ")]))}

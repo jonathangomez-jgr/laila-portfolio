@@ -199,6 +199,20 @@ export type GoNoGoCriterion = {
   status: "Abierto" | "Cerrado";
 };
 
+/** Pendiente que debe cerrarse antes de salir a producción (deriva de un riesgo bloqueante). */
+export type ProductionPrerequisite = {
+  id: string;
+  riskId: string;
+  title: string;
+  whatHappens: string;
+  whyItMatters: string;
+  evidence: string;
+  steps: string[];
+  owner: Owner;
+  doneWhen: string;
+  related: string[];
+};
+
 export type OpenQuestion = {
   id: string;
   question: string;
@@ -241,6 +255,7 @@ export type HandoverDoc = {
   integrationsSummary: { name: string; implementation: string; endpoint: string; auth: string; envNote: string; related: string[] }[];
   securityFindings: string[];
   risks: RiskDoc[];
+  productionPrerequisites: ProductionPrerequisite[];
   openQuestions: OpenQuestion[];
   runbook: RunbookStep[];
   tests: TestCaseDoc[];

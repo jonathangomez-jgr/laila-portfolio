@@ -27,7 +27,7 @@ type Props = {
 
 const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
-const ID_RE = /\b((?:ACT|R|OQ|MAN|PRE|DEP|POST|RB|HV18|GO|SEC|FLW|APX|TST|MCK|PT|RET|DC|LBL|RSS|INT|CINT|OBJ|FLD|RT|AUT|WF|VR|EA|TRG|BH|DATA|QUE|QRC|SCH|STD|USR|AR|ARR|ENT|AGT|PS|CHN|OMNI|FEAT|ENV)-\d{1,3})\b/g;
+const ID_RE = /\b((?:ACT|PP|R|OQ|MAN|PRE|DEP|POST|RB|HV18|GO|SEC|FLW|APX|TST|MCK|PT|RET|DC|LBL|RSS|INT|CINT|OBJ|FLD|RT|AUT|WF|VR|EA|TRG|BH|DATA|QUE|QRC|SCH|STD|USR|AR|ARR|ENT|AGT|PS|CHN|OMNI|FEAT|ENV)-\d{1,3})\b/g;
 
 const BADGE: Record<string, string> = {
   Crítica: "bg-rose-100 text-rose-800",
