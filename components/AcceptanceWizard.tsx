@@ -269,15 +269,36 @@ export default function AcceptanceWizard({
     }
   };
 
-  // Progress across the whole wizard (0-100)
-  const answeredCount = useMemo(
-    () => Array.from(responses.values()).filter((r) => r.result != null).length,
-    [responses],
-  );
+  // Blocked criteria are excluded from progress and from the sign-off gate.
+  const effectiveTotal = useMemo(() => {
+    let n = 0;
+    for (const cat of template.categories) {
+      for (const c of cat.criteria) {
+        if (!c.isBlocked) n++;
+      }
+    }
+    return n;
+  }, [template.categories]);
+
+  const answeredCount = useMemo(() => {
+    const blocked = new Set<string>();
+    template.categories.forEach((cat) =>
+      cat.criteria.forEach((c) => {
+        if (c.isBlocked) blocked.add(c.id);
+      }),
+    );
+    let n = 0;
+    for (const [critId, r] of responses) {
+      if (blocked.has(critId)) continue;
+      if (r.result != null) n++;
+    }
+    return n;
+  }, [responses, template.categories]);
+
   const progressPct =
-    template.totalCriteria === 0
+    effectiveTotal === 0
       ? 0
-      : Math.round((answeredCount / template.totalCriteria) * 100);
+      : Math.round((answeredCount / effectiveTotal) * 100);
 
   // Current page content
   const isCategoryPage = page >= 1 && page <= numCategoryPages;
@@ -642,9 +663,11 @@ function CriterionCard({
 }) {
   const result = response?.result ?? null;
   const [commentDraft, setCommentDraft] = useState(response?.comment ?? "");
+  const isBlocked = criterion.isBlocked;
 
-  const borderClass =
-    result === "Pass"
+  const borderClass = isBlocked
+    ? "border-slate-200 bg-slate-50"
+    : result === "Pass"
       ? "border-green-300 bg-green-50/40"
       : result === "Fail"
         ? "border-red-300 bg-red-50/40"
@@ -685,7 +708,15 @@ function CriterionCard({
           >
             {criterion.severity}
           </span>
-          {result && (
+          {isBlocked && (
+            <span
+              className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-100 text-blue-700 border border-blue-200"
+              title={criterion.blockedReason ?? "En espera de validación externa"}
+            >
+              ⏸ {criterion.blockedReason ?? "En espera"}
+            </span>
+          )}
+          {!isBlocked && result && (
             <span
               className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${resultChip}`}
             >
@@ -697,32 +728,38 @@ function CriterionCard({
             </span>
           )}
         </div>
-        <div className="flex gap-0.5 bg-slate-50 border border-slate-200 rounded-lg p-0.5">
-          <ToggleBtn
-            active={result === "Pass"}
-            activeClass="bg-green-600 text-white border-green-600"
-            onClick={() => onChange(criterion, "Pass", null)}
-          >
-            👍 Cumple
-          </ToggleBtn>
-          <ToggleBtn
-            active={result === "Fail"}
-            activeClass="bg-red-600 text-white border-red-600"
-            onClick={() => {
-              if (result !== "Fail")
-                void onChange(criterion, "Fail", commentDraft || "(pendiente)");
-            }}
-          >
-            👎 No cumple
-          </ToggleBtn>
-          <ToggleBtn
-            active={result === "NA"}
-            activeClass="bg-slate-500 text-white border-slate-500"
-            onClick={() => onChange(criterion, "NA", null)}
-          >
-            N/A
-          </ToggleBtn>
-        </div>
+        {isBlocked ? (
+          <div className="text-[11px] text-slate-500 italic px-2 py-1">
+            Pausado · no cuenta para la decisión
+          </div>
+        ) : (
+          <div className="flex gap-0.5 bg-slate-50 border border-slate-200 rounded-lg p-0.5">
+            <ToggleBtn
+              active={result === "Pass"}
+              activeClass="bg-green-600 text-white border-green-600"
+              onClick={() => onChange(criterion, "Pass", null)}
+            >
+              👍 Cumple
+            </ToggleBtn>
+            <ToggleBtn
+              active={result === "Fail"}
+              activeClass="bg-red-600 text-white border-red-600"
+              onClick={() => {
+                if (result !== "Fail")
+                  void onChange(criterion, "Fail", commentDraft || "(pendiente)");
+              }}
+            >
+              👎 No cumple
+            </ToggleBtn>
+            <ToggleBtn
+              active={result === "NA"}
+              activeClass="bg-slate-500 text-white border-slate-500"
+              onClick={() => onChange(criterion, "NA", null)}
+            >
+              N/A
+            </ToggleBtn>
+          </div>
+        )}
       </div>
 
       <p className="mt-2 text-sm text-slate-800 leading-relaxed pl-0.5">
@@ -898,6 +935,7 @@ function FinalPage({
     };
     template.categories.forEach((cat) => {
       cat.criteria.forEach((c) => {
+        if (c.isBlocked) return;
         bySev[c.severity].total++;
         const r = responses.get(c.id)?.result ?? null;
         if (r === "Pass") bySev[c.severity].Pass++;
@@ -913,6 +951,7 @@ function FinalPage({
     const list: CriterionDTO[] = [];
     template.categories.forEach((cat) => {
       cat.criteria.forEach((c) => {
+        if (c.isBlocked) return;
         if (c.severity === "Blocker" && responses.get(c.id)?.result === "Fail")
           list.push(c);
       });
@@ -932,14 +971,29 @@ function FinalPage({
 
   // Gate 2 · Progreso mínimo 95% para poder enviar
   const PROGRESS_THRESHOLD = 95;
-  const answeredCount = useMemo(
-    () => Array.from(responses.values()).filter((r) => r.result != null).length,
-    [responses],
-  );
+  const { finalAnswered, finalTotal } = useMemo(() => {
+    const blocked = new Set<string>();
+    template.categories.forEach((cat) =>
+      cat.criteria.forEach((c) => {
+        if (c.isBlocked) blocked.add(c.id);
+      }),
+    );
+    let a = 0;
+    let t = 0;
+    for (const cat of template.categories) {
+      for (const c of cat.criteria) {
+        if (c.isBlocked) continue;
+        t++;
+      }
+    }
+    for (const [critId, r] of responses) {
+      if (blocked.has(critId)) continue;
+      if (r.result != null) a++;
+    }
+    return { finalAnswered: a, finalTotal: t };
+  }, [template.categories, responses]);
   const progressPct =
-    template.totalCriteria === 0
-      ? 0
-      : Math.round((answeredCount / template.totalCriteria) * 100);
+    finalTotal === 0 ? 0 : Math.round((finalAnswered / finalTotal) * 100);
   const progressGatePassed = progressPct >= PROGRESS_THRESHOLD;
 
   const canSubmit =
@@ -1177,9 +1231,8 @@ function FinalPage({
           <p className="mt-1 text-xs text-amber-700">
             Para enviar la evaluación necesitas al menos{" "}
             <strong>{PROGRESS_THRESHOLD}%</strong> de criterios respondidos.
-            Hoy llevas <strong>{progressPct}%</strong> ({answeredCount} de{" "}
-            {template.totalCriteria}). Responde los criterios faltantes antes
-            de firmar.
+            Hoy llevas <strong>{progressPct}%</strong> ({finalAnswered} de{" "}
+            {finalTotal}). Responde los criterios faltantes antes de firmar.
           </p>
         </div>
       )}
@@ -1199,9 +1252,9 @@ function FinalPage({
           <span className="text-sm text-slate-700 leading-relaxed group-hover:text-slate-900">
             Yo, <strong className="text-slate-900">{evaluator}</strong>,
             confirmo que los resultados mostrados en este reporte reflejan mi
-            evaluación honesta de los {template.totalCriteria} criterios y
-            asumo responsabilidad por la decisión final registrada. Entiendo
-            que esta firma queda vinculada a mi usuario con fecha y hora.
+            evaluación honesta de los {finalTotal} criterios y asumo
+            responsabilidad por la decisión final registrada. Entiendo que esta
+            firma queda vinculada a mi usuario con fecha y hora.
           </span>
         </label>
       </div>
@@ -1373,11 +1426,15 @@ function WizardFooter({
     const cat = categories[categoryIdx];
     if (!cat) return "none";
     let answered = 0;
+    let answerable = 0;
     for (const c of cat.criteria) {
+      if (c.isBlocked) continue;
+      answerable++;
       if (responses.get(c.id)?.result != null) answered++;
     }
+    if (answerable === 0) return "full";
     if (answered === 0) return "none";
-    if (answered === cat.criteria.length) return "full";
+    if (answered === answerable) return "full";
     return "partial";
   };
 

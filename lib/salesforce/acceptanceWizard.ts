@@ -17,6 +17,8 @@ export type CriterionDTO = {
   givenWhenThen: string;
   severity: Severity;
   sortOrder: number;
+  isBlocked: boolean;
+  blockedReason: string | null;
 };
 
 export type CategoryDTO = {
@@ -106,6 +108,8 @@ type CriterionRow = {
   GivenWhenThen__c: string;
   Severity__c: Severity;
   SortOrder__c: number;
+  IsBlocked__c: boolean | null;
+  BlockedReason__c: string | null;
 };
 
 export async function getActiveTemplateForSlug(
@@ -128,7 +132,8 @@ export async function getActiveTemplateForSlug(
      ORDER BY SortOrder__c ASC`,
   );
   const crits = await sfQuery<CriterionRow>(
-    `SELECT Id, Category__c, Topic__c, GivenWhenThen__c, Severity__c, SortOrder__c
+    `SELECT Id, Category__c, Topic__c, GivenWhenThen__c, Severity__c, SortOrder__c,
+            IsBlocked__c, BlockedReason__c
      FROM JGR_FDE_AcceptanceCriterion__c
      WHERE Category__c IN (${cats.map((c) => `'${c.Id}'`).join(",") || "''"})
      ORDER BY SortOrder__c ASC`,
@@ -144,6 +149,8 @@ export async function getActiveTemplateForSlug(
       givenWhenThen: c.GivenWhenThen__c,
       severity: c.Severity__c,
       sortOrder: c.SortOrder__c,
+      isBlocked: c.IsBlocked__c === true,
+      blockedReason: c.BlockedReason__c,
     });
     critsByCat.set(c.Category__c, list);
   }

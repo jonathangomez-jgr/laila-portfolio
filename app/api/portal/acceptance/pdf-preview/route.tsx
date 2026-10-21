@@ -112,6 +112,8 @@ function buildMockData(
       givenWhenThen: c.text,
       severity: c.severity,
       sortOrder: catIdx * 5 + i + 1,
+      isBlocked: false,
+      blockedReason: null,
     })),
   }));
 
