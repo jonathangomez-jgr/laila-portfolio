@@ -176,6 +176,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     icon: "🔬",
     visibleTo: ["Salesforce", "Partner"],
   },
+  {
+    slug: "req-servicenow-distribuidor-code",
+    label: "Requerimiento · Exposición del Distribuidor dueño en ServiceNow",
+    description:
+      "Requerimiento técnico de integración sobre el endpoint MuleSoft `/api/tickets/incident`. Documenta la observación de que el response actual no expone un campo que identifique al Distribuidor titular del ticket, bloqueando la validación de pertenencia (propio · hija · nieta) en Betty. Incluye evidencia del response real, análisis de por qué sys_created_by no resuelve el caso, 3 caminos técnicos candidatos para exponer el campo y el comportamiento esperado tras el ajuste. 7 páginas.",
+    url: "/Customers/Betterware/files/Requerimiento_ServiceNow_DistribuidorCode.pdf",
+    category: "Técnico",
+    icon: "🔌",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
 ];
 
 // ----------------------------------------------------------------------------
