@@ -186,6 +186,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     icon: "🔌",
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
+  {
+    slug: "reporte-remediacion-eval12",
+    label: "Reporte de remediación · EVAL-000012",
+    description:
+      "Reporte de cierre del trabajo de remediación sobre los 12 findings marcados como 'no cumple' en el EVAL-000012 del 20-OCT-2026. Resume por finding la causa raíz identificada, el fix aplicado y la validación realizada. Incluye estado final (10 resueltos · 3 en espera de terceros), inventario de entregables técnicos (6 clases Apex nuevas, 7 ajustes al bundle v34 activo, 3 documentos publicados) y agenda de siguientes pasos. 6 páginas.",
+    url: "/Customers/Betterware/files/Reporte_Remediacion_EVAL-000012.pdf",
+    category: "Pilot",
+    icon: "📊",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
 ];
 
 // ----------------------------------------------------------------------------
