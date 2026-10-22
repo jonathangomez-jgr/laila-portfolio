@@ -68,6 +68,7 @@ export default function AcceptanceWizardLanding({
   const [starting, setStarting] = useState(false);
   const [consolidating, setConsolidating] = useState(false);
   const [showConsolidatePreview, setShowConsolidatePreview] = useState(false);
+  const [consolidateAck, setConsolidateAck] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeEvaluation, setActiveEvaluation] =
     useState<EvaluationDTO | null>(null);
@@ -128,6 +129,7 @@ export default function AcceptanceWizardLanding({
       }
       setActiveEvaluation(body.evaluation);
       setShowConsolidatePreview(false);
+      setConsolidateAck(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
@@ -356,7 +358,11 @@ export default function AcceptanceWizardLanding({
       {showConsolidatePreview && consolidation && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
-          onClick={() => !consolidating && setShowConsolidatePreview(false)}
+          onClick={() => {
+            if (consolidating) return;
+            setShowConsolidatePreview(false);
+            setConsolidateAck(false);
+          }}
         >
           <div
             className="w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-6 shadow-xl"
@@ -403,10 +409,28 @@ export default function AcceptanceWizardLanding({
               fueron marcados.
             </p>
 
+            <label className="mt-4 flex items-start gap-3 cursor-pointer group rounded-xl border border-slate-200 bg-slate-50 p-3">
+              <input
+                type="checkbox"
+                className="mt-0.5 w-4 h-4 accent-emerald-600 cursor-pointer flex-shrink-0"
+                checked={consolidateAck}
+                onChange={(e) => setConsolidateAck(e.target.checked)}
+                disabled={consolidating}
+              />
+              <span className="text-sm text-slate-700 leading-relaxed group-hover:text-slate-900">
+                Entiendo que estoy unificando respuestas de evaluaciones
+                anteriores y me comprometo a verificar los resultados antes
+                de firmar.
+              </span>
+            </label>
+
             <div className="mt-5 flex justify-end gap-2">
               <button
                 type="button"
-                onClick={() => setShowConsolidatePreview(false)}
+                onClick={() => {
+                  setShowConsolidatePreview(false);
+                  setConsolidateAck(false);
+                }}
                 disabled={consolidating}
                 className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-50"
               >
@@ -415,8 +439,13 @@ export default function AcceptanceWizardLanding({
               <button
                 type="button"
                 onClick={startConsolidation}
-                disabled={consolidating}
-                className="rounded-lg bg-emerald-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                disabled={consolidating || !consolidateAck}
+                className="rounded-lg bg-emerald-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed"
+                title={
+                  !consolidateAck
+                    ? "Marca la casilla de confirmación para habilitar"
+                    : undefined
+                }
               >
                 {consolidating ? "Creando…" : "Crear consolidación"}
               </button>
