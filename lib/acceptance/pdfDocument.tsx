@@ -354,7 +354,9 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <Text style={styles.reportTag}>
-              Evaluación de aceptación · firmada
+              {evaluation.evaluationType === "Consolidated"
+                ? "Firma consolidada · evaluación final"
+                : "Evaluación de aceptación · firmada"}
             </Text>
             <Text style={styles.reportTitle}>{template.label}</Text>
             <Text style={styles.reportSub}>
@@ -606,33 +608,60 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
               const resultLabel =
                 r?.result === "Pass"
                   ? "CUMPLE"
-                  : r?.result === "Fail"
-                    ? "NO CUMPLE"
-                    : r?.result === "NA"
-                      ? "N/A"
-                      : "SIN RESP.";
+                  : r?.result === "PassWithObservations"
+                    ? "CUMPLE C/OBS"
+                    : r?.result === "Fail"
+                      ? "NO CUMPLE"
+                      : r?.result === "NA"
+                        ? "N/A"
+                        : "SIN RESP.";
               const resultBg =
                 r?.result === "Pass"
                   ? "#D1FAE5"
-                  : r?.result === "Fail"
-                    ? "#FFE4E6"
-                    : r?.result === "NA"
-                      ? "#E2E8F0"
-                      : "#F8FAFC";
+                  : r?.result === "PassWithObservations"
+                    ? "#FEF3C7"
+                    : r?.result === "Fail"
+                      ? "#FFE4E6"
+                      : r?.result === "NA"
+                        ? "#E2E8F0"
+                        : "#F8FAFC";
               const resultColor =
                 r?.result === "Pass"
                   ? "#065F46"
-                  : r?.result === "Fail"
-                    ? "#9F1239"
-                    : r?.result === "NA"
-                      ? "#475569"
-                      : "#94A3B8";
+                  : r?.result === "PassWithObservations"
+                    ? "#92400E"
+                    : r?.result === "Fail"
+                      ? "#9F1239"
+                      : r?.result === "NA"
+                        ? "#475569"
+                        : "#94A3B8";
+              const sourceLabel = r?.sourceEvaluationVersion
+                ? r.sourceEvaluationVersion
+                : r?.sourceEvaluationName
+                  ? r.sourceEvaluationName
+                  : null;
               return (
                 <View key={c.id} style={styles.criterionRow} wrap={false}>
-                  <Text style={styles.critText}>
-                    {String(i + 1).padStart(2, "0")}
-                    {c.topic ? ` · ${c.topic}` : ""} · {c.givenWhenThen}
-                  </Text>
+                  <View style={{ flex: 1, paddingRight: 6 }}>
+                    <Text style={styles.critText}>
+                      {String(i + 1).padStart(2, "0")}
+                      {c.topic ? ` · ${c.topic}` : ""} · {c.givenWhenThen}
+                    </Text>
+                    {sourceLabel &&
+                      evaluation.evaluationType === "Consolidated" && (
+                        <Text
+                          style={{
+                            fontSize: 7,
+                            color: "#6366F1",
+                            marginTop: 2,
+                            fontFamily: "Helvetica-Oblique",
+                          }}
+                        >
+                          ↳ heredado de {sourceLabel}
+                          {r?.answeredAt ? ` · ${fmtDate(r.answeredAt)}` : ""}
+                        </Text>
+                      )}
+                  </View>
                   <Text
                     style={[
                       styles.critResult,

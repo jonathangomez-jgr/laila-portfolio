@@ -71,6 +71,9 @@ type ResponseState = {
   answeredByName: string | null;
   answeredByPortalAccessId: string | null;
   answeredAt: string | null;
+  sourceEvaluationId: string | null;
+  sourceEvaluationName: string | null;
+  sourceEvaluationVersion: string | null;
 };
 
 export default function AcceptanceWizard({
@@ -99,6 +102,9 @@ export default function AcceptanceWizard({
         answeredByName: r.answeredByName,
         answeredByPortalAccessId: r.answeredByPortalAccessId,
         answeredAt: r.answeredAt,
+        sourceEvaluationId: r.sourceEvaluationId,
+        sourceEvaluationName: r.sourceEvaluationName,
+        sourceEvaluationVersion: r.sourceEvaluationVersion,
       }),
     );
     return m;
@@ -143,6 +149,10 @@ export default function AcceptanceWizard({
           answeredByName: user.name,
           answeredByPortalAccessId: user.id,
           answeredAt: nowIso,
+          // Al editar manualmente, deja de ser heredada
+          sourceEvaluationId: null,
+          sourceEvaluationName: null,
+          sourceEvaluationVersion: null,
         });
         return next;
       });
@@ -200,6 +210,9 @@ export default function AcceptanceWizard({
               answeredByName: r.answeredByName,
               answeredByPortalAccessId: r.answeredByPortalAccessId,
               answeredAt: r.answeredAt,
+              sourceEvaluationId: r.sourceEvaluationId,
+              sourceEvaluationName: r.sourceEvaluationName,
+              sourceEvaluationVersion: r.sourceEvaluationVersion,
             });
           }
           return next;
@@ -320,7 +333,13 @@ export default function AcceptanceWizard({
       />
 
       <div className="p-6 min-h-[480px]">
-        {page === 0 && <WelcomePage template={template} onStart={() => goTo(1)} />}
+        {page === 0 && (
+          <WelcomePage
+            template={template}
+            evaluation={evaluation}
+            onStart={() => goTo(1)}
+          />
+        )}
 
         {isCategoryPage && currentCategory && (
           <CategoryPage
@@ -511,14 +530,21 @@ function CollaboratorAvatars({
 
 function WelcomePage({
   template,
+  evaluation,
   onStart,
 }: {
   template: TemplateDTO;
+  evaluation: EvaluationDTO;
   onStart: () => void;
 }) {
-  const defaultMsg =
-    "Hemos llegado hasta aquí juntos.\nTu evaluación de hoy es lo que convierte este trabajo en una experiencia real.";
-  const msg = template.welcomeMessage ?? defaultMsg;
+  const isConsolidated = evaluation.evaluationType === "Consolidated";
+  const defaultMsg = isConsolidated
+    ? "Esta es la firma final.\nRevisa cada criterio, ajusta lo que haga falta, y firma una sola vez sobre el universo completo."
+    : "Hemos llegado hasta aquí juntos.\nTu evaluación de hoy es lo que convierte este trabajo en una experiencia real.";
+  const msg =
+    isConsolidated || !template.welcomeMessage
+      ? defaultMsg
+      : template.welcomeMessage;
   const lines = msg.split("\n");
 
   return (
@@ -537,9 +563,22 @@ function WelcomePage({
         />
       </div>
 
-      <div className="rounded-2xl border border-cyan-100 bg-gradient-to-br from-cyan-50 via-white to-blue-50 p-8">
-        <p className="text-[11px] font-bold uppercase tracking-widest text-cyan-700">
-          Evaluación de aceptación · {template.label}
+      <div
+        className={
+          "rounded-2xl border p-8 " +
+          (isConsolidated
+            ? "border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-cyan-50"
+            : "border-cyan-100 bg-gradient-to-br from-cyan-50 via-white to-blue-50")
+        }
+      >
+        <p
+          className={
+            "text-[11px] font-bold uppercase tracking-widest " +
+            (isConsolidated ? "text-emerald-700" : "text-cyan-700")
+          }
+        >
+          {isConsolidated ? "Firma consolidada · " : "Evaluación de aceptación · "}
+          {template.label}
         </p>
         <h1 className="mt-3 text-2xl font-bold text-slate-900 leading-snug">
           {lines[0]}
@@ -793,6 +832,14 @@ function CriterionCard({
           Respondido por{" "}
           <strong className="text-slate-700">{response.answeredByName}</strong>
           {response.answeredAt ? ` · ${timeAgo(response.answeredAt)}` : ""}
+          {response.sourceEvaluationId && (
+            <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider">
+              ↳ heredado de{" "}
+              {response.sourceEvaluationVersion
+                ? response.sourceEvaluationVersion
+                : response.sourceEvaluationName}
+            </span>
+          )}
         </p>
       )}
 

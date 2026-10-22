@@ -29,6 +29,30 @@ type ListingResponse = {
   all: EvaluationDTO[];
 };
 
+type ConsolidationPreviewResponse = {
+  preview: {
+    masterTemplateId: string;
+    masterTemplateLabel: string;
+    totalCriteria: number;
+    sourceEvaluations: {
+      id: string;
+      name: string;
+      version: string | null;
+      label: string;
+      status: string;
+      submittedAt: string | null;
+    }[];
+    byResult: {
+      Pass: number;
+      PassWithObservations: number;
+      Fail: number;
+      NA: number;
+      Unanswered: number;
+    };
+  };
+  existing: EvaluationDTO | null;
+};
+
 export default function AcceptanceWizardLanding({
   user,
   slug,
@@ -38,8 +62,12 @@ export default function AcceptanceWizardLanding({
 }) {
   const [template, setTemplate] = useState<TemplateDTO | null>(null);
   const [listing, setListing] = useState<ListingResponse | null>(null);
+  const [consolidation, setConsolidation] =
+    useState<ConsolidationPreviewResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [starting, setStarting] = useState(false);
+  const [consolidating, setConsolidating] = useState(false);
+  const [showConsolidatePreview, setShowConsolidatePreview] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeEvaluation, setActiveEvaluation] =
     useState<EvaluationDTO | null>(null);
@@ -48,10 +76,13 @@ export default function AcceptanceWizardLanding({
     setLoading(true);
     setError(null);
     try {
-      const [tplRes, listRes] = await Promise.all([
+      const [tplRes, listRes, consRes] = await Promise.all([
         fetch(`/api/portal/acceptance/template?slug=${encodeURIComponent(slug)}`),
         fetch(
           `/api/portal/acceptance/evaluation?slug=${encodeURIComponent(slug)}`,
+        ),
+        fetch(
+          `/api/portal/acceptance/consolidate?slug=${encodeURIComponent(slug)}`,
         ),
       ]);
       if (!tplRes.ok) throw new Error(`Template load failed (${tplRes.status})`);
@@ -61,6 +92,10 @@ export default function AcceptanceWizardLanding({
       const listBody = (await listRes.json()) as ListingResponse;
       setTemplate(tplBody.template);
       setListing(listBody);
+      if (consRes.ok) {
+        const consBody = (await consRes.json()) as ConsolidationPreviewResponse;
+        setConsolidation(consBody);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
@@ -71,6 +106,34 @@ export default function AcceptanceWizardLanding({
   useEffect(() => {
     void load();
   }, [load]);
+
+  const startConsolidation = async () => {
+    setConsolidating(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/portal/acceptance/consolidate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug }),
+      });
+      if (!res.ok) throw new Error(`Consolidate failed (${res.status})`);
+      const body = (await res.json()) as { evaluation: EvaluationDTO };
+      // Al abrir la consolidada hay que cargar el template maestro (no el activo)
+      const tplRes = await fetch(
+        `/api/portal/acceptance/template?id=${encodeURIComponent(body.evaluation.templateId)}`,
+      );
+      if (tplRes.ok) {
+        const tplBody = (await tplRes.json()) as { template: TemplateDTO };
+        setTemplate(tplBody.template);
+      }
+      setActiveEvaluation(body.evaluation);
+      setShowConsolidatePreview(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error desconocido");
+    } finally {
+      setConsolidating(false);
+    }
+  };
 
   const startNew = async () => {
     setStarting(true);
@@ -228,6 +291,139 @@ export default function AcceptanceWizardLanding({
           )}
         </div>
       </div>
+
+      {/* Consolidation card · aparece cuando hay 2+ evaluaciones parciales del mismo rol */}
+      {consolidation &&
+        consolidation.preview.sourceEvaluations.length >= 2 && (
+          <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-cyan-50 p-6">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+              Firma consolidada · evaluación final
+            </p>
+            <h3 className="mt-1 text-lg font-semibold text-slate-900">
+              Unir las {consolidation.preview.sourceEvaluations.length} evaluaciones
+              y firmar sobre el universo completo
+            </h3>
+            <p className="mt-2 max-w-2xl text-sm text-slate-600">
+              Tomamos la última marca por criterio de cada evaluación previa y
+              armamos una vista final sobre los{" "}
+              <strong className="text-slate-900">
+                {consolidation.preview.totalCriteria} criterios
+              </strong>{" "}
+              del template maestro ({consolidation.preview.masterTemplateLabel}).
+              Vas a poder revisar, ajustar lo que haga falta, y firmar una sola
+              vez con trazabilidad por criterio.
+            </p>
+
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowConsolidatePreview(true)}
+                className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition disabled:opacity-50"
+                disabled={consolidating}
+              >
+                {consolidation.existing
+                  ? "Continuar consolidación →"
+                  : "Consolidar y firmar →"}
+              </button>
+              <div className="flex flex-wrap gap-2 text-[11px]">
+                <span className="rounded-full bg-green-100 text-green-700 px-2 py-0.5 font-semibold">
+                  ✓ {consolidation.preview.byResult.Pass} cumple
+                </span>
+                {consolidation.preview.byResult.PassWithObservations > 0 && (
+                  <span className="rounded-full bg-amber-100 text-amber-700 px-2 py-0.5 font-semibold">
+                    ⚠ {consolidation.preview.byResult.PassWithObservations} con obs.
+                  </span>
+                )}
+                <span className="rounded-full bg-red-100 text-red-700 px-2 py-0.5 font-semibold">
+                  ✕ {consolidation.preview.byResult.Fail} no cumple
+                </span>
+                {consolidation.preview.byResult.NA > 0 && (
+                  <span className="rounded-full bg-slate-200 text-slate-600 px-2 py-0.5 font-semibold">
+                    — {consolidation.preview.byResult.NA} N/A
+                  </span>
+                )}
+                {consolidation.preview.byResult.Unanswered > 0 && (
+                  <span className="rounded-full bg-slate-100 text-slate-500 px-2 py-0.5 font-semibold">
+                    {consolidation.preview.byResult.Unanswered} sin responder
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+      {/* Preview modal · confirmación antes de crear */}
+      {showConsolidatePreview && consolidation && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
+          onClick={() => !consolidating && setShowConsolidatePreview(false)}
+        >
+          <div
+            className="w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+              Antes de consolidar
+            </p>
+            <h3 className="mt-1 text-lg font-bold text-slate-900">
+              Vas a crear una evaluación final sobre {consolidation.preview.totalCriteria} criterios
+            </h3>
+            <p className="mt-2 text-sm text-slate-600">
+              Para cada criterio tomaremos la última respuesta registrada de las
+              siguientes evaluaciones previas:
+            </p>
+
+            <ul className="mt-3 space-y-1.5 max-h-48 overflow-y-auto">
+              {consolidation.preview.sourceEvaluations.map((s) => (
+                <li
+                  key={s.id}
+                  className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm"
+                >
+                  <span className="text-slate-800 font-medium">
+                    {s.label}{" "}
+                    <span className="text-xs text-slate-500">· {s.name}</span>
+                  </span>
+                  <span
+                    className={
+                      "text-[10px] font-bold uppercase tracking-wider rounded-full px-2 py-0.5 " +
+                      (s.status === "Submitted"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-blue-100 text-blue-700")
+                    }
+                  >
+                    {s.status === "Submitted" ? "Firmada" : "En curso"}
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-3 text-xs text-slate-500">
+              Podrás revisar y ajustar cada respuesta antes de firmar. Los
+              criterios heredados mostrarán de qué evaluación vienen y cuándo
+              fueron marcados.
+            </p>
+
+            <div className="mt-5 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowConsolidatePreview(false)}
+                disabled={consolidating}
+                className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={startConsolidation}
+                disabled={consolidating}
+                className="rounded-lg bg-emerald-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+              >
+                {consolidating ? "Creando…" : "Crear consolidación"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Previous evaluations · firmadas por el mismo rol */}
       {otherEvals.length > 0 && (

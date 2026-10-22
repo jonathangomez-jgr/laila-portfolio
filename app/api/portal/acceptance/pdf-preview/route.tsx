@@ -114,6 +114,7 @@ function buildMockData(
       sortOrder: catIdx * 5 + i + 1,
       isBlocked: false,
       blockedReason: null,
+      criterionKey: null,
     })),
   }));
 
@@ -147,6 +148,9 @@ function buildMockData(
         answeredByPortalAccessId: null,
         answeredByName: null,
         answeredByEmail: null,
+        sourceEvaluationId: null,
+        sourceEvaluationName: null,
+        sourceEvaluationVersion: null,
       };
     }),
   );
@@ -163,6 +167,7 @@ function buildMockData(
     evaluatorName,
     evaluatorEmail: "preview@laila.demo",
     evaluatorRole: "Client",
+    evaluationType: "Partial",
     status: "Submitted",
     startedAt: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
     submittedAt: new Date().toISOString(),

@@ -10,6 +10,8 @@ export type EvaluationStatus = "InProgress" | "Submitted" | "Archived";
 export type FinalDecision = "Si" | "No";
 export type EvaluatorRole = "Client" | "Partner" | "Salesforce";
 
+export type EvaluationType = "Partial" | "Consolidated";
+
 export type CriterionDTO = {
   id: string;
   categoryId: string;
@@ -19,6 +21,7 @@ export type CriterionDTO = {
   sortOrder: number;
   isBlocked: boolean;
   blockedReason: string | null;
+  criterionKey: string | null;
 };
 
 export type CategoryDTO = {
@@ -49,6 +52,9 @@ export type ResponseDTO = {
   answeredByPortalAccessId: string | null;
   answeredByName: string | null;
   answeredByEmail: string | null;
+  sourceEvaluationId: string | null;
+  sourceEvaluationName: string | null;
+  sourceEvaluationVersion: string | null;
 };
 
 export type CollaboratorDTO = {
@@ -67,6 +73,7 @@ export type EvaluationDTO = {
   evaluatorName: string | null;
   evaluatorEmail: string | null;
   evaluatorRole: EvaluatorRole | null;
+  evaluationType: EvaluationType;
   status: EvaluationStatus;
   startedAt: string | null;
   submittedAt: string | null;
@@ -110,20 +117,10 @@ type CriterionRow = {
   SortOrder__c: number;
   IsBlocked__c: boolean | null;
   BlockedReason__c: string | null;
+  CriterionKey__c: string | null;
 };
 
-export async function getActiveTemplateForSlug(
-  slug: string,
-): Promise<TemplateDTO | null> {
-  const tmpls = await sfQuery<TemplateRow>(
-    `SELECT Id, Label__c, ProjectSlug__c, AgentApiName__c, Version__c, WelcomeMessage__c
-     FROM JGR_FDE_AcceptanceTemplate__c
-     WHERE ProjectSlug__c = '${slug.replace(/'/g, "\\'")}' AND IsActive__c = true
-     ORDER BY CreatedDate DESC
-     LIMIT 1`,
-  );
-  if (tmpls.length === 0) return null;
-  const tmpl = tmpls[0];
+async function hydrateTemplate(tmpl: TemplateRow): Promise<TemplateDTO> {
 
   const cats = await sfQuery<CategoryRow>(
     `SELECT Id, Name, Description__c, SortOrder__c
@@ -133,7 +130,7 @@ export async function getActiveTemplateForSlug(
   );
   const crits = await sfQuery<CriterionRow>(
     `SELECT Id, Category__c, Topic__c, GivenWhenThen__c, Severity__c, SortOrder__c,
-            IsBlocked__c, BlockedReason__c
+            IsBlocked__c, BlockedReason__c, CriterionKey__c
      FROM JGR_FDE_AcceptanceCriterion__c
      WHERE Category__c IN (${cats.map((c) => `'${c.Id}'`).join(",") || "''"})
      ORDER BY SortOrder__c ASC`,
@@ -151,6 +148,7 @@ export async function getActiveTemplateForSlug(
       sortOrder: c.SortOrder__c,
       isBlocked: c.IsBlocked__c === true,
       blockedReason: c.BlockedReason__c,
+      criterionKey: c.CriterionKey__c,
     });
     critsByCat.set(c.Category__c, list);
   }
@@ -175,6 +173,33 @@ export async function getActiveTemplateForSlug(
   };
 }
 
+export async function getActiveTemplateForSlug(
+  slug: string,
+): Promise<TemplateDTO | null> {
+  const tmpls = await sfQuery<TemplateRow>(
+    `SELECT Id, Label__c, ProjectSlug__c, AgentApiName__c, Version__c, WelcomeMessage__c
+     FROM JGR_FDE_AcceptanceTemplate__c
+     WHERE ProjectSlug__c = '${slug.replace(/'/g, "\\'")}' AND IsActive__c = true
+     ORDER BY CreatedDate DESC
+     LIMIT 1`,
+  );
+  if (tmpls.length === 0) return null;
+  return hydrateTemplate(tmpls[0]);
+}
+
+export async function getTemplateById(
+  id: string,
+): Promise<TemplateDTO | null> {
+  const tmpls = await sfQuery<TemplateRow>(
+    `SELECT Id, Label__c, ProjectSlug__c, AgentApiName__c, Version__c, WelcomeMessage__c
+     FROM JGR_FDE_AcceptanceTemplate__c
+     WHERE Id = '${id}'
+     LIMIT 1`,
+  );
+  if (tmpls.length === 0) return null;
+  return hydrateTemplate(tmpls[0]);
+}
+
 // ============================================================================
 // Evaluation · start / get / submit
 // ============================================================================
@@ -187,6 +212,7 @@ type EvaluationRow = {
   EvaluatorName__c: string | null;
   EvaluatorEmail__c: string | null;
   EvaluatorRole__c: EvaluatorRole | null;
+  EvaluationType__c: EvaluationType | null;
   Status__c: EvaluationStatus;
   StartedAt__c: string | null;
   SubmittedAt__c: string | null;
@@ -204,14 +230,17 @@ type ResponseRow = {
   AnsweredByPortalAccess__c: string | null;
   AnsweredByName__c: string | null;
   AnsweredByEmail__c: string | null;
+  SourceEvaluation__c: string | null;
+  SourceEvaluation__r?: { Name?: string | null; Template__r?: { Version__c?: string | null } | null } | null;
 };
 
-const EVAL_SELECT_FIELDS = `Id, Name, Template__c, Evaluator__c, EvaluatorName__c, EvaluatorEmail__c, EvaluatorRole__c,
+const EVAL_SELECT_FIELDS = `Id, Name, Template__c, Evaluator__c, EvaluatorName__c, EvaluatorEmail__c, EvaluatorRole__c, EvaluationType__c,
             Status__c, StartedAt__c, SubmittedAt__c, FinalDecision__c,
             ConfidenceLevel__c, FinalComment__c, CurrentPage__c`;
 
 const RESPONSE_SELECT_FIELDS = `Id, Criterion__c, Result__c, Comment__c, AnsweredAt__c,
-            AnsweredByPortalAccess__c, AnsweredByName__c, AnsweredByEmail__c`;
+            AnsweredByPortalAccess__c, AnsweredByName__c, AnsweredByEmail__c,
+            SourceEvaluation__c, SourceEvaluation__r.Name, SourceEvaluation__r.Template__r.Version__c`;
 
 function buildCollaborators(responses: ResponseRow[]): CollaboratorDTO[] {
   const byId = new Map<string, CollaboratorDTO>();
@@ -255,6 +284,7 @@ function toEvaluationDTO(
     evaluatorName: row.EvaluatorName__c,
     evaluatorEmail: row.EvaluatorEmail__c,
     evaluatorRole: row.EvaluatorRole__c,
+    evaluationType: row.EvaluationType__c ?? "Partial",
     status: row.Status__c,
     startedAt: row.StartedAt__c,
     submittedAt: row.SubmittedAt__c,
@@ -271,6 +301,9 @@ function toEvaluationDTO(
       answeredByPortalAccessId: r.AnsweredByPortalAccess__c,
       answeredByName: r.AnsweredByName__c,
       answeredByEmail: r.AnsweredByEmail__c,
+      sourceEvaluationId: r.SourceEvaluation__c,
+      sourceEvaluationName: r.SourceEvaluation__r?.Name ?? null,
+      sourceEvaluationVersion: r.SourceEvaluation__r?.Template__r?.Version__c ?? null,
     })),
     collaborators: buildCollaborators(responses),
     progress: {
@@ -480,4 +513,246 @@ export async function submitEvaluation(params: {
   const dto = await getEvaluationById(params.evaluationId);
   if (!dto) throw new Error("Evaluation submitted but could not be read back");
   return dto;
+}
+
+// ============================================================================
+// Consolidación · merge de evaluaciones por CriterionKey (misma role + slug)
+// ============================================================================
+
+export type ConsolidationPreview = {
+  masterTemplateId: string;
+  masterTemplateLabel: string;
+  totalCriteria: number;
+  sourceEvaluations: {
+    id: string;
+    name: string;
+    version: string | null;
+    label: string;
+    status: EvaluationStatus;
+    submittedAt: string | null;
+  }[];
+  byResult: {
+    Pass: number;
+    PassWithObservations: number;
+    Fail: number;
+    NA: number;
+    Unanswered: number;
+  };
+};
+
+// Devuelve el template "maestro" (más antiguo por CreatedDate) para un slug.
+// Ese template se usa como universo completo del merge consolidado.
+async function getMasterTemplateForSlug(
+  slug: string,
+): Promise<{ id: string; label: string } | null> {
+  const rows = await sfQuery<{ Id: string; Label__c: string }>(
+    `SELECT Id, Label__c
+     FROM JGR_FDE_AcceptanceTemplate__c
+     WHERE ProjectSlug__c = '${slug.replace(/'/g, "\\'")}'
+     ORDER BY CreatedDate ASC
+     LIMIT 1`,
+  );
+  if (rows.length === 0) return null;
+  return { id: rows[0].Id, label: rows[0].Label__c };
+}
+
+type LatestRespRow = {
+  CriterionKey: string;
+  Result__c: Result | null;
+  Comment__c: string | null;
+  AnsweredAt__c: string | null;
+  AnsweredByPortalAccess__c: string | null;
+  AnsweredByName__c: string | null;
+  AnsweredByEmail__c: string | null;
+  Evaluation__c: string;
+  Evaluation__r: { Name: string; Template__c: string } | null;
+};
+
+// Para cada CriterionKey, devuelve la última respuesta registrada (por AnsweredAt desc)
+// de cualquier eval Partial del mismo rol en el slug. Solo respuestas con result != null.
+async function getLatestResponsesByKey(
+  slug: string,
+  role: EvaluatorRole,
+): Promise<Map<string, LatestRespRow>> {
+  const rows = await sfQuery<{
+    Criterion__r: { CriterionKey__c: string | null } | null;
+    Result__c: Result | null;
+    Comment__c: string | null;
+    AnsweredAt__c: string | null;
+    AnsweredByPortalAccess__c: string | null;
+    AnsweredByName__c: string | null;
+    AnsweredByEmail__c: string | null;
+    Evaluation__c: string;
+    Evaluation__r: { Name: string; Template__c: string } | null;
+  }>(
+    `SELECT Criterion__r.CriterionKey__c, Result__c, Comment__c, AnsweredAt__c,
+            AnsweredByPortalAccess__c, AnsweredByName__c, AnsweredByEmail__c,
+            Evaluation__c, Evaluation__r.Name, Evaluation__r.Template__c
+     FROM JGR_FDE_AcceptanceResponse__c
+     WHERE Result__c != null
+       AND Evaluation__r.EvaluatorRole__c = '${role}'
+       AND Evaluation__r.EvaluationType__c = 'Partial'
+       AND Evaluation__r.Template__r.ProjectSlug__c = '${slug.replace(/'/g, "\\'")}'
+     ORDER BY AnsweredAt__c DESC`,
+  );
+
+  const byKey = new Map<string, LatestRespRow>();
+  for (const r of rows) {
+    const key = r.Criterion__r?.CriterionKey__c;
+    if (!key) continue;
+    if (byKey.has(key)) continue; // first one is the most recent (DESC order)
+    byKey.set(key, {
+      CriterionKey: key,
+      Result__c: r.Result__c,
+      Comment__c: r.Comment__c,
+      AnsweredAt__c: r.AnsweredAt__c,
+      AnsweredByPortalAccess__c: r.AnsweredByPortalAccess__c,
+      AnsweredByName__c: r.AnsweredByName__c,
+      AnsweredByEmail__c: r.AnsweredByEmail__c,
+      Evaluation__c: r.Evaluation__c,
+      Evaluation__r: r.Evaluation__r,
+    });
+  }
+  return byKey;
+}
+
+export async function previewConsolidation(
+  slug: string,
+  role: EvaluatorRole,
+): Promise<ConsolidationPreview | null> {
+  const master = await getMasterTemplateForSlug(slug);
+  if (!master) return null;
+
+  // Count criteria in master
+  const critCount = await sfQuery<{ c: number; k: string | null }>(
+    `SELECT CriterionKey__c k, COUNT(Id) c
+     FROM JGR_FDE_AcceptanceCriterion__c
+     WHERE Category__r.Template__c = '${master.id}'
+     GROUP BY CriterionKey__c`,
+  );
+  const masterKeys = new Set(
+    critCount.map((r) => r.k).filter((k): k is string => !!k),
+  );
+  const totalCriteria = critCount.reduce((s, r) => s + r.c, 0);
+
+  // All partial evals of this slug + role
+  const sources = await sfQuery<{
+    Id: string;
+    Name: string;
+    Status__c: EvaluationStatus;
+    SubmittedAt__c: string | null;
+    Template__r: { Label__c: string; Version__c: string | null } | null;
+  }>(
+    `SELECT Id, Name, Status__c, SubmittedAt__c,
+            Template__r.Label__c, Template__r.Version__c
+     FROM JGR_FDE_AcceptanceEvaluation__c
+     WHERE EvaluatorRole__c = '${role}'
+       AND EvaluationType__c = 'Partial'
+       AND Status__c IN ('Submitted', 'InProgress')
+       AND Template__r.ProjectSlug__c = '${slug.replace(/'/g, "\\'")}'
+     ORDER BY SubmittedAt__c DESC NULLS LAST`,
+  );
+
+  const latest = await getLatestResponsesByKey(slug, role);
+  const byResult = { Pass: 0, PassWithObservations: 0, Fail: 0, NA: 0, Unanswered: 0 };
+  for (const key of masterKeys) {
+    const r = latest.get(key)?.Result__c ?? null;
+    if (r === "Pass") byResult.Pass++;
+    else if (r === "PassWithObservations") byResult.PassWithObservations++;
+    else if (r === "Fail") byResult.Fail++;
+    else if (r === "NA") byResult.NA++;
+    else byResult.Unanswered++;
+  }
+
+  return {
+    masterTemplateId: master.id,
+    masterTemplateLabel: master.label,
+    totalCriteria,
+    sourceEvaluations: sources.map((s) => ({
+      id: s.Id,
+      name: s.Name,
+      version: s.Template__r?.Version__c ?? null,
+      label: s.Template__r?.Label__c ?? "",
+      status: s.Status__c,
+      submittedAt: s.SubmittedAt__c,
+    })),
+    byResult,
+  };
+}
+
+export async function createConsolidatedEvaluation(params: {
+  slug: string;
+  role: EvaluatorRole;
+  signer: { portalAccessId: string; name: string; email: string };
+}): Promise<EvaluationDTO> {
+  const master = await getMasterTemplateForSlug(params.slug);
+  if (!master) throw new Error("master template not found");
+
+  // Create the consolidated eval
+  const now = new Date().toISOString();
+  const { id: newEvalId } = await sfCreate("JGR_FDE_AcceptanceEvaluation__c", {
+    Template__c: master.id,
+    Evaluator__c: params.signer.portalAccessId,
+    EvaluatorName__c: params.signer.name,
+    EvaluatorEmail__c: params.signer.email,
+    EvaluatorRole__c: params.role,
+    EvaluationType__c: "Consolidated",
+    Status__c: "InProgress",
+    StartedAt__c: now,
+    CurrentPage__c: 0,
+  });
+
+  // Get all criteria of master template with their key
+  const crits = await sfQuery<{
+    Id: string;
+    CriterionKey__c: string | null;
+  }>(
+    `SELECT Id, CriterionKey__c
+     FROM JGR_FDE_AcceptanceCriterion__c
+     WHERE Category__r.Template__c = '${master.id}'`,
+  );
+
+  const latest = await getLatestResponsesByKey(params.slug, params.role);
+
+  // Create one response per criterion, prefilled if there's a latest match
+  for (const c of crits) {
+    const inherited = c.CriterionKey__c ? latest.get(c.CriterionKey__c) : null;
+    const payload: Record<string, unknown> = {
+      Evaluation__c: newEvalId,
+      Criterion__c: c.Id,
+    };
+    if (inherited) {
+      payload.Result__c = inherited.Result__c;
+      payload.Comment__c = inherited.Comment__c;
+      payload.AnsweredAt__c = inherited.AnsweredAt__c;
+      payload.AnsweredByPortalAccess__c = inherited.AnsweredByPortalAccess__c;
+      payload.AnsweredByName__c = inherited.AnsweredByName__c;
+      payload.AnsweredByEmail__c = inherited.AnsweredByEmail__c;
+      payload.SourceEvaluation__c = inherited.Evaluation__c;
+    }
+    await sfCreate("JGR_FDE_AcceptanceResponse__c", payload);
+  }
+
+  const dto = await getEvaluationById(newEvalId);
+  if (!dto) throw new Error("Consolidated eval created but could not be read back");
+  return dto;
+}
+
+// En la landing, chequear si existe ya una Consolidated InProgress para (slug, role).
+export async function findConsolidatedInProgress(
+  slug: string,
+  role: EvaluatorRole,
+): Promise<EvaluationDTO | null> {
+  const rows = await sfQuery<EvaluationRow>(
+    `SELECT ${EVAL_SELECT_FIELDS}
+     FROM JGR_FDE_AcceptanceEvaluation__c
+     WHERE EvaluatorRole__c = '${role}'
+       AND EvaluationType__c = 'Consolidated'
+       AND Status__c = 'InProgress'
+       AND Template__r.ProjectSlug__c = '${slug.replace(/'/g, "\\'")}'
+     ORDER BY StartedAt__c DESC
+     LIMIT 1`,
+  );
+  if (rows.length === 0) return null;
+  return getEvaluationById(rows[0].Id);
 }
