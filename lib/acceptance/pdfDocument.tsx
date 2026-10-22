@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     borderBottomColor: BORDER,
     alignItems: "flex-start",
   },
-  critText: { flex: 1, fontSize: 9, color: INK, lineHeight: 1.35 },
+  critText: { fontSize: 9, color: INK, lineHeight: 1.35 },
   critResult: {
     width: 70,
     fontSize: 7,
@@ -662,7 +662,7 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
                   : null;
               return (
                 <View key={c.id} style={styles.criterionRow} wrap={false}>
-                  <View style={{ flex: 1, paddingRight: 6 }}>
+                  <View style={{ flex: 1, flexDirection: "column", paddingRight: 6 }}>
                     <Text style={styles.critText}>
                       {String(i + 1).padStart(2, "0")}
                       {c.topic ? ` · ${c.topic}` : ""} · {c.givenWhenThen}
@@ -673,7 +673,7 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
                           style={{
                             fontSize: 7,
                             color: "#6366F1",
-                            marginTop: 2,
+                            marginTop: 3,
                             fontFamily: "Helvetica-Oblique",
                           }}
                         >
