@@ -37,9 +37,15 @@ export async function PATCH(request: NextRequest) {
     const result = body.result ?? null;
     const comment = body.comment ?? null;
 
-    if (result === "Fail" && (!comment || comment.trim().length === 0)) {
+    if (
+      (result === "Fail" || result === "PassWithObservations") &&
+      (!comment || comment.trim().length === 0)
+    ) {
       return NextResponse.json(
-        { error: "comment is required when result = Fail" },
+        {
+          error:
+            "comment is required when result = Fail or PassWithObservations",
+        },
         { status: 400 },
       );
     }

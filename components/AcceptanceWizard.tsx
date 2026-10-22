@@ -669,11 +669,13 @@ function CriterionCard({
     ? "border-slate-200 bg-slate-50"
     : result === "Pass"
       ? "border-green-300 bg-green-50/40"
-      : result === "Fail"
-        ? "border-red-300 bg-red-50/40"
-        : result === "NA"
-          ? "border-slate-200 bg-slate-50 opacity-85"
-          : "border-slate-200 bg-white";
+      : result === "PassWithObservations"
+        ? "border-amber-300 bg-amber-50/40"
+        : result === "Fail"
+          ? "border-red-300 bg-red-50/40"
+          : result === "NA"
+            ? "border-slate-200 bg-slate-50 opacity-85"
+            : "border-slate-200 bg-white";
 
   const sevBadge =
     criterion.severity === "Blocker"
@@ -685,15 +687,19 @@ function CriterionCard({
   const resultChip =
     result === "Pass"
       ? "bg-green-100 text-green-700"
-      : result === "Fail"
-        ? "bg-red-100 text-red-700"
-        : result === "NA"
-          ? "bg-slate-200 text-slate-600"
-          : "";
+      : result === "PassWithObservations"
+        ? "bg-amber-100 text-amber-700"
+        : result === "Fail"
+          ? "bg-red-100 text-red-700"
+          : result === "NA"
+            ? "bg-slate-200 text-slate-600"
+            : "";
+
+  const needsComment = result === "Fail" || result === "PassWithObservations";
 
   const commitComment = () => {
-    if (result !== "Fail") return;
-    void onChange(criterion, "Fail", commentDraft);
+    if (!needsComment) return;
+    void onChange(criterion, result, commentDraft);
   };
 
   return (
@@ -722,9 +728,11 @@ function CriterionCard({
             >
               {result === "Pass"
                 ? "✓ Cumple"
-                : result === "Fail"
-                  ? "✕ No cumple"
-                  : "— N/A"}
+                : result === "PassWithObservations"
+                  ? "✓ Cumple con observaciones"
+                  : result === "Fail"
+                    ? "✕ No cumple"
+                    : "— N/A"}
             </span>
           )}
         </div>
@@ -733,13 +741,27 @@ function CriterionCard({
             Pausado · no cuenta para la decisión
           </div>
         ) : (
-          <div className="flex gap-0.5 bg-slate-50 border border-slate-200 rounded-lg p-0.5">
+          <div className="flex flex-wrap gap-0.5 bg-slate-50 border border-slate-200 rounded-lg p-0.5">
             <ToggleBtn
               active={result === "Pass"}
               activeClass="bg-green-600 text-white border-green-600"
               onClick={() => onChange(criterion, "Pass", null)}
             >
               👍 Cumple
+            </ToggleBtn>
+            <ToggleBtn
+              active={result === "PassWithObservations"}
+              activeClass="bg-amber-500 text-white border-amber-500"
+              onClick={() => {
+                if (result !== "PassWithObservations")
+                  void onChange(
+                    criterion,
+                    "PassWithObservations",
+                    commentDraft || "(pendiente)",
+                  );
+              }}
+            >
+              ⚠ Cumple con observaciones
             </ToggleBtn>
             <ToggleBtn
               active={result === "Fail"}
@@ -774,20 +796,68 @@ function CriterionCard({
         </p>
       )}
 
-      {result === "Fail" && (
-        <div className="mt-3 pt-3 border-t border-dashed border-red-200 space-y-2.5">
+      {needsComment && (
+        <div
+          className={
+            "mt-3 pt-3 border-t border-dashed space-y-2.5 " +
+            (result === "Fail" ? "border-red-200" : "border-amber-200")
+          }
+        >
           <div>
             <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-              Comentario <span className="text-red-600">· Requerido</span>
+              {result === "Fail" ? "Comentario" : "Observaciones · mejora deseable"}{" "}
+              <span
+                className={
+                  result === "Fail" ? "text-red-600" : "text-amber-700"
+                }
+              >
+                · Requerido
+              </span>
             </label>
             <textarea
-              className="mt-1 w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400"
+              className={
+                "mt-1 w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 " +
+                (result === "Fail"
+                  ? "focus:ring-red-200 focus:border-red-400"
+                  : "focus:ring-amber-200 focus:border-amber-400")
+              }
               rows={3}
               value={commentDraft}
               onChange={(e) => setCommentDraft(e.target.value)}
               onBlur={commitComment}
-              placeholder="¿Qué observaste? Sé lo más específico posible."
+              onPaste={(e) => {
+                const items = Array.from(e.clipboardData?.items ?? []);
+                const imageItems = items.filter((i) => i.type.startsWith("image/"));
+                if (imageItems.length === 0) return;
+                e.preventDefault();
+                for (const it of imageItems) {
+                  const file = it.getAsFile();
+                  if (file && response?.id) {
+                    const ext = file.type.split("/")[1] || "png";
+                    const stamped = new File(
+                      [file],
+                      `clipboard-${Date.now()}.${ext}`,
+                      { type: file.type },
+                    );
+                    void (
+                      document.querySelector(
+                        `[data-attachment-slot="${response.id}"]`,
+                      ) as HTMLElement | null
+                    )?.dispatchEvent(
+                      new CustomEvent("portal:paste-upload", { detail: stamped }),
+                    );
+                  }
+                }
+              }}
+              placeholder={
+                result === "Fail"
+                  ? "¿Qué observaste? Sé lo más específico posible. Podés pegar screenshots con Cmd+V."
+                  : "¿Qué mejora sugerís? Describí la observación. Podés pegar screenshots con Cmd+V."
+              }
             />
+            <p className="mt-1 text-[10px] text-slate-500">
+              💡 Tip: pegá imágenes con Cmd+V (macOS) o Ctrl+V (Windows) · se adjuntan automáticamente.
+            </p>
           </div>
           <AttachmentUploader responseId={response?.id ?? ""} />
         </div>
@@ -835,43 +905,167 @@ function renderGivenWhenThen(text: string): React.ReactNode {
   );
 }
 
-function AttachmentUploader({ responseId }: { responseId: string }) {
-  const [uploading, setUploading] = useState(false);
-  const [files, setFiles] = useState<string[]>([]);
+type AttachmentItem = {
+  key: string;
+  name: string;
+  status: "uploading" | "uploaded" | "failed";
+  contentDocumentId?: string;
+  size?: number;
+  error?: string;
+};
 
-  const handleFile = async (file: File) => {
-    setUploading(true);
-    try {
-      const form = new FormData();
-      form.append("file", file);
-      const res = await fetch(
-        `/api/portal/acceptance/response/attachment?responseId=${encodeURIComponent(responseId)}`,
-        { method: "POST", body: form },
-      );
-      if (!res.ok) throw new Error(`Upload failed (${res.status})`);
-      setFiles((prev) => [...prev, file.name]);
-    } catch (err) {
-      alert("No se pudo subir: " + (err instanceof Error ? err.message : "error"));
-    } finally {
-      setUploading(false);
-    }
-  };
+function AttachmentUploader({ responseId }: { responseId: string }) {
+  const [items, setItems] = useState<AttachmentItem[]>([]);
+  const slotRef = useRef<HTMLDivElement | null>(null);
+
+  const uploadFile = useCallback(
+    async (file: File) => {
+      if (!responseId) return;
+      const key = `${Date.now()}-${file.name}`;
+      setItems((prev) => [
+        ...prev,
+        { key, name: file.name, status: "uploading", size: file.size },
+      ]);
+      try {
+        const form = new FormData();
+        form.append("file", file);
+        const res = await fetch(
+          `/api/portal/acceptance/response/attachment?responseId=${encodeURIComponent(responseId)}`,
+          { method: "POST", body: form },
+        );
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          throw new Error(body.error || `HTTP ${res.status}`);
+        }
+        const body = (await res.json()) as {
+          uploaded: { contentDocumentId: string };
+        };
+        setItems((prev) =>
+          prev.map((it) =>
+            it.key === key
+              ? {
+                  ...it,
+                  status: "uploaded",
+                  contentDocumentId: body.uploaded.contentDocumentId,
+                }
+              : it,
+          ),
+        );
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "error";
+        setItems((prev) =>
+          prev.map((it) =>
+            it.key === key ? { ...it, status: "failed", error: msg } : it,
+          ),
+        );
+      }
+    },
+    [responseId],
+  );
+
+  // Load existing attachments on mount
+  useEffect(() => {
+    if (!responseId) return;
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch(
+          `/api/portal/acceptance/response/attachment?responseId=${encodeURIComponent(responseId)}`,
+          { cache: "no-store" },
+        );
+        if (!res.ok) return;
+        const body = (await res.json()) as {
+          attachments: {
+            contentDocumentId: string;
+            title: string;
+            size: number | null;
+          }[];
+        };
+        if (cancelled) return;
+        setItems((prev) => {
+          const existingDocIds = new Set(
+            prev.map((it) => it.contentDocumentId).filter(Boolean),
+          );
+          const incoming = body.attachments
+            .filter((a) => !existingDocIds.has(a.contentDocumentId))
+            .map(
+              (a): AttachmentItem => ({
+                key: a.contentDocumentId,
+                name: a.title,
+                status: "uploaded",
+                contentDocumentId: a.contentDocumentId,
+                size: a.size ?? undefined,
+              }),
+            );
+          return [...prev, ...incoming];
+        });
+      } catch {
+        /* silencioso */
+      }
+    };
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [responseId]);
+
+  // Listen for paste events from the textarea
+  useEffect(() => {
+    const el = slotRef.current;
+    if (!el) return;
+    const onPaste = (ev: Event) => {
+      const file = (ev as CustomEvent<File>).detail;
+      if (file) void uploadFile(file);
+    };
+    el.addEventListener("portal:paste-upload", onPaste);
+    return () => el.removeEventListener("portal:paste-upload", onPaste);
+  }, [uploadFile]);
 
   return (
-    <div>
+    <div ref={slotRef} data-attachment-slot={responseId}>
       <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
         Adjuntos{" "}
         <span className="text-slate-400 normal-case font-medium tracking-normal">
-          (opcional)
+          (opcional · se guardan automáticamente)
         </span>
       </label>
       <div className="mt-1 flex flex-wrap gap-2 items-center">
-        {files.map((name, i) => (
+        {items.map((it) => (
           <span
-            key={i}
-            className="inline-flex items-center gap-1.5 bg-white border border-slate-200 px-2.5 py-1 rounded text-xs text-slate-800"
+            key={it.key}
+            title={
+              it.status === "failed"
+                ? `Error: ${it.error}`
+                : it.size
+                  ? `${(it.size / 1024).toFixed(0)} KB`
+                  : undefined
+            }
+            className={
+              "inline-flex items-center gap-1.5 border px-2.5 py-1 rounded text-xs " +
+              (it.status === "uploading"
+                ? "bg-slate-50 border-slate-200 text-slate-500"
+                : it.status === "uploaded"
+                  ? "bg-green-50 border-green-200 text-green-800"
+                  : "bg-red-50 border-red-200 text-red-800")
+            }
           >
-            📎 {name}
+            {it.status === "uploading"
+              ? "⏳"
+              : it.status === "uploaded"
+                ? "✓"
+                : "⚠"}{" "}
+            📎 {it.name}
+            {it.status === "failed" && (
+              <button
+                type="button"
+                className="ml-1 underline"
+                onClick={() => {
+                  setItems((prev) => prev.filter((p) => p.key !== it.key));
+                }}
+              >
+                quitar
+              </button>
+            )}
           </span>
         ))}
         <label className="cursor-pointer inline-flex items-center gap-1.5 bg-transparent border border-dashed border-slate-300 px-2.5 py-1 rounded text-xs text-cyan-700 font-bold hover:bg-cyan-50">
@@ -879,10 +1073,10 @@ function AttachmentUploader({ responseId }: { responseId: string }) {
           <input
             type="file"
             className="hidden"
-            disabled={uploading}
             onChange={(e) => {
               const f = e.target.files?.[0];
-              if (f) void handleFile(f);
+              if (f) void uploadFile(f);
+              e.target.value = "";
             }}
           />
         </label>
@@ -926,12 +1120,19 @@ function FinalPage({
 }) {
   // Totals by severity × result
   type SeverityKey = "Blocker" | "Critical" | "Nice-to-have";
-  type Bucket = { Pass: number; Fail: number; NA: number; Unanswered: number; total: number };
+  type Bucket = {
+    Pass: number;
+    PassWithObservations: number;
+    Fail: number;
+    NA: number;
+    Unanswered: number;
+    total: number;
+  };
   const totals = useMemo<Record<SeverityKey, Bucket>>(() => {
     const bySev: Record<SeverityKey, Bucket> = {
-      Blocker: { Pass: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
-      Critical: { Pass: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
-      "Nice-to-have": { Pass: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
+      Blocker: { Pass: 0, PassWithObservations: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
+      Critical: { Pass: 0, PassWithObservations: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
+      "Nice-to-have": { Pass: 0, PassWithObservations: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
     };
     template.categories.forEach((cat) => {
       cat.criteria.forEach((c) => {
@@ -939,6 +1140,7 @@ function FinalPage({
         bySev[c.severity].total++;
         const r = responses.get(c.id)?.result ?? null;
         if (r === "Pass") bySev[c.severity].Pass++;
+        else if (r === "PassWithObservations") bySev[c.severity].PassWithObservations++;
         else if (r === "Fail") bySev[c.severity].Fail++;
         else if (r === "NA") bySev[c.severity].NA++;
         else bySev[c.severity].Unanswered++;
@@ -1021,10 +1223,13 @@ function FinalPage({
         <div className="space-y-3">
           {(["Blocker", "Critical", "Nice-to-have"] as const).map((sev) => {
             const t = totals[sev];
-            const applicable = t.Pass + t.Fail; // excluye NA e sin respuesta del denominador de compliance
+            const totalPass = t.Pass + t.PassWithObservations;
+            const applicable = totalPass + t.Fail;
             const pct =
-              applicable === 0 ? 0 : Math.round((t.Pass / applicable) * 100);
+              applicable === 0 ? 0 : Math.round((totalPass / applicable) * 100);
             const passPct = t.total === 0 ? 0 : (t.Pass / t.total) * 100;
+            const pwoPct =
+              t.total === 0 ? 0 : (t.PassWithObservations / t.total) * 100;
             const failPct = t.total === 0 ? 0 : (t.Fail / t.total) * 100;
             const naPct = t.total === 0 ? 0 : (t.NA / t.total) * 100;
             return (
@@ -1043,14 +1248,21 @@ function FinalPage({
                 </div>
                 <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200">
                   <div className="bg-emerald-500" style={{ width: `${passPct}%` }} />
+                  <div className="bg-amber-400" style={{ width: `${pwoPct}%` }} />
                   <div className="bg-rose-500" style={{ width: `${failPct}%` }} />
                   <div className="bg-slate-400" style={{ width: `${naPct}%` }} />
                 </div>
-                <div className="mt-1 text-[11px] text-slate-600 flex gap-4">
+                <div className="mt-1 text-[11px] text-slate-600 flex flex-wrap gap-4">
                   <span>
                     <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-1 align-middle" />
                     {t.Pass} cumple
                   </span>
+                  {t.PassWithObservations > 0 && (
+                    <span>
+                      <span className="inline-block w-2 h-2 rounded-full bg-amber-400 mr-1 align-middle" />
+                      {t.PassWithObservations} con observaciones
+                    </span>
+                  )}
                   <span>
                     <span className="inline-block w-2 h-2 rounded-full bg-rose-500 mr-1 align-middle" />
                     {t.Fail} no cumple

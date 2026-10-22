@@ -5,7 +5,7 @@ import { sfQuery, sfCreate, sfUpdate } from "../salesforce";
 // ============================================================================
 
 export type Severity = "Blocker" | "Critical" | "Nice-to-have";
-export type Result = "Pass" | "Fail" | "NA";
+export type Result = "Pass" | "PassWithObservations" | "Fail" | "NA";
 export type EvaluationStatus = "InProgress" | "Submitted" | "Archived";
 export type FinalDecision = "Si" | "No";
 export type EvaluatorRole = "Client" | "Partner" | "Salesforce";
