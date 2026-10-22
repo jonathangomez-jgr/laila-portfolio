@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { renderToStream } from "@react-pdf/renderer";
 import {
   submitEvaluation,
-  getActiveTemplateForSlug,
+  getTemplateById,
   getEvaluationRoleById,
   type FinalDecision,
 } from "@/lib/salesforce/acceptanceWizard";
@@ -101,7 +101,10 @@ export async function POST(request: NextRequest) {
     });
 
     // 2) Generate PDF
-    const template = await getActiveTemplateForSlug(body.slug);
+    // Use the template that this specific eval was created against (critical for
+    // Consolidated evals, which run against the master template, not the slug's
+    // currently-active template).
+    const template = await getTemplateById(evaluation.templateId);
     if (!template) {
       // Shouldn't happen · submit succeeded already
       return NextResponse.json({ evaluation, pdfError: "template not found" });
