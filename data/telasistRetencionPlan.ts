@@ -844,6 +844,16 @@ const ACTIVITIES: Activity[] = [
     status: "done",
     progressPercent: 100,
     dependencies: ["0.13"],
+    updates: [
+      {
+        date: "2026-10-20",
+        author: "Salesforce - FDE",
+        note: "Mapa de datos 20-oct: busca por SOSL con los primeros 10 caracteres del RFC filtrando por la campaña (máx. 20 resultados) y exige 4 coincidencias: RFC de 10, los 6 dígitos, al menos 2 palabras del nombre y los últimos 4 del teléfono (se omite si la cuenta no tiene teléfono). Corrige 0/O según la posición en el RFC. Máximo 2 intentos; si fallan crea un Case 'Identidad no validada' (el Manual v2.0 dice que no se genera caso, ver INV-19). No pide los datos de quién llama (parentesco, teléfono de contacto, estado, correo); el Manual v2.0 pide el estado (INV-21).",
+      },
+    ],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
     deliverables: ["Apex action desplegada (InvexValidarTarjetahabiente) + test class"],
     tags: ["dev", "apex"],
   }),
@@ -866,6 +876,16 @@ const ACTIVITIES: Activity[] = [
     status: "done",
     progressPercent: 100,
     dependencies: ["1.4"],
+    updates: [
+      {
+        date: "2026-10-20",
+        author: "Salesforce - FDE",
+        note: "Mapa de datos 20-oct: lee de Account solo identidad, teléfono, semaforo_invex2__c y VPN__c. Producto y saldo no están conectados (Campo_Producto_Account__c y Campo_Saldo_Account__c vacíos), y semáforo y VPN solo se usan con Usar_Reglas__c encendido (hoy apagado). Fecha de corte, Bonif. suspensión, canal, plaza y segmento no se leen. Corrección en 1.5.6. La memoria entre llamadas lee hasta 50 Cases de 12 meses: máx. 2 retenciones, exclusión de 12 meses por beneficio y alerta si hubo gestión en los últimos 15 días.",
+      },
+    ],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
     deliverables: ["Apex action desplegada (InvexRetencionRepository) + test class"],
     tags: ["dev", "apex"],
   }),
@@ -928,6 +948,16 @@ const ACTIVITIES: Activity[] = [
     status: "done",
     progressPercent: 100,
     dependencies: ["1.7"],
+    updates: [
+      {
+        date: "2026-10-20",
+        author: "Salesforce - FDE",
+        note: "Mapa de datos 20-oct: los trámites se mandan como código (TRA37, ACUC6…) y el picklist Tramite_Invex usa nombres descriptivos, así que no se guarda ningún trámite (desajuste crítico DM-02). Por la misma razón la memoria no reconoce los beneficios que dieron los humanos y podría volver a ofrecerlos. Corrección en 1.5.5 / 1.5.7.",
+      },
+    ],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
     deliverables: ["Acción cubierta por InvexCaseWriter + InvexRegistrarSeguimiento con slot discipline"],
     tags: ["dev", "apex"],
   }),
@@ -948,6 +978,16 @@ const ACTIVITIES: Activity[] = [
     actualEnd: "2026-10-16",
     status: "done",
     progressPercent: 100,
+    updates: [
+      {
+        date: "2026-10-20",
+        author: "Salesforce - FDE",
+        note: "Mapa de datos 20-oct: Comentario_Analista__c mide 100 caracteres, no 150, así que el folio (al final) puede quedar cortado (DM-06). En el comentario a planchar la subcategoría queda en la posición de CAT2.",
+      },
+    ],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
     deliverables: ["Resumen y comentario cubiertos por InvexRegistrarResultado + variable resumen_escalamiento"],
     tags: ["dev", "apex"],
   }),
@@ -970,6 +1010,16 @@ const ACTIVITIES: Activity[] = [
     status: "done",
     progressPercent: 100,
     dependencies: ["1.4", "1.7", "1.8", "1.9"],
+    updates: [
+      {
+        date: "2026-10-20",
+        author: "Salesforce - FDE",
+        note: "Mapa de datos 20-oct: el Case se crea al validar (RecordType Caso_general, Toma de datos, Origin Teléfono) y reutiliza el abierto del día. Al cerrar, en QA se rechazó RTCC en Tipo_Invex__c y se perdió el bloque de retención (DM-01). Además: Resultado_de_llamada__c espera Retención/Cancelación/Otros, la precancelación sale CANC en vez de PRECANC, categorías vacías, el folio no tiene campo propio (Folio__c existe) y Origin no distingue al agente. Si falla la escritura completa, guarda solo los 3 campos de texto de respaldo. Corrección en 1.5.5.",
+      },
+    ],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
     deliverables: ["Apex action desplegada (InvexCaseWriter) + variables caso_id / numero_caso / error_resultado"],
     tags: ["dev", "apex", "critical-path"],
   }),
@@ -992,6 +1042,16 @@ const ACTIVITIES: Activity[] = [
     status: "done",
     progressPercent: 100,
     dependencies: ["0.11", "1.10"],
+    updates: [
+      {
+        date: "2026-10-20",
+        author: "Salesforce - FDE",
+        note: "Mapa de datos 20-oct: al escalar escribe la nota en Description y Comentarios_de_seguimiento__c; el Case queda abierto en Toma de datos sin tipificar. La opción de IVR es siempre 1 (Opciones_IVR_Motivo__c = *=1): no hay ruteo por motivo (DM-10, ligado a 0.11). En el Case 00014209 la nota de transferencia quedó duplicada (DM-13).",
+      },
+    ],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
     deliverables: ["Diálogo Transfer_To_Agent + acción InvexRegistrarEscalamiento + motivo_escalamiento tipificado en 12 escenarios + resumen_escalamiento para contexto humano"],
     tags: ["dev", "routing"],
   }),
@@ -1008,6 +1068,16 @@ const ACTIVITIES: Activity[] = [
     week: 2,
     plannedStart: "2026-10-12",
     plannedEnd: "2026-10-17",
+    updates: [
+      {
+        date: "2026-10-20",
+        author: "Salesforce - FDE",
+        note: "Mapa de datos 20-oct: Invex_Beneficio__mdt desplegado con 12 registros (A–J, con variantes A6/A9 y J6/J12), todos v2026-draft. Invex_Regla__mdt tiene un solo ejemplo (excluir A con semáforo ROJO) y las reglas están apagadas.",
+      },
+    ],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
     deliverables: ["Beneficio_Invex__mdt desplegado con 10 registros v2026-draft"],
     tags: ["config", "delegable", "metadata"],
   }),
@@ -1112,6 +1182,30 @@ const ACTIVITIES: Activity[] = [
     tags: ["deploy", "critical-path"],
   }),
 
+  act({
+    id: "1.18",
+    phaseId: "f1",
+    number: "1.18",
+    title: "Mapa de datos del agente v7 · qué consulta y dónde registra",
+    description:
+      "Revisión de solo lectura del agente v7 en el sandbox QA: cada lectura y escritura en Salesforce por etapa de la llamada (6 acciones Apex + 2 flows de telefonía), los 4 candados de seguridad (permiso Invex_Retencion_Agente, filtro por campaña, coincidencia RFC + 6 dígitos, lista de campos validada contra el describe), la memoria entre llamadas, la Custom Metadata, el resultado de los 6 Cases de prueba del 16-oct y la cobertura del contrato del Discovery Brief §7. Sin cambios en la org.",
+    owner: "Salesforce - FDE",
+    type: "Review",
+    week: 2,
+    plannedStart: "2026-10-19",
+    plannedEnd: "2026-10-20",
+    actualStart: "2026-10-19",
+    actualEnd: "2026-10-20",
+    status: "done",
+    progressPercent: 100,
+    dependencies: ["1.17"],
+    deliverables: ["Documento de 8 páginas con 12 desajustes priorizados (4 críticos) y 7 preguntas para el equipo", "Desajustes cargados en el backlog como DM-01 a DM-13"],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    tags: ["review", "observability"],
+  }),
+
   // ============ F1.5 · Reemplazar mocks ============
   act({
     id: "1.5.1",
@@ -1194,8 +1288,11 @@ const ACTIVITIES: Activity[] = [
     week: 3,
     plannedStart: "2026-10-26",
     plannedEnd: "2026-10-29",
-    dependencies: ["1.10"],
+    dependencies: ["1.10", "1.18"],
     deliverables: ["Invex_Config__mdt y Invex_Beneficio__mdt alineados a los picklists de PROD", "Caso de retención de prueba con el bloque completo guardado"],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
     tags: ["dev", "apex", "critical-path"],
   }),
   act({
@@ -1212,6 +1309,9 @@ const ACTIVITIES: Activity[] = [
     plannedEnd: "2026-10-30",
     dependencies: ["0.9"],
     deliverables: ["Lecturas conectadas en InvexRetencionRepository / Config", "Reglas de semáforo cargadas en Invex_Regla__mdt, apagadas"],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
     tags: ["dev", "apex", "critical-path"],
   }),
   act({
@@ -1228,6 +1328,9 @@ const ACTIVITIES: Activity[] = [
     plannedEnd: "2026-10-30",
     dependencies: ["0.18", "1.5.5"],
     deliverables: ["Comentarios de trámite en formato oficial", "Catálogo de beneficios completo vs documento de códigos V01"],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
     tags: ["dev", "tipificacion"],
   }),
   act({
@@ -1245,6 +1348,9 @@ const ACTIVITIES: Activity[] = [
     plannedEnd: "2026-10-30",
     dependencies: ["1.5.5", "1.5.6"],
     deliverables: ["Agente activo en sandbox", "Ronda de pruebas con casos tipificados completos"],
+    references: [
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
     tags: ["test", "deploy"],
   }),
 
@@ -1987,10 +2093,10 @@ const STATUS_UPDATES: StatusUpdate[] = [
     highlights: [
       "Semana de discovery operativo: el agente no cambió (v7, última modificación 16-oct). Lo que avanzó fue el entendimiento de cómo trabaja el ejecutivo humano y de qué falta exactamente.",
       "20-oct · Sesión de capacitación de Telasist sobre el proceso INVEX Retenciones TDC. Minuta de Skala con 14 pendientes: matriz VPN, semáforo, validación con ejecutivo INVEX, fecha de originación, Bonif. suspensión anualidad, Custom Data, folios, Walmart (tipificación y ofertas), matriz de ofertas por motivo, saldo > $5,557.56 y 3 tipificaciones.",
-      "19-20-oct · Mapa de datos del agente v7 (qué consulta y dónde registra) por el Equipo FDE Salesforce: 12 desajustes entre la configuración y la org, 4 críticos (Tipo_Invex__c rechaza RTCC, trámites como código vs nombres, saldo y producto no conectados).",
+      "19-20-oct · Mapa de datos del agente v7 (qué consulta y dónde registra) por el Equipo FDE Salesforce, publicado en Documentos · Técnico: 12 desajustes entre la configuración y la org, 4 críticos (Tipo_Invex__c rechaza RTCC, trámites como código vs nombres, saldo y producto no conectados).",
       "21-22-oct · Conciliación contra datos reales: 7 colores de semáforo en QA (PLATINO, no 'plata'); Custom Data 2/3 = 99 % de las cuentas; Generales / Tipo Generales ya existen en PROD con los valores de la tabla (4,895 casos); el folio con 4 dígitos del agente coincide con el ejemplo de la propia minuta.",
       "Corrección al Plan de Estado del 19-oct: la escritura al caso no está completa (R8) y las versiones del agente aparecen inactivas en el sandbox.",
-      "Portal actualizado: actividades 0.16-0.20 y 1.5.5-1.5.8, riesgos R8 y R9, 20 pendientes en el backlog y Reporte Semanal publicado.",
+      "Portal actualizado: actividades 0.16-0.20, 1.18 y 1.5.5-1.5.8, riesgos R8 y R9, 21 pendientes de negocio (INV) y 13 ajustes técnicos (DM) en el backlog, Reporte Semanal y Mapa de datos publicados.",
     ],
     nextWeek: [
       "Equipo FDE Salesforce (no depende de Invex): alinear escritura del Case a PROD (1.5.5), conectar lecturas de la cuenta (1.5.6), tipificación general y comentarios de trámite en formato oficial (1.5.7), reactivar el agente y repetir pruebas (1.5.8).",
@@ -2010,6 +2116,7 @@ const STATUS_UPDATES: StatusUpdate[] = [
         url: "/Customers/Telasist/files/Reporte_Semanal_Invex_Retencion_TDC_2026-10-22.pdf",
         kind: "pdf",
       },
+      { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
     ],
   },
   {

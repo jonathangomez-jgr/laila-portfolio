@@ -262,10 +262,20 @@ const TELASIST_RETENCION_DOCS: DocEntry[] = [
     slug: "reporte-semanal-2026-10-22",
     label: "Reporte Semanal · Semana 2 (19 al 23 oct)",
     description:
-      "Actividades de la semana y conciliación de la sesión de capacitación de Telasist (20-oct) contra el agente v7 y los datos reales de QA y PROD. 8 páginas. Qué valida el ejecutivo vs qué lee el agente, Custom Data y tipificaciones generales, folio, comentarios de trámite, 12 ajustes en la escritura al caso, 20 pendientes con dueño y plan de la semana 3.",
+      "Actividades de la semana y conciliación de la sesión de capacitación de Telasist (20-oct) contra el agente v7 y los datos reales de QA y PROD. 8 páginas. Qué valida el ejecutivo vs qué lee el agente, Custom Data y tipificaciones generales, folio, comentarios de trámite, 12 ajustes en la escritura al caso, 21 pendientes de negocio con dueño y plan de la semana 3.",
     url: "/Customers/Telasist/files/Reporte_Semanal_Invex_Retencion_TDC_2026-10-22.pdf",
     category: "Ejecutivo",
     icon: "🗓️",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "mapa-datos-agente-v7",
+    label: "Mapa de datos del agente v7 · qué consulta y dónde registra",
+    description:
+      "Revisión de solo lectura del agente AF_Voice_Invex_Retenciones_TDC v7 en el sandbox QA (20-oct). 8 páginas. Cada lectura y escritura en Salesforce por etapa de la llamada: búsqueda y validación del tarjetahabiente, memoria entre llamadas, Custom Metadata, campos del Case al cerrar, resultado de las 6 pruebas del 16-oct, 12 desajustes por prioridad, cobertura del contrato del Discovery Brief §7 y 7 preguntas para el equipo.",
+    url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf",
+    category: "Técnico",
+    icon: "🗺️",
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
