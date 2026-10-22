@@ -259,6 +259,16 @@ const JAFRA_DOCS: DocEntry[] = [
 // ----------------------------------------------------------------------------
 const TELASIST_RETENCION_DOCS: DocEntry[] = [
   {
+    slug: "reporte-semanal-2026-10-22",
+    label: "Reporte Semanal · Semana 2 (19 al 23 oct)",
+    description:
+      "Actividades de la semana y conciliación de la sesión de capacitación de Telasist (20-oct) contra el agente v7 y los datos reales de QA y PROD. 8 páginas. Qué valida el ejecutivo vs qué lee el agente, Custom Data y tipificaciones generales, folio, comentarios de trámite, 12 ajustes en la escritura al caso, 20 pendientes con dueño y plan de la semana 3.",
+    url: "/Customers/Telasist/files/Reporte_Semanal_Invex_Retencion_TDC_2026-10-22.pdf",
+    category: "Ejecutivo",
+    icon: "🗓️",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "plan-estado-agente",
     label: "Plan de Estado · Agente de Voz Invex Retención TDC",
     description:
