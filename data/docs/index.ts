@@ -30,6 +30,16 @@ export const CATEGORY_ORDER: DocCategory[] = [
 // ----------------------------------------------------------------------------
 const BETTERWARE_DOCS: DocEntry[] = [
   {
+    slug: "remediaciones-betty-v37",
+    label: "Remediaciones atendidas · Betty v37",
+    description:
+      "Snapshot del cierre técnico aplicado al agente antes de iniciar la nueva ronda de pruebas. Cubre el cierre de F02/F03 del EVAL-000012, las 7 remediaciones del EVAL-000013, los componentes propios con prefijo FDE_ creados o extendidos, el hallazgo técnico sobre URLs con JWT y el checklist canónico para probar cada escenario. 6 páginas.",
+    url: "/Customers/Betterware/files/remediaciones_v37.pdf",
+    category: "Pilot",
+    icon: "🧪",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "condiciones-betty-v28",
     label: "Condiciones del Agente · Betty v28",
     description:
