@@ -438,8 +438,18 @@ export default function AcceptanceWizardLanding({
                 className="flex items-center justify-between py-2.5 gap-3"
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-slate-900">
+                  <p className="text-sm font-medium text-slate-900 flex items-center gap-2">
                     {ev.evaluatorName ?? "Evaluador"}
+                    {ev.templateVersion && (
+                      <span className="inline-flex items-center rounded-full bg-slate-100 text-slate-600 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5">
+                        {ev.templateVersion}
+                      </span>
+                    )}
+                    {ev.evaluationType === "Consolidated" && (
+                      <span className="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5">
+                        Consolidada
+                      </span>
+                    )}
                   </p>
                   <p className="text-xs text-slate-500">
                     {ev.status === "Submitted"

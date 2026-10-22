@@ -163,6 +163,8 @@ function buildMockData(
     id: "eval-preview",
     name: "EVAL-PREVIEW",
     templateId: template.id,
+    templateLabel: template.label,
+    templateVersion: template.version,
     evaluatorPortalAccessId: "preview",
     evaluatorName,
     evaluatorEmail: "preview@laila.demo",

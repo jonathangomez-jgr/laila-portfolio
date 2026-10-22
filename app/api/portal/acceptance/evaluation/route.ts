@@ -3,7 +3,7 @@ import {
   startEvaluation,
   getEvaluationById,
   findInProgressEvaluationForRole,
-  listEvaluationsForTemplateAndRole,
+  listEvaluationsForSlugAndRole,
   getActiveTemplateForSlug,
   getEvaluationRoleById,
 } from "@/lib/salesforce/acceptanceWizard";
@@ -55,10 +55,7 @@ export async function GET(request: NextRequest) {
         template.id,
         user.role,
       );
-      const all = await listEvaluationsForTemplateAndRole(
-        template.id,
-        user.role,
-      );
+      const all = await listEvaluationsForSlugAndRole(slug, user.role);
       return NextResponse.json({
         templateId: template.id,
         inProgress,

@@ -69,6 +69,8 @@ export type EvaluationDTO = {
   id: string;
   name: string;
   templateId: string;
+  templateLabel: string | null;
+  templateVersion: string | null;
   evaluatorPortalAccessId: string | null;
   evaluatorName: string | null;
   evaluatorEmail: string | null;
@@ -208,6 +210,7 @@ type EvaluationRow = {
   Id: string;
   Name: string;
   Template__c: string;
+  Template__r?: { Label__c?: string | null; Version__c?: string | null } | null;
   Evaluator__c: string | null;
   EvaluatorName__c: string | null;
   EvaluatorEmail__c: string | null;
@@ -234,7 +237,8 @@ type ResponseRow = {
   SourceEvaluation__r?: { Name?: string | null; Template__r?: { Version__c?: string | null } | null } | null;
 };
 
-const EVAL_SELECT_FIELDS = `Id, Name, Template__c, Evaluator__c, EvaluatorName__c, EvaluatorEmail__c, EvaluatorRole__c, EvaluationType__c,
+const EVAL_SELECT_FIELDS = `Id, Name, Template__c, Template__r.Label__c, Template__r.Version__c,
+            Evaluator__c, EvaluatorName__c, EvaluatorEmail__c, EvaluatorRole__c, EvaluationType__c,
             Status__c, StartedAt__c, SubmittedAt__c, FinalDecision__c,
             ConfidenceLevel__c, FinalComment__c, CurrentPage__c`;
 
@@ -280,6 +284,8 @@ function toEvaluationDTO(
     id: row.Id,
     name: row.Name,
     templateId: row.Template__c,
+    templateLabel: row.Template__r?.Label__c ?? null,
+    templateVersion: row.Template__r?.Version__c ?? null,
     evaluatorPortalAccessId: row.Evaluator__c,
     evaluatorName: row.EvaluatorName__c,
     evaluatorEmail: row.EvaluatorEmail__c,
@@ -349,14 +355,14 @@ export async function findInProgressEvaluationForRole(
   return getEvaluationById(rows[0].Id);
 }
 
-export async function listEvaluationsForTemplateAndRole(
-  templateId: string,
+export async function listEvaluationsForSlugAndRole(
+  slug: string,
   role: EvaluatorRole,
 ): Promise<EvaluationDTO[]> {
   const rows = await sfQuery<EvaluationRow>(
     `SELECT ${EVAL_SELECT_FIELDS}
      FROM JGR_FDE_AcceptanceEvaluation__c
-     WHERE Template__c = '${templateId}'
+     WHERE Template__r.ProjectSlug__c = '${slug.replace(/'/g, "\\'")}'
        AND EvaluatorRole__c = '${role}'
        AND Status__c != 'Archived'
      ORDER BY StartedAt__c DESC
