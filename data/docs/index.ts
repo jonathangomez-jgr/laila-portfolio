@@ -70,6 +70,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
+    slug: "deck-golive-insiders-22oct",
+    label: "Deck · Go-Live Insiders · 22-oct",
+    description:
+      "Presentación ejecutiva del arranque del Programa Insiders con Betty v38. 6 slides: resumen en números (11 subagentes · 50 acciones · 38% ya son FDE propias · 22 Insiders), confirmación de la firma consolidada EVAL-000021 con cumplimiento por severidad y firmantes, lista completa de Insiders con nombre y código de Distribuidor, próximos pasos (monitoreo + evaluación lunes 26-oct para subir flujo al 20%), cierre.",
+    url: "/Customers/Betterware/files/Deck_GoLive_Insiders_22oct.pdf",
+    category: "Pilot",
+    icon: "🚀",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "matriz-escalamientos-v42-vs-betty-v28",
     label: "Matriz de Escalamientos · V42 vs Betty v28",
     description:

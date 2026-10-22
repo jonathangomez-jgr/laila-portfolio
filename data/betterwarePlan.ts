@@ -1816,6 +1816,28 @@ const MILESTONES: Milestone[] = [
     references: [],
   },
   {
+    id: "deck_golive_insiders",
+    title: "🚀 Go-Live Insiders · Betty v38",
+    description:
+      "Arranque formal del Programa Insiders con Betty v38 publicada en producción. Firma consolidada EVAL-000021 (SÍ · LISTA PARA ARRANCAR) + 22 Insiders activos con sesión registrada + dashboard de seguimiento disponible en Salesforce (app Seguimiento Betty).",
+    date: "2026-10-22",
+    kind: "Go-live",
+    phaseId: "f1_5",
+    participants: [
+      "Salesforce - FDE",
+      "Partner",
+      "Betterware - Sponsor",
+    ],
+    status: "scheduled",
+    references: [
+      {
+        label: "Deck · Go-Live Insiders · 22-oct",
+        url: "/Customers/Betterware/files/Deck_GoLive_Insiders_22oct.pdf",
+        kind: "document",
+      },
+    ],
+  },
+  {
     id: "escalada_50",
     title: "Escalada al 50%",
     description:
