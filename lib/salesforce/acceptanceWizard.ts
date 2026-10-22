@@ -574,8 +574,19 @@ type LatestRespRow = {
   Evaluation__r: { Name: string; Template__c: string } | null;
 };
 
-// Para cada CriterionKey, devuelve la última respuesta registrada (por AnsweredAt desc)
-// de cualquier eval Partial del mismo rol en el slug. Solo respuestas con result != null.
+// Prioridad para resolver conflictos entre evaluaciones distintas:
+// Pass > PassWithObservations > NA > Fail. "El mejor estado alcanzado gana."
+// Tiebreaker: más reciente por AnsweredAt.
+const RESULT_PRIORITY: Record<string, number> = {
+  Pass: 4,
+  PassWithObservations: 3,
+  NA: 2,
+  Fail: 1,
+};
+
+// Para cada CriterionKey, devuelve la mejor respuesta histórica entre todas las
+// evaluaciones Partial del mismo rol + slug. "Mejor" = mayor prioridad; ante empate,
+// la más reciente. Solo respuestas con result != null.
 async function getLatestResponsesByKey(
   slug: string,
   role: EvaluatorRole,
@@ -598,15 +609,25 @@ async function getLatestResponsesByKey(
      WHERE Result__c != null
        AND Evaluation__r.EvaluatorRole__c = '${role}'
        AND Evaluation__r.EvaluationType__c = 'Partial'
-       AND Evaluation__r.Template__r.ProjectSlug__c = '${slug.replace(/'/g, "\\'")}'
-     ORDER BY AnsweredAt__c DESC`,
+       AND Evaluation__r.Template__r.ProjectSlug__c = '${slug.replace(/'/g, "\\'")}'`,
   );
 
   const byKey = new Map<string, LatestRespRow>();
   for (const r of rows) {
     const key = r.Criterion__r?.CriterionKey__c;
     if (!key) continue;
-    if (byKey.has(key)) continue; // first one is the most recent (DESC order)
+    const current = byKey.get(key);
+    const incomingPriority = RESULT_PRIORITY[r.Result__c ?? ""] ?? 0;
+    if (current) {
+      const currentPriority = RESULT_PRIORITY[current.Result__c ?? ""] ?? 0;
+      if (incomingPriority < currentPriority) continue; // peor estado, descartar
+      if (incomingPriority === currentPriority) {
+        // Tiebreaker: más reciente
+        const currentAt = current.AnsweredAt__c ?? "";
+        const incomingAt = r.AnsweredAt__c ?? "";
+        if (incomingAt <= currentAt) continue;
+      }
+    }
     byKey.set(key, {
       CriterionKey: key,
       Result__c: r.Result__c,
