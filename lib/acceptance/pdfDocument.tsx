@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   barPass: { backgroundColor: "#10B981" },
+  barPWO: { backgroundColor: "#FBBF24" },
   barFail: { backgroundColor: "#F43F5E" },
   barNA: { backgroundColor: "#94A3B8" },
   breakdown: {
@@ -305,14 +306,21 @@ type Props = {
 };
 
 type SeverityKey = "Blocker" | "Critical" | "Nice-to-have";
-type Bucket = { Pass: number; Fail: number; NA: number; Unanswered: number; total: number };
+type Bucket = {
+  Pass: number;
+  PassWithObservations: number;
+  Fail: number;
+  NA: number;
+  Unanswered: number;
+  total: number;
+};
 
 export function AcceptancePdfDocument({ template, evaluation }: Props) {
   // Build totals
   const totals: Record<SeverityKey, Bucket> = {
-    Blocker: { Pass: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
-    Critical: { Pass: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
-    "Nice-to-have": { Pass: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
+    Blocker: { Pass: 0, PassWithObservations: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
+    Critical: { Pass: 0, PassWithObservations: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
+    "Nice-to-have": { Pass: 0, PassWithObservations: 0, Fail: 0, NA: 0, Unanswered: 0, total: 0 },
   };
   const responsesByCrit = new Map(
     evaluation.responses.map((r) => [r.criterionId, r]),
@@ -328,6 +336,8 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
       const r = responsesByCrit.get(c.id);
       const result = r?.result ?? null;
       if (result === "Pass") totals[c.severity].Pass++;
+      else if (result === "PassWithObservations")
+        totals[c.severity].PassWithObservations++;
       else if (result === "Fail") {
         totals[c.severity].Fail++;
         failedCriteria.push({ criterion: c, comment: r?.comment ?? null });
@@ -504,10 +514,13 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
         <Text style={styles.sectionTitle}>Cumplimiento por severidad</Text>
         {(["Blocker", "Critical", "Nice-to-have"] as const).map((sev) => {
           const t = totals[sev];
-          const applicable = t.Pass + t.Fail;
+          const totalPass = t.Pass + t.PassWithObservations;
+          const applicable = totalPass + t.Fail;
           const pct =
-            applicable === 0 ? 0 : Math.round((t.Pass / applicable) * 100);
+            applicable === 0 ? 0 : Math.round((totalPass / applicable) * 100);
           const passPct = t.total === 0 ? 0 : (t.Pass / t.total) * 100;
+          const pwoPct =
+            t.total === 0 ? 0 : (t.PassWithObservations / t.total) * 100;
           const failPct = t.total === 0 ? 0 : (t.Fail / t.total) * 100;
           const naPct = t.total === 0 ? 0 : (t.NA / t.total) * 100;
           return (
@@ -524,6 +537,7 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
               </View>
               <View style={styles.bar}>
                 <View style={[styles.barPass, { width: `${passPct}%` }]} />
+                <View style={[styles.barPWO, { width: `${pwoPct}%` }]} />
                 <View style={[styles.barFail, { width: `${failPct}%` }]} />
                 <View style={[styles.barNA, { width: `${naPct}%` }]} />
               </View>
@@ -532,6 +546,12 @@ export function AcceptancePdfDocument({ template, evaluation }: Props) {
                   <View style={[styles.breakdownDot, { backgroundColor: "#10B981" }]} />
                   <Text>{t.Pass} cumple</Text>
                 </View>
+                {t.PassWithObservations > 0 && (
+                  <View style={styles.breakdownItem}>
+                    <View style={[styles.breakdownDot, { backgroundColor: "#FBBF24" }]} />
+                    <Text>{t.PassWithObservations} con observaciones</Text>
+                  </View>
+                )}
                 <View style={styles.breakdownItem}>
                   <View style={[styles.breakdownDot, { backgroundColor: "#F43F5E" }]} />
                   <Text>{t.Fail} no cumple</Text>
