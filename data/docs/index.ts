@@ -90,6 +90,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
+    slug: "snapshot-semanal-2026-10-23",
+    label: "Snapshot Semanal · Viernes 23-oct",
+    description:
+      "Reporte ejecutivo de 1 página con el estado del agente al cierre de la semana del 19 al 23 de octubre. Salida con Insiders, aceptación formal de Betterware, 10 versiones de mejora y app Seguimiento Betty · próximo hito: escalada al 20% el Lun 26-oct · gauge del Reporte de Descubrimientos. Formato institucional Salesforce FDE · cadencia Viernes.",
+    url: "/Customers/Betterware/files/Snapshot_Viernes_2026_10_23.pdf",
+    category: "Ejecutivo",
+    icon: "📊",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "snapshot-viernes-16-oct",
     label: "Snapshot Semanal · Viernes 16-oct",
     description:

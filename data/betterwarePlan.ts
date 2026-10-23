@@ -1214,9 +1214,9 @@ const ACTIVITIES: Activity[] = [
     id: "2.13",
     phaseId: "f2",
     number: "2.13",
-    title: "Escalar feature flag progresivamente (70→85→100% en subset)",
+    title: "Estabilización post-GA al 100% del tráfico",
     description:
-      "Incrementar el porcentaje de tráfico al nuevo agente a medida que las acciones críticas se reemplazan y validan. Monitoreo intensivo tras cada incremento. Al cierre de F2, agente debe estar al 70-85% del tráfico.",
+      "Betty atiende el 100% del tráfico desde el GA del Jue 29-oct. Durante F2 se vigilan los KPIs después de cada reemplazo de acción (Error Rate, escalaciones, abandono) y se mantiene el rollback operativo al agente legacy por acción, no por porcentaje de tráfico.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: true,
@@ -1225,9 +1225,9 @@ const ACTIVITIES: Activity[] = [
     plannedStart: "2026-11-02",
     plannedEnd: "2026-11-13",
     dependencies: ["1.5.9"],
-    deliverables: ["Feature flag en 70-85% al cerrar F2"],
+    deliverables: ["KPIs estables al 100% tras cada reemplazo · rollback por acción documentado"],
     references: [],
-    tags: ["deploy", "ab-test"],
+    tags: ["ops", "ga"],
   }),
   act({
     id: "2.14",
@@ -1430,9 +1430,9 @@ const ACTIVITIES: Activity[] = [
     id: "4.1",
     phaseId: "f4",
     number: "4.1",
-    title: "Rollout final 85% → 100%",
+    title: "Corte final: 100% de acciones en implementación propia",
     description:
-      "Incremento final del feature flag en producción durante 48 horas. 85% al abrir el lunes, 100% al martes si no hay regresión. V40 queda como rollback de emergencia.",
+      "Betty ya atiende el 100% del tráfico desde el GA (29-oct). Este corte final retira las últimas dependencias de acciones legacy en 48 horas: lunes se activan los reemplazos restantes, martes se confirma cero regresión. V40 queda solo como rollback de emergencia.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner", "Betterware - IT Lead"],
     delegableToPartner: true,
@@ -1441,7 +1441,7 @@ const ACTIVITIES: Activity[] = [
     plannedStart: "2026-11-30",
     plannedEnd: "2026-12-01",
     dependencies: ["3.9"],
-    deliverables: ["100% tráfico en nuevo agente"],
+    deliverables: ["100% de acciones de Betty sobre implementación propia"],
     references: [],
     tags: ["deploy", "critical-path"],
   }),
@@ -1774,6 +1774,26 @@ const MILESTONES: Milestone[] = [
     outcome:
       "Salida formal ejecutada el Jue 22-oct con la cohorte de Insiders sobre Betty v38.",
     references: [],
+  },
+  {
+    id: "snapshot-23-oct",
+    title: "📊 Snapshot Semanal · Reporte de avances",
+    description:
+      "Vie 23-oct · snapshot ejecutivo de 1 página con el estado del agente al cierre de la semana (19 al 23 de octubre): salida con Insiders, aceptación formal de Betterware, 10 versiones de mejora (v28 → v38) y app Seguimiento Betty en Salesforce.",
+    date: "2026-10-23",
+    kind: "Internal Review",
+    phaseId: "f1_5",
+    participants: ["Salesforce - FDE", "Betterware - Sponsor", "Betterware - IT Lead"],
+    status: "completed",
+    outcome:
+      "Snapshot publicado en el portal de Laila · segundo reporte de la cadencia semanal de los viernes.",
+    references: [
+      {
+        label: "Snapshot Semanal · 23-oct (PDF)",
+        url: "/Customers/Betterware/files/Snapshot_Viernes_2026_10_23.pdf",
+        kind: "document",
+      },
+    ],
   },
   {
     id: "escalada_20",
