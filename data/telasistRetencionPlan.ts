@@ -462,6 +462,11 @@ const ACTIVITIES: Activity[] = [
     deliverables: ["Matriz de decisión del beneficio en CSV o Excel con los campos acordados"],
     updates: [
       {
+        date: "2026-10-25",
+        author: "Salesforce - FDE",
+        note: "Knowledge oficial \"Invex - Retenciones\" (Prod v7, 20-oct; replicado al sandbox el 25-oct como 000001071) ya trae la tabla 'Beneficio × Regla comercial' y la matriz por producto (14 productos) con códigos de trámite. Reglas por semáforo: 12 MSI para azul, verde, dorado, negro y gris; bonificación 75 % para negro, dorado y gris sin VPN (aplica aunque Bonif. diga 'No aplica'); Programa Cero para negro, dorado, gris, azul y verde; rojo no aplica en ningún beneficio. VPN: bonificaciones 25 % y 100 % requieren valor VPN; promesa de anualidad gratis con VPN 500. Pendiente: nombres de color vs datos (dorado/gris/plata vs ORO/PLATINO; AMARILLO no aparece) y matriz por motivo.",
+      },
+      {
         date: "2026-10-20",
         author: "Salesforce - FDE",
         note: "Sesión de capacitación Telasist: el VPN lo asigna el banco y se compara contra un catálogo de beneficios (Excel mostrado en la sesión, pendiente de entrega formal). Semáforo ROJO = no se ofrecen beneficios; sin color = beneficios básicos (cuenta reciente). Colores reales en QA: AZUL, ORO, PLATINO, VERDE, NEGRO, ROJO, AMARILLO. Falta la simbología completa y cómo se combinan VPN + semáforo.",
@@ -728,6 +733,13 @@ const ACTIVITIES: Activity[] = [
     plannedStart: "2026-10-26",
     plannedEnd: "2026-10-28",
     dependencies: ["0.17"],
+    updates: [
+      {
+        date: "2026-10-25",
+        author: "Salesforce - FDE",
+        note: "Knowledge oficial \"Invex - Retenciones\" (Prod v7, 20-oct; replicado al sandbox el 25-oct como 000001071) confirma la regla: solo Custom Data 2 o 3 procede a cancelación o retención; con 1, 4, 5, 6 o 7 se tipifica Resultado = Otros, Categoría = Mesa de Control, Subcategoría = Expediente Incompleto, Generales = Sin documentación, Tipo Generales = Cancelación de cuenta titular (sin expediente) con/sin saldo. Falta solo la validación con el ejecutivo INVEX (0.17).",
+      },
+    ],
     deliverables: ["Regla de Custom Data confirmada", "Mapeo motivo de escalamiento del agente → Generales / Tipo Generales"],
     tags: ["definition", "telasist", "tipificacion"],
   }),
@@ -745,6 +757,13 @@ const ACTIVITIES: Activity[] = [
     plannedStart: "2026-10-26",
     plannedEnd: "2026-10-28",
     dependencies: ["0.17"],
+    updates: [
+      {
+        date: "2026-10-25",
+        author: "Salesforce - FDE",
+        note: "Knowledge oficial \"Invex - Retenciones\" (Prod v7, 20-oct; replicado al sandbox el 25-oct como 000001071) confirma el folio como prefijo + DDMMAA + últimos 4 dígitos (CC sin adeudo, CB pre-cancelación) y que la pre-cancelación solo procede con saldo pendiente igual o menor a $5,557.56. Sigue abierto qué hacer cuando el saldo supera ese monto.",
+      },
+    ],
     deliverables: ["Nomenclatura de folio firmada", "Regla para saldo > $5,557.56"],
     tags: ["definition", "folio"],
   }),
@@ -762,6 +781,13 @@ const ACTIVITIES: Activity[] = [
     plannedStart: "2026-10-26",
     plannedEnd: "2026-10-30",
     dependencies: ["0.17"],
+    updates: [
+      {
+        date: "2026-10-25",
+        author: "Salesforce - FDE",
+        note: "Knowledge oficial \"Invex - Retenciones\" (Prod v7, 20-oct; replicado al sandbox el 25-oct como 000001071): la bonificación al 75 % aplica aunque el registro tenga 'No aplica' en Bonif. suspensión anualidad. Fecha de originación sigue sin definición.",
+      },
+    ],
     deliverables: ["Definición funcional de fecha de originación", "Valores y reglas de Bonif. suspensión anualidad"],
     tags: ["definition", "invex"],
   }),
@@ -1206,6 +1232,25 @@ const ACTIVITIES: Activity[] = [
     tags: ["review", "observability"],
   }),
 
+  act({
+    id: "1.19",
+    phaseId: "f1",
+    number: "1.19",
+    title: "Réplica de los artículos Knowledge de Invex Retenciones al sandbox (es_MX + en_US)",
+    description:
+      "Los 3 artículos de Prod (Invex - Retenciones, Invex - Retenciones (comunicados), Invex - Retenciones (Ingeniería social)) no existían en el sandbox. Se habilitó Knowledge multilenguaje con es_MX, se crearon los maestros en español con el contenido idéntico a Prod (imágenes incluidas) y su traducción oficial en inglés, todos publicados. En inglés, los comentarios para pegar en la tipificación se conservan en español porque Invex los procesa tal cual.",
+    owner: "Salesforce - FDE",
+    type: "Config",
+    week: 3,
+    plannedStart: "2026-10-25",
+    plannedEnd: "2026-10-25",
+    actualStart: "2026-10-25",
+    actualEnd: "2026-10-25",
+    status: "done",
+    progressPercent: 100,
+    deliverables: ["Artículos 000001069, 000001070 y 000001071 publicados en es_MX y en_US en Telasist-Sandbox"],
+    tags: ["config", "knowledge"],
+  }),
   // ============ F1.5 · Reemplazar mocks ============
   act({
     id: "1.5.1",
@@ -1327,6 +1372,13 @@ const ACTIVITIES: Activity[] = [
     plannedStart: "2026-10-27",
     plannedEnd: "2026-10-30",
     dependencies: ["0.18", "1.5.5"],
+    updates: [
+      {
+        date: "2026-10-25",
+        author: "Salesforce - FDE",
+        note: "La matriz por producto del Knowledge oficial \"Invex - Retenciones\" (Prod v7, 20-oct; replicado al sandbox el 25-oct como 000001071) usa códigos que el catálogo del agente no tiene: TRA30 (promesa de anualidad gratis), TRA32 (bonificación 75 %), TRA43 / TRA44 (Programa Cero 12M / 6M), además de TRA39. Se suman a esta actividad (ver 1.5.9).",
+      },
+    ],
     deliverables: ["Comentarios de trámite en formato oficial", "Catálogo de beneficios completo vs documento de códigos V01"],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
@@ -1354,6 +1406,22 @@ const ACTIVITIES: Activity[] = [
     tags: ["test", "deploy"],
   }),
 
+  act({
+    id: "1.5.9",
+    phaseId: "f1_5",
+    number: "1.5.9",
+    title: "Alinear el catálogo del agente con la Knowledge oficial de Telasist",
+    description:
+      "Cargar en Invex_Beneficio__mdt, Invex_Producto__mdt e Invex_Regla__mdt las reglas comerciales y la matriz producto × beneficio del Knowledge 'Invex - Retenciones' (Prod v7, 20-oct): elegibilidad por semáforo y VPN, anualidad facturada y no pagada (≤ 90 días), sin bonificación previa, adeudo ≤ 30 % de la línea para Programa Cero 6/12M, UCEDOM $50 / $80 / $100 por producto y los códigos TRA30, TRA32, TRA43 y TRA44. Las reglas quedan apagadas detrás de Usar_Reglas__c hasta la validación con el ejecutivo INVEX.",
+    owner: "Salesforce - FDE",
+    type: "Config",
+    week: 3,
+    plannedStart: "2026-10-26",
+    plannedEnd: "2026-10-30",
+    dependencies: ["1.19", "1.5.6"],
+    deliverables: ["Custom Metadata alineada a la KB oficial", "Tabla de equivalencia de colores KB vs datos (dorado/gris/plata vs ORO/PLATINO)"],
+    tags: ["config", "catalog", "critical-path"],
+  }),
   // ============ F2 · Shadow pilot ============
   act({
     id: "2.1",
