@@ -7,11 +7,17 @@ import {
 } from "@/data/betterwareAgentDocumentation";
 import { paquetexpressAgentDocs } from "@/data/paquetexpressAgentDocumentation";
 import { pamAgentDocs } from "@/data/pamAgentDocumentation";
+import { telasistRetencionAgentDocs } from "@/data/telasistRetencionAgentDocumentation";
 import AgentActionsSubtab from "@/components/AgentActionsSubtab";
 
 type DocsSubtab = "subagents" | "actions";
 
-type ActionDoc = { name: string; target: string; description?: string };
+type ActionDoc = {
+  name: string;
+  target: string;
+  description?: string;
+  owner?: "FDE" | "Partner" | "Built-in";
+};
 
 type Subagent = {
   id: string;
@@ -35,7 +41,7 @@ type Doc = {
   subagents: Subagent[];
 };
 
-function pickDoc(slug?: string): Doc {
+function pickDoc(slug?: string): Doc | null {
   if (slug === "paquetexpress") {
     const d = paquetexpressAgentDocs;
     return {
@@ -60,6 +66,19 @@ function pickDoc(slug?: string): Doc {
       subagents: d.subagents as Subagent[],
     };
   }
+  if (slug === "telasist-retencion") {
+    const d = telasistRetencionAgentDocs;
+    return {
+      name: d.name,
+      developerName: d.developerName,
+      version: d.version,
+      revision: d.revision,
+      base: d.base,
+      categories: d.categories,
+      subagents: d.subagents as Subagent[],
+    };
+  }
+  if (slug !== "betterware") return null;
   return {
     name: betterwareAgentDocs.name,
     developerName: betterwareAgentDocs.developerName,
@@ -94,6 +113,14 @@ export default function AgentDocsTab({ slug }: { slug?: string } = {}) {
     setFocusedAction(actionName);
     setSubtab("actions");
   };
+
+  if (!doc) {
+    return (
+      <p className="text-sm text-slate-500">
+        Este proyecto aún no tiene documentación de agente publicada.
+      </p>
+    );
+  }
 
   return (
     <div>

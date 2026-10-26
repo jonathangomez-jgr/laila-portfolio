@@ -30,6 +30,9 @@ type TabId =
   | "agent-docs"
   | "handover";
 
+// Proyectos con documentación de agente publicada (ver AgentDocsTab.pickDoc).
+const AGENT_DOC_SLUGS = ["betterware", "paquetexpress", "pam", "telasist-retencion"];
+
 const TABS: Array<{
   id: TabId;
   label: string;
@@ -44,7 +47,7 @@ const TABS: Array<{
   { id: "pruebas", label: "🧪 Pruebas" },
   { id: "documentos", label: "📎 Documentos" },
   { id: "admin", label: "⚙️ Admin pruebas", adminOnly: true },
-  { id: "agent-docs", label: "🤖 Documentación agente" },
+  { id: "agent-docs", label: "🤖 Documentación agente", slugs: AGENT_DOC_SLUGS },
   { id: "handover", label: "🚀 Handover V18", slugs: HANDOVER_SLUGS, roles: HANDOVER_ROLES },
 ];
 

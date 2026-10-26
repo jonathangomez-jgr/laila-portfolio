@@ -2,7 +2,13 @@
 
 import { useMemo, useState, useEffect, useRef } from "react";
 
-type ActionDoc = { name: string; target: string; description?: string };
+type ActionDoc = {
+  name: string;
+  target: string;
+  description?: string;
+  /** Sobrescribe el dueño inferido del target (p. ej. clases del equipo FDE sin prefijo FDE_). */
+  owner?: "FDE" | "Partner" | "Built-in";
+};
 type Subagent = { id: string; name: string; acciones: ActionDoc[] };
 type Doc = { subagents: Subagent[] };
 
@@ -45,7 +51,9 @@ function buildActionsCatalog(doc: Doc): ActionRow[] {
   const byKey = new Map<string, ActionRow>();
   for (const sub of doc.subagents) {
     for (const a of sub.acciones) {
-      const { type, name, owner } = parseTarget(a.target);
+      const parsed = parseTarget(a.target);
+      const { type, name } = parsed;
+      const owner = a.owner ?? parsed.owner;
       const key = `${a.name}::${a.target}`;
       const existing = byKey.get(key);
       if (existing) {
