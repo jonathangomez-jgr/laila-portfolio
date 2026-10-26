@@ -363,7 +363,7 @@ const TELASIST_RETENCION_DOCS: DocEntry[] = [
     slug: "followup-01",
     label: "Follow-up #1 · Estado del proyecto",
     description:
-      "Seguimiento al Snapshot externo. 5 páginas. Qué construyó Skala desde el 10-oct, qué está completo, qué necesitamos de Invex (4 bloqueantes), qué necesitamos de Skala (5 preguntas técnicas) y qué necesitamos de Telasist (3 decisiones operativas). Para la reunión del 12-oct.",
+      "Seguimiento al Snapshot externo. 5 páginas. Qué construyó el Equipo FDE Salesforce desde el 10-oct, qué está completo, qué necesitamos de Invex (4 bloqueantes), qué necesitamos de Skala (5 preguntas técnicas) y qué necesitamos de Telasist (3 decisiones operativas). Para la reunión del 12-oct.",
     url: "/Customers/Telasist/files/Telasist-Invex-Retencion-TDC-Followup-01.pdf",
     category: "Ejecutivo",
     icon: "📊",
