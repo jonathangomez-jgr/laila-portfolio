@@ -29,6 +29,47 @@ export const CATEGORY_ORDER: DocCategory[] = [
 // Betterware docs
 // ----------------------------------------------------------------------------
 const BETTERWARE_DOCS: DocEntry[] = [
+  // Seguimiento diario · archivos protegidos (Laila Files, ver protectedFiles.ts)
+  {
+    slug: "seguimiento-betty-diario",
+    label: "Seguimiento diario · Betty vs V42",
+    description:
+      "Reporte del día anterior: sesiones y distribuidoras atendidas por cada agente, resolución, transferencias a bots auxiliares, escalamiento a ejecutivos, recontacto y actividad del programa Insiders. Se actualiza todos los días.",
+    url: "/api/portal/files/betterware-seguimiento-diario-pdf",
+    category: "Pilot",
+    icon: "📈",
+    visibleTo: ["Salesforce", "Client"],
+  },
+  {
+    slug: "seguimiento-betty-diario-xlsx",
+    label: "Seguimiento diario · detalle (Excel)",
+    description:
+      "Detalle por sesión del día anterior: agente, ruta, destino, escalamiento, recontacto y encuesta. Teléfonos enmascarados.",
+    url: "/api/portal/files/betterware-seguimiento-diario-xlsx",
+    category: "Pilot",
+    icon: "📊",
+    visibleTo: ["Salesforce", "Client"],
+  },
+  {
+    slug: "seguimiento-betty-consolidado",
+    label: "Seguimiento consolidado · desde la salida con Insiders",
+    description:
+      "Acumulado desde el 22 de octubre: participación de Betty día a día, efectividad por destino, top 10 de distribuidoras, Insiders sin uso de Betty y altas y bajas del programa. Se actualiza todos los días.",
+    url: "/api/portal/files/betterware-seguimiento-consolidado-pdf",
+    category: "Pilot",
+    icon: "📈",
+    visibleTo: ["Salesforce", "Client"],
+  },
+  {
+    slug: "seguimiento-betty-consolidado-xlsx",
+    label: "Seguimiento consolidado · detalle (Excel)",
+    description:
+      "Todas las sesiones de ambos agentes desde la salida con Insiders, más las hojas de destinos, rutas, top 10, Insiders sin Betty y altas y bajas.",
+    url: "/api/portal/files/betterware-seguimiento-consolidado-xlsx",
+    category: "Pilot",
+    icon: "📊",
+    visibleTo: ["Salesforce", "Client"],
+  },
   {
     slug: "remediaciones-betty-v37",
     label: "Remediaciones atendidas · Betty v37",
