@@ -320,6 +320,16 @@ const JAFRA_DOCS: DocEntry[] = [
 // ----------------------------------------------------------------------------
 const TELASIST_RETENCION_DOCS: DocEntry[] = [
   {
+    slug: "guia-maestra-invex-retencion",
+    label: "Guía Maestra · Invex Retención TDC (v1)",
+    description:
+      "Libro de estudio para el Equipo FDE Salesforce y el partner TS4/Skala (26-oct). 226 páginas, 23 capítulos, 16 diagramas. Banco Invex y sus tarjetas de marca compartida, regulación mexicana de cancelación, operación humana de retención en Telasist, la retención a fondo (motivos, catálogo de beneficios, matriz y elegibilidad, folios y tipificación, 7 casos narrados), el agente de voz v8, historia del proyecto y el replan al 12-nov. Glosario con estado de confirmación y trazabilidad a DM/INV.",
+    url: "/Customers/Telasist/files/Invex_Retencion_TDC_Guia_Maestra_Negocio_y_Agentforce.pdf",
+    category: "Arquitectura",
+    icon: "📘",
+    visibleTo: ["Salesforce", "Partner"],
+  },
+  {
     slug: "reporte-semanal-2026-10-22",
     label: "Reporte Semanal · Semana 2 (19 al 23 oct)",
     description:
