@@ -320,6 +320,26 @@ const JAFRA_DOCS: DocEntry[] = [
 // ----------------------------------------------------------------------------
 const TELASIST_RETENCION_DOCS: DocEntry[] = [
   {
+    slug: "reporte-pruebas-ronda0",
+    label: "Reporte de Pruebas · Ronda 0 (línea base v8)",
+    description:
+      "Resultados del 27-oct. 7 páginas. 48 conversaciones con acciones reales en el sandbox: 27 casos de mecánica sobre la v8 activa y 21 escenarios difíciles de retención sobre un build con mitigaciones. Rúbrica de supervisor, causa y mitigación del bloqueo de identidad, 46 hallazgos priorizados (5 críticos) y lo que corrige la v9.",
+    url: "/Customers/Telasist/files/Reporte_Pruebas_Ronda0_Invex_TDC.pdf",
+    category: "Pilot",
+    icon: "🧪",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "playbook-retencion",
+    label: "Playbook de Retención · Cuentas Especiales (v1.0)",
+    description:
+      "Guía de supervisor para ejecutivos y el agente de voz. 27 páginas. Clasificar en los primeros 30 segundos, escucha activa y empatía en voz, mapa de motivos, escalera de negociación por perfil, biblioteca de objeciones, reglas de paro y salida digna, guardarraíles regulatorios y de la Cédula v10, y 32 escenarios difíciles. Para validar con supervisores de Telasist el 30-oct.",
+    url: "/Customers/Telasist/files/Playbook_Retencion_Invex_TDC.pdf",
+    category: "Ejecutivo",
+    icon: "🎯",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "guia-maestra-invex-retencion",
     label: "Guía Maestra · Invex Retención TDC (v1)",
     description:
