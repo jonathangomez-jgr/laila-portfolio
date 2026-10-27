@@ -1173,6 +1173,27 @@ const ACTIVITIES: Activity[] = [
     progressPercent: 80,
   }),
   act({
+    id: "2.17",
+    phaseId: "f2",
+    number: "2.17",
+    title: "Evaluar el escalamiento antes de ofrecer un ejecutivo",
+    description:
+      "Unificar en una sola decisión cuándo Betty ofrece un ejecutivo y cuándo procede el pase. Betty consulta el criterio de escalamiento y el horario antes de ofrecer: si procede, ofrece; si es fuera de horario, informa el horario; si no procede, sigue ayudando sin ofrecer. Si la distribuidora acepta, se transfiere sin volver a evaluar. Requiere una consulta de sólo evaluación (sin envío de mensajes ni cambios en registros). Pendiente de ratificar alcance con los resultados de v41 (backlog FASE-B-09).",
+    owner: "Salesforce - FDE",
+    collaborators: ["Betterware - UAT"],
+    delegableToPartner: false,
+    type: "Dev",
+    week: 6,
+    plannedStart: "2026-11-09",
+    plannedEnd: "2026-11-13",
+    dependencies: ["1.5.9"],
+    deliverables: [
+      "Consulta de sólo evaluación · ofertas de ejecutivo condicionadas a la decisión · pase sin reevaluación al aceptar · medición de ofertas hechas, aceptadas y transferidas",
+    ],
+    references: [],
+    tags: ["escalamiento", "ux"],
+  }),
+  act({
     id: "2.11",
     phaseId: "f2",
     number: "2.11",
