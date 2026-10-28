@@ -1,6 +1,6 @@
 // ============================================================================
 // Betterware · FDE_BW_Service_Agent — Plan de reconstrucción (COMPRIMIDO)
-// Arranque: Dom 2026-10-04 · Salida Insiders: Jue 2026-10-22 · GA: Jue 2026-10-29 · Go-live 100%: Vie 2026-12-11
+// Arranque: Dom 2026-10-04 · Salida Insiders: Jue 2026-10-22 · GA: Mar 2026-11-03 · Go-live 100%: Vie 2026-12-11
 // Autor: Jonathan Gomez (Salesforce FDE)
 // ============================================================================
 
@@ -266,11 +266,11 @@ const PHASES: Phase[] = [
     title: "Programa Insiders · Salida → GA",
     shortLabel: "F1.5 · Insiders → GA",
     description:
-      "Salida formal Jue 22-oct con la cohorte de Insiders sobre Betty v38. Observación jue 22 → dom 25 y escalada diaria a partir del Lun 26-oct (20% → Mar 27 40% → Mié 28 60%) hasta el Jue 29-oct donde el agente nuevo pasa a flujo general (GA · 100%). Observación intensiva con daily standups y monitoreo de conversaciones.",
+      "Salida formal Jue 22-oct con la cohorte de Insiders sobre Betty v38. Observación jue 22 → dom 25 y escalada a partir del Lun 26-oct (20% el 27-oct → Mié 28 50% → Lun 2-nov 80%) hasta el Mar 3-nov donde el agente nuevo pasa a flujo general (GA · 100%). Observación intensiva con daily standups y monitoreo de conversaciones.",
     objective:
       "Pasar de piloto cerrado a flujo general en 1 semana, con evidencia dura día a día de que el nuevo agente mejora KPIs vs BW_AGENT_N, y rollback inmediato (desmarcar FDE_Pilot__c) ante cualquier regresión significativa.",
     startDate: "2026-10-22",
-    endDate: "2026-10-29",
+    endDate: "2026-11-03",
     requires: [
       "F1 cerrada · Approval publish firmado · pruebas internas y aceptación 16-21 oct completadas",
       "Lista de 15-25 Insiders curada y marcada en MessagingEndUser",
@@ -280,7 +280,7 @@ const PHASES: Phase[] = [
     outcome:
       "Agente nuevo en GA (100% del tráfico), KPIs comparados contra baseline del agente actual, aprendizajes documentados para la Fase 2.",
     gate:
-      "Executive Review 3 (Jue 29-oct) · firma de GA + aprobar entrar a reemplazo gradual de acciones.",
+      "Executive Review 3 (Mar 3-nov) · firma de GA + aprobar entrar a reemplazo gradual de acciones.",
     color: "#F28B42",
   },
   {
@@ -778,7 +778,7 @@ const ACTIVITIES: Activity[] = [
     tags: ["parity-v42", "polish", "critical-path"],
   }),
 
-  // ============== FASE 1.5 — A/B PRODUCCIÓN (Jue 2026-10-22 → Jue 2026-10-29) ==============
+  // ============== FASE 1.5 — A/B PRODUCCIÓN (Jue 2026-10-22 → Mar 2026-11-03) ==============
   act({
     id: "1.5.1",
     phaseId: "f1_5",
@@ -830,14 +830,14 @@ const ACTIVITIES: Activity[] = [
     number: "1.5.3",
     title: "Daily standup durante escalada",
     description:
-      "Standup diario de 15 min con FDE + Partner + Betterware IT Lead durante la ventana de escalada lunes 26 → jueves 29. Agenda fija: KPIs del día anterior, blockers vigentes, hotfixes necesarios, decisión de escalar al siguiente % o mantener.",
+      "Standup diario de 15 min con FDE + Partner + Betterware IT Lead durante la ventana de escalada lunes 26-oct → martes 3-nov. Agenda fija: KPIs del día anterior, blockers vigentes, hotfixes necesarios, decisión de escalar al siguiente % o mantener.",
     owner: "Shared",
     collaborators: ["Salesforce - FDE", "Partner", "Betterware - IT Lead"],
     delegableToPartner: false,
     type: "Mgmt",
     week: 4,
     plannedStart: "2026-10-26",
-    plannedEnd: "2026-10-29",
+    plannedEnd: "2026-11-03",
     dependencies: ["1.5.2"],
     deliverables: ["4 minutas de standup"],
     references: [],
@@ -856,7 +856,7 @@ const ACTIVITIES: Activity[] = [
     type: "Ops",
     week: 3,
     plannedStart: "2026-10-22",
-    plannedEnd: "2026-10-29",
+    plannedEnd: "2026-11-03",
     dependencies: ["1.5.1"],
     deliverables: ["Reporte diario de KPIs · PRs de hotfix merged"],
     references: [],
@@ -885,28 +885,9 @@ const ACTIVITIES: Activity[] = [
     id: "1.5.6",
     phaseId: "f1_5",
     number: "1.5.6",
-    title: "Escalada al 40%",
+    title: "Escalada al 50%",
     description:
-      "Martes 27-oct: incremento de 20% a 40%. Review de KPIs del día previo antes de activar. Monitoreo intensivo.",
-    owner: "Salesforce - FDE",
-    collaborators: ["Partner"],
-    delegableToPartner: true,
-    type: "Deploy",
-    week: 4,
-    plannedStart: "2026-10-27",
-    plannedEnd: "2026-10-27",
-    dependencies: ["1.5.5"],
-    deliverables: ["Cohorte al 40%"],
-    references: [],
-    tags: ["deploy", "insiders"],
-  }),
-  act({
-    id: "1.5.7",
-    phaseId: "f1_5",
-    number: "1.5.7",
-    title: "Escalada al 60%",
-    description:
-      "Miércoles 28-oct: incremento de 40% a 60%. Review de KPIs del día previo antes de activar. Último escalón antes del salto a GA.",
+      "Miércoles 28-oct: incremento de 20% a 50% de las distribuidoras del WhatsApp de Betty, por sorteo determinista sobre el mismo orden del 20%. Review de KPIs del día previo antes de activar. Monitoreo intensivo.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: true,
@@ -914,8 +895,27 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-28",
     plannedEnd: "2026-10-28",
+    dependencies: ["1.5.5"],
+    deliverables: ["Cohorte al 50%"],
+    references: [],
+    tags: ["deploy", "insiders"],
+  }),
+  act({
+    id: "1.5.7",
+    phaseId: "f1_5",
+    number: "1.5.7",
+    title: "Escalada al 80%",
+    description:
+      "Lunes 2-nov: incremento de 50% a 80%. Review de KPIs del día previo antes de activar. Último escalón antes del salto a GA.",
+    owner: "Salesforce - FDE",
+    collaborators: ["Partner"],
+    delegableToPartner: true,
+    type: "Deploy",
+    week: 4,
+    plannedStart: "2026-11-02",
+    plannedEnd: "2026-11-02",
     dependencies: ["1.5.6"],
-    deliverables: ["Cohorte al 60%"],
+    deliverables: ["Cohorte al 80%"],
     references: [],
     tags: ["deploy", "insiders"],
   }),
@@ -925,14 +925,14 @@ const ACTIVITIES: Activity[] = [
     number: "1.5.9",
     title: "🎯 GA · Flujo total General Available",
     description:
-      "Jueves 29-oct: salto a GA (100%). El agente nuevo (FDE_BW_Service_Agent) queda como el flujo general para todas las distribuidoras — ya no limitado a la cohorte Insiders marcada con FDE_Pilot__c. Review ejecutivo final con el Sponsor para firmar GA y aprobar la entrada a Fase 2 (reemplazo gradual de acciones legacy).",
+      "Martes 3-nov: salto a GA (100% · flujo total). El agente nuevo (FDE_BW_Service_Agent) queda como el flujo general para todas las distribuidoras — ya no limitado a la cohorte Insiders marcada con FDE_Insider__c. Review ejecutivo final con el Sponsor para firmar GA y aprobar la entrada a Fase 2 (reemplazo gradual de acciones legacy).",
     owner: "Shared",
     collaborators: ["Salesforce - FDE", "Partner", "Betterware - Sponsor", "Betterware - IT Lead"],
     delegableToPartner: false,
     type: "Deploy",
     week: 4,
-    plannedStart: "2026-10-29",
-    plannedEnd: "2026-10-29",
+    plannedStart: "2026-11-03",
+    plannedEnd: "2026-11-03",
     dependencies: ["1.5.7"],
     deliverables: [
       "Agente nuevo en GA · 100% del tráfico",
@@ -949,7 +949,7 @@ const ACTIVITIES: Activity[] = [
     number: "2.1",
     title: "Reemplazo seguridad: Consultar_Informacion_Distribuidor",
     description:
-      "Documentar el Flow legacy BW_CtrlDistributor + Consultar_Informacion_Distribuidor, escribir tests de paridad, implementar BW_FDE_GetDistributorInfo propia con SOQL + enforcement WITH USER_MODE o stripInaccessible, correr paridad, cortar adapter. Cierra hallazgos 04 y 07 para esta acción.",
+      "Documentar el Flow legacy BW_CtrlDistributor + Consultar_Informacion_Distribuidor, escribir tests de paridad, implementar BW_FDE_GetDistributorInfo propia con SOQL + enforcement WITH USER_MODE o stripInaccessible, correr paridad, cortar adapter. Cierra hallazgos 04 y 07 para esta acción. Avance al 28-oct: Betty ya consulta la información del distribuidor con los clones propios FDE_BW_InformacionDistribuidor y FDE_BW_ConsultarInformacionComercialGeneralDeUnDistribuidor, detrás de la compuerta de autenticación (hallazgo 04 cerrado en Betty). Pendiente: tests de paridad documentados.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: false,
@@ -957,6 +957,9 @@ const ACTIVITIES: Activity[] = [
     week: 5,
     plannedStart: "2026-11-02",
     plannedEnd: "2026-11-04",
+    actualStart: "2026-10-14",
+    progressPercent: 70,
+    status: "in-progress",
     dependencies: ["1.5.9"],
     deliverables: ["BW_FDE_GetDistributorInfo impl propia · tests paridad green"],
     references: [],
@@ -968,7 +971,7 @@ const ACTIVITIES: Activity[] = [
     number: "2.2",
     title: "Reemplazo seguridad: ConsultarAsociados + ownership gate",
     description:
-      "Implementar BW_CheckAffiliateOwnership real contra el modelo de datos. Reemplazar ConsultarAsociados por implementación propia con el gate de propiedad primero. Cierra hallazgo 05.",
+      "Implementar BW_CheckAffiliateOwnership real contra el modelo de datos. Reemplazar ConsultarAsociados por implementación propia con el gate de propiedad primero. Cierra hallazgo 05. Avance al 28-oct: el IDOR (hallazgo 05) está cerrado en Betty: BWPlusAffiliateLookupAction valida la propiedad contra el distribuidor de la sesión y FDE_ValidarLinaje valida el linaje. Pendiente: implementación propia de la consulta y tests de IDOR.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: false,
@@ -976,6 +979,9 @@ const ACTIVITIES: Activity[] = [
     week: 5,
     plannedStart: "2026-11-04",
     plannedEnd: "2026-11-06",
+    actualStart: "2026-10-14",
+    progressPercent: 40,
+    status: "in-progress",
     dependencies: ["2.1"],
     deliverables: ["BW_CheckAffiliateOwnership real · tests de IDOR passing"],
     references: [],
@@ -1123,7 +1129,7 @@ const ACTIVITIES: Activity[] = [
     number: "2.10",
     title: "Reemplazo de acciones restantes (valor medio-alto)",
     description:
-      "Convertir el resto de adapters en implementación propia (puntos, premios, pagos, consultas de saldo, tickets, catálogo). Priorizar por volumen de uso y riesgo residual. Avance al 23-oct: 19 de las 51 acciones de Betty v38 ya corren sobre componentes propios FDE_* (15 flows + 4 Apex con tests y with sharing).",
+      "Convertir el resto de adapters en implementación propia (puntos, premios, pagos, consultas de saldo, tickets, catálogo). Priorizar por volumen de uso y riesgo residual. Avance al 28-oct: 25 de las 53 acciones de Betty ya corren sobre componentes propios FDE_* (17 flows + 8 Apex); al 23-oct eran 19 de 51.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: true,
@@ -1133,7 +1139,7 @@ const ACTIVITIES: Activity[] = [
     plannedEnd: "2026-11-13",
     actualStart: "2026-10-14",
     status: "in-progress",
-    progressPercent: 35,
+    progressPercent: 47,
     dependencies: ["2.4", "2.5", "2.6", "2.7"],
     deliverables: ["0 adapters restantes en acciones de datos"],
     references: [],
@@ -1191,7 +1197,7 @@ const ACTIVITIES: Activity[] = [
     number: "2.17",
     title: "Evaluar el escalamiento antes de ofrecer un ejecutivo",
     description:
-      "Unificar en una sola decisión cuándo Betty ofrece un ejecutivo y cuándo procede el pase. Betty consulta el criterio de escalamiento y el horario antes de ofrecer: si procede, ofrece; si es fuera de horario, informa el horario; si no procede, sigue ayudando sin ofrecer. Si la distribuidora acepta, se transfiere sin volver a evaluar. Requiere una consulta de sólo evaluación (sin envío de mensajes ni cambios en registros). Pendiente de ratificar alcance con los resultados de v41 (backlog FASE-B-09).",
+      "Unificar en una sola decisión cuándo Betty ofrece un ejecutivo y cuándo procede el pase. Betty consulta el criterio de escalamiento y el horario antes de ofrecer: si procede, ofrece; si es fuera de horario, informa el horario; si no procede, sigue ayudando sin ofrecer. Si la distribuidora acepta, se transfiere sin volver a evaluar. Requiere una consulta de sólo evaluación (sin envío de mensajes ni cambios en registros). Pendiente de ratificar alcance con los resultados de v41 (backlog FASE-B-09). Avance al 28-oct: Betty v39 (activa desde el 24-oct) ya consulta el criterio de escalamiento y el horario antes de ofrecer un ejecutivo, y si no procede sigue ayudando sin ofrecerlo. Pendiente: prueba en WhatsApp de la rama sin escalamiento, refresco del estado de escalamiento y la medición de ofertas.",
     owner: "Salesforce - FDE",
     collaborators: ["Betterware - UAT"],
     delegableToPartner: false,
@@ -1199,6 +1205,9 @@ const ACTIVITIES: Activity[] = [
     week: 6,
     plannedStart: "2026-11-09",
     plannedEnd: "2026-11-13",
+    actualStart: "2026-10-24",
+    progressPercent: 40,
+    status: "in-progress",
     dependencies: ["1.5.9"],
     deliverables: [
       "Consulta de sólo evaluación · ofertas de ejecutivo condicionadas a la decisión · pase sin reevaluación al aceptar · medición de ofertas hechas, aceptadas y transferidas",
@@ -1250,7 +1259,7 @@ const ACTIVITIES: Activity[] = [
     number: "2.13",
     title: "Estabilización post-GA al 100% del tráfico",
     description:
-      "Betty atiende el 100% del tráfico desde el GA del Jue 29-oct. Durante F2 se vigilan los KPIs después de cada reemplazo de acción (Error Rate, escalaciones, abandono) y se mantiene el rollback operativo al agente legacy por acción, no por porcentaje de tráfico.",
+      "Betty atiende el 100% del tráfico desde el GA del Mar 3-nov. Durante F2 se vigilan los KPIs después de cada reemplazo de acción (Error Rate, escalaciones, abandono) y se mantiene el rollback operativo al agente legacy por acción, no por porcentaje de tráfico.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: true,
@@ -1423,7 +1432,7 @@ const ACTIVITIES: Activity[] = [
     number: "3.8",
     title: "Finalizar runbook, docs y dashboards",
     description:
-      "Documentación operacional completa: runbook de incidentes, dashboards de monitoring, test coverage report, documentación de arquitectura actualizada. Avance: dashboard de seguimiento Insiders (app Seguimiento Betty) en producción desde 22-oct, con vista por sesión y por distribuidora.",
+      "Documentación operacional completa: runbook de incidentes, dashboards de monitoring, test coverage report, documentación de arquitectura actualizada. Avance al 28-oct: app Seguimiento Betty en producción con dashboard de sesiones (filtro por agente) y de distribuidoras Insiders, reportes FDE de sesiones por agente y de Insiders activas, seguimiento diario Betty vs BW_AGENT_N en PDF/Excel, y la Guía Maestra (137 pp) como documentación de arquitectura y operación.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner"],
     delegableToPartner: true,
@@ -1433,7 +1442,7 @@ const ACTIVITIES: Activity[] = [
     plannedEnd: "2026-11-27",
     actualStart: "2026-10-22",
     status: "in-progress",
-    progressPercent: 15,
+    progressPercent: 40,
     dependencies: [],
     deliverables: ["Runbook · dashboards · docs completas"],
     references: [],
@@ -1466,7 +1475,7 @@ const ACTIVITIES: Activity[] = [
     number: "4.1",
     title: "Corte final: 100% de acciones en implementación propia",
     description:
-      "Betty ya atiende el 100% del tráfico desde el GA (29-oct). Este corte final retira las últimas dependencias de acciones legacy en 48 horas: lunes se activan los reemplazos restantes, martes se confirma cero regresión. V40 queda solo como rollback de emergencia.",
+      "Betty ya atiende el 100% del tráfico desde el GA (3-nov). Este corte final retira las últimas dependencias de acciones legacy en 48 horas: lunes se activan los reemplazos restantes, martes se confirma cero regresión. V40 queda solo como rollback de emergencia.",
     owner: "Salesforce - FDE",
     collaborators: ["Partner", "Betterware - IT Lead"],
     delegableToPartner: true,
@@ -1833,20 +1842,20 @@ const MILESTONES: Milestone[] = [
     id: "escalada_20",
     title: "Escalada al 20%",
     description:
-      "Lunes 26-oct. Si los KPIs de los primeros días de Insiders (jue 22 → dom 25) son verdes, se marcan más MessagingEndUser con FDE_Pilot__c para subir la cohorte al 20%. Arranca la escalada diaria 20% → 40% → 60% → GA.",
+      "Ejecutada el Mar 27-oct: 20,377 MessagingEndUser del WhatsApp de Betty marcados con FDE_Insider__c por sorteo determinista, más las 256 elegidas por Betterware (~20% del canal). Plan original: Lunes 26-oct. Si los KPIs de los primeros días de Insiders (jue 22 → dom 25) son verdes, se marcan más MessagingEndUser con FDE_Pilot__c para subir la cohorte al 20%. Escalada siguiente: 50% (28-oct) → 80% (2-nov) → GA (3-nov).",
     date: "2026-10-26",
     kind: "Go-live",
     phaseId: "f1_5",
     participants: ["Salesforce - FDE", "Partner", "Betterware - IT Lead"],
-    status: "scheduled",
+    status: "completed",
     references: [],
   },
   {
-    id: "escalada_40",
-    title: "Escalada al 40%",
+    id: "escalada_50",
+    title: "Escalada al 50%",
     description:
-      "Martes 27-oct. Incremento de 20% a 40% si los KPIs del día previo se mantuvieron verdes.",
-    date: "2026-10-27",
+      "Miércoles 28-oct. Incremento de 20% a 50% si los KPIs del día previo se mantuvieron verdes.",
+    date: "2026-10-28",
     kind: "Go-live",
     phaseId: "f1_5",
     participants: ["Salesforce - FDE", "Partner"],
@@ -1854,11 +1863,11 @@ const MILESTONES: Milestone[] = [
     references: [],
   },
   {
-    id: "escalada_60",
-    title: "Escalada al 60%",
+    id: "escalada_80",
+    title: "Escalada al 80%",
     description:
-      "Miércoles 28-oct. Incremento de 40% a 60% si los KPIs del día previo se mantuvieron verdes. Último escalón antes del salto a GA.",
-    date: "2026-10-28",
+      "Lunes 2-nov. Incremento de 50% a 80% si los KPIs del día previo se mantuvieron verdes. Último escalón antes del salto a GA.",
+    date: "2026-11-02",
     kind: "Go-live",
     phaseId: "f1_5",
     participants: ["Salesforce - FDE", "Partner"],
@@ -1893,8 +1902,8 @@ const MILESTONES: Milestone[] = [
     id: "ga",
     title: "🎯 GA · Flujo total General Available",
     description:
-      "Jueves 29-oct. Salto a 100%: el agente nuevo (FDE_BW_Service_Agent) queda como el flujo general para todas las distribuidoras — ya no limitado a la cohorte Insiders marcada con FDE_Pilot__c. Review ejecutivo final con el Sponsor para firmar GA y aprobar la entrada a Fase 2 (reemplazo gradual de acciones legacy).",
-    date: "2026-10-29",
+      "Martes 3-nov. Salto a 100% · flujo total: el agente nuevo (FDE_BW_Service_Agent) queda como el flujo general para todas las distribuidoras — ya no limitado a la cohorte Insiders marcada con FDE_Insider__c. Review ejecutivo final con el Sponsor para firmar GA y aprobar la entrada a Fase 2 (reemplazo gradual de acciones legacy).",
+    date: "2026-11-03",
     kind: "Go-live",
     phaseId: "f1_5",
     participants: [
@@ -1910,8 +1919,8 @@ const MILESTONES: Milestone[] = [
     id: "er3",
     title: "ER3 — firma de GA + go/no-go reemplazo",
     description:
-      "Review ejecutivo al cierre del ciclo Insiders → GA (Jue 29-oct). Firma formal de GA y decisión de entrar a Fase 2 (reemplazo gradual de acciones legacy) o ajustar según evidencia.",
-    date: "2026-10-29",
+      "Review ejecutivo al cierre del ciclo Insiders → GA (Mar 3-nov). Firma formal de GA y decisión de entrar a Fase 2 (reemplazo gradual de acciones legacy) o ajustar según evidencia.",
+    date: "2026-11-03",
     kind: "Executive Review",
     phaseId: "f1_5",
     participants: ["Shared"],
@@ -2259,7 +2268,7 @@ export const betterwarePlan: BetterwarePlan = {
       subtitle: "Go-live con cohorte Insiders → GA",
       phaseIds: ["f0", "f1", "f1_5"],
       startLabel: "Kickoff 06-oct",
-      endLabel: "GA 29-oct",
+      endLabel: "GA 03-nov",
     },
     {
       id: "etapa_2",
