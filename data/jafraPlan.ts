@@ -12,7 +12,7 @@
 //   /Customers/Jafra/files/Conociendo-a-nuestro-agente.html
 // ============================================================================
 
-import type { PlanBaseline } from "./betterwarePlan";
+import type { PlanBaseline, Stage } from "./betterwarePlan";
 import { jafraBaseline } from "./jafraPlanBaseline";
 
 export type ISODate = string; // "YYYY-MM-DD"
@@ -204,6 +204,7 @@ export type JafraPlan = {
   risks: Risk[];
   stableCriteria: StableCriterion[];
   statusUpdates: StatusUpdate[];
+  stages?: Stage[];
   baseline?: PlanBaseline;
   brandColor?: string;
 };
@@ -1437,6 +1438,28 @@ export const jafraPlan: JafraPlan = {
           kind: "pdf",
         },
       ],
+    },
+  ],
+  stages: [
+    {
+      id: "etapa_1",
+      number: 1,
+      name: "Salida a live",
+      subtitle: "V42 en producción · go/no-go G1–G8 → tráfico total",
+      phaseIds: ["p0", "p1", "p2", "p3"],
+      color: "#8E7CC3",
+      startLabel: "Arranque 13-oct",
+      endLabel: "Lanzamiento 24-oct",
+    },
+    {
+      id: "etapa_2",
+      number: 2,
+      name: "Hypercare + Handoff",
+      subtitle: "Operación estable · handoff a Jafra IT",
+      phaseIds: ["p4"],
+      color: "#93C47D",
+      startLabel: "Hypercare 27-oct",
+      endLabel: "Handoff 07-nov",
     },
   ],
   baseline: jafraBaseline,

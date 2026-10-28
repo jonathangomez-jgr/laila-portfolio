@@ -238,6 +238,10 @@ function StageProgressStrip({
     stages[stages.length - 1];
   const finalStage = stages[stages.length - 1];
   const phaseCode = phase.shortLabel.split(" · ")[0];
+  // Nombres acumulativos (Eficacia → Eficacia + Eficiencia) se leen con la última etapa; si no, la secuencia
+  const globalStagesLabel = finalStage.name.includes(stages[0].name)
+    ? finalStage.name
+    : stages.map((st) => st.name).join(" → ");
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-[#4FB3CF] bg-gradient-to-r from-[#EAF6FA] to-white p-5 md:flex-row md:gap-0 md:divide-x md:divide-slate-200">
       <StageProgressItem
@@ -256,7 +260,7 @@ function StageProgressStrip({
       />
       <StageProgressItem
         label="Progreso global"
-        title={`${finalStage.name} · entrega final`}
+        title={`${globalStagesLabel} · entrega final`}
         value={globalValue}
         startLabel={stages[0].startLabel}
         endLabel={finalStage.endLabel}
