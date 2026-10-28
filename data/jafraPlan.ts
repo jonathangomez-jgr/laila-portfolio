@@ -1444,7 +1444,7 @@ export const jafraPlan: JafraPlan = {
     {
       id: "etapa_1",
       number: 1,
-      name: "Salida a live",
+      name: "Eficacia",
       subtitle: "V42 en producción · go/no-go G1–G8 → tráfico total",
       phaseIds: ["p0", "p1", "p2", "p3"],
       color: "#8E7CC3",
