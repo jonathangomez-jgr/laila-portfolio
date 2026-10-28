@@ -8,6 +8,9 @@ import {
   phaseStatus,
   globalProgress,
   overallHealth,
+  planStages,
+  stageProgress,
+  type PlanStage,
 } from "../data/plans";
 import type {
   Activity,
@@ -166,6 +169,93 @@ function ProgressBar({ value, color }: { value: number; color: string }) {
       <div
         className="h-full rounded-full transition-all"
         style={{ width: `${Math.min(100, Math.max(0, value))}%`, background: color }}
+      />
+    </div>
+  );
+}
+
+// --- AVANCE POR ETAPA (fase actual · etapa actual · global) ----------------
+
+function StageProgressItem({
+  label,
+  title,
+  value,
+  startLabel,
+  endLabel,
+}: {
+  label: string;
+  title: string;
+  value: number;
+  startLabel: string;
+  endLabel: string;
+}) {
+  const width = Math.min(100, Math.max(0, value));
+  return (
+    <div className="flex-1 px-1 md:px-5 first:md:pl-0 last:md:pr-0">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">{label}</p>
+          <p className="mt-1 text-sm font-semibold text-slate-900">{title}</p>
+        </div>
+        <p className="font-mono text-3xl font-bold leading-none text-[#2E8BA6]">{value}%</p>
+      </div>
+      <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full border border-slate-200 bg-white">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-[#4FB3CF] to-[#2E7F99] transition-all"
+          style={{ width: `${width}%` }}
+        />
+      </div>
+      <div className="mt-1.5 flex justify-between text-[11px] text-slate-500">
+        <span>{startLabel}</span>
+        <span>{endLabel}</span>
+      </div>
+    </div>
+  );
+}
+
+function StageProgressStrip({
+  plan,
+  stages,
+  globalValue,
+}: {
+  plan: BetterwarePlan;
+  stages: PlanStage[];
+  globalValue: number;
+}) {
+  const today = todayISO();
+  const phase =
+    plan.phases.find((p) => p.startDate <= today && today <= p.endDate) ??
+    plan.phases.find((p) => today < p.startDate) ??
+    plan.phases[plan.phases.length - 1];
+  // Etapa en curso: la que contiene la fase actual; si la fase no está en ninguna, la primera sin terminar
+  const stage =
+    stages.find((st) => st.phaseIds.includes(phase.id)) ??
+    stages.find((st) => stageProgress(plan, st) < 100) ??
+    stages[stages.length - 1];
+  const finalStage = stages[stages.length - 1];
+  const phaseCode = phase.shortLabel.split(" · ")[0];
+  return (
+    <div className="flex flex-col gap-4 rounded-2xl border border-[#4FB3CF] bg-gradient-to-r from-[#EAF6FA] to-white p-5 md:flex-row md:gap-0 md:divide-x md:divide-slate-200">
+      <StageProgressItem
+        label={`Fase actual · ${phaseCode}`}
+        title={phase.title}
+        value={phaseProgress(plan, phase.id)}
+        startLabel={fmtDate(phase.startDate)}
+        endLabel={fmtDate(phase.endDate)}
+      />
+      <StageProgressItem
+        label={`Etapa ${stage.number} · ${stage.name}`}
+        title={stage.subtitle}
+        value={stageProgress(plan, stage)}
+        startLabel={stage.startLabel}
+        endLabel={stage.endLabel}
+      />
+      <StageProgressItem
+        label="Progreso global"
+        title={`${finalStage.name} · entrega final`}
+        value={globalValue}
+        startLabel={stages[0].startLabel}
+        endLabel={finalStage.endLabel}
       />
     </div>
   );
@@ -1233,6 +1323,14 @@ export default function BetterwarePlanCanvas({
       {/* DASHBOARD */}
       {view === "dashboard" && (
         <div className="space-y-6">
+          {planStages(planWithOverrides).length > 0 && (
+            <StageProgressStrip
+              plan={planWithOverrides}
+              stages={planStages(planWithOverrides)}
+              globalValue={progress}
+            />
+          )}
+
           <ThisWeekCard
             activities={activitiesWithOverrides}
             phases={plan.phases}

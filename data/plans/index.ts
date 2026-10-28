@@ -65,6 +65,28 @@ export function phaseStatus(plan: ProjectPlan, phaseId: string): ActivityStatus 
   return "not-started";
 }
 
+export type PlanStage = {
+  id: string;
+  number: number;
+  name: string;
+  subtitle: string;
+  phaseIds: string[];
+  startLabel: string;
+  endLabel: string;
+};
+
+export function planStages(plan: ProjectPlan): PlanStage[] {
+  return ("stages" in plan && plan.stages) || [];
+}
+
+// Mismo criterio que phaseProgress/globalProgress: promedio simple de las actividades de la etapa
+export function stageProgress(plan: ProjectPlan, stage: PlanStage): number {
+  const activities = plan.activities.filter((a) => stage.phaseIds.includes(a.phaseId));
+  if (activities.length === 0) return 0;
+  const sum = activities.reduce((acc, a) => acc + a.progressPercent, 0);
+  return Math.round(sum / activities.length);
+}
+
 export function globalProgress(plan: ProjectPlan): number {
   if (plan.activities.length === 0) return 0;
   const total = plan.activities.reduce((sum, a) => sum + a.progressPercent, 0);

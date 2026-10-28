@@ -181,6 +181,18 @@ export type StatusUpdate = {
   references: Reference[];
 };
 
+// Etapa del proyecto: agrupa fases para comunicar el avance al cliente
+// (p. ej. Etapa 1 · Eficacia = F0 + F1 + F1.5). Opcional en cualquier plan.
+export type Stage = {
+  id: string;
+  number: number;
+  name: string;
+  subtitle: string;
+  phaseIds: string[];
+  startLabel: string;
+  endLabel: string;
+};
+
 export type BetterwarePlan = {
   slug: "betterware";
   projectName: string;
@@ -192,6 +204,7 @@ export type BetterwarePlan = {
   risks: Risk[];
   stableCriteria: StableCriterion[];
   statusUpdates: StatusUpdate[];
+  stages?: Stage[];
 };
 
 // ============================================================================
@@ -2238,6 +2251,26 @@ export const betterwarePlan: BetterwarePlan = {
   risks: RISKS,
   stableCriteria: STABLE_CRITERIA,
   statusUpdates: STATUS_UPDATES,
+  stages: [
+    {
+      id: "etapa_1",
+      number: 1,
+      name: "Eficacia",
+      subtitle: "Go-live con cohorte Insiders → GA",
+      phaseIds: ["f0", "f1", "f1_5"],
+      startLabel: "Kickoff 06-oct",
+      endLabel: "GA 29-oct",
+    },
+    {
+      id: "etapa_2",
+      number: 2,
+      name: "Eficacia + Eficiencia",
+      subtitle: "Reemplazo total · entrega final",
+      phaseIds: ["f2", "f3", "f4"],
+      startLabel: "Arranque 02-nov",
+      endLabel: "Entrega 04-dic",
+    },
+  ],
 };
 
 // ============================================================================
