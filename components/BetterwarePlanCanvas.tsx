@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { betterwarePlan } from "../data/betterwarePlan";
+import PlanBaselineGantt from "./PlanBaselineGantt";
 import {
   type ProjectPlan,
   phaseProgress,
@@ -9,6 +10,7 @@ import {
   globalProgress,
   overallHealth,
   planStages,
+  planBaseline,
   stageProgress,
   type PlanStage,
 } from "../data/plans";
@@ -28,6 +30,7 @@ import type {
 type ViewTab =
   | "dashboard"
   | "gantt"
+  | "baseline"
   | "calendar"
   | "activities"
   | "milestones"
@@ -1287,6 +1290,9 @@ export default function BetterwarePlanCanvas({
           [
             ["dashboard", "Dashboard"],
             ["gantt", "Timeline"],
+            ...(planBaseline(plan)
+              ? ([["baseline", "Progreso vs baseline"]] as [ViewTab, string][])
+              : []),
             ["calendar", "Calendario"],
             ["activities", `Actividades (${plan.activities.length})`],
             ["milestones", `Milestones (${plan.milestones.length})`],
@@ -1395,6 +1401,15 @@ export default function BetterwarePlanCanvas({
             </div>
           </div>
         </div>
+      )}
+
+      {/* PROGRESO VS BASELINE */}
+      {view === "baseline" && planBaseline(plan) && (
+        <PlanBaselineGantt
+          plan={planWithOverrides}
+          baseline={planBaseline(plan)!}
+          stages={planStages(plan)}
+        />
       )}
 
       {/* GANTT */}

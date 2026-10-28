@@ -73,7 +73,19 @@ export type PlanStage = {
   phaseIds: string[];
   startLabel: string;
   endLabel: string;
+  color?: string;
 };
+
+export type PlanBaselineData = {
+  capturedOn: string;
+  sourceCommit?: string;
+  phases: { id: string; startDate: string; endDate: string }[];
+  activities: { id: string; phaseId: string; plannedStart: string; plannedEnd: string }[];
+};
+
+export function planBaseline(plan: ProjectPlan): PlanBaselineData | null {
+  return ("baseline" in plan && plan.baseline) || null;
+}
 
 export function planStages(plan: ProjectPlan): PlanStage[] {
   return ("stages" in plan && plan.stages) || [];

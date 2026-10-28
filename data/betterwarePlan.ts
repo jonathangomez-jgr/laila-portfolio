@@ -4,6 +4,8 @@
 // Autor: Jonathan Gomez (Salesforce FDE)
 // ============================================================================
 
+import { betterwareBaseline } from "./betterwarePlanBaseline";
+
 export type ISODate = string; // "YYYY-MM-DD"
 
 export type OwnerTag =
@@ -191,6 +193,15 @@ export type Stage = {
   phaseIds: string[];
   startLabel: string;
   endLabel: string;
+  color?: string;
+};
+
+// Línea base congelada del plan (fechas de fases y actividades a una fecha dada, p. ej. el kickoff).
+export type PlanBaseline = {
+  capturedOn: ISODate;
+  sourceCommit?: string;
+  phases: { id: string; startDate: ISODate; endDate: ISODate }[];
+  activities: { id: string; phaseId: string; plannedStart: ISODate; plannedEnd: ISODate }[];
 };
 
 export type BetterwarePlan = {
@@ -205,6 +216,7 @@ export type BetterwarePlan = {
   stableCriteria: StableCriterion[];
   statusUpdates: StatusUpdate[];
   stages?: Stage[];
+  baseline?: PlanBaseline;
 };
 
 // ============================================================================
@@ -2267,6 +2279,7 @@ export const betterwarePlan: BetterwarePlan = {
       name: "Eficacia",
       subtitle: "Go-live con cohorte Insiders → GA",
       phaseIds: ["f0", "f1", "f1_5"],
+      color: "#8E7CC3",
       startLabel: "Kickoff 06-oct",
       endLabel: "GA 03-nov",
     },
@@ -2276,10 +2289,12 @@ export const betterwarePlan: BetterwarePlan = {
       name: "Eficacia + Eficiencia",
       subtitle: "Reemplazo total · entrega final",
       phaseIds: ["f2", "f3", "f4"],
+      color: "#93C47D",
       startLabel: "Arranque 02-nov",
       endLabel: "Entrega 04-dic",
     },
   ],
+  baseline: betterwareBaseline,
 };
 
 // ============================================================================
