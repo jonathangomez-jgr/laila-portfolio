@@ -14,7 +14,7 @@ import {
 // Los avances usan la misma fórmula del portal: promedio simple de actividades.
 
 const DAY_MS = 86_400_000;
-const BRAND_GLOBAL = "#39AEC7"; // teal Betterware del deck de kickoff
+const DEFAULT_GLOBAL = "#39AEC7"; // si el plan no define color de marca
 const ETAPA_LABEL_COLORS = ["#39AEC7", "#8C4799"];
 const MONTHS = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
@@ -177,11 +177,13 @@ export default function PlanBaselineGantt({
   plan,
   baseline,
   stages,
+  brandColor = DEFAULT_GLOBAL,
   today = toISO(new Date()),
 }: {
   plan: BetterwarePlan;
   baseline: PlanBaselineData;
   stages: PlanStage[];
+  brandColor?: string;
   today?: string;
 }) {
   // ---- línea base (estática) -------------------------------------------------
@@ -218,7 +220,10 @@ export default function PlanBaselineGantt({
   const weeks: { n: number; start: string; label: string }[] = [];
   for (let m = firstMonday, n = 1; m <= lastEnd; m = addDays(m, 7), n++) {
     const labelStart = m < kickoff ? kickoff : m;
-    weeks.push({ n, start: m, label: `${fmtShort(labelStart)} → ${toDate(addDays(m, 4)).getDate()}` });
+    const friday = addDays(m, 4);
+    const label =
+      labelStart >= friday ? fmtShort(labelStart) : `${fmtShort(labelStart)} → ${toDate(friday).getDate()}`;
+    weeks.push({ n, start: m, label });
   }
   const domainEnd = addDays(weeks[weeks.length - 1].start, 7);
   const totalDays = daysBetween(domainStart, domainEnd);
@@ -294,7 +299,7 @@ export default function PlanBaselineGantt({
       label: "Global",
       span: allReal,
       value: globalProgress(plan),
-      color: BRAND_GLOBAL,
+      color: brandColor,
       meta: realMeta(allReal, allBase),
       emphasis: true,
     },

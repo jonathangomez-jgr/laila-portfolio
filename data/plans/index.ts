@@ -87,6 +87,11 @@ export function planBaseline(plan: ProjectPlan): PlanBaselineData | null {
   return ("baseline" in plan && plan.baseline) || null;
 }
 
+// Color de marca del cliente (barra de progreso global); null si el plan no lo define
+export function planBrandColor(plan: ProjectPlan): string | null {
+  return ("brandColor" in plan && plan.brandColor) || null;
+}
+
 export function planStages(plan: ProjectPlan): PlanStage[] {
   return ("stages" in plan && plan.stages) || [];
 }

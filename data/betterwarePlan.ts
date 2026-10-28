@@ -217,6 +217,7 @@ export type BetterwarePlan = {
   statusUpdates: StatusUpdate[];
   stages?: Stage[];
   baseline?: PlanBaseline;
+  brandColor?: string;
 };
 
 // ============================================================================
@@ -2295,6 +2296,7 @@ export const betterwarePlan: BetterwarePlan = {
     },
   ],
   baseline: betterwareBaseline,
+  brandColor: "#39AEC7",
 };
 
 // ============================================================================

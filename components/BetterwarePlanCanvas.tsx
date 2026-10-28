@@ -11,6 +11,7 @@ import {
   overallHealth,
   planStages,
   planBaseline,
+  planBrandColor,
   stageProgress,
   type PlanStage,
 } from "../data/plans";
@@ -1409,6 +1410,7 @@ export default function BetterwarePlanCanvas({
           plan={planWithOverrides}
           baseline={planBaseline(plan)!}
           stages={planStages(plan)}
+          brandColor={planBrandColor(plan) ?? undefined}
         />
       )}
 

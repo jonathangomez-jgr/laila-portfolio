@@ -12,6 +12,9 @@
 //   /Customers/Jafra/files/Conociendo-a-nuestro-agente.html
 // ============================================================================
 
+import type { PlanBaseline } from "./betterwarePlan";
+import { jafraBaseline } from "./jafraPlanBaseline";
+
 export type ISODate = string; // "YYYY-MM-DD"
 
 export type OwnerTag =
@@ -201,6 +204,8 @@ export type JafraPlan = {
   risks: Risk[];
   stableCriteria: StableCriterion[];
   statusUpdates: StatusUpdate[];
+  baseline?: PlanBaseline;
+  brandColor?: string;
 };
 
 // ============================================================================
@@ -701,6 +706,7 @@ const ACTIVITIES: Activity[] = [
     week: 1,
     plannedStart: "2026-10-16",
     plannedEnd: "2026-10-17",
+    actualEnd: "2026-10-19",
     dependencies: ["1.9"],
     deliverables: [
       "6+ escenarios con evidencia de trace · todos pasan · diferencias documentadas si las hubiera",
@@ -883,6 +889,8 @@ const ACTIVITIES: Activity[] = [
     week: 2,
     plannedStart: "2026-10-21",
     plannedEnd: "2026-10-21",
+    actualStart: "2026-10-19",
+    actualEnd: "2026-10-19",
     dependencies: ["2.9"],
     deliverables: ["V42 publicada y activa en prod · v35 archivada como fallback"],
     tags: ["publish", "delegable", "critical-path"],
@@ -901,6 +909,7 @@ const ACTIVITIES: Activity[] = [
     week: 2,
     plannedStart: "2026-10-21",
     plannedEnd: "2026-10-21",
+    actualStart: "2026-10-19",
     dependencies: ["3.1"],
     deliverables: ["Smoke test medio día · 10+ sesiones internas · 0 incidentes"],
     tags: ["smoke-test", "critical-path"],
@@ -1430,6 +1439,8 @@ export const jafraPlan: JafraPlan = {
       ],
     },
   ],
+  baseline: jafraBaseline,
+  brandColor: "#8C4799",
 };
 
 // ============================================================================
