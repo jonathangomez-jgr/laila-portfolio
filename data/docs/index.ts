@@ -330,6 +330,26 @@ const TELASIST_RETENCION_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
+    slug: "reporte-semanal-2026-10-29",
+    label: "Reporte Semanal · Semana 3 (26 al 30 oct)",
+    description:
+      "8 páginas. v9 activa y v10 en borrador; escritura del caso y lectura de la cuenta corregidas (una cancelación sin saldo ya sale CC); catálogo de la Knowledge cargado; lo que ya hace el agente en pruebas; avance del plan, bloqueantes (filtro de contenido, voz en sandbox, definiciones de Invex) y decisiones para el corte del 30-oct.",
+    url: "/Customers/Telasist/files/Reporte_Semanal_Invex_Retencion_TDC_2026-10-29.pdf",
+    category: "Ejecutivo",
+    icon: "🗓️",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "agenda-corte-definiciones-2026-10-30",
+    label: "Agenda · Corte de definiciones (30-oct)",
+    description:
+      "6 páginas. 19 decisiones abiertas de Invex, Telasist Operación y Telasist IT, cada una con opciones, dueño, actividad del plan y el supuesto por defecto que se configurará detrás de un interruptor si no se decide; compromisos del Equipo FDE Salesforce.",
+    url: "/Customers/Telasist/files/Agenda_Corte_Definiciones_Invex_TDC_2026-10-30.pdf",
+    category: "Ejecutivo",
+    icon: "📋",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "playbook-retencion",
     label: "Playbook de Retención · Cuentas Especiales (v1.0)",
     description:

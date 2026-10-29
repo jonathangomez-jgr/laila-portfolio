@@ -884,6 +884,13 @@ const ACTIVITIES: Activity[] = [
     deliverables: [
       "Minuta con los 14 puntos validados",
     ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "Vencida sin iniciar: sigue pendiente la validación con el ejecutivo INVEX. Bloquea 0.23 y la sesión de cierre (0.29).",
+      },
+    ],
     tags: ["telasist", "invex"],
   }),
   act({
@@ -1108,8 +1115,9 @@ const ACTIVITIES: Activity[] = [
     plannedStart: "2026-10-27",
     plannedEnd: "2026-10-30",
     actualStart: "2026-10-27",
-    status: "in-progress",
-    progressPercent: 80,
+    actualEnd: "2026-10-27",
+    status: "done",
+    progressPercent: 100,
     dependencies: ["0.11"],
     deliverables: [
       "Playbook v1.0 (PDF, 27 pp)",
@@ -1118,7 +1126,55 @@ const ACTIVITIES: Activity[] = [
     references: [
       { label: "Playbook de Retención · Cuentas Especiales (PDF)", url: "/Customers/Telasist/files/Playbook_Retencion_Invex_TDC.pdf", kind: "pdf" },
     ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "Playbook de Retención v1.0 (27 pp) publicado en Documentos el 27-oct.",
+      },
+    ],
     tags: ["playbook", "retencion"],
+  }),
+  act({
+    id: "0.33",
+    phaseId: "f0",
+    number: "0.33",
+    title: "Ingeniería inversa del botón 'Crear Caso' de la consola (PROD)",
+    description: "Análisis de solo lectura del LWC ta_motorClientesCasosCmp: Apex, campos (label, API, tipo, lookups), integraciones, triggers y 24 flows de Case/VoiceCall, con las implicaciones para el agente. Versiones en español e inglés.",
+    owner: "Salesforce - FDE",
+    type: "Doc",
+    week: 4,
+    plannedStart: "2026-10-29",
+    plannedEnd: "2026-10-29",
+    actualStart: "2026-10-29",
+    actualEnd: "2026-10-29",
+    status: "done",
+    progressPercent: 100,
+    deliverables: [
+      "Reporte ES (67 pp)",
+      "Reporte EN (67 pp)",
+    ],
+    tags: ["f0", "discovery"],
+  }),
+  act({
+    id: "0.34",
+    phaseId: "f0",
+    number: "0.34",
+    title: "Memoria v9 → v10 para el equipo",
+    description: "Qué incorporó la v9 frente a los hallazgos de la Ronda 0, qué agrega la v10, pase a draft y cambios de la org integrados.",
+    owner: "Salesforce - FDE",
+    type: "Doc",
+    week: 4,
+    plannedStart: "2026-10-27",
+    plannedEnd: "2026-10-27",
+    actualStart: "2026-10-27",
+    actualEnd: "2026-10-27",
+    status: "done",
+    progressPercent: 100,
+    deliverables: [
+      "Memoria v9 → v10 (13 pp)",
+    ],
+    tags: ["f0", "interno"],
   }),
   // ============ F1 · Build ============
   act({
@@ -1548,14 +1604,23 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-27",
     plannedEnd: "2026-10-28",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-10-27",
+    actualEnd: "2026-10-27",
+    status: "done",
+    progressPercent: 100,
     deliverables: [
       "Mapeo corregido en Config",
       "Case de prueba con RTCC guardado",
     ],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "v9 del Equipo FDE (27-oct): Valores_Resultado = Retención / Cancelación / Otros. v10: guarda de dependencias de picklist. Probado en preview: Retención/RTCC y Cancelación/PRECANC.",
+      },
     ],
     tags: ["f2", "case", "critical-path"],
   }),
@@ -1570,13 +1635,22 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-27",
     plannedEnd: "2026-10-28",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-10-27",
+    actualEnd: "2026-10-27",
+    status: "done",
+    progressPercent: 100,
     deliverables: [
       "Codigo_Tipo_Precancelacion = PRECANC",
     ],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "Codigo_Tipo_Precancelacion = PRECANC en la v9; verificado con TP-16, TP-17 y TP-20.",
+      },
     ],
     tags: ["f2", "case"],
   }),
@@ -1591,8 +1665,9 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-27",
     plannedEnd: "2026-10-30",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-10-27",
+    status: "in-progress",
+    progressPercent: 80,
     dependencies: ["2.6"],
     deliverables: [
       "Tabla código → nombre",
@@ -1600,6 +1675,13 @@ const ACTIVITIES: Activity[] = [
     ],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "v10 (draft desde el 27-oct): Producto_Invex_Picklist__c y la etiqueta exacta de Trámite 1-3 por Custom Metadata. Pendiente: MSI12, UC50 y UC80 no dependen de ningún producto en el sandbox; confirmar la dependencia en PROD.",
+      },
     ],
     tags: ["f2", "case", "critical-path"],
   }),
@@ -1614,13 +1696,21 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-28",
     plannedEnd: "2026-10-29",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-10-28",
+    status: "in-progress",
+    progressPercent: 90,
     deliverables: [
       "Categorías en Invex_Motivo__mdt",
     ],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "v10: categoría y subcategoría por motivo, y motivo nuevo CARGO_NO_RECONOCIDO. Falta decidir su categoría (ACLARACIONES o CARGOS Y COMISIONES/CA6).",
+      },
     ],
     tags: ["f2", "case"],
   }),
@@ -1635,13 +1725,21 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-28",
     plannedEnd: "2026-10-29",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-10-28",
+    status: "in-progress",
+    progressPercent: 50,
     deliverables: [
       "Comentarios con folio completo",
     ],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "Límite de 100 caracteres y plantillas por trámite en la v9. Bug abierto: el comentario sale truncado o mal formado ('RECHAZA 0 O FOLIO') y dice 'RECHAZA' sin ofertas presentadas.",
+      },
     ],
     tags: ["f2", "case"],
   }),
@@ -1656,8 +1754,9 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-27",
     plannedEnd: "2026-10-30",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-10-27",
+    status: "in-progress",
+    progressPercent: 80,
     dependencies: ["0.19", "2.14"],
     deliverables: [
       "Lecturas conectadas",
@@ -1667,6 +1766,11 @@ const ACTIVITIES: Activity[] = [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
     ],
     updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "v10: Campo_Producto_Account = Producto__c y Campo_Saldo_Account = Saldo__c conectados; VPN y semáforo nulos ya no apagan las reglas. Verificado: una cancelación con saldo 0 sale CC (antes todo era CB). Faltan la línea de crédito y la fecha de corte en la carga.",
+      },
       {
         date: "2026-10-20",
         author: "Salesforce - FDE",
@@ -1688,7 +1792,7 @@ const ACTIVITIES: Activity[] = [
     plannedEnd: "2026-10-30",
     actualStart: "2026-10-28",
     status: "in-progress",
-    progressPercent: 10,
+    progressPercent: 85,
     dependencies: ["0.11"],
     deliverables: [
       "Catálogo v2026 cargado",
@@ -1697,6 +1801,11 @@ const ACTIVITIES: Activity[] = [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
     ],
     updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "v9: 14 beneficios KB con orden y requisitos. v10: ACUC 6/12, SUBON y UC100 en Walmart y Sam's; alias Despegar, Voyage y SiCard (Despegar ya oferta B50 y 12 MSI). Supuestos por confirmar con Invex: SUBON con costo y MSI/PC sin costo (RTSC).",
+      },
       {
         date: "2026-10-25",
         author: "Salesforce - FDE",
@@ -1716,8 +1825,9 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-29",
     plannedEnd: "2026-11-03",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-10-29",
+    status: "in-progress",
+    progressPercent: 70,
     dependencies: ["2.6", "2.7", "0.29"],
     deliverables: [
       "Reglas activas",
@@ -1725,6 +1835,13 @@ const ACTIVITIES: Activity[] = [
     ],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "v9: Usar_Reglas = true con 9 reglas. v10: VPN y semáforo nulos tratados. Una cuenta ROJO con VPN 0 recibió ofertas en la v9; re-probar en la Ronda 1. Falta el corte del 30-oct.",
+      },
     ],
     tags: ["f2", "catalogo", "critical-path"],
   }),
@@ -1739,8 +1856,9 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-29",
     plannedEnd: "2026-10-30",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-10-29",
+    status: "in-progress",
+    progressPercent: 90,
     dependencies: ["2.6"],
     deliverables: [
       "Regla Custom Data",
@@ -1748,6 +1866,13 @@ const ACTIVITIES: Activity[] = [
     ],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "v9: Custom Data 5 no oferta y tipifica MESA DE CONTROL; NOW se canaliza a Atención a Clientes. v10: sin expediente queda TEAT + Generales 'Sin documentación' y el agente lo explica antes de cancelar.",
+      },
     ],
     tags: ["f2", "knowledge"],
   }),
@@ -1762,14 +1887,22 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-30",
     plannedEnd: "2026-10-30",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-10-30",
+    status: "in-progress",
+    progressPercent: 60,
     dependencies: ["2.6", "0.24"],
     deliverables: [
       "Regla de saldo",
     ],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "El saldo ya se lee de la cuenta y el umbral está parametrizado. La política para saldo mayor al umbral sigue en CB: SIN_FOLIO (con CaseNumber como acuse) queda soportado, pendiente de decisión de Invex/Legal (0.24, R16).",
+      },
     ],
     tags: ["f2", "cuenta"],
   }),
@@ -1793,6 +1926,13 @@ const ACTIVITIES: Activity[] = [
     ],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "Bloqueado por Invex: el texto de Beneficios naturales sigue con la nota interna 'Confirmar con Invex el texto oficial…' (no se lee en voz alta, pero viaja en la acción).",
+      },
     ],
     tags: ["f2", "catalogo"],
   }),
@@ -1829,14 +1969,22 @@ const ACTIVITIES: Activity[] = [
     week: 5,
     plannedStart: "2026-11-02",
     plannedEnd: "2026-11-03",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-11-02",
+    status: "in-progress",
+    progressPercent: 40,
     dependencies: ["0.15", "0.21"],
     deliverables: [
       "DM-09..13 cerrados",
     ],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "DM-09 hecho (folio = Folio__c). Pendientes: Origin que distinga al agente y opción de IVR por motivo.",
+      },
     ],
     tags: ["f2", "case"],
   }),
@@ -1883,14 +2031,22 @@ const ACTIVITIES: Activity[] = [
     week: 5,
     plannedStart: "2026-11-02",
     plannedEnd: "2026-11-03",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-11-02",
+    status: "in-progress",
+    progressPercent: 80,
     dependencies: ["2.3"],
     deliverables: [
       "Memoria lee trámites por etiqueta",
     ],
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "v10: memoria lee Folio__c y reconoce los códigos V9/V10 y las etiquetas de trámite. Verificado: con una gestión previa el agente pregunta primero si llama por esa solicitud.",
+      },
     ],
     tags: ["f2", "cuenta"],
   }),
@@ -1905,8 +2061,9 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-30",
     plannedEnd: "2026-11-03",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-10-30",
+    status: "in-progress",
+    progressPercent: 70,
     dependencies: ["2.6"],
     deliverables: [
       "Errores de acción escalan",
@@ -1916,13 +2073,20 @@ const ACTIVITIES: Activity[] = [
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
     ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "v10: error técnico escala sin cancelar, una validación por turno, nunca 'quedó registrada' sin folio, una oferta por turno, desescalar antes de transferir, tercero, seguimiento con identidad y cargo no reconocido. Ronda 1 pendiente.",
+      },
+    ],
     tags: ["f2", "critical-path"],
   }),
   act({
     id: "2.20",
     phaseId: "f2",
     number: "2.20",
-    title: "Especificación y configuración conversacional v9 (Playbook → agente)",
+    title: "Especificación y configuración conversacional v10 (Playbook → agente)",
     description: "Traducir el Playbook al agente: identificación con teléfono y 6 dígitos en una sola pregunta (mitigación del filtro de plataforma, 7/7 + 21/21 sin bloqueo), parche del bucle de consentimiento (probado), parche del validador (especificado), regla de tercero que llama por el titular, rutas de cargo no reconocido, consumo mínimo, mala venta y EXPI, escalera de ofertas por perfil × motivo, empatía al inicio, aviso de cancelación antes del consentimiento y guardas para no confirmar un registro fallido.",
     owner: "Salesforce - FDE",
     type: "Dev",
@@ -1931,15 +2095,23 @@ const ACTIVITIES: Activity[] = [
     plannedEnd: "2026-11-03",
     actualStart: "2026-10-27",
     status: "in-progress",
-    progressPercent: 25,
+    progressPercent: 85,
     dependencies: ["0.32", "4.0"],
     deliverables: [
-      "Especificación v9",
-      "Bundle v9 en borrador",
+      "Memoria v9 → v10",
+      "Bundle v10 en draft",
+      "Ronda 1",
     ],
     references: [
       { label: "Reporte de Pruebas · Ronda 0 (PDF)", url: "/Customers/Telasist/files/Reporte_Pruebas_Ronda0_Invex_TDC.pdf", kind: "pdf" },
       { label: "Playbook de Retención · Cuentas Especiales (PDF)", url: "/Customers/Telasist/files/Playbook_Retencion_Invex_TDC.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "v10 en draft desde el 27-oct (bundle _10): 38 ediciones sobre la v9 y cambios de Apex/CMT integrados con los de la v9. Preview: 5 de 6 escenarios en Pass. Hallazgos nuevos de plataforma: H-47 (el RFC solo cae en el filtro, 3 de 14 sesiones) y H-48 (CVV; tres disparos terminan la sesión).",
+      },
     ],
     tags: ["f2", "playbook", "critical-path"],
   }),
@@ -1955,8 +2127,9 @@ const ACTIVITIES: Activity[] = [
     plannedStart: "2026-10-27",
     plannedEnd: "2026-11-04",
     actualStart: "2026-10-27",
-    status: "in-progress",
-    progressPercent: 50,
+    actualEnd: "2026-10-27",
+    status: "done",
+    progressPercent: 100,
     dependencies: ["2.1", "2.3", "2.6", "2.8", "2.18", "2.19"],
     deliverables: [
       "Corrida de pruebas",
@@ -1966,6 +2139,11 @@ const ACTIVITIES: Activity[] = [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
     ],
     updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "Validación final de la v10 (0Af7z00000vCWePCAW): 122/122 pruebas y cobertura 93–100 % en las clases Invex. Desplegado con quick deploy 0Af7z00000vCWmTCAW.",
+      },
       {
         date: "2026-10-27",
         author: "Salesforce - FDE",
@@ -1985,8 +2163,10 @@ const ACTIVITIES: Activity[] = [
     week: 5,
     plannedStart: "2026-11-04",
     plannedEnd: "2026-11-04",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-11-04",
+    actualEnd: "2026-10-27",
+    status: "done",
+    progressPercent: 100,
     dependencies: ["2.15"],
     deliverables: [
       "Agente v9 activo",
@@ -1994,7 +2174,74 @@ const ACTIVITIES: Activity[] = [
     references: [
       { label: "Mapa de datos del agente v7 (PDF)", url: "/Customers/Telasist/files/Agente_Invex_Datos_Consulta_y_Registro.pdf", kind: "pdf" },
     ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "El Equipo FDE Salesforce publicó y activó la v9 el 27-oct (BotVersion 9 activa). La v10 se publicará después de la Ronda 1 (2.21).",
+      },
+    ],
     tags: ["f2", "critical-path"],
+  }),
+  act({
+    id: "2.21",
+    phaseId: "f2",
+    number: "2.21",
+    title: "Ronda 1 sobre la v10 y publicación",
+    description: "Probar el draft v10 con acciones reales y cuentas limpias: Case con producto, trámite, categoría y folio; CC frente a CB con saldo real; sin expediente; Walmart con ACUC y UC100; consentimiento; tercero. Si pasa, publicar y activar la v10 con aviso al equipo.",
+    owner: "Salesforce - FDE",
+    type: "Test",
+    week: 4,
+    plannedStart: "2026-10-30",
+    plannedEnd: "2026-11-04",
+    status: "not-started",
+    progressPercent: 0,
+    dependencies: ["2.20"],
+    deliverables: [
+      "Resultados Ronda 1",
+      "v10 publicada y activa",
+    ],
+    tags: ["f2", "testing", "critical-path"],
+  }),
+  act({
+    id: "2.22",
+    phaseId: "f2",
+    number: "2.22",
+    title: "Alinear el agente con la consola de PROD (VoiceCall y flows de Case)",
+    description: "El reporte del LWC 'Crear Caso' mostró dos diferencias. 1) En la VoiceCall el agente escribe el Case en RelatedRecordId; la consola pone ahí la cuenta, el Case en SC_Case_in_VoiceCall__c y Primera_vez__c = true. 2) Si el agente pone Servicio__c, se activan los flows Casos (reescribe Producto_Invex_Picklist__c) y 'Proceso Invex' (antepone o reinicia el código en Comentarios_Tramite_*). Además, las versiones de esos flows difieren entre sandbox y PROD.",
+    owner: "Salesforce - FDE",
+    type: "Dev",
+    week: 4,
+    plannedStart: "2026-10-30",
+    plannedEnd: "2026-11-04",
+    status: "not-started",
+    progressPercent: 0,
+    dependencies: ["2.21"],
+    deliverables: [
+      "VoiceCall escrita como la consola",
+      "Decisión sobre Servicio__c",
+      "Prueba con los flows de PROD",
+    ],
+    tags: ["f2", "case"],
+  }),
+  act({
+    id: "2.23",
+    phaseId: "f2",
+    number: "2.23",
+    title: "Caso a Salesforce por falso positivo del filtro de contenido",
+    description: "Abrir el caso de soporte con las trazas de H-01, H-47 y H-48: los datos de validación (RFC, 6 dígitos) y la mención del CVV caen en el guardrail Inappropriate_Content antes del LLM; con tres disparos la sesión termina. Probar en paralelo la mitigación M2 (pedir el RFC junto con el nombre de la tarjeta) y verificar en voz.",
+    owner: "Salesforce - FDE",
+    type: "Mgmt",
+    week: 4,
+    plannedStart: "2026-10-30",
+    plannedEnd: "2026-11-05",
+    status: "not-started",
+    progressPercent: 0,
+    deliverables: [
+      "Caso de soporte abierto",
+      "Resultado de M2",
+    ],
+    tags: ["f2", "plataforma", "critical-path"],
   }),
   act({
     id: "2.17",
@@ -2007,10 +2254,22 @@ const ACTIVITIES: Activity[] = [
     week: 4,
     plannedStart: "2026-10-29",
     plannedEnd: "2026-10-29",
-    status: "not-started",
-    progressPercent: 0,
+    actualStart: "2026-10-29",
+    actualEnd: "2026-10-29",
+    status: "done",
+    progressPercent: 100,
     deliverables: [
       "Reporte Semanal S3",
+    ],
+    references: [
+      { label: "Reporte Semanal · 26 al 30 oct (PDF)", url: "/Customers/Telasist/files/Reporte_Semanal_Invex_Retencion_TDC_2026-10-29.pdf", kind: "pdf" },
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "Reporte semanal de la semana 3 publicado en Documentos.",
+      },
     ],
     tags: ["f2", "status"],
   }),
@@ -2132,10 +2391,17 @@ const ACTIVITIES: Activity[] = [
     plannedEnd: "2026-11-05",
     actualStart: "2026-10-27",
     status: "in-progress",
-    progressPercent: 40,
+    progressPercent: 55,
     dependencies: ["4.0", "2.16"],
     deliverables: [
       "Suite de pruebas del agente",
+    ],
+    updates: [
+      {
+        date: "2026-10-29",
+        author: "Salesforce - FDE",
+        note: "48 conversaciones de la Ronda 0, 6 escenarios de la v9 y 10 de la v10 con el corredor adaptativo.",
+      },
     ],
     tags: ["testing", "critical-path"],
   }),
@@ -2763,6 +3029,17 @@ const MILESTONES: Milestone[] = [
     ],
   },
   {
+    id: "agente-v10-draft",
+    title: "Agente v9 activo y v10 en draft",
+    description: "v9 activada por el equipo; v10 desplegada como draft con Apex y CMT validados (122/122).",
+    date: "2026-10-27",
+    kind: "Internal Review",
+    phaseId: "f2",
+    participants: ["Salesforce - FDE"],
+    status: "completed",
+    references: [],
+  },
+  {
     id: "reporte-semanal-2026-10-29",
     title: "Reporte semanal · semana 3",
     description: "Avance de F2 y decisiones.",
@@ -2770,7 +3047,7 @@ const MILESTONES: Milestone[] = [
     kind: "Weekly Status",
     phaseId: "f2",
     participants: ["Salesforce - FDE", "Telasist - Operations", "Partner"],
-    status: "scheduled",
+    status: "completed",
     references: [],
   },
   {
@@ -2799,8 +3076,8 @@ const MILESTONES: Milestone[] = [
   },
   {
     id: "agente-v9",
-    title: "Agente v9 con reglas reales activo en sandbox",
-    description: "Catálogo de la Knowledge, Case correcto y cuenta conectada.",
+    title: "Agente v10 con reglas reales activo en sandbox",
+    description: "v9 activa desde el 27-oct; la v10 (catálogo KB, Case correcto, cuenta conectada) se activa tras la Ronda 1.",
     date: "2026-11-04",
     kind: "Internal Review",
     phaseId: "f2",
@@ -2994,13 +3271,13 @@ const RISKS: Risk[] = [
     id: "R8",
     title: "La escritura del Case no coincide con los valores de PROD",
     description:
-      "Causa raíz confirmada el 26-oct: Resultado_de_llamada recibe valores inexistentes y, por la dependencia de picklist, Tipo_Invex también se rechaza; trámites como código, CANC en lugar de PRECANC, categorías vacías y comentario truncado.",
+      "Mitigado el 27-oct con la v9 y la v10: Resultado, Tipo, PRECANC, producto, etiquetas de trámite, categorías y folio con guarda de dependencias. Queda confirmar en PROD la dependencia de MSI12, UC50 y UC80.",
     probability: "High",
     impact: "High",
     mitigation:
       "Actividades 2.1–2.5 y 2.13; prueba de DML contra los valores de PROD antes de v9.",
     owner: "Salesforce - FDE",
-    status: "active",
+    status: "mitigated",
     phaseId: "f2",
     references: [],
   },
@@ -3022,7 +3299,7 @@ const RISKS: Risk[] = [
     id: "R10",
     title: "Código de v8 sin pruebas después del 22-oct",
     description:
-      "Resuelto el 27-oct: 90/90 pruebas en verde, cobertura por clase 80–100 %.",
+      "Resuelto: 122/122 pruebas en la v10 (27-oct), cobertura 93–100 %.",
     probability: "Low",
     impact: "Medium",
     mitigation:
@@ -3036,11 +3313,11 @@ const RISKS: Risk[] = [
     id: "R17",
     title: "Filtro de contenido de la plataforma bloquea la identidad",
     description:
-      "El filtro marca como inapropiado el tercer mensaje del cliente con solo datos (6 dígitos, RFC) y envenena la sesión; en v8 bloqueó 43 de 49 intentos. También se activa con CVV/NIP o \"soy supervisor\".",
+      "El guardrail de la plataforma rechaza mensajes con datos de validación antes del LLM. Con M1 (teléfono + 6 dígitos juntos) bajó de 3/3 a 1/11 sesiones, pero el RFC solo cae en 3 de 14 sesiones y la mención del CVV también; con tres disparos la sesión termina ('Safety violation limit exceeded'), que en voz sería una llamada cortada.",
     probability: "High",
     impact: "High",
     mitigation:
-      "Pedir teléfono y 6 dígitos en una sola pregunta (0 bloqueos en 25 sesiones de prueba); escalar a Salesforce como falso positivo con trazas; verificar en voz (F3).",
+      "M1 y override del filtro en la v10; probar M2 (RFC junto con el nombre de la tarjeta); abrir caso a Salesforce con trazas (2.23); verificar en voz (F3).",
     owner: "Salesforce - FDE",
     status: "active",
     phaseId: "f2",
@@ -3050,8 +3327,8 @@ const RISKS: Risk[] = [
     id: "R18",
     title: "Defectos críticos de consentimiento y autenticación",
     description:
-      "Validador y bucle de consentimiento, registro fallido reportado como éxito y tercero autenticado con los datos del titular: errores graves de la Cédula y riesgo regulatorio.",
-    probability: "Medium",
+      "Corregidos en la v10 y verificados en preview: consentimiento sin bucle, nunca 'quedó registrada' sin folio, tercero detectado y escalado. Falta la Ronda 1 y la prueba en voz.",
+    probability: "Low",
     impact: "High",
     mitigation:
       "Correcciones en 2.19/2.20 y re-prueba en la Ronda 1 antes del readiness review.",
@@ -3078,7 +3355,7 @@ const RISKS: Risk[] = [
     id: "R12",
     title: "Telefonía sin conectar en el sandbox",
     description:
-      "Ningún flujo de voz apunta al agente; la primera llamada E2E depende de Telasist IT.",
+      "Ningún flujo de voz apunta al agente; la primera llamada E2E depende de Telasist IT. Agentforce Voice ya soporta español (confirmado 27-oct), así que el idioma deja de ser riesgo; queda la conexión de telefonía.",
     probability: "Medium",
     impact: "High",
     mitigation:
@@ -3142,6 +3419,48 @@ const RISKS: Risk[] = [
     owner: "Salesforce - FDE",
     status: "active",
     phaseId: "f2",
+    references: [],
+  },
+  {
+    id: "R19",
+    title: "Diferencias del agente con la consola y los flows de PROD",
+    description:
+      "El agente escribe la VoiceCall distinto que el LWC 'Crear Caso' y, si pone Servicio__c, dos flows de PROD reescriben el producto y los comentarios de trámite. Las versiones de esos flows difieren entre sandbox y PROD, así que lo probado en sandbox puede no reflejar PROD.",
+    probability: "Medium",
+    impact: "High",
+    mitigation:
+      "Actividad 2.22 y prueba con las versiones de PROD antes del handoff; documentarlo para TS4/Skala.",
+    owner: "Salesforce - FDE",
+    status: "active",
+    phaseId: "f2",
+    references: [],
+  },
+  {
+    id: "R20",
+    title: "La v9 activa ya corre con el Apex y los CMT de la v10",
+    description:
+      "Apex y Custom Metadata son compartidos por versión: la v9 activa ya lee el saldo (puede cerrar CC), usa los alias nuevos y escribe el Case con la guarda de dependencias.",
+    probability: "Low",
+    impact: "Medium",
+    mitigation:
+      "Cambios compatibles (inputs opcionales); compartir la memoria v9 → v10 con el equipo y publicar la v10 tras la Ronda 1.",
+    owner: "Salesforce - FDE",
+    status: "active",
+    phaseId: "f2",
+    references: [],
+  },
+  {
+    id: "R21",
+    title: "Credenciales de integraciones en Custom Metadata en PROD",
+    description:
+      "La consola de PROD guarda client-id y client-secret de 6 servicios MuleSoft en CustomCredential__mdt (no Named Credentials) y dos callouts ignoran el interruptor llamadaAPIHabilitada__c. No afecta al agente, pero es un riesgo de seguridad del entorno que recibe TS4/Skala.",
+    probability: "Medium",
+    impact: "Medium",
+    mitigation:
+      "Reportarlo a Telasist IT en el handoff con la recomendación de migrar a Named Credentials.",
+    owner: "Telasist - IT Lead",
+    status: "active",
+    phaseId: "f5",
     references: [],
   },
 ];
@@ -3226,6 +3545,33 @@ const STABLE_CRITERIA: StableCriterion[] = [
 // ============================================================================
 
 const STATUS_UPDATES: StatusUpdate[] = [
+  {
+    id: "status-2026-10-29",
+    weekOf: "2026-10-26",
+    author: "Salesforce - FDE",
+    overallHealth: "yellow",
+    phaseId: "f2",
+    highlights: [
+      "Agente v9 publicado y activo en sandbox desde el 27-oct; v10 desplegado como draft con 38 ediciones conversacionales y Apex/CMT validados (122/122 pruebas, cobertura 93–100 %).",
+      "Escritura del Case corregida (2.1–2.4): Retención/Cancelación/Otros, PRECANC, producto, etiqueta exacta del trámite, categorías y folio, con guarda de dependencias de picklist.",
+      "Cuenta conectada (2.6): con saldo real una cancelación sin saldo ya sale CC. Catálogo KB con ACUC, SUBON, UC100 y alias de Despegar, Voyage y SiCard (2.7).",
+      "Ronda 0 cerrada y Playbook publicado. Preview v10: 5 de 6 escenarios en Pass (oferta por turno, tercero, desescalamiento, seguimiento, aviso de precancelación).",
+      "Ingeniería inversa del botón 'Crear Caso' de la consola de PROD (ES y EN): el agente debe alinear cómo escribe la VoiceCall y cuidar dos flows de Case que reescriben producto y comentarios.",
+    ],
+    nextWeek: [
+      "Equipo FDE Salesforce: Ronda 1 sobre la v10 y publicación (2.21), alineación con la consola de PROD (2.22), caso a Salesforce por el filtro de contenido y prueba M2 (2.23).",
+      "Telasist Operación: ruta de transferencia (0.21) y validación con el ejecutivo INVEX (0.22, vencida).",
+      "Telasist IT: ruta de voz en sandbox (3.1) para la primera llamada E2E del 6-nov.",
+      "Invex: decisiones del corte del 30-oct, política de saldo mayor al umbral (0.24) y textos oficiales de beneficios naturales (2.11).",
+    ],
+    activeBlockers: [
+      "Filtro de contenido de la plataforma con datos de validación (R17 · 2.23).",
+      "Ruta de transferencia y ruta de voz en sandbox (Telasist · 0.21, 3.1).",
+      "Validación con el ejecutivo INVEX y definiciones del corte del 30-oct (0.22, 0.29).",
+    ],
+    activeRisks: ["R1", "R6", "R11", "R12", "R14", "R16", "R17", "R18", "R19", "R20", "R21"],
+    references: [],
+  },
   {
     id: "status-2026-10-26",
     weekOf: "2026-10-26",
