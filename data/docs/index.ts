@@ -267,6 +267,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     icon: "📊",
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
+  {
+    slug: "sesion-arquitectura-agente",
+    label: "Presentación · Arquitectura del agente · El modelo entiende, el código decide",
+    description:
+      "Sesión de 30 minutos en formato charla (24 slides horizontales, con notas del orador en la tecla N). Por qué se migró de Agentforce Builder legacy a Agent Script, en qué debe ayudar la nueva estructura, cómo se combinan la parte probabilística (el modelo entiende) y la determinística (el código decide), por qué el comportamiento varía durante las pruebas y por qué cada cambio se valida antes de liberarse. Incluye cinco interacciones: simulador de reglas en prosa contra reglas en código, recorrido de un turno, mapa de los 12 subagentes, interruptor de herramientas por estado y quiz de quién decide. Flechas para avanzar, F pantalla completa. Los simuladores son didácticos, no mediciones de Betty.",
+    url: "/Customers/Betterware/files/sesion-arquitectura-agente/index.html",
+    category: "Arquitectura",
+    icon: "🧠",
+    visibleTo: ["Salesforce"],
+  },
 ];
 
 // ----------------------------------------------------------------------------
@@ -398,6 +408,26 @@ const TELASIST_RETENCION_DOCS: DocEntry[] = [
     category: "Pilot",
     icon: "🧭",
     visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "presentacion-mesa-directiva",
+    label: "Presentación · Mesa directiva · Agente de voz Retención Invex TDC",
+    description:
+      "Deck para la mesa directiva (martes 10-nov). 21 slides horizontales: qué pidió Invex (Discovery Brief y Manual v2.0), cómo se construyó el agente, qué incluye la solución, cómo se probó, pedido contra construido, qué falta hasta la entrega del 12-nov y las decisiones que dependen del cliente. Borrador: el estado se confirma contra el plan antes de presentar.",
+    url: "/Customers/Telasist/files/Presentacion_Mesa_Directiva_Agente_Invex_TDC.html",
+    category: "Ejecutivo",
+    icon: "🎤",
+    visibleTo: ["Salesforce"],
+  },
+  {
+    slug: "demo-llamada-agente-invex",
+    label: "Demo · Llamada en vivo del agente de voz Retención Invex TDC",
+    description:
+      "Presentación para montar encima la grabación de la llamada (overlay en OBS): teléfono con pantalla vacía, línea de tiempo de 10 momentos y tarjeta de detalle. Flechas para avanzar, F pantalla completa, C modo limpio. Borrador: el texto de las escenas sale del guion v12 y se ajusta con la llamada real.",
+    url: "/Customers/Telasist/files/Demo_Llamada_Agente_Invex_TDC.html",
+    category: "Ejecutivo",
+    icon: "📞",
+    visibleTo: ["Salesforce"],
   },
   {
     slug: "presentacion-arranque",

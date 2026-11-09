@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Betterware × Salesforce · Arquitectura del agente: el modelo entiende, el código decide</title>
+<style>
+@font-face{font-family:"Avant Garde for Salesforce";src:url(assets/fonts/AvantGardeForSalesforceW05-Dm.woff) format("woff");font-weight:600;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Light.woff) format("woff");font-weight:300;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Regular.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Semibold.woff) format("woff");font-weight:600;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Bold.woff) format("woff");font-weight:700;font-display:swap}
+
+/* ===== THEME: salesforce-brand (Sacred palette) — copied from the engine theme, do not invent hex ===== */
+:root{
+  --ink:#001E5B;--ink2:#052663;--ink3:#0a2f74;--ink4:#103a86;
+  --line:#1c3f80;--line2:#2b4f95;
+  --text:#EAF5FE;--muted:#a8c2ec;--faint:#7592c4;
+  --accent:#00B3FF;--accent-soft:#90D0FE;--accent-dim:rgba(0,179,255,.14);
+  --electric:#066AFE;--electric-2:#022AC0;
+  --good:#04E1CB;--good-dim:rgba(4,225,203,.14);--warn:#FCC003;--warn-dim:rgba(252,192,3,.14);
+  --pink:#FF538A;--pink-dim:rgba(255,83,138,.14);--violet:#D17DFE;--violet-dim:rgba(209,125,254,.14);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --display:"Avant Garde for Salesforce","Salesforce Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sans:"Salesforce Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  /* chart series in stack order def,esc,aba,amb — validated with dataviz validate_palette.js on surface #052663 (dark): ALL CHECKS PASS; Not set = neutral gray + hatch (no data) */
+  --c-def:#199e70;--c-amb:#3987e5;--c-esc:#9085e9;--c-aba:#d95926;--c-not:#4a6396;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#000f33;font-family:var(--sans);color:var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+/* ===== fixed 1920x1080 canvas, scaled to fit ===== */
+#deck{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 82% 2%, rgba(0,179,255,.18), transparent 46%),
+    radial-gradient(120% 120% at 6% 104%, rgba(6,106,254,.22), transparent 54%),
+    radial-gradient(150% 120% at 50% 42%, #062a75 0%, #001E5B 62%, #001542 100%)}
+.progress{position:absolute;top:0;left:0;height:5px;z-index:50;background:linear-gradient(90deg,var(--accent),var(--electric),var(--good));box-shadow:0 0 14px rgba(0,179,255,.6);transition:width .45s cubic-bezier(.2,.7,.2,1)}
+
+.slide{position:absolute;inset:0;padding:92px 120px 134px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
+.slide.active{opacity:1;visibility:visible;transition:opacity .45s ease}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(rgba(144,208,254,.07) 1px,transparent 1.5px);background-size:34px 34px}
+.slide>*{position:relative;z-index:1}
+
+/* chrome */
+.pill{position:absolute!important;top:34px;right:44px;z-index:6;display:flex;align-items:center;gap:16px;padding:10px 22px;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 8px 26px rgba(0,10,40,.35)}
+.pill img.jafra{height:24px}
+.pill i{width:1px;height:24px;background:#c9d3e2}
+.pill img{height:26px;display:block}
+.snum{position:absolute!important;bottom:34px;right:48px;font-size:15px;letter-spacing:.16em;color:var(--faint);font-weight:600}
+.src{position:absolute!important;bottom:28px;left:120px;right:250px;font-size:15px;color:#9db4dc;line-height:1.38;border-top:1px solid rgba(144,208,254,.18);padding-top:8px}
+.src::before{content:"Fuente · ";font-weight:700;color:var(--accent-soft)}
+.eyebrow{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;font-size:15px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-soft);padding:8px 16px;border-radius:999px;background:var(--accent-dim);border:1px solid rgba(0,179,255,.3);margin-bottom:22px}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.eyebrow.pk{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.35)}
+.eyebrow.gd{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.35)}
+.eyebrow.yl{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.35)}
+
+h1{font-family:var(--display);font-weight:600;font-size:104px;line-height:1.02;letter-spacing:-.025em}
+h2{font-family:var(--display);font-weight:600;font-size:58px;line-height:1.08;letter-spacing:-.02em;max-width:1500px}
+h3{font-size:27px;font-weight:700;line-height:1.25;color:#fff}
+p,li{font-size:23px;line-height:1.5;color:var(--muted)}
+b,strong{color:#fff;font-weight:700}
+.lede{font-size:27px;line-height:1.45;color:var(--muted);max-width:1300px;margin-top:18px}
+.mono{font-family:var(--mono)}
+.grad{background:linear-gradient(92deg,#90D0FE,#00B3FF 40%,#04E1CB);-webkit-background-clip:text;background-clip:text;color:transparent}
+.body{flex:1;display:flex;flex-direction:column;min-height:0}
+
+/* cards */
+.card{position:relative;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:22px;padding:28px 30px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 18px 40px rgba(0,8,32,.35);overflow:hidden}
+.card.bar::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--accent),var(--electric))}
+.card.bar.g::before{background:linear-gradient(90deg,var(--good),var(--accent))}
+.card.bar.y::before{background:linear-gradient(90deg,var(--warn),#ff9f45)}
+.card.bar.p::before{background:linear-gradient(90deg,var(--pink),var(--violet))}
+.card.bar.v::before{background:linear-gradient(90deg,var(--violet),var(--electric))}
+.card .k{font-size:15px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:10px}
+.card p{font-size:21px}
+.grid{display:grid;gap:24px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+
+/* evidence level chips */
+.lv{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:28px;padding:0 9px;border-radius:8px;font-size:15px;font-weight:700;font-family:var(--mono);margin-right:10px;vertical-align:3px}
+.lv.A{background:rgba(0,179,255,.18);color:var(--accent-soft);border:1px solid rgba(0,179,255,.45)}
+.lv.B{background:var(--violet-dim);color:#e3b6ff;border:1px solid rgba(209,125,254,.45)}
+.lv.C{background:var(--warn-dim);color:var(--warn);border:1px solid rgba(252,192,3,.45)}
+
+/* session buttons */
+.ses{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(144,208,254,.4);color:#fff;text-decoration:none;font-size:17px;font-weight:600;transition:background .25s,transform .35s cubic-bezier(.34,1.56,.64,1)}
+.ses:hover{background:rgba(0,179,255,.22);transform:translateY(-3px)}
+.ses .id{font-family:var(--mono);font-size:14px;color:var(--accent-soft);font-weight:500}
+.ses::after{content:"↗";color:var(--accent)}
+.sesrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+
+/* status (always icon + label) */
+.st{display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:999px;font-size:15.5px;font-weight:700;white-space:nowrap;border:1px solid}
+.st.ok{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.4)}
+.st.mid{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.4)}
+.st.no{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.4)}
+
+/* sparkles: edges only */
+.spk{position:absolute!important;z-index:2;pointer-events:none;width:56px;height:auto}
+/* big stat */
+.big{font-family:var(--display);font-weight:600;font-size:120px;line-height:.95;letter-spacing:-.03em;color:#fff}
+.big.md{font-size:84px}
+.big small{font-size:.42em;color:var(--accent-soft);letter-spacing:0}
+
+/* dividers */
+.divider{justify-content:center;align-items:flex-start;background:radial-gradient(1200px 820px at 70% 30%,#0b3a8f 0%,#001E5B 55%,#000f33 100%)}
+.divider::after{background-image:linear-gradient(rgba(0,179,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,179,255,.07) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(1100px 760px at 60% 45%,#000 0%,transparent 75%);mask-image:radial-gradient(1100px 760px at 60% 45%,#000 0%,transparent 75%)}
+.divider .glow{position:absolute;width:900px;height:900px;right:-120px;top:50%;transform:translateY(-50%);border-radius:50%;background:radial-gradient(circle,rgba(0,179,255,.28),transparent 64%);filter:blur(10px);z-index:0}
+.divider.pk .glow{background:radial-gradient(circle,rgba(255,83,138,.24),transparent 64%)}
+.divider.gd .glow{background:radial-gradient(circle,rgba(4,225,203,.22),transparent 64%)}
+.divider .chap{font-family:var(--display);font-size:260px;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(144,208,254,.55);margin-bottom:30px}
+.divider h2{font-size:96px;max-width:1680px}
+.divider .lede{font-size:30px}
+
+/* tooltip */
+#tip{position:fixed;z-index:100;pointer-events:none;background:#fff;color:#001E5B;font-size:15px;font-weight:600;padding:8px 12px;border-radius:10px;box-shadow:0 10px 26px rgba(0,0,0,.35);opacity:0;transition:opacity .12s;white-space:nowrap}
+#tip b{color:#001E5B}
+svg text{font-family:var(--sans)}
+.chart{width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:22px;font-size:17px;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:16px;height:16px;border-radius:4px;display:inline-block}
+
+/* tables */
+table.tb{width:100%;border-collapse:separate;border-spacing:0;font-size:18px;background:rgba(5,38,99,.7);border:1px solid var(--line2);border-radius:18px;overflow:hidden}
+.tb th{font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-soft);text-align:left;padding:13px 16px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--line2);font-weight:700}
+.tb td{padding:10px 16px;border-bottom:1px solid var(--line);color:var(--muted);line-height:1.32;vertical-align:middle}
+.tb td:first-child{color:#fff;font-weight:700}
+.tb tr:last-child td{border-bottom:none}
+.sem{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:10px;vertical-align:-1px;flex-shrink:0}.sem.g{background:var(--good)}.sem.y{background:var(--warn)}.sem.r{background:var(--pink)}.sm18 td{padding:7px 14px}tr.rg td{background:rgba(4,225,203,.05)}tr.ry td{background:rgba(252,192,3,.06)}tr.rr td{background:rgba(255,83,138,.08)}.pn{display:inline-block;margin-left:8px;font-size:12.5px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--pink-dim);color:#ff8db1;border:1px solid rgba(255,83,138,.4)}
+.tag{display:inline-block;font-size:13.5px;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:7px;background:var(--accent-dim);color:var(--accent-soft);white-space:nowrap}
+
+/* finding layout */
+.fhead{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
+.fnum{font-family:var(--display);font-size:30px;color:var(--accent);letter-spacing:.04em}
+.fcols{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;margin-top:30px;flex:1;min-height:0}
+.fcols .card h3{margin-bottom:12px}
+.fcols ul{list-style:none;display:flex;flex-direction:column;gap:13px}
+.fcols li{font-size:22.5px;line-height:1.42}
+.gate{display:flex;align-items:center;gap:16px;padding:16px 22px;border-radius:16px;background:rgba(4,225,203,.1);border:1px solid rgba(4,225,203,.4);font-size:19px;color:#d9fffa}
+.gate .gk{font-family:var(--mono);font-weight:700;color:var(--good);font-size:18px;white-space:nowrap}
+.why{margin-top:22px;padding:18px 22px;border-radius:14px;background:rgba(0,179,255,.08);border-left:4px solid var(--accent)}
+.why .k{font-size:14px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:6px}
+.why p{font-size:22px;color:var(--text);line-height:1.45}
+.fcols>div:last-child>.card{flex:1;display:flex;flex-direction:column}
+.fcols>div:last-child>.card p{font-size:22.5px!important;line-height:1.5}
+.fcols>div:last-child .v41{margin-top:auto}
+.v41{font-size:20.5px;line-height:1.45;color:var(--muted);padding:14px 18px;border-radius:14px;background:rgba(209,125,254,.08);border:1px solid rgba(209,125,254,.3);margin-top:14px}
+.v41 b{color:#e9c8ff}
+
+.rm .slide{transition:none!important}
+.cover-title .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em}.cover-title .wi{display:inline-block}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+
+/* ===== extras de esta sesión ===== */
+.det{color:var(--accent)}.prob{color:var(--pink)}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font-size:16px;font-weight:700;border:1px solid;white-space:nowrap}
+.chip.d{color:var(--accent-soft);background:var(--accent-dim);border-color:rgba(0,179,255,.45)}
+.chip.p{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.45)}
+.chip.b{color:#e3b6ff;background:var(--violet-dim);border-color:rgba(209,125,254,.45)}
+.chip.g{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.4)}
+.chip.y{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.4)}
+.btn{font-family:var(--sans);font-size:20px;font-weight:700;color:#fff;background:linear-gradient(92deg,var(--electric),var(--accent));border:0;border-radius:999px;padding:14px 28px;cursor:pointer;box-shadow:0 10px 26px rgba(0,100,255,.35);transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(0,140,255,.5)}
+.btn.ghost{background:rgba(255,255,255,.08);border:1px solid rgba(144,208,254,.4);box-shadow:none}
+.btn.sm{font-size:17px;padding:10px 20px}
+.code{font-family:var(--mono);font-size:18px;line-height:1.55;color:#cfe4ff;background:rgba(0,15,51,.7);border:1px solid var(--line2);border-radius:14px;padding:16px 20px;white-space:pre-wrap}
+.code .kw{color:#ff8db1}.code .vr{color:var(--good)}.code .cm{color:var(--faint)}
+.quote{border-left:4px solid var(--accent);padding:6px 0 6px 22px;font-size:25px;line-height:1.45;color:var(--text);font-style:italic}
+.quote small{display:block;margin-top:8px;font-style:normal;font-size:16px;color:var(--faint);letter-spacing:.04em}
+
+/* simulador A/B */
+.trial{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:18px}
+.trial .t{height:58px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;border:1px solid var(--line2);background:rgba(255,255,255,.03);transition:background .2s}
+.t.ok{background:var(--good-dim);border-color:rgba(4,225,203,.5)}
+.t.bad{background:var(--pink-dim);border-color:rgba(255,83,138,.55)}
+.t.mid{background:var(--warn-dim);border-color:rgba(252,192,3,.5)}
+.t.alt{background:var(--violet-dim);border-color:rgba(209,125,254,.5)}
+.score{font-family:var(--display);font-size:64px;line-height:1}
+.score small{font-size:.38em;color:var(--accent-soft)}
+
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;position:relative;margin-top:40px}
+.pipe::before{content:"";position:absolute;left:4%;right:4%;top:46px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--accent));opacity:.55}
+.pn{position:relative;font-family:var(--sans);text-align:center;color:#fff;background:rgba(10,47,116,.7);border:2px solid var(--line2);border-radius:20px;padding:84px 12px 20px;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .25s,background .25s}
+.pn .bubble{position:absolute;left:50%;top:14px;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:28px;color:#001E5B;background:var(--accent);box-shadow:0 0 0 8px rgba(0,179,255,.18)}
+.pn.p .bubble{background:var(--pink);box-shadow:0 0 0 8px rgba(255,83,138,.2)}
+.pn:hover{transform:translateY(-5px)}
+.pn.on{border-color:#fff;background:rgba(6,106,254,.4)}
+.pn.p.on{background:rgba(255,83,138,.28)}
+.pn h3{font-size:20px;line-height:1.2}
+.pn span{display:block;margin-top:8px;font-size:14px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent-soft)}
+.pn.p span{color:#ff8db1}
+
+/* mapa de subagentes */
+.smap{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
+.sa{font-family:var(--sans);text-align:left;color:#fff;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:16px;padding:14px 18px;cursor:pointer;font-size:19px;font-weight:700;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .25s,background .25s}
+.sa small{display:block;font-size:14px;font-weight:400;color:var(--muted);margin-top:3px}
+.sa:hover{transform:translateY(-4px);border-color:var(--accent)}
+.sa.on{border-color:#fff;background:rgba(6,106,254,.45)}
+.sa.star{border-color:rgba(252,192,3,.6)}
+
+/* interruptor */
+.sw{display:inline-flex;align-items:center;gap:16px;cursor:pointer;background:none;border:0;color:#fff;font-family:var(--sans);font-size:22px;font-weight:700}
+.sw i{width:78px;height:42px;border-radius:999px;background:#334a7d;position:relative;transition:background .25s;flex-shrink:0}
+.sw i::after{content:"";position:absolute;top:5px;left:5px;width:32px;height:32px;border-radius:50%;background:#fff;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.sw.on i{background:var(--good)}.sw.on i::after{transform:translateX(36px)}
+.tool{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 20px;border-radius:14px;border:1px solid var(--line2);margin-top:12px;transition:all .35s}
+.tool b{font-family:var(--mono);font-size:19px}
+.tool .cond{font-family:var(--mono);font-size:15px;color:var(--faint)}
+.tool.on{background:var(--good-dim);border-color:rgba(4,225,203,.55)}
+.tool.off{opacity:.38;background:rgba(255,255,255,.02)}
+.vrow{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-radius:12px;background:rgba(0,15,51,.55);border:1px solid var(--line);margin-top:10px;font-size:19px}
+.vrow .nm{font-family:var(--mono);color:var(--good)}
+.vrow .vl{font-family:var(--mono);color:#fff;font-weight:700}
+.vrow small{display:block;font-size:14px;color:var(--faint);font-family:var(--sans)}
+
+/* quiz */
+.qz{font-family:var(--sans);text-align:left;color:#fff;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:20px;padding:22px 26px;cursor:pointer;min-height:176px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .3s cubic-bezier(.34,1.56,.64,1),background .3s,border-color .3s}
+.qz:hover{transform:translateY(-4px)}
+.qz h3{font-size:23px;line-height:1.3}
+.qz .hint{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-soft);font-weight:700}
+.qz .ans{display:none;font-size:18px;line-height:1.4;color:var(--muted);margin-top:10px}
+.qz.open{cursor:default}
+.qz.open .ans{display:block}
+.qz.open .hint{display:none}
+.qz.open.llm{border-color:rgba(255,83,138,.6);background:rgba(255,83,138,.1)}
+.qz.open.cod{border-color:rgba(0,179,255,.6);background:rgba(0,179,255,.1)}
+.qz.open.amb{border-color:rgba(209,125,254,.6);background:rgba(209,125,254,.1)}
+
+/* notas del orador */
+#notes{position:fixed;left:0;right:0;bottom:0;z-index:90;background:rgba(0,10,40,.96);border-top:2px solid var(--accent);padding:18px 40px 22px;display:none;max-height:38vh;overflow:auto}
+#notes.show{display:block}
+#notes .nh{display:flex;justify-content:space-between;gap:20px;font-size:14px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-soft);margin-bottom:8px}
+#notes .nb{font-size:19px;line-height:1.55;color:#eaf5fe;max-width:1500px}
+aside.notes{display:none}
+.hl{background:linear-gradient(transparent 62%,rgba(0,179,255,.35) 0)}
+.big2{font-family:var(--display);font-weight:600;font-size:150px;line-height:.95;letter-spacing:-.03em}
+.stat .lb{font-size:19px;line-height:1.35;margin-top:10px;color:var(--muted)}
+
+</style>
+</head>
+<body>
+<div id="deck">
+<div class="progress" id="progress"></div>
+<!-- 01 · COVER -->
+<section class="slide cover" data-anim="cover" data-min="0:00">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:54px;top:170px;width:88px">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:96px;bottom:150px;width:40px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:64px;bottom:120px;width:60px">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="right:120px;top:150px;width:32px">
+  <div class="body" style="justify-content:center">
+    <div class="eyebrow" data-a>Betterware × Salesforce · Sesión de arquitectura · 30 minutos</div>
+    <h1 class="cover-title" style="max-width:1200px">Un agente que entiende<br><span class="grad">y un código que decide</span></h1>
+    <p class="lede" data-a style="max-width:1080px;margin-top:22px">Por qué migramos de Agentforce Builder legacy a Agent Script, cómo se combinan lo probabilístico y lo determinístico, y qué significa para la estabilidad de Betty.</p>
+    <div data-a style="display:flex;gap:16px;margin-top:40px">
+      <span class="chip d">Determinístico · el código decide</span>
+      <span class="chip p">Probabilístico · el modelo entiende</span>
+      <span class="chip b">Híbrido · las dos mitades juntas</span>
+    </div>
+  </div>
+  <img class="astro" src="assets/img/agent-astro.png" alt="Agent Astro" style="position:absolute;right:150px;top:300px;width:470px;z-index:1">
+  <aside class="notes">(0:00 · 1 min) Buenos días. Antes de hablar de arquitectura quiero empezar con una pregunta que seguramente muchos de ustedes se han hecho en estas semanas de pruebas: ¿por qué el agente a veces responde distinto a lo mismo? Hoy les voy a contar por qué pasa, por qué es normal en cierta parte, y por qué la arquitectura nueva fue diseñada justamente para que lo importante no cambie nunca.</aside>
+</section>
+
+<!-- 02 · HOOK -->
+<section class="slide" data-min="1:00">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="right:40px;top:420px;width:44px">
+  <div class="eyebrow pk" data-a>La pregunta que nos trajo aquí</div>
+  <h2 data-a>Una distribuidora escribe lo mismo, dos veces. ¿Debe recibir lo mismo?</h2>
+  <div class="grid g2" style="margin-top:46px;flex:1;min-height:0" data-pop>
+    <div class="card bar p" style="display:flex;flex-direction:column;gap:16px">
+      <div class="k" style="color:#ff8db1">Lo que puede variar</div>
+      <p style="color:var(--text);font-size:26px">Cómo se saluda, qué palabras usa, en qué orden explica, si agrega una frase amable.</p>
+      <p>Es lenguaje natural. Dos redacciones distintas pueden decir exactamente lo mismo.</p>
+      <div style="margin-top:auto"><span class="chip p">Probabilístico · está bien que varíe</span></div>
+    </div>
+    <div class="card bar" style="display:flex;flex-direction:column;gap:16px">
+      <div class="k">Lo que NO debe variar</div>
+      <p style="color:var(--text);font-size:26px">Si se verifica su identidad, qué datos puede ver, cuándo se pasa a una persona, y que un folio solo exista si el sistema lo devolvió.</p>
+      <p>Son reglas de negocio. Una sola desviación es un incidente.</p>
+      <div style="margin-top:auto"><span class="chip d">Determinístico · nunca debe variar</span></div>
+    </div>
+  </div>
+  <div class="why" data-a><div class="k">La idea de toda la sesión</div><p>Separar con precisión qué se le deja al modelo y qué se le quita. Esa separación es la migración.</p></div>
+  <aside class="notes">(1:00 · 2 min) Pongamos un caso. Una distribuidora escribe "quiero reportar un faltante" dos veces. Si la segunda vez Betty le saluda con otras palabras, no pasa nada. Pero si la primera vez le pide verificar identidad y la segunda no, tenemos un problema serio. Todo lo que voy a explicar hoy es cómo asegurar que lo primero pueda variar y lo segundo no.</aside>
+</section>
+
+<!-- 03 · AGENDA -->
+<section class="slide" data-min="3:00">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:40px;bottom:200px;width:34px">
+  <div class="eyebrow" data-a>Agenda · 30 minutos</div>
+  <h2 data-a>Cuatro actos, con dos momentos para jugar con la arquitectura</h2>
+  <div class="grid g4" style="margin-top:56px" data-pop>
+    <div class="card bar"><div class="k">Acto 1 · 8 min</div><h3>Por qué cambiar</h3><p style="margin-top:10px">El problema del enfoque anterior y lo que se espera de la nueva estructura.</p></div>
+    <div class="card bar v"><div class="k">Acto 2 · 10 min</div><h3>Cómo está construida</h3><p style="margin-top:10px">Lo probabilístico, lo determinístico y cómo se combinan en cada turno.</p></div>
+    <div class="card bar p"><div class="k">Acto 3 · 6 min</div><h3>Por qué varía en pruebas</h3><p style="margin-top:10px">Qué es normal, qué no, y cómo validamos cada cambio.</p></div>
+    <div class="card bar g"><div class="k">Acto 4 · 6 min</div><h3>Confianza y liberación</h3><p style="margin-top:10px">Cómo evoluciona Betty y qué esperamos de esta etapa.</p></div>
+  </div>
+  <div class="card" data-a style="margin-top:34px;display:flex;align-items:center;gap:28px;padding:26px 34px">
+    <div class="big md" style="font-size:64px;color:var(--good)">3 ✦</div>
+    <p style="font-size:24px;color:var(--text)">Tres cosas para llevarse: <b>el modelo entiende, el código decide</b> · <b>lo que cambia no es lo que importa</b> · <b>cada cambio se valida antes de llegar a ustedes</b>.</p>
+  </div>
+  <aside class="notes">(3:00 · 1 min) Cuatro actos. En el segundo y el cuarto hay simuladores interactivos: les pido que los toquen, no que me crean. Y si se quedan con tres frases, que sean estas.</aside>
+</section>
+
+<!-- 04 · DIVIDER 1 -->
+<section class="slide divider" data-anim="divider" data-min="4:00">
+  <div class="glow"></div>
+  <div class="chap">01</div>
+  <h2>Por qué <span class="grad">cambiar</span></h2>
+  <p class="lede">El problema no era el modelo. Era pedirle que también fuera el reglamento.</p>
+  <aside class="notes">(4:00) Acto uno.</aside>
+</section>
+
+<!-- 05 · EL PROBLEMA -->
+<section class="slide" data-min="4:15">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:36px;bottom:170px;width:50px">
+  <div class="eyebrow pk" data-a>El enfoque anterior</div>
+  <h2 data-a>En el Builder legacy, las reglas viven escritas en prosa y el modelo decide cómo cumplirlas</h2>
+  <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:36px;margin-top:38px;flex:1;min-height:0">
+    <div class="card" data-a>
+      <div class="k" style="color:#ff8db1">Así se ve una regla en el enfoque legacy</div>
+      <div class="code" style="margin-top:8px;font-size:20px">"Antes de consultar el saldo, verifica que
+la distribuidora esté autenticada. Si no lo
+está, pide su código. Nunca des datos sin
+verificar. Si el usuario insiste, escala."</div>
+      <p style="margin-top:16px">Es una <b>petición</b>, no una garantía. El modelo la lee cada turno y la interpreta cada vez.</p>
+    </div>
+    <div data-pop style="display:flex;flex-direction:column;gap:14px">
+      <div class="card" style="padding:18px 24px"><h3 style="font-size:22px">1 · Más reglas, más texto</h3><p style="font-size:19px;margin-top:4px">Cada incidente agregaba otra instrucción. Los prompts crecen y las reglas empiezan a competir entre sí.</p></div>
+      <div class="card" style="padding:18px 24px"><h3 style="font-size:22px">2 · El orden no está garantizado</h3><p style="font-size:19px;margin-top:4px">Nada obliga a que “verificar” ocurra antes de “consultar”.</p></div>
+      <div class="card" style="padding:18px 24px"><h3 style="font-size:22px">3 · La memoria es el contexto</h3><p style="font-size:19px;margin-top:4px">El estado de la conversación depende de lo que el modelo “recuerde” del historial.</p></div>
+    </div>
+  </div>
+  <div class="src">Descripción general del enfoque: Salesforce, “Agent Script”, developer.salesforce.com/docs/ai/agentforce/guide/agent-script.html. Salesforce lo nombra “prompt doom loop” en salesforce.com/agentforce/script/.</div>
+  <aside class="notes">(4:15 · 2 min) En el Builder legacy las reglas se escriben en español dentro de las instrucciones. Es poderoso porque es rápido de construir. Pero una regla en prosa es una petición, no una garantía. Con el tiempo cada incidente agregó otra instrucción y llegamos a lo que Salesforce llama el "prompt doom loop": más texto, más conflicto, menos previsibilidad. No es culpa del modelo; es pedirle que además de conversar sea el reglamento.</aside>
+</section>
+
+<!-- 06 · SIMULADOR A/B -->
+<section class="slide" data-anim="sim" data-min="6:15">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="left:44px;top:200px;width:30px">
+  <div class="eyebrow yl" data-a>Interactivo · simulación ilustrativa</div>
+  <h2 data-a>La misma situación, 12 veces. Mira dónde cae la decisión</h2>
+  <div class="grid g2" style="margin-top:30px;flex:1;min-height:0;gap:30px">
+    <div class="card" data-a>
+      <div class="k" style="color:#ff8db1">Regla en prosa · el modelo decide</div>
+      <p style="font-size:19px">“Pide verificación antes de dar datos de cuenta.”</p>
+      <div class="trial" id="trA"></div>
+      <div style="display:flex;align-items:baseline;gap:14px;margin-top:20px"><div class="score" id="scA" style="color:#ff8db1">–</div><p style="font-size:19px" id="lbA">Pulsa “Ejecutar 12 intentos”</p></div>
+    </div>
+    <div class="card bar" data-a>
+      <div class="k">Regla en código · <span class="mono" style="font-size:.9em;text-transform:none">available when isAuthenticated == True</span></div>
+      <p style="font-size:19px">La acción de consulta <b>no existe</b> para el modelo hasta que el código la habilita.</p>
+      <div class="trial" id="trB"></div>
+      <div style="display:flex;align-items:baseline;gap:14px;margin-top:20px"><div class="score" id="scB" style="color:var(--good)">–</div><p style="font-size:19px" id="lbB">Pulsa “Ejecutar 12 intentos”</p></div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:20px;margin-top:20px" data-a>
+    <button class="btn" id="runSim">▶ Ejecutar 12 intentos</button>
+    <button class="btn ghost sm" id="harder">Subir la presión: usuario insistente</button>
+    <p style="font-size:17px;color:var(--faint)">Simulación didáctica con probabilidades ilustrativas; no es una medición de Betty.</p>
+  </div>
+  <aside class="notes">(6:15 · 2 min) Esto es una simulación didáctica, no una medición. A la izquierda, la regla vive en el prompt: casi siempre la cumple, pero "casi" es el problema, y si el usuario insiste, la tasa baja. A la derecha, la regla vive en el código: la acción simplemente no está disponible hasta que el sistema confirma la autenticación. Pulsen "usuario insistente" y observen que la derecha no se mueve. Eso es determinismo: no depende de que el modelo "se acuerde".</aside>
+</section>
+
+<!-- 07 · POR QUÉ IMPORTA -->
+<section class="slide" data-min="8:15">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:38px;bottom:230px;width:46px">
+  <div class="eyebrow" data-a>Por qué es importante la migración</div>
+  <h2 data-a>Cuatro razones, todas ligadas a operar Betty a escala</h2>
+  <div class="grid g4" style="margin-top:44px;flex:1" data-pop>
+    <div class="card bar" style="display:flex;flex-direction:column"><div class="k">Control</div><h3>Las reglas se ejecutan, no se sugieren</h3><p style="margin-top:12px">Orden de pasos, condiciones y rutas quedan definidos en el script. El modelo trabaja dentro de ese marco.</p></div>
+    <div class="card bar p" style="display:flex;flex-direction:column"><div class="k" style="color:#ff8db1">Seguridad</div><h3>Los datos se habilitan por estado</h3><p style="margin-top:12px">Una consulta de cuenta solo existe cuando la sesión está verificada. No depende de la insistencia de nadie.</p></div>
+    <div class="card bar g" style="display:flex;flex-direction:column"><div class="k" style="color:var(--good)">Estabilidad</div><h3>Menos desviaciones entre intentos</h3><p style="margin-top:12px">Las decisiones críticas pasan por el mismo camino cada vez; lo que varía es la redacción.</p></div>
+    <div class="card bar v" style="display:flex;flex-direction:column"><div class="k" style="color:var(--violet)">Trazabilidad</div><h3>Cada decisión se puede explicar</h3><p style="margin-top:12px">Variables, transiciones y acciones quedan en la traza: se puede responder “por qué hizo eso”.</p></div>
+  </div>
+  <div class="why" data-a><div class="k">En qué debe ayudar a Betterware</div><p>Que una distribuidora reciba el mismo tratamiento sin importar el día, la redacción o el volumen, y que cualquier cambio de regla sea una edición puntual y verificable.</p></div>
+  <div class="src">Beneficios descritos por Salesforce: consistencia, contexto en tiempo real, fin del “prompt doom loop”, visibilidad y pruebas con trazas — salesforce.com/agentforce/script/.</div>
+  <aside class="notes">(8:15 · 2 min) Cuatro razones. Control: las reglas se ejecutan. Seguridad: los datos se habilitan por estado de la sesión. Estabilidad: lo crítico recorre el mismo camino. Trazabilidad: podemos explicar cada decisión. Y la consecuencia para Betterware es muy concreta: tratamiento homogéneo, y cambios de regla como ediciones pequeñas, no reescrituras de prompts gigantes.</aside>
+</section>
+
+<!-- 08 · LO QUE DICE SALESFORCE -->
+<section class="slide" data-min="10:15">
+  <div class="eyebrow gd" data-a>Fuentes oficiales</div>
+  <h2 data-a>No es una opinión nuestra: es el diseño que Salesforce describe para Agent Script</h2>
+  <div class="grid g2" style="margin-top:36px;gap:28px;flex:1;min-height:0" data-pop>
+    <div class="card"><div class="quote">“Use Agent Script to build predictable, context-aware agent workflows that don’t rely solely on interpretation by an LLM.”<small>Salesforce Developer Docs · Agent Script</small></div></div>
+    <div class="card"><div class="quote">“Script combines the flexibility of natural language instructions for handling conversational tasks with the reliability of programmatic expressions for handling business rules.”<small>Salesforce Developer Docs · Agent Script</small></div></div>
+    <div class="card"><div class="quote">“Auditable, step-by-step control over agent behavior.”<small>salesforce.com/agentforce/script</small></div></div>
+    <div class="card"><div class="quote">Flujos críticos que siguen “the exact same steps every single time”, y lógica de negocio que se mantiene aunque cambien los modelos subyacentes.<small>salesforce.com/agentforce/script (paráfrasis y cita parcial)</small></div></div>
+  </div>
+  <p data-a style="margin-top:18px;font-size:20px">Nota de vocabulario: desde abril de 2026 Salesforce llama <b>subagents</b> a lo que antes eran <b>topics</b>, sin cambio de funcionalidad.</p>
+  <div class="src">Salesforce Developer Docs, “Agent Script” (developer.salesforce.com/docs/ai/agentforce/guide/agent-script.html) · Salesforce, “Agent Script” (salesforce.com/agentforce/script/). Consultadas el 9 de noviembre de 2026.</div>
+  <aside class="notes">(10:15 · 1 min) Esto no lo inventamos. Salesforce lo describe así: flujos predecibles que no dependen solo de la interpretación del modelo; flexibilidad del lenguaje natural más la confiabilidad de expresiones programáticas. Y vale una aclaración de vocabulario: lo que antes se llamaba topics ahora son subagents.</aside>
+</section>
+
+<!-- 09 · DIVIDER 2 -->
+<section class="slide divider pk" data-anim="divider" data-min="11:15">
+  <div class="glow"></div>
+  <div class="chap">02</div>
+  <h2>Cómo está <span class="grad">construida</span> Betty</h2>
+  <p class="lede">Dos mitades que no compiten: una entiende, la otra decide.</p>
+  <aside class="notes">(11:15) Acto dos. La parte técnica, pero sin jerga.</aside>
+</section>
+
+<!-- 10 · DOS MITADES -->
+<section class="slide" data-min="11:30">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:40px;top:330px;width:36px">
+  <div class="eyebrow" data-a>El principio de diseño</div>
+  <h2 data-a>El modelo entiende, el código decide</h2>
+  <div class="grid g2" style="margin-top:34px;flex:1;min-height:0;gap:28px">
+    <div class="card bar p" data-a>
+      <div class="k" style="color:#ff8db1">Probabilístico · el modelo de lenguaje</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px">
+        <li><b>Entiende</b> qué quiere la distribuidora, aunque lo escriba con errores o abreviaturas.</li>
+        <li><b>Extrae</b> datos del texto libre: un código, una fecha, un número de pedido.</li>
+        <li><b>Clasifica</b> la intención y elige el subagente que corresponde.</li>
+        <li><b>Redacta</b> la respuesta con el tono de Betty.</li>
+      </ul>
+      <p style="margin-top:14px;font-size:19px;color:var(--faint)">Fortaleza: flexibilidad. Riesgo: no es idéntico dos veces.</p>
+    </div>
+    <div class="card bar" data-a>
+      <div class="k">Determinístico · el script, las variables y el código</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px">
+        <li><b>Decide</b> qué subagente toma el turno y en qué orden.</li>
+        <li><b>Habilita</b> o esconde acciones según el estado (<span class="mono" style="font-size:.85em">available when</span>).</li>
+        <li><b>Ejecuta</b> acciones en secuencia fija (<span class="mono" style="font-size:.85em">run</span>) con argumentos tomados de variables.</li>
+        <li><b>Recuerda</b> el estado de la sesión en variables, no en el historial.</li>
+      </ul>
+      <p style="margin-top:14px;font-size:19px;color:var(--faint)">Fortaleza: mismo resultado cada vez. Límite: no entiende lenguaje.</p>
+    </div>
+  </div>
+  <div class="gate" data-a style="margin-top:20px"><span class="gk">PRINCIPIO</span>Nunca un mensaje de “registrado” sin un folio devuelto por el sistema: el modelo redacta, pero el dato lo trae el código.</div>
+  <aside class="notes">(11:30 · 2 min) Esta es la diapositiva más importante. Al modelo le dejamos lo que hace mejor que nadie: entender lenguaje desordenado, extraer datos y redactar con calidad. Al código le dejamos lo que el lenguaje no puede garantizar: el orden, los permisos, la memoria del estado. Y el ejemplo que mejor lo resume: Betty nunca dice "tu solicitud quedó registrada" si el sistema no devolvió un folio. El modelo redacta, pero el dato lo trae el código.</aside>
+</section>
+
+<!-- 11 · PIPELINE DE UN TURNO -->
+<section class="slide" data-min="13:30">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:36px;bottom:170px;width:50px">
+  <div class="eyebrow" data-a>Interactivo · un turno de conversación</div>
+  <h2 data-a>Seis pasos por cada mensaje; solo uno es libre</h2>
+  <div class="pipe" id="pipe" data-pop>
+    <div class="pn on" data-i="0"><div class="bubble">1</div><h3>Llega el mensaje</h3><span>entrada</span></div>
+    <div class="pn" data-i="1"><div class="bubble">2</div><h3>Reglas previas</h3><span>código</span></div>
+    <div class="pn" data-i="2"><div class="bubble">3</div><h3>Se arman las instrucciones</h3><span>código</span></div>
+    <div class="pn p" data-i="3"><div class="bubble">4</div><h3>El modelo razona</h3><span>probabilístico</span></div>
+    <div class="pn" data-i="4"><div class="bubble">5</div><h3>Acciones permitidas</h3><span>código</span></div>
+    <div class="pn" data-i="5"><div class="bubble">6</div><h3>Cierre del turno</h3><span>código</span></div>
+  </div>
+  <div class="card" id="pipeInfo" style="margin-top:34px;flex:1;min-height:0;display:flex;gap:30px;align-items:flex-start">
+    <div style="flex:1"><div class="k" id="piK">Paso 1</div><h3 id="piT" style="font-size:30px"></h3><p id="piP" style="margin-top:10px"></p></div>
+    <div style="flex:1"><div class="k">Ejemplo en Betty</div><div class="code" id="piC" style="font-size:17px"></div></div>
+  </div>
+  <div class="src">Orden de ejecución (reglas previas → instrucciones resueltas → razonamiento → acciones → cierre) conforme al bundle FDE_BW_Service_Agent_V2.agent y a la descripción de Agent Script en developer.salesforce.com/docs/ai/agentforce/guide/agent-script.html.</div>
+  <aside class="notes">(13:30 · 2 min) Hagan clic en cada paso. Cuando llega un mensaje, primero corren las reglas previas en código: por ejemplo, si la persona no está verificada, el turno se manda a autenticación sin preguntarle al modelo. Después el código arma las instrucciones que verá el modelo según el estado. Solo en el cuarto paso el modelo razona, y lo hace dentro de lo que el código le permitió: sus herramientas están filtradas. Después las acciones se ejecutan con argumentos que salen de variables. Y al final el código actualiza el estado. Cinco de seis pasos son código.</aside>
+</section>
+
+<!-- 12 · MAPA DE BETTY -->
+<section class="slide" data-min="15:30">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="right:120px;top:150px;width:32px">
+  <div class="eyebrow" data-a>Interactivo · la estructura de Betty</div>
+  <h2 data-a>Un router con reglas de entrada y 12 subagentes especializados</h2>
+  <div class="card bar" data-a style="margin-top:22px;padding:18px 26px;display:flex;align-items:center;gap:22px">
+    <span class="chip d" style="font-size:18px">Router · agent_router</span>
+    <p style="font-size:20px;color:var(--text)">Cada mensaje pasa primero por las reglas de entrada (<b>9 bloques de reglas previas</b> en total en el agente) y solo después se le pide al modelo que clasifique.</p>
+  </div>
+  <div class="smap" id="smap" data-pop>
+    <button class="sa on" data-k="auth">AuthAndSecurity<small>Verificación</small></button>
+    <button class="sa" data-k="acc">AccountAndInfo<small>Cuenta y asociadas</small></button>
+    <button class="sa" data-k="ord">OrdersAndDelivery<small>Pedidos y entregas</small></button>
+    <button class="sa" data-k="pay">PaymentsAndFinance<small>Pagos y saldos</small></button>
+    <button class="sa" data-k="rew">RewardsAndLoyalty<small>Premios y puntos</small></button>
+    <button class="sa" data-k="dig">DigitalContent<small>Catálogo y contenido</small></button>
+    <button class="sa star" data-k="pe">PedidoExtemporaneo<small>Flujo guiado por pasos</small></button>
+    <button class="sa" data-k="faq">GeneralFAQ<small>Knowledge</small></button>
+    <button class="sa star" data-k="esc">Escalation<small>Único punto de pase</small></button>
+    <button class="sa" data-k="off">OffTopic<small>Fuera de alcance</small></button>
+    <button class="sa" data-k="amb">Ambiguous<small>Aclaración</small></button>
+    <button class="sa" data-k="att">Analizar_Adjuntos<small>Evidencias</small></button>
+  </div>
+  <div class="card" id="saInfo" style="margin-top:20px;flex:1;min-height:0"></div>
+  <div class="src">Estructura verificada en FDE_BW_Service_Agent_V2.agent: start_agent agent_router + 12 subagentes (11 de dominio/soporte + Analizar_Adjuntos); 93 variables de estado y 35 condiciones available when (conteo del 9-nov-2026).</div>
+  <aside class="notes">(15:30 · 2 min) Esta es la forma de Betty. Un router y subagentes especializados. Toquen cualquiera para ver qué hace y qué reglas de código lo rodean. Dos merecen mención: Escalation es el único punto donde se decide pasar a una persona, para que no haya cinco criterios distintos regados en el agente; y Pedido Extemporáneo es un flujo guiado por pasos, donde el código lleva la cuenta de en qué paso va la conversación.</aside>
+</section>
+
+<!-- 13 · INTERRUPTOR -->
+<section class="slide" data-min="17:30">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:40px;bottom:200px;width:34px">
+  <div class="eyebrow yl" data-a>Interactivo · available when</div>
+  <h2 data-a>Las herramientas del modelo aparecen o desaparecen según el estado</h2>
+  <div class="grid g2" style="margin-top:30px;flex:1;min-height:0;gap:30px">
+    <div data-a>
+      <button class="sw" id="swAuth"><i></i><span id="swLbl">Distribuidora NO verificada</span></button>
+      <div class="vrow"><div><span class="nm">isAuthenticated</span><small>variable de estado de la sesión</small></div><span class="vl" id="vAuth">False</span></div>
+      <div class="vrow"><div><span class="nm">auth_attempts</span><small>intentos fallidos de verificación</small></div>
+        <span><button class="btn ghost sm" id="attMinus">−</button> <span class="vl" id="vAtt" style="margin:0 10px">0</span> <button class="btn ghost sm" id="attPlus">+</button></span></div>
+      <p style="margin-top:20px;font-size:19px">El modelo <b>no puede</b> invocar lo que no ve. No hace falta convencerlo con una instrucción de “no lo hagas”.</p>
+    </div>
+    <div data-a>
+      <div class="k" style="font-size:15px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft)">Herramientas visibles para el modelo</div>
+      <div class="tool" id="t1"><div><b>verificar_codigo</b><div class="cond">available when isAuthenticated == False</div></div><span class="chip g">activa</span></div>
+      <div class="tool" id="t2"><div><b>go_to_orders · go_to_payments · go_to_rewards</b><div class="cond">tras la verificación</div></div><span class="chip g">activa</span></div>
+      <div class="tool" id="t3"><div><b>go_back_router</b><div class="cond">available when isAuthenticated == True</div></div><span class="chip g">activa</span></div>
+      <div class="tool" id="t4"><div><b>escalate_now</b><div class="cond">available when auth_attempts &gt;= 3</div></div><span class="chip g">activa</span></div>
+    </div>
+  </div>
+  <div class="src">Patrón tomado de AuthAndSecurity en FDE_BW_Service_Agent_V2.agent (condiciones available when sobre isAuthenticated y auth_attempts). Simplificado para la demostración.</div>
+  <aside class="notes">(17:30 · 2 min) Este es el mecanismo central. Muevan el interruptor. Cuando la distribuidora no está verificada, el modelo solo ve la herramienta de verificar. Cuando se verifica, aparecen las de pedidos, pagos y premios. Y si falla tres veces, aparece la de escalar. El modelo no decide si puede consultar un saldo: simplemente la herramienta no existe todavía. Eso es lo que cambia de fondo respecto al enfoque anterior.</aside>
+</section>
+
+<!-- 14 · CUÁNDO SE COMBINAN -->
+<section class="slide" data-min="19:30">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="right:40px;top:420px;width:44px">
+  <div class="eyebrow gd" data-a>Interactivo · ¿quién decide?</div>
+  <h2 data-a>Toca cada situación: ¿la resuelve el modelo, el código, o las dos?</h2>
+  <div class="grid g3" style="margin-top:34px;gap:20px;flex:1;min-height:0" data-pop>
+    <button class="qz" data-t="cod"><h3>“Quiero hablar con una persona”</h3><span class="hint">Toca para ver</span><div class="ans"><span class="chip d">Código</span><br>El pase se decide en un solo subagente con reglas fijas. El modelo detecta la petición; el código ejecuta el pase.</div></button>
+    <button class="qz" data-t="llm"><h3>“oye q onda con mi pedi, no llego”</h3><span class="hint">Toca para ver</span><div class="ans"><span class="chip p">Modelo</span><br>Entender el lenguaje informal y concluir que es un tema de pedidos. Eso es clasificación, justo lo que el modelo hace bien.</div></button>
+    <button class="qz" data-t="amb"><h3>Consultar el saldo de la distribuidora</h3><span class="hint">Toca para ver</span><div class="ans"><span class="chip b">Las dos</span><br>El modelo entiende la petición; el código verifica que esté autenticada, ejecuta la consulta con su código y el modelo redacta la respuesta con el dato real.</div></button>
+    <button class="qz" data-t="cod"><h3>Dar un folio de solicitud</h3><span class="hint">Toca para ver</span><div class="ans"><span class="chip d">Código</span><br>El folio solo existe si el sistema lo devolvió. Nunca se inventa ni se redacta por cuenta propia.</div></button>
+    <button class="qz" data-t="llm"><h3>Tono, saludo y empatía de la respuesta</h3><span class="hint">Toca para ver</span><div class="ans"><span class="chip p">Modelo</span><br>Aquí la variación es una virtud: una conversación natural no suena a plantilla.</div></button>
+    <button class="qz" data-t="amb"><h3>Pedido extemporáneo, paso a paso</h3><span class="hint">Toca para ver</span><div class="ans"><span class="chip b">Las dos</span><br>El código lleva el paso en una variable y no deja saltarse etapas; el modelo interpreta las respuestas libres de la distribuidora en cada etapa.</div></button>
+  </div>
+  <div class="why" data-a><div class="k">Regla práctica</div><p>Si equivocarse tiene costo para la distribuidora o para Betterware, va a código. Si equivocarse solo cambia la redacción, se queda con el modelo.</p></div>
+  <aside class="notes">(19:30 · 3 min) Un juego rápido. Pidan a alguien del público que elija una tarjeta. Lo importante no es acertar, es ver el patrón: casi todo lo que importa de verdad es una combinación. El modelo entiende y redacta; el código verifica, ejecuta y registra. La regla práctica que usamos para decidir dónde va cada cosa: si equivocarse cuesta, va a código.</aside>
+</section>
+
+<!-- 15 · ANATOMÍA -->
+<section class="slide" data-min="22:30">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:36px;bottom:170px;width:50px">
+  <div class="eyebrow" data-a>Cómo se escribe: las dos mitades en un mismo archivo</div>
+  <h2 data-a>El script mezcla código y lenguaje natural en el mismo lugar</h2>
+  <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:30px;margin-top:28px;flex:1;min-height:0">
+    <div class="code" data-a style="font-size:19px"><span class="cm"># Reglas previas: se ejecutan siempre, sin preguntar al modelo</span>
+<span class="kw">before_reasoning:</span>
+    <span class="kw">if</span> <span class="vr">@variables.isAuthenticated</span> == False:
+        <span class="kw">transition to</span> @subagent.AuthAndSecurity
+
+<span class="kw">reasoning:</span>
+    <span class="kw">instructions: -></span>
+        <span class="cm"># lógica: decide qué texto verá el modelo</span>
+        <span class="kw">if</span> <span class="vr">@variables.pe_salio</span> == True:
+            | No regreses al pedido extemporáneo.
+        <span class="cm"># lenguaje natural: lo que sigue lo interpreta el modelo</span>
+        | Identifica la intención y transfiere al
+        | subagente correcto.
+
+    <span class="kw">actions:</span>
+        go_to_orders: @utils.transition to @subagent.OrdersAndDelivery
+            <span class="kw">available when</span> <span class="vr">@variables.isAuthenticated</span> == True</div>
+    <div style="display:flex;flex-direction:column;gap:14px" data-pop>
+      <div class="card" style="padding:18px 24px"><span class="chip d">Sin símbolo</span><p style="font-size:19px;margin-top:8px">Lógica de programa: <span class="mono">if</span>, <span class="mono">transition</span>, <span class="mono">set</span>, <span class="mono">run</span>. Se ejecuta tal cual.</p></div>
+      <div class="card" style="padding:18px 24px"><span class="chip p">Línea con |</span><p style="font-size:19px;margin-top:8px">Texto para el modelo. Se incluye solo si la lógica de arriba lo permite.</p></div>
+      <div class="card" style="padding:18px 24px"><span class="chip g">available when</span><p style="font-size:19px;margin-top:8px">Esconde o muestra una herramienta del modelo según el estado.</p></div>
+      <div class="card" style="padding:18px 24px"><span class="chip y">@variables</span><p style="font-size:19px;margin-top:8px">La memoria de la sesión: no depende del historial de chat.</p></div>
+    </div>
+  </div>
+  <div class="src">Fragmento simplificado a partir de agent_router en FDE_BW_Service_Agent_V2.agent. Sintaxis: “->” para lógica y “|” para prompts, conforme a developer.salesforce.com/docs/ai/agentforce/guide/agent-script.html.</div>
+  <aside class="notes">(22:30 · 1 min) No hace falta leer código para entender esto. Fíjense en la forma: líneas de lógica, líneas de texto para el modelo, y condiciones que muestran u ocultan herramientas. Un mismo archivo, dos mitades. Y como las reglas están escritas una sola vez, cambiar una regla es editar una línea, no reescribir un párrafo.</aside>
+</section>
+
+<!-- 16 · DIVIDER 3 -->
+<section class="slide divider gd" data-anim="divider" data-min="23:30">
+  <div class="glow"></div>
+  <div class="chap">03</div>
+  <h2>Por qué <span class="grad">varía</span> en pruebas</h2>
+  <p class="lede">Distinguir lo esperado de lo que sí es un hallazgo.</p>
+  <aside class="notes">(23:30) Acto tres.</aside>
+</section>
+
+<!-- 17 · QUÉ VARÍA -->
+<section class="slide" data-min="23:45">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:38px;bottom:230px;width:46px">
+  <div class="eyebrow yl" data-a>Expectativas claras</div>
+  <h2 data-a>Dos conversaciones nunca son idénticas, y eso no significa que el agente falle</h2>
+  <div class="grid g2" style="margin-top:34px;flex:1;min-height:0;gap:28px">
+    <div class="card bar y" data-a>
+      <div class="k" style="color:var(--warn)">Variación esperada · no es hallazgo</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px">
+        <li>Redacción distinta para el mismo contenido.</li>
+        <li>Saludo, despedida o frase de cortesía diferentes.</li>
+        <li>Orden de las ideas dentro de una respuesta correcta.</li>
+        <li>Más o menos detalle cuando el dato y la acción son los mismos.</li>
+      </ul>
+    </div>
+    <div class="card bar p" data-a>
+      <div class="k" style="color:#ff8db1">Hallazgo real · sí se reporta</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px">
+        <li>Entrega datos sin haber verificado identidad.</li>
+        <li>Dice “registrado” sin que exista folio.</li>
+        <li>Pasa a una persona sin cumplir el criterio, o no pasa cuando debería.</li>
+        <li>Se queda en un callejón sin salida, o da un teléfono o URL inventados.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="why" data-a><div class="k">Cómo distinguirlos</div><p>Pregunta: <b>¿cambió el resultado para la distribuidora, o solo las palabras?</b> Si cambió la acción, el dato o la decisión, es un hallazgo.</p></div>
+  <aside class="notes">(23:45 · 2 min) Esta es la diapositiva para alinear expectativas con el equipo que prueba. Variación esperada: palabras, orden, cortesía. Hallazgo real: cuando cambia el resultado, es decir, la acción, el dato o la decisión. Les pedimos una sola pregunta como filtro: ¿cambió el resultado o solo las palabras?</aside>
+</section>
+
+<!-- 18 · POR QUÉ VARÍA TODAVÍA -->
+<section class="slide" data-min="25:45">
+  <img class="spk" src="assets/img/sp-magenta.png" alt="" style="left:44px;top:200px;width:30px">
+  <div class="eyebrow" data-a>Causas de variación durante las pruebas</div>
+  <h2 data-a>Cuatro razones por las que dos pruebas pueden no coincidir</h2>
+  <div class="grid g4" style="margin-top:40px;flex:1" data-pop>
+    <div class="card bar p" style="display:flex;flex-direction:column"><div class="k" style="color:#ff8db1">1 · Lenguaje</div><h3>El modelo es probabilístico por naturaleza</h3><p style="margin-top:10px">Aun con las mismas instrucciones, la redacción puede cambiar. Es la parte que queremos conservar.</p></div>
+    <div class="card bar" style="display:flex;flex-direction:column"><div class="k">2 · Estado</div><h3>La sesión no empieza siempre igual</h3><p style="margin-top:10px">Una persona ya verificada, con un pedido previo o un intento fallido recorre un camino distinto a una sesión nueva.</p></div>
+    <div class="card bar v" style="display:flex;flex-direction:column"><div class="k" style="color:var(--violet)">3 · Datos</div><h3>Los sistemas responden con datos distintos</h3><p style="margin-top:10px">Un pedido en otro estatus, un saldo actualizado o una consulta sin resultado cambian lo que Betty puede decir.</p></div>
+    <div class="card bar y" style="display:flex;flex-direction:column"><div class="k" style="color:var(--warn)">4 · Versión</div><h3>El agente evoluciona entre pruebas</h3><p style="margin-top:10px">Cada versión corrige comportamientos. Una prueba de ayer puede dar otro resultado hoy por una mejora deliberada.</p></div>
+  </div>
+  <div class="src">Las causas 2 y 3 se explican por el diseño: el estado vive en variables de sesión y las acciones consultan Flows y Apex en vivo. La causa 4, por el control de versiones del agente (cada publicación es una BotVersion distinta).</div>
+  <aside class="notes">(25:45 · 1 min) Cuatro causas. Lenguaje, que es esperable. Estado, porque la sesión no arranca igual. Datos, porque los sistemas responden con información cambiante. Y versión, porque estamos mejorando el agente. Esta última es la que más importa para la siguiente diapositiva.</aside>
+</section>
+
+<!-- 19 · VALIDAR CADA CAMBIO -->
+<section class="slide" data-anim="plan" data-min="26:45" style="justify-content:center">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="right:34px;top:180px;width:34px">
+  <div class="eyebrow gd" data-a>Por qué se valida cada cambio</div>
+  <h2 data-a>Corregir una cosa no debe romper otra: por eso cada cambio pasa por cuatro puertas</h2>
+  <div class="tl" style="position:relative;margin-top:46px">
+    <div class="tl-line" style="position:absolute;left:0;right:0;top:18px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--pink),var(--accent),var(--good),var(--violet));transform-origin:0 50%"></div>
+    <div class="grid g4" style="gap:22px;position:relative" data-pop>
+      <div><div class="dot" style="width:40px;height:40px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 8px rgba(255,83,138,.18)"></div>
+        <div class="card" style="margin-top:22px;padding:22px 24px"><div class="k" style="color:#ff8db1">Puerta 1</div><h3 style="font-size:23px">Sandbox primero</h3><p style="margin-top:8px;font-size:19px">Todo cambio se construye y prueba fuera de producción.</p></div></div>
+      <div><div class="dot" style="width:40px;height:40px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 8px rgba(0,179,255,.18)"></div>
+        <div class="card" style="margin-top:22px;padding:22px 24px"><div class="k">Puerta 2</div><h3 style="font-size:23px">Validación y vista previa</h3><p style="margin-top:8px;font-size:19px">El script se valida y se prueba con conversaciones del caso.</p></div></div>
+      <div><div class="dot" style="width:40px;height:40px;border-radius:50%;background:var(--good);box-shadow:0 0 0 8px rgba(4,225,203,.18)"></div>
+        <div class="card" style="margin-top:22px;padding:22px 24px"><div class="k" style="color:var(--good)">Puerta 3</div><h3 style="font-size:23px">Regresión</h3><p style="margin-top:8px;font-size:19px">Se repiten casos ya confirmados para comprobar que nada previo se rompió.</p></div></div>
+      <div><div class="dot" style="width:40px;height:40px;border-radius:50%;background:var(--violet);box-shadow:0 0 0 8px rgba(209,125,254,.18)"></div>
+        <div class="card" style="margin-top:22px;padding:22px 24px"><div class="k" style="color:var(--violet)">Puerta 4</div><h3 style="font-size:23px">Aprobación y verificación</h3><p style="margin-top:8px;font-size:19px">Producción solo con aprobación; después se verifica que lo activo sea lo construido.</p></div></div>
+    </div>
+  </div>
+  <div class="why" data-a style="margin-top:40px"><div class="k">Por qué importa</div><p>Como las reglas viven en código compartido, un cambio impacta a todos los flujos que lo usan. La validación no es burocracia: es lo que protege lo que ya funciona.</p></div>
+  <aside class="notes">(26:45 · 1 min) Cuatro puertas. Sandbox, validación con vista previa, regresión y aprobación con verificación posterior. La razón es simple: como las reglas están centralizadas, un cambio bueno en un lugar puede afectar a otros. La regresión es la puerta que evita corregir una cosa y romper otra.</aside>
+</section>
+
+<!-- 20 · DIVIDER 4 -->
+<section class="slide divider" data-anim="divider" data-min="27:45">
+  <div class="glow"></div>
+  <div class="chap">04</div>
+  <h2>Confianza y <span class="grad">liberación</span></h2>
+  <p class="lede">Qué esperar de cada etapa, y qué no se promete.</p>
+  <aside class="notes">(27:45) Acto cuatro, el cierre.</aside>
+</section>
+
+<!-- 21 · EVOLUCIÓN -->
+<section class="slide" data-min="28:00">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:40px;top:330px;width:36px">
+  <div class="eyebrow gd" data-a>Cómo evoluciona Betty</div>
+  <h2 data-a>Del enfoque anterior a un agente que mejora sin romper lo que ya funciona</h2>
+  <table class="tb" data-a style="margin-top:30px;font-size:21px">
+    <tr><th style="width:24%">Dimensión</th><th style="width:38%">Builder legacy</th><th>Agent Script (Betty)</th></tr>
+    <tr><td>Dónde viven las reglas</td><td>En instrucciones escritas en prosa</td><td>En lógica del script, variables y código</td></tr>
+    <tr><td>Orden de los pasos</td><td>Lo interpreta el modelo</td><td>Lo fija el script</td></tr>
+    <tr><td>Acceso a acciones</td><td>Por descripción e instrucción</td><td>Por condición de estado (available when)</td></tr>
+    <tr><td>Memoria de la sesión</td><td>El historial de la conversación</td><td>Variables explícitas</td></tr>
+    <tr><td>Cambiar una regla</td><td>Editar y reequilibrar un prompt largo</td><td>Edición puntual y verificable</td></tr>
+    <tr><td>Explicar una decisión</td><td>Inferirla del texto</td><td>Traza de variables, transiciones y acciones</td></tr>
+  </table>
+  <p data-a style="margin-top:18px;font-size:20px">Lo que se conserva del enfoque anterior: la capacidad conversacional y de razonamiento del modelo. Lo que se agrega: control programático.</p>
+  <div class="src">Comparativo conforme a Salesforce, “Agent Script preserves the conversational skills and complex reasoning ability derived from natural language prompts, and it adds the determinism of programmatic instructions” (developer.salesforce.com/docs/ai/agentforce/guide/agent-script.html).</div>
+  <aside class="notes">(28:00 · 1 min) Resumen en una tabla. Lo que se conserva es lo que ya valoramos: la conversación natural. Lo que se agrega es control. Y quiero ser claro con lo que no prometemos: no prometemos que el agente diga las mismas palabras siempre; prometemos que las decisiones críticas sigan el mismo camino siempre.</aside>
+</section>
+
+<!-- 22 · EXPECTATIVAS -->
+<section class="slide" data-min="29:00">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:64px;bottom:120px;width:60px">
+  <div class="eyebrow" data-a>Alineando expectativas</div>
+  <h2 data-a>Lo que prometemos y lo que no</h2>
+  <div class="grid g2" style="margin-top:34px;flex:1;min-height:0;gap:28px">
+    <div class="card bar g" data-a>
+      <div class="k" style="color:var(--good)">Sí prometemos</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:6px">
+        <li>✓ Las reglas críticas siguen el mismo camino en cada intento.</li>
+        <li>✓ Ningún dato de cuenta sin verificación previa.</li>
+        <li>✓ Nada de “registrado” sin folio del sistema.</li>
+        <li>✓ Cada cambio se prueba y se repite sobre casos ya confirmados.</li>
+        <li>✓ Los hallazgos reales se corrigen en la siguiente versión.</li>
+      </ul>
+    </div>
+    <div class="card bar p" data-a>
+      <div class="k" style="color:#ff8db1">No prometemos</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:6px">
+        <li>✕ Que las palabras sean idénticas entre conversaciones.</li>
+        <li>✕ Que no existan casos nuevos que aún no hemos visto.</li>
+        <li>✕ Que una versión sea la definitiva: Betty seguirá evolucionando.</li>
+        <li>✕ Que cada ajuste llegue sin validación previa.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="why" data-a><div class="k">Cómo nos ayudan</div><p>Al reportar una prueba, indiquen <b>qué esperaban, qué pasó y si cambió el resultado o solo las palabras</b>. Con eso la corrección es rápida y precisa.</p></div>
+  <aside class="notes">(29:00 · 1 min) Para cerrar, lo que prometemos y lo que no. Y cómo nos ayudan: cuando reporten una prueba, dígannos qué esperaban, qué pasó y si cambió el resultado o solo las palabras.</aside>
+</section>
+
+<!-- 23 · CIERRE -->
+<section class="slide cover" data-anim="cover" data-min="29:45">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:54px;top:170px;width:88px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:64px;bottom:120px;width:60px">
+  <div class="body" style="justify-content:center">
+    <div class="eyebrow" data-a>Para llevarse</div>
+    <h1 class="cover-title" style="max-width:1200px">El modelo entiende,<br><span class="grad">el código decide</span></h1>
+    <div class="grid g3" data-pop style="margin-top:40px;max-width:1280px">
+      <div class="card bar"><div class="k">1</div><p style="color:var(--text);font-size:23px">Lo crítico es determinístico: mismo camino, cada vez.</p></div>
+      <div class="card bar p"><div class="k" style="color:#ff8db1">2</div><p style="color:var(--text);font-size:23px">Lo que varía es la redacción, no la decisión.</p></div>
+      <div class="card bar g"><div class="k" style="color:var(--good)">3</div><p style="color:var(--text);font-size:23px">Cada cambio se valida antes de llegar a ustedes.</p></div>
+    </div>
+  </div>
+  <img class="astro" src="assets/img/agent-astro.png" alt="Agent Astro" style="position:absolute;right:150px;top:300px;width:470px;z-index:1">
+  <aside class="notes">(29:45 · 15 s) Tres ideas. Lo crítico es determinístico. Lo que varía es la redacción, no la decisión. Y cada cambio se valida antes de llegar a ustedes. Gracias. Quedo abierto a preguntas.</aside>
+</section>
+
+<!-- 24 · FUENTES -->
+<section class="slide" data-min="30:00">
+  <div class="eyebrow" data-a>Apéndice · fuentes</div>
+  <h2 data-a>Fuentes oficiales y evidencia del proyecto</h2>
+  <div class="grid g2" style="margin-top:34px;gap:28px;flex:1;min-height:0">
+    <div class="card" data-a><div class="k">Documentación oficial de Salesforce</div>
+      <ul style="margin-top:6px;padding-left:22px;display:flex;flex-direction:column;gap:12px">
+        <li style="font-size:20px"><b>Agent Script</b> (Developer Docs) · developer.salesforce.com/docs/ai/agentforce/guide/agent-script.html</li>
+        <li style="font-size:20px"><b>Agent Script</b> (producto) · salesforce.com/agentforce/script/</li>
+        <li style="font-size:20px"><b>Agentforce</b> · salesforce.com/agentforce/</li>
+        <li style="font-size:20px"><b>Agent Script Recipes</b> (repositorio oficial) · github.com/trailheadapps/agent-script-recipes</li>
+      </ul>
+      <p style="margin-top:14px;font-size:17px;color:var(--faint)">Consultadas el 9-nov-2026. Las citas textuales se limitan a las frases verificadas en esas páginas.</p></div>
+    <div class="card" data-a><div class="k">Evidencia del proyecto Betterware</div>
+      <ul style="margin-top:6px;padding-left:22px;display:flex;flex-direction:column;gap:12px">
+        <li style="font-size:20px"><span class="mono">FDE_BW_Service_Agent_V2.agent</span>: 12 subagentes, 93 variables, 35 condiciones <span class="mono">available when</span>, 9 bloques de reglas previas.</li>
+        <li style="font-size:20px">Principio de arquitectura y flujo de cambio: reglas del repositorio del agente.</li>
+        <li style="font-size:20px">Los simuladores de las diapositivas 6 y 13 son <b>didácticos</b>; no son mediciones de Betty.</li>
+      </ul></div>
+  </div>
+  <aside class="notes">Apéndice para consulta. No se presenta.</aside>
+</section>
+
+</div>
+<div id="tip"></div>
+<div id="notes"><div class="nh"></div><div class="nb"></div></div>
+<script src="assets/gsap.min.js"></script>
+<script>
+(() => {
+const deck = document.getElementById('deck');
+const slides = Array.from(deck.querySelectorAll('.slide'));
+const total = slides.length;
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]still/.test(location.search) || !window.gsap;
+const pad = n => String(n).padStart(2, '0');
+if (RM) document.documentElement.classList.add('rm');
+
+function fit(){ const s = Math.min(innerWidth/1920, innerHeight/1080);
+  deck.style.transform = `translate(${(innerWidth-1920*s)/2}px,${(innerHeight-1080*s)/2}px) scale(${s})`; }
+addEventListener('resize', fit); fit();
+
+/* chrome: pill co-brand + número */
+slides.forEach((s, i) => {
+  const p = document.createElement('div'); p.className = 'pill';
+  p.innerHTML = '<img src="assets/img/betterware-logo.png" alt="Betterware" style="height:22px"><i></i><img src="assets/img/sf-logo.svg" alt="Salesforce">';
+  s.prepend(p);
+  const n = document.createElement('div'); n.className = 'snum'; n.textContent = `${pad(i+1)} / ${pad(total)}`; s.append(n);
+});
+
+/* notas del orador (tecla N) */
+const notes = document.getElementById('notes');
+function showNotes(){ const s = slides[cur], a = s.querySelector('aside.notes');
+  notes.querySelector('.nh').innerHTML = `<span>Notas del orador · diapositiva ${cur+1}</span><span>min ${s.dataset.min || ''}</span>`;
+  notes.querySelector('.nb').textContent = a ? a.textContent : ''; }
+
+/* ---------- interacciones ---------- */
+// 1) Simulador A/B (ilustrativo)
+(function(){
+  const trA = document.getElementById('trA'), trB = document.getElementById('trB');
+  if (!trA) return;
+  let hard = false;
+  const build = (el) => { el.innerHTML = ''; for (let i = 0; i < 12; i++) { const d = document.createElement('div'); d.className = 't'; d.textContent = '·'; el.append(d); } };
+  build(trA); build(trB);
+  const run = () => {
+    build(trA); build(trB);
+    const pA = hard ? 0.62 : 0.88; // prob. ilustrativa de que el modelo cumpla la regla escrita en prosa
+    let okA = 0; const tA = trA.children, tB = trB.children;
+    for (let i = 0; i < 12; i++) {
+      setTimeout(() => {
+        const ok = Math.random() < pA; if (ok) okA++;
+        tA[i].className = 't ' + (ok ? 'ok' : 'bad'); tA[i].textContent = ok ? '✓' : '✕';
+        tB[i].className = 't ok'; tB[i].textContent = '✓';
+        document.getElementById('scA').innerHTML = `${okA}<small> / ${i+1}</small>`;
+        document.getElementById('scB').innerHTML = `${i+1}<small> / ${i+1}</small>`;
+        if (i === 11) {
+          document.getElementById('lbA').textContent = okA === 12 ? 'Esta vez cumplió las 12, pero nada lo garantiza.' : `${12-okA} intento(s) sin cumplir la regla.`;
+          document.getElementById('lbB').textContent = 'La acción no existía sin verificación: no hay forma de saltarla.';
+        } }, i * 160);
+    }
+  };
+  document.getElementById('runSim').onclick = run;
+  document.getElementById('harder').onclick = e => { hard = !hard; e.target.textContent = hard ? 'Presión alta activada ✓ (pulsa de nuevo para quitarla)' : 'Subir la presión: usuario insistente'; run(); };
+})();
+
+// 2) Pipeline de un turno
+(function(){
+  const pipe = document.getElementById('pipe'); if (!pipe) return;
+  const D = [
+    {k:'Paso 1 · entrada', t:'Llega el mensaje de la distribuidora', p:'Por WhatsApp entra texto libre, con errores, abreviaturas o varias ideas juntas. Aún no se ha decidido nada.', c:'"oye q onda con mi pedi, no llego"'},
+    {k:'Paso 2 · código', t:'Reglas previas (before_reasoning)', p:'Antes de consultar al modelo, el script revisa el estado: ¿está verificada?, ¿hay un pase pendiente?, ¿va a mitad de un flujo? Si una regla aplica, el turno se redirige sin pedirle opinión al modelo.', c:'if isAuthenticated == False:\n    transition to AuthAndSecurity'},
+    {k:'Paso 3 · código', t:'Se arman las instrucciones del turno', p:'La lógica decide qué texto verá el modelo. Solo se incluyen las instrucciones que aplican al estado actual; no todo el reglamento en cada turno.', c:'if pe_salio == True:\n    | No regreses al pedido extemporáneo.'},
+    {k:'Paso 4 · probabilístico', t:'El modelo razona', p:'Aquí está la parte libre: entender la intención, extraer datos y elegir entre las herramientas que el código le dejó visibles. Es el único paso no determinístico.', c:'Intención: pedidos\nHerramienta elegida: go_to_orders'},
+    {k:'Paso 5 · código', t:'Se ejecutan las acciones permitidas', p:'Las acciones (Flow o Apex) corren con argumentos tomados de variables de estado, no de lo que el modelo "recuerde". El resultado vuelve como dato real.', c:'run @actions.consulta_pedido\n    with codigo = @variables.CodigoDistribuidor'},
+    {k:'Paso 6 · código', t:'Cierre del turno y actualización del estado', p:'Se guardan las variables (paso del flujo, intentos, folio) y el modelo redacta la respuesta final con los datos reales. El siguiente turno parte de ese estado.', c:'set @variables.estatus_consultas = 1'}
+  ];
+  const sel = i => { pipe.querySelectorAll('.pn').forEach((n, j) => n.classList.toggle('on', j === i));
+    const d = D[i]; document.getElementById('piK').textContent = d.k; document.getElementById('piT').textContent = d.t;
+    document.getElementById('piP').textContent = d.p; document.getElementById('piC').textContent = d.c;
+    if (!RM && window.gsap) gsap.fromTo('#pipeInfo > div', {y:14, opacity:0}, {y:0, opacity:1, duration:.4, stagger:.06}); };
+  pipe.querySelectorAll('.pn').forEach((n, i) => n.addEventListener('click', () => sel(i)));
+  sel(0);
+})();
+
+// 3) Mapa de subagentes
+(function(){
+  const map = document.getElementById('smap'); if (!map) return;
+  const D = {
+    auth:{n:'AuthAndSecurity', t:'Verifica quién escribe antes de abrir cualquier dato de cuenta.', r:'Habilita la verificación solo si no hay sesión verificada; ofrece escalar tras 3 intentos fallidos; permite volver al router solo ya autenticada.'},
+    acc:{n:'AccountAndInfo', t:'Datos de cuenta de la distribuidora y consulta de asociadas.', r:'Valida la pertenencia de linaje de una asociada con una acción propia antes de mostrar datos de otra persona.'},
+    ord:{n:'OrdersAndDelivery', t:'Estatus de pedidos, entregas y seguimiento.', r:'Limita las consultas de estatus por conversación con un contador (estatus_consultas) para evitar bucles.'},
+    pay:{n:'PaymentsAndFinance', t:'Pagos, saldos y pagos no reflejados.', r:'Antes de consultar pagos de una asociada, valida su linaje contra la distribuidora autenticada.'},
+    rew:{n:'RewardsAndLoyalty', t:'Puntos, premios y programa de lealtad.', r:'Misma validación de linaje antes de hablar de premios de otra persona.'},
+    dig:{n:'DigitalContent', t:'Catálogo, flyers y contenido comercial.', r:'Un contador de entradas (contenido_entradas) corta ciclos repetidos.'},
+    pe:{n:'PedidoExtemporaneo', t:'Solicitud de pedido fuera de tiempo, guiada por pasos.', r:'Una variable (pe_paso) guarda en qué etapa va; el router reenvía aquí mientras el flujo siga abierto.'},
+    faq:{n:'GeneralFAQ', t:'Preguntas de políticas y programas, respondidas con Knowledge.', r:'No requiere verificación porque no accede a datos personales.'},
+    esc:{n:'Escalation', t:'Único punto donde se decide pasar a una persona.', r:'Centraliza el criterio de pase para que no existan reglas distintas repartidas por el agente.'},
+    off:{n:'OffTopic', t:'Mensajes fuera del alcance de Betty.', r:'Responde con límites claros y devuelve la conversación al alcance.'},
+    amb:{n:'Ambiguous', t:'Saludos y mensajes poco claros.', r:'Pide aclaración en lugar de escalar por defecto: ante la duda, se pregunta.'},
+    att:{n:'Analizar_Adjuntos', t:'Análisis de imágenes y archivos adjuntos como evidencia.', r:'Las URLs que devuelve una acción se citan literal; no se inventan.'}
+  };
+  const info = document.getElementById('saInfo');
+  const sel = k => { map.querySelectorAll('.sa').forEach(b => b.classList.toggle('on', b.dataset.k === k));
+    const d = D[k]; info.innerHTML = `<div class="k">Subagente</div><h3 style="font-size:30px">${d.n}</h3><p style="margin-top:8px;color:var(--text)">${d.t}</p><p style="margin-top:12px"><span class="chip d">Regla de código</span>&nbsp; ${d.r}</p>`;
+    if (!RM && window.gsap) gsap.fromTo(info.children, {y:12, opacity:0}, {y:0, opacity:1, duration:.35, stagger:.05}); };
+  map.querySelectorAll('.sa').forEach(b => b.addEventListener('click', () => sel(b.dataset.k)));
+  sel('auth');
+})();
+
+// 4) Interruptor available when
+(function(){
+  const sw = document.getElementById('swAuth'); if (!sw) return;
+  let auth = false, att = 0;
+  const upd = () => {
+    sw.classList.toggle('on', auth);
+    document.getElementById('swLbl').textContent = auth ? 'Distribuidora verificada' : 'Distribuidora NO verificada';
+    document.getElementById('vAuth').textContent = auth ? 'True' : 'False';
+    document.getElementById('vAtt').textContent = att;
+    const st = (id, on) => { const e = document.getElementById(id); e.className = 'tool ' + (on ? 'on' : 'off'); const c = e.querySelector('.chip'); c.className = 'chip ' + (on ? 'g' : 'y'); c.textContent = on ? 'activa' : 'oculta'; };
+    st('t1', !auth); st('t2', auth); st('t3', auth); st('t4', att >= 3);
+  };
+  sw.onclick = () => { auth = !auth; upd(); };
+  document.getElementById('attPlus').onclick = () => { att = Math.min(5, att + 1); upd(); };
+  document.getElementById('attMinus').onclick = () => { att = Math.max(0, att - 1); upd(); };
+  upd();
+})();
+
+// 5) Quiz
+document.querySelectorAll('.qz').forEach(q => q.addEventListener('click', () => {
+  q.classList.add('open', q.dataset.t);
+  if (!RM && window.gsap) gsap.from(q.querySelector('.ans'), {opacity:0, y:10, duration:.4});
+}));
+
+/* ---------- coreografía por diapositiva ---------- */
+function play(s){
+  if (RM) return;
+  if (s._tl) { s._tl.progress(1).kill(); }
+  const tl = gsap.timeline(); s._tl = tl;
+  if (s.dataset.anim === 'cover') {
+    const t = s.querySelector('.cover-title');
+    if (!t.dataset.split) { t.dataset.split = 1;
+      t.innerHTML = t.innerHTML.replace(/(<span class="grad">)(.*?)(<\/span>)/, (m, a, b, c) => b.split(' ').map(w => `<span class="w"><span class="grad wi">${w}</span></span>`).join(' '))
+        .replace(/^([^<]+)/, m => m.trim().split(' ').map(w => `<span class="w"><span class="wi">${w}</span></span>`).join(' ') + ' '); }
+    tl.from(t.querySelectorAll('.wi'), {yPercent:110, duration:1, stagger:.09, ease:'power4.out'}, .15)
+      .from(s.querySelector('.astro'), {x:120, y:40, rotation:8, opacity:0, duration:1.4, ease:'power3.out'}, .3);
+    gsap.to(s.querySelector('.astro'), {y:'-=16', duration:3.2, repeat:-1, yoyo:true, ease:'sine.inOut', delay:1.6});
+  }
+  if (s.dataset.anim === 'divider') {
+    tl.from(s.querySelector('.chap'), {scale:.6, opacity:0, duration:1.1, ease:'expo.out'}, 0)
+      .from(s.querySelector('.glow'), {scale:.4, opacity:0, duration:1.6, ease:'power2.out'}, 0);
+  }
+  if (s.dataset.anim === 'plan') {
+    tl.from(s.querySelector('.tl-line'), {scaleX:0, duration:1.4, ease:'power2.inOut'}, .3)
+      .from(s.querySelectorAll('.dot'), {scale:0, duration:.5, stagger:.3, ease:'back.out(3)'}, .4);
+  }
+  tl.from(s.querySelectorAll('[data-a]'), {y:30, opacity:0, duration:.7, stagger:.08, ease:'power3.out'}, .05);
+  s.querySelectorAll('[data-pop]').forEach(g => tl.from(g.children, {y:26, scale:.95, opacity:0, duration:.6, stagger:.08, ease:'back.out(1.6)'}, .25));
+  tl.from(s.querySelectorAll('.spk'), {scale:0, rotation:-70, opacity:0, duration:1, stagger:.12, ease:'back.out(2)'}, .2);
+  setTimeout(() => { if (s._tl === tl && tl.progress() < 1) tl.progress(1); }, 4500);
+}
+
+/* ---------- navegación ---------- */
+const progress = document.getElementById('progress');
+let cur = 0;
+function go(i){ i = Math.max(0, Math.min(total-1, i));
+  slides[cur].classList.remove('active'); cur = i; slides[cur].classList.add('active');
+  progress.style.width = `${(cur+1)/total*100}%`; history.replaceState(null, '', '#' + (cur+1)); play(slides[cur]);
+  if (notes.classList.contains('show')) showNotes(); }
+addEventListener('keydown', e => {
+  if (['ArrowRight',' ','PageDown'].includes(e.key)) { e.preventDefault(); go(cur+1); }
+  else if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); go(cur-1); }
+  else if (e.key === 'Home') go(0); else if (e.key === 'End') go(total-1);
+  else if (e.key === 'n' || e.key === 'N') { notes.classList.toggle('show'); showNotes(); }
+  else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); } });
+deck.addEventListener('click', e => { if (e.target.closest('a,button,.no-advance,.pn,.sa,.qz') || getSelection().toString()) return;
+  (e.clientX < innerWidth * .25) ? go(cur-1) : go(cur+1); });
+cur = Math.max(0, Math.min(total-1, (parseInt(location.hash.slice(1)) || 1) - 1));
+slides[cur].classList.add('active'); go(cur);
+})();
+
+</script>
+</body>
+</html>

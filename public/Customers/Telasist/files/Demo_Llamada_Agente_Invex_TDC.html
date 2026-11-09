@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo en vivo · Agente de voz Retención Invex TDC — Telasist × Salesforce</title>
+<style>
+  @font-face { font-family:'AvantGarde'; src:url('../../../Assets Salesforce Brand/Fonts/Titles/AvantGardeForSalesforceW05-Dm.woff') format('woff'); }
+  @font-face { font-family:'SalesforceSans'; src:url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Regular.woff') format('woff'); font-weight:400; }
+  @font-face { font-family:'SalesforceSans'; src:url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Semibold.woff') format('woff'); font-weight:600; }
+  @font-face { font-family:'SalesforceSans'; src:url('../../../Assets Salesforce Brand/Fonts/Body/SalesforceSans-Bold.woff') format('woff'); font-weight:700; }
+
+  :root { --accent:#22B4FF; --muted:rgba(232,240,255,.78); --dim:rgba(232,240,255,.48); }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; overflow:hidden; }
+  body {
+    font-family:'SalesforceSans',-apple-system,system-ui,sans-serif; color:#fff;
+    background:
+      radial-gradient(ellipse at 18% 12%, rgba(0,179,255,.32) 0%, transparent 48%),
+      radial-gradient(ellipse at 82% 88%, rgba(115,3,148,.18) 0%, transparent 50%),
+      linear-gradient(150deg,#066afe 0%,#022ac0 42%,#001e5b 100%);
+  }
+  h1,h2,h3 { font-family:'AvantGarde','SalesforceSans',sans-serif; margin:0; font-weight:600; letter-spacing:-.02em; }
+
+  .stage { position:fixed; inset:0; display:flex; flex-direction:column; }
+  .view { display:none; flex:1; min-height:0; }
+  .view.on { display:flex; animation:fade .42s cubic-bezier(.22,1,.36,1) both; }
+  @keyframes fade { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+
+  /* Logos */
+  .logos { display:flex; align-items:center; gap:24px; }
+  .logos .sf { height:44px; width:auto; }
+  .logos .tela { height:30px; width:auto; filter:brightness(0) invert(1); }
+  .logos .sep { width:1px; height:30px; background:rgba(255,255,255,.34); }
+
+  /* Cover / closing */
+  .slide { flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px; }
+  .slide .logos .sf { height:84px; } .slide .logos .tela { height:50px; } .slide .logos .sep { height:56px; }
+  .slide h1 { margin-top:56px; font-size:clamp(3.2rem,7vw,6.6rem); line-height:1.04; }
+  .slide p { margin:28px 0 0; text-transform:uppercase; letter-spacing:.32em; font-weight:600; color:#B8E4FF; font-size:clamp(1rem,1.3vw,1.5rem); }
+
+  /* Scene layout */
+  header { display:flex; justify-content:space-between; align-items:center; padding:20px 40px; }
+  .chip { display:flex; align-items:center; gap:12px; border:1px solid rgba(255,255,255,.32); background:rgba(0,20,60,.28);
+          backdrop-filter:blur(6px); border-radius:999px; padding:10px 20px; font-size:13px; font-weight:600; letter-spacing:.22em; text-transform:uppercase; }
+  .body { display:flex; flex:1; min-height:0; padding:8px 40px 36px; }
+  .left { width:50%; display:flex; align-items:center; }
+  .right { width:50%; display:flex; align-items:center; padding-left:32px; }
+
+  /* Teléfono: interior vacío para el overlay de OBS */
+  .phone { position:relative; flex:none; width:400px; height:min(825px,84vh); aspect-ratio:400/825; }
+  .phone .bezel { position:absolute; inset:0; border-radius:52px; padding:22px;
+    background:linear-gradient(180deg,#0a1a48,#030a22);
+    box-shadow:0 50px 140px rgba(0,10,40,.65),0 0 0 2px rgba(180,210,255,.18),inset 0 0 0 1px rgba(255,255,255,.06); }
+  .phone .screen { position:relative; width:100%; height:100%; border-radius:28px; overflow:hidden;
+    background:linear-gradient(180deg,#2A2A2C,#333335 22%,#3C3C3E 52%,#363638 78%,#2B2B2D);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.06); display:flex; align-items:center; justify-content:center; }
+  .phone .notch { position:absolute; top:12px; left:50%; transform:translateX(-50%); width:118px; height:28px; border-radius:999px; background:#020203; z-index:2; }
+  .phone .hint { text-align:center; font-size:12px; font-weight:600; letter-spacing:.36em; text-transform:uppercase; color:rgba(255,255,255,.14); }
+  body.clean .phone .hint { display:none; }
+
+  /* Timeline */
+  .timeline { flex:1; display:flex; flex-direction:column; justify-content:center; gap:4px; padding-left:36px; position:relative; }
+  .tl { display:flex; align-items:center; gap:14px; padding:7px 0; cursor:pointer; color:var(--dim); transition:color .25s; }
+  .tl .dot { width:14px; height:14px; border-radius:50%; border:2px solid rgba(255,255,255,.4); flex:none; transition:all .25s; }
+  .tl .t { font-size:15px; font-weight:600; line-height:1.2; }
+  .tl.done { color:var(--muted); } .tl.done .dot { background:rgba(34,180,255,.55); border-color:transparent; }
+  .tl.act { color:#fff; } .tl.act .dot { background:var(--accent); border-color:var(--accent); animation:pulse 2.2s ease-out infinite; }
+  .tl.act .t { font-size:17px; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(34,180,255,.55)} 50%{box-shadow:0 0 0 14px rgba(34,180,255,0)} }
+
+  /* Detail card */
+  .card { width:100%; max-width:640px; border-radius:24px; padding:36px 40px; background:rgba(0,20,60,.34);
+          border:1px solid rgba(255,255,255,.2); backdrop-filter:blur(8px); box-shadow:0 30px 80px rgba(0,10,40,.35); }
+  .card .num { color:var(--accent); font-weight:700; letter-spacing:.2em; font-size:13px; text-transform:uppercase; }
+  .card h2 { font-size:clamp(2rem,3vw,3rem); margin:10px 0 6px; line-height:1.08; }
+  .card .sub { color:#B8E4FF; font-weight:600; font-size:clamp(1rem,1.2vw,1.2rem); margin-bottom:18px; }
+  .card p { margin:0; color:var(--muted); font-size:clamp(1rem,1.25vw,1.3rem); line-height:1.55; }
+  .tags { display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+  .tags span { font-size:13px; font-weight:600; padding:6px 14px; border-radius:999px; background:rgba(34,180,255,.22); border:1px solid rgba(34,180,255,.4); }
+
+  .astro { position:fixed; right:20px; bottom:20px; width:220px; opacity:.82; pointer-events:none; z-index:5;
+           filter:drop-shadow(0 26px 52px rgba(0,10,40,.6)); animation:float 6s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translateY(0) rotate(-4deg)} 50%{transform:translateY(-14px) rotate(-1deg)} }
+  .progress { height:4px; background:rgba(255,255,255,.1); }
+  .progress i { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--accent),#90D0FE); transition:width .5s ease-out; }
+  .keys { position:fixed; left:40px; bottom:14px; font-size:11px; color:var(--dim); z-index:6; }
+  body.clean .keys, body.clean .astro { display:none; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+
+  <!-- Portada -->
+  <section class="view slide on" data-kind="cover">
+    <div class="logos"><img class="sf" src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" alt="Salesforce"><span class="sep"></span><img class="tela" src="../telasist-logo.png" alt="Telasist"></div>
+    <h1>Retención de tarjeta de crédito Invex</h1>
+    <p>Salesforce · Agentforce Voice</p>
+  </section>
+
+  <!-- Escenas (se generan abajo) -->
+  <section class="view" id="sceneView" data-kind="scene" style="flex-direction:column;">
+    <header>
+      <div class="logos"><img class="sf" src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" alt="Salesforce"><span class="sep"></span><img class="tela" src="../telasist-logo.png" alt="Telasist"></div>
+      <div class="chip">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22B4FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg>
+        Salesforce · Agentforce Voice
+      </div>
+    </header>
+    <div class="body">
+      <div class="left">
+        <div class="phone"><div class="bezel"><div class="screen"><div class="notch"></div><div class="hint">Overlay<br>OBS</div></div></div></div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+      <div class="right"><div class="card" id="card"></div></div>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+  </section>
+
+  <!-- Cierre -->
+  <section class="view slide" data-kind="close">
+    <div class="logos"><img class="sf" src="../../../Assets Salesforce Brand/Logo/Main Salesforce Cloud - Primary.svg" alt="Salesforce"><span class="sep"></span><img class="tela" src="../telasist-logo.png" alt="Telasist"></div>
+    <h1>Gracias</h1>
+    <p>Salesforce · Agentforce Voice</p>
+  </section>
+</div>
+
+<img class="astro" src="../../../Assets Salesforce Brand/Carachters/Astro/Astro SF 3D - 7.png" alt="">
+<div class="keys">← → avanzar · F pantalla completa · C modo limpio (oculta ayudas para grabar)</div>
+
+<script>
+/* Escenas del camino feliz (Llamada 1 del guion: cancelación que termina en retención).
+   Lenguaje de negocio, sin detalle técnico. Ajustar al guion final antes de grabar. */
+const SCENES = [
+  { t:'Saludo y empatía', s:'El asistente se presenta',
+    d:'El asistente se identifica como asistente virtual de Invex, escucha el motivo de la llamada y responde con empatía desde la primera frase. La persona que llama no tiene que pasar por un menú.',
+    tags:['Se identifica como asistente virtual','Empatía desde el inicio'] },
+  { t:'Confirmación de la intención', s:'Entiende qué quiere el cliente',
+    d:'Confirma que el cliente quiere cancelar su tarjeta y le explica, en una frase, por qué necesita validar su identidad antes de continuar.',
+    tags:['Una sola confirmación','Sin repreguntar'] },
+  { t:'Identificación', s:'Nombre, teléfono y datos de la tarjeta',
+    d:'Pide el nombre completo, el teléfono y los últimos dígitos de la tarjeta en una sola pregunta, y después el RFC. Lee el RFC de regreso letra por letra para confirmarlo. Nunca repite en voz alta los dígitos de la tarjeta.',
+    tags:['Pregunta agrupada','RFC leído de regreso','No repite datos sensibles'] },
+  { t:'Validación', s:'El sistema verifica contra los registros',
+    d:'Con los datos capturados, las reglas de negocio validan al cliente contra los registros de Invex. La decisión no la improvisa el modelo de lenguaje: la toman las reglas definidas con el equipo de Invex.',
+    tags:['Reglas de negocio en Salesforce','Decisión determinística'] },
+  { t:'Sondeo del motivo', s:'Descubre por qué quiere cancelar',
+    d:'Pregunta el motivo real de la cancelación y lo clasifica. En este caso, la anualidad le parece cara para el uso que le da a la tarjeta.',
+    tags:['Motivo real','Clasificación automática'] },
+  { t:'Primera oferta', s:'Un beneficio del catálogo',
+    d:'Con el motivo y el perfil del cliente, ofrece un solo beneficio del catálogo autorizado, una oferta por turno para que el cliente la pueda procesar.',
+    tags:['Catálogo autorizado','Una oferta por turno'] },
+  { t:'Manejo de objeciones', s:'Rota a la siguiente oferta',
+    d:'Cuando el cliente pregunta si hay algo más, el asistente presenta la siguiente alternativa del catálogo en un turno aparte, sin repetir la anterior.',
+    tags:['Rotación de ofertas','Sin presionar'] },
+  { t:'Consentimiento', s:'Un “sí” claro del cliente',
+    d:'Antes de aplicar cualquier cosa, pide el consentimiento explícito para continuar con la tarjeta y con el beneficio mencionado. Sin un “sí” claro no se cierra como retención.',
+    tags:['Consentimiento explícito','Sin ambigüedad'] },
+  { t:'Cierre y folio', s:'Registro del caso en Salesforce',
+    d:'Registra el resultado como retención, crea el caso en Salesforce y dicta al cliente su folio. Repite los plazos para que no queden dudas sobre lo que sigue.',
+    tags:['Caso en Salesforce','Folio dictado','Plazos repetidos'] },
+  { t:'Despedida', s:'Cierre institucional',
+    d:'Se despide con el mensaje institucional de Invex y la llamada termina. Todo el contexto queda en el caso para que cualquier asesor lo consulte después.',
+    tags:['Despedida institucional','Trazabilidad completa'] }
+];
+
+const views = [...document.querySelectorAll('.view')];
+const sceneView = document.getElementById('sceneView');
+const tl = document.getElementById('timeline');
+const card = document.getElementById('card');
+const bar = document.getElementById('bar');
+let idx = -1;                 // -1 portada · 0..n-1 escenas · n cierre
+const N = SCENES.length;
+
+SCENES.forEach((sc, i) => {
+  const el = document.createElement('div');
+  el.className = 'tl';
+  el.innerHTML = '<span class="dot"></span><span class="t"></span>';
+  el.querySelector('.t').textContent = sc.t;
+  el.onclick = () => go(i);
+  tl.appendChild(el);
+});
+
+function show(el) {
+  views.forEach(v => v.classList.remove('on'));
+  void el.offsetWidth; el.classList.add('on');
+}
+function render() {
+  if (idx < 0) return show(views[0]);
+  if (idx >= N) return show(views[2]);
+  const sc = SCENES[idx];
+  card.innerHTML = '';
+  const mk = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; e.textContent = txt; return e; };
+  card.append(
+    mk('div','num', 'Momento ' + String(idx+1).padStart(2,'0') + ' de ' + N),
+    mk('h2','', sc.t), mk('div','sub', sc.s), mk('p','', sc.d));
+  const tags = mk('div','tags'); sc.tags.forEach(t => tags.appendChild(mk('span','', t))); card.appendChild(tags);
+  [...tl.children].forEach((e, i) => e.className = 'tl' + (i < idx ? ' done' : i === idx ? ' act' : ''));
+  bar.style.width = ((idx+1)/N*100) + '%';
+  show(sceneView);
+  card.style.animation = 'none'; void card.offsetWidth; card.style.animation = 'fade .42s both';
+}
+function go(i) { idx = Math.max(-1, Math.min(N, i)); render(); }
+
+addEventListener('keydown', e => {
+  if (['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)) { e.preventDefault(); go(idx+1); }
+  else if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)) { e.preventDefault(); go(idx-1); }
+  else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+  else if (e.key === 'c' || e.key === 'C') { document.body.classList.toggle('clean'); }
+});
+render();
+</script>
+</body>
+</html>
