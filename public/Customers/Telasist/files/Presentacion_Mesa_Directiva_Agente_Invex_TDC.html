@@ -633,6 +633,14 @@
     <p class="foot">Equipo FDE Salesforce · Proyecto Telasist × Invex · Estado al 10-nov-2026. Todo lo descrito funciona en el sandbox con cuentas ficticias; no se ha probado con clientes.</p>
   </section>
 
+  <section class="slide gracias" id="slide-14">
+    <h1 class="gracias-h1">Gracias</h1>
+    <p class="gracias-sub">Un agente donde lo que obliga no depende del prompt, construido sobre las reglas de Invex y dentro de Salesforce.</p>
+    <div class="gracias-contacts" style="grid-template-columns: 1fr; max-width: 700px;">
+      <div class="gracias-contact"><div class="name">Equipo FDE Salesforce</div><div class="role">Proyecto Telasist × Invex · Retención TDC</div></div>
+    </div>
+  </section>
+
 
 </div>
 
@@ -688,7 +696,7 @@
   slides.addEventListener('scroll', sync);
   window.addEventListener('resize', () => { slides.style.scrollBehavior = 'auto'; slides.scrollLeft = current() * window.innerWidth; slides.style.scrollBehavior = ''; sync(); });
   sync();
-  document.querySelectorAll('.slide-num').forEach((el, i) => { el.innerHTML = '<span class="current">' + String(i + 2).padStart(2, '0') + '</span> / 13'; });
+  document.querySelectorAll('.slide-num').forEach((el, i) => { el.innerHTML = '<span class="current">' + String(i + 2).padStart(2, '0') + '</span> / 14'; });
 </script>
 
 <script src="gsap.min.js"></script>
