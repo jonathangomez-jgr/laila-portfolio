@@ -1,16 +1,18 @@
-// Documentación del agente AF_Voice_Invex_Retenciones_TDC versión v8 Active.
+// Documentación del agente AF_Voice_Invex_Retenciones_TDC versión v15 Active.
 // Misma estructura que betterwareAgentDocumentation.ts — no agrega campos extra
 // salvo `owner` opcional por acción (lo usa AgentActionsSubtab).
 //
-// Bundle: aiAuthoringBundles/AF_Voice_Invex_Retenciones_TDC (target .v8),
-// retrieveado del sandbox Telasist-Sandbox el 2026-10-26 · 1,059 líneas de
-// Agent Script. v8 publicada y activa el 2026-10-22.
+// Bundle: aiAuthoringBundles/AF_Voice_Invex_Retenciones_TDC_15 (BotVersion 15),
+// retrieveado del sandbox Telasist-Sandbox el 2026-11-10 · 1,255 líneas de
+// Agent Script, 65 variables de estado y 22 condiciones `available when`.
+// v15 activa; la v16 existe pero está inactiva (se evaluó y no se promovió).
 //
 // Agente de voz de Cuentas Especiales: enrutador determinista + 6 subagentes
 // (una etapa de la llamada por subagente). Toda decisión de negocio
 // (identidad, oferta, límites, consentimiento, tipo de cierre, folio,
 // tipificación) vive en las acciones Apex InvexRetencion*. Claude Opus 4.7 en
-// todas las etapas. 8 acciones conectadas: 6 Apex Invex* + 2 Flows.
+// todas las etapas. 8 acciones conectadas: 6 Apex Invex* + 2 Flows (5 Apex de
+// negocio + el registro de escalamiento, y los flujos de finalizar y de transferir).
 //
 // El plan por fases, los riesgos y las pruebas NO viven aquí — viven en las
 // tabs Plan, Calendario y Pruebas del portal.
@@ -73,10 +75,10 @@ const ESCALAMIENTO = {
 export const telasistRetencionAgentDocs: TelasistRetencionAgentDocumentation = {
   name: "AF Voice Invex Retenciones TDC",
   developerName: "AF_Voice_Invex_Retenciones_TDC",
-  version: "v8 Active (bundle AF_Voice_Invex_Retenciones_TDC · target .v8 · sandbox Telasist-Sandbox)",
-  revision: "22-oct-2026 (Active) · snapshot 26-oct-2026",
+  version: "v15 Active (bundle AF_Voice_Invex_Retenciones_TDC_15 · sandbox Telasist-Sandbox)",
+  revision: "v15 creada el 9-nov-2026, activa al 10-nov-2026 · snapshot 10-nov-2026",
   base:
-    "Agente de voz de Cuentas Especiales para solicitudes de cancelación de tarjetas de crédito Invex. Enrutador determinista + 6 subagentes, una etapa de la llamada por subagente: recepción → identificación → sondeo → oferta → cierre, con salida a escalamiento desde cualquier etapa. Template AgentforceServiceAgent · Agent Script · es_MX · Claude Opus 4.7 en todas las etapas · voz con 17 keywords de producto (Invex, RFC, Volaris, Walmart, Programa Cero, folio…). Toda decisión de negocio (identidad, oferta, límites, consentimiento, tipo de cierre, folio y tipificación) la toma la capa Apex InvexRetencion*; el modelo conversa. 8 acciones: 6 Apex Invex* + 2 Flows. Alineado al Manual de Proceso v2.0 (guion de retención obligatorio, un intento de desescalamiento, cierre con plazo y folio dictado dos veces). Estado de la configuración y pendientes (catálogo v2026-draft, escritura del Case, lecturas de cuenta, Knowledge y telefonía sin conectar): ver la fase F2 del Plan.",
+    "Agente de voz de Cuentas Especiales para solicitudes de cancelación de tarjetas de crédito Invex. Enrutador determinista + 6 subagentes, una etapa de la llamada por subagente: recepción → identificación → sondeo → oferta → cierre, con salida a escalamiento desde cualquier etapa. Template AgentforceServiceAgent · Agent Script · es_MX · Claude Opus 4.7 en todas las etapas · voz propia de la v15 y 17 keywords de producto (Invex, RFC, Volaris, Walmart, Programa Cero, folio…). Toda decisión de negocio (identidad, oferta, límites, consentimiento, tipo de cierre, folio y tipificación) la toma la capa Apex InvexRetencion*; el modelo conversa. 8 acciones: 6 Apex Invex* + 2 Flows. Alineado al Manual de Proceso v2.0 (guion de retención obligatorio, un intento de desescalamiento, cierre con plazo y folio dictado dos veces). Cada acción de larga duración tiene su propio mensaje de progreso, breve y distinto, para que la plataforma no repita \"Permítame un momento\". Los temas de seguridad integrados de la plataforma (contenido inapropiado, inyección de instrucciones, ingeniería inversa) están apagados por dos Known Issues de Salesforce (W-23246618, W-24065690) porque bloqueaban los datos que el cliente dicta; las mismas protecciones se aplican con reglas del propio agente y del código. Las 3 versiones previas (v13 a v15) se documentan en la presentación a mesa directiva. El plan, los riesgos y las pruebas viven en las tabs Plan y Pruebas.",
   categories: TELASIST_RETENCION_CATEGORIES,
   subagents: [
     {
@@ -139,14 +141,18 @@ export const telasistRetencionAgentDocs: TelasistRetencionAgentDocumentation = {
         { name: "registrar_producto", target: "@utils.setVariables", description: "dato_producto tal como lo dijo el cliente, o NO SABE." },
         { name: "registrar_estado", target: "@utils.setVariables", description: "dato_estado. Se captura; Apex todavía no lo valida." },
         { name: "validar_tarjetahabiente", target: "apex://InvexValidarTarjetahabiente", owner: "FDE", description: "Valida contra la carga diaria de Invex (RFC, 6 dígitos, nombre y teléfono), crea o reutiliza el Case del día y devuelve producto canónico, nombre de pila, últimos 4, historial de 12 meses, alerta de gestión reciente, último folio e intentos. Available when los seis datos están completos y el RFC confirmado; también se ejecuta por código (run) en after_reasoning." },
-        { ...ESCALAMIENTO, description: "Motivos posibles: FALLECIMIENTO, INCAPACIDAD_MEDICA, SOLICITA_HUMANO; por código, VALIDACION_FALLIDA (10 turnos) o el motivo que devuelva la validación (intentos agotados, NO_ENCONTRADO)." },
+        { name: "marcar_desescalamiento", target: "@utils.setVariables", description: "desescalamiento_intentado = True tras el único intento de desescalar a un cliente molesto; available when desescalamiento_intentado == False." },
+        { name: "marcar_cliente_molesto", target: "@utils.setVariables", description: "Registra CLIENTE_MOLESTO si, tras el único intento de desescalar, el cliente sigue sin querer continuar; available when desescalamiento_intentado == True." },
+        { ...ESCALAMIENTO, description: "Motivos posibles: FALLECIMIENTO, INCAPACIDAD_MEDICA, SOLICITA_HUMANO; por código, VALIDACION_FALLIDA (10 turnos) o el motivo que devuelva la validación (intentos agotados, NO_ENCONTRADO). Acción con mensaje de progreso: \"Un momento, reviso sus datos.\"" },
       ],
       criterios: [
         "Dado que el cliente dice varios datos en una frase, cuando el agente responde, entonces registra cada uno con su herramienta y solo pide el siguiente que falte.",
         "Dado que el cliente dictó su RFC, cuando el agente lo registra, entonces lo lee de regreso carácter por carácter y espera confirmación antes de validar.",
         "Dado que la validación devuelve NO_COINCIDE o NO_ENCONTRADO y quedan intentos, cuando el agente responde, entonces pide de nuevo RFC y seis dígitos sin decir qué dato falló.",
         "Dado que pasaron 10 turnos sin validar, cuando termina el turno, entonces se registra VALIDACION_FALLIDA y la llamada se transfiere.",
-        "Dado que el cliente no sabe el nombre de su tarjeta, cuando el agente lo pregunta, entonces registra NO SABE y continúa (en v8 eso deja al motor sin producto; ver F2 del Plan).",
+        "Dado que el cliente dicta su CVV, NIP, contraseña o el número completo de la tarjeta, cuando el agente responde, entonces no lo registra ni lo repite: dice que no necesita ese dato y continúa.",
+        "Dado que el cliente se muestra muy molesto desde la identificación, cuando el agente responde por primera vez, entonces hace un solo intento de desescalar antes de transferir.",
+        "Dado que el cliente no sabe el nombre de su tarjeta, cuando el agente lo pregunta, entonces registra NO SABE y continúa con el siguiente dato.",
       ],
     },
     {
@@ -161,14 +167,15 @@ export const telasistRetencionAgentDocs: TelasistRetencionAgentDocumentation = {
         "Empatía breve, escucha sin interrumpir. No ofrece nada antes de recibir la oferta del motor. Desescalamiento: \"¿Me permite un minuto para entender qué pasó?\". Mensaje de espera: \"Permítame un momento, estoy revisando las opciones para su tarjeta.\"",
       acciones: [
         { name: "obtener_oferta", target: "apex://InvexObtenerOferta", owner: "FDE", description: "Motor de retención: con cuenta, producto canónico, motivo e historial devuelve la primera oferta (código, guion aprobado, condiciones, alternativa), los límites (puede ofrecer más, cancelación habilitada) y las preguntas exactas de retención y de cancelación. El script de retención lo arma Apex desde Invex_Config__mdt." },
-        { name: "registrar_seguimiento", target: "apex://InvexRegistrarSeguimiento", owner: "FDE", description: "Fase 1b: registra beneficio o cancelación no aplicados con el folio previo y devuelve el guion de seguimiento. Available when Automatizar_Seguimiento está encendido (hoy apagado: el seguimiento se transfiere)." },
+        { name: "registrar_seguimiento", target: "apex://InvexRegistrarSeguimiento", owner: "FDE", description: "Fase 1b: registra beneficio o cancelación no aplicados con el folio previo y devuelve el guion de seguimiento. Available when seguimiento_automatizado == True y aún no hay folio; la configuración Automatizar_Seguimiento está apagada hoy y el seguimiento se transfiere a un asesor." },
         { name: "marcar_desescalamiento", target: "@utils.setVariables", description: "desescalamiento_intentado = True tras el único intento." },
-        { ...ESCALAMIENTO, description: "Motivos posibles: FALLECIMIENTO, INCAPACIDAD_MEDICA, TARJETA_GARANTIZADA, EXCEPCION_EXPI, AMENAZA_LEGAL, SOLICITA_HUMANO, CLIENTE_MOLESTO, SEGUIMIENTO; por código, ERROR_TECNICO si el registro falla." },
+        { ...ESCALAMIENTO, description: "Motivos posibles: FALLECIMIENTO, INCAPACIDAD_MEDICA, TARJETA_GARANTIZADA, EXCEPCION_EXPI, AMENAZA_LEGAL, AMENAZA_VIOLENCIA, SOLICITA_HUMANO, CLIENTE_MOLESTO, SEGUIMIENTO; por código, ERROR_TECNICO si el registro falla." },
       ],
       criterios: [
         "Dado que el cliente explicó su motivo, cuando el agente lo clasifica, entonces llama a obtener_oferta con el código y no menciona ningún beneficio antes de recibir la respuesta.",
         "Dado que el cliente está muy molesto, cuando el agente responde por primera vez, entonces hace un solo intento de desescalar y no transfiere en ese turno.",
         "Dado que ya se intentó desescalar y el cliente sigue sin querer escuchar, cuando el agente responde, entonces registra CLIENTE_MOLESTO sin usar la palabra transferencia.",
+        "Dado que el cliente amenaza con violencia física, cuando el agente responde, entonces no discute ni lo desafía: registra AMENAZA_VIOLENCIA y transfiere.",
         "Dado que hubo una gestión de retención en los últimos 15 días, cuando inicia el sondeo, entonces el agente pregunta primero si la llamada es por esa solicitud.",
       ],
     },
@@ -185,12 +192,13 @@ export const telasistRetencionAgentDocs: TelasistRetencionAgentDocumentation = {
       acciones: [
         { name: "siguiente_oferta", target: "apex://InvexSiguienteOferta", owner: "FDE", description: "Siguiente beneficio cuando el cliente rechazó el actual. Available when puede_ofrecer_mas == True." },
         { name: "registrar_retencion", target: "apex://InvexRegistrarResultado", owner: "FDE", description: "RETENCION con el código del beneficio aceptado, la respuesta literal y el script leído (un script repetido como respuesta se rechaza como AMBIGUO). Genera folio RB y tipifica. Available when ofertas_presentadas > 0." },
-        { name: "registrar_cancelacion", target: "apex://InvexRegistrarResultado", owner: "FDE", description: "CANCELACION con la respuesta literal a la pregunta de cancelación. Apex decide CC o CB según saldo (en v8 el saldo no está conectado y toda cancelación sale CB). Available when cancelacion_habilitada == True." },
+        { name: "registrar_cancelacion", target: "apex://InvexRegistrarResultado", owner: "FDE", description: "CANCELACION con la respuesta literal a la pregunta de cancelación. Apex decide CC (sin saldo) o CB (precancelación con saldo) según el saldo de la cuenta; si el saldo supera el umbral de $5,557.56 la llamada escala con SALDO_MAYOR_UMBRAL. Available when cancelacion_habilitada == True." },
         { name: "marcar_desescalamiento", target: "@utils.setVariables", description: "desescalamiento_intentado = True tras el único intento." },
         { ...ESCALAMIENTO, description: "Motivos posibles: AMENAZA_LEGAL, FALLECIMIENTO, INCAPACIDAD_MEDICA, TARJETA_GARANTIZADA, EXCEPCION_EXPI, SOLICITA_HUMANO, CLIENTE_MOLESTO; por código, ERROR_TECNICO." },
       ],
       criterios: [
-        "Dado que el cliente rechaza la oferta y quedan ofertas, cuando el agente responde, entonces usa siguiente_oferta y presenta un solo beneficio nuevo.",
+        "Dado que el cliente rechaza la oferta y quedan ofertas, cuando el agente responde, entonces usa siguiente_oferta (mensaje de progreso: \"Busco otra opción.\") y presenta un solo beneficio nuevo.",
+        "Dado que el cliente pregunta cómo funciona un beneficio o cuánto es, cuando el agente responde, entonces dice solo lo que trae el texto aprobado: no explica procedimientos ni da cifras que no vengan en él (cambio de la v14).",
         "Dado que aún no se presentó el mínimo de ofertas, cuando el cliente insiste en cancelar, entonces el agente reconoce su postura y presenta brevemente la siguiente oferta.",
         "Dado que el cliente acepta un beneficio, cuando el agente confirma, entonces lee el script obligatorio de retención tal cual y registra la respuesta exacta del cliente.",
         "Dado que el consentimiento resulta AMBIGUO o NEGADO, cuando el agente responde, entonces no registra nada y vuelve a pedir un sí o un no explícito.",
@@ -224,7 +232,7 @@ export const telasistRetencionAgentDocs: TelasistRetencionAgentDocumentation = {
       name: "Escalamiento a asesor",
       category: "Escalamiento a humano",
       descripcion:
-        "En before_reasoning, una sola vez: registra en el Case el motivo y el resumen de la llamada (InvexRegistrarEscalamiento devuelve la opción de IVR) y avisa a la telefonía la opción de transferencia (flow Update_Voice_Call_Description). Luego dice una frase breve adecuada al motivo y transfiere. 12 motivos: FALLECIMIENTO, INCAPACIDAD_MEDICA, TARJETA_GARANTIZADA, EXCEPCION_EXPI, CLIENTE_MOLESTO, AMENAZA_LEGAL, OTRO_TEMA, SOLICITA_HUMANO, SEGUIMIENTO, NO_ENCONTRADO, VALIDACION_FALLIDA, ERROR_TECNICO.",
+        "En before_reasoning, una sola vez: registra en el Case el motivo y el resumen de la llamada (InvexRegistrarEscalamiento devuelve la opción de IVR) y avisa a la telefonía la opción de transferencia (flow Update_Voice_Call_Description). Luego dice una frase breve adecuada al motivo y transfiere. 19 motivos declarados: FALLECIMIENTO, INCAPACIDAD_MEDICA, TARJETA_GARANTIZADA, EXCEPCION_EXPI, CLIENTE_MOLESTO, AMENAZA_LEGAL, AMENAZA_VIOLENCIA, OTRO_TEMA, SOLICITA_HUMANO, SEGUIMIENTO, NO_ENCONTRADO, VALIDACION_FALLIDA, ERROR_TECNICO, ATENCION_CLIENTES, PRODUCTO_SIN_REGLA, COBRANZA, SALDO_MAYOR_UMBRAL, TERCERO y CARGO_NO_RECONOCIDO.",
       activacion: "Desde cualquier etapa en cuanto motivo_escalamiento tiene valor.",
       respuestas:
         "Una sola frase cálida. En fallecimiento, condolencias antes de comunicar al área. En NO_ENCONTRADO o VALIDACION_FALLIDA, explica que un asesor revisará su información sin decir qué dato no coincidió. Mensaje de la telefonía: \"Le comunico con un asesor de Cuentas Especiales. Por favor, permanezca en la línea.\"",
