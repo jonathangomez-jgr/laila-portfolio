@@ -279,6 +279,34 @@
   body.on-dark .dots .dot { background:rgba(255,255,255,.45); }
   body.on-dark .dots .dot:hover:not(.active) { background:rgba(255,255,255,.8); }
   body.on-dark .dots .dot.active { background:#fff; box-shadow:0 0 10px rgba(255,255,255,.6); }
+  /* === Lámina interactiva === */
+  .sim { display:grid; grid-template-columns:1fr 1fr; gap:22px; max-width:1500px; align-items:start; }
+  .sim .vrow { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:9px 0; border-top:1px solid var(--rule); font-size:clamp(13px,1.05vw,15px); }
+  .sim .vrow.first { border-top:0; }
+  .sim .nm { font-family:ui-monospace,Menlo,monospace; color:var(--eb15); font-weight:600; }
+  .sim .vl { font-family:ui-monospace,Menlo,monospace; font-weight:700; color:var(--eb30); background:var(--cb95); padding:3px 12px; border-radius:8px; min-width:70px; text-align:center; transition:all .25s; }
+  .sim .vl.on { background:#E3F5EC; color:var(--ok); }
+  .simbtn { border:1px solid var(--rule); background:#fff; color:var(--eb30); border-radius:999px; padding:6px 15px; font-weight:700; cursor:pointer; font-size:14px; font-family:inherit; transition:all .2s; }
+  .simbtn:hover:not([disabled]) { background:var(--cb95); border-color:var(--eb50); }
+  .simbtn[disabled] { opacity:.35; cursor:not-allowed; }
+  .simsw { display:flex; align-items:center; gap:12px; border:1px solid var(--rule); background:#fff; border-radius:999px; padding:7px 16px 7px 8px; cursor:pointer; font-weight:700; color:var(--eb15); font-family:inherit; font-size:14px; margin-bottom:6px; }
+  .simsw i { width:42px; height:24px; border-radius:999px; background:#C9D3E6; position:relative; transition:background .25s; flex:none; }
+  .simsw i::after { content:''; position:absolute; left:3px; top:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:left .25s; box-shadow:0 1px 3px rgba(0,30,91,.3); }
+  .simsw.is-on i { background:var(--ok); } .simsw.is-on i::after { left:21px; }
+  .tool { display:flex; justify-content:space-between; gap:14px; align-items:center; padding:11px 14px; border:1px solid var(--rule); border-radius:12px; margin-bottom:9px; background:#fff; transition:all .3s; }
+  .tool b { font-family:ui-monospace,Menlo,monospace; color:var(--eb15); display:block; font-size:clamp(13px,1.05vw,15px); }
+  .tool small { display:block; font-family:ui-monospace,Menlo,monospace; color:var(--slate); font-size:12px; margin-top:3px; }
+  .tool .st { font-size:11.5px; font-weight:700; padding:4px 12px; border-radius:999px; background:#E3F5EC; color:var(--ok); white-space:nowrap; }
+  .tool.off { opacity:.42; background:var(--cb95); border-style:dashed; } .tool.off .st { background:#E6EBF3; color:var(--slate); }
+  .simmsg { margin-top:12px; padding:12px 14px; border-left:4px solid var(--eb50); background:var(--cb95); border-radius:0 10px 10px 0; font-size:clamp(13px,1.05vw,15px); color:var(--ink); line-height:1.45; min-height:68px; }
+  .rules2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+  .rules2 > div { font-size:clamp(12px,.95vw,13.5px); line-height:1.45; color:var(--ink); padding:10px 12px; border-radius:10px; }
+  .rules2 .prose { background:#FFF1DC; } .rules2 .code { background:#E3F5EC; }
+  .rules2 b.t { display:block; font-size:11px; letter-spacing:.12em; text-transform:uppercase; margin-bottom:4px; }
+  .rules2 .prose b.t { color:var(--warn); } .rules2 .code b.t { color:var(--ok); }
+  .rules2 code { font-family:ui-monospace,Menlo,monospace; font-size:.92em; }
+  .tag { display:inline-block; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:3px 10px; border-radius:999px; margin-bottom:10px; }
+  .tag.p { background:#FFF1DC; color:var(--warn); } .tag.d { background:#E3F5EC; color:var(--ok); }
 </style>
 </head>
 <body>
@@ -304,7 +332,7 @@
     <div class="left">
       <span class="eyebrow">Mesa directiva</span>
       <h1>Agente de voz<br><span class="accent">Retención Invex TDC</span></h1>
-      <p class="subtitle">Qué se pidió, cómo se ha construido, qué incluye la solución y qué falta para entregarla.</p>
+      <p class="subtitle">El contexto, la arquitectura que hace distinta a esta solución, cómo se probó y lo que sigue.</p>
       <div class="cover-authors" style="grid-template-columns: 1fr;">
         <div class="cover-author">
           <div class="name">Equipo FDE Salesforce</div>
@@ -317,26 +345,26 @@
     </div>
   </section>
 
-  <!-- 02 · RUTA -->
+  
   <section class="slide" id="slide-2">
     <span class="brand-chip">Ruta de la presentación</span>
     <span class="slide-num"></span>
     <span class="section-eyebrow">Cómo vamos a recorrerlo</span>
-    <h2>Cuatro preguntas, en orden</h2>
-    <p class="lead">Cada bloque responde una pregunta de la mesa y termina en la siguiente. Al final, una sola lámina compara lo pedido contra lo construido.</p>
+    <h2>Cuatro momentos</h2>
+    <p class="lead">Primero el contexto de Invex. Después, el centro de la presentación: cómo está construido el agente y por qué las decisiones no dependen del prompt. Luego cómo se probó, y unas conclusiones.</p>
     <div class="cols4">
-      <div class="card"><div class="big">1</div><h3>¿Qué se pidió?</h3><p class="sm">El Discovery Brief y el Manual de Proceso v2.0 de Invex: alcance, flujo de llamada, reglas de negocio, datos y criterios de éxito.</p><span class="chip todo">Láminas 3 a 8</span></div>
-      <div class="card"><div class="big">2</div><h3>¿Cómo se construyó?</h3><p class="sm">Principio de diseño, arquitectura, el agente por etapas, la capa de reglas y datos, y los resguardos de seguridad.</p><span class="chip todo">Láminas 9 a 13</span></div>
-      <div class="card"><div class="big">3</div><h3>¿Qué incluye y cómo se probó?</h3><p class="sm">Inventario de la solución y resultados de las pruebas.</p><span class="chip todo">Láminas 14 a 15</span></div>
-      <div class="card"><div class="big">4</div><h3>¿Dónde estamos y qué falta?</h3><p class="sm">Pedido contra construido, trabajo restante hasta el 12-nov, y las decisiones que dependen del cliente.</p><span class="chip todo">Láminas 16 a 19</span></div>
+      <div class="card"><div class="big">1</div><h3>Contexto</h3><p class="sm">Qué pidió Invex, qué atiende el agente, las reglas de negocio y cómo sabremos que funciona.</p><span class="chip todo">Láminas 3 a 6</span></div>
+      <div class="card" style="border-top:4px solid var(--eb50);"><div class="big">2</div><h3>Arquitectura</h3><p class="sm">Qué hace diferente a la solución: el agente conversa; lo que obliga vive en el estado de la llamada y en la lógica de Salesforce.</p><span class="chip todo">Láminas 7 a 11</span></div>
+      <div class="card"><div class="big">3</div><h3>Escenarios de prueba</h3><p class="sm">Con qué cuentas y llamadas se probó, qué encontramos y qué cambió en el agente.</p><span class="chip todo">Lámina 12</span></div>
+      <div class="card"><div class="big">4</div><h3>Conclusiones</h3><p class="sm">Lo que se queda de lo construido y lo que sigue.</p><span class="chip todo">Lámina 13</span></div>
     </div>
   </section>
 
-  <!-- 03 · CONTEXTO -->
+  
   <section class="slide" id="slide-3">
-    <span class="brand-chip">Qué se pidió · Contexto</span>
+    <span class="brand-chip">Contexto · El punto de partida</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">01 · El punto de partida</span>
+    <span class="section-eyebrow">01 · Una operación que ya funciona</span>
     <h2>Una operación viva que el agente debe relevar, no inventar</h2>
     <p class="lead">Invex Retenciones TDC lleva operando desde mayo con ejecutivos de Telasist. El pedido es automatizar las llamadas entrantes de cancelación de tarjeta de crédito, con un ejecutivo humano disponible en cada llamada.</p>
     <div class="kpi-row">
@@ -349,9 +377,9 @@
     <p class="foot">Fuente: Discovery Brief (Draft v1, 8-oct-2026), datos de Salesforce del 5-may al 7-oct. La línea base aún necesita la definición de Invex del denominador y de la permanencia.</p>
   </section>
 
-  <!-- 04 · ALCANCE -->
+  
   <section class="slide" id="slide-4">
-    <span class="brand-chip">Qué se pidió · Alcance</span>
+    <span class="brand-chip">Contexto · Alcance</span>
     <span class="slide-num"></span>
     <span class="section-eyebrow">02 · Qué atiende el agente y qué no</span>
     <h2>Lo que es del agente, lo que sigue siendo humano</h2>
@@ -377,36 +405,11 @@
     <p class="foot">Fuera de alcance: retención de productos de asistencia, llamadas salientes y las otras 15 campañas Invex. Regla transversal: debe existir salida a un humano en cada llamada.</p>
   </section>
 
-  <!-- 05 · FLUJO -->
+  
   <section class="slide" id="slide-5">
-    <span class="brand-chip">Qué se pidió · La llamada</span>
+    <span class="brand-chip">Contexto · Reglas de negocio</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">03 · El modelo de llamada que se automatiza</span>
-    <h2>Siete etapas y tres tipos de cierre con folio</h2>
-    <p class="lead">Un ejecutivo contesta en menos de cinco segundos como "Cuentas Especiales" y sigue este modelo en cinco a ocho minutos.</p>
-    <div class="flow">
-      <div class="step"><span class="n">1</span><b>Bienvenida</b>Saludo, empatía y datos de la persona que llama</div>
-      <div class="step"><span class="n">2</span><b>Confirmación</b>Confirma que busca cancelar e identifica la tarjeta</div>
-      <div class="step"><span class="n">3</span><b>Sondeo</b>Motivo real en dos preguntas directas</div>
-      <div class="step"><span class="n">4</span><b>Perfilamiento</b>Semáforo, VPN y segmento contra la matriz</div>
-      <div class="step"><span class="n">5</span><b>Oferta</b>Beneficio natural primero; manejo de objeciones</div>
-      <div class="step"><span class="n">6</span><b>Cierre</b>"Sí" o "no" claro, guion del escenario y folio</div>
-      <div class="step"><span class="n">7</span><b>Despedida</b>Registro, despedida institucional y encuesta</div>
-    </div>
-    <table class="tbl" style="margin-top:22px;">
-      <tr><th>Cierre</th><th>Qué debe ocurrir</th><th>Folio</th></tr>
-      <tr><td><strong>Retención</strong></td><td>El cliente dice un "sí" claro para continuar con la tarjeta y los beneficios mencionados</td><td>RB + DDMMAA + últimos 4</td></tr>
-      <tr><td><strong>Cancelación sin saldo</strong></td><td>Cancelación iniciada hoy, efectiva en 24 horas hábiles; el cliente cancela cargos recurrentes</td><td>CC + DDMMAA + últimos 4</td></tr>
-      <tr><td><strong>Precancelación con saldo</strong></td><td>Tarjeta bloqueada; se cancela sola al llegar el saldo a cero; intereses y comisiones siguen vigentes</td><td>CB + DDMMAA + últimos 4</td></tr>
-    </table>
-    <p class="foot">Además existen dos guiones de seguimiento ("beneficio no aplicado" y "cancelación no aplicada") con folio de seguimiento.</p>
-  </section>
-
-  <!-- 06 · REGLAS -->
-  <section class="slide" id="slide-6">
-    <span class="brand-chip">Qué se pidió · Reglas de negocio</span>
-    <span class="slide-num"></span>
-    <span class="section-eyebrow">04 · Qué decide el agente y con qué reglas</span>
+    <span class="section-eyebrow">03 · Las reglas de negocio de Invex</span>
     <h2>Diez beneficios, catorce productos y reglas de saldo y de persuasión</h2>
     <p class="lead">Las decisiones de negocio no las improvisa el modelo de lenguaje: salen del catálogo, la matriz y el Manual de Proceso v2.0.</p>
     <div class="cols2">
@@ -425,41 +428,14 @@
         <li><strong>Seguridad:</strong> producto y últimos 4 dígitos solo después de validar identidad</li>
       </ul></div>
     </div>
-    <div class="callout warn"><strong>Lo que Invex aún no entrega.</strong> La regla que decide qué beneficio ofrecer a cada cliente (semáforo, VPN y segmento) y 7 puntos que el manual marca "por definir". Es la mayor incertidumbre del proyecto (lámina 20).</div>
+    <div class="callout warn"><strong>Lo que Invex aún no entrega.</strong> La regla que decide qué beneficio ofrecer a cada cliente (semáforo, VPN y segmento) y 7 puntos que el manual marca "por definir". Es la mayor incertidumbre del proyecto (lámina 13).</div>
   </section>
 
-  <!-- 07 · VOZ Y DATOS -->
-  <section class="slide" id="slide-7">
-    <span class="brand-chip">Qué se pidió · Voz y datos</span>
+  
+  <section class="slide" id="slide-6">
+    <span class="brand-chip">Contexto · Éxito</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">05 · Cómo debe hablar y qué debe dejar en Salesforce</span>
-    <h2>Conversar como el mejor ejecutivo y dejar el caso idéntico al de un humano</h2>
-    <p class="lead">Invex y Telasist leen los mismos campos para sus reportes. Por eso el agente debe escribir el caso exactamente como lo haría un operador.</p>
-    <div class="cols2">
-      <div class="card"><h3>Requisitos de conversación</h3><ul>
-        <li>Español de México, trato de usted, saludo estándar en menos de 5 segundos</li>
-        <li><strong>Validación de identidad:</strong> nombre, RFC, teléfono registrado, últimos 6 dígitos y producto</li>
-        <li>El RFC se lee de regreso con el alfabeto aeronáutico; cada dígito se confirma</li>
-        <li>Escucha sin interrumpir, empatía breve, preguntas de sondeo y negociación ganar-ganar</li>
-        <li>Límites éticos: sin presión tras una negativa, sin urgencia falsa, sin promesas fuera del guion</li>
-        <li>Consentimiento explícito para retención, cancelación y precancelación</li>
-      </ul></div>
-      <div class="card"><h3>Contrato de datos con Salesforce</h3><ul>
-        <li><strong>Lee</strong> 17 campos del tarjetahabiente cargados cada madrugada (producto, saldo, semáforo, VPN y otros)</li>
-        <li><strong>Escribe</strong> el bloque de retención: resultado, tipo (RTCC, RTSC, CANC, TEAT), categorías y subcategorías, comentario del analista, hasta tres trámites con comentario</li>
-        <li><strong>Folio</strong> dentro del comentario del analista (no tiene campo propio)</li>
-        <li><strong>Catálogo de tipificación:</strong> unas 120 filas codificadas</li>
-        <li>El saldo y el semáforo son una foto de la última carga: pueden tener hasta un día</li>
-      </ul></div>
-    </div>
-    <p class="foot">Pendientes del cliente en este bloque: política de fallo de identidad y lista final de escalamientos. La aprobación legal del aviso de IA y la grabación la gestiona Telasist con Invex.</p>
-  </section>
-
-  <!-- 08 · CRITERIOS -->
-  <section class="slide" id="slide-8">
-    <span class="brand-chip">Qué se pidió · Éxito</span>
-    <span class="slide-num"></span>
-    <span class="section-eyebrow">06 · Cómo sabremos que funciona</span>
+    <span class="section-eyebrow">04 · Cómo sabremos que funciona</span>
     <h2>Retener igual que un humano, sin sumar riesgo ni costo</h2>
     <p class="lead">Cinco criterios propuestos en el brief, para acordarse con Invex. La retención sola se puede inflar, por eso se lee siempre junto con los demás.</p>
     <div class="cols5">
@@ -472,39 +448,43 @@
     <div class="callout"><strong>Dónde estamos frente a estos criterios.</strong> Aún no se miden en llamadas reales: el agente se ha probado en el sandbox con cuentas ficticias. La medición contra la línea base empieza en el UAT y el piloto, después de la entrega.</div>
   </section>
 
-  <!-- 09 · PRINCIPIO -->
-  <section class="slide" id="slide-9">
-    <span class="brand-chip">Cómo se construyó · Principio</span>
+  
+  <section class="slide" id="slide-7">
+    <span class="brand-chip">Arquitectura · El diferencial</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">07 · La decisión de diseño más importante</span>
-    <h2>El agente conversa; el código decide</h2>
-    <p class="lead">Un modelo de lenguaje habla bien pero no debe decidir identidad, ofertas, límites ni folios. Separamos las dos tareas.</p>
-    <div class="cols2">
-      <div class="card" style="border-top:4px solid var(--eb50);"><h3>Lo hace el agente (conversación)</h3><ul>
-        <li>Saluda, escucha y empatiza en español de México</li>
-        <li>Pide un dato a la vez y lo dicta de vuelta</li>
-        <li>Redacta la oferta y responde objeciones con naturalidad</li>
-        <li>Detecta enojo, amenaza o petición de un asesor</li>
-        <li>Nunca inventa beneficios, montos, plazos ni folios</li>
+    <span class="section-eyebrow">05 · Qué decide una llamada</span>
+    <h2>Lo que obliga no está en el prompt</h2>
+    <p class="lead">Las reglas de una llamada pueden vivir en una instrucción que el modelo debe recordar, o en el estado y el código de la plataforma. Aquí las que cuestan dinero o cumplimiento viven en la segunda, y solo la primera capa es probabilística.</p>
+    <div class="cols3">
+      <div class="card" style="border-top:4px solid var(--warn);"><span class="tag p">Probabilístico · el modelo</span><h3>Instrucciones del agente</h3><ul>
+        <li>Tono, empatía y español de México</li>
+        <li>Cómo pedir cada dato y cómo redactar la oferta</li>
+        <li>Entender qué dijo el cliente: intención, enojo, amenaza</li>
+      </ul><p class="sm" style="margin-top:10px;">Aquí el modelo puede variar, y está bien.</p></div>
+      <div class="card" style="border-top:4px solid var(--eb50);"><span class="tag d">Determinista · el script del agente</span><h3>Estado y compuertas</h3><ul>
+        <li><strong>Enrutador por estado:</strong> la etapa la fijan las variables, no el modelo</li>
+        <li><strong>22 condiciones <code>available when</code>:</strong> el modelo solo puede usar una herramienta cuando el estado lo permite</li>
+        <li><strong>Acciones por código:</strong> validar, transferir y colgar se ejecutan sin pedirle permiso al modelo</li>
+        <li>65 variables de estado de la llamada</li>
       </ul></div>
-      <div class="card" style="border-top:4px solid var(--ok);"><h3>Lo hace el código (reglas)</h3><ul>
-        <li><strong>Identidad:</strong> compara contra la carga diaria</li>
-        <li><strong>Oferta:</strong> qué beneficios son elegibles y en qué orden</li>
-        <li><strong>Límites:</strong> máximo de objeciones, umbrales de saldo, tipo de cierre</li>
-        <li><strong>Folio y tipificación:</strong> los arma y los escribe en el caso</li>
-        <li>Las etapas avanzan por condiciones del sistema, no por lo que el modelo "decida"</li>
+      <div class="card" style="border-top:4px solid var(--ok);"><span class="tag d">Determinista · lógica en Salesforce</span><h3>Apex, metadatos y el caso</h3><ul>
+        <li><strong>Identidad</strong> contra la carga diaria de Invex</li>
+        <li><strong>Oferta:</strong> qué beneficio, en qué orden y cuántas veces</li>
+        <li><strong>Cierre:</strong> retención, cancelación o precancelación, folio y tipificación</li>
+        <li><strong>Escritura</strong> del Case y de la VoiceCall</li>
+        <li>139 pruebas Apex pasadas en el despliegue del 9-nov</li>
       </ul></div>
     </div>
-    <div class="callout"><strong>Por qué importa a la mesa.</strong> Una cancelación o un beneficio mal otorgado tiene costo real. Al dejar las decisiones en reglas verificables y con pruebas, el comportamiento es auditable y repetible en cada llamada.</div>
+    <div class="callout"><strong>La idea central.</strong> Las etapas avanzan por el estado, y registrar una retención o una cancelación pasa por Apex, que valida el consentimiento, las ofertas presentadas y el saldo. Si el modelo se equivoca al conversar, el código no registra lo que no valida.</div>
   </section>
 
-  <!-- 10 · ARQUITECTURA -->
-  <section class="slide" id="slide-10">
-    <span class="brand-chip">Cómo se construyó · Arquitectura</span>
+  
+  <section class="slide" id="slide-8">
+    <span class="brand-chip">Arquitectura · Cómo viaja una llamada</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">08 · De la llamada al caso</span>
-    <h2>Cómo viaja una llamada por la solución</h2>
-    <p class="lead">Todo vive en la plataforma de Telasist en Salesforce. Se reutiliza lo que ya tienen: Service Cloud, VoiceCall y la carga diaria de Invex.</p>
+    <span class="section-eyebrow">06 · De la llamada al caso</span>
+    <h2>Todo ocurre dentro de Salesforce</h2>
+    <p class="lead">El agente, las reglas, los datos del cliente y el caso viven en la misma plataforma de Telasist. No hay un servicio externo que mantener ni una integración que sincronizar entre la conversación y el registro.</p>
     <div class="arch">
       <div class="box"><b>Cliente</b>Llama a Cuentas Especiales</div><div class="arrow">→</div>
       <div class="box"><b>Telefonía</b>Registro VoiceCall y transferencia a asesor</div><div class="arrow">→</div>
@@ -520,57 +500,62 @@
     <p class="foot">Los trámites se registran en la llamada y los aplica Invex después; el agente no puede confirmar que un beneficio ya quedó aplicado, y así se lo dice al cliente.</p>
   </section>
 
-  <!-- 11 · AGENTE -->
-  <section class="slide" id="slide-11">
-    <span class="brand-chip">Cómo se construyó · El agente</span>
+  
+  <section class="slide compact" id="slide-9">
+    <span class="brand-chip">Arquitectura · Una llamada, etapa por etapa</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">09 · Seis etapas con compuertas</span>
-    <h2>Una conversación guiada, una etapa por paso</h2>
-    <p class="lead">Cada etapa es un subagente con una sola tarea y solo avanza cuando el sistema confirma que terminó la anterior.</p>
-    <div class="flow">
-      <div class="step"><span class="n">1</span><b>Recepción</b>Saluda, entiende si quiere cancelar o dar seguimiento y confirma la intención</div>
-      <div class="step"><span class="n">2</span><b>Identificación</b>Captura nombre, teléfono, últimos 6 dígitos, RFC y producto; el sistema valida</div>
-      <div class="step"><span class="n">3</span><b>Sondeo</b>Descubre el motivo real y lo clasifica; un intento de desescalar si hay enojo</div>
-      <div class="step"><span class="n">4</span><b>Oferta</b>Una oferta por turno, rotación ante objeciones y consentimiento explícito</div>
-      <div class="step"><span class="n">5</span><b>Cierre</b>Registra el resultado, dicta el folio y repite plazos; despedida</div>
-      <div class="step"><span class="n">6</span><b>Escalamiento</b>Registra el motivo y transfiere a un asesor con contexto</div>
+    <span class="section-eyebrow">07 · Seis etapas con compuertas</span>
+    <h2>En cada etapa, el modelo conversa y el código decide</h2>
+    <p class="lead">Cada etapa es un subagente con una tarea. Solo avanza cuando el sistema confirma que terminó la anterior.</p>
+    <div class="cols3">
+      <div class="card"><h3><span class="n" style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--eb30);color:#fff;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-right:8px;">1</span>Recepción</h3><p class="sm"><strong>El modelo:</strong> saluda con empatía y confirma que quiere cancelar.</p><p class="sm" style="margin-top:6px;"><strong style="color:var(--ok);">El código:</strong> pasa a identificación solo con la intención confirmada; seguimiento, fallecimiento o tarjeta garantizada escalan.</p></div>
+      <div class="card"><h3><span class="n" style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--eb30);color:#fff;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-right:8px;">2</span>Identificación</h3><p class="sm"><strong>El modelo:</strong> pide un dato a la vez y lee el RFC de regreso.</p><p class="sm" style="margin-top:6px;"><strong style="color:var(--ok);">El código:</strong> Apex valida contra la carga diaria sin revelar qué dato falló; con 10 turnos sin validar, escala.</p></div>
+      <div class="card"><h3><span class="n" style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--eb30);color:#fff;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-right:8px;">3</span>Sondeo</h3><p class="sm"><strong>El modelo:</strong> descubre y clasifica el motivo real.</p><p class="sm" style="margin-top:6px;"><strong style="color:var(--ok);">El código:</strong> Apex entrega la primera oferta del catálogo; antes de eso, el modelo no tiene oferta que mencionar.</p></div>
+      <div class="card"><h3><span class="n" style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--eb30);color:#fff;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-right:8px;">4</span>Oferta</h3><p class="sm"><strong>El modelo:</strong> presenta un beneficio con su texto aprobado.</p><p class="sm" style="margin-top:6px;"><strong style="color:var(--ok);">El código:</strong> la siguiente oferta y la cancelación existen solo cuando el estado lo permite (mínimo 2, máximo 3 ofertas).</p></div>
+      <div class="card"><h3><span class="n" style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--eb30);color:#fff;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-right:8px;">5</span>Cierre</h3><p class="sm"><strong>El modelo:</strong> dicta el folio dos veces y se despide.</p><p class="sm" style="margin-top:6px;"><strong style="color:var(--ok);">El código:</strong> Apex decide retención, cancelación o precancelación, arma el folio y tipifica; el sistema cuelga una sola vez.</p></div>
+      <div class="card"><h3><span class="n" style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--eb30);color:#fff;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-right:8px;">6</span>Escalamiento</h3><p class="sm"><strong>El modelo:</strong> dice una frase cálida.</p><p class="sm" style="margin-top:6px;"><strong style="color:var(--ok);">El código:</strong> el código registra el motivo y el resumen en el caso y transfiere con contexto; hay 19 motivos declarados.</p></div>
     </div>
-    <div class="cols3" style="margin-top:22px;">
-      <div class="card"><h3>Tamaño</h3><p class="sm">Unas 1,200 líneas de Agent Script, 63 variables de estado y 8 acciones (6 de Apex y 2 flujos).</p></div>
-      <div class="card"><h3>Modelo y tono</h3><p class="sm">Claude Opus 4.7 en todas las etapas. Español de México, trato de usted, frases cortas y una pregunta por turno.</p></div>
-      <div class="card"><h3>Honestidad por diseño</h3><p class="sm">Se identifica como asistente virtual desde el saludo y nunca afirma que algo "ya quedó aplicado".</p></div>
-    </div>
+    <p class="foot">Tres tipos de cierre con folio: retención (RB), cancelación sin saldo (CC) y precancelación con saldo (CB), seguidos de la fecha (DDMMAA) y los últimos 4 dígitos. Claude Opus 4.7 en todas las etapas, unas 1,250 líneas de Agent Script y 8 acciones (6 de Apex y 2 flujos).</p>
   </section>
 
-  <!-- 12 · CAPA DE REGLAS -->
-  <section class="slide" id="slide-12">
-    <span class="brand-chip">Cómo se construyó · Reglas y datos</span>
+  
+  <section class="slide compact" id="slide-10">
+    <span class="brand-chip">Arquitectura · Interactivo</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">10 · Donde viven las decisiones de negocio</span>
-    <h2>Capa de reglas en Apex, configuración en metadatos</h2>
-    <p class="lead">Lo que cambia con el negocio (beneficios, guiones, umbrales) está en configuración; lo que debe ser exacto (identidad, folio, escritura del caso) está en código con pruebas.</p>
-    <table class="tbl">
-      <tr><th>Acción del agente</th><th>Qué resuelve el código</th></tr>
-      <tr><td><strong>Validar tarjetahabiente</strong></td><td>Compara nombre, RFC, teléfono, últimos 6 dígitos y producto contra la carga diaria; cuenta intentos fallidos sin revelar qué dato falló</td></tr>
-      <tr><td><strong>Obtener oferta / Siguiente oferta</strong></td><td>Aplica catálogo, matriz producto × beneficio, reglas de saldo y exclusiones; entrega una oferta por turno con su texto aprobado</td></tr>
-      <tr><td><strong>Registrar resultado</strong></td><td>Decide el tipo de cierre (retención, cancelación o precancelación), arma el folio RB, CC o CB, tipifica y escribe el caso</td></tr>
-      <tr><td><strong>Registrar seguimiento</strong></td><td>Atiende "no aplicado": ubica el folio anterior, abre el seguimiento y entrega el plazo</td></tr>
-      <tr><td><strong>Registrar escalamiento</strong></td><td>Guarda el motivo y el resumen en el caso y devuelve la opción de transferencia; si el caso ya está cerrado, deja un caso de auditoría</td></tr>
-    </table>
-    <div class="cols3" style="margin-top:20px;">
-      <div class="card"><div class="big">12</div><p class="sm">clases Apex de Invex más 3 clases de prueba</p></div>
-      <div class="card"><div class="big">139/139</div><p class="sm">pruebas Apex pasadas en el despliegue del 9-nov</p></div>
-      <div class="card"><div class="big">A–J</div><p class="sm">beneficios y 14 productos como metadatos configurables, sin tocar código</p></div>
+    <span class="section-eyebrow">08 · Qué ve el modelo en cada momento</span>
+    <h2>Una regla en el prompt se pide. Una regla en el código se cumple</h2>
+    <p class="lead">Cambia el estado de la llamada y mira qué herramientas puede usar el modelo. Las condiciones son las reales de la versión 15.</p>
+    <div class="sim" id="sim">
+      <div>
+        <button class="simsw" id="swAuth"><i></i><span id="swLbl">Cliente sin validar</span></button>
+        <div class="vrow first"><span class="nm">verificado</span><span class="vl" id="vVer">False</span></div>
+        <div class="vrow"><span class="nm">ofertas_presentadas</span><span><button class="simbtn" id="offMinus">−</button> <span class="vl" id="vOff" style="margin:0 8px;">0</span> <button class="simbtn" id="offPlus">+</button></span></div>
+        <div class="vrow"><span class="nm">puede_ofrecer_mas</span><span class="vl" id="vMore">False</span></div>
+        <div class="vrow"><span class="nm">cancelacion_habilitada</span><span class="vl" id="vCan">False</span></div>
+        <div class="simmsg" id="simMsg"></div>
+      </div>
+      <div>
+        <div class="tool" id="t1"><div><b>validar_tarjetahabiente</b><small>available when verificado == False</small></div><span class="st">visible</span></div>
+        <div class="tool" id="t5"><div><b>obtener_oferta</b><small>available when codigo_motivo == "" and folio == ""</small></div><span class="st">visible</span></div>
+        <div class="tool" id="t2"><div><b>siguiente_oferta</b><small>available when puede_ofrecer_mas == True</small></div><span class="st">visible</span></div>
+        <div class="tool" id="t3"><div><b>registrar_retencion</b><small>available when ofertas_presentadas &gt; 0</small></div><span class="st">visible</span></div>
+        <div class="tool" id="t4"><div><b>registrar_cancelacion</b><small>available when cancelacion_habilitada == True</small></div><span class="st">visible</span></div>
+      </div>
     </div>
+    <div class="rules2">
+      <div class="prose"><b class="t">Regla en el prompt</b>«No registres la cancelación hasta presentar al menos dos ofertas.» Depende de que el modelo la recuerde, también con un cliente que insiste.</div>
+      <div class="code"><b class="t">Regla en el código</b><code>available when cancelacion_habilitada == True</code>. El modelo no puede usar la acción hasta que Apex la habilita.</div>
+    </div>
+    <p class="foot">Variables y condiciones tomadas del script de la v15 (sandbox, 10-nov); simplificado para la lámina. En el agente real, Apex decide cuándo se cumplen según la configuración (mínimo 2, máximo 3 ofertas). Medición propia: una regla de estilo en prosa («un solo mensaje por turno») apenas bajó los turnos con mensajes dobles, de 49 % a 42 % en 10 sesiones por brazo; por eso lo que obliga va en código.</p>
   </section>
 
-  <!-- 13 · SEGURIDAD -->
-  <section class="slide" id="slide-13">
-    <span class="brand-chip">Cómo se construyó · Resguardos</span>
+  
+  <section class="slide compact" id="slide-11">
+    <span class="brand-chip">Arquitectura · Resguardos</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">11 · Qué evita que el agente haga algo indebido</span>
-    <h2>El agente conversa; el código decide</h2>
-    <p class="lead">Los resguardos no dependen de que el modelo de lenguaje los recuerde: lo que obliga a Invex (identidad, qué beneficio, tipo de cierre, folio) lo fija el sistema, y el modelo solo conversa. Se pusieron a prueba de forma deliberada con insultos, amenazas e intentos de manipulación.</p>
+    <span class="section-eyebrow">09 · Qué evita que el agente haga algo indebido</span>
+    <h2>Resguardos que no dependen de la memoria del modelo</h2>
+    <p class="lead">Lo que obliga a Invex (identidad, beneficio, tipo de cierre, folio) lo fija el sistema. Se probó de forma deliberada con insultos, amenazas e intentos de manipulación.</p>
     <div class="cols3">
       <div class="card" style="border-top:4px solid var(--eb50);"><h3>Identidad y privacidad</h3><ul>
         <li>Producto y últimos 4 dígitos solo después de validar</li>
@@ -592,54 +577,26 @@
         <li>Una amenaza legal o de violencia escala a un asesor</li>
       </ul></div>
     </div>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="n">22</div><div class="l">Condiciones <strong>available when</strong> que fijan cuándo el modelo puede usar cada herramienta</div></div>
+      <div class="kpi-card"><div class="n">12</div><div class="l">Clases <strong>Apex</strong> de Invex, con reglas de identidad, oferta, cierre y escritura del caso</div></div>
+      <div class="kpi-card"><div class="n">139</div><div class="l">Pruebas Apex pasadas en el despliegue del 9-nov</div></div>
+      <div class="kpi-card"><div class="n">19</div><div class="l">Motivos de escalamiento a un asesor, registrados en el caso</div></div>
+    </div>
     <div class="callout"><strong>Documento de guardarraíles.</strong> Se entrega a Invex una especificación con cada regla, la capa que la aplica (código, compuerta del sistema, instrucción al modelo o plataforma), su estado real y las decisiones que necesitamos del cliente. Está en borrador para revisión.</div>
-    <div class="callout warn"><strong>Compromiso de Telasist con Invex.</strong> El texto del aviso de que se habla con una IA, la grabación y los límites de persuasión requieren la aprobación de Legal de Invex antes de producción; Telasist la gestiona con el cliente. Hoy el agente se presenta como asistente virtual desde el saludo.</div>
   </section>
 
-  <!-- 14 · INVENTARIO -->
-  <section class="slide" id="slide-14">
-    <span class="brand-chip">Qué incluye la solución</span>
+  
+  <section class="slide" id="slide-12">
+    <span class="brand-chip">Escenarios de prueba</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">12 · El inventario completo</span>
-    <h2>Qué recibe Telasist al cierre de la entrega</h2>
-    <p class="lead">La solución, más lo necesario para operarla, probarla y mantenerla sin depender del equipo de construcción.</p>
-    <div class="cols3">
-      <div class="card"><h3>El agente</h3><ul>
-        <li>Agente de voz con 6 etapas en español de México</li>
-        <li>Capa de reglas en Apex con pruebas</li>
-        <li>Catálogo de beneficios, productos y guiones en metadatos</li>
-        <li>Base de conocimiento "Invex - Retenciones" conectada</li>
-        <li>Escritura del caso con tipificación, folio y trámites</li>
-      </ul></div>
-      <div class="card"><h3>Calidad y operación</h3><ul>
-        <li>Suite de pruebas de conversación con cuentas ficticias</li>
-        <li>Réplica de casos reales de Prod en el sandbox</li>
-        <li>Auditorías técnica, de cumplimiento y de voz</li>
-        <li>Observabilidad: trazas de sesión y tablero de calidad</li>
-        <li>Runbook de operación y afinación</li>
-      </ul></div>
-      <div class="card"><h3>Conocimiento y traspaso</h3><ul>
-        <li>Paquete de despliegue para TS4/Skala</li>
-        <li>Documentación técnica y plan de UAT</li>
-        <li>Guía Maestra del negocio y del agente (226 pp en v1)</li>
-        <li>Playbook de retención para supervisores</li>
-        <li>Transferencia de conocimiento y acta de entrega</li>
-      </ul></div>
-    </div>
-    <p class="foot">La entrega del Equipo FDE Salesforce es el 12-nov. Después, el UAT con Invex y el pase a producción están a cargo de TS4/Skala.</p>
-  </section>
-  <!-- 16 · PRUEBAS -->
-  <section class="slide" id="slide-16">
-    <span class="brand-chip">Cómo se probó</span>
-    <span class="slide-num"></span>
-    <span class="section-eyebrow">13 · Qué hemos validado y qué nos enseñó</span>
-    <h2>Pruebas con cuentas ficticias y réplica de llamadas reales</h2>
-    <p class="lead">No se prueba con clientes. Se construyó un banco de cuentas ficticias con el formato de Prod y se reprodujeron las dos llamadas reales analizadas.</p>
-    <div class="kpi-row">
+    <span class="section-eyebrow">10 · Qué hemos validado y qué nos enseñó</span>
+    <h2>Pruebas con cuentas ficticias construidas con el formato de Prod</h2>
+    <p class="lead">No se prueba con clientes. Se construyó un banco de cuentas ficticias con el formato de Prod, con nombres y datos que ponen a prueba al agente.</p>
+    <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);">
       <div class="kpi-card"><div class="n">32</div><div class="l">Escenarios de la <strong>Ronda 0</strong> (27-oct) sobre 14 cuentas ficticias iniciales</div></div>
       <div class="kpi-card"><div class="n">19</div><div class="l">Escenarios de la <strong>réplica de Prod</strong>, con nombres que retan la pronunciación</div></div>
       <div class="kpi-card"><div class="n">52</div><div class="l"><strong>Hallazgos</strong> registrados y priorizados en el control de pruebas</div></div>
-      <div class="kpi-card"><div class="n">2</div><div class="l">Llamadas reales de Prod analizadas campo por campo</div></div>
     </div>
     <div class="cols2">
       <div class="card"><h3>Lo que las pruebas cambiaron</h3><ul>
@@ -656,117 +613,26 @@
         <li>Reglas de validación del caso en Prod que rompen llamadas (teléfono inválido en 100 cuentas)</li>
       </ul></div>
     </div>
+    <p class="foot">En preparación: un stack de 120 sesiones por agente con la mezcla real de Prod (productos, resultados y motivos), con piloto ya validado. Las pruebas de texto no miden voz ni latencia de telefonía.</p>
   </section>
 
-  <!-- 17 · PEDIDO VS CONSTRUIDO -->
-  <section class="slide compact" id="slide-17">
-    <span class="brand-chip">Dónde estamos · Pedido contra construido</span>
+  
+  <section class="slide compact" id="slide-13">
+    <span class="brand-chip">Conclusiones</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">14 · La lámina que resume todo</span>
-    <h2>Cada requisito del cliente frente a su estado actual</h2>
-    <table class="tbl dense">
-      <tr><th>Lo que se pidió</th><th style="width:150px;">Estado</th><th>Situación</th></tr>
-      <tr><td>Validar identidad con cinco datos</td><td><span class="chip ok">Construido</span></td><td>Funciona, incluidos el cero inicial y la Ñ de los apellidos</td></tr>
-      <tr><td>Sondeo del motivo real</td><td><span class="chip ok">Construido</span></td><td>Seis motivos con desescalación, también desde la identificación</td></tr>
-      <tr><td>Ofertar del catálogo (10 beneficios × 14 productos)</td><td><span class="chip warn">Parcial</span></td><td>Catálogo y matriz listos; la regla de qué ofrecer a quién depende de Invex</td></tr>
-      <tr><td>Objeciones: máximo 3, sin costo primero</td><td><span class="chip ok">Construido</span></td><td>Rotación de ofertas por turno</td></tr>
-      <tr><td>"Sí" explícito antes de cerrar</td><td><span class="chip ok">Construido</span></td><td>Con pruebas de consentimiento</td></tr>
-      <tr><td>Tres cierres con folio RB, CC y CB</td><td><span class="chip ok">Construido</span></td><td>Probado de punta a punta en el sandbox; falta que TS4 corrija un error de etiquetas en Prod que afecta trámites</td></tr>
-      <tr><td>Escribir el caso como un humano</td><td><span class="chip warn">Parcial</span></td><td>Ajustes finos al mapa de datos en curso</td></tr>
-      <tr><td>Seguimientos "no aplicado" (Fase 1b)</td><td><span class="chip ok">Construido</span></td><td>Memoria entre llamadas desplegada el 3-nov</td></tr>
-      <tr><td>Casos especiales y salida a humano</td><td><span class="chip warn">Parcial</span></td><td>Rutas listas; la lista final de escalamientos la define Invex</td></tr>
-      <tr><td>Voz y telefonía reales</td><td><span class="chip warn">En curso</span></td><td>Número de prueba activo y llamadas completas con folio; falta probar la transferencia a un asesor con contexto</td></tr>
-      <tr><td>Aviso de IA, grabación y aprobación legal</td><td><span class="chip warn">En gestión</span></td><td>El aviso existe en el saludo; Telasist gestiona con Invex la aprobación del texto final</td></tr>
-      <tr><td>Criterios de éxito y medición</td><td><span class="chip warn">En curso</span></td><td>Stack de 120 sesiones por agente con la mezcla real de Prod, con piloto validado; falta correrlo. La medición real es en el UAT</td></tr>
-    </table>
-    <p class="foot">Estado según el sandbox de Telasist y el plan del proyecto al 10-nov-2026. "Construido" significa funcionando en el sandbox con cuentas ficticias, no probado con clientes.</p>
-  </section>
-
-  <!-- 18 · QUÉ FALTA -->
-  <section class="slide" id="slide-18">
-    <span class="brand-chip">Dónde estamos · Lo que falta construir</span>
-    <span class="slide-num"></span>
-    <span class="section-eyebrow">15 · Hasta la entrega del 12 de noviembre</span>
-    <h2>Qué ya funciona y qué falta, en cuatro frentes</h2>
-    <div class="cols4">
-      <div class="card"><h3>Cerrar el agente</h3><ul class="sm">
-        <li><strong>Hecho:</strong> validación con cero inicial (probada por voz), Ñ y amenaza de violencia (probadas en pruebas de código y de texto), caso con vista de Invex y llamada ligada a cuenta y campaña; oferta limitada al texto aprobado (v14)</li>
-        <li><strong>Falta:</strong> texto oficial de beneficios (hoy, una frase por producto)</li>
-        <li><strong>Falta:</strong> que el agente no escriba dos mensajes por turno (hoy 49 %) ni quede cortado al despedirse</li>
-      </ul></div>
-      <div class="card"><h3>Voz y telefonía</h3><ul class="sm">
-        <li><strong>Hecho:</strong> número de prueba activo y llamadas completas de punta a punta, con folio escrito en el caso</li>
-        <li><strong>Falta:</strong> latencia (mediana de 3 s sin aviso), final de la llamada con la encuesta</li>
-        <li><strong>Falta:</strong> transferencia a asesor con contexto, sin probar por voz</li>
-      </ul></div>
-      <div class="card"><h3>Pruebas y auditorías</h3><ul class="sm">
-        <li><strong>Hecho:</strong> 4 llamadas de prueba, 13 guiones por teléfono, un informe de calidad de voz (nota C) y un stack de 120 sesiones por agente con piloto validado</li>
-        <li><strong>Falta:</strong> correr el stack completo (unas 4 horas) y alcanzar 95 % de exactitud</li>
-        <li><strong>Falta:</strong> auditorías técnica, de cumplimiento y de voz; observabilidad y pre-UAT</li>
-      </ul></div>
-      <div class="card"><h3>Entrega</h3><ul class="sm">
-        <li><strong>Hecho:</strong> documento de guardarraíles v0.1, listo para revisión de Invex</li>
-        <li><strong>Falta:</strong> paquete de despliegue, documentación técnica y runbook</li>
-        <li><strong>Falta:</strong> plan de UAT, Guía Maestra v2, presentación final y acta de entrega</li>
-      </ul></div>
+    <span class="section-eyebrow">11 · Lo que se queda de esta presentación</span>
+    <h2>Un agente donde lo que obliga no depende del prompt</h2>
+    <p class="lead">Cuatro conclusiones de lo que hay construido hoy en el sandbox de Telasist.</p>
+    <div class="cols2">
+      <div class="card" style="border-top:4px solid var(--eb50);"><div class="big">1</div><h3>El agente conversa; el código decide</h3><p class="sm">Identidad, oferta, cierre, folio y escritura del caso los fijan el estado de la llamada y Apex, con 139 pruebas automáticas. Si el modelo se equivoca al hablar, el código no registra lo que no valida.</p></div>
+      <div class="card" style="border-top:4px solid var(--ok);"><div class="big">2</div><h3>Todo ocurre dentro de Salesforce</h3><p class="sm">El agente, las reglas, el caso, la llamada, el conocimiento y la memoria de contactos anteriores viven en la misma plataforma. No hay una integración intermedia que mantener ni datos que conciliar.</p></div>
+      <div class="card" style="border-top:4px solid var(--eb50);"><div class="big">3</div><h3>Está construido sobre las reglas de Invex</h3><p class="sm">Catálogo de 10 beneficios para 14 productos, reglas de saldo y de persuasión del Manual v2.0, y tres cierres con folio RB, CC y CB. Lo que cambia con el negocio está en configuración, no en código.</p></div>
+      <div class="card" style="border-top:4px solid var(--ok);"><div class="big">4</div><h3>Lo que se probó cambió el agente</h3><p class="sm">51 escenarios con cuentas ficticias y 52 hallazgos se convirtieron en cambios concretos: identidad en una sola pregunta, consentimiento sin bucles y oferta limitada al texto aprobado.</p></div>
     </div>
-    <div class="callout warn"><strong>Lectura honesta.</strong> El agente ya atiende una llamada completa, pero la experiencia por voz todavía no está a punto: hay esperas largas, mensajes repetidos y un final que se corta. Las auditorías y el paquete de entrega siguen sin arrancar. Orden propuesto: mejorar la conversación, medirla con las pruebas y preparar la entrega en paralelo.</div>
-    <p class="foot">Estado al 10-nov-2026 según las pruebas en el sandbox y la v15 activa; el avance de cada actividad se confirma en el portal antes de la presentación.</p>
+    <div class="callout"><strong>Lo que sigue.</strong> Cerrar la experiencia por voz (un mensaje por turno, final de llamada sin cortes y transferencia a un asesor probada), correr el stack completo de pruebas y entregar el 12 de noviembre. Para llegar a producción, Invex define la matriz de elegibilidad, la política de identidad y los escalamientos; Telasist gestiona la aprobación legal; TS4 corrige la etiqueta de Prod que deja 58 casos sin código de trámite.</div>
+    <p class="foot">Equipo FDE Salesforce · Proyecto Telasist × Invex · Estado al 10-nov-2026. Todo lo descrito funciona en el sandbox con cuentas ficticias; no se ha probado con clientes.</p>
   </section>
 
-  <!-- 19 · RUTA A PRODUCCIÓN -->
-  <section class="slide" id="slide-19">
-    <span class="brand-chip">Dónde estamos · Ruta a producción</span>
-    <span class="slide-num"></span>
-    <span class="section-eyebrow">16 · Después de la entrega</span>
-    <h2>Quién hace qué desde el 12 de noviembre</h2>
-    <p class="lead">El Equipo FDE Salesforce entrega el agente configurado, probado, auditado y afinado. El resto lo ejecuta el partner con el cliente.</p>
-    <div class="timeline-wrap"><div class="timeline-grid">
-      <div class="ph done"><div class="ph-dot">✔</div><h4>Construcción y pruebas</h4><div class="ph-date">10-oct → 12-nov</div><div class="ph-text">Equipo FDE Salesforce. Agente, reglas, pruebas, auditorías y documentación.</div></div>
-      <div class="ph inprogress"><div class="ph-dot">★</div><h4>Entrega</h4><div class="ph-date">12-nov</div><div class="ph-text">Presentación final, acta y traspaso de conocimiento a TS4/Skala.</div></div>
-      <div class="ph future"><div class="ph-dot">U</div><h4>UAT del cliente</h4><div class="ph-date">13 → 24-nov (tentativo)</div><div class="ph-text">Telasist Operación ejecuta; TS4/Skala corrige; Invex firma.</div></div>
-      <div class="ph future"><div class="ph-dot">L</div><h4>Aprobación legal</h4><div class="ph-date">25-nov (tentativo)</div><div class="ph-text">Compuerta de Invex que gestiona Telasist: uso de IA, aviso y grabación.</div></div>
-      <div class="ph future"><div class="ph-dot">P</div><h4>Producción</h4><div class="ph-date">25-nov → 11-dic (tentativo)</div><div class="ph-text">Pase a producción, cola de la campaña, arranque controlado y despliegue gradual.</div></div>
-    </div></div>
-    <p class="foot">Las fechas del UAT y de producción son tentativas y dependen de las decisiones del cliente (lámina siguiente).</p>
-  </section>
-
-  <!-- 20 · DECISIONES -->
-  <section class="slide" id="slide-20">
-    <span class="brand-chip">Qué necesitamos de ustedes</span>
-    <span class="slide-num"></span>
-    <span class="section-eyebrow">17 · Decisiones que destraban el camino</span>
-    <h2>Lo que depende de Invex y Telasist</h2>
-    <p class="lead">El agente puede estar terminado y aun así no salir a producción si estas decisiones no se toman. Cada una tiene dueño en el plan.</p>
-    <div class="triad">
-      <div class="triad-card block"><h3><span class="dot"></span>Bloquean producción · Invex y Telasist</h3><ul>
-        <li><strong>Matriz de elegibilidad:</strong> cómo semáforo, VPN y segmento deciden el beneficio</li>
-        <li><strong>Aprobación legal</strong> del uso de IA, el aviso y la grabación (la gestiona Telasist)</li>
-        <li><strong>Política de identidad</strong> y lista completa de escalamientos</li>
-      </ul></div>
-      <div class="triad-card warn"><h3><span class="dot"></span>Afinan el comportamiento · Invex y Telasist</h3><ul>
-        <li>¿Puede repetirse el beneficio UCEDOM a un mismo cliente?</li>
-        <li>Monto de UCEDOM en Volaris 2.0 y Platinum ($50 o $80)</li>
-        <li>Los 7 puntos que el Manual v2.0 marca "por definir"</li>
-        <li>Fecha de originación y bonificación por suspensión en la carga</li>
-      </ul></div>
-      <div class="triad-card ok"><h3><span class="dot"></span>Correcciones en Prod · TS4 y Telasist IT</h3><ul>
-        <li>Etiqueta con paréntesis faltante que deja 58 casos sin código de trámite (de 665 expuestos desde el 19-ago)</li>
-        <li>Regla de teléfono del caso que falla en 100 cuentas</li>
-        <li>Alinear las reglas de QA con las de Prod</li>
-      </ul></div>
-    </div>
-    <div class="callout"><strong>Lo que pedimos hoy a la mesa.</strong> Un responsable y una fecha para cada decisión de la columna roja, de modo que el UAT pueda arrancar el 13 de noviembre.</div>
-  </section>
-
-  <!-- 21 · GRACIAS -->
-  <section class="slide gracias" id="slide-21">
-    <h1 class="gracias-h1">Gracias</h1>
-    <p class="gracias-sub">El agente está construido sobre las reglas de Invex y probado en el sandbox. Lo que falta es voz, auditoría, entrega, las decisiones del cliente y la aprobación legal que gestiona Telasist.</p>
-    <div class="gracias-contacts" style="grid-template-columns: 1fr; max-width: 700px;">
-      <div class="gracias-contact"><div class="name">Equipo FDE Salesforce</div><div class="role">Proyecto Telasist × Invex · Retención TDC</div></div>
-    </div>
-  </section>
 
 </div>
 
@@ -822,7 +688,7 @@
   slides.addEventListener('scroll', sync);
   window.addEventListener('resize', () => { slides.style.scrollBehavior = 'auto'; slides.scrollLeft = current() * window.innerWidth; slides.style.scrollBehavior = ''; sync(); });
   sync();
-  document.querySelectorAll('.slide-num').forEach((el, i) => { el.innerHTML = '<span class="current">' + String(i + 2).padStart(2, '0') + '</span> / 20'; });
+  document.querySelectorAll('.slide-num').forEach((el, i) => { el.innerHTML = '<span class="current">' + String(i + 2).padStart(2, '0') + '</span> / 13'; });
 </script>
 
 <script src="gsap.min.js"></script>
@@ -906,6 +772,46 @@
 
   slidesEl.addEventListener('scroll', () => enter(index()));
   addEventListener('load', () => setTimeout(() => enter(index()), 120));
+})();
+
+</script>
+<script>
+/* Lámina interactiva: herramientas visibles para el modelo según el estado de la llamada.
+   Condiciones tomadas de la v15 del agente (available when). Simplificado: en el agente real,
+   Apex devuelve cancelacion_habilitada y puede_ofrecer_mas según la configuración (mínimo 2, máximo 3 ofertas). */
+(function () {
+  if (!document.getElementById('sim')) return;
+  const $ = id => document.getElementById(id);
+  let ver = false, off = 0;
+  function render() {
+    const cancel = ver && off >= 2, more = ver && off >= 1 && off < 3;
+    const set = (id, v) => { $(id).textContent = v; $(id).classList.toggle('on', v === 'True'); };
+    set('vVer', ver ? 'True' : 'False');
+    $('vOff').textContent = off;
+    set('vCan', cancel ? 'True' : 'False');
+    set('vMore', more ? 'True' : 'False');
+    $('swLbl').textContent = ver ? 'Cliente validado' : 'Cliente sin validar';
+    $('swAuth').classList.toggle('is-on', ver);
+    $('offMinus').disabled = !ver || off <= 0;
+    $('offPlus').disabled = !ver || off >= 3;
+    const vis = { t1: !ver, t5: ver && off === 0, t2: more, t3: off > 0, t4: cancel };
+    Object.keys(vis).forEach(k => {
+      $(k).classList.toggle('off', !vis[k]);
+      $(k).querySelector('.st').textContent = vis[k] ? 'visible' : 'no disponible';
+    });
+    $('simMsg').innerHTML = !ver
+      ? 'Si el cliente dice <b>«quiero cancelar»</b> ahora: el agente sigue en identificación. No hay oferta ni cancelación que registrar.'
+      : off === 0
+        ? 'Si el cliente dice <b>«quiero cancelar»</b> ahora: el agente primero pide al motor la primera oferta. Registrar la cancelación todavía no está disponible para el modelo.'
+        : off === 1
+          ? 'Si el cliente dice <b>«quiero cancelar»</b> ahora: reconoce su postura y presenta brevemente la siguiente oferta. Aunque insista, el modelo todavía no puede registrar la cancelación.'
+          : 'Si el cliente dice <b>«quiero cancelar»</b> ahora: la cancelación está habilitada. El agente hace la pregunta exacta de cancelación y registra la respuesta del cliente.';
+  }
+  const click = (id, fn) => $(id).addEventListener('click', e => { fn(); e.currentTarget.blur(); render(); });
+  click('swAuth', () => { ver = !ver; if (!ver) off = 0; });
+  click('offMinus', () => { off = Math.max(0, off - 1); });
+  click('offPlus', () => { off = Math.min(3, off + 1); });
+  render();
 })();
 
 </script>
