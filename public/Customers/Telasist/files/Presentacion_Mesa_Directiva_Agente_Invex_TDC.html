@@ -327,8 +327,8 @@
     <div class="cols4">
       <div class="card"><div class="big">1</div><h3>¿Qué se pidió?</h3><p class="sm">El Discovery Brief y el Manual de Proceso v2.0 de Invex: alcance, flujo de llamada, reglas de negocio, datos y criterios de éxito.</p><span class="chip todo">Láminas 3 a 8</span></div>
       <div class="card"><div class="big">2</div><h3>¿Cómo se construyó?</h3><p class="sm">Principio de diseño, arquitectura, el agente por etapas, la capa de reglas y datos, y los resguardos de seguridad.</p><span class="chip todo">Láminas 9 a 13</span></div>
-      <div class="card"><div class="big">3</div><h3>¿Qué incluye y cómo se probó?</h3><p class="sm">Inventario de la solución, evolución por versiones y resultados de las pruebas.</p><span class="chip todo">Láminas 14 a 16</span></div>
-      <div class="card"><div class="big">4</div><h3>¿Dónde estamos y qué falta?</h3><p class="sm">Pedido contra construido, trabajo restante hasta el 12-nov, y las decisiones que dependen del cliente.</p><span class="chip todo">Láminas 17 a 20</span></div>
+      <div class="card"><div class="big">3</div><h3>¿Qué incluye y cómo se probó?</h3><p class="sm">Inventario de la solución y resultados de las pruebas.</p><span class="chip todo">Láminas 14 a 15</span></div>
+      <div class="card"><div class="big">4</div><h3>¿Dónde estamos y qué falta?</h3><p class="sm">Pedido contra construido, trabajo restante hasta el 12-nov, y las decisiones que dependen del cliente.</p><span class="chip todo">Láminas 16 a 19</span></div>
     </div>
   </section>
 
@@ -628,36 +628,11 @@
     </div>
     <p class="foot">La entrega del Equipo FDE Salesforce es el 12-nov. Después, el UAT con Invex y el pase a producción están a cargo de TS4/Skala.</p>
   </section>
-
-  <!-- 15 · EVOLUCION -->
-  <section class="slide compact" id="slide-15">
-    <span class="brand-chip">Cómo se construyó · Evolución</span>
-    <span class="slide-num"></span>
-    <span class="section-eyebrow">13 · Cuatro semanas, dieciséis versiones</span>
-    <h2>De un clon de voz a un agente con las reglas reales de Invex</h2>
-    <p class="lead">Cada versión se probó antes de la siguiente. La v15 es la que está activa hoy en el sandbox; la v16 se evaluó y no se promovió porque no mejoraba lo suficiente.</p>
-    <table class="tbl dense">
-      <tr><th style="width:90px;">Versión</th><th style="width:90px;">Fecha</th><th>Qué aportó</th><th style="width:190px;">Estado</th></tr>
-      <tr><td>v1 a v5</td><td>10-oct</td><td>Se parte del patrón de voz ya probado en otros agentes del portafolio; seis etapas, capa de reglas en Apex y catálogo de beneficios</td><td><span class="chip todo">Histórica</span></td></tr>
-      <tr><td>v7</td><td>16-oct</td><td>Seguimientos de "no aplicado", un solo dato por herramienta, usuario dedicado del agente, preguntas de consentimiento configurables</td><td><span class="chip todo">Histórica</span></td></tr>
-      <tr><td>v8</td><td>22-oct</td><td>Alineada con el Manual de Proceso v2.0: guion de retención obligatorio, un intento de desescalar, cierre con plazos</td><td><span class="chip todo">Histórica</span></td></tr>
-      <tr><td>v9</td><td>27-oct</td><td>Reglas reales de la base de conocimiento: catálogo, matriz de tarjetas, umbral de $5,557.56, guiones oficiales CC/CB</td><td><span class="chip todo">Histórica</span></td></tr>
-      <tr><td>v10</td><td>27-oct</td><td>Mejoras de la Ronda 0 de pruebas: identidad en menos mensajes, consentimiento sin bucles, una oferta por turno, empatía al inicio</td><td><span class="chip todo">Histórica</span></td></tr>
-      <tr><td>v11</td><td>5-nov</td><td>Errores recuperables con salida propia, confirmación de intención sin repreguntar, lectura exacta del RFC</td><td><span class="chip todo">Histórica</span></td></tr>
-      <tr><td>v12</td><td>7-nov</td><td>Código de amenaza de violencia, un solo intento de desescalar desde la identificación y ajuste del filtro de contenido de la plataforma</td><td><span class="chip todo">Histórica</span></td></tr>
-      <tr><td>v13</td><td>8-nov</td><td>Regla para mensajes cortos o cortados del cliente: la frase "contenido que no corresponde" bajó de 4 a 0 de 10 sesiones de prueba</td><td><span class="chip todo">Histórica</span></td></tr>
-      <tr><td>v14</td><td>9-nov</td><td>En la oferta solo dice el texto aprobado, sin explicar procedimientos ni dar cifras ajenas. Nació de la llamada de prueba del 8-nov</td><td><span class="chip todo">Histórica</span></td></tr>
-      <tr><td>v15</td><td>9-nov</td><td>Nueva voz y mensajes de progreso mientras el agente consulta datos</td><td><span class="chip ok">Activa en sandbox</span></td></tr>
-      <tr><td>v16</td><td>9-nov</td><td>Un solo mensaje por turno y dos frases prohibidas. Se midió en 10 sesiones por brazo: mejora marginal (49 % a 42 % de turnos con mensajes dobles)</td><td><span class="chip warn">Evaluada, no promovida</span></td></tr>
-    </table>
-    <p class="foot">Capa Apex: el 3-nov se desplegó la v10.2 (memoria entre llamadas que reconoce los folios de los asesores y escalamiento seguro con el caso cerrado) y el 9-nov la actualización con la amenaza de violencia; las 139 pruebas pasaron ese día.</p>
-  </section>
-
   <!-- 16 · PRUEBAS -->
   <section class="slide" id="slide-16">
     <span class="brand-chip">Cómo se probó</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">14 · Qué hemos validado y qué nos enseñó</span>
+    <span class="section-eyebrow">13 · Qué hemos validado y qué nos enseñó</span>
     <h2>Pruebas con cuentas ficticias y réplica de llamadas reales</h2>
     <p class="lead">No se prueba con clientes. Se construyó un banco de cuentas ficticias con el formato de Prod y se reprodujeron las dos llamadas reales analizadas.</p>
     <div class="kpi-row">
@@ -687,7 +662,7 @@
   <section class="slide compact" id="slide-17">
     <span class="brand-chip">Dónde estamos · Pedido contra construido</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">15 · La lámina que resume todo</span>
+    <span class="section-eyebrow">14 · La lámina que resume todo</span>
     <h2>Cada requisito del cliente frente a su estado actual</h2>
     <table class="tbl dense">
       <tr><th>Lo que se pidió</th><th style="width:150px;">Estado</th><th>Situación</th></tr>
@@ -711,7 +686,7 @@
   <section class="slide" id="slide-18">
     <span class="brand-chip">Dónde estamos · Lo que falta construir</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">16 · Hasta la entrega del 12 de noviembre</span>
+    <span class="section-eyebrow">15 · Hasta la entrega del 12 de noviembre</span>
     <h2>Qué ya funciona y qué falta, en cuatro frentes</h2>
     <div class="cols4">
       <div class="card"><h3>Cerrar el agente</h3><ul class="sm">
@@ -743,7 +718,7 @@
   <section class="slide" id="slide-19">
     <span class="brand-chip">Dónde estamos · Ruta a producción</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">17 · Después de la entrega</span>
+    <span class="section-eyebrow">16 · Después de la entrega</span>
     <h2>Quién hace qué desde el 12 de noviembre</h2>
     <p class="lead">El Equipo FDE Salesforce entrega el agente configurado, probado, auditado y afinado. El resto lo ejecuta el partner con el cliente.</p>
     <div class="timeline-wrap"><div class="timeline-grid">
@@ -760,7 +735,7 @@
   <section class="slide" id="slide-20">
     <span class="brand-chip">Qué necesitamos de ustedes</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">18 · Decisiones que destraban el camino</span>
+    <span class="section-eyebrow">17 · Decisiones que destraban el camino</span>
     <h2>Lo que depende de Invex y Telasist</h2>
     <p class="lead">El agente puede estar terminado y aun así no salir a producción si estas decisiones no se toman. Cada una tiene dueño en el plan.</p>
     <div class="triad">
@@ -847,7 +822,7 @@
   slides.addEventListener('scroll', sync);
   window.addEventListener('resize', () => { slides.style.scrollBehavior = 'auto'; slides.scrollLeft = current() * window.innerWidth; slides.style.scrollBehavior = ''; sync(); });
   sync();
-  document.querySelectorAll('.slide-num').forEach((el, i) => { el.innerHTML = '<span class="current">' + String(i + 2).padStart(2, '0') + '</span> / 21'; });
+  document.querySelectorAll('.slide-num').forEach((el, i) => { el.innerHTML = '<span class="current">' + String(i + 2).padStart(2, '0') + '</span> / 20'; });
 </script>
 
 <script src="gsap.min.js"></script>

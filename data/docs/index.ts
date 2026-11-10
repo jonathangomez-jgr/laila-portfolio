@@ -413,7 +413,7 @@ const TELASIST_RETENCION_DOCS: DocEntry[] = [
     slug: "presentacion-mesa-directiva",
     label: "Presentación · Mesa directiva · Agente de voz Retención Invex TDC",
     description:
-      "Deck para la mesa directiva (martes 10-nov). 21 slides horizontales: qué pidió Invex (Discovery Brief y Manual v2.0), cómo se construyó el agente, qué incluye la solución, cómo se probó, pedido contra construido, qué falta hasta la entrega del 12-nov y las decisiones que dependen del cliente. Borrador: el estado se confirma contra el plan antes de presentar.",
+      "Deck para la mesa directiva (martes 10-nov). 20 slides horizontales: qué pidió Invex (Discovery Brief y Manual v2.0), cómo se construyó el agente, qué incluye la solución, cómo se probó, pedido contra construido, qué falta hasta la entrega del 12-nov y las decisiones que dependen del cliente. Borrador: el estado se confirma contra el plan antes de presentar.",
     url: "/Customers/Telasist/files/Presentacion_Mesa_Directiva_Agente_Invex_TDC.html",
     category: "Ejecutivo",
     icon: "🎤",
