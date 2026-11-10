@@ -452,7 +452,7 @@
         <li>El saldo y el semáforo son una foto de la última carga: pueden tener hasta un día</li>
       </ul></div>
     </div>
-    <p class="foot">Pendientes del cliente en este bloque: política de fallo de identidad, lista final de escalamientos, y aprobación legal sobre el aviso de IA y la grabación.</p>
+    <p class="foot">Pendientes del cliente en este bloque: política de fallo de identidad y lista final de escalamientos. La aprobación legal del aviso de IA y la grabación la gestiona Telasist con Invex.</p>
   </section>
 
   <!-- 08 · CRITERIOS -->
@@ -559,7 +559,7 @@
     </table>
     <div class="cols3" style="margin-top:20px;">
       <div class="card"><div class="big">12</div><p class="sm">clases Apex de Invex más 3 clases de prueba</p></div>
-      <div class="card"><div class="big">135/135</div><p class="sm">pruebas Apex pasadas en la validación del despliegue del 3-nov</p></div>
+      <div class="card"><div class="big">139/139</div><p class="sm">pruebas Apex pasadas en el despliegue del 9-nov</p></div>
       <div class="card"><div class="big">A–J</div><p class="sm">beneficios y 14 productos como metadatos configurables, sin tocar código</p></div>
     </div>
   </section>
@@ -569,8 +569,8 @@
     <span class="brand-chip">Cómo se construyó · Resguardos</span>
     <span class="slide-num"></span>
     <span class="section-eyebrow">11 · Qué evita que el agente haga algo indebido</span>
-    <h2>Resguardos de seguridad, privacidad y ética</h2>
-    <p class="lead">Se diseñaron junto con las reglas del Manual v2.0 y se pusieron a prueba de forma deliberada con intentos de manipulación.</p>
+    <h2>El agente conversa; el código decide</h2>
+    <p class="lead">Los resguardos no dependen de que el modelo de lenguaje los recuerde: lo que obliga a Invex (identidad, qué beneficio, tipo de cierre, folio) lo fija el sistema, y el modelo solo conversa. Se pusieron a prueba de forma deliberada con insultos, amenazas e intentos de manipulación.</p>
     <div class="cols3">
       <div class="card" style="border-top:4px solid var(--eb50);"><h3>Identidad y privacidad</h3><ul>
         <li>Producto y últimos 4 dígitos solo después de validar</li>
@@ -589,10 +589,11 @@
         <li>Ignora intentos de cambiar sus reglas o ver su configuración</li>
         <li>Ante un error técnico, transfiere a un humano en lugar de improvisar</li>
         <li>Si tras 10 turnos de identificación no logra validar, escala</li>
-        <li>Una amenaza legal escala a un asesor</li>
+        <li>Una amenaza legal o de violencia escala a un asesor</li>
       </ul></div>
     </div>
-    <div class="callout warn"><strong>Pendiente de aprobación del cliente.</strong> El texto del aviso de que se habla con una IA y las reglas de grabación requieren la aprobación legal de Invex antes de producción. Hoy el agente se presenta como asistente virtual desde el saludo.</div>
+    <div class="callout"><strong>Documento de guardarraíles.</strong> Se entrega a Invex una especificación con cada regla, la capa que la aplica (código, compuerta del sistema, instrucción al modelo o plataforma), su estado real y las decisiones que necesitamos del cliente. Está en borrador para revisión.</div>
+    <div class="callout warn"><strong>Compromiso de Telasist con Invex.</strong> El texto del aviso de que se habla con una IA, la grabación y los límites de persuasión requieren la aprobación de Legal de Invex antes de producción; Telasist la gestiona con el cliente. Hoy el agente se presenta como asistente virtual desde el saludo.</div>
   </section>
 
   <!-- 14 · INVENTARIO -->
@@ -629,23 +630,27 @@
   </section>
 
   <!-- 15 · EVOLUCION -->
-  <section class="slide" id="slide-15">
+  <section class="slide compact" id="slide-15">
     <span class="brand-chip">Cómo se construyó · Evolución</span>
     <span class="slide-num"></span>
-    <span class="section-eyebrow">13 · Cuatro semanas, diez iteraciones visibles</span>
+    <span class="section-eyebrow">13 · Cuatro semanas, dieciséis versiones</span>
     <h2>De un clon de voz a un agente con las reglas reales de Invex</h2>
-    <p class="lead">Cada versión se probó antes de la siguiente. La v9 es la que está activa hoy en el sandbox; las siguientes son borradores.</p>
-    <table class="tbl">
-      <tr><th style="width:90px;">Versión</th><th style="width:110px;">Fecha</th><th>Qué aportó</th><th style="width:130px;">Estado</th></tr>
+    <p class="lead">Cada versión se probó antes de la siguiente. La v15 es la que está activa hoy en el sandbox; la v16 se evaluó y no se promovió porque no mejoraba lo suficiente.</p>
+    <table class="tbl dense">
+      <tr><th style="width:90px;">Versión</th><th style="width:90px;">Fecha</th><th>Qué aportó</th><th style="width:190px;">Estado</th></tr>
       <tr><td>v1 a v5</td><td>10-oct</td><td>Se parte del patrón de voz ya probado en otros agentes del portafolio; seis etapas, capa de reglas en Apex y catálogo de beneficios</td><td><span class="chip todo">Histórica</span></td></tr>
       <tr><td>v7</td><td>16-oct</td><td>Seguimientos de "no aplicado", un solo dato por herramienta, usuario dedicado del agente, preguntas de consentimiento configurables</td><td><span class="chip todo">Histórica</span></td></tr>
       <tr><td>v8</td><td>22-oct</td><td>Alineada con el Manual de Proceso v2.0: guion de retención obligatorio, un intento de desescalar, cierre con plazos</td><td><span class="chip todo">Histórica</span></td></tr>
-      <tr><td>v9</td><td>27-oct</td><td>Reglas reales de la base de conocimiento: catálogo, matriz de tarjetas, umbral de $5,557.56, guiones oficiales CC/CB</td><td><span class="chip ok">Activa en sandbox</span></td></tr>
-      <tr><td>v10</td><td>27-oct</td><td>Mejoras de la Ronda 0 de pruebas: identidad en menos mensajes, consentimiento sin bucles, una oferta por turno, empatía al inicio</td><td><span class="chip warn">Borrador</span></td></tr>
-      <tr><td>v11</td><td>6-nov</td><td>Guardas de errores recuperables, confirmación de intención sin repreguntar, lectura exacta del RFC</td><td><span class="chip warn">Borrador</span></td></tr>
-      <tr><td>v12</td><td>7-nov</td><td>Sobre la v11: desescalación desde la identificación y ajuste del filtro de contenido de la plataforma</td><td><span class="chip warn">Borrador local</span></td></tr>
+      <tr><td>v9</td><td>27-oct</td><td>Reglas reales de la base de conocimiento: catálogo, matriz de tarjetas, umbral de $5,557.56, guiones oficiales CC/CB</td><td><span class="chip todo">Histórica</span></td></tr>
+      <tr><td>v10</td><td>27-oct</td><td>Mejoras de la Ronda 0 de pruebas: identidad en menos mensajes, consentimiento sin bucles, una oferta por turno, empatía al inicio</td><td><span class="chip todo">Histórica</span></td></tr>
+      <tr><td>v11</td><td>5-nov</td><td>Errores recuperables con salida propia, confirmación de intención sin repreguntar, lectura exacta del RFC</td><td><span class="chip todo">Histórica</span></td></tr>
+      <tr><td>v12</td><td>7-nov</td><td>Código de amenaza de violencia, un solo intento de desescalar desde la identificación y ajuste del filtro de contenido de la plataforma</td><td><span class="chip todo">Histórica</span></td></tr>
+      <tr><td>v13</td><td>8-nov</td><td>Regla para mensajes cortos o cortados del cliente: la frase "contenido que no corresponde" bajó de 4 a 0 de 10 sesiones de prueba</td><td><span class="chip todo">Histórica</span></td></tr>
+      <tr><td>v14</td><td>9-nov</td><td>En la oferta solo dice el texto aprobado, sin explicar procedimientos ni dar cifras ajenas. Nació de la llamada de prueba del 8-nov</td><td><span class="chip todo">Histórica</span></td></tr>
+      <tr><td>v15</td><td>9-nov</td><td>Nueva voz y mensajes de progreso mientras el agente consulta datos</td><td><span class="chip ok">Activa en sandbox</span></td></tr>
+      <tr><td>v16</td><td>9-nov</td><td>Un solo mensaje por turno y dos frases prohibidas. Se midió en 10 sesiones por brazo: mejora marginal (49 % a 42 % de turnos con mensajes dobles)</td><td><span class="chip warn">Evaluada, no promovida</span></td></tr>
     </table>
-    <p class="foot">Además, el 3-nov se desplegó la v10.2 de la capa Apex: memoria entre llamadas que reconoce los folios de los asesores y escalamiento seguro cuando el caso ya está cerrado. Aplica a la v9 activa.</p>
+    <p class="foot">Capa Apex: el 3-nov se desplegó la v10.2 (memoria entre llamadas que reconoce los folios de los asesores y escalamiento seguro con el caso cerrado) y el 9-nov la actualización con la amenaza de violencia; las 139 pruebas pasaron ese día.</p>
   </section>
 
   <!-- 16 · PRUEBAS -->
@@ -667,9 +672,11 @@
         <li>El consentimiento ya no entra en bucle</li>
         <li>Un folio previo de cancelación lleva directo al seguimiento, sin límite de días</li>
         <li>El escalamiento ya no falla si el caso está cerrado</li>
+        <li>Los 6 dígitos con cero inicial y la Ñ de los apellidos ya se validan bien</li>
+        <li>Tras la llamada del 8-nov, la oferta se limita al texto aprobado: el agente había explicado un procedimiento y dado una cifra sin respaldo</li>
       </ul></div>
       <div class="card"><h3>Hallazgos abiertos relevantes</h3><ul>
-        <li>Validación: los 6 dígitos que inician en 0 pierden el cero (afecta a 1 de cada 10 cuentas de Prod); la Ñ no iguala a N</li>
+        <li>Mensajes dobles: en 49 % de los turnos (v15) el agente escribe dos bloques; una regla de instrucción no lo resolvió y requiere mover la captura de datos a código</li>
         <li>El filtro de contenido de la plataforma puede bloquear datos dictados; hay un caso por abrir con Salesforce</li>
         <li>Reglas de validación del caso en Prod que rompen llamadas (teléfono inválido en 100 cuentas)</li>
       </ul></div>
@@ -684,20 +691,20 @@
     <h2>Cada requisito del cliente frente a su estado actual</h2>
     <table class="tbl dense">
       <tr><th>Lo que se pidió</th><th style="width:150px;">Estado</th><th>Situación</th></tr>
-      <tr><td>Validar identidad con cinco datos</td><td><span class="chip ok">Construido</span></td><td>Funciona; faltan dos ajustes de coincidencia (cero inicial, Ñ)</td></tr>
-      <tr><td>Sondeo del motivo real</td><td><span class="chip ok">Construido</span></td><td>Seis motivos con desescalación; en identificación solo en borrador</td></tr>
+      <tr><td>Validar identidad con cinco datos</td><td><span class="chip ok">Construido</span></td><td>Funciona, incluidos el cero inicial y la Ñ de los apellidos</td></tr>
+      <tr><td>Sondeo del motivo real</td><td><span class="chip ok">Construido</span></td><td>Seis motivos con desescalación, también desde la identificación</td></tr>
       <tr><td>Ofertar del catálogo (10 beneficios × 14 productos)</td><td><span class="chip warn">Parcial</span></td><td>Catálogo y matriz listos; la regla de qué ofrecer a quién depende de Invex</td></tr>
       <tr><td>Objeciones: máximo 3, sin costo primero</td><td><span class="chip ok">Construido</span></td><td>Rotación de ofertas por turno</td></tr>
       <tr><td>"Sí" explícito antes de cerrar</td><td><span class="chip ok">Construido</span></td><td>Con pruebas de consentimiento</td></tr>
-      <tr><td>Tres cierres con folio RB, CC y CB</td><td><span class="chip ok">Construido</span></td><td>Falta que TS4 corrija un error de etiquetas en Prod que afecta trámites</td></tr>
+      <tr><td>Tres cierres con folio RB, CC y CB</td><td><span class="chip ok">Construido</span></td><td>Probado de punta a punta en el sandbox; falta que TS4 corrija un error de etiquetas en Prod que afecta trámites</td></tr>
       <tr><td>Escribir el caso como un humano</td><td><span class="chip warn">Parcial</span></td><td>Ajustes finos al mapa de datos en curso</td></tr>
       <tr><td>Seguimientos "no aplicado" (Fase 1b)</td><td><span class="chip ok">Construido</span></td><td>Memoria entre llamadas desplegada el 3-nov</td></tr>
       <tr><td>Casos especiales y salida a humano</td><td><span class="chip warn">Parcial</span></td><td>Rutas listas; la lista final de escalamientos la define Invex</td></tr>
-      <tr><td>Voz y telefonía reales</td><td><span class="chip block">Pendiente</span></td><td>Ruta, número de prueba, transferencia y primera llamada de punta a punta</td></tr>
-      <tr><td>Aviso de IA, grabación y aprobación legal</td><td><span class="chip block">Pendiente</span></td><td>El aviso existe en el saludo; el texto final lo aprueba Invex</td></tr>
-      <tr><td>Criterios de éxito y medición</td><td><span class="chip warn">En curso</span></td><td>Suite de pruebas y observabilidad por completar; medición real en UAT</td></tr>
+      <tr><td>Voz y telefonía reales</td><td><span class="chip warn">En curso</span></td><td>Número de prueba activo y llamadas completas con folio; falta probar la transferencia a un asesor con contexto</td></tr>
+      <tr><td>Aviso de IA, grabación y aprobación legal</td><td><span class="chip warn">En gestión</span></td><td>El aviso existe en el saludo; Telasist gestiona con Invex la aprobación del texto final</td></tr>
+      <tr><td>Criterios de éxito y medición</td><td><span class="chip warn">En curso</span></td><td>Stack de 120 sesiones por agente con la mezcla real de Prod, con piloto validado; falta correrlo. La medición real es en el UAT</td></tr>
     </table>
-    <p class="foot">Estado según el sandbox de Telasist y el plan del proyecto al 7-nov-2026. "Construido" significa funcionando en el sandbox con cuentas ficticias, no probado con clientes.</p>
+    <p class="foot">Estado según el sandbox de Telasist y el plan del proyecto al 10-nov-2026. "Construido" significa funcionando en el sandbox con cuentas ficticias, no probado con clientes.</p>
   </section>
 
   <!-- 18 · QUÉ FALTA -->
@@ -705,35 +712,31 @@
     <span class="brand-chip">Dónde estamos · Lo que falta construir</span>
     <span class="slide-num"></span>
     <span class="section-eyebrow">16 · Hasta la entrega del 12 de noviembre</span>
-    <h2>El trabajo restante, en cuatro frentes</h2>
+    <h2>Qué ya funciona y qué falta, en cuatro frentes</h2>
     <div class="cols4">
       <div class="card"><h3>Cerrar el agente</h3><ul class="sm">
-        <li>Corregir cero inicial y Ñ en la validación</li>
-        <li>Código propio para amenazas de violencia</li>
-        <li>Conectar la base de conocimiento y los textos oficiales de beneficios</li>
-        <li>Decidir la versión que se publica y publicarla</li>
+        <li><strong>Hecho:</strong> validación con cero inicial (probada por voz), Ñ y amenaza de violencia (probadas en pruebas de código y de texto), caso con vista de Invex y llamada ligada a cuenta y campaña; oferta limitada al texto aprobado (v14)</li>
+        <li><strong>Falta:</strong> texto oficial de beneficios (hoy, una frase por producto)</li>
+        <li><strong>Falta:</strong> que el agente no escriba dos mensajes por turno (hoy 49 %) ni quede cortado al despedirse</li>
       </ul></div>
       <div class="card"><h3>Voz y telefonía</h3><ul class="sm">
-        <li>Ruta de voz en el sandbox hacia el agente</li>
-        <li>Número de prueba y transferencia con contexto</li>
-        <li>Afinación del reconocimiento de voz</li>
-        <li>Primera llamada de punta a punta</li>
+        <li><strong>Hecho:</strong> número de prueba activo y llamadas completas de punta a punta, con folio escrito en el caso</li>
+        <li><strong>Falta:</strong> latencia (mediana de 3 s sin aviso), final de la llamada con la encuesta</li>
+        <li><strong>Falta:</strong> transferencia a asesor con contexto, sin probar por voz</li>
       </ul></div>
       <div class="card"><h3>Pruebas y auditorías</h3><ul class="sm">
-        <li>Suite de al menos 40 escenarios con 95% de exactitud</li>
-        <li>Escenarios de llamadas reales</li>
-        <li>Auditorías técnica, de cumplimiento, de voz y contra la Cédula v10</li>
-        <li>Observabilidad y pre-UAT con la operación</li>
+        <li><strong>Hecho:</strong> 4 llamadas de prueba, 13 guiones por teléfono, un informe de calidad de voz (nota C) y un stack de 120 sesiones por agente con piloto validado</li>
+        <li><strong>Falta:</strong> correr el stack completo (unas 4 horas) y alcanzar 95 % de exactitud</li>
+        <li><strong>Falta:</strong> auditorías técnica, de cumplimiento y de voz; observabilidad y pre-UAT</li>
       </ul></div>
       <div class="card"><h3>Entrega</h3><ul class="sm">
-        <li>Paquete de despliegue y documentación técnica</li>
-        <li>Runbook, plan y casos de UAT</li>
-        <li>Guía Maestra v2 y transferencia de conocimiento</li>
-        <li>Presentación final y acta de entrega</li>
+        <li><strong>Hecho:</strong> documento de guardarraíles v0.1, listo para revisión de Invex</li>
+        <li><strong>Falta:</strong> paquete de despliegue, documentación técnica y runbook</li>
+        <li><strong>Falta:</strong> plan de UAT, Guía Maestra v2, presentación final y acta de entrega</li>
       </ul></div>
     </div>
-    <div class="callout warn"><strong>Lectura honesta.</strong> Quedan cinco días y el bloque de voz y telefonía, las auditorías y el paquete de entrega aún no arrancan. El orden propuesto es cerrar la versión del agente, correr la ronda de pruebas sobre ella y preparar la entrega en paralelo.</div>
-    <p class="foot">El avance exacto de cada actividad se confirma en el portal antes de la presentación.</p>
+    <div class="callout warn"><strong>Lectura honesta.</strong> El agente ya atiende una llamada completa, pero la experiencia por voz todavía no está a punto: hay esperas largas, mensajes repetidos y un final que se corta. Las auditorías y el paquete de entrega siguen sin arrancar. Orden propuesto: mejorar la conversación, medirla con las pruebas y preparar la entrega en paralelo.</div>
+    <p class="foot">Estado al 10-nov-2026 según las pruebas en el sandbox y la v15 activa; el avance de cada actividad se confirma en el portal antes de la presentación.</p>
   </section>
 
   <!-- 19 · RUTA A PRODUCCIÓN -->
@@ -747,7 +750,7 @@
       <div class="ph done"><div class="ph-dot">✔</div><h4>Construcción y pruebas</h4><div class="ph-date">10-oct → 12-nov</div><div class="ph-text">Equipo FDE Salesforce. Agente, reglas, pruebas, auditorías y documentación.</div></div>
       <div class="ph inprogress"><div class="ph-dot">★</div><h4>Entrega</h4><div class="ph-date">12-nov</div><div class="ph-text">Presentación final, acta y traspaso de conocimiento a TS4/Skala.</div></div>
       <div class="ph future"><div class="ph-dot">U</div><h4>UAT del cliente</h4><div class="ph-date">13 → 24-nov (tentativo)</div><div class="ph-text">Telasist Operación ejecuta; TS4/Skala corrige; Invex firma.</div></div>
-      <div class="ph future"><div class="ph-dot">L</div><h4>Aprobación legal</h4><div class="ph-date">25-nov (tentativo)</div><div class="ph-text">Compuerta de Invex: uso de IA, aviso y grabación.</div></div>
+      <div class="ph future"><div class="ph-dot">L</div><h4>Aprobación legal</h4><div class="ph-date">25-nov (tentativo)</div><div class="ph-text">Compuerta de Invex que gestiona Telasist: uso de IA, aviso y grabación.</div></div>
       <div class="ph future"><div class="ph-dot">P</div><h4>Producción</h4><div class="ph-date">25-nov → 11-dic (tentativo)</div><div class="ph-text">Pase a producción, cola de la campaña, arranque controlado y despliegue gradual.</div></div>
     </div></div>
     <p class="foot">Las fechas del UAT y de producción son tentativas y dependen de las decisiones del cliente (lámina siguiente).</p>
@@ -761,9 +764,9 @@
     <h2>Lo que depende de Invex y Telasist</h2>
     <p class="lead">El agente puede estar terminado y aun así no salir a producción si estas decisiones no se toman. Cada una tiene dueño en el plan.</p>
     <div class="triad">
-      <div class="triad-card block"><h3><span class="dot"></span>Bloquean producción · Invex</h3><ul>
+      <div class="triad-card block"><h3><span class="dot"></span>Bloquean producción · Invex y Telasist</h3><ul>
         <li><strong>Matriz de elegibilidad:</strong> cómo semáforo, VPN y segmento deciden el beneficio</li>
-        <li><strong>Aprobación legal</strong> del uso de IA, el aviso y la grabación</li>
+        <li><strong>Aprobación legal</strong> del uso de IA, el aviso y la grabación (la gestiona Telasist)</li>
         <li><strong>Política de identidad</strong> y lista completa de escalamientos</li>
       </ul></div>
       <div class="triad-card warn"><h3><span class="dot"></span>Afinan el comportamiento · Invex y Telasist</h3><ul>
@@ -773,7 +776,7 @@
         <li>Fecha de originación y bonificación por suspensión en la carga</li>
       </ul></div>
       <div class="triad-card ok"><h3><span class="dot"></span>Correcciones en Prod · TS4 y Telasist IT</h3><ul>
-        <li>Etiqueta con paréntesis faltante que deja 57 casos sin código de trámite</li>
+        <li>Etiqueta con paréntesis faltante que deja 58 casos sin código de trámite (de 665 expuestos desde el 19-ago)</li>
         <li>Regla de teléfono del caso que falla en 100 cuentas</li>
         <li>Alinear las reglas de QA con las de Prod</li>
       </ul></div>
@@ -784,7 +787,7 @@
   <!-- 21 · GRACIAS -->
   <section class="slide gracias" id="slide-21">
     <h1 class="gracias-h1">Gracias</h1>
-    <p class="gracias-sub">El agente está construido sobre las reglas de Invex y probado en el sandbox. Lo que falta es voz, auditoría, entrega y tres decisiones del cliente.</p>
+    <p class="gracias-sub">El agente está construido sobre las reglas de Invex y probado en el sandbox. Lo que falta es voz, auditoría, entrega, las decisiones del cliente y la aprobación legal que gestiona Telasist.</p>
     <div class="gracias-contacts" style="grid-template-columns: 1fr; max-width: 700px;">
       <div class="gracias-contact"><div class="name">Equipo FDE Salesforce</div><div class="role">Proyecto Telasist × Invex · Retención TDC</div></div>
     </div>
