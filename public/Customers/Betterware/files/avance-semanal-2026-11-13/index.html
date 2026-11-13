@@ -1,387 +1,425 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Betty FDE · Avance semanal</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Betterware × Salesforce · Avance semanal · Betty FDE</title>
 <style>
-@font-face { font-family: 'SF Sans'; src: url('SalesforceSans-Light.woff') format('woff'); font-weight: 300; }
-@font-face { font-family: 'SF Sans'; src: url('SalesforceSans-Regular.woff') format('woff'); font-weight: 400; }
-@font-face { font-family: 'SF Sans'; src: url('SalesforceSans-Semibold.woff') format('woff'); font-weight: 600; }
-@font-face { font-family: 'SF Sans'; src: url('SalesforceSans-Bold.woff') format('woff'); font-weight: 700; }
-@font-face { font-family: 'Avant SF'; src: url('AvantGardeForSalesforceW05-Dm.woff') format('woff'); font-weight: 500; }
+@font-face{font-family:"Avant Garde for Salesforce";src:url(assets/fonts/AvantGardeForSalesforceW05-Dm.woff) format("woff");font-weight:600;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Light.woff) format("woff");font-weight:300;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Regular.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Semibold.woff) format("woff");font-weight:600;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Bold.woff) format("woff");font-weight:700;font-display:swap}
 
-:root {
-  --eb-15: #001E5B; --eb-30: #022AC0; --eb-50: #066AFE;
-  --cb-68: #00B3FF; --cb-80: #90D0FE; --cb-95: #EAF5FE;
-  --body: #2F3C5E; --muted: #6B7A99;
-  --ok: #0F9D58; --warn: #F28B42; --crit: #E8275A; --info: #066AFE;
-  --panel: #F6F9FF; --rule: #D5E0F2;
+/* ===== THEME: salesforce-brand (Sacred palette) — copied from the engine theme, do not invent hex ===== */
+:root{
+  --ink:#001E5B;--ink2:#052663;--ink3:#0a2f74;--ink4:#103a86;
+  --line:#1c3f80;--line2:#2b4f95;
+  --text:#EAF5FE;--muted:#a8c2ec;--faint:#7592c4;
+  --accent:#00B3FF;--accent-soft:#90D0FE;--accent-dim:rgba(0,179,255,.14);
+  --electric:#066AFE;--electric-2:#022AC0;
+  --good:#04E1CB;--good-dim:rgba(4,225,203,.14);--warn:#FCC003;--warn-dim:rgba(252,192,3,.14);
+  --pink:#FF538A;--pink-dim:rgba(255,83,138,.14);--violet:#D17DFE;--violet-dim:rgba(209,125,254,.14);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --display:"Avant Garde for Salesforce","Salesforce Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sans:"Salesforce Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  /* chart series in stack order def,esc,aba,amb — validated with dataviz validate_palette.js on surface #052663 (dark): ALL CHECKS PASS; Not set = neutral gray + hatch (no data) */
+  --c-def:#199e70;--c-amb:#3987e5;--c-esc:#9085e9;--c-aba:#d95926;--c-not:#4a6396;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#000f33;font-family:var(--sans);color:var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+/* ===== fixed 1920x1080 canvas, scaled to fit ===== */
+#deck{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 82% 2%, rgba(0,179,255,.18), transparent 46%),
+    radial-gradient(120% 120% at 6% 104%, rgba(6,106,254,.22), transparent 54%),
+    radial-gradient(150% 120% at 50% 42%, #062a75 0%, #001E5B 62%, #001542 100%)}
+.progress{position:absolute;top:0;left:0;height:5px;z-index:50;background:linear-gradient(90deg,var(--accent),var(--electric),var(--good));box-shadow:0 0 14px rgba(0,179,255,.6);transition:width .45s cubic-bezier(.2,.7,.2,1)}
+
+.slide{position:absolute;inset:0;padding:92px 120px 134px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
+.slide.active{opacity:1;visibility:visible;transition:opacity .45s ease}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(rgba(144,208,254,.07) 1px,transparent 1.5px);background-size:34px 34px}
+.slide>*{position:relative;z-index:1}
+
+/* chrome */
+.pill{position:absolute!important;top:34px;right:44px;z-index:6;display:flex;align-items:center;gap:16px;padding:10px 22px;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 8px 26px rgba(0,10,40,.35)}
+.pill img.jafra{height:24px}
+.pill i{width:1px;height:24px;background:#c9d3e2}
+.pill img{height:26px;display:block}
+.snum{position:absolute!important;bottom:34px;right:48px;font-size:15px;letter-spacing:.16em;color:var(--faint);font-weight:600}
+.src{position:absolute!important;bottom:28px;left:120px;right:250px;font-size:15px;color:#9db4dc;line-height:1.38;border-top:1px solid rgba(144,208,254,.18);padding-top:8px}
+.src::before{content:"Fuente · ";font-weight:700;color:var(--accent-soft)}
+.eyebrow{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;font-size:15px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-soft);padding:8px 16px;border-radius:999px;background:var(--accent-dim);border:1px solid rgba(0,179,255,.3);margin-bottom:22px}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.eyebrow.pk{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.35)}
+.eyebrow.gd{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.35)}
+.eyebrow.yl{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.35)}
+
+h1{font-family:var(--display);font-weight:600;font-size:104px;line-height:1.02;letter-spacing:-.025em}
+h2{font-family:var(--display);font-weight:600;font-size:58px;line-height:1.08;letter-spacing:-.02em;max-width:1500px}
+h3{font-size:27px;font-weight:700;line-height:1.25;color:#fff}
+p,li{font-size:23px;line-height:1.5;color:var(--muted)}
+b,strong{color:#fff;font-weight:700}
+.lede{font-size:27px;line-height:1.45;color:var(--muted);max-width:1300px;margin-top:18px}
+.mono{font-family:var(--mono)}
+.grad{background:linear-gradient(92deg,#90D0FE,#00B3FF 40%,#04E1CB);-webkit-background-clip:text;background-clip:text;color:transparent}
+.body{flex:1;display:flex;flex-direction:column;min-height:0}
+
+/* cards */
+.card{position:relative;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:22px;padding:28px 30px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 18px 40px rgba(0,8,32,.35);overflow:hidden}
+.card.bar::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--accent),var(--electric))}
+.card.bar.g::before{background:linear-gradient(90deg,var(--good),var(--accent))}
+.card.bar.y::before{background:linear-gradient(90deg,var(--warn),#ff9f45)}
+.card.bar.p::before{background:linear-gradient(90deg,var(--pink),var(--violet))}
+.card.bar.v::before{background:linear-gradient(90deg,var(--violet),var(--electric))}
+.card .k{font-size:15px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:10px}
+.card p{font-size:21px}
+.grid{display:grid;gap:24px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+
+/* evidence level chips */
+.lv{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:28px;padding:0 9px;border-radius:8px;font-size:15px;font-weight:700;font-family:var(--mono);margin-right:10px;vertical-align:3px}
+.lv.A{background:rgba(0,179,255,.18);color:var(--accent-soft);border:1px solid rgba(0,179,255,.45)}
+.lv.B{background:var(--violet-dim);color:#e3b6ff;border:1px solid rgba(209,125,254,.45)}
+.lv.C{background:var(--warn-dim);color:var(--warn);border:1px solid rgba(252,192,3,.45)}
+
+/* session buttons */
+.ses{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(144,208,254,.4);color:#fff;text-decoration:none;font-size:17px;font-weight:600;transition:background .25s,transform .35s cubic-bezier(.34,1.56,.64,1)}
+.ses:hover{background:rgba(0,179,255,.22);transform:translateY(-3px)}
+.ses .id{font-family:var(--mono);font-size:14px;color:var(--accent-soft);font-weight:500}
+.ses::after{content:"↗";color:var(--accent)}
+.sesrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+
+/* status (always icon + label) */
+.st{display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:999px;font-size:15.5px;font-weight:700;white-space:nowrap;border:1px solid}
+.st.ok{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.4)}
+.st.mid{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.4)}
+.st.no{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.4)}
+
+/* sparkles: edges only */
+.spk{position:absolute!important;z-index:2;pointer-events:none;width:56px;height:auto}
+/* big stat */
+.big{font-family:var(--display);font-weight:600;font-size:120px;line-height:.95;letter-spacing:-.03em;color:#fff}
+.big.md{font-size:84px}
+.big small{font-size:.42em;color:var(--accent-soft);letter-spacing:0}
+
+/* dividers */
+.divider{justify-content:center;align-items:flex-start;background:radial-gradient(1200px 820px at 70% 30%,#0b3a8f 0%,#001E5B 55%,#000f33 100%)}
+.divider::after{background-image:linear-gradient(rgba(0,179,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,179,255,.07) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(1100px 760px at 60% 45%,#000 0%,transparent 75%);mask-image:radial-gradient(1100px 760px at 60% 45%,#000 0%,transparent 75%)}
+.divider .glow{position:absolute;width:900px;height:900px;right:-120px;top:50%;transform:translateY(-50%);border-radius:50%;background:radial-gradient(circle,rgba(0,179,255,.28),transparent 64%);filter:blur(10px);z-index:0}
+.divider.pk .glow{background:radial-gradient(circle,rgba(255,83,138,.24),transparent 64%)}
+.divider.gd .glow{background:radial-gradient(circle,rgba(4,225,203,.22),transparent 64%)}
+.divider .chap{font-family:var(--display);font-size:260px;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(144,208,254,.55);margin-bottom:30px}
+.divider h2{font-size:96px;max-width:1680px}
+.divider .lede{font-size:30px}
+
+/* tooltip */
+#tip{position:fixed;z-index:100;pointer-events:none;background:#fff;color:#001E5B;font-size:15px;font-weight:600;padding:8px 12px;border-radius:10px;box-shadow:0 10px 26px rgba(0,0,0,.35);opacity:0;transition:opacity .12s;white-space:nowrap}
+#tip b{color:#001E5B}
+svg text{font-family:var(--sans)}
+.chart{width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:22px;font-size:17px;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:16px;height:16px;border-radius:4px;display:inline-block}
+
+/* tables */
+table.tb{width:100%;border-collapse:separate;border-spacing:0;font-size:18px;background:rgba(5,38,99,.7);border:1px solid var(--line2);border-radius:18px;overflow:hidden}
+.tb th{font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-soft);text-align:left;padding:13px 16px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--line2);font-weight:700}
+.tb td{padding:10px 16px;border-bottom:1px solid var(--line);color:var(--muted);line-height:1.32;vertical-align:middle}
+.tb td:first-child{color:#fff;font-weight:700}
+.tb tr:last-child td{border-bottom:none}
+.sem{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:10px;vertical-align:-1px;flex-shrink:0}.sem.g{background:var(--good)}.sem.y{background:var(--warn)}.sem.r{background:var(--pink)}.sm18 td{padding:7px 14px}tr.rg td{background:rgba(4,225,203,.05)}tr.ry td{background:rgba(252,192,3,.06)}tr.rr td{background:rgba(255,83,138,.08)}.pn{display:inline-block;margin-left:8px;font-size:12.5px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--pink-dim);color:#ff8db1;border:1px solid rgba(255,83,138,.4)}
+.tag{display:inline-block;font-size:13.5px;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:7px;background:var(--accent-dim);color:var(--accent-soft);white-space:nowrap}
+
+/* finding layout */
+.fhead{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
+.fnum{font-family:var(--display);font-size:30px;color:var(--accent);letter-spacing:.04em}
+.fcols{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;margin-top:30px;flex:1;min-height:0}
+.fcols .card h3{margin-bottom:12px}
+.fcols ul{list-style:none;display:flex;flex-direction:column;gap:13px}
+.fcols li{font-size:22.5px;line-height:1.42}
+.gate{display:flex;align-items:center;gap:16px;padding:16px 22px;border-radius:16px;background:rgba(4,225,203,.1);border:1px solid rgba(4,225,203,.4);font-size:19px;color:#d9fffa}
+.gate .gk{font-family:var(--mono);font-weight:700;color:var(--good);font-size:18px;white-space:nowrap}
+.why{margin-top:22px;padding:18px 22px;border-radius:14px;background:rgba(0,179,255,.08);border-left:4px solid var(--accent)}
+.why .k{font-size:14px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:6px}
+.why p{font-size:22px;color:var(--text);line-height:1.45}
+.fcols>div:last-child>.card{flex:1;display:flex;flex-direction:column}
+.fcols>div:last-child>.card p{font-size:22.5px!important;line-height:1.5}
+.fcols>div:last-child .v41{margin-top:auto}
+.v41{font-size:20.5px;line-height:1.45;color:var(--muted);padding:14px 18px;border-radius:14px;background:rgba(209,125,254,.08);border:1px solid rgba(209,125,254,.3);margin-top:14px}
+.v41 b{color:#e9c8ff}
+
+.rm .slide{transition:none!important}
+.cover-title .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em}.cover-title .wi{display:inline-block}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
 }
 
-@page { size: Letter landscape; margin: 0; }
-* { box-sizing: border-box; }
-html, body {
-  margin: 0; padding: 0;
-  font-family: 'SF Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: var(--body); font-size: 10.5pt; line-height: 1.5;
-  -webkit-print-color-adjust: exact; print-color-adjust: exact;
-}
-h1, h2, h3, h4 { font-family: 'Avant SF', sans-serif; color: var(--eb-15); letter-spacing: -0.01em; margin: 0; }
+/* ===== extras de esta sesión ===== */
+.det{color:var(--accent)}.prob{color:var(--pink)}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font-size:16px;font-weight:700;border:1px solid;white-space:nowrap}
+.chip.d{color:var(--accent-soft);background:var(--accent-dim);border-color:rgba(0,179,255,.45)}
+.chip.p{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.45)}
+.chip.b{color:#e3b6ff;background:var(--violet-dim);border-color:rgba(209,125,254,.45)}
+.chip.g{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.4)}
+.chip.y{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.4)}
+.btn{font-family:var(--sans);font-size:20px;font-weight:700;color:#fff;background:linear-gradient(92deg,var(--electric),var(--accent));border:0;border-radius:999px;padding:14px 28px;cursor:pointer;box-shadow:0 10px 26px rgba(0,100,255,.35);transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(0,140,255,.5)}
+.btn.ghost{background:rgba(255,255,255,.08);border:1px solid rgba(144,208,254,.4);box-shadow:none}
+.btn.sm{font-size:17px;padding:10px 20px}
+.code{font-family:var(--mono);font-size:18px;line-height:1.55;color:#cfe4ff;background:rgba(0,15,51,.7);border:1px solid var(--line2);border-radius:14px;padding:16px 20px;white-space:pre-wrap}
+.code .kw{color:#ff8db1}.code .vr{color:var(--good)}.code .cm{color:var(--faint)}
+.quote{border-left:4px solid var(--accent);padding:6px 0 6px 22px;font-size:25px;line-height:1.45;color:var(--text);font-style:italic}
+.quote small{display:block;margin-top:8px;font-style:normal;font-size:16px;color:var(--faint);letter-spacing:.04em}
 
-.slide {
-  position: relative;
-  width: 100%;
-  height: 215mm;
-  padding: 18mm 22mm;
-  page-break-after: always;
-  overflow: hidden;
-}
-.slide:last-child { page-break-after: auto; }
+/* simulador A/B */
+.trial{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:18px}
+.trial .t{height:58px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;border:1px solid var(--line2);background:rgba(255,255,255,.03);transition:background .2s}
+.t.ok{background:var(--good-dim);border-color:rgba(4,225,203,.5)}
+.t.bad{background:var(--pink-dim);border-color:rgba(255,83,138,.55)}
+.t.mid{background:var(--warn-dim);border-color:rgba(252,192,3,.5)}
+.t.alt{background:var(--violet-dim);border-color:rgba(209,125,254,.5)}
+.score{font-family:var(--display);font-size:64px;line-height:1}
+.score small{font-size:.38em;color:var(--accent-soft)}
 
-.slide-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--rule);
-  margin-bottom: 16px;
-}
-.slide-head .brand { display: flex; align-items: center; gap: 10px; }
-.slide-head .brand img { width: 24px; height: 24px; }
-.slide-head .brand-text { font-family: 'Avant SF', sans-serif; font-size: 12pt; color: var(--eb-15); }
-.slide-head .brand-text .sub { color: var(--cb-68); font-family: 'SF Sans', sans-serif; font-size: 9pt; font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; margin-left: 8px; }
-.slide-head .pager { color: var(--muted); font-size: 9pt; text-transform: uppercase; letter-spacing: 0.1em; }
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;position:relative;margin-top:40px}
+.pipe::before{content:"";position:absolute;left:4%;right:4%;top:46px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--accent));opacity:.55}
+.pn{position:relative;font-family:var(--sans);text-align:center;color:#fff;background:rgba(10,47,116,.7);border:2px solid var(--line2);border-radius:20px;padding:84px 12px 20px;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .25s,background .25s}
+.pn .bubble{position:absolute;left:50%;top:14px;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:28px;color:#001E5B;background:var(--accent);box-shadow:0 0 0 8px rgba(0,179,255,.18)}
+.pn.p .bubble{background:var(--pink);box-shadow:0 0 0 8px rgba(255,83,138,.2)}
+.pn:hover{transform:translateY(-5px)}
+.pn.on{border-color:#fff;background:rgba(6,106,254,.4)}
+.pn.p.on{background:rgba(255,83,138,.28)}
+.pn h3{font-size:20px;line-height:1.2}
+.pn span{display:block;margin-top:8px;font-size:14px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent-soft)}
+.pn.p span{color:#ff8db1}
 
-.eyebrow {
-  display:inline-block; padding:4px 12px; background:var(--cb-95); color:var(--eb-30);
-  font-size:8.5pt; text-transform:uppercase; letter-spacing:0.14em;
-  font-weight:600; border-radius:999px; margin-bottom:10px;
-}
-h2.title { font-size:26pt; line-height:1.08; margin-bottom:8px; }
-h2.title .accent { color: var(--eb-50); }
-p.intro { font-size:11pt; color:var(--body); max-width:230mm; line-height:1.55; margin:0 0 14px 0; }
+/* mapa de subagentes */
+.smap{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
+.sa{font-family:var(--sans);text-align:left;color:#fff;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:16px;padding:14px 18px;cursor:pointer;font-size:19px;font-weight:700;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .25s,background .25s}
+.sa small{display:block;font-size:14px;font-weight:400;color:var(--muted);margin-top:3px}
+.sa:hover{transform:translateY(-4px);border-color:var(--accent)}
+.sa.on{border-color:#fff;background:rgba(6,106,254,.45)}
+.sa.star{border-color:rgba(252,192,3,.6)}
 
-/* COVER */
-.cover {
-  background: linear-gradient(160deg, #001E5B 0%, #022AC0 55%, #066AFE 100%);
-  color: #fff; padding: 24mm 28mm;
-}
-.cover::before { content:''; position:absolute; width:520px; height:520px; right:-160px; top:-160px;
-  background: radial-gradient(circle at center, rgba(0,179,255,0.35), transparent 60%); border-radius: 50%; }
-.cover::after { content:''; position:absolute; width:420px; height:420px; left:-120px; bottom:-150px;
-  background: radial-gradient(circle at center, rgba(144,208,254,0.25), transparent 60%); border-radius: 50%; }
-.cover .brand-row { display:flex; align-items:center; gap:12px; position:relative; z-index:2; }
-.cover .brand-row img { width:30px; height:30px; }
-.cover .brand-row .brand { font-family: 'Avant SF', sans-serif; font-size: 15pt; color: #fff; }
-.cover .brand-row .brand .sub {
-  font-family: 'SF Sans', sans-serif; font-size: 10pt; font-weight: 400; color: #90D0FE;
-  letter-spacing: 0.08em; text-transform: uppercase; margin-left: 8px;
-}
-.cover .tag {
-  display:inline-block; margin-top:48mm; padding:7px 18px;
-  border: 1px solid rgba(144,208,254,0.6); border-radius:999px;
-  color:#90D0FE; font-size:9.5pt; letter-spacing:0.14em; text-transform:uppercase;
-  position:relative; z-index:2;
-}
-.cover h1 {
-  font-size:42pt; line-height:1.04; color:#fff; margin-top:12px;
-  max-width:220mm; position:relative; z-index:2;
-}
-.cover h1 .accent { display:block; color:#00B3FF; font-size:18pt; margin-top:10px; }
-.cover .lede {
-  margin-top:14px; max-width:180mm; font-size:12pt;
-  color:#E6EEFF; line-height:1.55; position:relative; z-index:2;
-}
-.cover .meta {
-  position:absolute; left:28mm; bottom:22mm; right:28mm;
-  display:flex; justify-content:space-between; align-items:flex-end; z-index:2;
-}
-.cover .meta .block { color:#E6EEFF; font-size:10pt; line-height:1.6; }
-.cover .meta .label {
-  display:block; color:#90D0FE; text-transform:uppercase;
-  letter-spacing:0.14em; font-size:8pt; margin-bottom:4px;
-}
-.cover .meta .value { font-weight:600; color:#fff; font-size:11pt; }
-.astro { position:absolute; right:18mm; bottom:36mm; width:170px; z-index:1; opacity:0.95; }
-.spark { position:absolute; z-index:1; opacity:0.75; }
-.spark.one   { right:52mm; top:62mm; width:22px; }
-.spark.two   { left:34mm; top:52mm; width:16px; transform:rotate(18deg); }
-.spark.three { left:14mm; bottom:60mm; width:18px; transform:rotate(-10deg); }
+/* interruptor */
+.sw{display:inline-flex;align-items:center;gap:16px;cursor:pointer;background:none;border:0;color:#fff;font-family:var(--sans);font-size:22px;font-weight:700}
+.sw i{width:78px;height:42px;border-radius:999px;background:#334a7d;position:relative;transition:background .25s;flex-shrink:0}
+.sw i::after{content:"";position:absolute;top:5px;left:5px;width:32px;height:32px;border-radius:50%;background:#fff;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.sw.on i{background:var(--good)}.sw.on i::after{transform:translateX(36px)}
+.tool{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 20px;border-radius:14px;border:1px solid var(--line2);margin-top:12px;transition:all .35s}
+.tool b{font-family:var(--mono);font-size:19px}
+.tool .cond{font-family:var(--mono);font-size:15px;color:var(--faint)}
+.tool.on{background:var(--good-dim);border-color:rgba(4,225,203,.55)}
+.tool.off{opacity:.38;background:rgba(255,255,255,.02)}
+.vrow{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-radius:12px;background:rgba(0,15,51,.55);border:1px solid var(--line);margin-top:10px;font-size:19px}
+.vrow .nm{font-family:var(--mono);color:var(--good)}
+.vrow .vl{font-family:var(--mono);color:#fff;font-weight:700}
+.vrow small{display:block;font-size:14px;color:var(--faint);font-family:var(--sans)}
 
-/* KPI grid */
-.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 10px; }
-.kpi {
-  background: #fff; border: 1px solid var(--rule); border-radius: 14px;
-  padding: 20px 18px; min-height: 115px;
-}
-.kpi .n { font-family: 'Avant SF', sans-serif; font-size: 42pt; line-height: 1; color: var(--eb-50); }
-.kpi .n.ok { color: var(--ok); }
-.kpi .n.warn { color: var(--warn); }
-.kpi .label { font-size: 8pt; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 10px; font-weight: 700; }
-.kpi .desc { font-size: 9pt; color: var(--body); margin-top: 4px; line-height: 1.4; }
+/* quiz */
+.qz{font-family:var(--sans);text-align:left;color:#fff;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:20px;padding:22px 26px;cursor:pointer;min-height:176px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .3s cubic-bezier(.34,1.56,.64,1),background .3s,border-color .3s}
+.qz:hover{transform:translateY(-4px)}
+.qz h3{font-size:23px;line-height:1.3}
+.qz .hint{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-soft);font-weight:700}
+.qz .ans{display:none;font-size:18px;line-height:1.4;color:var(--muted);margin-top:10px}
+.qz.open{cursor:default}
+.qz.open .ans{display:block}
+.qz.open .hint{display:none}
+.qz.open.llm{border-color:rgba(255,83,138,.6);background:rgba(255,83,138,.1)}
+.qz.open.cod{border-color:rgba(0,179,255,.6);background:rgba(0,179,255,.1)}
+.qz.open.amb{border-color:rgba(209,125,254,.6);background:rgba(209,125,254,.1)}
 
-/* Compliance bars */
-.compliance { margin-top: 14px; }
-.cmp-row { margin-bottom: 14px; }
-.cmp-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
-.cmp-label { font-size: 11pt; font-weight: 700; color: var(--eb-15); }
-.cmp-label .cnt { font-size: 9pt; font-weight: 400; color: var(--muted); margin-left: 6px; }
-.cmp-pct { font-size: 16pt; font-weight: 700; color: var(--eb-15); font-family: 'Avant SF', sans-serif; }
-.bar { display: flex; height: 10px; width: 100%; overflow: hidden; border-radius: 999px; background: #F1F5F9; border: 1px solid var(--rule); }
-.bar .pass { background: #10B981; }
-.bar .pwo { background: #FBBF24; }
-.bar .fail { background: #F43F5E; }
-.bar .na { background: #94A3B8; }
-.cmp-break { margin-top: 5px; font-size: 9pt; color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; }
-.cmp-break .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
-
-/* Signers card */
-.signers {
-  margin-top: 14px;
-  background: var(--panel); border: 1px solid var(--rule); border-radius: 12px;
-  padding: 14px 18px;
-}
-.signers .lbl { font-size: 7.5pt; color: var(--muted); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; }
-.signers .row { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
-.signers .col { flex: 1; }
-.signers .name { font-size: 12pt; font-weight: 700; color: var(--eb-15); margin-top: 2px; font-family: 'Avant SF', sans-serif; }
-.signers .meta { font-size: 9pt; color: var(--muted); margin-top: 2px; }
-
-/* Insiders table */
-.ins-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-top: 10px; }
-.ins-row { display: grid; grid-template-columns: 20px 1fr auto; gap: 10px; align-items: baseline; padding: 5px 0; border-bottom: 1px dashed var(--rule); font-size: 10.5pt; }
-.ins-row .num { font-family: 'Avant SF', sans-serif; color: var(--eb-50); font-size: 10pt; }
-.ins-row .name { color: var(--eb-15); font-weight: 600; }
-.ins-row .code { color: var(--muted); font-size: 9.5pt; font-family: 'SF Mono', Menlo, monospace; background: var(--cb-95); padding: 2px 8px; border-radius: 4px; }
-
-/* Next steps */
-.steps { margin-top: 12px; }
-.step-card {
-  display: grid; grid-template-columns: 60px 1fr; gap: 18px; align-items: center;
-  background: #fff; border: 1px solid var(--rule); border-radius: 14px;
-  padding: 20px 22px; margin-bottom: 14px;
-}
-.step-card .n {
-  font-family: 'Avant SF', sans-serif; font-size: 46pt; color: var(--eb-50); line-height: 1;
-}
-.step-card h3 { font-size: 16pt; color: var(--eb-15); margin-bottom: 4px; }
-.step-card p { font-size: 10.5pt; color: var(--body); margin: 0; line-height: 1.5; }
-
-/* Thank you */
-.thanks {
-  background: linear-gradient(160deg, #001E5B 0%, #022AC0 55%, #066AFE 100%);
-  color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center;
-  text-align: center; padding: 20mm;
-}
-.thanks::before { content:''; position:absolute; width:520px; height:520px; right:-160px; bottom:-160px;
-  background: radial-gradient(circle at center, rgba(0,179,255,0.35), transparent 60%); border-radius: 50%; z-index:0; }
-.thanks::after { content:''; position:absolute; width:420px; height:420px; left:-120px; top:-150px;
-  background: radial-gradient(circle at center, rgba(144,208,254,0.25), transparent 60%); border-radius: 50%; z-index:0; }
-.thanks .wrap { position: relative; z-index: 2; }
-.thanks h1 { color: #fff; font-size: 68pt; margin-bottom: 14px; }
-.thanks h1 .accent { color: #00B3FF; display: block; font-size: 22pt; margin-top: 10px; }
-.thanks p { color: #E6EEFF; font-size: 12pt; max-width: 160mm; margin: 0 auto; line-height: 1.6; }
-.thanks .sign {
-  display:flex; align-items:center; gap:12px; justify-content: center;
-  margin-top: 28px; color: #90D0FE; font-size: 9.5pt;
-  letter-spacing: 0.14em; text-transform: uppercase;
-}
-.thanks .sign img { width: 20px; height: 20px; opacity: 0.8; }
-
-.tbl{width:100%;border-collapse:collapse;font-size:9.8pt;margin-top:6px}
-.tbl th{background:var(--eb-15);color:#fff;text-align:left;padding:7px 10px;font-size:8pt;text-transform:uppercase;letter-spacing:.08em}
-.tbl td{padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--body)}
-.tbl tr:nth-child(even) td{background:var(--panel)}
-.tbl td.k{font-weight:700;color:var(--eb-15);width:26%}
-.tbl td.e{color:var(--muted);width:14%;white-space:nowrap}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
-.box{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:14px 18px}
-.box h3{font-size:12.5pt;margin-bottom:6px}
-.box p,.box li{font-size:10pt;margin:0 0 5px 0;line-height:1.45}
-.box ul{margin:0;padding-left:18px}
-.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:8pt;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
-.pill.w{background:#FFF1E4;color:#B45F06}.pill.o{background:#E3F6EC;color:#0A7D44}
-.note{margin-top:10px;font-size:9pt;color:var(--muted);font-style:italic}
-
-@media screen{
-html,body{height:100%;overflow:hidden;background:#001E5B}
-#stage{position:fixed;left:0;top:0;width:1056px;height:813px;transform-origin:0 0}
-#stage .slide{position:absolute;inset:0;width:1056px;height:813px;background:#fff;opacity:0;pointer-events:none;transition:opacity .35s}
-#stage .slide.on{opacity:1;pointer-events:auto}
-#dots{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:9}
-#dots i{width:9px;height:9px;border-radius:50%;background:#ffffff55;cursor:pointer}
-#dots i.on{background:#00B3FF}
-#hint{position:fixed;right:14px;bottom:8px;color:#a8c2ec;font:11px sans-serif;z-index:9}
-#notes{position:fixed;left:0;right:0;bottom:0;background:#031a4d;color:#EAF5FE;font:15px/1.5 'SF Sans',sans-serif;padding:16px 28px 30px;display:none;z-index:10;border-top:2px solid #00B3FF}
+/* notas del orador */
+#notes{position:fixed;left:0;right:0;bottom:0;z-index:90;background:rgba(0,10,40,.96);border-top:2px solid var(--accent);padding:18px 40px 22px;display:none;max-height:38vh;overflow:auto}
 #notes.show{display:block}
-}
-@media print{#dots,#hint,#notes{display:none}}
+#notes .nh{display:flex;justify-content:space-between;gap:20px;font-size:14px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-soft);margin-bottom:8px}
+#notes .nb{font-size:19px;line-height:1.55;color:#eaf5fe;max-width:1500px}
+aside.notes{display:none}
+.hl{background:linear-gradient(transparent 62%,rgba(0,179,255,.35) 0)}
+.big2{font-family:var(--display);font-weight:600;font-size:150px;line-height:.95;letter-spacing:-.03em}
+.stat .lb{font-size:19px;line-height:1.35;margin-top:10px;color:var(--muted)}
+
+.card p{font-size:25px}.card h3{font-size:30px}.tb{font-size:23px}.tb td{padding:18px 20px}.tb th{font-size:15px}.why p{font-size:25px}.lede{font-size:26px!important}
 </style>
 </head>
-<body><div id="stage">
-
-<section class="slide cover">
-  <div class="brand-row"><img src="sf-logo.svg" alt=""><div class="brand">Salesforce<span class="sub">Agentforce · Betterware</span></div></div>
-  <img src="sparkle-blue.svg" class="spark one" alt=""><img src="sparkle-blue.svg" class="spark two" alt=""><img src="sparkle-blue.svg" class="spark three" alt="">
-  <span class="tag">Avance semanal · Dirección</span>
-  <h1>Betty FDE: avance de la semana<span class="accent">Resumen ejecutivo · semana del 9 al 13 de noviembre de 2026</span></h1>
-  <p class="lede">Qué se construyó, cómo lo estamos probando, qué definió Betterware y qué necesitamos para volver a abrir el flujo a Betty FDE.</p>
-  <img src="astro.png" class="astro" alt="">
-  <div class="meta">
-    <div class="block"><span class="label">Agente</span><span class="value">Betty · FDE_BW_Service_Agent_V2</span><br>Avance al 13 de noviembre</div>
-    <div class="block" style="text-align:right;"><span class="label">Documento</span><span class="value">v1.0 · 13-nov-2026</span><br>Para dirección Betterware</div>
+<body>
+<div id="deck">
+<div class="progress" id="progress"></div>
+<section class="slide cover" data-anim="cover">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:54px;top:170px;width:88px">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:96px;bottom:150px;width:40px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:64px;bottom:120px;width:60px">
+  <div class="body" style="justify-content:center">
+    <div class="eyebrow" data-a>Betterware × Salesforce · Avance semanal · 9 al 13 de noviembre</div>
+    <h1 class="cover-title" style="max-width:1200px">Betty FDE:<br><span class="grad">avance de la semana</span></h1>
+    <p class="lede" data-a style="max-width:1080px;margin-top:22px">Qué se construyó, cómo lo estamos probando, qué definió Betterware y qué necesitamos para volver a abrir el flujo a Betty FDE.</p>
+    <div data-a style="display:flex;gap:16px;margin-top:40px"><span class="chip d">Más control</span><span class="chip g">Más pruebas</span><span class="chip y">Una dependencia abierta</span></div>
   </div>
+  <img class="astro" src="assets/img/agent-astro.png" alt="" style="position:absolute;right:150px;top:300px;width:470px;z-index:1">
+  <aside class="notes">Resumen de la semana del 9 al 13 de noviembre: qué se construyó, cómo se prueba, qué definió Betterware y qué se necesita para reabrir el flujo a Betty FDE.</aside>
 </section>
-
 <section class="slide">
-  <div class="slide-head">
-    <div class="brand"><img src="sf-logo.svg" alt=""><div class="brand-text">Salesforce<span class="sub">Agentforce · Resumen</span></div></div>
-    <span class="pager">01 · De un vistazo</span>
+  <div class="eyebrow" data-a>De un vistazo</div>
+  <h2 data-a>Más control, más pruebas y <span class="grad">una dependencia abierta</span></h2>
+  <div class="grid g4" style="margin-top:40px" data-pop>
+    <div class="card bar"><div class="big md">9</div><h3 style="margin-top:10px">Etapas de mejora</h3><p>Trabajo continuo sobre el escalamiento a ejecutivo, cada una con regresión completa.</p></div>
+    <div class="card bar g"><div class="big md">4,098</div><h3 style="margin-top:10px">Casos de prueba</h3><p>Pedido extemporáneo: 14 grupos y más de 34 mil mensajes simulados, todos en verde.</p></div>
+    <div class="card bar v"><div class="big md">2</div><h3 style="margin-top:10px">Definiciones de Betterware</h3><p>Intentos de autenticación y mensaje de cierre, ya documentados.</p></div>
+    <div class="card bar y"><div class="big md">1</div><h3 style="margin-top:10px">Autorización pendiente</h3><p>Pruebas en producción, necesaria para reabrir el flujo.</p></div>
   </div>
-
-  <span class="eyebrow">Semana del 9 al 13 de noviembre</span>
-  <h2 class="title">Más control, más pruebas y <span class="accent">una dependencia abierta</span></h2>
-  <p class="intro">El equipo avanzó en tres frentes: que Betty pase a un ejecutivo de forma confiable, que el pedido extemporáneo funcione de punta a punta y que las reglas del negocio queden documentadas en un solo lugar. Falta un permiso para probar en producción.</p>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="n">9</div><div class="label">Etapas de mejora</div><div class="desc">Trabajo continuo sobre el escalamiento a ejecutivo, cada una con regresión completa</div></div>
-    <div class="kpi"><div class="n">4,098</div><div class="label">Casos de prueba</div><div class="desc">Banco del pedido extemporáneo: 14 grupos y más de 34 mil mensajes simulados, todos en verde</div></div>
-    <div class="kpi"><div class="n ok">2</div><div class="label">Definiciones de Betterware</div><div class="desc">Intentos de autenticación y mensaje de cierre, ya documentados</div></div>
-    <div class="kpi"><div class="n warn">1</div><div class="label">Autorización pendiente</div><div class="desc">Pruebas en producción, necesaria para reabrir el flujo</div></div>
+  <div class="grid g2" style="margin-top:28px" data-pop>
+    <div class="card"><div class="k">Lo que ya está</div><p>Escalamiento a ejecutivo más predecible, reglas de autenticación y autorización ratificadas en un documento, y un banco de pruebas con las reglas completas y en verde.</p></div>
+    <div class="card"><div class="k">Lo que falta</div><p>Autorización de Betterware para probar en producción, cerrar las conversaciones simuladas del banco y tres decisiones de Betterware: autenticación (2) y zona horaria.</p></div>
   </div>
-  <div class="two" style="margin-top:16px">
-    <div class="box"><h3>Lo que ya está</h3><ul>
-      <li>Escalamiento a ejecutivo más predecible: el sistema garantiza el pase y respeta el horario.</li>
-      <li>Reglas de autenticación y de autorización por operación, ratificadas y en un documento de referencia.</li>
-      <li>Banco de pruebas construido: la parte de reglas está completa y en verde; las conversaciones simuladas siguen en curso.</li></ul></div>
-    <div class="box"><h3>Lo que falta</h3><ul>
-      <li>Autorización de Betterware para probar en producción.</li>
-      <li>Cerrar las conversaciones simuladas del banco de pruebas.</li>
-      <li>Tres decisiones de Betterware: autenticación (2) y zona horaria.</li></ul></div>
-  </div>
+  <aside class="notes">Tres frentes: escalamiento a ejecutivo confiable, pedido extemporáneo probado de punta a punta y reglas documentadas. El banco tiene 4,098 casos en verde. La dependencia abierta es la autorización de pruebas en producción.</aside>
 </section>
-
 <section class="slide">
-  <div class="slide-head">
-    <div class="brand"><img src="sf-logo.svg" alt=""><div class="brand-text">Salesforce<span class="sub">Agentforce · Escalamiento</span></div></div>
-    <span class="pager">02 · Escalamiento a ejecutivo</span>
-  </div>
-
-  <span class="eyebrow">Del 5 al 12 de noviembre</span>
-  <h2 class="title">Pasar a un ejecutivo, <span class="accent">sin depender del azar</span></h2>
-  <p class="intro">La meta es que una distribuidora que necesita a una persona llegue a ella sin dar vueltas, y que nunca se le ofrezca un ejecutivo cuando el horario está cerrado. Cada etapa se probó contra una línea base fija: ninguna introdujo cambios de comportamiento sin explicar.</p>
-  <table class="tbl"><thead><tr><th>Qué se hizo</th><th>Resultado</th><th>Etapas</th></tr></thead><tbody>
-    <tr><td class="k">Línea base de referencia</td><td>95 conversaciones de referencia, con 3 corridas cada una, para medir cualquier cambio contra un punto fijo.</td><td class="e">0</td></tr>
-    <tr><td class="k">Pase garantizado por el sistema</td><td>En pedidos, pagos, preguntas frecuentes y emergencias, el pase a ejecutivo lo fuerza el sistema y deja de depender de que el modelo lo recuerde. Los folios inválidos se cuentan y, al repetirse, llevan al pase.</td><td class="e">2</td></tr>
-    <tr><td class="k">Horario antes de ofrecer</td><td>Se revisa el horario antes de ofrecer un ejecutivo. En las pruebas, cero ofertas con horario cerrado.</td><td class="e">4</td></tr>
-    <tr><td class="k">Contador y evaluación</td><td>Se cuentan las peticiones explícitas de ejecutivo, y cada escalamiento queda medido como ofrecido, aceptado o transferido.</td><td class="e">5 y 6</td></tr>
-    <tr><td class="k">Reglas en una tabla editable</td><td>Los criterios (por ejemplo, enojo y emergencia, que fuerzan el pase) viven en una tabla que se puede ajustar sin tocar el agente.</td><td class="e">7</td></tr>
-    <tr><td class="k">Instrucciones más ligeras</td><td>Se recortó el texto de instrucciones en varias etapas, hasta un 62% en el último bloque, sin cambiar el comportamiento. Menos texto significa respuestas más estables.</td><td class="e">1, 3 y 8</td></tr>
+  <div class="eyebrow pk" data-a>Escalamiento a ejecutivo · del 5 al 12 de noviembre</div>
+  <h2 data-a>Pasar a un ejecutivo, <span class="grad">sin depender del azar</span></h2>
+  <p class="lede" data-a style="font-size:23px;max-width:1500px">Que quien necesita a una persona llegue a ella sin dar vueltas, y que nunca se ofrezca un ejecutivo con el horario cerrado. Cada etapa se probó contra una línea base fija.</p>
+  <table class="tb" style="margin-top:26px" data-a><thead><tr><th>Qué se hizo</th><th>Resultado</th><th>Etapas</th></tr></thead><tbody>
+    <tr><td>Línea base de referencia</td><td>95 conversaciones, 3 corridas cada una, para medir cualquier cambio contra un punto fijo.</td><td><span class="tag">0</span></td></tr>
+    <tr><td>Pase garantizado por el sistema</td><td>En pedidos, pagos, preguntas frecuentes y emergencias, el pase lo fuerza el sistema. Los folios inválidos se cuentan y, al repetirse, llevan al pase.</td><td><span class="tag">2</span></td></tr>
+    <tr><td>Horario antes de ofrecer</td><td>Se revisa el horario antes de ofrecer un ejecutivo. En las pruebas, cero ofertas con horario cerrado.</td><td><span class="tag">4</span></td></tr>
+    <tr><td>Contador y evaluación</td><td>Se cuentan las peticiones explícitas y cada escalamiento queda medido: ofrecido, aceptado o transferido.</td><td><span class="tag">5 y 6</span></td></tr>
+    <tr><td>Reglas en una tabla editable</td><td>Los criterios, como enojo y emergencia, viven en una tabla que se ajusta sin tocar el agente.</td><td><span class="tag">7</span></td></tr>
+    <tr><td>Instrucciones más ligeras</td><td>Hasta 62% menos texto en el último bloque, sin cambiar el comportamiento. Menos texto, respuestas más estables.</td><td><span class="tag">1, 3 y 8</span></td></tr>
   </tbody></table>
-  <p class="note">Trabajo realizado y probado en el entorno de pruebas.</p>
+  <aside class="notes">Nueve etapas de mejora, cada una probada contra una línea base fija. El pase a ejecutivo lo garantiza el sistema y se revisa el horario antes de ofrecerlo. Todo se probó en el entorno de pruebas.</aside>
 </section>
-
 <section class="slide">
-  <div class="slide-head">
-    <div class="brand"><img src="sf-logo.svg" alt=""><div class="brand-text">Salesforce<span class="sub">Agentforce · Pedido extemporáneo</span></div></div>
-    <span class="pager">03 · Pruebas</span>
+  <div class="eyebrow gd" data-a>Banco de pruebas · estado al 13 de noviembre</div>
+  <h2 data-a>Pedido extemporáneo, <span class="grad">probado a fondo</span></h2>
+  <p class="lede" data-a style="font-size:23px;max-width:1500px">4,098 casos en 14 grupos: horarios, importes, códigos, aceptación y confirmación, linaje, contadores y registro, además de casos aleatorios. En paralelo se simulan conversaciones completas con el modelo real.</p>
+  <div class="grid g2" style="margin-top:34px" data-pop>
+    <div class="card bar g"><div class="k">Reglas del pedido extemporáneo</div><div class="big">100%</div>
+      <div style="height:14px;border-radius:8px;background:var(--good);margin:18px 0 12px"></div>
+      <p>4,098 casos · 34,211 mensajes simulados sin fallas en el entorno de pruebas. Además, 148 pruebas automáticas del paquete en 100%.</p></div>
+    <div class="card bar y"><div class="k">Conversaciones simuladas con el modelo</div><div class="big">92%</div>
+      <div style="display:flex;height:14px;border-radius:8px;overflow:hidden;margin:18px 0 12px"><i style="width:91.9%;background:var(--good)"></i><i style="width:8.1%;background:var(--pink)"></i></div>
+      <p>68 de 74 conversaciones sin fallas · 6 por revisar. <span class="st mid">Banco en curso</span></p></div>
   </div>
-  <span class="eyebrow">Banco de pruebas · estado al 13 de noviembre</span>
-  <h2 class="title">Pedido extemporáneo, <span class="accent">probado a fondo</span></h2>
-  <p class="intro">El banco tiene 4,098 casos en 14 grupos: horarios, importes, códigos de distribuidora, aceptación y confirmación, linaje, contadores y registro, además de casos aleatorios. En paralelo se simulan conversaciones completas de la distribuidora con el modelo real.</p>
-  <div class="compliance">
-    <div class="cmp-row"><div class="cmp-head"><div class="cmp-label">Reglas del pedido extemporáneo<span class="cnt">· 4,098 casos · 34,211 mensajes simulados</span></div><div class="cmp-pct">100%</div></div>
-      <div class="bar"><div class="pass" style="width:100%;"></div></div><div class="cmp-break"><span><span class="dot" style="background:#10B981"></span>Todos los casos sin fallas en el entorno de pruebas</span><span>Además, 148 pruebas automáticas del paquete en 100%</span></div></div>
-    <div class="cmp-row"><div class="cmp-head"><div class="cmp-label">Conversaciones simuladas con el modelo<span class="cnt">· 74 conversaciones</span></div><div class="cmp-pct">92%</div></div>
-      <div class="bar"><div class="pass" style="width:91.9%;"></div><div class="fail" style="width:8.1%;"></div></div><div class="cmp-break"><span><span class="dot" style="background:#10B981"></span>68 sin fallas</span><span><span class="dot" style="background:#F43F5E"></span>6 por revisar</span></div></div>
-  </div>
-  <div class="two">
-    <div class="box"><h3>Qué muestra</h3><p>Las reglas del negocio están completas y estables. En las conversaciones, las fallas de rondas anteriores ya no aparecen en la última corrida; falta confirmarlo en vivo.</p></div>
-    <div class="box"><h3>Qué sigue</h3><p>Revisar las 6 fallas pendientes, repetir las conversaciones simuladas completas y confirmar las correcciones. <span class="pill w">Banco en curso</span></p></div>
-  </div>
+  <div class="why" data-a><div class="k">Qué sigue</div><p>Las fallas de rondas anteriores ya no aparecen en la última corrida; falta confirmarlo en vivo. Revisar las 6 pendientes y repetir las conversaciones completas.</p></div>
+  <aside class="notes">Las reglas del pedido extemporáneo están completas y en verde. Las conversaciones simuladas con el modelo van en 68 de 74 sin fallas; quedan 6 por revisar. El banco sigue en curso, no está terminado.</aside>
 </section>
-
 <section class="slide">
-  <div class="slide-head">
-    <div class="brand"><img src="sf-logo.svg" alt=""><div class="brand-text">Salesforce<span class="sub">Agentforce · Reglas del negocio</span></div></div>
-    <span class="pager">04 · Documentación</span>
+  <div class="eyebrow" data-a>Fuente única de reglas</div>
+  <h2 data-a>Las reglas del negocio, <span class="grad">en un solo lugar</span></h2>
+  <div class="grid g3" style="margin-top:36px" data-pop>
+    <div class="card bar"><div class="k">Documentos de referencia</div><p><b>Matriz de autenticación y autorización</b> por operación y nivel de linaje. <b>Matriz de escalamiento.</b> <b>Guía de contexto</b> para el equipo. <b>Pendientes técnicos</b> por alinear.</p></div>
+    <div class="card bar g"><div class="k">Lo que Betterware definió · <span style="color:var(--good)">Confirmado</span></div><p><b>5 intentos de autenticación</b>: 3 por código y 2 por referencia bancaria. Si no se completa, <b>no se escala</b>: se cierra con el mensaje confirmado, cordial, que invita a volver a escribir.</p></div>
+    <div class="card bar y"><div class="k">Para decidir con Betterware · <span style="color:var(--warn)">Abierto</span></div><p>Si la referencia bancaria se ofrece desde el primer fallo con código o solo tras los 3 intentos. Si el conteo de intentos y el de restablecer contraseña son independientes. La zona horaria de los horarios.</p></div>
   </div>
-
-  <span class="eyebrow">Fuente única de reglas</span>
-  <h2 class="title">Las reglas del negocio, <span class="accent">en un solo lugar</span></h2>
-  <p class="intro">Se ordenó la documentación para que cualquier persona que se incorpore entienda qué debe cubrir Betty y por qué. Lo definido por Betterware quedó registrado con su fecha.</p>
-  <div class="two">
-    <div class="box"><h3>Documentos de referencia</h3><ul>
-      <li><strong>Matriz de autenticación y autorización:</strong> quién es la distribuidora y qué puede ver, por operación y por nivel de linaje.</li>
-      <li><strong>Matriz de escalamiento:</strong> qué escala Betty, cómo y hacia dónde.</li>
-      <li><strong>Guía de contexto:</strong> punto de entrada para el equipo, con las decisiones de Betterware y los pendientes.</li>
-      <li><strong>Pendientes técnicos:</strong> lo que falta alinear en el agente.</li></ul></div>
-    <div class="box"><h3>Lo que Betterware definió <span class="pill o">Confirmado</span></h3><ul>
-      <li><strong>5 intentos de autenticación en total:</strong> 3 por código y 2 por referencia bancaria.</li>
-      <li>Si no se completa, <strong>no se escala</strong>: se cierra la conversación.</li>
-      <li><strong>Mensaje de cierre confirmado:</strong> cordial, invita a volver a escribir cuando quiera.</li></ul></div>
-  </div>
-  <div class="box" style="margin-top:16px"><h3>Para decidir con Betterware <span class="pill w">Abierto</span></h3><ul>
-    <li>Si la referencia bancaria se ofrece desde el primer fallo con código o solo al agotar los 3 intentos. Hoy se ofrece de inmediato.</li>
-    <li>Si el conteo de intentos de autenticación y el de restablecer contraseña son independientes.</li>
-    <li>La zona horaria de los horarios de atención.</li></ul></div>
-  <p class="note">Al revisar el agente se vio que hoy cuenta 3 intentos y escala. Se alineará con lo definido una vez resueltas las decisiones anteriores.</p>
+  <div class="why" data-a><div class="k">Nota</div><p>Hoy el agente cuenta 3 intentos y escala. Se alineará con lo definido una vez resueltas las decisiones abiertas.</p></div>
+  <aside class="notes">Documentos de referencia en un solo lugar. Betterware definió 5 intentos de autenticación (3 por código, 2 por referencia bancaria) y cierre sin escalar. Quedan tres decisiones abiertas.</aside>
 </section>
-
 <section class="slide">
-  <div class="slide-head">
-    <div class="brand"><img src="sf-logo.svg" alt=""><div class="brand-text">Salesforce<span class="sub">Agentforce · Pruebas</span></div></div>
-    <span class="pager">05 · Conversaciones reales</span>
-  </div>
-
-  <span class="eyebrow">Acuerdo del lunes 9 de noviembre</span>
-  <h2 class="title">Probar con conversaciones reales, <span class="accent">sin cargar el sistema</span></h2>
-  <p class="intro">Betterware nos compartirá conversaciones reales para alimentar las pruebas. Así evitamos descargar de forma masiva desde el sistema de producción y cuidamos su capacidad de consulta.</p>
-  <div class="steps">
-    <div class="step-card"><div class="n">1</div><div><h3>Betterware comparte conversaciones</h3><p>Una muestra representativa de lo que escriben las distribuidoras. Fecha y formato de entrega: por confirmar.</p></div></div>
-    <div class="step-card"><div class="n">2</div><div><h3>Se anonimizan y se vuelven casos de prueba</h3><p>Sin datos personales: se retiran códigos, teléfonos y nombres antes de usarlas.</p></div></div>
-    <div class="step-card"><div class="n">3</div><div><h3>Se mide a Betty contra casos reales</h3><p>Los casos reales complementan el banco simulado y muestran si Betty responde como esperan las distribuidoras.</p></div></div>
-  </div>
+  <div class="eyebrow yl" data-a>Acuerdo del lunes 9 de noviembre</div>
+  <h2 data-a>Probar con conversaciones reales, <span class="grad">sin cargar el sistema</span></h2>
+  <p class="lede" data-a style="font-size:23px;max-width:1500px">Betterware compartirá conversaciones reales para alimentar las pruebas. Así evitamos descargas masivas desde producción y cuidamos su capacidad de consulta.</p>
+  <div class="grid g3" style="margin-top:40px" data-pop><div class="card bar "><div class="big md">1</div><h3 style="margin-top:10px">Betterware comparte conversaciones</h3><p style="margin-top:8px">Una muestra representativa de lo que escriben las distribuidoras. Fecha y formato de entrega por confirmar.</p></div><div class="card bar v"><div class="big md">2</div><h3 style="margin-top:10px">Se anonimizan y se vuelven casos</h3><p style="margin-top:8px">Sin datos personales: se retiran códigos, teléfonos y nombres antes de usarlas.</p></div><div class="card bar g"><div class="big md">3</div><h3 style="margin-top:10px">Se mide a Betty contra casos reales</h3><p style="margin-top:8px">Complementan el banco simulado y muestran si Betty responde como esperan las distribuidoras.</p></div></div>
+  <aside class="notes">Acuerdo del lunes 9: Betterware comparte conversaciones para las pruebas y así no se descarga de forma masiva desde producción. Fecha y formato de entrega por confirmar.</aside>
 </section>
-
 <section class="slide">
-  <div class="slide-head">
-    <div class="brand"><img src="sf-logo.svg" alt=""><div class="brand-text">Salesforce<span class="sub">Agentforce · Siguientes pasos</span></div></div>
-    <span class="pager">06 · Qué sigue</span>
-  </div>
-
-  <span class="eyebrow">Dependencias y próximos pasos</span>
-  <h2 class="title">Lo que necesitamos para <span class="accent">reabrir el flujo</span></h2>
-  <p class="intro">El flujo hacia Betty FDE sigue en pausa. Esto es lo que lo desbloquea y lo que el equipo hará mientras tanto.</p>
-  <div class="steps">
-    <div class="step-card"><div class="n">1</div><div><h3>Autorización de pruebas en producción <span class="pill w">Betterware</span></h3><p>Es la condición para volver a abrir el flujo a Betty FDE. Sin ella el equipo sigue probando solo en el entorno de pruebas.</p></div></div>
-    <div class="step-card"><div class="n">2</div><div><h3>Cerrar el banco de pruebas</h3><p>Terminar la ejecución completa, resolver las fallas pendientes y entregar resultados finales.</p></div></div>
-    <div class="step-card"><div class="n">3</div><div><h3>Decisiones sobre autenticación</h3><p>Con las respuestas de Betterware, el agente se alinea a los 5 intentos, al cierre sin escalar y al mensaje confirmado.</p></div></div>
-    <div class="step-card"><div class="n">4</div><div><h3>Recibir y usar las conversaciones reales</h3><p>Incorporarlas, anonimizadas, a las pruebas de la siguiente semana.</p></div></div>
-  </div>
+  <div class="eyebrow yl" data-a>Dependencias y próximos pasos</div>
+  <h2 data-a>Lo que necesitamos para <span class="grad">reabrir el flujo</span></h2>
+  <p class="lede" data-a style="font-size:23px;max-width:1500px">El flujo hacia Betty FDE sigue en pausa. Esto es lo que lo desbloquea y lo que el equipo hará mientras tanto.</p>
+  <div class="grid g4" style="margin-top:40px" data-pop><div class="card bar y"><div class="big md">1</div><h3 style="margin-top:10px">Autorización de pruebas en producción</h3><p style="margin-top:8px">Condición para reabrir el flujo a Betty FDE. Mientras tanto se prueba solo en el entorno de pruebas.</p></div><div class="card bar "><div class="big md">2</div><h3 style="margin-top:10px">Cerrar el banco de pruebas</h3><p style="margin-top:8px">Resolver las fallas pendientes, repetir las conversaciones completas y entregar resultados finales.</p></div><div class="card bar v"><div class="big md">3</div><h3 style="margin-top:10px">Decisiones sobre autenticación</h3><p style="margin-top:8px">Con las respuestas de Betterware, el agente se alinea a 5 intentos, cierre sin escalar y mensaje confirmado.</p></div><div class="card bar g"><div class="big md">4</div><h3 style="margin-top:10px">Usar las conversaciones reales</h3><p style="margin-top:8px">Incorporarlas, anonimizadas, a las pruebas de la siguiente semana.</p></div></div>
+  <aside class="notes">La autorización de pruebas en producción es la condición para reabrir el flujo. Mientras tanto se cierra el banco, se alinea autenticación y se incorporan las conversaciones reales.</aside>
 </section>
-
-<section class="slide thanks">
-  <div class="wrap"><img src="astro.png" alt="" style="width:120px;margin-bottom:10px">
-    <h1>Gracias<span class="accent">Betty FDE · avance semanal</span></h1>
-    <p>Seguimos trabajando en el entorno de pruebas. En cuanto tengamos la autorización y los resultados finales, actualizamos este resumen.</p>
-    <div class="sign"><img src="sf-logo.svg" alt="">Salesforce · Agentforce · Betterware</div></div>
+<section class="slide cover">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:120px;top:200px;width:70px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:100px;bottom:140px;width:56px">
+  <div class="body" style="justify-content:center">
+    <div class="eyebrow gd" data-a>Betty FDE · avance semanal</div>
+    <h1 style="font-size:120px" data-a>Gracias</h1>
+    <p class="lede" data-a style="max-width:1000px">Seguimos trabajando en el entorno de pruebas. En cuanto tengamos la autorización y los resultados finales, actualizamos este resumen.</p>
+  </div>
+  <img class="astro" src="assets/img/agent-astro.png" alt="" style="position:absolute;right:150px;top:300px;width:470px;z-index:1">
+  <aside class="notes">Cierre. En cuanto haya autorización y resultados finales se actualiza este resumen.</aside>
 </section>
-
-</div><div id="dots"></div><div id="hint">← → navegar · F pantalla completa · N notas</div><div id="notes"></div>
+</div>
+<div id="tip"></div>
+<div id="notes"><div class="nh"></div><div class="nb"></div></div>
+<script src="assets/gsap.min.js"></script>
 <script>
-const NOTES=[
-"Portada. Resumen de la semana del 9 al 13 de noviembre: qué se construyó, cómo se prueba, qué definió Betterware y qué se necesita para reabrir el flujo a Betty FDE.",
-"De un vistazo. Tres frentes: escalamiento a ejecutivo confiable, pedido extemporáneo probado de punta a punta y reglas documentadas. El banco tiene 4,098 casos en verde. La dependencia abierta es la autorización de pruebas en producción.",
-"Escalamiento. Nueve etapas de mejora, cada una probada contra una línea base fija. El pase a ejecutivo lo garantiza el sistema y se revisa el horario antes de ofrecerlo. Todo se probó en el entorno de pruebas.",
-"Pruebas. Las reglas del pedido extemporáneo están completas y en verde (4,098 casos, 34,211 mensajes simulados). Las conversaciones simuladas con el modelo van en 68 de 74 sin fallas; quedan 6 por revisar. El banco sigue en curso, no está terminado.",
-"Reglas del negocio. Documentos de referencia en un solo lugar. Betterware definió 5 intentos de autenticación (3 por código, 2 por referencia bancaria) y cierre sin escalar. Quedan tres decisiones abiertas.",
-"Conversaciones reales. Acuerdo del lunes 9: Betterware comparte conversaciones para las pruebas y así no se descarga de forma masiva desde producción. Fecha y formato de entrega por confirmar.",
-"Qué sigue. La autorización de pruebas en producción es la condición para reabrir el flujo. Mientras tanto se cierra el banco, se alinea autenticación y se incorporan las conversaciones reales.",
-"Cierre. En cuanto haya autorización y resultados finales se actualiza este resumen."];
-const st=document.getElementById('stage'),sl=[...st.querySelectorAll('.slide')],dots=document.getElementById('dots'),nt=document.getElementById('notes');let c=0;
-sl.forEach((s,i)=>{const d=document.createElement('i');d.onclick=()=>go(i);dots.append(d)});
-function fit(){const k=Math.min(innerWidth/1056,(innerHeight-24)/813);st.style.transform=`translate(${(innerWidth-1056*k)/2}px,${(innerHeight-24-813*k)/2}px) scale(${k})`}
-function go(i){c=Math.max(0,Math.min(sl.length-1,i));sl.forEach((s,j)=>s.classList.toggle('on',j==c));[...dots.children].forEach((d,j)=>d.classList.toggle('on',j==c));nt.textContent=NOTES[c]||'';location.hash=c+1}
-addEventListener('resize',fit);fit();
-addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key))go(c+1);else if(['ArrowLeft','PageUp'].includes(e.key))go(c-1);else if(e.key=='Home')go(0);else if(e.key=='End')go(sl.length-1);else if(/^f$/i.test(e.key))document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();else if(/^n$/i.test(e.key))nt.classList.toggle('show')});
-addEventListener('click',e=>{if(e.target.closest('#dots,#notes'))return;go(e.clientX>innerWidth/2?c+1:c-1)});
-go((parseInt(location.hash.slice(1))||1)-1);
-</script></body></html>
+(() => {
+const deck = document.getElementById('deck');
+const slides = Array.from(deck.querySelectorAll('.slide'));
+const total = slides.length;
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]still/.test(location.search) || !window.gsap;
+const pad = n => String(n).padStart(2, '0');
+if (RM) document.documentElement.classList.add('rm');
+
+function fit(){ const s = Math.min(innerWidth/1920, innerHeight/1080);
+  deck.style.transform = `translate(${(innerWidth-1920*s)/2}px,${(innerHeight-1080*s)/2}px) scale(${s})`; }
+addEventListener('resize', fit); fit();
+
+/* chrome: pill co-brand + número */
+slides.forEach((s, i) => {
+  const p = document.createElement('div'); p.className = 'pill';
+  p.innerHTML = '<img src="assets/img/betterware-logo.png" alt="Betterware" style="height:22px"><i></i><img src="assets/img/sf-logo.svg" alt="Salesforce">';
+  s.prepend(p);
+  const n = document.createElement('div'); n.className = 'snum'; n.textContent = `${pad(i+1)} / ${pad(total)}`; s.append(n);
+});
+
+/* notas del orador (tecla N) */
+const notes = document.getElementById('notes');
+function showNotes(){ const s = slides[cur], a = s.querySelector('aside.notes');
+  notes.querySelector('.nh').innerHTML = `<span>Notas del orador · diapositiva ${cur+1}</span><span>min ${''}</span>`;
+  notes.querySelector('.nb').textContent = a ? a.textContent : ''; }
+
+/* ---------- coreografía por diapositiva ---------- */
+function play(s){
+  if (RM) return;
+  if (s._tl) { s._tl.progress(1).kill(); }
+  const tl = gsap.timeline(); s._tl = tl;
+  if (s.dataset.anim === 'cover') {
+    const t = s.querySelector('.cover-title');
+    if (!t.dataset.split) { t.dataset.split = 1;
+      t.innerHTML = t.innerHTML.replace(/(<span class="grad">)(.*?)(<\/span>)/, (m, a, b, c) => b.split(' ').map(w => `<span class="w"><span class="grad wi">${w}</span></span>`).join(' '))
+        .replace(/^([^<]+)/, m => m.trim().split(' ').map(w => `<span class="w"><span class="wi">${w}</span></span>`).join(' ') + ' '); }
+    tl.from(t.querySelectorAll('.wi'), {yPercent:110, duration:1, stagger:.09, ease:'power4.out'}, .15)
+      .from(s.querySelector('.astro'), {x:120, y:40, rotation:8, opacity:0, duration:1.4, ease:'power3.out'}, .3);
+    gsap.to(s.querySelector('.astro'), {y:'-=16', duration:3.2, repeat:-1, yoyo:true, ease:'sine.inOut', delay:1.6});
+  }
+  if (s.dataset.anim === 'divider') {
+    tl.from(s.querySelector('.chap'), {scale:.6, opacity:0, duration:1.1, ease:'expo.out'}, 0)
+      .from(s.querySelector('.glow'), {scale:.4, opacity:0, duration:1.6, ease:'power2.out'}, 0);
+  }
+  if (s.dataset.anim === 'plan') {
+    tl.from(s.querySelector('.tl-line'), {scaleX:0, duration:1.4, ease:'power2.inOut'}, .3)
+      .from(s.querySelectorAll('.dot'), {scale:0, duration:.5, stagger:.3, ease:'back.out(3)'}, .4);
+  }
+  tl.from(s.querySelectorAll('[data-a]'), {y:30, opacity:0, duration:.7, stagger:.08, ease:'power3.out'}, .05);
+  s.querySelectorAll('[data-pop]').forEach(g => tl.from(g.children, {y:26, scale:.95, opacity:0, duration:.6, stagger:.08, ease:'back.out(1.6)'}, .25));
+  tl.from(s.querySelectorAll('.spk'), {scale:0, rotation:-70, opacity:0, duration:1, stagger:.12, ease:'back.out(2)'}, .2);
+  setTimeout(() => { if (s._tl === tl && tl.progress() < 1) tl.progress(1); }, 4500);
+}
+
+/* ---------- navegación ---------- */
+const progress = document.getElementById('progress');
+let cur = 0;
+function go(i){ i = Math.max(0, Math.min(total-1, i));
+  slides[cur].classList.remove('active'); cur = i; slides[cur].classList.add('active');
+  progress.style.width = `${(cur+1)/total*100}%`; history.replaceState(null, '', '#' + (cur+1)); play(slides[cur]);
+  if (notes.classList.contains('show')) showNotes(); }
+addEventListener('keydown', e => {
+  if (['ArrowRight',' ','PageDown'].includes(e.key)) { e.preventDefault(); go(cur+1); }
+  else if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); go(cur-1); }
+  else if (e.key === 'Home') go(0); else if (e.key === 'End') go(total-1);
+  else if (e.key === 'n' || e.key === 'N') { notes.classList.toggle('show'); showNotes(); }
+  else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); } });
+deck.addEventListener('click', e => { if (e.target.closest('a,button,.no-advance,.pn,.sa,.qz') || getSelection().toString()) return;
+  (e.clientX < innerWidth * .25) ? go(cur-1) : go(cur+1); });
+cur = Math.max(0, Math.min(total-1, (parseInt(location.hash.slice(1)) || 1) - 1));
+slides[cur].classList.add('active'); go(cur);
+})();
+
+</script>
+</body>
+</html>
