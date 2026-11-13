@@ -131,6 +131,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
+    slug: "avance-semanal-2026-11-13",
+    label: "Avance Semanal · Semana del 9 al 13 nov",
+    description:
+      "Presentación ejecutiva de 8 slides con el avance de la semana: escalamiento a ejecutivo más predecible (9 etapas de mejora con regresión completa), banco de pruebas del pedido extemporáneo (4,067 casos, resultados parciales), reglas de autenticación y autorización documentadas con lo definido por Betterware (5 intentos y mensaje de cierre), acuerdo de pruebas con conversaciones reales y la autorización de pruebas en producción como condición para reabrir el flujo a Betty FDE.",
+    url: "/Customers/Betterware/files/Avance_Semanal_Betty_2026_11_13.pdf",
+    category: "Ejecutivo",
+    icon: "📈",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "snapshot-semanal-2026-10-23",
     label: "Snapshot Semanal · Viernes 23-oct",
     description:
