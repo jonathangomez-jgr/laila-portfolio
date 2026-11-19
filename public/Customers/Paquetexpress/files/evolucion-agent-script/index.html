@@ -262,8 +262,8 @@ table.tb.s th{font-size:13px;padding:10px 14px}
 .cl.p{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.45)}
 .cl.b{color:#e3b6ff;background:var(--violet-dim);border-color:rgba(209,125,254,.45)}
 .cl.n{color:var(--muted);background:rgba(255,255,255,.06);border-color:rgba(144,208,254,.3)}
-.vs{display:grid;grid-template-columns:230px 1fr 1fr;gap:0;border:1px solid var(--line2);border-radius:18px;overflow:hidden;background:rgba(5,38,99,.7)}
-.vs>div{padding:14px 20px;border-bottom:1px solid var(--line);font-size:19.5px;line-height:1.38;color:var(--muted)}
+.vs{flex-shrink:0;display:grid;grid-template-columns:230px 1fr 1fr;gap:0;border:1px solid var(--line2);border-radius:18px;overflow:hidden;background:rgba(5,38,99,.7)}
+.vs>div{padding:10px 20px;border-bottom:1px solid var(--line);font-size:19.5px;line-height:1.38;color:var(--muted)}
 .vs>div:nth-last-child(-n+3){border-bottom:none}
 .vs .h{font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-soft);background:rgba(255,255,255,.04)}
 .vs .r{color:#fff;font-weight:700}
@@ -313,34 +313,35 @@ table.tb.s th{font-size:13px;padding:10px 14px}
   <div class="body" style="justify-content:center">
     <div class="eyebrow" data-a>Paquetexpress × Salesforce · Evolución del agente · Noviembre 2026</div>
     <h1 class="cover-title" style="max-width:1250px">Del agente actual<br><span class="grad">a Agent Script</span></h1>
-    <p class="lede" data-a style="max-width:1100px;margin-top:22px">Qué cambia, qué ya se construyó, qué falta probar y qué decisiones necesitamos de Paquetexpress para llevarlo a producción.</p>
-    <div data-a style="display:flex;gap:16px;margin-top:40px"><span class="chip d">Producción v5</span><span class="chip g">Agent Script en sandbox</span><span class="chip y">Decisiones pendientes</span></div>
+    <p class="lede" data-a style="max-width:1100px;margin-top:22px">Qué cambia, qué ya se construyó y cuáles son los siguientes pasos para llevarlo a producción.</p>
+    <div data-a style="display:flex;gap:16px;margin-top:40px"><span class="chip d">Producción v5</span><span class="chip g">Agent Script en sandbox</span><span class="chip y">Siguientes pasos</span></div>
   </div>
   <img class="astro" src="assets/img/agent-astro.png" alt="" style="position:absolute;right:150px;top:300px;width:470px;z-index:1">
-  <aside class="notes">Sesión de 40 minutos: 35 de presentación y 5 de discusión. Objetivo: alinear qué es el agente nuevo, qué evidencia hay hoy y qué decidir. Postura: transparente. Distinguimos lo construido, lo probado y lo que solo es capacidad de la plataforma.</aside>
+  <aside class="notes">Sesión de 40 minutos: 35 de presentación y 5 de discusión. Objetivo: alinear qué es el agente nuevo, qué evidencia hay y cuál es el camino a producción. Postura: transparente. Distinguimos lo construido, lo probado y lo que solo es capacidad de la plataforma.</aside>
 </section>
 <section class="slide">
   <div class="eyebrow" data-a>De un vistazo</div>
-  <h2 data-a>El agente nuevo mejora la conversación; <span class="grad">falta probarlo con casos reales</span></h2>
-  <div class="grid g4" style="margin-top:40px" data-pop>
+  <h2 data-a>El agente nuevo ya hace lo que hace producción y <span class="grad">mejora la conversación</span></h2>
+  <div class="grid g3" style="margin-top:40px" data-pop>
     <div class="card bar"><div class="big md">8</div><h3 style="margin-top:10px">Solicitudes de alcance</h3><p style="font-size:21px">3 en pausa por decisión de Paquetexpress y 5 en espera de pruebas, en 2 etapas.</p></div>
-    <div class="card bar g"><div class="big md">0 de 11</div><h3 style="margin-top:10px">Observaciones que son regresión</h3><p style="font-size:21px">Por configuración, producción v5 se comporta igual. Falta confirmarlo conversando.</p></div>
-    <div class="card bar y"><div class="big md">0 de 33</div><h3 style="margin-top:10px">Escenarios ejecutados</h3><p style="font-size:21px">Definidos con los mismos datos para ambos agentes. Aparte hay 7 pruebas manuales sobre producción v5.</p></div>
-    <div class="card bar v"><div class="big md">39–65 d</div><h3 style="margin-top:10px">Para atender lo adicional</h3><p style="font-size:21px">Esfuerzo aproximado de 11 solicitudes fuera de la v25, con un recurso. No es compromiso.</p></div>
+    <div class="card bar g"><div class="big md">0 de 11</div><h3 style="margin-top:10px">Observaciones que son regresión</h3><p style="font-size:21px">En cada una, el agente de producción v5 se comporta igual.</p></div>
+        <div class="card bar v"><div class="big md">39–65 d</div><h3 style="margin-top:10px">Para atender lo adicional</h3><p style="font-size:21px">Esfuerzo aproximado de 11 solicitudes fuera de la v25, con un recurso. No es compromiso.</p></div>
   </div>
   <div class="grid g2" style="margin-top:28px" data-pop>
     <div class="card s"><div class="k">Lo que ya existe</div><p>Agente v25 en Agent Script en sandbox, con enrutador y 10 subagentes. Cotización, rastreo, casos, FAQ, sucursales y escalamiento. RAD implementado con las APIs de Freeway.</p></div>
-    <div class="card s"><div class="k">Lo que falta</div><p>Ronda conjunta de pruebas, medición de latencia, definir la fuente oficial de importes y fechas, y liberar la Etapa 1. Este deck separa lo construido de lo probado.</p></div>
+    <div class="card s"><div class="k">Lo que sigue</div><p>Aprobar el paso a producción del agente de cotización; después, probar WhatsApp Calls en cotización y, por último, el agente con Recolección a Domicilio.</p></div>
   </div>
   <div class="src">Alcance y estado v25 (18-nov-2026) · Comparativa producción vs sandbox (19-nov-2026)</div>
-  <aside class="notes">Min 2. Cuatro cifras. Dos son honestas por lo que no dicen: cero regresiones por configuración, y cero escenarios ejecutados. Todavía no afirmamos mejora de calidad.</aside>
+  <aside class="notes">Min 2. Tres cifras: el alcance, las observaciones sin regresión y el esfuerzo de lo adicional. Freeway y Paquetexpress ya han probado el agente.</aside>
 </section>
 <section class="slide">
   <div class="eyebrow" data-a>Por qué evolucionar</div>
   <h2 data-a>Con Agent Script <span class="grad">el código decide el orden</span> y el modelo conversa</h2>
-  <div class="vs" style="margin-top:34px" data-pop>
+  <p class="lede" data-a style="font-size:23px!important;max-width:1680px;margin-top:10px;color:#fff">Legacy: el modelo puede saltarse instrucciones. Agent Script: el código las hace cumplir y la autenticación es un filtro inquebrantable.</p>
+  <div class="vs" style="margin-top:20px" data-pop>
     <div class="h">Aspecto</div><div class="h">Producción v5 · topics clásicos</div><div class="h">Sandbox v25 · Agent Script</div>
     <div class="r">Quién lleva la secuencia</div><div class="l">El modelo decide el orden, guiado por instrucciones en lenguaje natural</div><div class="a">El código controla pasos y variables; el modelo redacta y entiende</div>
+    <div class="r">Autenticación</div><div class="l">Depende de que el modelo siga la instrucción de verificar primero</div><div class="a">Filtro en código: sin verificación, ninguna otra acción avanza</div>
     <div class="r">Cotización nacional</div><div class="l">24 instrucciones. Dos de ellas se contradicen: pide «¿nacional o internacional?» aunque el cliente mencione un país</div><div class="a">Secuencia fija: CP origen → CP destino → tipo → peso → medidas → servicios → seguro, sin repetir datos</div>
     <div class="r">Cambios a mitad de flujo</div><div class="l">Sin instrucción explícita para modificar un dato o cotizar otro envío</div><div class="a">Modifica un dato, recalcula y cotiza otro envío sin empezar de cero</div>
     <div class="r">Máximos (2,000 kg · 300×200×180 cm)</div><div class="l">Los aplica el modelo por instrucción</div><div class="a">Los valida el código</div>
@@ -351,40 +352,14 @@ table.tb.s th{font-size:13px;padding:10px 14px}
   <aside class="notes">Min 3. La ventaja es de control y consistencia conversacional. Aclarar que el cálculo de importes no cambia con la migración: eso evita atribuir a Agent Script lo que depende de la API.</aside>
 </section>
 <section class="slide">
-  <div class="eyebrow" data-a>Arquitectura híbrida</div>
-  <h2 data-a>Un enrutador reparte, <span class="grad">el código fija las reglas y el modelo conversa</span></h2>
-  <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:34px;margin-top:30px;flex:1;min-height:0" data-pop>
-    <div>
-      <div class="node rt">Enrutador del agente<small>Clasifica la solicitud. Si el cliente no está verificado, lo envía primero a verificación y conserva su intención.</small></div>
-      <div class="grid g3" style="margin-top:20px;gap:16px">
-        <div><div class="grp">Entrada</div><div class="node">Verificación<small>Nombre, correo, teléfono; cliente nuevo o existente</small></div></div>
-        <div><div class="grp">Cotización</div><div class="node">Cotización nacional<small>Secuencia en código y caso único</small></div><div class="node" style="margin-top:10px">Cotización internacional<small>Solo pide país</small></div></div>
-        <div><div class="grp">Conversación</div><div class="node">Pregunta ambigua</div><div class="node" style="margin-top:10px">Fuera de tema</div></div>
-      </div>
-      <div class="grp" style="margin-top:20px">Servicio</div>
-      <div class="grid g3" style="gap:16px">
-        <div class="node">Rastreo<small>Estatus en lenguaje claro</small></div><div class="node">Casos<small>Alta, consulta, comentarios</small></div><div class="node">Información general<small>Base de conocimiento</small></div>
-        <div class="node">Sucursales y empleo<small>Ligas oficiales</small></div><div class="node">Escalamiento<small>Valida horario</small></div><div class="node" style="border-style:dashed">RAD · Etapa 2<small>Frente independiente</small></div>
-      </div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:18px">
-      <div class="card s bar" style="flex:1"><div class="k">Lo decide el código</div><p>A qué subagente va el cliente · verificar antes de todo · orden de preguntas · máximos de peso y medidas · crear el caso una sola vez · horario de escalamiento.</p></div>
-      <div class="card s bar p" style="flex:1"><div class="k">Lo resuelve el modelo</div><p>Entender lo que dice el cliente · extraer datos · redactar en usted · explicar el estatus de un envío · responder FAQ con la base de conocimiento.</p></div>
-      <div class="why" style="margin-top:0"><div class="k">Configuración</div><p style="font-size:19px">Modelo sfdc_ai__DefaultGPT4Omni · español de México · 18 acciones de negocio (flujos, Apex y prompt template).</p></div>
-    </div>
-  </div>
-  <div class="src">Documentación del agente, Alcance y estado v25 (bundle Paquete_Express_vX recuperado el 18-nov-2026). El número de subagentes no es una medida de éxito.</div>
-  <aside class="notes">Min 3. No es una clase de Agent Script: la idea es que lo crítico (orden, validaciones, no duplicar casos) ya no depende de que el modelo lo recuerde. RAD se maneja aparte por decisión de etapas.</aside>
-</section>
-<section class="slide">
   <div class="eyebrow yl" data-a>Capacidades de plataforma</div>
   <h2 data-a>Disponible en Salesforce no es lo mismo que <span class="grad">implementado para Paquetexpress</span></h2>
   <table class="tb s" style="margin-top:28px" data-pop>
-    <tr><th style="width:27%">Capacidad</th><th style="width:30%">¿Implementada aquí?</th><th style="width:25%">¿Probada?</th><th>Alcance</th></tr>
-    <tr><td>Control determinista y variables</td><td><span class="cl g">Sí</span> candados en v25</td><td><span class="cl y">Parcial</span> revisión de Freeway; falta ronda conversacional</td><td>En alcance (1.1)</td></tr><tr><td>Subagentes especializados</td><td><span class="cl g">Sí</span> enrutador + 10</td><td><span class="cl y">Parcial</span> igual que arriba</td><td>En alcance (1.1)</td></tr><tr><td>Versiones y Agentforce DX</td><td><span class="cl g">Sí</span> bundle recuperable por CLI</td><td><span class="cl d">Uso continuo</span> retrieve 18 y 19-nov</td><td>Transversal</td></tr><tr><td>Trazabilidad (trazas STDM)</td><td><span class="cl d">Disponible</span> Paquetexpress ya revisó trazas</td><td><span class="cl n">En uso</span> sin métricas en fuentes</td><td>Oportunidad: tablero</td></tr><tr><td>Modelo LLM por subagente</td><td><span class="cl n">No</span> un solo modelo para el agente</td><td><span class="cl n">N/A</span></td><td>Oportunidad</td></tr><tr><td>Pruebas automatizadas y regresión</td><td><span class="cl y">Parcial</span> 33 escenarios definidos</td><td><span class="cl p">0 ejecutados</span></td><td>Criterio de salida propuesto</td></tr><tr><td>Voz (agente vX en sandbox)</td><td><span class="cl y">Piloto</span> v4 activa en sandbox</td><td><span class="cl y">Parcial</span> ≈30 sesiones Preview; llamadas reales pendientes</td><td>Fuera de la v25</td></tr><tr><td>STT en web y notas de voz en WhatsApp</td><td><span class="cl y">Incluido</span> en el bloque de liberación</td><td><span class="cl n">Sin evidencia</span> en las fuentes</td><td>Solicitudes 1.2, 1.3, 2.2, 2.3</td></tr><tr><td>WhatsApp Calls</td><td><span class="cl n">No</span> depende de la liberación</td><td><span class="cl n">N/A</span></td><td>Solicitudes 1.4, 2.4</td></tr>
+    <tr><th style="width:32%">Capacidad</th><th style="width:44%">¿Implementada aquí?</th><th>Alcance</th></tr>
+    <tr><td>Control determinista y variables</td><td><span class="cl g">Sí</span> candados en v25</td><td>En alcance (1.1)</td></tr><tr><td>Subagentes especializados</td><td><span class="cl g">Sí</span> enrutador + 10</td><td>En alcance (1.1)</td></tr><tr><td>Versiones y Agentforce DX</td><td><span class="cl g">Sí</span> bundle recuperable por CLI</td><td>Transversal</td></tr><tr><td>Trazabilidad (trazas STDM)</td><td><span class="cl d">Disponible</span> Paquetexpress ya revisó trazas</td><td>Oportunidad: tablero</td></tr><tr><td>Modelo LLM por subagente</td><td><span class="cl n">No</span> un solo modelo para el agente</td><td>Oportunidad</td></tr><tr><td>Pruebas automatizadas y regresión</td><td><span class="cl y">Parcial</span> 33 escenarios definidos</td><td>Oportunidad</td></tr><tr><td>STT en web y notas de voz en WhatsApp</td><td><span class="cl y">Incluido</span> en el bloque de liberación</td><td>Solicitudes 1.2, 1.3, 2.2, 2.3</td></tr><tr><td>WhatsApp Calls y voz</td><td><span class="cl p">Bloqueada</span> depende de la liberación de cotización</td><td>Solicitudes 1.4, 2.4</td></tr>
   </table>
-  <div class="src">Alcance y estado v25 (18-nov) · Resumen de actividades 9–13 nov · Capacidades de plataforma según documentación de Salesforce (enlaces oficiales por adjuntar en el anexo).</div>
-  <aside class="notes">Min 3. Cada fila separa cuatro cosas: la capacidad existe en la plataforma, se implementó aquí, se probó y si está en el alcance. Lo que dice Sin evidencia significa que no encontramos prueba en las fuentes; no que no funcione.</aside>
+  <div class="src">Alcance y estado v25 (18-nov) · Capacidades de plataforma según documentación de Salesforce (enlaces oficiales por adjuntar en el anexo).</div>
+  <aside class="notes">Min 3. Cada fila separa si la capacidad existe en la plataforma, si se implementó aquí y si está en el alcance. WhatsApp Calls y voz quedan bloqueadas hasta liberar cotización.</aside>
 </section>
 <section class="slide">
   <div class="eyebrow" data-a>Comparación funcional</div>
@@ -396,45 +371,22 @@ table.tb.s th{font-size:13px;padding:10px 14px}
     <tr><td>Cotización internacional</td><td>Pregunta nacional o internacional</td><td>Subagente propio; solo pide el país</td><td><span class="cl g">Mejorado</span></td><td>Menos fricción</td></tr>
     <tr><td>Rastreo</td><td>Estatus y caso silencioso</td><td>Mismo diseño y misma consulta</td><td><span class="cl d">Equivalente</span></td><td>Sin cambio</td></tr>
     <tr><td>Casos</td><td>Alta, consulta y comentarios</td><td>Igual, pregunta motivo y guía antes de crear</td><td><span class="cl g">Mejorado</span></td><td>Casos más completos</td></tr>
-    <tr><td>FAQ</td><td>Respuestas fijas en instrucciones (parte en inglés) y base de conocimiento</td><td>Base de conocimiento y lista de temas</td><td><span class="cl y">Parcial</span></td><td>Depende del contenido de la KB</td></tr>
+    <tr><td>FAQ</td><td>Respuestas fijas en instrucciones (parte en inglés) y base de conocimiento</td><td>Base de conocimiento y lista de temas</td><td><span class="cl d">Equivalente</span></td><td>Sin cambio</td></tr>
     <tr><td>Sucursales y empleo</td><td>Ligas fijas en instrucciones</td><td>Ligas oficiales con texto exacto</td><td><span class="cl d">Equivalente</span></td><td>Sin cambio</td></tr>
     <tr><td>Escalamiento con horario</td><td>Flow de horario</td><td>Apex «Horario Paquete»</td><td><span class="cl d">Equivalente</span></td><td>Mensaje fuera de horario distinto</td></tr>
-    <tr><td>Recolección a domicilio</td><td>No existe</td><td>Implementado, en pruebas</td><td><span class="cl b">Pendiente</span></td><td>Etapa 2</td></tr>
+    <tr><td>Recolección a domicilio</td><td>No existe</td><td>Implementado, en espera de pruebas</td><td><span class="cl b">Pendiente</span></td><td>Etapa 2</td></tr>
   </table>
-  <div class="why" data-a><div class="k">Cómo leerlo</div><p style="font-size:20px">La clasificación sale de leer la configuración de ambos agentes, no de conversaciones. Producción también tiene un agente Agent Script activo (Agentforce_Paquetexpress_V2) que no se comparó.</p></div>
-  <div class="src">Comparativa producción vs sandbox, secciones 2 y 3 (19-nov-2026). Es una diferencia de arquitectura; todavía no es resultado de pruebas.</div>
-  <aside class="notes">Min 4. Cuidado con la lectura: mejorado significa que el diseño ya resuelve algo que producción no resuelve por instrucción. Se confirma con pruebas. Nombrar la discrepancia: existe otro agente activo en producción y hay que confirmar cuál es el objetivo.</aside>
+  <div class="why" data-a><div class="k">Cómo leerlo</div><p style="font-size:20px">La clasificación sale de leer la configuración de ambos agentes. En producción existe también Agentforce_Paquetexpress_V2, la versión de cotización que se liberó y se regresó a petición de Paquetexpress; hoy no atiende conversaciones.</p></div>
+  <div class="src">Comparativa producción vs sandbox, secciones 2 y 3 (19-nov-2026). Diferencias de arquitectura entre ambos agentes.</div>
+  <aside class="notes">Min 4. Cuidado con la lectura: mejorado significa que el diseño ya resuelve algo que producción no resuelve por instrucción. Aclarar que el agente V2 en producción es la versión de cotización que se regresó y no atiende conversaciones.</aside>
 </section>
 <section class="slide">
   <div class="eyebrow gd" data-a>Trabajo realizado</div>
   <h2 data-a>El trabajo atacó <span class="grad">problemas conversacionales concretos</span></h2>
   <div class="grid g3" style="margin-top:32px" data-pop>
-  <div class="card s bar"><h3>Preguntas repetidas</h3><p>Problema: el agente vuelve a pedir datos que el cliente ya dio. Intervención: candados de secuencia y variables en código.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> construido en v25; validado por Freeway según el doc de alcance, sin evidencia adjunta.</p></div></div><div class="card s bar g"><h3>Cambios a mitad de cotización</h3><p>Intervención: modificar un dato y recalcular, o cotizar otro envío sin reiniciar. Los máximos de peso y medidas se validan en código.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> construido; por probar en la ronda conjunta.</p></div></div><div class="card s bar v"><h3>Cotización internacional</h3><p>Intervención: subagente que solo pide el país, registra el caso una sola vez y ofrece transferir con un asesor.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> construido; por probar.</p></div></div><div class="card s bar y"><h3>Recolección a domicilio (RAD)</h3><p>Intervención: subagente integrado con las APIs que construyó Freeway, como frente independiente.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> implementado; pendiente de pruebas de Paquetexpress y Freeway.</p></div></div><div class="card s bar p"><h3>Experiencia de voz</h3><p>Agente de voz vX aparte: instrucciones en usted, lectura de guías y CP, reparación de errores del reconocimiento, derivación al contact center. Cifras, correo y horario corregidos.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> v4 activa en sandbox; ≈30 sesiones en Preview. Llamadas reales pendientes.</p></div></div><div class="card s bar g"><h3>Preparación y diagnóstico</h3><p>Comparativa de configuración de ambas orgs en solo lectura, 33 escenarios con los mismos datos y revisión de integraciones.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> entregado; los escenarios aún no se ejecutan.</p></div></div>  </div>
+  <div class="card s bar"><h3>Preguntas repetidas</h3><p>Problema: el agente vuelve a pedir datos que el cliente ya dio. Intervención: candados de secuencia y variables en código.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> construido en v25; validado por Freeway según el doc de alcance.</p></div></div><div class="card s bar g"><h3>Cambios a mitad de cotización</h3><p>Intervención: modificar un dato y recalcular, o cotizar otro envío sin reiniciar. Los máximos de peso y medidas se validan en código.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> construido.</p></div></div><div class="card s bar v"><h3>Cotización internacional</h3><p>Intervención: subagente que solo pide el país, registra el caso una sola vez y ofrece transferir con un asesor.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> construido.</p></div></div><div class="card s bar y"><h3>Recolección a domicilio (RAD)</h3><p>Intervención: subagente integrado con las APIs que construyó Freeway, como frente independiente.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> implementado, en espera de pruebas; bloqueado en dependencia de la liberación de cotización.</p></div></div><div class="card s bar p"><h3>Experiencia de voz</h3><p>Agente de voz vX aparte: instrucciones en usted, lectura de guías y CP, reparación de errores del reconocimiento, derivación al contact center. Cifras, correo y horario corregidos.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> bloqueado en dependencia de la liberación de cotización.</p></div></div>  </div>
   <div class="src">Alcance y estado v25 (18-nov) · Resumen de actividades 9–13 nov (agente de voz) · Comparativa (19-nov)</div>
-  <aside class="notes">Min 3. Cada tarjeta es problema, intervención y estado. Evitamos medir por líneas de código o número de subagentes. Voz es un frente aparte; se muestra como evidencia de capacidad, no como parte de la v25.</aside>
-</section>
-<section class="slide">
-  <div class="eyebrow yl" data-a>Calidad y desempeño</div>
-  <h2 data-a>Hoy comparamos configuración; <span class="grad">las métricas de calidad siguen pendientes</span></h2>
-  <div style="display:grid;grid-template-columns:.8fr 1.5fr;gap:30px;margin-top:30px;flex:1;min-height:0">
-    <div style="display:flex;flex-direction:column;gap:16px" data-pop>
-      <div class="card s"><p><span class="lv A">A</span><b>Configuración comparada</b> (19-nov). Metadata de ambas orgs: topics, instrucciones, flujos y Apex.</p></div>
-      <div class="card s"><p><span class="lv B">B</span><b>Validación reportada</b> por Freeway de varias correcciones. Sin evidencia adjunta en las fuentes.</p></div>
-      <div class="card s"><p><span class="lv C">C</span><b>Conversaciones ejecutadas:</b> 7 pruebas manuales sobre producción v5 (slides 9–10); 0 de 33 escenarios comparativos. Sin tráfico real.</p></div>
-    </div>
-    <table class="tb s" data-pop>
-      <tr><th style="width:24%">Métrica</th><th style="width:15%">Estado</th><th>Cómo medirla</th></tr>
-      <tr><td>Resolución efectiva</td><td><span class="cl p">Pendiente</span></td><td>Correr los 33 escenarios en v5 y v25 con la misma verificación y datos</td></tr>
-      <tr><td>Exactitud de importes y fechas</td><td><span class="cl y">Parcial</span></td><td>Producción v5: 7 de 7 importes iguales al portal. Falta v25, Zona Plus y frontera</td></tr>
-      <tr><td>Latencia por turno (LAT-01)</td><td><span class="cl p">Pendiente</span></td><td>Tiempo por turno y por acción, con umbral de 10 s</td></tr>
-      <tr><td>Cumplimiento de reglas</td><td><span class="cl y">Parcial</span></td><td>Candados verificados en configuración; falta verlos en conversación</td></tr>
-      <tr><td>Transferencias a un asesor</td><td><span class="cl p">Pendiente</span></td><td>Escenarios de escalamiento operativo y de asesor</td></tr>
-      <tr><td>Errores e incidencias</td><td><span class="cl y">Parcial</span></td><td>Paquetexpress revisó trazas STDM; no hay conteo en las fuentes</td></tr>
-    </table>
-  </div>
-  <div class="why" data-a><div class="k">Postura</div><p style="font-size:20.5px">No afirmamos una mejora de calidad todavía. Lo demostrado es una diferencia de diseño. Tampoco hay tráfico real; todo sería prueba controlada.</p></div>
-  <div class="src">Comparativa (19-nov), sección 5 y archivo de escenarios · Alcance y estado v25, sección 1.</div>
-  <aside class="notes">Min 3. Es la slide de transparencia. Tres niveles de evidencia: A configuración, B validación reportada, C conversaciones ejecutadas. Hoy solo hay A. Propuesta: la ronda conjunta produce el primer dato C.</aside>
+  <aside class="notes">Min 3. Cada tarjeta es problema, intervención y estado. Evitamos medir por líneas de código o número de subagentes. Voz y RAD dependen de la liberación de cotización.</aside>
 </section>
 <section class="slide">
   <div class="eyebrow pk" data-a>Pruebas manuales · producción v5</div>
@@ -510,54 +462,38 @@ table.tb.s th{font-size:13px;padding:10px 14px}
   <aside class="notes">Min 3. Mostrar que son rangos por supuestos. El mensaje no es esto cuesta mucho, sino qué conviene priorizar. Importes y fecha son ruta crítica porque Zona Plus y fecha dependen de ellos. Confirmar con Paquetexpress dónde estaba pactada la precisión de importes.</aside>
 </section>
 <section class="slide">
-  <div class="eyebrow yl" data-a>Estado y riesgos</div>
-  <h2 data-a>La Etapa 1 está construida; <span class="grad">liberarla depende de decisiones y pruebas</span></h2>
+  <div class="eyebrow yl" data-a>Estado</div>
+  <h2 data-a>La Etapa 1 está construida; <span class="grad">lo demás depende de su liberación</span></h2>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:28px;flex:1;min-height:0">
     <table class="tb s" data-pop>
       <tr><th style="width:9%">#</th><th>Solicitud</th><th style="width:34%">Estado</th></tr>
       <tr><td>1.1</td><td>Migración a Agent Script</td><td><span class="cl y">En pausa · Paquetexpress</span></td></tr>
       <tr><td>1.2</td><td>Speech-to-Text en web</td><td><span class="cl y">En pausa · Paquetexpress</span></td></tr>
       <tr><td>1.3</td><td>Speech-to-Text en WhatsApp</td><td><span class="cl y">En pausa · Paquetexpress</span></td></tr>
-      <tr><td>1.4</td><td>WhatsApp Calls</td><td><span class="cl b">Espera de pruebas</span></td></tr>
-      <tr><td>2.1</td><td>Subagente de RAD</td><td><span class="cl b">Espera de pruebas</span></td></tr>
-      <tr><td>2.2</td><td>STT web (RAD)</td><td><span class="cl b">Espera de pruebas</span></td></tr>
-      <tr><td>2.3</td><td>STT WhatsApp (RAD)</td><td><span class="cl b">Espera de pruebas</span></td></tr>
-      <tr><td>2.4</td><td>WhatsApp Calls (RAD)</td><td><span class="cl b">Espera de pruebas</span></td></tr>
+      <tr><td>1.4</td><td>WhatsApp Calls</td><td><span class="cl p">Bloqueada · depende de 1.1</span></td></tr>
+      <tr><td>2.1</td><td>Subagente de RAD</td><td><span class="cl p">Bloqueada · depende de 1.1</span></td></tr>
+      <tr><td>2.2</td><td>STT web (RAD)</td><td><span class="cl p">Bloqueada · depende de 1.1</span></td></tr>
+      <tr><td>2.3</td><td>STT WhatsApp (RAD)</td><td><span class="cl p">Bloqueada · depende de 1.1</span></td></tr>
+      <tr><td>2.4</td><td>WhatsApp Calls (RAD)</td><td><span class="cl p">Bloqueada · depende de 1.1</span></td></tr>
     </table>
-    <div class="card s bar y" data-pop><div class="k">Riesgos y discrepancias</div>
+    <div class="card s bar y" data-pop style="align-self:start"><div class="k">Pruebas</div>
       <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px">
-        <li style="font-size:19.5px"><b>Agente objetivo.</b> Hay otro agente Agent Script activo en producción (V2). Confirmar cuál se migra.</li>
-        <li style="font-size:19.5px"><b>Flujo de cotización.</b> El activo es de enero de 2025; hay un borrador de marzo de 2026 sin activar. No hay causa confirmada.</li>
-        <li style="font-size:19.5px"><b>Importes y fechas.</b> En 7 pruebas los importes coinciden con el portal; la fecha de Express 2 Day con recolección difiere un día.</li>
-        <li style="font-size:19.5px"><b>Seguridad.</b> Hallazgo en la integración de cotización; se comparte por canal directo.</li>
-        <li style="font-size:19.5px"><b>Datos.</b> Faltan un CP de Zona Plus, uno de frontera y una guía válida de producción.</li>
+        <li style="font-size:20.5px"><b>Pruebas.</b> Paquetexpress señala diferencias frente al sitio web. Las 7 pruebas de Andrés muestran importes iguales al portal; solo difiere la fecha de Express 2 Day con recolección.</li>
       </ul></div>
   </div>
-  <div class="src">Alcance y estado v25 (18-nov), solicitudes 1.1–2.4 · Comparativa (19-nov), secciones 1, 4 y hallazgo de seguridad.</div>
-  <aside class="notes">Min 2. Las tres solicitudes en pausa son decisión de Paquetexpress; sin juicio. Señalar las discrepancias entre documentos: agente objetivo, origen de importes y el resultado de pruebas del cliente frente a la configuración.</aside>
+  <div class="src">Alcance y estado v25 (18-nov), solicitudes 1.1–2.4 · Pruebas manuales de Andrés (18-nov).</div>
+  <aside class="notes">Min 2. Las tres solicitudes en pausa son decisión de Paquetexpress; sin juicio. Conectar con las pruebas de Andrés: importes iguales, difiere la fecha de Express 2 Day. Las solicitudes 1.4 y 2.x dependen de liberar cotización (1.1).</aside>
 </section>
 <section class="slide">
-  <div class="eyebrow gd" data-a>Recomendación y decisiones</div>
-  <h2 data-a>Recomendamos una ronda conjunta de pruebas; <span class="grad">el go-live queda condicionado a criterios</span></h2>
-  <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:30px;margin-top:28px;flex:1;min-height:0">
-    <div class="card s bar" data-pop><div class="k">Criterios para producción</div>
-      <ul class="ck" style="margin-top:8px">
-        <li>33 escenarios ejecutados en v5 y v25 con los mismos datos, sin regresiones</li>
-        <li>Latencia medida con un umbral acordado (hoy se pide menos de 10 s)</li>
-        <li>Base de conocimiento corregida y re-probada (3 puntos)</li>
-        <li>Regla de fechas definida y conciliada con la web; importes validados también en Zona Plus</li>
-        <li>Hallazgo de seguridad atendido y agente objetivo confirmado</li>
-        <li>RAD probado por Paquetexpress y Freeway antes de la Etapa 2</li>
-      </ul></div>
-    <div style="display:flex;flex-direction:column;gap:14px" data-pop>
-      <div class="card s bar y"><div class="big md" style="font-size:44px">1</div><h3>¿Cuál es el agente objetivo?</h3><p>Producción v5 o el V2 Agent Script activo.</p></div>
-      <div class="card s bar g"><div class="big md" style="font-size:44px">2</div><h3>¿Cuál es la regla oficial de fechas y de importes en Zona Plus?</h3><p>Y entregar los CP y la guía de prueba que faltan.</p></div>
-      <div class="card s bar v"><div class="big md" style="font-size:44px">3</div><h3>¿En qué orden priorizamos lo adicional?</h3><p>Propuesta: importes y fecha, Zona Plus, colonias y frontera.</p></div>
-      <div class="card s bar p"><div class="big md" style="font-size:44px">4</div><h3>¿Cuándo es la ronda conjunta y quién la lidera?</h3><p>Paquetexpress, Freeway y Salesforce; Paquetexpress corrige la KB.</p></div>
-    </div>
+  <div class="eyebrow gd" data-a>Recomendación</div>
+  <h2 data-a>El agente nuevo ya hace lo que hace producción, con mejoras; <span class="grad">recomendamos pasarlo a producción</span></h2>
+  <div class="grid g3" style="margin-top:44px;flex:1;max-height:560px" data-pop>
+    <div class="card bar"><div class="big">1</div><h3 style="margin-top:10px">Paso a producción</h3><p style="font-size:30px!important;line-height:1.4;margin-top:12px">Aprobar la liberación del agente de cotización.</p></div>
+    <div class="card bar g"><div class="big">2</div><h3 style="margin-top:10px">WhatsApp Calls</h3><p style="font-size:30px!important;line-height:1.4;margin-top:12px">Con la aprobación, probar llamadas de WhatsApp en el agente de cotización.</p></div>
+    <div class="card bar v"><div class="big">3</div><h3 style="margin-top:10px">Recolección a Domicilio</h3><p style="font-size:30px!important;line-height:1.4;margin-top:12px">Después, pruebas del agente con RAD.</p></div>
   </div>
-  <div class="src">Síntesis de Alcance y estado v25 (18-nov) y Comparativa (19-nov). Criterios y orden de prioridad: propuesta de Salesforce, por acordar.</div>
-  <aside class="notes">Min 3 más 5 de discusión. Recomendación concreta: hoy no hay evidencia conversacional para ir a producción; sí hay base para una ronda de pruebas conjunta. Pedir las cuatro decisiones, una por una.</aside>
+  <div class="src">Síntesis de Alcance y estado v25 (18-nov), Comparativa (19-nov) y pruebas manuales de Andrés (18-nov).</div>
+  <aside class="notes">Min 3 más 5 de discusión. Mensaje: el agente nuevo cubre lo que hace producción y mejora la conversación. Pedir la aprobación del paso a producción; WhatsApp Calls y RAD siguen en ese orden.</aside>
 </section>
 <section class="slide cover">
   <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:120px;top:200px;width:70px">
