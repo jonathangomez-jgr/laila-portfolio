@@ -550,11 +550,25 @@ const PAM_DOCS: DocEntry[] = [
 // ----------------------------------------------------------------------------
 // Lookup
 // ----------------------------------------------------------------------------
+const PAQUETEXPRESS_DOCS: DocEntry[] = [
+  {
+    slug: "evolucion-agent-script",
+    label: "Evolución del agente · De Legacy a Agent Script",
+    description:
+      "Presentación ejecutiva de 13 slides (35 min + 5 de discusión): por qué evolucionar a Agent Script, comparación funcional producción v5 vs sandbox v25, evidencia disponible y pendiente, clasificación de las 14 observaciones, esfuerzo estimado, riesgos y decisiones requeridas. Flechas para avanzar, F pantalla completa y N notas del orador.",
+    url: "/Customers/Paquetexpress/files/evolucion-agent-script/index.html",
+    category: "Ejecutivo",
+    icon: "🖥️",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+];
+
 const DOCS_BY_SLUG: Record<string, DocEntry[]> = {
   betterware: BETTERWARE_DOCS,
   jafra: JAFRA_DOCS,
   "telasist-retencion": TELASIST_RETENCION_DOCS,
   pam: PAM_DOCS,
+  paquetexpress: PAQUETEXPRESS_DOCS,
 };
 
 export function getDocsForSlug(slug: string): DocEntry[] {

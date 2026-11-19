@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Paquetexpress · Evolución del agente: de Legacy a Agent Script</title>
+<style>
+@font-face{font-family:"Avant Garde for Salesforce";src:url(assets/fonts/AvantGardeForSalesforceW05-Dm.woff) format("woff");font-weight:600;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Light.woff) format("woff");font-weight:300;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Regular.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Semibold.woff) format("woff");font-weight:600;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Bold.woff) format("woff");font-weight:700;font-display:swap}
+
+/* ===== THEME: salesforce-brand (Sacred palette) — copied from the engine theme, do not invent hex ===== */
+:root{
+  --ink:#001E5B;--ink2:#052663;--ink3:#0a2f74;--ink4:#103a86;
+  --line:#1c3f80;--line2:#2b4f95;
+  --text:#EAF5FE;--muted:#a8c2ec;--faint:#7592c4;
+  --accent:#00B3FF;--accent-soft:#90D0FE;--accent-dim:rgba(0,179,255,.14);
+  --electric:#066AFE;--electric-2:#022AC0;
+  --good:#04E1CB;--good-dim:rgba(4,225,203,.14);--warn:#FCC003;--warn-dim:rgba(252,192,3,.14);
+  --pink:#FF538A;--pink-dim:rgba(255,83,138,.14);--violet:#D17DFE;--violet-dim:rgba(209,125,254,.14);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --display:"Avant Garde for Salesforce","Salesforce Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sans:"Salesforce Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  /* chart series in stack order def,esc,aba,amb — validated with dataviz validate_palette.js on surface #052663 (dark): ALL CHECKS PASS; Not set = neutral gray + hatch (no data) */
+  --c-def:#199e70;--c-amb:#3987e5;--c-esc:#9085e9;--c-aba:#d95926;--c-not:#4a6396;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#000f33;font-family:var(--sans);color:var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+/* ===== fixed 1920x1080 canvas, scaled to fit ===== */
+#deck{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 82% 2%, rgba(0,179,255,.18), transparent 46%),
+    radial-gradient(120% 120% at 6% 104%, rgba(6,106,254,.22), transparent 54%),
+    radial-gradient(150% 120% at 50% 42%, #062a75 0%, #001E5B 62%, #001542 100%)}
+.progress{position:absolute;top:0;left:0;height:5px;z-index:50;background:linear-gradient(90deg,var(--accent),var(--electric),var(--good));box-shadow:0 0 14px rgba(0,179,255,.6);transition:width .45s cubic-bezier(.2,.7,.2,1)}
+
+.slide{position:absolute;inset:0;padding:92px 120px 134px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
+.slide.active{opacity:1;visibility:visible;transition:opacity .45s ease}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(rgba(144,208,254,.07) 1px,transparent 1.5px);background-size:34px 34px}
+.slide>*{position:relative;z-index:1}
+
+/* chrome */
+.pill{position:absolute!important;top:34px;right:44px;z-index:6;display:flex;align-items:center;gap:16px;padding:10px 22px;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 8px 26px rgba(0,10,40,.35)}
+.pill img.jafra{height:24px}
+.pill i{width:1px;height:24px;background:#c9d3e2}
+.pill img{height:26px;display:block}
+.snum{position:absolute!important;bottom:34px;right:48px;font-size:15px;letter-spacing:.16em;color:var(--faint);font-weight:600}
+.src{position:absolute!important;bottom:28px;left:120px;right:250px;font-size:15px;color:#9db4dc;line-height:1.38;border-top:1px solid rgba(144,208,254,.18);padding-top:8px}
+.src::before{content:"Fuente · ";font-weight:700;color:var(--accent-soft)}
+.eyebrow{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;font-size:15px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-soft);padding:8px 16px;border-radius:999px;background:var(--accent-dim);border:1px solid rgba(0,179,255,.3);margin-bottom:22px}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.eyebrow.pk{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.35)}
+.eyebrow.gd{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.35)}
+.eyebrow.yl{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.35)}
+
+h1{font-family:var(--display);font-weight:600;font-size:104px;line-height:1.02;letter-spacing:-.025em}
+h2{font-family:var(--display);font-weight:600;font-size:58px;line-height:1.08;letter-spacing:-.02em;max-width:1500px}
+h3{font-size:27px;font-weight:700;line-height:1.25;color:#fff}
+p,li{font-size:23px;line-height:1.5;color:var(--muted)}
+b,strong{color:#fff;font-weight:700}
+.lede{font-size:27px;line-height:1.45;color:var(--muted);max-width:1300px;margin-top:18px}
+.mono{font-family:var(--mono)}
+.grad{background:linear-gradient(92deg,#90D0FE,#00B3FF 40%,#04E1CB);-webkit-background-clip:text;background-clip:text;color:transparent}
+.body{flex:1;display:flex;flex-direction:column;min-height:0}
+
+/* cards */
+.card{position:relative;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:22px;padding:28px 30px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 18px 40px rgba(0,8,32,.35);overflow:hidden}
+.card.bar::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--accent),var(--electric))}
+.card.bar.g::before{background:linear-gradient(90deg,var(--good),var(--accent))}
+.card.bar.y::before{background:linear-gradient(90deg,var(--warn),#ff9f45)}
+.card.bar.p::before{background:linear-gradient(90deg,var(--pink),var(--violet))}
+.card.bar.v::before{background:linear-gradient(90deg,var(--violet),var(--electric))}
+.card .k{font-size:15px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:10px}
+.card p{font-size:21px}
+.grid{display:grid;gap:24px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+
+/* evidence level chips */
+.lv{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:28px;padding:0 9px;border-radius:8px;font-size:15px;font-weight:700;font-family:var(--mono);margin-right:10px;vertical-align:3px}
+.lv.A{background:rgba(0,179,255,.18);color:var(--accent-soft);border:1px solid rgba(0,179,255,.45)}
+.lv.B{background:var(--violet-dim);color:#e3b6ff;border:1px solid rgba(209,125,254,.45)}
+.lv.C{background:var(--warn-dim);color:var(--warn);border:1px solid rgba(252,192,3,.45)}
+
+/* session buttons */
+.ses{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(144,208,254,.4);color:#fff;text-decoration:none;font-size:17px;font-weight:600;transition:background .25s,transform .35s cubic-bezier(.34,1.56,.64,1)}
+.ses:hover{background:rgba(0,179,255,.22);transform:translateY(-3px)}
+.ses .id{font-family:var(--mono);font-size:14px;color:var(--accent-soft);font-weight:500}
+.ses::after{content:"↗";color:var(--accent)}
+.sesrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+
+/* status (always icon + label) */
+.st{display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:999px;font-size:15.5px;font-weight:700;white-space:nowrap;border:1px solid}
+.st.ok{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.4)}
+.st.mid{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.4)}
+.st.no{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.4)}
+
+/* sparkles: edges only */
+.spk{position:absolute!important;z-index:2;pointer-events:none;width:56px;height:auto}
+/* big stat */
+.big{font-family:var(--display);font-weight:600;font-size:120px;line-height:.95;letter-spacing:-.03em;color:#fff}
+.big.md{font-size:84px}
+.big small{font-size:.42em;color:var(--accent-soft);letter-spacing:0}
+
+/* dividers */
+.divider{justify-content:center;align-items:flex-start;background:radial-gradient(1200px 820px at 70% 30%,#0b3a8f 0%,#001E5B 55%,#000f33 100%)}
+.divider::after{background-image:linear-gradient(rgba(0,179,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,179,255,.07) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(1100px 760px at 60% 45%,#000 0%,transparent 75%);mask-image:radial-gradient(1100px 760px at 60% 45%,#000 0%,transparent 75%)}
+.divider .glow{position:absolute;width:900px;height:900px;right:-120px;top:50%;transform:translateY(-50%);border-radius:50%;background:radial-gradient(circle,rgba(0,179,255,.28),transparent 64%);filter:blur(10px);z-index:0}
+.divider.pk .glow{background:radial-gradient(circle,rgba(255,83,138,.24),transparent 64%)}
+.divider.gd .glow{background:radial-gradient(circle,rgba(4,225,203,.22),transparent 64%)}
+.divider .chap{font-family:var(--display);font-size:260px;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(144,208,254,.55);margin-bottom:30px}
+.divider h2{font-size:96px;max-width:1680px}
+.divider .lede{font-size:30px}
+
+/* tooltip */
+#tip{position:fixed;z-index:100;pointer-events:none;background:#fff;color:#001E5B;font-size:15px;font-weight:600;padding:8px 12px;border-radius:10px;box-shadow:0 10px 26px rgba(0,0,0,.35);opacity:0;transition:opacity .12s;white-space:nowrap}
+#tip b{color:#001E5B}
+svg text{font-family:var(--sans)}
+.chart{width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:22px;font-size:17px;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:16px;height:16px;border-radius:4px;display:inline-block}
+
+/* tables */
+table.tb{width:100%;border-collapse:separate;border-spacing:0;font-size:18px;background:rgba(5,38,99,.7);border:1px solid var(--line2);border-radius:18px;overflow:hidden}
+.tb th{font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-soft);text-align:left;padding:13px 16px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--line2);font-weight:700}
+.tb td{padding:10px 16px;border-bottom:1px solid var(--line);color:var(--muted);line-height:1.32;vertical-align:middle}
+.tb td:first-child{color:#fff;font-weight:700}
+.tb tr:last-child td{border-bottom:none}
+.sem{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:10px;vertical-align:-1px;flex-shrink:0}.sem.g{background:var(--good)}.sem.y{background:var(--warn)}.sem.r{background:var(--pink)}.sm18 td{padding:7px 14px}tr.rg td{background:rgba(4,225,203,.05)}tr.ry td{background:rgba(252,192,3,.06)}tr.rr td{background:rgba(255,83,138,.08)}.pn{display:inline-block;margin-left:8px;font-size:12.5px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--pink-dim);color:#ff8db1;border:1px solid rgba(255,83,138,.4)}
+.tag{display:inline-block;font-size:13.5px;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:7px;background:var(--accent-dim);color:var(--accent-soft);white-space:nowrap}
+
+/* finding layout */
+.fhead{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
+.fnum{font-family:var(--display);font-size:30px;color:var(--accent);letter-spacing:.04em}
+.fcols{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;margin-top:30px;flex:1;min-height:0}
+.fcols .card h3{margin-bottom:12px}
+.fcols ul{list-style:none;display:flex;flex-direction:column;gap:13px}
+.fcols li{font-size:22.5px;line-height:1.42}
+.gate{display:flex;align-items:center;gap:16px;padding:16px 22px;border-radius:16px;background:rgba(4,225,203,.1);border:1px solid rgba(4,225,203,.4);font-size:19px;color:#d9fffa}
+.gate .gk{font-family:var(--mono);font-weight:700;color:var(--good);font-size:18px;white-space:nowrap}
+.why{margin-top:22px;padding:18px 22px;border-radius:14px;background:rgba(0,179,255,.08);border-left:4px solid var(--accent)}
+.why .k{font-size:14px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:6px}
+.why p{font-size:22px;color:var(--text);line-height:1.45}
+.fcols>div:last-child>.card{flex:1;display:flex;flex-direction:column}
+.fcols>div:last-child>.card p{font-size:22.5px!important;line-height:1.5}
+.fcols>div:last-child .v41{margin-top:auto}
+.v41{font-size:20.5px;line-height:1.45;color:var(--muted);padding:14px 18px;border-radius:14px;background:rgba(209,125,254,.08);border:1px solid rgba(209,125,254,.3);margin-top:14px}
+.v41 b{color:#e9c8ff}
+
+.rm .slide{transition:none!important}
+.cover-title .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em}.cover-title .wi{display:inline-block}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+
+/* ===== extras de esta sesión ===== */
+.det{color:var(--accent)}.prob{color:var(--pink)}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font-size:16px;font-weight:700;border:1px solid;white-space:nowrap}
+.chip.d{color:var(--accent-soft);background:var(--accent-dim);border-color:rgba(0,179,255,.45)}
+.chip.p{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.45)}
+.chip.b{color:#e3b6ff;background:var(--violet-dim);border-color:rgba(209,125,254,.45)}
+.chip.g{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.4)}
+.chip.y{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.4)}
+.btn{font-family:var(--sans);font-size:20px;font-weight:700;color:#fff;background:linear-gradient(92deg,var(--electric),var(--accent));border:0;border-radius:999px;padding:14px 28px;cursor:pointer;box-shadow:0 10px 26px rgba(0,100,255,.35);transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(0,140,255,.5)}
+.btn.ghost{background:rgba(255,255,255,.08);border:1px solid rgba(144,208,254,.4);box-shadow:none}
+.btn.sm{font-size:17px;padding:10px 20px}
+.code{font-family:var(--mono);font-size:18px;line-height:1.55;color:#cfe4ff;background:rgba(0,15,51,.7);border:1px solid var(--line2);border-radius:14px;padding:16px 20px;white-space:pre-wrap}
+.code .kw{color:#ff8db1}.code .vr{color:var(--good)}.code .cm{color:var(--faint)}
+.quote{border-left:4px solid var(--accent);padding:6px 0 6px 22px;font-size:25px;line-height:1.45;color:var(--text);font-style:italic}
+.quote small{display:block;margin-top:8px;font-style:normal;font-size:16px;color:var(--faint);letter-spacing:.04em}
+
+/* simulador A/B */
+.trial{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:18px}
+.trial .t{height:58px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;border:1px solid var(--line2);background:rgba(255,255,255,.03);transition:background .2s}
+.t.ok{background:var(--good-dim);border-color:rgba(4,225,203,.5)}
+.t.bad{background:var(--pink-dim);border-color:rgba(255,83,138,.55)}
+.t.mid{background:var(--warn-dim);border-color:rgba(252,192,3,.5)}
+.t.alt{background:var(--violet-dim);border-color:rgba(209,125,254,.5)}
+.score{font-family:var(--display);font-size:64px;line-height:1}
+.score small{font-size:.38em;color:var(--accent-soft)}
+
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;position:relative;margin-top:40px}
+.pipe::before{content:"";position:absolute;left:4%;right:4%;top:46px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--accent));opacity:.55}
+.pn{position:relative;font-family:var(--sans);text-align:center;color:#fff;background:rgba(10,47,116,.7);border:2px solid var(--line2);border-radius:20px;padding:84px 12px 20px;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .25s,background .25s}
+.pn .bubble{position:absolute;left:50%;top:14px;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:28px;color:#001E5B;background:var(--accent);box-shadow:0 0 0 8px rgba(0,179,255,.18)}
+.pn.p .bubble{background:var(--pink);box-shadow:0 0 0 8px rgba(255,83,138,.2)}
+.pn:hover{transform:translateY(-5px)}
+.pn.on{border-color:#fff;background:rgba(6,106,254,.4)}
+.pn.p.on{background:rgba(255,83,138,.28)}
+.pn h3{font-size:20px;line-height:1.2}
+.pn span{display:block;margin-top:8px;font-size:14px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent-soft)}
+.pn.p span{color:#ff8db1}
+
+/* mapa de subagentes */
+.smap{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
+.sa{font-family:var(--sans);text-align:left;color:#fff;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:16px;padding:14px 18px;cursor:pointer;font-size:19px;font-weight:700;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .25s,background .25s}
+.sa small{display:block;font-size:14px;font-weight:400;color:var(--muted);margin-top:3px}
+.sa:hover{transform:translateY(-4px);border-color:var(--accent)}
+.sa.on{border-color:#fff;background:rgba(6,106,254,.45)}
+.sa.star{border-color:rgba(252,192,3,.6)}
+
+/* interruptor */
+.sw{display:inline-flex;align-items:center;gap:16px;cursor:pointer;background:none;border:0;color:#fff;font-family:var(--sans);font-size:22px;font-weight:700}
+.sw i{width:78px;height:42px;border-radius:999px;background:#334a7d;position:relative;transition:background .25s;flex-shrink:0}
+.sw i::after{content:"";position:absolute;top:5px;left:5px;width:32px;height:32px;border-radius:50%;background:#fff;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.sw.on i{background:var(--good)}.sw.on i::after{transform:translateX(36px)}
+.tool{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 20px;border-radius:14px;border:1px solid var(--line2);margin-top:12px;transition:all .35s}
+.tool b{font-family:var(--mono);font-size:19px}
+.tool .cond{font-family:var(--mono);font-size:15px;color:var(--faint)}
+.tool.on{background:var(--good-dim);border-color:rgba(4,225,203,.55)}
+.tool.off{opacity:.38;background:rgba(255,255,255,.02)}
+.vrow{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-radius:12px;background:rgba(0,15,51,.55);border:1px solid var(--line);margin-top:10px;font-size:19px}
+.vrow .nm{font-family:var(--mono);color:var(--good)}
+.vrow .vl{font-family:var(--mono);color:#fff;font-weight:700}
+.vrow small{display:block;font-size:14px;color:var(--faint);font-family:var(--sans)}
+
+/* quiz */
+.qz{font-family:var(--sans);text-align:left;color:#fff;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:20px;padding:22px 26px;cursor:pointer;min-height:176px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .3s cubic-bezier(.34,1.56,.64,1),background .3s,border-color .3s}
+.qz:hover{transform:translateY(-4px)}
+.qz h3{font-size:23px;line-height:1.3}
+.qz .hint{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-soft);font-weight:700}
+.qz .ans{display:none;font-size:18px;line-height:1.4;color:var(--muted);margin-top:10px}
+.qz.open{cursor:default}
+.qz.open .ans{display:block}
+.qz.open .hint{display:none}
+.qz.open.llm{border-color:rgba(255,83,138,.6);background:rgba(255,83,138,.1)}
+.qz.open.cod{border-color:rgba(0,179,255,.6);background:rgba(0,179,255,.1)}
+.qz.open.amb{border-color:rgba(209,125,254,.6);background:rgba(209,125,254,.1)}
+
+/* notas del orador */
+#notes{position:fixed;left:0;right:0;bottom:0;z-index:90;background:rgba(0,10,40,.96);border-top:2px solid var(--accent);padding:18px 40px 22px;display:none;max-height:38vh;overflow:auto}
+#notes.show{display:block}
+#notes .nh{display:flex;justify-content:space-between;gap:20px;font-size:14px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-soft);margin-bottom:8px}
+#notes .nb{font-size:19px;line-height:1.55;color:#eaf5fe;max-width:1500px}
+aside.notes{display:none}
+.hl{background:linear-gradient(transparent 62%,rgba(0,179,255,.35) 0)}
+.big2{font-family:var(--display);font-weight:600;font-size:150px;line-height:.95;letter-spacing:-.03em}
+.stat .lb{font-size:19px;line-height:1.35;margin-top:10px;color:var(--muted)}
+
+.card p{font-size:25px}.card h3{font-size:30px}.tb{font-size:23px}.tb td{padding:18px 20px}.tb th{font-size:15px}.why p{font-size:25px}.lede{font-size:26px!important}
+.tb.compact td{padding-top:11px;padding-bottom:11px}
+.tb.compact th{padding-top:12px;padding-bottom:12px}
+
+/* ===== Paquetexpress deck ===== */
+table.tb.s{font-size:17.5px}
+table.tb.s td{padding:8px 14px}
+table.tb.s th{font-size:13px;padding:10px 14px}
+.card.s p{font-size:19.5px;line-height:1.42}
+.card.s h3{font-size:22px;margin-bottom:6px}
+.card.s .k{font-size:13.5px}
+.card.s{padding:22px 26px}
+.cl{display:inline-block;font-size:14px;font-weight:700;padding:3px 10px;border-radius:7px;white-space:nowrap;border:1px solid}
+.cl.g{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.4)}
+.cl.d{color:var(--accent-soft);background:var(--accent-dim);border-color:rgba(0,179,255,.45)}
+.cl.y{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.4)}
+.cl.p{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.45)}
+.cl.b{color:#e3b6ff;background:var(--violet-dim);border-color:rgba(209,125,254,.45)}
+.cl.n{color:var(--muted);background:rgba(255,255,255,.06);border-color:rgba(144,208,254,.3)}
+.vs{display:grid;grid-template-columns:230px 1fr 1fr;gap:0;border:1px solid var(--line2);border-radius:18px;overflow:hidden;background:rgba(5,38,99,.7)}
+.vs>div{padding:14px 20px;border-bottom:1px solid var(--line);font-size:19.5px;line-height:1.38;color:var(--muted)}
+.vs>div:nth-last-child(-n+3){border-bottom:none}
+.vs .h{font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-soft);background:rgba(255,255,255,.04)}
+.vs .r{color:#fff;font-weight:700}
+.vs .l{background:rgba(255,83,138,.05)}.vs .a{background:rgba(4,225,203,.05)}
+.node{border:1px solid var(--line2);background:rgba(10,47,116,.7);border-radius:14px;padding:12px 16px;font-size:18.5px;font-weight:700;color:#fff;line-height:1.25}
+.node small{display:block;font-weight:400;font-size:14.5px;color:var(--muted);margin-top:2px}
+.node.rt{border-color:var(--accent);background:rgba(0,179,255,.16);text-align:center;font-size:22px}
+.grp{font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-soft);margin:0 0 8px}
+.bar-row{display:grid;grid-template-columns:220px 1fr 130px;align-items:center;gap:16px;margin-top:16px}
+.bar-row .lb{font-size:20px;color:#fff;font-weight:700;line-height:1.2}.bar-row .lb small{display:block;font-weight:400;font-size:15px;color:var(--muted)}
+.trk{position:relative;height:30px;border-radius:8px;background:rgba(255,255,255,.05)}
+.rng{position:absolute;top:0;bottom:0;border-radius:8px}
+.bar-row .vl{font-family:var(--display);font-size:24px;color:#fff;text-align:right}
+.ck{list-style:none;display:flex;flex-direction:column;gap:11px}
+.ck li{font-size:20.5px;line-height:1.38;padding-left:38px;position:relative;color:var(--text)}
+.ck li::before{content:"";position:absolute;left:0;top:4px;width:22px;height:22px;border-radius:6px;border:2px solid var(--accent)}
+.chain{display:flex;align-items:center;gap:12px;margin-top:12px;font-size:18.5px;color:#fff}
+.chain .n{padding:8px 14px;border-radius:12px;border:1px solid var(--line2);background:rgba(10,47,116,.7);font-weight:700}
+.chain .ar{color:var(--accent);font-size:24px}
+</style>
+</head>
+<body>
+<div id="deck">
+<div class="progress" id="progress"></div>
+<section class="slide cover" data-anim="cover">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:54px;top:170px;width:88px">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:96px;bottom:150px;width:40px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:64px;bottom:120px;width:60px">
+  <div class="body" style="justify-content:center">
+    <div class="eyebrow" data-a>Paquetexpress × Salesforce · Evolución del agente · Noviembre 2026</div>
+    <h1 class="cover-title" style="max-width:1250px">Del agente actual<br><span class="grad">a Agent Script</span></h1>
+    <p class="lede" data-a style="max-width:1100px;margin-top:22px">Qué cambia, qué ya se construyó, qué falta probar y qué decisiones necesitamos de Paquetexpress para llevarlo a producción.</p>
+    <div data-a style="display:flex;gap:16px;margin-top:40px"><span class="chip d">Producción v5</span><span class="chip g">Agent Script en sandbox</span><span class="chip y">Decisiones pendientes</span></div>
+  </div>
+  <img class="astro" src="assets/img/agent-astro.png" alt="" style="position:absolute;right:150px;top:300px;width:470px;z-index:1">
+  <aside class="notes">Sesión de 40 minutos: 35 de presentación y 5 de discusión. Objetivo: alinear qué es el agente nuevo, qué evidencia hay hoy y qué decidir. Postura: transparente. Distinguimos lo construido, lo probado y lo que solo es capacidad de la plataforma.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow" data-a>De un vistazo</div>
+  <h2 data-a>El agente nuevo mejora la conversación; <span class="grad">falta probarlo con casos reales</span></h2>
+  <div class="grid g4" style="margin-top:40px" data-pop>
+    <div class="card bar"><div class="big md">8</div><h3 style="margin-top:10px">Solicitudes de alcance</h3><p style="font-size:21px">3 en pausa por decisión de Paquetexpress y 5 en espera de pruebas, en 2 etapas.</p></div>
+    <div class="card bar g"><div class="big md">0 de 11</div><h3 style="margin-top:10px">Observaciones que son regresión</h3><p style="font-size:21px">Por configuración, producción v5 se comporta igual. Falta confirmarlo conversando.</p></div>
+    <div class="card bar y"><div class="big md">0 de 33</div><h3 style="margin-top:10px">Escenarios ejecutados</h3><p style="font-size:21px">Ya están definidos con los mismos datos para ambos agentes; falta correrlos.</p></div>
+    <div class="card bar v"><div class="big md">39–65 d</div><h3 style="margin-top:10px">Para atender lo adicional</h3><p style="font-size:21px">Esfuerzo aproximado de 11 solicitudes fuera de la v25, con un recurso. No es compromiso.</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:28px" data-pop>
+    <div class="card s"><div class="k">Lo que ya existe</div><p>Agente v25 en Agent Script en sandbox, con enrutador y 10 subagentes. Cotización, rastreo, casos, FAQ, sucursales y escalamiento. RAD implementado con las APIs de Freeway.</p></div>
+    <div class="card s"><div class="k">Lo que falta</div><p>Ronda conjunta de pruebas, medición de latencia, definir la fuente oficial de importes y fechas, y liberar la Etapa 1. Este deck separa lo construido de lo probado.</p></div>
+  </div>
+  <div class="src">Alcance y estado v25 (18-nov-2026) · Comparativa producción vs sandbox (19-nov-2026)</div>
+  <aside class="notes">Min 2. Cuatro cifras. Dos son honestas por lo que no dicen: cero regresiones por configuración, y cero escenarios ejecutados. Todavía no afirmamos mejora de calidad.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow" data-a>Por qué evolucionar</div>
+  <h2 data-a>Con Agent Script <span class="grad">el código decide el orden</span> y el modelo conversa</h2>
+  <div class="vs" style="margin-top:34px" data-pop>
+    <div class="h">Aspecto</div><div class="h">Producción v5 · topics clásicos</div><div class="h">Sandbox v25 · Agent Script</div>
+    <div class="r">Quién lleva la secuencia</div><div class="l">El modelo decide el orden, guiado por instrucciones en lenguaje natural</div><div class="a">El código controla pasos y variables; el modelo redacta y entiende</div>
+    <div class="r">Cotización nacional</div><div class="l">24 instrucciones. Dos de ellas se contradicen: pide «¿nacional o internacional?» aunque el cliente mencione un país</div><div class="a">Secuencia fija: CP origen → CP destino → tipo → peso → medidas → servicios → seguro, sin repetir datos</div>
+    <div class="r">Cambios a mitad de flujo</div><div class="l">Sin instrucción explícita para modificar un dato o cotizar otro envío</div><div class="a">Modifica un dato, recalcula y cotiza otro envío sin empezar de cero</div>
+    <div class="r">Máximos (2,000 kg · 300×200×180 cm)</div><div class="l">Los aplica el modelo por instrucción</div><div class="a">Los valida el código</div>
+    <div class="r">Tono</div><div class="l">Mezcla tú y usted</div><div class="a">Usted, de forma consistente</div>
+  </div>
+  <div class="why" data-a><div class="k">Lo que no cambia</div><p>Ambos agentes usan la misma API de cotización (CotizacionEnvioV2) y la misma consulta de rastreo. Los importes y estatus salen de las mismas fuentes.</p></div>
+  <div class="src">Comparativa producción vs sandbox, secciones 1–3 (metadata en solo lectura de ambas orgs, 19-nov-2026). Es comparación de configuración.</div>
+  <aside class="notes">Min 3. La ventaja es de control y consistencia conversacional. Aclarar que el cálculo de importes no cambia con la migración: eso evita atribuir a Agent Script lo que depende de la API.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow" data-a>Arquitectura híbrida</div>
+  <h2 data-a>Un enrutador reparte, <span class="grad">el código fija las reglas y el modelo conversa</span></h2>
+  <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:34px;margin-top:30px;flex:1;min-height:0" data-pop>
+    <div>
+      <div class="node rt">Enrutador del agente<small>Clasifica la solicitud. Si el cliente no está verificado, lo envía primero a verificación y conserva su intención.</small></div>
+      <div class="grid g3" style="margin-top:20px;gap:16px">
+        <div><div class="grp">Entrada</div><div class="node">Verificación<small>Nombre, correo, teléfono; cliente nuevo o existente</small></div></div>
+        <div><div class="grp">Cotización</div><div class="node">Cotización nacional<small>Secuencia en código y caso único</small></div><div class="node" style="margin-top:10px">Cotización internacional<small>Solo pide país</small></div></div>
+        <div><div class="grp">Conversación</div><div class="node">Pregunta ambigua</div><div class="node" style="margin-top:10px">Fuera de tema</div></div>
+      </div>
+      <div class="grp" style="margin-top:20px">Servicio</div>
+      <div class="grid g3" style="gap:16px">
+        <div class="node">Rastreo<small>Estatus en lenguaje claro</small></div><div class="node">Casos<small>Alta, consulta, comentarios</small></div><div class="node">Información general<small>Base de conocimiento</small></div>
+        <div class="node">Sucursales y empleo<small>Ligas oficiales</small></div><div class="node">Escalamiento<small>Valida horario</small></div><div class="node" style="border-style:dashed">RAD · Etapa 2<small>Frente independiente</small></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="card s bar" style="flex:1"><div class="k">Lo decide el código</div><p>A qué subagente va el cliente · verificar antes de todo · orden de preguntas · máximos de peso y medidas · crear el caso una sola vez · horario de escalamiento.</p></div>
+      <div class="card s bar p" style="flex:1"><div class="k">Lo resuelve el modelo</div><p>Entender lo que dice el cliente · extraer datos · redactar en usted · explicar el estatus de un envío · responder FAQ con la base de conocimiento.</p></div>
+      <div class="why" style="margin-top:0"><div class="k">Configuración</div><p style="font-size:19px">Modelo sfdc_ai__DefaultGPT4Omni · español de México · 18 acciones de negocio (flujos, Apex y prompt template).</p></div>
+    </div>
+  </div>
+  <div class="src">Documentación del agente, Alcance y estado v25 (bundle Paquete_Express_vX recuperado el 18-nov-2026). El número de subagentes no es una medida de éxito.</div>
+  <aside class="notes">Min 3. No es una clase de Agent Script: la idea es que lo crítico (orden, validaciones, no duplicar casos) ya no depende de que el modelo lo recuerde. RAD se maneja aparte por decisión de etapas.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow yl" data-a>Capacidades de plataforma</div>
+  <h2 data-a>Disponible en Salesforce no es lo mismo que <span class="grad">implementado para Paquetexpress</span></h2>
+  <table class="tb s" style="margin-top:28px" data-pop>
+    <tr><th style="width:27%">Capacidad</th><th style="width:30%">¿Implementada aquí?</th><th style="width:25%">¿Probada?</th><th>Alcance</th></tr>
+    <tr><td>Control determinista y variables</td><td><span class="cl g">Sí</span> candados en v25</td><td><span class="cl y">Parcial</span> revisión de Freeway; falta ronda conversacional</td><td>En alcance (1.1)</td></tr><tr><td>Subagentes especializados</td><td><span class="cl g">Sí</span> enrutador + 10</td><td><span class="cl y">Parcial</span> igual que arriba</td><td>En alcance (1.1)</td></tr><tr><td>Versiones y Agentforce DX</td><td><span class="cl g">Sí</span> bundle recuperable por CLI</td><td><span class="cl d">Uso continuo</span> retrieve 18 y 19-nov</td><td>Transversal</td></tr><tr><td>Trazabilidad (trazas STDM)</td><td><span class="cl d">Disponible</span> Paquetexpress ya revisó trazas</td><td><span class="cl n">En uso</span> sin métricas en fuentes</td><td>Oportunidad: tablero</td></tr><tr><td>Modelo LLM por subagente</td><td><span class="cl n">No</span> un solo modelo para el agente</td><td><span class="cl n">N/A</span></td><td>Oportunidad</td></tr><tr><td>Pruebas automatizadas y regresión</td><td><span class="cl y">Parcial</span> 33 escenarios definidos</td><td><span class="cl p">0 ejecutados</span></td><td>Criterio de salida propuesto</td></tr><tr><td>Voz (agente vX en sandbox)</td><td><span class="cl y">Piloto</span> v4 activa en sandbox</td><td><span class="cl y">Parcial</span> ≈30 sesiones Preview; llamadas reales pendientes</td><td>Fuera de la v25</td></tr><tr><td>STT en web y notas de voz en WhatsApp</td><td><span class="cl y">Incluido</span> en el bloque de liberación</td><td><span class="cl n">Sin evidencia</span> en las fuentes</td><td>Solicitudes 1.2, 1.3, 2.2, 2.3</td></tr><tr><td>WhatsApp Calls</td><td><span class="cl n">No</span> depende de la liberación</td><td><span class="cl n">N/A</span></td><td>Solicitudes 1.4, 2.4</td></tr>
+  </table>
+  <div class="src">Alcance y estado v25 (18-nov) · Resumen de actividades 9–13 nov · Capacidades de plataforma según documentación de Salesforce (enlaces oficiales por adjuntar en el anexo).</div>
+  <aside class="notes">Min 3. Cada fila separa cuatro cosas: la capacidad existe en la plataforma, se implementó aquí, se probó y si está en el alcance. Lo que dice Sin evidencia significa que no encontramos prueba en las fuentes; no que no funcione.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow" data-a>Comparación funcional</div>
+  <h2 data-a>El sandbox conserva todo lo que hace producción y <span class="grad">mejora cómo conversa</span></h2>
+  <table class="tb s" style="margin-top:26px" data-pop>
+    <tr><th style="width:17%">Capacidad</th><th style="width:27%">Producción v5</th><th style="width:30%">Sandbox v25</th><th style="width:12%">Clase</th><th>Impacto en el cliente</th></tr>
+    <tr><td>Verificación</td><td>Busca o crea contacto por correo</td><td>Igual, distingue nuevo o existente, retoma la intención y en WhatsApp toma el teléfono</td><td><span class="cl g">Mejorado</span></td><td>Menos pasos</td></tr>
+    <tr><td>Cotización nacional</td><td>El modelo lleva la secuencia</td><td>Secuencia en código; modifica datos y recalcula</td><td><span class="cl g">Mejorado</span></td><td>No repite preguntas</td></tr>
+    <tr><td>Cotización internacional</td><td>Pregunta nacional o internacional</td><td>Subagente propio; solo pide el país</td><td><span class="cl g">Mejorado</span></td><td>Menos fricción</td></tr>
+    <tr><td>Rastreo</td><td>Estatus y caso silencioso</td><td>Mismo diseño y misma consulta</td><td><span class="cl d">Equivalente</span></td><td>Sin cambio</td></tr>
+    <tr><td>Casos</td><td>Alta, consulta y comentarios</td><td>Igual, pregunta motivo y guía antes de crear</td><td><span class="cl g">Mejorado</span></td><td>Casos más completos</td></tr>
+    <tr><td>FAQ</td><td>Respuestas fijas en instrucciones (parte en inglés) y base de conocimiento</td><td>Base de conocimiento y lista de temas</td><td><span class="cl y">Parcial</span></td><td>Depende del contenido de la KB</td></tr>
+    <tr><td>Sucursales y empleo</td><td>Ligas fijas en instrucciones</td><td>Ligas oficiales con texto exacto</td><td><span class="cl d">Equivalente</span></td><td>Sin cambio</td></tr>
+    <tr><td>Escalamiento con horario</td><td>Flow de horario</td><td>Apex «Horario Paquete»</td><td><span class="cl d">Equivalente</span></td><td>Mensaje fuera de horario distinto</td></tr>
+    <tr><td>Recolección a domicilio</td><td>No existe</td><td>Implementado, en pruebas</td><td><span class="cl b">Pendiente</span></td><td>Etapa 2</td></tr>
+  </table>
+  <div class="why" data-a><div class="k">Cómo leerlo</div><p style="font-size:20px">La clasificación sale de leer la configuración de ambos agentes, no de conversaciones. Producción también tiene un agente Agent Script activo (Agentforce_Paquetexpress_V2) que no se comparó.</p></div>
+  <div class="src">Comparativa producción vs sandbox, secciones 2 y 3 (19-nov-2026). Es una diferencia de arquitectura; todavía no es resultado de pruebas.</div>
+  <aside class="notes">Min 4. Cuidado con la lectura: mejorado significa que el diseño ya resuelve algo que producción no resuelve por instrucción. Se confirma con pruebas. Nombrar la discrepancia: existe otro agente activo en producción y hay que confirmar cuál es el objetivo.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow gd" data-a>Trabajo realizado</div>
+  <h2 data-a>El trabajo atacó <span class="grad">problemas conversacionales concretos</span></h2>
+  <div class="grid g3" style="margin-top:32px" data-pop>
+  <div class="card s bar"><h3>Preguntas repetidas</h3><p>Problema: el agente vuelve a pedir datos que el cliente ya dio. Intervención: candados de secuencia y variables en código.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> construido en v25; validado por Freeway según el doc de alcance, sin evidencia adjunta.</p></div></div><div class="card s bar g"><h3>Cambios a mitad de cotización</h3><p>Intervención: modificar un dato y recalcular, o cotizar otro envío sin reiniciar. Los máximos de peso y medidas se validan en código.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> construido; por probar en la ronda conjunta.</p></div></div><div class="card s bar v"><h3>Cotización internacional</h3><p>Intervención: subagente que solo pide el país, registra el caso una sola vez y ofrece transferir con un asesor.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> construido; por probar.</p></div></div><div class="card s bar y"><h3>Recolección a domicilio (RAD)</h3><p>Intervención: subagente integrado con las APIs que construyó Freeway, como frente independiente.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> implementado; pendiente de pruebas de Paquetexpress y Freeway.</p></div></div><div class="card s bar p"><h3>Experiencia de voz</h3><p>Agente de voz vX aparte: instrucciones en usted, lectura de guías y CP, reparación de errores del reconocimiento, derivación al contact center. Cifras, correo y horario corregidos.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> v4 activa en sandbox; ≈30 sesiones en Preview. Llamadas reales pendientes.</p></div></div><div class="card s bar g"><h3>Preparación y diagnóstico</h3><p>Comparativa de configuración de ambas orgs en solo lectura, 33 escenarios con los mismos datos y revisión de integraciones.</p><div class="why" style="margin-top:12px;padding:10px 14px"><p style="font-size:17.5px"><b>Estado:</b> entregado; los escenarios aún no se ejecutan.</p></div></div>  </div>
+  <div class="src">Alcance y estado v25 (18-nov) · Resumen de actividades 9–13 nov (agente de voz) · Comparativa (19-nov)</div>
+  <aside class="notes">Min 3. Cada tarjeta es problema, intervención y estado. Evitamos medir por líneas de código o número de subagentes. Voz es un frente aparte; se muestra como evidencia de capacidad, no como parte de la v25.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow yl" data-a>Calidad y desempeño</div>
+  <h2 data-a>Hoy comparamos configuración; <span class="grad">las métricas de calidad siguen pendientes</span></h2>
+  <div style="display:grid;grid-template-columns:.8fr 1.5fr;gap:30px;margin-top:30px;flex:1;min-height:0">
+    <div style="display:flex;flex-direction:column;gap:16px" data-pop>
+      <div class="card s"><p><span class="lv A">A</span><b>Configuración comparada</b> (19-nov). Metadata de ambas orgs: topics, instrucciones, flujos y Apex.</p></div>
+      <div class="card s"><p><span class="lv B">B</span><b>Validación reportada</b> por Freeway de varias correcciones. Sin evidencia adjunta en las fuentes.</p></div>
+      <div class="card s"><p><span class="lv C">C</span><b>Conversaciones ejecutadas:</b> 0 de 33 escenarios. No hay tráfico real analizado.</p></div>
+    </div>
+    <table class="tb s" data-pop>
+      <tr><th style="width:24%">Métrica</th><th style="width:15%">Estado</th><th>Cómo medirla</th></tr>
+      <tr><td>Resolución efectiva</td><td><span class="cl p">Pendiente</span></td><td>Correr los 33 escenarios en v5 y v25 con la misma verificación y datos</td></tr>
+      <tr><td>Exactitud de importes y fechas</td><td><span class="cl p">Pendiente</span></td><td>Comparar contra la página web con CP reales (faltan Zona Plus y frontera)</td></tr>
+      <tr><td>Latencia por turno (LAT-01)</td><td><span class="cl p">Pendiente</span></td><td>Tiempo por turno y por acción, con umbral de 10 s</td></tr>
+      <tr><td>Cumplimiento de reglas</td><td><span class="cl y">Parcial</span></td><td>Candados verificados en configuración; falta verlos en conversación</td></tr>
+      <tr><td>Transferencias a un asesor</td><td><span class="cl p">Pendiente</span></td><td>Escenarios de escalamiento operativo y de asesor</td></tr>
+      <tr><td>Errores e incidencias</td><td><span class="cl y">Parcial</span></td><td>Paquetexpress revisó trazas STDM; no hay conteo en las fuentes</td></tr>
+    </table>
+  </div>
+  <div class="why" data-a><div class="k">Postura</div><p style="font-size:20.5px">No afirmamos una mejora de calidad todavía. Lo demostrado es una diferencia de diseño. Tampoco hay tráfico real; todo sería prueba controlada.</p></div>
+  <div class="src">Comparativa (19-nov), sección 5 y archivo de escenarios · Alcance y estado v25, sección 1.</div>
+  <aside class="notes">Min 3. Es la slide de transparencia. Tres niveles de evidencia: A configuración, B validación reportada, C conversaciones ejecutadas. Hoy solo hay A. Propuesta: la ronda conjunta produce el primer dato C.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow pk" data-a>Observaciones de Paquetexpress</div>
+  <h2 data-a>Por configuración, ninguna observación es regresión: <span class="grad">producción hoy se comporta igual</span></h2>
+  <table class="tb s" style="margin-top:22px;font-size:16.5px" data-pop>
+    <tr><th style="width:6%">ID</th><th style="width:19%">Observación</th><th style="width:19%">Producción v5</th><th style="width:19%">Sandbox v25</th><th style="width:17%">Clasificación propuesta</th><th>Evidencia</th></tr>
+    <tr><td>FP-01</td><td>Validar colonias</td><td>No pregunta colonia</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-02</td><td>Zona Plus: reconocer el CP</td><td>Dice «CP no válido»</td><td>Igual, con liga de sucursales</td><td><span class="cl b">Ampliación</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-03</td><td>Importes de cotización</td><td>Los del API tal cual</td><td>Mismo API y código</td><td><span class="cl p">Por determinar</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-04</td><td>Fecha estimada de entrega</td><td>La del API</td><td>Igual</td><td><span class="cl p">Por determinar</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-05</td><td>Seguro sobre el límite</td><td>Acepta cualquier monto</td><td>Igual</td><td><span class="cl y">Mejora deseable</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-06</td><td>Ocurre en Zona Plus</td><td>Sin regla por zona</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-07</td><td>Dimensiones en Zona Plus</td><td>Solo máximos generales</td><td>Igual; máximos en código</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-08</td><td>Tipos de embalaje</td><td>Depende de la KB</td><td>Igual</td><td><span class="cl n">Contenido KB</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-09</td><td>Sucursales de frontera</td><td>Solo requisitos y liga</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-10</td><td>PAM</td><td>Sin contenido propio</td><td>Igual</td><td><span class="cl p">Por determinar</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-11</td><td>Respuesta en menos de 10 s</td><td>No medido</td><td>No medido</td><td><span class="cl p">Por determinar</span></td><td><span class="cl p">Medir</span></td></tr><tr><td>PX-1</td><td>Ligas Los Mochis y privacidad; horario 9 pm</td><td>Salen de la KB</td><td>Salen de la KB</td><td><span class="cl n">Contenido KB</span></td><td><span class="cl y">Probar</span></td></tr>
+  </table>
+  <div style="display:flex;gap:18px;margin-top:14px;font-size:17px;color:var(--muted);align-items:center" data-a><span><span class="cl g">Config</span> confirmado en configuración</span><span><span class="cl y">Probar</span> falta probar con datos reales</span><span><span class="cl p">Medir</span> falta medir</span></div>
+  <div class="src">Comparativa (19-nov), sección 4 · Alcance y estado v25, sección 4. Clasificación propuesta por Salesforce, por validar con Paquetexpress. No se localizó el acuerdo de alcance original; se usó el documento de alcance v25.</div>
+  <aside class="notes">Min 5. Es la slide con más rigor. Tono colaborativo: las observaciones son legítimas, producción tampoco las resuelve hoy. Ampliación no significa que no importen: son funcionalidad que ninguno de los dos agentes tiene. Por determinar: importes y fechas dependen de la API y de un flujo; si la exactitud era un criterio de aceptación, podría ser un defecto dentro del alcance. Pedimos ayuda para confirmarlo.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow" data-a>Alcance y esfuerzo</div>
+  <h2 data-a>Lo adicional suma <span class="grad">entre 5 y 8 semanas con dos recursos</span>, con importes como ruta crítica</h2>
+  <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:36px;margin-top:30px;flex:1;min-height:0">
+    <div class="card s bar" data-pop>
+      <div class="k">Días hábiles estimados por nivel de esfuerzo</div>
+      <div class="bar-row"><div class="lb">Alto<small>2 puntos · importes, respuesta &lt; 10 s</small></div><div class="trk"><div class="rng" style="left:calc(18/35*100%);width:calc(12/35*100%);background:var(--pink)"></div></div><div class="vl">18–30</div></div>
+      <div class="bar-row"><div class="lb">Medio<small>6 puntos · colonias, Zona Plus, fecha, frontera</small></div><div class="trk"><div class="rng" style="left:calc(21/35*100%);width:calc(11/35*100%);background:var(--warn)"></div></div><div class="vl">21–32</div></div>
+      <div class="bar-row"><div class="lb">Bajo<small>3 puntos · seguro, embalaje, PAM</small></div><div class="trk"><div class="rng" style="left:calc(4/35*100%);width:calc(3/35*100%);background:var(--accent)"></div></div><div class="vl">4–7</div></div>
+      <div class="bar-row"><div class="lb">Solo re-prueba<small>3 puntos · contenido KB de Paquetexpress</small></div><div class="trk"><div class="rng" style="left:calc(1.5/35*100%);width:6px;background:var(--good)"></div></div><div class="vl">≈1.5</div></div>
+      <div class="bar-row" style="margin-top:6px"><div></div><div style="position:relative;height:22px;font-size:15px;color:var(--faint)"><span style="position:absolute;left:0">0</span><span style="position:absolute;left:calc(10/35*100%);transform:translateX(-50%)">10</span><span style="position:absolute;left:calc(20/35*100%);transform:translateX(-50%)">20</span><span style="position:absolute;left:calc(30/35*100%);transform:translateX(-50%)">30 días</span></div><div></div></div>
+      <p style="margin-top:16px;font-size:19px">Cada barra es el rango estimado. Total aproximado 39–65 días hábiles con un recurso, tras restar ≈5 por trabajo compartido. Son estimaciones de planeación, no compromisos.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:18px" data-pop>
+      <div class="card s bar y" style="flex:1"><div class="k">Dependencias</div>
+        <div class="chain"><span class="n">Fuente oficial de importes</span><span class="ar">→</span><span class="n">Fecha de entrega</span></div>
+        <div class="chain"><span class="n">CP de Zona Plus</span><span class="ar">→</span><span class="n">Ocurre y dimensiones</span></div>
+        <p style="margin-top:14px">Paquetexpress y Freeway deben entregar APIs, catálogos y reglas. Sin esto no se estima con precisión.</p></div>
+      <div class="card s bar g" style="flex:1"><div class="k">Alcance original</div><p>8 solicitudes en 2 etapas: migración, voz en web y WhatsApp, y WhatsApp Calls, primero para cotización y luego para RAD. La v25 cubre la Etapa 1; RAD se prueba y libera por separado.</p></div>
+    </div>
+  </div>
+  <div class="src">Alcance y estado v25 (18-nov), sección 4 y resumen de esfuerzo. Supuestos: APIs y catálogos entregados a tiempo; no incluye una nueva ronda de UAT.</div>
+  <aside class="notes">Min 3. Mostrar que son rangos por supuestos. El mensaje no es esto cuesta mucho, sino qué conviene priorizar. Importes y fecha son ruta crítica porque Zona Plus y fecha dependen de ellos. Confirmar con Paquetexpress dónde estaba pactada la precisión de importes.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow yl" data-a>Estado y riesgos</div>
+  <h2 data-a>La Etapa 1 está construida; <span class="grad">liberarla depende de decisiones y pruebas</span></h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:28px;flex:1;min-height:0">
+    <table class="tb s" data-pop>
+      <tr><th style="width:9%">#</th><th>Solicitud</th><th style="width:34%">Estado</th></tr>
+      <tr><td>1.1</td><td>Migración a Agent Script</td><td><span class="cl y">En pausa · Paquetexpress</span></td></tr>
+      <tr><td>1.2</td><td>Speech-to-Text en web</td><td><span class="cl y">En pausa · Paquetexpress</span></td></tr>
+      <tr><td>1.3</td><td>Speech-to-Text en WhatsApp</td><td><span class="cl y">En pausa · Paquetexpress</span></td></tr>
+      <tr><td>1.4</td><td>WhatsApp Calls</td><td><span class="cl b">Espera de pruebas</span></td></tr>
+      <tr><td>2.1</td><td>Subagente de RAD</td><td><span class="cl b">Espera de pruebas</span></td></tr>
+      <tr><td>2.2</td><td>STT web (RAD)</td><td><span class="cl b">Espera de pruebas</span></td></tr>
+      <tr><td>2.3</td><td>STT WhatsApp (RAD)</td><td><span class="cl b">Espera de pruebas</span></td></tr>
+      <tr><td>2.4</td><td>WhatsApp Calls (RAD)</td><td><span class="cl b">Espera de pruebas</span></td></tr>
+    </table>
+    <div class="card s bar y" data-pop><div class="k">Riesgos y discrepancias</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px">
+        <li style="font-size:19.5px"><b>Agente objetivo.</b> Hay otro agente Agent Script activo en producción (V2). Confirmar cuál se migra.</li>
+        <li style="font-size:19.5px"><b>Importes.</b> El flujo de cotización activo es de enero de 2025; hay un borrador de marzo de 2026 sin activar. Es hipótesis, no causa confirmada.</li>
+        <li style="font-size:19.5px"><b>Pruebas.</b> El doc de alcance señala diferencias frente al sitio web; la comparativa muestra el mismo API. Hay que conciliarlo con casos reales.</li>
+        <li style="font-size:19.5px"><b>Seguridad.</b> Hallazgo en la integración de cotización; se comparte por canal directo.</li>
+        <li style="font-size:19.5px"><b>Datos.</b> Faltan un CP de Zona Plus, uno de frontera y una guía válida de producción.</li>
+      </ul></div>
+  </div>
+  <div class="src">Alcance y estado v25 (18-nov), solicitudes 1.1–2.4 · Comparativa (19-nov), secciones 1, 4 y hallazgo de seguridad.</div>
+  <aside class="notes">Min 2. Las tres solicitudes en pausa son decisión de Paquetexpress; sin juicio. Señalar las discrepancias entre documentos: agente objetivo, origen de importes y el resultado de pruebas del cliente frente a la configuración.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow gd" data-a>Recomendación y decisiones</div>
+  <h2 data-a>Recomendamos una ronda conjunta de pruebas; <span class="grad">el go-live queda condicionado a criterios</span></h2>
+  <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:30px;margin-top:28px;flex:1;min-height:0">
+    <div class="card s bar" data-pop><div class="k">Criterios para producción</div>
+      <ul class="ck" style="margin-top:8px">
+        <li>33 escenarios ejecutados en v5 y v25 con los mismos datos, sin regresiones</li>
+        <li>Latencia medida con un umbral acordado (hoy se pide menos de 10 s)</li>
+        <li>Base de conocimiento corregida y re-probada (3 puntos)</li>
+        <li>Fuente oficial de importes y fechas definida y conciliada con la web</li>
+        <li>Hallazgo de seguridad atendido y agente objetivo confirmado</li>
+        <li>RAD probado por Paquetexpress y Freeway antes de la Etapa 2</li>
+      </ul></div>
+    <div style="display:flex;flex-direction:column;gap:14px" data-pop>
+      <div class="card s bar y"><div class="big md" style="font-size:44px">1</div><h3>¿Cuál es el agente objetivo?</h3><p>Producción v5 o el V2 Agent Script activo.</p></div>
+      <div class="card s bar g"><div class="big md" style="font-size:44px">2</div><h3>¿Cuál es la fuente oficial de importes y fechas?</h3><p>Y entregar los CP y la guía de prueba que faltan.</p></div>
+      <div class="card s bar v"><div class="big md" style="font-size:44px">3</div><h3>¿En qué orden priorizamos lo adicional?</h3><p>Propuesta: importes y fecha, Zona Plus, colonias y frontera.</p></div>
+      <div class="card s bar p"><div class="big md" style="font-size:44px">4</div><h3>¿Cuándo es la ronda conjunta y quién la lidera?</h3><p>Paquetexpress, Freeway y Salesforce; Paquetexpress corrige la KB.</p></div>
+    </div>
+  </div>
+  <div class="src">Síntesis de Alcance y estado v25 (18-nov) y Comparativa (19-nov). Criterios y orden de prioridad: propuesta de Salesforce, por acordar.</div>
+  <aside class="notes">Min 3 más 5 de discusión. Recomendación concreta: hoy no hay evidencia conversacional para ir a producción; sí hay base para una ronda de pruebas conjunta. Pedir las cuatro decisiones, una por una.</aside>
+</section>
+<section class="slide cover">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:120px;top:200px;width:70px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:100px;bottom:140px;width:56px">
+  <div class="body" style="justify-content:center">
+    <div class="eyebrow gd" data-a>Paquetexpress × Salesforce</div>
+    <h1 style="font-size:120px" data-a>Gracias</h1>
+    <p class="lede" data-a style="max-width:1000px">Quedamos atentos a las cuatro decisiones para agendar la ronda conjunta de pruebas y avanzar hacia la liberación.</p>
+  </div>
+  <img class="astro" src="assets/img/agent-astro.png" alt="" style="position:absolute;right:150px;top:300px;width:470px;z-index:1">
+  <aside class="notes">Cierre. Abrir la discusión con la decisión 1: el agente objetivo.</aside>
+</section>
+</div>
+<div id="tip"></div>
+<div id="notes"><div class="nh"></div><div class="nb"></div></div>
+<script src="assets/gsap.min.js"></script>
+<script>
+(() => {
+const deck = document.getElementById('deck');
+const slides = Array.from(deck.querySelectorAll('.slide'));
+const total = slides.length;
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]still/.test(location.search) || !window.gsap;
+const pad = n => String(n).padStart(2, '0');
+if (RM) document.documentElement.classList.add('rm');
+
+function fit(){ const s = Math.min(innerWidth/1920, innerHeight/1080);
+  deck.style.transform = `translate(${(innerWidth-1920*s)/2}px,${(innerHeight-1080*s)/2}px) scale(${s})`; }
+addEventListener('resize', fit); fit();
+
+/* chrome: pill co-brand + número */
+slides.forEach((s, i) => {
+  const p = document.createElement('div'); p.className = 'pill';
+  p.innerHTML = '<img src="assets/img/paquetexpress-logo.png" alt="Paquetexpress" style="height:30px"><i></i><img src="assets/img/sf-logo.svg" alt="Salesforce">';
+  s.prepend(p);
+  const n = document.createElement('div'); n.className = 'snum'; n.textContent = `${pad(i+1)} / ${pad(total)}`; s.append(n);
+});
+
+/* notas del orador (tecla N) */
+const notes = document.getElementById('notes');
+function showNotes(){ const s = slides[cur], a = s.querySelector('aside.notes');
+  notes.querySelector('.nh').innerHTML = `<span>Notas del orador · diapositiva ${cur+1}</span><span>min ${''}</span>`;
+  notes.querySelector('.nb').textContent = a ? a.textContent : ''; }
+
+/* ---------- coreografía por diapositiva ---------- */
+function play(s){
+  if (RM) return;
+  if (s._tl) { s._tl.progress(1).kill(); }
+  const tl = gsap.timeline(); s._tl = tl;
+  if (s.dataset.anim === 'cover') {
+    const t = s.querySelector('.cover-title');
+    if (!t.dataset.split) { t.dataset.split = 1;
+      t.innerHTML = t.innerHTML.replace(/(<span class="grad">)(.*?)(<\/span>)/, (m, a, b, c) => b.split(' ').map(w => `<span class="w"><span class="grad wi">${w}</span></span>`).join(' '))
+        .replace(/^([^<]+)/, m => m.trim().split(' ').map(w => `<span class="w"><span class="wi">${w}</span></span>`).join(' ') + ' '); }
+    tl.from(t.querySelectorAll('.wi'), {yPercent:110, duration:1, stagger:.09, ease:'power4.out'}, .15)
+      .from(s.querySelector('.astro'), {x:120, y:40, rotation:8, opacity:0, duration:1.4, ease:'power3.out'}, .3);
+    gsap.to(s.querySelector('.astro'), {y:'-=16', duration:3.2, repeat:-1, yoyo:true, ease:'sine.inOut', delay:1.6});
+  }
+  if (s.dataset.anim === 'divider') {
+    tl.from(s.querySelector('.chap'), {scale:.6, opacity:0, duration:1.1, ease:'expo.out'}, 0)
+      .from(s.querySelector('.glow'), {scale:.4, opacity:0, duration:1.6, ease:'power2.out'}, 0);
+  }
+  if (s.dataset.anim === 'plan') {
+    tl.from(s.querySelector('.tl-line'), {scaleX:0, duration:1.4, ease:'power2.inOut'}, .3)
+      .from(s.querySelectorAll('.dot'), {scale:0, duration:.5, stagger:.3, ease:'back.out(3)'}, .4);
+  }
+  tl.from(s.querySelectorAll('[data-a]'), {y:30, opacity:0, duration:.7, stagger:.08, ease:'power3.out'}, .05);
+  s.querySelectorAll('[data-pop]').forEach(g => tl.from(g.children, {y:26, scale:.95, opacity:0, duration:.6, stagger:.08, ease:'back.out(1.6)'}, .25));
+  tl.from(s.querySelectorAll('.spk'), {scale:0, rotation:-70, opacity:0, duration:1, stagger:.12, ease:'back.out(2)'}, .2);
+  setTimeout(() => { if (s._tl === tl && tl.progress() < 1) tl.progress(1); }, 4500);
+}
+
+/* ---------- navegación ---------- */
+const progress = document.getElementById('progress');
+let cur = 0;
+function go(i){ i = Math.max(0, Math.min(total-1, i));
+  slides[cur].classList.remove('active'); cur = i; slides[cur].classList.add('active');
+  progress.style.width = `${(cur+1)/total*100}%`; history.replaceState(null, '', '#' + (cur+1)); play(slides[cur]);
+  if (notes.classList.contains('show')) showNotes(); }
+addEventListener('keydown', e => {
+  if (['ArrowRight',' ','PageDown'].includes(e.key)) { e.preventDefault(); go(cur+1); }
+  else if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); go(cur-1); }
+  else if (e.key === 'Home') go(0); else if (e.key === 'End') go(total-1);
+  else if (e.key === 'n' || e.key === 'N') { notes.classList.toggle('show'); showNotes(); }
+  else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); } });
+deck.addEventListener('click', e => { if (e.target.closest('a,button,.no-advance,.pn,.sa,.qz') || getSelection().toString()) return;
+  (e.clientX < innerWidth * .25) ? go(cur-1) : go(cur+1); });
+cur = Math.max(0, Math.min(total-1, (parseInt(location.hash.slice(1)) || 1) - 1));
+slides[cur].classList.add('active'); go(cur);
+})();
+
+</script>
+</body>
+</html>
