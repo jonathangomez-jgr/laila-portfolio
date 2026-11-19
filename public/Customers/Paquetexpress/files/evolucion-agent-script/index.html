@@ -298,6 +298,10 @@ table.tb.s th{font-size:13px;padding:10px 14px}
 .lbx.show{display:flex}
 .lbx img{width:1700px;height:860px;object-fit:contain;background:transparent;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .lbx span{font-size:18px;color:var(--accent-soft);letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+.cv{display:flex;gap:16px;justify-content:center;align-items:flex-start;margin-top:12px;height:560px}
+.cv figure{flex:0 1 auto;min-width:0;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:14px;padding:8px;cursor:zoom-in;position:relative}
+.cv img{display:block;max-height:540px;max-width:100%;width:auto;height:auto;border-radius:8px;background:#fff}
+.cv figure span{position:absolute;left:14px;top:14px;font-size:13px;font-weight:700;letter-spacing:.12em;color:#001E5B;background:rgba(255,255,255,.9);padding:3px 9px;border-radius:999px}
 .chain{display:flex;align-items:center;gap:12px;margin-top:12px;font-size:18.5px;color:#fff}
 .chain .n{padding:8px 14px;border-radius:12px;border:1px solid var(--line2);background:rgba(10,47,116,.7);font-weight:700}
 .chain .ar{color:var(--accent);font-size:24px}
@@ -381,6 +385,18 @@ table.tb.s th{font-size:13px;padding:10px 14px}
   <aside class="notes">Min 4. Cuidado con la lectura: mejorado significa que el diseño ya resuelve algo que producción no resuelve por instrucción. Aclarar que el agente V2 en producción es la versión de cotización que se regresó y no atiende conversaciones.</aside>
 </section>
 <section class="slide">
+  <div class="eyebrow gd" data-a>Conversaciones de prueba · agente sandbox v25 (WhatsApp)</div>
+  <h2 data-a style="font-size:50px">El agente nuevo <span class="grad">corrige, valida y se mantiene en tema</span></h2>
+  <div class="no-advance" id="cvw">
+    <div class="pv-top"><span id="cvTabs" style="display:flex;gap:10px;flex-wrap:wrap"></span></div>
+    <div class="pv-cap" id="cvCap"></div>
+    <div class="cv" id="cvRow"></div>
+  </div>
+  <div class="lbx" id="lbx2"><span id="lbx2T"></span><img id="lbx2I" alt=""></div>
+  <div class="src">Capturas de WhatsApp del agente «Paquetexpress QA SBX» (Paquete Pruebas.docx). Fecha inferida de las respuestas del agente: 19-nov-2026. Clic en una imagen para ampliarla; Esc para cerrar. Teclas 1–5 cambian de escenario.</div>
+  <aside class="notes">Min 3. Cinco escenarios reales del agente en sandbox. 1) Corrige el CP de origen a mitad del flujo y el peso después de cotizar; recalcula de 1,810.40 a 3,229.76 y conserva los demás datos. 2) Otra cotización nacional desde cero, con caso nuevo. 3) Rechaza 4,000 kg, 450, 400 y 700 cm; con 2,000 kg exactos pide confirmar, algo a revisar. 4) Cotización internacional a Perú: crea el caso y ofrece transferir, sin pedir CP ni medidas. 5) Temas ajenos: redirige a servicios de Paquetexpress. En el escenario 2 el seguro de 52,000 se aceptó sin validar (FP-05).</aside>
+</section>
+<section class="slide">
   <div class="eyebrow gd" data-a>Trabajo realizado</div>
   <h2 data-a>El trabajo atacó <span class="grad">problemas conversacionales concretos</span></h2>
   <div class="grid g3" style="margin-top:32px" data-pop>
@@ -431,7 +447,7 @@ table.tb.s th{font-size:13px;padding:10px 14px}
   <h2 data-a>Por configuración, ninguna observación es regresión: <span class="grad">producción hoy se comporta igual</span></h2>
   <table class="tb s" style="margin-top:22px;font-size:16.5px" data-pop>
     <tr><th style="width:6%">ID</th><th style="width:19%">Observación</th><th style="width:19%">Producción v5</th><th style="width:19%">Sandbox v25</th><th style="width:17%">Clasificación propuesta</th><th>Evidencia</th></tr>
-    <tr><td>FP-01</td><td>Validar colonias</td><td>No pregunta colonia</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-02</td><td>Zona Plus: reconocer el CP</td><td>Dice «CP no válido»</td><td>Igual, con liga de sucursales</td><td><span class="cl b">Ampliación</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-03</td><td>Importes de cotización</td><td>Mismo API; sin probar</td><td>Igual al portal en 7 de 7 pruebas</td><td><span class="cl p">Por determinar</span></td><td><span class="cl d">Prueba</span></td></tr><tr><td>FP-04</td><td>Fecha estimada de entrega</td><td>Mismo API; sin probar</td><td>Express 2 Day con recolección: 19 vs 20 nov (2 de 2)</td><td><span class="cl p">Por determinar</span></td><td><span class="cl d">Prueba</span></td></tr><tr><td>FP-05</td><td>Seguro sobre el límite</td><td>Acepta cualquier monto</td><td>Igual</td><td><span class="cl y">Mejora deseable</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-06</td><td>Ocurre en Zona Plus</td><td>Sin regla por zona</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-07</td><td>Dimensiones en Zona Plus</td><td>Solo máximos generales</td><td>Igual; máximos en código</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-08</td><td>Tipos de embalaje</td><td>Depende de la KB</td><td>Igual</td><td><span class="cl n">Contenido KB</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-09</td><td>Sucursales de frontera</td><td>Solo requisitos y liga</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-10</td><td>PAM</td><td>Sin contenido propio</td><td>Igual</td><td><span class="cl p">Por determinar</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-11</td><td>Respuesta en menos de 10 s</td><td>No medido</td><td>No medido</td><td><span class="cl p">Por determinar</span></td><td><span class="cl p">Medir</span></td></tr><tr><td>PX-1</td><td>Ligas Los Mochis y privacidad; horario 9 pm</td><td>Salen de la KB</td><td>Salen de la KB</td><td><span class="cl n">Contenido KB</span></td><td><span class="cl y">Probar</span></td></tr>
+    <tr><td>FP-01</td><td>Validar colonias</td><td>No pregunta colonia</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-02</td><td>Zona Plus: reconocer el CP</td><td>Dice «CP no válido»</td><td>Igual, con liga de sucursales</td><td><span class="cl b">Ampliación</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-03</td><td>Importes de cotización</td><td>Mismo API; sin probar</td><td>Igual al portal en 7 de 7 pruebas</td><td><span class="cl p">Por determinar</span></td><td><span class="cl d">Prueba</span></td></tr><tr><td>FP-04</td><td>Fecha estimada de entrega</td><td>Mismo API; sin probar</td><td>Express 2 Day con recolección: 19 vs 20 nov (2 de 2)</td><td><span class="cl p">Por determinar</span></td><td><span class="cl d">Prueba</span></td></tr><tr><td>FP-05</td><td>Seguro sobre el límite</td><td>Acepta cualquier monto</td><td>Acepta $52,000 sin validar</td><td><span class="cl y">Mejora deseable</span></td><td><span class="cl d">Prueba</span></td></tr><tr><td>FP-06</td><td>Ocurre en Zona Plus</td><td>Sin regla por zona</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-07</td><td>Dimensiones en Zona Plus</td><td>Solo máximos generales</td><td>Igual; máximos en código</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-08</td><td>Tipos de embalaje</td><td>Depende de la KB</td><td>Igual</td><td><span class="cl n">Contenido KB</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-09</td><td>Sucursales de frontera</td><td>Solo requisitos y liga</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-10</td><td>PAM</td><td>Sin contenido propio</td><td>Igual</td><td><span class="cl p">Por determinar</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-11</td><td>Respuesta en menos de 10 s</td><td>No medido</td><td>No medido</td><td><span class="cl p">Por determinar</span></td><td><span class="cl p">Medir</span></td></tr><tr><td>PX-1</td><td>Ligas Los Mochis y privacidad; horario 9 pm</td><td>Salen de la KB</td><td>Salen de la KB</td><td><span class="cl n">Contenido KB</span></td><td><span class="cl y">Probar</span></td></tr>
   </table>
   <div style="display:flex;gap:18px;margin-top:14px;font-size:17px;color:var(--muted);align-items:center" data-a><span><span class="cl g">Config</span> confirmado en configuración</span><span><span class="cl d">Prueba</span> observado en prueba manual (sandbox)</span><span><span class="cl y">Probar</span> falta probar con datos reales</span><span><span class="cl p">Medir</span> falta medir</span></div>
   <div class="src">Comparativa (19-nov), sección 4 · Alcance y estado v25, sección 4. Clasificación propuesta por Salesforce, por validar con Paquetexpress. No se localizó el acuerdo de alcance original; se usó el documento de alcance v25.</div>
@@ -622,6 +638,39 @@ addEventListener('keydown',e=>{
   if(lb.classList.contains('show')){ e.stopImmediatePropagation(); if(e.key==='Escape') lb.classList.remove('show'); return; }
   const act=document.querySelector('.slide.active #pv'); if(!act) return;
   if(/^[1-6]$/.test(e.key)){cur=+e.key-1;render();}
+},true);
+render();
+})();
+</script>
+
+<script>
+(() => {
+const C=[
+ {n:'Modificar un dato',cap:'Corrige el CP de origen a mitad del flujo (55024 a 22000) y el peso después de cotizar (32 a 85 kg): recalcula de $1,810.40 a $3,229.76 y conserva el resto de los datos.',f:['mod-1','mod-2','mod-3','mod-4']},
+ {n:'Cotizar otro envío',cap:'Con «otra cotización nacional» empieza desde cero (81270 a 21395, 40 kg) y registra un caso nuevo, el 14286804.',f:['otro-1','otro-2','otro-3']},
+ {n:'Validación de máximos',cap:'Rechaza 4,000 kg, 450 cm de largo, 400 de ancho y 700 de alto, y vuelve a pedir el dato indicando el límite.',f:['max-1','max-2']},
+ {n:'Internacional, solo con país',cap:'Con «cotización internacional para Perú» crea el caso 14286806 y ofrece transferir con un agente; no pide CP, peso ni medidas.',f:['intl-1']},
+ {n:'Fuera de tema',cap:'Ante deportes, boletos, turismo o clima, no entra en el tema y regresa a los servicios de Paquetexpress.',f:['fuera-1']}];
+const tabs=document.getElementById('cvTabs'); if(!tabs) return;
+const cap=document.getElementById('cvCap'),row=document.getElementById('cvRow');
+const lb=document.getElementById('lbx2'),lbI=document.getElementById('lbx2I'),lbT=document.getElementById('lbx2T');
+let cur=0;
+function render(){
+  const c=C[cur];
+  tabs.innerHTML=C.map((q,i)=>`<button class="pb ${i==cur?'on':''}" data-i="${i}">${i+1} · ${q.n}</button>`).join('');
+  cap.innerHTML=`<span>${c.cap}</span>`;
+  row.innerHTML=c.f.map((f,i)=>`<figure data-t="${c.n} · ${i+1} de ${c.f.length}">${c.f.length>1?`<span>${i+1}/${c.f.length}</span>`:''}<img src="assets/conversaciones/${f}.png" alt="${c.n} ${i+1}"></figure>`).join('');
+}
+document.getElementById('cvw').addEventListener('click',e=>{
+  e.stopPropagation();
+  const b=e.target.closest('.pb[data-i]'); if(b){cur=+b.dataset.i;render();return;}
+  const f=e.target.closest('figure'); if(f){lbI.src=f.querySelector('img').src;lbT.textContent=f.dataset.t;lb.classList.add('show');}
+});
+lb.addEventListener('click',e=>{e.stopPropagation();lb.classList.remove('show');});
+addEventListener('keydown',e=>{
+  if(lb.classList.contains('show')){ e.stopImmediatePropagation(); if(e.key==='Escape') lb.classList.remove('show'); return; }
+  if(!document.querySelector('.slide.active #cvw')) return;
+  if(/^[1-5]$/.test(e.key)){cur=+e.key-1;render();}
 },true);
 render();
 })();
