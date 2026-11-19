@@ -131,6 +131,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
+    slug: "avance-semanal-2026-11-20",
+    label: "Avance Semanal · Semana del 16 al 20 nov",
+    description:
+      "Presentación ejecutiva de 10 slides con el avance de la semana: Betty v57 activa con usuario propio, pedido extemporáneo reemplazado y probado en producción (73 de 74 conversaciones sin fallas), pruebas de todo el agente (66 casos, 6 hallazgos por corregir), estado del plan e Insiders al 50%, y el hallazgo sobre la base de conocimiento: qué encontramos, cómo afecta las respuestas y qué implicaría reconstruirla.",
+    url: "/Customers/Betterware/files/Avance_Semanal_Betty_2026_11_20.pdf",
+    category: "Ejecutivo",
+    icon: "📈",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "avance-semanal-2026-11-13",
     label: "Avance Semanal · Semana del 9 al 13 nov",
     description:
