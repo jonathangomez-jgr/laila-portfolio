@@ -244,6 +244,8 @@ aside.notes{display:none}
 .stat .lb{font-size:19px;line-height:1.35;margin-top:10px;color:var(--muted)}
 
 .card p{font-size:25px}.card h3{font-size:30px}.tb{font-size:23px}.tb td{padding:18px 20px}.tb th{font-size:15px}.why p{font-size:25px}.lede{font-size:26px!important}
+.tb.compact td{padding-top:11px;padding-bottom:11px}
+.tb.compact th{padding-top:12px;padding-bottom:12px}
 </style>
 </head>
 <body>
@@ -307,13 +309,9 @@ aside.notes{display:none}
 <section class="slide">
   <div class="eyebrow" data-a>Programa y plan · estado al 19 de noviembre</div>
   <h2 data-a>Insiders al 50% y <span class="grad">el plan al día de hoy</span></h2>
-  <div class="grid g4" style="margin-top:40px" data-pop>
-    <div class="card bar"><div class="big md">50%</div><h3 style="margin-top:10px">Programa Insiders</h3><p>Nivel actual de la escalada del programa.</p></div>
-    <div class="card bar g"><div class="big md">26 de 62</div><h3 style="margin-top:10px">Actividades terminadas</h3><p>11 en curso, 22 por iniciar, 2 bloqueadas y 1 programada.</p></div>
-    <div class="card bar y"><div class="big md">13</div><h3 style="margin-top:10px">Con fecha vencida</h3><p>Seguridad y autenticación (Fase 2) y el cierre de la escalada al 80% y GA.</p></div>
-    <div class="card bar v"><div class="big md">4</div><h3 style="margin-top:10px">Días para la Fase 3</h3><p>El UAT formal y el bugfix arrancan el 23 de noviembre.</p></div>
-  </div>
-  <table class="tb" style="margin-top:30px" data-a><thead><tr><th>Fase</th><th>Avance</th><th>Comentario</th></tr></thead><tbody>
+  <p class="lede" data-a style="font-size:23px;max-width:1500px">62 actividades en seis fases: 26 terminadas, 11 en curso y 13 con fecha vencida, sobre todo en seguridad y autenticación y en el cierre de la escalada. La Fase 3 empieza el 23 de noviembre, en 4 días.</p>
+  <div class="grid g3" style="margin-top:26px" data-pop><div class="card bar "><div class="k">Fase actual · F2</div><div class="big md">45%</div><h3 style="margin-top:6px;font-size:25px;white-space:nowrap">Reemplazo gradual acción por acción</h3><div style="height:14px;border-radius:8px;background:rgba(255,255,255,.12);overflow:hidden;margin:10px 0 8px"><i style="display:block;width:45%;height:100%;background:linear-gradient(90deg,#066AFE,#00B3FF)"></i></div><p style="display:flex;justify-content:space-between"><span>2 nov</span><span>20 nov</span></p></div><div class="card bar g"><div class="k">Etapa 2 · Eficacia + eficiencia</div><div class="big md">22%</div><h3 style="margin-top:6px;font-size:25px;white-space:nowrap">Reemplazo total · entrega final</h3><div style="height:14px;border-radius:8px;background:rgba(255,255,255,.12);overflow:hidden;margin:10px 0 8px"><i style="display:block;width:22%;height:100%;background:linear-gradient(90deg,#066AFE,#00B3FF)"></i></div><p style="display:flex;justify-content:space-between"><span>Arranque 02-nov</span><span>Entrega 04-dic</span></p></div><div class="card bar v"><div class="k">Progreso global</div><div class="big md">50%</div><h3 style="margin-top:6px;font-size:25px;white-space:nowrap">Eficacia + eficiencia · entrega final</h3><div style="height:14px;border-radius:8px;background:rgba(255,255,255,.12);overflow:hidden;margin:10px 0 8px"><i style="display:block;width:50%;height:100%;background:linear-gradient(90deg,#066AFE,#00B3FF)"></i></div><p style="display:flex;justify-content:space-between"><span>Kickoff 06-oct</span><span>Entrega 04-dic</span></p></div></div>
+  <table class="tb compact" style="margin-top:18px" data-a><thead><tr><th>Fase</th><th>Avance</th><th>Comentario</th></tr></thead><tbody>
     <tr><td>0 · Preparación y 1 · Pruebas conjuntas</td><td><span class="tag">100%</span></td><td>17 actividades terminadas.</td></tr>
     <tr><td>Escalada del programa Insiders</td><td><span class="tag">74%</span></td><td>Escalada al 20% y al 50% hecha; pendientes el 80% y el GA.</td></tr>
     <tr><td>2 · Reemplazo gradual</td><td><span class="tag">45%</span></td><td>Se suma el pedido extemporáneo, terminado. Siguen seguridad, autenticación y el resto de las acciones.</td></tr>
@@ -321,6 +319,24 @@ aside.notes{display:none}
   </tbody></table>
   <div class="why" data-a><div class="k">Novedad de la semana</div><p>Se agregaron las distribuidoras CP Platino para que tengan comunicación directa con un ejecutivo.</p></div>
   <aside class="notes">El plan tiene 62 actividades en seis fases. Las dos primeras están completas y la escalada de Insiders va al 74%. Los mayores pendientes están en seguridad y autenticación y en el cierre de la escalada; son 13 actividades con fecha vencida. Como novedad, se agregaron las distribuidoras CP Platino para que tengan comunicación directa con un ejecutivo.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow gd" data-a>Comparativo · tráfico real al 50% · 17 y 18 de noviembre</div>
+  <h2 data-a>Betty vs agente anterior: <span class="grad">sin ganador global</span></h2>
+  <p class="lede" data-a style="font-size:23px;max-width:1500px">Betty v57 contra el agente anterior v47 en conversaciones reales de WhatsApp: 1,313 sesiones y 240 conversaciones evaluadas una por una.</p>
+  <div class="grid g4" style="margin-top:26px" data-pop>
+    <div class="card bar"><div class="big md" style="font-size:58px">8.3% · 7.5%</div><h3 style="margin-top:10px">Resuelve por sí solo</h3><p>Betty · anterior. No significativa.</p></div>
+    <div class="card bar g"><div class="big md" style="font-size:58px">15% · 29%</div><h3 style="margin-top:10px">Sin solución ni pase</h3><p>Betty · anterior. Menos conversaciones sin salida.</p></div>
+    <div class="card bar v"><div class="big md" style="font-size:58px">3.58 · 3.43</div><h3 style="margin-top:10px">Calidad percibida, de 5</h3><p>Equivalente.</p></div>
+    <div class="card bar y"><div class="big md" style="font-size:58px">71% · 36%</div><h3 style="margin-top:10px">Con ejecutivo tras conocimiento</h3><p>Betty · anterior. Principal mejora de Betty.</p></div>
+  </div>
+  <table class="tb compact" style="margin-top:22px" data-a><thead><tr><th>Mejor en</th><th>Detalle</th></tr></thead><tbody>
+    <tr><td>Betty</td><td>Menos conversaciones sin salida (15.0% contra 29.2%), menos pases tardíos a ejecutivo (14.2% contra 26.7%), mejor recuperación ante errores (3.12 contra 2.81) y cumplimiento de procesos (4.08 contra 3.86), y menos mensajes con caracteres extraños (0.6% contra 4.2%).</td></tr>
+    <tr><td>Agente anterior</td><td>Pasa menos a ejecutivo (40.8% contra 52.1%) y su tono suena más natural (2.5% de mensajes mecánicos contra 8.3%).</td></tr>
+    <tr><td>Equivalentes</td><td>Resolución propia, tokens por sesión (106,522 contra 105,238) y tiempo de primera respuesta (2.2 a 2.4 segundos).</td></tr>
+  </tbody></table>
+  <div class="why" data-a><div class="k">Cómo leerlo</div><p>Ventana de unas 15 horas y evaluación sin calibración humana: son indicios. Recomendación: continuar el piloto al 50%, con las correcciones de conocimiento y escalamiento antes de subir.</p></div>
+  <aside class="notes">No hay evidencia para declarar un ganador global. Resuelven por sí solos una proporción pequeña y parecida, y la calidad percibida es equivalente. Betty deja menos conversaciones sin salida y tiene menos pases tardíos; el agente anterior pasa menos a ejecutivo. El punto principal de mejora de Betty es conocimiento: 71% de sus sesiones que consultan conocimiento terminan con ejecutivo, contra 36% del anterior. Ventana corta, sin calibración humana: son indicios.</aside>
 </section>
 <section class="slide">
   <div class="eyebrow pk" data-a>Base de conocimiento · hallazgo de la semana · 1 de 3</div>
@@ -352,7 +368,7 @@ aside.notes{display:none}
     <tr><td>Sin trazabilidad</td><td>La fuente es el nombre de un campo, no un artículo.</td><td><span class="tag">418 de 561</span></td></tr>
   </tbody></table>
   <div class="grid g2" style="margin-top:22px" data-pop>
-    <div class="card"><div class="k">Con el agente anterior</div><p>Los dos agentes usan el mismo flujo de conocimiento. La diferencia está en cómo cada uno arma la consulta y presenta la respuesta: igualarlo es un trabajo de agente y se puede hacer antes de reconstruir.</p></div>
+    <div class="card"><div class="k">Con el agente anterior</div><p>Los dos usan el mismo flujo de conocimiento, pero en tráfico real el 71% de las sesiones de Betty que lo consultan terminan con un ejecutivo, contra 36% del anterior: Betty descarta respuestas que sí traían texto. Es trabajo de agente y se puede hacer antes de reconstruir.</p></div>
     <div class="card"><div class="k">Qué no resuelve</div><p>Mejorar solo el texto de la plantilla no basta: mientras el buscador no devuelva el artículo correcto, ninguna redacción puede responder desde él.</p></div>
   </div>
   <aside class="notes">Seis formas de fallar, con evidencia. Muestras: 82 consultas reales y 60 artículos con dos preguntas cada uno, evaluadas con un juez automático que coincidió con la revisión manual en 8 de 11 casos. La conclusión: hay que corregir contenido y búsqueda antes que el texto de la plantilla.</aside>
@@ -378,9 +394,9 @@ aside.notes{display:none}
   <div class="grid g3" style="margin-top:40px" data-pop>
     <div class="card bar"><div class="big md">1</div><h3 style="margin-top:10px">Igualar a Betty con el agente anterior en conocimiento</h3><p style="margin-top:8px">Comparar ambas con las mismas preguntas reales, sin cambiar la base de conocimiento, y corregir solo en el agente, conservando las reglas de no inventar ni divagar. Entre 4 y 6 días.</p></div>
     <div class="card bar g"><div class="big md">2</div><h3 style="margin-top:10px">Corregir los seis hallazgos y volver a probar todo el agente</h3><p style="margin-top:8px">Enrutamiento de devoluciones y traspasos, candado de la contraseña, la palabra "catálogo" y el aviso por datos bancarios; con regresión completa antes de publicar.</p></div>
-    <div class="card bar y"><div class="big md">3</div><h3 style="margin-top:10px">Tres confirmaciones de Betterware</h3><p style="margin-top:8px">Si el teléfono registrado del código de prueba cambió a propósito (hoy impide la autenticación normal); las decisiones del plan de conocimiento; y si se amplía la autorización de pruebas en producción.</p></div>
+    <div class="card bar y"><div class="big md">3</div><h3 style="margin-top:10px">Dos confirmaciones de Betterware</h3><p style="margin-top:8px">Las decisiones del plan de conocimiento (campo oficial de respuesta, revisores y alcance) y si se amplía la autorización de pruebas en producción más allá del código de prueba.</p></div>
   </div>
-  <aside class="notes">Tres frentes para las próximas dos semanas. Lo que más nos ayuda de Betterware: confirmar el teléfono del código de prueba, decidir sobre el plan de conocimiento y ampliar la autorización de pruebas en producción.</aside>
+  <aside class="notes">Tres frentes para las próximas dos semanas. Lo que más nos ayuda de Betterware: decidir sobre el plan de conocimiento y ampliar la autorización de pruebas en producción.</aside>
 </section>
 <section class="slide cover">
   <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:120px;top:200px;width:70px">
