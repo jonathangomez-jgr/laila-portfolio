@@ -141,6 +141,16 @@ const BETTERWARE_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
+    slug: "avance-semanal-2026-11-20-slides",
+    label: "Avance Semanal · Semana del 16 al 20 nov (versión slides)",
+    description:
+      "Misma presentación del avance semanal en formato de slides para proyectar: 10 láminas horizontales, flechas para avanzar, F pantalla completa y N notas del orador.",
+    url: "/Customers/Betterware/files/avance-semanal-2026-11-20/index.html",
+    category: "Ejecutivo",
+    icon: "🖥️",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "avance-semanal-2026-11-13",
     label: "Avance Semanal · Semana del 9 al 13 nov",
     description:

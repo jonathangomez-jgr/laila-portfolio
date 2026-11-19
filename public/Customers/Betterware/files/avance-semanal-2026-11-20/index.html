@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Betty FDE · Avance semanal · 16 al 20 de noviembre de 2026</title>
+<style>
+@font-face{font-family:"Avant Garde for Salesforce";src:url(assets/fonts/AvantGardeForSalesforceW05-Dm.woff) format("woff");font-weight:600;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Light.woff) format("woff");font-weight:300;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Regular.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Semibold.woff) format("woff");font-weight:600;font-display:swap}
+@font-face{font-family:"Salesforce Sans";src:url(assets/fonts/SalesforceSans-Bold.woff) format("woff");font-weight:700;font-display:swap}
+
+/* ===== THEME: salesforce-brand (Sacred palette) — copied from the engine theme, do not invent hex ===== */
+:root{
+  --ink:#001E5B;--ink2:#052663;--ink3:#0a2f74;--ink4:#103a86;
+  --line:#1c3f80;--line2:#2b4f95;
+  --text:#EAF5FE;--muted:#a8c2ec;--faint:#7592c4;
+  --accent:#00B3FF;--accent-soft:#90D0FE;--accent-dim:rgba(0,179,255,.14);
+  --electric:#066AFE;--electric-2:#022AC0;
+  --good:#04E1CB;--good-dim:rgba(4,225,203,.14);--warn:#FCC003;--warn-dim:rgba(252,192,3,.14);
+  --pink:#FF538A;--pink-dim:rgba(255,83,138,.14);--violet:#D17DFE;--violet-dim:rgba(209,125,254,.14);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --display:"Avant Garde for Salesforce","Salesforce Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sans:"Salesforce Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  /* chart series in stack order def,esc,aba,amb — validated with dataviz validate_palette.js on surface #052663 (dark): ALL CHECKS PASS; Not set = neutral gray + hatch (no data) */
+  --c-def:#199e70;--c-amb:#3987e5;--c-esc:#9085e9;--c-aba:#d95926;--c-not:#4a6396;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#000f33;font-family:var(--sans);color:var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+/* ===== fixed 1920x1080 canvas, scaled to fit ===== */
+#deck{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 82% 2%, rgba(0,179,255,.18), transparent 46%),
+    radial-gradient(120% 120% at 6% 104%, rgba(6,106,254,.22), transparent 54%),
+    radial-gradient(150% 120% at 50% 42%, #062a75 0%, #001E5B 62%, #001542 100%)}
+.progress{position:absolute;top:0;left:0;height:5px;z-index:50;background:linear-gradient(90deg,var(--accent),var(--electric),var(--good));box-shadow:0 0 14px rgba(0,179,255,.6);transition:width .45s cubic-bezier(.2,.7,.2,1)}
+
+.slide{position:absolute;inset:0;padding:92px 120px 134px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
+.slide.active{opacity:1;visibility:visible;transition:opacity .45s ease}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(rgba(144,208,254,.07) 1px,transparent 1.5px);background-size:34px 34px}
+.slide>*{position:relative;z-index:1}
+
+/* chrome */
+.pill{position:absolute!important;top:34px;right:44px;z-index:6;display:flex;align-items:center;gap:16px;padding:10px 22px;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 8px 26px rgba(0,10,40,.35)}
+.pill img.jafra{height:24px}
+.pill i{width:1px;height:24px;background:#c9d3e2}
+.pill img{height:26px;display:block}
+.snum{position:absolute!important;bottom:34px;right:48px;font-size:15px;letter-spacing:.16em;color:var(--faint);font-weight:600}
+.src{position:absolute!important;bottom:28px;left:120px;right:250px;font-size:15px;color:#9db4dc;line-height:1.38;border-top:1px solid rgba(144,208,254,.18);padding-top:8px}
+.src::before{content:"Fuente · ";font-weight:700;color:var(--accent-soft)}
+.eyebrow{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;font-size:15px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-soft);padding:8px 16px;border-radius:999px;background:var(--accent-dim);border:1px solid rgba(0,179,255,.3);margin-bottom:22px}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.eyebrow.pk{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.35)}
+.eyebrow.gd{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.35)}
+.eyebrow.yl{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.35)}
+
+h1{font-family:var(--display);font-weight:600;font-size:104px;line-height:1.02;letter-spacing:-.025em}
+h2{font-family:var(--display);font-weight:600;font-size:58px;line-height:1.08;letter-spacing:-.02em;max-width:1500px}
+h3{font-size:27px;font-weight:700;line-height:1.25;color:#fff}
+p,li{font-size:23px;line-height:1.5;color:var(--muted)}
+b,strong{color:#fff;font-weight:700}
+.lede{font-size:27px;line-height:1.45;color:var(--muted);max-width:1300px;margin-top:18px}
+.mono{font-family:var(--mono)}
+.grad{background:linear-gradient(92deg,#90D0FE,#00B3FF 40%,#04E1CB);-webkit-background-clip:text;background-clip:text;color:transparent}
+.body{flex:1;display:flex;flex-direction:column;min-height:0}
+
+/* cards */
+.card{position:relative;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:22px;padding:28px 30px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 18px 40px rgba(0,8,32,.35);overflow:hidden}
+.card.bar::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--accent),var(--electric))}
+.card.bar.g::before{background:linear-gradient(90deg,var(--good),var(--accent))}
+.card.bar.y::before{background:linear-gradient(90deg,var(--warn),#ff9f45)}
+.card.bar.p::before{background:linear-gradient(90deg,var(--pink),var(--violet))}
+.card.bar.v::before{background:linear-gradient(90deg,var(--violet),var(--electric))}
+.card .k{font-size:15px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:10px}
+.card p{font-size:21px}
+.grid{display:grid;gap:24px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+
+/* evidence level chips */
+.lv{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:28px;padding:0 9px;border-radius:8px;font-size:15px;font-weight:700;font-family:var(--mono);margin-right:10px;vertical-align:3px}
+.lv.A{background:rgba(0,179,255,.18);color:var(--accent-soft);border:1px solid rgba(0,179,255,.45)}
+.lv.B{background:var(--violet-dim);color:#e3b6ff;border:1px solid rgba(209,125,254,.45)}
+.lv.C{background:var(--warn-dim);color:var(--warn);border:1px solid rgba(252,192,3,.45)}
+
+/* session buttons */
+.ses{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(144,208,254,.4);color:#fff;text-decoration:none;font-size:17px;font-weight:600;transition:background .25s,transform .35s cubic-bezier(.34,1.56,.64,1)}
+.ses:hover{background:rgba(0,179,255,.22);transform:translateY(-3px)}
+.ses .id{font-family:var(--mono);font-size:14px;color:var(--accent-soft);font-weight:500}
+.ses::after{content:"↗";color:var(--accent)}
+.sesrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+
+/* status (always icon + label) */
+.st{display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:999px;font-size:15.5px;font-weight:700;white-space:nowrap;border:1px solid}
+.st.ok{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.4)}
+.st.mid{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.4)}
+.st.no{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.4)}
+
+/* sparkles: edges only */
+.spk{position:absolute!important;z-index:2;pointer-events:none;width:56px;height:auto}
+/* big stat */
+.big{font-family:var(--display);font-weight:600;font-size:120px;line-height:.95;letter-spacing:-.03em;color:#fff}
+.big.md{font-size:84px}
+.big small{font-size:.42em;color:var(--accent-soft);letter-spacing:0}
+
+/* dividers */
+.divider{justify-content:center;align-items:flex-start;background:radial-gradient(1200px 820px at 70% 30%,#0b3a8f 0%,#001E5B 55%,#000f33 100%)}
+.divider::after{background-image:linear-gradient(rgba(0,179,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,179,255,.07) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(1100px 760px at 60% 45%,#000 0%,transparent 75%);mask-image:radial-gradient(1100px 760px at 60% 45%,#000 0%,transparent 75%)}
+.divider .glow{position:absolute;width:900px;height:900px;right:-120px;top:50%;transform:translateY(-50%);border-radius:50%;background:radial-gradient(circle,rgba(0,179,255,.28),transparent 64%);filter:blur(10px);z-index:0}
+.divider.pk .glow{background:radial-gradient(circle,rgba(255,83,138,.24),transparent 64%)}
+.divider.gd .glow{background:radial-gradient(circle,rgba(4,225,203,.22),transparent 64%)}
+.divider .chap{font-family:var(--display);font-size:260px;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(144,208,254,.55);margin-bottom:30px}
+.divider h2{font-size:96px;max-width:1680px}
+.divider .lede{font-size:30px}
+
+/* tooltip */
+#tip{position:fixed;z-index:100;pointer-events:none;background:#fff;color:#001E5B;font-size:15px;font-weight:600;padding:8px 12px;border-radius:10px;box-shadow:0 10px 26px rgba(0,0,0,.35);opacity:0;transition:opacity .12s;white-space:nowrap}
+#tip b{color:#001E5B}
+svg text{font-family:var(--sans)}
+.chart{width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:22px;font-size:17px;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:16px;height:16px;border-radius:4px;display:inline-block}
+
+/* tables */
+table.tb{width:100%;border-collapse:separate;border-spacing:0;font-size:18px;background:rgba(5,38,99,.7);border:1px solid var(--line2);border-radius:18px;overflow:hidden}
+.tb th{font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-soft);text-align:left;padding:13px 16px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--line2);font-weight:700}
+.tb td{padding:10px 16px;border-bottom:1px solid var(--line);color:var(--muted);line-height:1.32;vertical-align:middle}
+.tb td:first-child{color:#fff;font-weight:700}
+.tb tr:last-child td{border-bottom:none}
+.sem{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:10px;vertical-align:-1px;flex-shrink:0}.sem.g{background:var(--good)}.sem.y{background:var(--warn)}.sem.r{background:var(--pink)}.sm18 td{padding:7px 14px}tr.rg td{background:rgba(4,225,203,.05)}tr.ry td{background:rgba(252,192,3,.06)}tr.rr td{background:rgba(255,83,138,.08)}.pn{display:inline-block;margin-left:8px;font-size:12.5px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--pink-dim);color:#ff8db1;border:1px solid rgba(255,83,138,.4)}
+.tag{display:inline-block;font-size:13.5px;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:7px;background:var(--accent-dim);color:var(--accent-soft);white-space:nowrap}
+
+/* finding layout */
+.fhead{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
+.fnum{font-family:var(--display);font-size:30px;color:var(--accent);letter-spacing:.04em}
+.fcols{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;margin-top:30px;flex:1;min-height:0}
+.fcols .card h3{margin-bottom:12px}
+.fcols ul{list-style:none;display:flex;flex-direction:column;gap:13px}
+.fcols li{font-size:22.5px;line-height:1.42}
+.gate{display:flex;align-items:center;gap:16px;padding:16px 22px;border-radius:16px;background:rgba(4,225,203,.1);border:1px solid rgba(4,225,203,.4);font-size:19px;color:#d9fffa}
+.gate .gk{font-family:var(--mono);font-weight:700;color:var(--good);font-size:18px;white-space:nowrap}
+.why{margin-top:22px;padding:18px 22px;border-radius:14px;background:rgba(0,179,255,.08);border-left:4px solid var(--accent)}
+.why .k{font-size:14px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:6px}
+.why p{font-size:22px;color:var(--text);line-height:1.45}
+.fcols>div:last-child>.card{flex:1;display:flex;flex-direction:column}
+.fcols>div:last-child>.card p{font-size:22.5px!important;line-height:1.5}
+.fcols>div:last-child .v41{margin-top:auto}
+.v41{font-size:20.5px;line-height:1.45;color:var(--muted);padding:14px 18px;border-radius:14px;background:rgba(209,125,254,.08);border:1px solid rgba(209,125,254,.3);margin-top:14px}
+.v41 b{color:#e9c8ff}
+
+.rm .slide{transition:none!important}
+.cover-title .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em}.cover-title .wi{display:inline-block}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+
+/* ===== extras de esta sesión ===== */
+.det{color:var(--accent)}.prob{color:var(--pink)}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font-size:16px;font-weight:700;border:1px solid;white-space:nowrap}
+.chip.d{color:var(--accent-soft);background:var(--accent-dim);border-color:rgba(0,179,255,.45)}
+.chip.p{color:#ff8db1;background:var(--pink-dim);border-color:rgba(255,83,138,.45)}
+.chip.b{color:#e3b6ff;background:var(--violet-dim);border-color:rgba(209,125,254,.45)}
+.chip.g{color:var(--good);background:var(--good-dim);border-color:rgba(4,225,203,.4)}
+.chip.y{color:var(--warn);background:var(--warn-dim);border-color:rgba(252,192,3,.4)}
+.btn{font-family:var(--sans);font-size:20px;font-weight:700;color:#fff;background:linear-gradient(92deg,var(--electric),var(--accent));border:0;border-radius:999px;padding:14px 28px;cursor:pointer;box-shadow:0 10px 26px rgba(0,100,255,.35);transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(0,140,255,.5)}
+.btn.ghost{background:rgba(255,255,255,.08);border:1px solid rgba(144,208,254,.4);box-shadow:none}
+.btn.sm{font-size:17px;padding:10px 20px}
+.code{font-family:var(--mono);font-size:18px;line-height:1.55;color:#cfe4ff;background:rgba(0,15,51,.7);border:1px solid var(--line2);border-radius:14px;padding:16px 20px;white-space:pre-wrap}
+.code .kw{color:#ff8db1}.code .vr{color:var(--good)}.code .cm{color:var(--faint)}
+.quote{border-left:4px solid var(--accent);padding:6px 0 6px 22px;font-size:25px;line-height:1.45;color:var(--text);font-style:italic}
+.quote small{display:block;margin-top:8px;font-style:normal;font-size:16px;color:var(--faint);letter-spacing:.04em}
+
+/* simulador A/B */
+.trial{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:18px}
+.trial .t{height:58px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;border:1px solid var(--line2);background:rgba(255,255,255,.03);transition:background .2s}
+.t.ok{background:var(--good-dim);border-color:rgba(4,225,203,.5)}
+.t.bad{background:var(--pink-dim);border-color:rgba(255,83,138,.55)}
+.t.mid{background:var(--warn-dim);border-color:rgba(252,192,3,.5)}
+.t.alt{background:var(--violet-dim);border-color:rgba(209,125,254,.5)}
+.score{font-family:var(--display);font-size:64px;line-height:1}
+.score small{font-size:.38em;color:var(--accent-soft)}
+
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;position:relative;margin-top:40px}
+.pipe::before{content:"";position:absolute;left:4%;right:4%;top:46px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--accent));opacity:.55}
+.pn{position:relative;font-family:var(--sans);text-align:center;color:#fff;background:rgba(10,47,116,.7);border:2px solid var(--line2);border-radius:20px;padding:84px 12px 20px;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .25s,background .25s}
+.pn .bubble{position:absolute;left:50%;top:14px;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:28px;color:#001E5B;background:var(--accent);box-shadow:0 0 0 8px rgba(0,179,255,.18)}
+.pn.p .bubble{background:var(--pink);box-shadow:0 0 0 8px rgba(255,83,138,.2)}
+.pn:hover{transform:translateY(-5px)}
+.pn.on{border-color:#fff;background:rgba(6,106,254,.4)}
+.pn.p.on{background:rgba(255,83,138,.28)}
+.pn h3{font-size:20px;line-height:1.2}
+.pn span{display:block;margin-top:8px;font-size:14px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent-soft)}
+.pn.p span{color:#ff8db1}
+
+/* mapa de subagentes */
+.smap{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
+.sa{font-family:var(--sans);text-align:left;color:#fff;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:16px;padding:14px 18px;cursor:pointer;font-size:19px;font-weight:700;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .25s,background .25s}
+.sa small{display:block;font-size:14px;font-weight:400;color:var(--muted);margin-top:3px}
+.sa:hover{transform:translateY(-4px);border-color:var(--accent)}
+.sa.on{border-color:#fff;background:rgba(6,106,254,.45)}
+.sa.star{border-color:rgba(252,192,3,.6)}
+
+/* interruptor */
+.sw{display:inline-flex;align-items:center;gap:16px;cursor:pointer;background:none;border:0;color:#fff;font-family:var(--sans);font-size:22px;font-weight:700}
+.sw i{width:78px;height:42px;border-radius:999px;background:#334a7d;position:relative;transition:background .25s;flex-shrink:0}
+.sw i::after{content:"";position:absolute;top:5px;left:5px;width:32px;height:32px;border-radius:50%;background:#fff;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.sw.on i{background:var(--good)}.sw.on i::after{transform:translateX(36px)}
+.tool{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 20px;border-radius:14px;border:1px solid var(--line2);margin-top:12px;transition:all .35s}
+.tool b{font-family:var(--mono);font-size:19px}
+.tool .cond{font-family:var(--mono);font-size:15px;color:var(--faint)}
+.tool.on{background:var(--good-dim);border-color:rgba(4,225,203,.55)}
+.tool.off{opacity:.38;background:rgba(255,255,255,.02)}
+.vrow{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-radius:12px;background:rgba(0,15,51,.55);border:1px solid var(--line);margin-top:10px;font-size:19px}
+.vrow .nm{font-family:var(--mono);color:var(--good)}
+.vrow .vl{font-family:var(--mono);color:#fff;font-weight:700}
+.vrow small{display:block;font-size:14px;color:var(--faint);font-family:var(--sans)}
+
+/* quiz */
+.qz{font-family:var(--sans);text-align:left;color:#fff;background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:20px;padding:22px 26px;cursor:pointer;min-height:176px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .3s cubic-bezier(.34,1.56,.64,1),background .3s,border-color .3s}
+.qz:hover{transform:translateY(-4px)}
+.qz h3{font-size:23px;line-height:1.3}
+.qz .hint{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-soft);font-weight:700}
+.qz .ans{display:none;font-size:18px;line-height:1.4;color:var(--muted);margin-top:10px}
+.qz.open{cursor:default}
+.qz.open .ans{display:block}
+.qz.open .hint{display:none}
+.qz.open.llm{border-color:rgba(255,83,138,.6);background:rgba(255,83,138,.1)}
+.qz.open.cod{border-color:rgba(0,179,255,.6);background:rgba(0,179,255,.1)}
+.qz.open.amb{border-color:rgba(209,125,254,.6);background:rgba(209,125,254,.1)}
+
+/* notas del orador */
+#notes{position:fixed;left:0;right:0;bottom:0;z-index:90;background:rgba(0,10,40,.96);border-top:2px solid var(--accent);padding:18px 40px 22px;display:none;max-height:38vh;overflow:auto}
+#notes.show{display:block}
+#notes .nh{display:flex;justify-content:space-between;gap:20px;font-size:14px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-soft);margin-bottom:8px}
+#notes .nb{font-size:19px;line-height:1.55;color:#eaf5fe;max-width:1500px}
+aside.notes{display:none}
+.hl{background:linear-gradient(transparent 62%,rgba(0,179,255,.35) 0)}
+.big2{font-family:var(--display);font-weight:600;font-size:150px;line-height:.95;letter-spacing:-.03em}
+.stat .lb{font-size:19px;line-height:1.35;margin-top:10px;color:var(--muted)}
+
+.card p{font-size:25px}.card h3{font-size:30px}.tb{font-size:23px}.tb td{padding:18px 20px}.tb th{font-size:15px}.why p{font-size:25px}.lede{font-size:26px!important}
+</style>
+</head>
+<body>
+<div id="deck">
+<div class="progress" id="progress"></div>
+<section class="slide cover" data-anim="cover">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:54px;top:170px;width:88px">
+  <img class="spk" src="assets/img/sp-yellow.png" alt="" style="left:96px;bottom:150px;width:40px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:64px;bottom:120px;width:60px">
+  <div class="body" style="justify-content:center">
+    <div class="eyebrow" data-a>Betterware × Salesforce · Avance semanal · 16 al 20 de noviembre</div>
+    <h1 class="cover-title" style="max-width:1200px">Betty FDE:<br><span class="grad">avance de la semana</span></h1>
+    <p class="lede" data-a style="max-width:1080px;margin-top:22px">Qué quedó en producción, qué encontramos al probar todo el agente y qué descubrimos sobre la base de conocimiento, que explica por qué algunas respuestas fallan.</p>
+    <div data-a style="display:flex;gap:16px;margin-top:40px"><span class="chip d">En producción</span><span class="chip g">Probado a fondo</span><span class="chip y">Hallazgo en conocimiento</span></div>
+  </div>
+  <img class="astro" src="assets/img/agent-astro.png" alt="" style="position:absolute;right:150px;top:300px;width:470px;z-index:1">
+  <aside class="notes">Resumen de la semana del 16 al 20 de noviembre. Tres mensajes: Betty ya opera en producción con su propio usuario y con el pedido extemporáneo reemplazado; probamos todo el agente y encontramos seis ajustes; y encontramos por qué la base de conocimiento responde mal en algunos casos.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow" data-a>De un vistazo</div>
+  <h2 data-a>Betty opera con su propio usuario y <span class="grad">el pedido extemporáneo ya está reemplazado</span></h2>
+  <div class="grid g4" style="margin-top:40px" data-pop>
+    <div class="card bar"><div class="big md">v57</div><h3 style="margin-top:10px">Versión activa</h3><p>Desde el 17 de noviembre, con un usuario propio de Betty, separado del agente anterior.</p></div>
+    <div class="card bar g"><div class="big md">73 de 74</div><h3 style="margin-top:10px">Pruebas en producción</h3><p>Conversaciones de pedido extemporáneo; la única falla fue del propio caso de prueba.</p></div>
+    <div class="card bar v"><div class="big md">66</div><h3 style="margin-top:10px">Pruebas de todo el agente</h3><p>Doce subagentes y más de 45 procesos, solo lectura; 6 hallazgos por corregir.</p></div>
+    <div class="card bar y"><div class="big md">57%</div><h3 style="margin-top:10px">Del índice, sin respuesta</h3><p>Más de la mitad de los fragmentos de la base de conocimiento no trae información útil.</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:28px" data-pop>
+    <div class="card"><div class="k">Lo que ya está</div><p>Pedido extemporáneo reemplazado por un flujo con reglas claras y confirmación explícita, ya en producción. Betty con su propio usuario, sin compartir identidad ni permisos con el agente anterior. Programa Insiders al 50%.</p></div>
+    <div class="card"><div class="k">Lo que encontramos</div><p>La búsqueda de la base de conocimiento no encuentra los artículos que existen solo en español, los artículos mezclan texto interno con la respuesta y omiten cifras en el resumen, y quedan seis ajustes por hacer en el agente.</p></div>
+  </div>
+  <aside class="notes">Betty v57 está activa desde el 17 de noviembre con usuario propio. Probamos el pedido extemporáneo en producción: 73 de 74 conversaciones sin fallas. Probamos todo el agente: 66 pruebas y seis hallazgos. Y el hallazgo grande: 57% de los fragmentos del índice de conocimiento no trae información útil.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow gd" data-a>Pedido extemporáneo · del 9 al 17 de noviembre</div>
+  <h2 data-a>Pedido extemporáneo, <span class="grad">reemplazado y en producción</span></h2>
+  <p class="lede" data-a style="font-size:23px;max-width:1500px">El proceso anterior se reemplazó por un flujo que valida horario, tipo de solicitud, motivo e importe antes de registrar, y que solo registra con confirmación explícita y un folio real.</p>
+  <table class="tb" style="margin-top:26px" data-a><thead><tr><th>Qué se hizo</th><th>Resultado</th><th>Fecha</th></tr></thead><tbody>
+    <tr><td>Reglas en producción</td><td>Valida horario, si la solicitud es propia o de linaje, motivo e importe. Nunca se registra sin confirmación explícita ni sin folio real.</td><td><span class="tag">12-nov</span></td></tr>
+    <tr><td>Pruebas de lógica</td><td>4,111 casos y más de 34 mil mensajes simulados, todos en verde.</td><td><span class="tag">13-nov</span></td></tr>
+    <tr><td>Conversaciones en producción</td><td>74 conversaciones con el distribuidor de prueba autorizado: 35 de 35 en inicio, tipo, aceptación, motivo e importe; 21 de 21 en linaje, consulta y pagos; 17 de 18 en dudas y seguridad.</td><td><span class="tag">17-nov</span></td></tr>
+    <tr><td>Versión activa</td><td>Betty v57 en producción, con el pedido extemporáneo reemplazado y usuario propio.</td><td><span class="tag">17-nov</span></td></tr>
+  </tbody></table>
+  <div class="why" data-a><div class="k">Importante</div><p>La única falla fue una expectativa del caso de prueba: Betty rechazó correctamente una instrucción maliciosa. Las pruebas se detienen antes de crear el pedido, así que no se registraron pedidos de prueba en producción; el seguimiento de los primeros registros reales va dentro del monitoreo continuo.</p></div>
+  <aside class="notes">El proceso se reemplazó y está en producción. Probamos primero la lógica con más de cuatro mil casos y después conversaciones completas en producción. Una falla de 74, y fue del caso de prueba, no de Betty. No se crearon pedidos de prueba; el seguimiento de los primeros registros reales va en el monitoreo.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow pk" data-a>Pruebas de todo el agente · doce subagentes, solo lectura</div>
+  <h2 data-a>Probamos todo el agente: <span class="grad">38 de 66 sin fallas y 6 hallazgos reales</span></h2>
+  <p class="lede" data-a style="font-size:23px;max-width:1500px">Muchas de las "fallas" fueron Betty pidiendo un dato antes de actuar, que es lo correcto. Estos son los hallazgos reales.</p>
+  <table class="tb" style="margin-top:22px" data-a><thead><tr><th>Hallazgo</th><th>Qué pasa</th><th>Qué haremos</th></tr></thead><tbody>
+    <tr><td>Devoluciones de BW+</td><td>La consulta se envía a premios, que no tiene esa información, y responde con premios canjeados.</td><td><span class="tag">Corregir enrutamiento</span></td></tr>
+    <tr><td>Traspasos de una asociada</td><td>Se manda a un tema que no puede consultarlos y termina ofreciendo un ejecutivo.</td><td><span class="tag">Corregir enrutamiento</span></td></tr>
+    <tr><td>Contraseña con acceso temporal</td><td>El agente intenta generar el enlace. El sistema lo rechaza por seguridad, pero el candado del agente debería frenarlo antes.</td><td><span class="tag">Reforzar candado</span></td></tr>
+    <tr><td>La palabra "catálogo"</td><td>Puede disparar el traspaso a un ejecutivo aunque la distribuidora esté respondiendo otra pregunta.</td><td><span class="tag">Ajustar el tema</span></td></tr>
+    <tr><td>Garantía, bonificación y reclutas</td><td>Terminan en preguntas generales y ofrecen ejecutivo en lugar de usar su propia consulta.</td><td><span class="tag">Revisar enrutamiento</span></td></tr>
+    <tr><td>Número de tarjeta enviado</td><td>Vuelve a pedir el código sin dar el aviso de seguridad sobre datos bancarios.</td><td><span class="tag">Agregar el aviso</span></td></tr>
+  </tbody></table>
+  <aside class="notes">Recorrimos los doce subagentes con consultas reales de solo lectura. Quedaron fuera por escribir en producción el traspaso real a ejecutivo, el cierre del pedido extemporáneo y los adjuntos. Los seis hallazgos son de enrutamiento y de candados; ninguno afecta datos de distribuidoras.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow" data-a>Programa y plan · estado al 19 de noviembre</div>
+  <h2 data-a>Insiders al 50% y <span class="grad">el plan al día de hoy</span></h2>
+  <div class="grid g4" style="margin-top:40px" data-pop>
+    <div class="card bar"><div class="big md">50%</div><h3 style="margin-top:10px">Programa Insiders</h3><p>Nivel actual de la escalada del programa.</p></div>
+    <div class="card bar g"><div class="big md">26 de 62</div><h3 style="margin-top:10px">Actividades terminadas</h3><p>11 en curso, 22 por iniciar, 2 bloqueadas y 1 programada.</p></div>
+    <div class="card bar y"><div class="big md">13</div><h3 style="margin-top:10px">Con fecha vencida</h3><p>Seguridad y autenticación (Fase 2) y el cierre de la escalada al 80% y GA.</p></div>
+    <div class="card bar v"><div class="big md">4</div><h3 style="margin-top:10px">Días para la Fase 3</h3><p>El UAT formal y el bugfix arrancan el 23 de noviembre.</p></div>
+  </div>
+  <table class="tb" style="margin-top:30px" data-a><thead><tr><th>Fase</th><th>Avance</th><th>Comentario</th></tr></thead><tbody>
+    <tr><td>0 · Preparación y 1 · Pruebas conjuntas</td><td><span class="tag">100%</span></td><td>17 actividades terminadas.</td></tr>
+    <tr><td>Escalada del programa Insiders</td><td><span class="tag">74%</span></td><td>Escalada al 20% y al 50% hecha; pendientes el 80% y el GA.</td></tr>
+    <tr><td>2 · Reemplazo gradual</td><td><span class="tag">45%</span></td><td>Se suma el pedido extemporáneo, terminado. Siguen seguridad, autenticación y el resto de las acciones.</td></tr>
+    <tr><td>3 · UAT formal y 4 · Go-live</td><td><span class="tag">0 a 6%</span></td><td>Empiezan el 23 de noviembre y el 7 de diciembre.</td></tr>
+  </tbody></table>
+  <aside class="notes">El plan tiene 62 actividades en seis fases. Las dos primeras están completas y la escalada de Insiders va al 74%. Los mayores pendientes están en seguridad y autenticación y en el cierre de la escalada; son 13 actividades con fecha vencida.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow pk" data-a>Base de conocimiento · hallazgo de la semana · 1 de 3</div>
+  <h2 data-a>Qué encontramos en la <span class="grad">base de conocimiento</span></h2>
+  <div class="grid g4" style="margin-top:34px" data-pop>
+    <div class="card bar"><div class="big md">798</div><h3 style="margin-top:10px">Artículos en español</h3><p>632 existen solo en español; 166 tienen versión en inglés idéntica.</p></div>
+    <div class="card bar y"><div class="big md">57%</div><h3 style="margin-top:10px">Fragmentos sin respuesta</h3><p>De 8,705 fragmentos del índice, unos 4,900 solo repiten título y pregunta.</p></div>
+    <div class="card bar y"><div class="big md">0 de 98</div><h3 style="margin-top:10px">Solo en español, encontrados</h3><p>El buscador estándar devolvió solo artículos en inglés, incluso con el título exacto.</p></div>
+    <div class="card bar y"><div class="big md">≈214</div><h3 style="margin-top:10px">Resúmenes con cifras omitidas</h3><p>Falta una hora, un monto o un plazo que sí está en el detalle (estimación).</p></div>
+  </div>
+  <table class="tb" style="margin-top:26px" data-a><thead><tr><th>Capa</th><th>Qué encontramos</th></tr></thead><tbody>
+    <tr><td>Artículos</td><td>Texto interno mezclado con la respuesta, 56 muy largos y 88 muy cortos, y ninguno con responsable ni fecha de revisión.</td></tr>
+    <tr><td>Datos en Data Cloud</td><td>La respuesta y la pregunta se copian a dos campos cada una, sin saber cuál es el oficial.</td></tr>
+    <tr><td>Índice</td><td>Doce campos indexados, incluidos número de artículo, URL y campos vacíos; contiene también archivados y borradores.</td></tr>
+    <tr><td>Buscadores y plantillas</td><td>Dos buscadores y dos plantillas con modelos e instrucciones distintos; el mensaje de "no encontré" sale en inglés.</td></tr>
+  </tbody></table>
+  <aside class="notes">Revisamos de punta a punta cómo se construye una respuesta. Los problemas empiezan en el contenido y se amplifican en cada capa. El dato más fuerte: de 98 artículos que existen solo en español, el buscador estándar no devolvió ninguno.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow pk" data-a>Base de conocimiento · hallazgo de la semana · 2 de 3</div>
+  <h2 data-a>Por qué Betty responde bien, <span class="grad">a medias o no responde</span></h2>
+  <p class="lede" data-a style="font-size:23px;max-width:1500px">Medimos las dos plantillas con 82 consultas reales y con 120 preguntas generadas desde los propios artículos. Ninguna es fiable por sí sola: cada una falla de forma distinta.</p>
+  <table class="tb" style="margin-top:20px" data-a><thead><tr><th>Cómo falla</th><th>Qué ocurre</th><th>Evidencia</th></tr></thead><tbody>
+    <tr><td>No encuentra el artículo</td><td>El buscador estándar no devuelve artículos en español.</td><td><span class="tag">0 de 98</span></td></tr>
+    <tr><td>Responde un tema vecino</td><td>Presenta con seguridad algo parecido pero distinto.</td><td><span class="tag">22 de 82</span></td></tr>
+    <tr><td>Respuesta incompleta</td><td>Responde con el resumen, que omite cifras del detalle.</td><td><span class="tag">28 de 120 completas</span></td></tr>
+    <tr><td>"No encontré" con artículo existente</td><td>La plantilla activa no recibe el fragmento correcto.</td><td><span class="tag">52 de 120</span></td></tr>
+    <tr><td>Mensaje en inglés</td><td>La frase de "sin respuesta" está en inglés en ambas.</td><td><span class="tag">9 y 15 de 82</span></td></tr>
+    <tr><td>Sin trazabilidad</td><td>La fuente es el nombre de un campo, no un artículo.</td><td><span class="tag">418 de 561</span></td></tr>
+  </tbody></table>
+  <div class="grid g2" style="margin-top:22px" data-pop>
+    <div class="card"><div class="k">Con el agente anterior</div><p>Los dos agentes usan el mismo flujo de conocimiento. La diferencia está en cómo cada uno arma la consulta y presenta la respuesta: igualarlo es un trabajo de agente y se puede hacer antes de reconstruir.</p></div>
+    <div class="card"><div class="k">Qué no resuelve</div><p>Mejorar solo el texto de la plantilla no basta: mientras el buscador no devuelva el artículo correcto, ninguna redacción puede responder desde él.</p></div>
+  </div>
+  <aside class="notes">Seis formas de fallar, con evidencia. Muestras: 82 consultas reales y 60 artículos con dos preguntas cada uno, evaluadas con un juez automático que coincidió con la revisión manual en 8 de 11 casos. La conclusión: hay que corregir contenido y búsqueda antes que el texto de la plantilla.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow yl" data-a>Base de conocimiento · hallazgo de la semana · 3 de 3 · fuera del calendario actual</div>
+  <h2 data-a>Reconstruir la base de conocimiento: <span class="grad">qué implica</span></h2>
+  <p class="lede" data-a style="font-size:23px;max-width:1500px">Corregirlo de raíz es un proyecto en sí mismo. Está documentado en un plan de 25 páginas, pero no forma parte del plan vigente ni de sus fechas.</p>
+  <div class="grid g2" style="margin-top:30px" data-pop>
+    <div class="card bar"><div class="k">Cómo se haría</div><p>Decisiones y línea base de medición. Diseño del modelo limpio del artículo. Limpieza técnica del mapeo, el índice y el buscador en un entorno de pruebas. Reescritura de artículos, revisados y aprobados por Betterware, como una nueva versión de cada uno; el original queda archivado y consultable. Plantilla, flujo y agente nuevos, validación y corte a producción por lotes.</p></div>
+    <div class="card bar y"><div class="k">Cuánto toma</div><p>Unos 47 días de trabajo técnico, casi 6 semanas. <b>Piloto de 80 artículos:</b> unas 8 semanas hasta producción. <b>Los 798 artículos:</b> entre 14 y 20 semanas, según si Betterware tiene 4 o 2 revisores. Cada artículo requiere unos 20 minutos de revisión humana.</p></div>
+  </div>
+  <table class="tb" style="margin-top:26px" data-a><thead><tr><th>Decisión que necesitamos</th><th>Quién</th></tr></thead><tbody>
+    <tr><td>Cuál es el campo oficial de respuesta, y qué se hace con los artículos en inglés</td><td>Dueño del contenido</td></tr>
+    <tr><td>Cuántos revisores y cuántas horas por semana pueden dedicar, y el alcance: piloto, 300 artículos o los 798</td><td>Betterware</td></tr>
+    <tr><td>Aceptar que el agente anterior y la app B+ vean los artículos corregidos al publicar</td><td>Betterware</td></tr>
+  </tbody></table>
+  <aside class="notes">Esto no está en el plan vigente y no mueve ninguna fecha; es un hallazgo con propuesta. Si Betterware decide hacerlo, un piloto de 80 artículos llega a producción en unas ocho semanas y el total en catorce a veinte, según los revisores disponibles.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow yl" data-a>Próximas dos semanas</div>
+  <h2 data-a>Lo que sigue y <span class="grad">lo que necesitamos de Betterware</span></h2>
+  <div class="grid g3" style="margin-top:40px" data-pop>
+    <div class="card bar"><div class="big md">1</div><h3 style="margin-top:10px">Igualar a Betty con el agente anterior en conocimiento</h3><p style="margin-top:8px">Comparar ambas con las mismas preguntas reales, sin cambiar la base de conocimiento, y corregir solo en el agente, conservando las reglas de no inventar ni divagar. Entre 4 y 6 días.</p></div>
+    <div class="card bar g"><div class="big md">2</div><h3 style="margin-top:10px">Corregir los seis hallazgos y volver a probar todo el agente</h3><p style="margin-top:8px">Enrutamiento de devoluciones y traspasos, candado de la contraseña, la palabra "catálogo" y el aviso por datos bancarios; con regresión completa antes de publicar.</p></div>
+    <div class="card bar y"><div class="big md">3</div><h3 style="margin-top:10px">Tres confirmaciones de Betterware</h3><p style="margin-top:8px">Si el teléfono registrado del código de prueba cambió a propósito (hoy impide la autenticación normal); las decisiones del plan de conocimiento; y si se amplía la autorización de pruebas en producción.</p></div>
+  </div>
+  <aside class="notes">Tres frentes para las próximas dos semanas. Lo que más nos ayuda de Betterware: confirmar el teléfono del código de prueba, decidir sobre el plan de conocimiento y ampliar la autorización de pruebas en producción.</aside>
+</section>
+<section class="slide cover">
+  <img class="spk" src="assets/img/sp-pink.png" alt="" style="left:120px;top:200px;width:70px">
+  <img class="spk" src="assets/img/sp-green.png" alt="" style="right:100px;bottom:140px;width:56px">
+  <div class="body" style="justify-content:center">
+    <div class="eyebrow gd" data-a>Betty FDE · avance semanal</div>
+    <h1 style="font-size:120px" data-a>Gracias</h1>
+    <p class="lede" data-a style="max-width:1000px">Quedamos atentos a las decisiones sobre conocimiento y a la autorización de pruebas para seguir avanzando hacia el UAT formal.</p>
+  </div>
+  <img class="astro" src="assets/img/agent-astro.png" alt="" style="position:absolute;right:150px;top:300px;width:470px;z-index:1">
+  <aside class="notes">Cierre. Quedamos atentos a las decisiones y a la autorización de pruebas para llegar al UAT formal.</aside>
+</section>
+</div>
+<div id="tip"></div>
+<div id="notes"><div class="nh"></div><div class="nb"></div></div>
+<script src="assets/gsap.min.js"></script>
+<script>
+(() => {
+const deck = document.getElementById('deck');
+const slides = Array.from(deck.querySelectorAll('.slide'));
+const total = slides.length;
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]still/.test(location.search) || !window.gsap;
+const pad = n => String(n).padStart(2, '0');
+if (RM) document.documentElement.classList.add('rm');
+
+function fit(){ const s = Math.min(innerWidth/1920, innerHeight/1080);
+  deck.style.transform = `translate(${(innerWidth-1920*s)/2}px,${(innerHeight-1080*s)/2}px) scale(${s})`; }
+addEventListener('resize', fit); fit();
+
+/* chrome: pill co-brand + número */
+slides.forEach((s, i) => {
+  const p = document.createElement('div'); p.className = 'pill';
+  p.innerHTML = '<img src="assets/img/betterware-logo.png" alt="Betterware" style="height:22px"><i></i><img src="assets/img/sf-logo.svg" alt="Salesforce">';
+  s.prepend(p);
+  const n = document.createElement('div'); n.className = 'snum'; n.textContent = `${pad(i+1)} / ${pad(total)}`; s.append(n);
+});
+
+/* notas del orador (tecla N) */
+const notes = document.getElementById('notes');
+function showNotes(){ const s = slides[cur], a = s.querySelector('aside.notes');
+  notes.querySelector('.nh').innerHTML = `<span>Notas del orador · diapositiva ${cur+1}</span><span>min ${''}</span>`;
+  notes.querySelector('.nb').textContent = a ? a.textContent : ''; }
+
+/* ---------- coreografía por diapositiva ---------- */
+function play(s){
+  if (RM) return;
+  if (s._tl) { s._tl.progress(1).kill(); }
+  const tl = gsap.timeline(); s._tl = tl;
+  if (s.dataset.anim === 'cover') {
+    const t = s.querySelector('.cover-title');
+    if (!t.dataset.split) { t.dataset.split = 1;
+      t.innerHTML = t.innerHTML.replace(/(<span class="grad">)(.*?)(<\/span>)/, (m, a, b, c) => b.split(' ').map(w => `<span class="w"><span class="grad wi">${w}</span></span>`).join(' '))
+        .replace(/^([^<]+)/, m => m.trim().split(' ').map(w => `<span class="w"><span class="wi">${w}</span></span>`).join(' ') + ' '); }
+    tl.from(t.querySelectorAll('.wi'), {yPercent:110, duration:1, stagger:.09, ease:'power4.out'}, .15)
+      .from(s.querySelector('.astro'), {x:120, y:40, rotation:8, opacity:0, duration:1.4, ease:'power3.out'}, .3);
+    gsap.to(s.querySelector('.astro'), {y:'-=16', duration:3.2, repeat:-1, yoyo:true, ease:'sine.inOut', delay:1.6});
+  }
+  if (s.dataset.anim === 'divider') {
+    tl.from(s.querySelector('.chap'), {scale:.6, opacity:0, duration:1.1, ease:'expo.out'}, 0)
+      .from(s.querySelector('.glow'), {scale:.4, opacity:0, duration:1.6, ease:'power2.out'}, 0);
+  }
+  if (s.dataset.anim === 'plan') {
+    tl.from(s.querySelector('.tl-line'), {scaleX:0, duration:1.4, ease:'power2.inOut'}, .3)
+      .from(s.querySelectorAll('.dot'), {scale:0, duration:.5, stagger:.3, ease:'back.out(3)'}, .4);
+  }
+  tl.from(s.querySelectorAll('[data-a]'), {y:30, opacity:0, duration:.7, stagger:.08, ease:'power3.out'}, .05);
+  s.querySelectorAll('[data-pop]').forEach(g => tl.from(g.children, {y:26, scale:.95, opacity:0, duration:.6, stagger:.08, ease:'back.out(1.6)'}, .25));
+  tl.from(s.querySelectorAll('.spk'), {scale:0, rotation:-70, opacity:0, duration:1, stagger:.12, ease:'back.out(2)'}, .2);
+  setTimeout(() => { if (s._tl === tl && tl.progress() < 1) tl.progress(1); }, 4500);
+}
+
+/* ---------- navegación ---------- */
+const progress = document.getElementById('progress');
+let cur = 0;
+function go(i){ i = Math.max(0, Math.min(total-1, i));
+  slides[cur].classList.remove('active'); cur = i; slides[cur].classList.add('active');
+  progress.style.width = `${(cur+1)/total*100}%`; history.replaceState(null, '', '#' + (cur+1)); play(slides[cur]);
+  if (notes.classList.contains('show')) showNotes(); }
+addEventListener('keydown', e => {
+  if (['ArrowRight',' ','PageDown'].includes(e.key)) { e.preventDefault(); go(cur+1); }
+  else if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); go(cur-1); }
+  else if (e.key === 'Home') go(0); else if (e.key === 'End') go(total-1);
+  else if (e.key === 'n' || e.key === 'N') { notes.classList.toggle('show'); showNotes(); }
+  else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); } });
+deck.addEventListener('click', e => { if (e.target.closest('a,button,.no-advance,.pn,.sa,.qz') || getSelection().toString()) return;
+  (e.clientX < innerWidth * .25) ? go(cur-1) : go(cur+1); });
+cur = Math.max(0, Math.min(total-1, (parseInt(location.hash.slice(1)) || 1) - 1));
+slides[cur].classList.add('active'); go(cur);
+})();
+
+</script>
+</body>
+</html>
