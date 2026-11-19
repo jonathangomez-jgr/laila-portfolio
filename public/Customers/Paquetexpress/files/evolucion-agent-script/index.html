@@ -280,6 +280,24 @@ table.tb.s th{font-size:13px;padding:10px 14px}
 .ck{list-style:none;display:flex;flex-direction:column;gap:11px}
 .ck li{font-size:20.5px;line-height:1.38;padding-left:38px;position:relative;color:var(--text)}
 .ck li::before{content:"";position:absolute;left:0;top:4px;width:22px;height:22px;border-radius:6px;border:2px solid var(--accent)}
+.pv-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
+.pv-top .sp{flex:1}
+.pb{font-family:var(--sans);font-size:19px;font-weight:700;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(144,208,254,.4);border-radius:999px;padding:9px 20px;cursor:pointer;transition:background .2s,transform .3s cubic-bezier(.34,1.56,.64,1)}
+.pb:hover{transform:translateY(-2px);background:rgba(0,179,255,.22)}
+.pb.on{background:linear-gradient(90deg,var(--electric),var(--accent));border-color:transparent}
+.pv-cap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:19px;color:var(--muted)}
+.pv-cap b{color:#fff}
+.pv{display:grid;gap:22px;margin-top:14px;flex:1;min-height:0}
+.pv.two{grid-template-columns:1fr 1fr}.pv.one{grid-template-columns:1fr}
+.pv figure{background:rgba(10,47,116,.62);border:1px solid var(--line2);border-radius:18px;padding:12px 14px 14px;display:flex;flex-direction:column;min-height:0;cursor:zoom-in}
+.pv figcaption{font-size:14px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-soft);margin-bottom:8px;display:flex;justify-content:space-between}
+.pv .im{flex:1;min-height:0;display:flex;align-items:flex-start;justify-content:center}
+.pv img{max-width:100%;max-height:100%;object-fit:contain;border-radius:10px;background:#fff}
+.pv.one figure{cursor:pointer}
+.lbx{position:absolute;inset:0;z-index:70;background:rgba(0,10,40,.92);display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;cursor:zoom-out}
+.lbx.show{display:flex}
+.lbx img{width:1700px;height:860px;object-fit:contain;background:transparent;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.lbx span{font-size:18px;color:var(--accent-soft);letter-spacing:.14em;text-transform:uppercase;font-weight:700}
 .chain{display:flex;align-items:center;gap:12px;margin-top:12px;font-size:18.5px;color:#fff}
 .chain .n{padding:8px 14px;border-radius:12px;border:1px solid var(--line2);background:rgba(10,47,116,.7);font-weight:700}
 .chain .ar{color:var(--accent);font-size:24px}
@@ -307,7 +325,7 @@ table.tb.s th{font-size:13px;padding:10px 14px}
   <div class="grid g4" style="margin-top:40px" data-pop>
     <div class="card bar"><div class="big md">8</div><h3 style="margin-top:10px">Solicitudes de alcance</h3><p style="font-size:21px">3 en pausa por decisión de Paquetexpress y 5 en espera de pruebas, en 2 etapas.</p></div>
     <div class="card bar g"><div class="big md">0 de 11</div><h3 style="margin-top:10px">Observaciones que son regresión</h3><p style="font-size:21px">Por configuración, producción v5 se comporta igual. Falta confirmarlo conversando.</p></div>
-    <div class="card bar y"><div class="big md">0 de 33</div><h3 style="margin-top:10px">Escenarios ejecutados</h3><p style="font-size:21px">Ya están definidos con los mismos datos para ambos agentes; falta correrlos.</p></div>
+    <div class="card bar y"><div class="big md">0 de 33</div><h3 style="margin-top:10px">Escenarios ejecutados</h3><p style="font-size:21px">Definidos con los mismos datos para ambos agentes. Aparte hay 7 pruebas manuales sobre producción v5.</p></div>
     <div class="card bar v"><div class="big md">39–65 d</div><h3 style="margin-top:10px">Para atender lo adicional</h3><p style="font-size:21px">Esfuerzo aproximado de 11 solicitudes fuera de la v25, con un recurso. No es compromiso.</p></div>
   </div>
   <div class="grid g2" style="margin-top:28px" data-pop>
@@ -402,12 +420,12 @@ table.tb.s th{font-size:13px;padding:10px 14px}
     <div style="display:flex;flex-direction:column;gap:16px" data-pop>
       <div class="card s"><p><span class="lv A">A</span><b>Configuración comparada</b> (19-nov). Metadata de ambas orgs: topics, instrucciones, flujos y Apex.</p></div>
       <div class="card s"><p><span class="lv B">B</span><b>Validación reportada</b> por Freeway de varias correcciones. Sin evidencia adjunta en las fuentes.</p></div>
-      <div class="card s"><p><span class="lv C">C</span><b>Conversaciones ejecutadas:</b> 0 de 33 escenarios. No hay tráfico real analizado.</p></div>
+      <div class="card s"><p><span class="lv C">C</span><b>Conversaciones ejecutadas:</b> 7 pruebas manuales sobre producción v5 (slides 9–10); 0 de 33 escenarios comparativos. Sin tráfico real.</p></div>
     </div>
     <table class="tb s" data-pop>
       <tr><th style="width:24%">Métrica</th><th style="width:15%">Estado</th><th>Cómo medirla</th></tr>
       <tr><td>Resolución efectiva</td><td><span class="cl p">Pendiente</span></td><td>Correr los 33 escenarios en v5 y v25 con la misma verificación y datos</td></tr>
-      <tr><td>Exactitud de importes y fechas</td><td><span class="cl p">Pendiente</span></td><td>Comparar contra la página web con CP reales (faltan Zona Plus y frontera)</td></tr>
+      <tr><td>Exactitud de importes y fechas</td><td><span class="cl y">Parcial</span></td><td>Producción v5: 7 de 7 importes iguales al portal. Falta v25, Zona Plus y frontera</td></tr>
       <tr><td>Latencia por turno (LAT-01)</td><td><span class="cl p">Pendiente</span></td><td>Tiempo por turno y por acción, con umbral de 10 s</td></tr>
       <tr><td>Cumplimiento de reglas</td><td><span class="cl y">Parcial</span></td><td>Candados verificados en configuración; falta verlos en conversación</td></tr>
       <tr><td>Transferencias a un asesor</td><td><span class="cl p">Pendiente</span></td><td>Escenarios de escalamiento operativo y de asesor</td></tr>
@@ -419,19 +437,57 @@ table.tb.s th{font-size:13px;padding:10px 14px}
   <aside class="notes">Min 3. Es la slide de transparencia. Tres niveles de evidencia: A configuración, B validación reportada, C conversaciones ejecutadas. Hoy solo hay A. Propuesta: la ronda conjunta produce el primer dato C.</aside>
 </section>
 <section class="slide">
+  <div class="eyebrow pk" data-a>Pruebas manuales · producción v5</div>
+  <h2 data-a>En 7 pruebas los importes coinciden con el portal; <span class="grad">la fecha de Express 2 Day no</span></h2>
+  <table class="tb s" style="margin-top:24px;font-size:16.5px" data-pop>
+    <tr><th style="width:7%">Prueba</th><th style="width:15%">Ruta (CP)</th><th style="width:17%">Envío</th><th style="width:19%">Servicios</th><th style="width:19%">Importe agente = portal</th><th>Fecha de entrega</th></tr>
+    <tr><td>1</td><td>22000 → 36294</td><td>85 kg · 75×50×45</td><td>EAD · sin seguro</td><td>$3,229.76 <span class="cl g">Igual</span></td><td><span class="cl n">Sin captura</span></td></tr>
+    <tr><td>2</td><td>81270 → 21395</td><td>40 kg · 30×25×20</td><td>RAD · EAD · seguro $52,000</td><td>Std $1,919.17 · Exp $3,774.26 <span class="cl g">Igual</span></td><td>Express: 19 vs 20 nov <span class="cl p">Difiere</span></td></tr>
+    <tr><td>3</td><td>82124 → 66473</td><td>35 kg · 20×40×70</td><td>RAD · EAD · seguro $1,540</td><td>Std $1,046.90 · Exp $2,529.64 <span class="cl g">Igual</span></td><td>Express: 19 vs 20 nov <span class="cl p">Difiere</span></td></tr>
+    <tr><td>3-2</td><td>82124 → 66473</td><td>35 kg · 20×40×70</td><td>Sin RAD ni EAD · $1,540</td><td>Std $741.59 · Exp $2,529.64 <span class="cl g">Igual</span></td><td>19 nov <span class="cl g">Igual</span></td></tr>
+    <tr><td>4</td><td>80000 → 23070</td><td>75 kg · 60×10×50</td><td>EAD · seguro $560</td><td>$1,654.46 <span class="cl g">Igual</span></td><td>19 nov <span class="cl g">Igual</span></td></tr>
+    <tr><td>5</td><td>76246 → 54769</td><td>1,400 kg · 170×46×120</td><td>RAD · EAD · sin seguro</td><td>$15,720.49 <span class="cl g">Igual</span></td><td>19 nov <span class="cl g">Igual</span></td></tr>
+    <tr><td>6</td><td>93308 → 72320</td><td>260 kg · 62×30×58</td><td>RAD · seguro $9,500</td><td>$2,811.00 <span class="cl g">Igual</span></td><td>18 nov <span class="cl g">Igual</span></td></tr>
+  </table>
+  <div class="grid g3" style="margin-top:18px" data-pop>
+    <div class="card s bar g"><div class="k">Importes</div><p>7 de 7 coinciden, incluidos 2 casos con dos servicios.</p></div>
+    <div class="card s bar p"><div class="k">Fecha</div><p>Con recolección, el portal entrega Express 2 Day un día después que el agente (2 de 2 casos).</p></div>
+    <div class="card s bar y"><div class="k">Alcance de la prueba</div><p>Solo producción v5 y envíos nacionales. Sin Zona Plus ni agente v25.</p></div>
+  </div>
+  <div class="src">pruebas Andres paquetexpress.xlsx y capturas (agente por WhatsApp frente a Cotiza y Envía del portal). Fecha de prueba inferida de las capturas: 18-nov-2026. EAD: entrega a domicilio; RAD: recolección a domicilio.</div>
+  <aside class="notes">Min 2. Resultado concreto de las pruebas manuales de Andrés sobre producción v5. Los importes coinciden en los 7 casos; esto matiza la idea de que las cotizaciones difieren del portal, al menos en envíos nacionales. La diferencia real es la fecha de Express 2 Day cuando hay recolección. Además, ambos aceptaron un seguro de 52,000 sin bloquear (FP-05). Prueba 1 sin captura. No se probaron Zona Plus ni v25.</aside>
+</section>
+<section class="slide">
+  <div class="eyebrow pk" data-a>Comparador · portal contra agente</div>
+  <h2 data-a style="font-size:50px">Compara cada cotización <span class="grad">lado a lado</span></h2>
+  <div class="no-advance" id="pv">
+    <div class="pv-top">
+      <span id="pvTabs" style="display:flex;gap:10px"></span>
+      <span class="sp"></span>
+      <button class="pb on" data-mode="two">Lado a lado</button>
+      <button class="pb" data-mode="one">Alternar (clic)</button>
+    </div>
+    <div class="pv-cap" id="pvCap"></div>
+    <div class="pv two" id="pvGrid" style="height:640px"></div>
+  </div>
+  <div class="lbx" id="lbx"><span id="lbxT"></span><img id="lbxI" alt=""></div>
+  <div class="src">Capturas de las pruebas manuales de producción v5 (18-nov). Clic en una imagen para ampliarla; Esc para cerrar. Teclas 1–6 cambian de prueba.</div>
+  <aside class="notes">Min 2. Interacción en vivo: elegir una prueba y comparar. En modo alternar, un clic cambia entre portal y agente en el mismo lugar. Mostrar prueba 2 (fecha difiere) y prueba 4 (todo igual).</aside>
+</section>
+<section class="slide">
   <div class="eyebrow pk" data-a>Observaciones de Paquetexpress</div>
   <h2 data-a>Por configuración, ninguna observación es regresión: <span class="grad">producción hoy se comporta igual</span></h2>
   <table class="tb s" style="margin-top:22px;font-size:16.5px" data-pop>
     <tr><th style="width:6%">ID</th><th style="width:19%">Observación</th><th style="width:19%">Producción v5</th><th style="width:19%">Sandbox v25</th><th style="width:17%">Clasificación propuesta</th><th>Evidencia</th></tr>
-    <tr><td>FP-01</td><td>Validar colonias</td><td>No pregunta colonia</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-02</td><td>Zona Plus: reconocer el CP</td><td>Dice «CP no válido»</td><td>Igual, con liga de sucursales</td><td><span class="cl b">Ampliación</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-03</td><td>Importes de cotización</td><td>Los del API tal cual</td><td>Mismo API y código</td><td><span class="cl p">Por determinar</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-04</td><td>Fecha estimada de entrega</td><td>La del API</td><td>Igual</td><td><span class="cl p">Por determinar</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-05</td><td>Seguro sobre el límite</td><td>Acepta cualquier monto</td><td>Igual</td><td><span class="cl y">Mejora deseable</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-06</td><td>Ocurre en Zona Plus</td><td>Sin regla por zona</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-07</td><td>Dimensiones en Zona Plus</td><td>Solo máximos generales</td><td>Igual; máximos en código</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-08</td><td>Tipos de embalaje</td><td>Depende de la KB</td><td>Igual</td><td><span class="cl n">Contenido KB</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-09</td><td>Sucursales de frontera</td><td>Solo requisitos y liga</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-10</td><td>PAM</td><td>Sin contenido propio</td><td>Igual</td><td><span class="cl p">Por determinar</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-11</td><td>Respuesta en menos de 10 s</td><td>No medido</td><td>No medido</td><td><span class="cl p">Por determinar</span></td><td><span class="cl p">Medir</span></td></tr><tr><td>PX-1</td><td>Ligas Los Mochis y privacidad; horario 9 pm</td><td>Salen de la KB</td><td>Salen de la KB</td><td><span class="cl n">Contenido KB</span></td><td><span class="cl y">Probar</span></td></tr>
+    <tr><td>FP-01</td><td>Validar colonias</td><td>No pregunta colonia</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-02</td><td>Zona Plus: reconocer el CP</td><td>Dice «CP no válido»</td><td>Igual, con liga de sucursales</td><td><span class="cl b">Ampliación</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-03</td><td>Importes de cotización</td><td>Igual al portal en 7 de 7 pruebas</td><td>Mismo API; sin probar</td><td><span class="cl p">Por determinar</span></td><td><span class="cl d">Prueba</span></td></tr><tr><td>FP-04</td><td>Fecha estimada de entrega</td><td>Express 2 Day con recolección: 19 vs 20 nov (2 de 2)</td><td>Mismo API; sin probar</td><td><span class="cl n">Heredado</span></td><td><span class="cl d">Prueba</span></td></tr><tr><td>FP-05</td><td>Seguro sobre el límite</td><td>Acepta cualquier monto</td><td>Igual</td><td><span class="cl y">Mejora deseable</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-06</td><td>Ocurre en Zona Plus</td><td>Sin regla por zona</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-07</td><td>Dimensiones en Zona Plus</td><td>Solo máximos generales</td><td>Igual; máximos en código</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-08</td><td>Tipos de embalaje</td><td>Depende de la KB</td><td>Igual</td><td><span class="cl n">Contenido KB</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-09</td><td>Sucursales de frontera</td><td>Solo requisitos y liga</td><td>Igual</td><td><span class="cl b">Ampliación</span></td><td><span class="cl g">Config</span></td></tr><tr><td>FP-10</td><td>PAM</td><td>Sin contenido propio</td><td>Igual</td><td><span class="cl p">Por determinar</span></td><td><span class="cl y">Probar</span></td></tr><tr><td>FP-11</td><td>Respuesta en menos de 10 s</td><td>No medido</td><td>No medido</td><td><span class="cl p">Por determinar</span></td><td><span class="cl p">Medir</span></td></tr><tr><td>PX-1</td><td>Ligas Los Mochis y privacidad; horario 9 pm</td><td>Salen de la KB</td><td>Salen de la KB</td><td><span class="cl n">Contenido KB</span></td><td><span class="cl y">Probar</span></td></tr>
   </table>
-  <div style="display:flex;gap:18px;margin-top:14px;font-size:17px;color:var(--muted);align-items:center" data-a><span><span class="cl g">Config</span> confirmado en configuración</span><span><span class="cl y">Probar</span> falta probar con datos reales</span><span><span class="cl p">Medir</span> falta medir</span></div>
+  <div style="display:flex;gap:18px;margin-top:14px;font-size:17px;color:var(--muted);align-items:center" data-a><span><span class="cl g">Config</span> confirmado en configuración</span><span><span class="cl d">Prueba</span> observado en prueba manual</span><span><span class="cl y">Probar</span> falta probar con datos reales</span><span><span class="cl p">Medir</span> falta medir</span></div>
   <div class="src">Comparativa (19-nov), sección 4 · Alcance y estado v25, sección 4. Clasificación propuesta por Salesforce, por validar con Paquetexpress. No se localizó el acuerdo de alcance original; se usó el documento de alcance v25.</div>
-  <aside class="notes">Min 5. Es la slide con más rigor. Tono colaborativo: las observaciones son legítimas, producción tampoco las resuelve hoy. Ampliación no significa que no importen: son funcionalidad que ninguno de los dos agentes tiene. Por determinar: importes y fechas dependen de la API y de un flujo; si la exactitud era un criterio de aceptación, podría ser un defecto dentro del alcance. Pedimos ayuda para confirmarlo.</aside>
+  <aside class="notes">Min 5. Es la slide con más rigor. Tono colaborativo: las observaciones son legítimas, producción tampoco las resuelve hoy. Ampliación no significa que no importen: son funcionalidad que ninguno de los dos agentes tiene. Importes: las 7 pruebas de Andrés coinciden con el portal; queda por probar Zona Plus. Fecha: la diferencia de Express 2 Day con recolección existe en producción hoy, por eso la marcamos como heredada; falta correrla en v25. Si la exactitud era criterio de aceptación, podría ser defecto dentro del alcance.</aside>
 </section>
 <section class="slide">
   <div class="eyebrow" data-a>Alcance y esfuerzo</div>
-  <h2 data-a>Lo adicional suma <span class="grad">entre 5 y 8 semanas con dos recursos</span>, con importes como ruta crítica</h2>
+  <h2 data-a>Lo adicional suma <span class="grad">entre 5 y 8 semanas con dos recursos</span>; las pruebas pueden acotar importes</h2>
   <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:36px;margin-top:30px;flex:1;min-height:0">
     <div class="card s bar" data-pop>
       <div class="k">Días hábiles estimados por nivel de esfuerzo</div>
@@ -446,7 +502,7 @@ table.tb.s th{font-size:13px;padding:10px 14px}
       <div class="card s bar y" style="flex:1"><div class="k">Dependencias</div>
         <div class="chain"><span class="n">Fuente oficial de importes</span><span class="ar">→</span><span class="n">Fecha de entrega</span></div>
         <div class="chain"><span class="n">CP de Zona Plus</span><span class="ar">→</span><span class="n">Ocurre y dimensiones</span></div>
-        <p style="margin-top:14px">Paquetexpress y Freeway deben entregar APIs, catálogos y reglas. Sin esto no se estima con precisión.</p></div>
+        <p style="margin-top:14px">Paquetexpress y Freeway deben entregar APIs, catálogos y reglas. Los importes nacionales coincidieron en las pruebas manuales; el esfuerzo de importes podría reducirse si el problema se limita a Zona Plus.</p></div>
       <div class="card s bar g" style="flex:1"><div class="k">Alcance original</div><p>8 solicitudes en 2 etapas: migración, voz en web y WhatsApp, y WhatsApp Calls, primero para cotización y luego para RAD. La v25 cubre la Etapa 1; RAD se prueba y libera por separado.</p></div>
     </div>
   </div>
@@ -471,8 +527,8 @@ table.tb.s th{font-size:13px;padding:10px 14px}
     <div class="card s bar y" data-pop><div class="k">Riesgos y discrepancias</div>
       <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px">
         <li style="font-size:19.5px"><b>Agente objetivo.</b> Hay otro agente Agent Script activo en producción (V2). Confirmar cuál se migra.</li>
-        <li style="font-size:19.5px"><b>Importes.</b> El flujo de cotización activo es de enero de 2025; hay un borrador de marzo de 2026 sin activar. Es hipótesis, no causa confirmada.</li>
-        <li style="font-size:19.5px"><b>Pruebas.</b> El doc de alcance señala diferencias frente al sitio web; la comparativa muestra el mismo API. Hay que conciliarlo con casos reales.</li>
+        <li style="font-size:19.5px"><b>Flujo de cotización.</b> El activo es de enero de 2025; hay un borrador de marzo de 2026 sin activar. No hay causa confirmada.</li>
+        <li style="font-size:19.5px"><b>Importes y fechas.</b> En 7 pruebas los importes coinciden con el portal; la fecha de Express 2 Day con recolección difiere un día.</li>
         <li style="font-size:19.5px"><b>Seguridad.</b> Hallazgo en la integración de cotización; se comparte por canal directo.</li>
         <li style="font-size:19.5px"><b>Datos.</b> Faltan un CP de Zona Plus, uno de frontera y una guía válida de producción.</li>
       </ul></div>
@@ -489,13 +545,13 @@ table.tb.s th{font-size:13px;padding:10px 14px}
         <li>33 escenarios ejecutados en v5 y v25 con los mismos datos, sin regresiones</li>
         <li>Latencia medida con un umbral acordado (hoy se pide menos de 10 s)</li>
         <li>Base de conocimiento corregida y re-probada (3 puntos)</li>
-        <li>Fuente oficial de importes y fechas definida y conciliada con la web</li>
+        <li>Regla de fechas definida y conciliada con la web; importes validados también en Zona Plus</li>
         <li>Hallazgo de seguridad atendido y agente objetivo confirmado</li>
         <li>RAD probado por Paquetexpress y Freeway antes de la Etapa 2</li>
       </ul></div>
     <div style="display:flex;flex-direction:column;gap:14px" data-pop>
       <div class="card s bar y"><div class="big md" style="font-size:44px">1</div><h3>¿Cuál es el agente objetivo?</h3><p>Producción v5 o el V2 Agent Script activo.</p></div>
-      <div class="card s bar g"><div class="big md" style="font-size:44px">2</div><h3>¿Cuál es la fuente oficial de importes y fechas?</h3><p>Y entregar los CP y la guía de prueba que faltan.</p></div>
+      <div class="card s bar g"><div class="big md" style="font-size:44px">2</div><h3>¿Cuál es la regla oficial de fechas y de importes en Zona Plus?</h3><p>Y entregar los CP y la guía de prueba que faltan.</p></div>
       <div class="card s bar v"><div class="big md" style="font-size:44px">3</div><h3>¿En qué orden priorizamos lo adicional?</h3><p>Propuesta: importes y fecha, Zona Plus, colonias y frontera.</p></div>
       <div class="card s bar p"><div class="big md" style="font-size:44px">4</div><h3>¿Cuándo es la ronda conjunta y quién la lidera?</h3><p>Paquetexpress, Freeway y Salesforce; Paquetexpress corrige la KB.</p></div>
     </div>
@@ -592,6 +648,47 @@ cur = Math.max(0, Math.min(total-1, (parseInt(location.hash.slice(1)) || 1) - 1)
 slides[cur].classList.add('active'); go(cur);
 })();
 
+</script>
+
+<script>
+(() => {
+const P=[
+ {id:'2',n:'Prueba 2',f:'prueba2',d:'81270 → 21395 · 40 kg · RAD + EAD · seguro $52,000',m:'Importe igual (Std $1,919.17 · Exp $3,774.26)',x:'Express 2 Day: agente 19 nov, portal 20 nov',bad:1},
+ {id:'3',n:'Prueba 3',f:'prueba3',d:'82124 → 66473 · 35 kg · RAD + EAD · seguro $1,540',m:'Importe igual (Std $1,046.90 · Exp $2,529.64)',x:'Express 2 Day: agente 19 nov, portal 20 nov',bad:1},
+ {id:'3-2',n:'Prueba 3-2',f:'prueba3-2',d:'82124 → 66473 · 35 kg · sin RAD ni EAD · seguro $1,540',m:'Importe igual (Std $741.59 · Exp $2,529.64)',x:'Fechas iguales: 19 nov',bad:0},
+ {id:'4',n:'Prueba 4',f:'prueba4',d:'80000 → 23070 · 75 kg · EAD · seguro $560',m:'Importe igual ($1,654.46)',x:'Fecha igual: 19 nov',bad:0},
+ {id:'5',n:'Prueba 5',f:'prueba5',d:'76246 → 54769 · 1,400 kg · RAD + EAD',m:'Importe igual ($15,720.49)',x:'Fecha igual: 19 nov',bad:0},
+ {id:'6',n:'Prueba 6',f:'prueba6',d:'93308 → 72320 · 260 kg · RAD · seguro $9,500',m:'Importe igual ($2,811.00)',x:'Fecha igual: 18 nov',bad:0}];
+const base='assets/pruebas/';
+const tabs=document.getElementById('pvTabs'),cap=document.getElementById('pvCap'),grid=document.getElementById('pvGrid');
+const lb=document.getElementById('lbx'),lbI=document.getElementById('lbxI'),lbT=document.getElementById('lbxT');
+if(!tabs) return;
+let cur=0,mode='two',side='portal';
+function zoom(src,t){lbI.src=src;lbT.textContent=t;lb.classList.add('show');}
+function render(){
+  const p=P[cur];
+  tabs.innerHTML=P.map((q,i)=>`<button class="pb ${i==cur?'on':''}" data-i="${i}">${q.id}</button>`).join('');
+  cap.innerHTML=`<b>${p.n}</b><span>${p.d}</span><span class="cl g">${p.m}</span><span class="cl ${p.bad?'p':'g'}">${p.x}</span>`;
+  const fig=(k,label)=>`<figure data-k="${k}"><figcaption><span>${label}</span><span>${mode=='one'?'clic: cambiar':'clic: ampliar'}</span></figcaption><div class="im"><img src="${base}${p.f}_${k}.png" alt="${label}"></div></figure>`;
+  grid.className='pv '+mode;
+  grid.innerHTML = mode=='two' ? fig('portal','Portal web · Cotiza y Envía')+fig('agente','Agente · producción v5 (WhatsApp)') : fig(side,side=='portal'?'Portal web · Cotiza y Envía':'Agente · producción v5 (WhatsApp)');
+  document.querySelectorAll('#pv .pb[data-mode]').forEach(b=>b.classList.toggle('on',b.dataset.mode==mode));
+}
+document.getElementById('pv').addEventListener('click',e=>{
+  e.stopPropagation();
+  const b=e.target.closest('.pb[data-i]'); if(b){cur=+b.dataset.i;render();return;}
+  const m=e.target.closest('.pb[data-mode]'); if(m){mode=m.dataset.mode;render();return;}
+  const f=e.target.closest('figure'); if(f){ if(mode=='one'){side=side=='portal'?'agente':'portal';render();} else zoom(f.querySelector('img').src,f.querySelector('figcaption span').textContent); }
+});
+document.getElementById('pv').addEventListener('dblclick',e=>{const f=e.target.closest('figure'); if(f&&mode=='one') zoom(f.querySelector('img').src,f.querySelector('figcaption span').textContent);});
+lb.addEventListener('click',e=>{e.stopPropagation();lb.classList.remove('show');});
+addEventListener('keydown',e=>{
+  if(lb.classList.contains('show')){ e.stopImmediatePropagation(); if(e.key==='Escape') lb.classList.remove('show'); return; }
+  const act=document.querySelector('.slide.active #pv'); if(!act) return;
+  if(/^[1-6]$/.test(e.key)){cur=+e.key-1;render();}
+},true);
+render();
+})();
 </script>
 </body>
 </html>
