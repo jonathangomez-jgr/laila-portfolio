@@ -422,8 +422,8 @@ table.tb.s th{font-size:13px;padding:10px 14px}
     <div class="card s bar p"><div class="k">Fecha</div><p>Con recolección, el portal entrega Express 2 Day un día después que el agente (2 de 2 casos).</p></div>
     <div class="card s bar y"><div class="k">Alcance de la prueba</div><p>Solo el agente sandbox v25 y envíos nacionales. Sin Zona Plus y sin repetir en producción.</p></div>
   </div>
-  <div class="src">pruebas Andres paquetexpress.xlsx y capturas (agente sandbox por WhatsApp frente a Cotiza y Envía del portal). Fecha de prueba inferida de las capturas: 18-nov-2026. EAD: entrega a domicilio; RAD: recolección a domicilio.</div>
-  <aside class="notes">Min 2. Resultado concreto de las pruebas manuales de Andrés sobre el agente sandbox v25. Los importes coinciden en los 7 casos; esto matiza la idea de que las cotizaciones difieren del portal, al menos en envíos nacionales. La diferencia real es la fecha de Express 2 Day cuando hay recolección. Además, ambos aceptaron un seguro de 52,000 sin bloquear (FP-05). Prueba 1 sin captura. No se probaron Zona Plus ni producción.</aside>
+  <div class="src">Excel de pruebas manuales y capturas (agente sandbox por WhatsApp frente a Cotiza y Envía del portal). Fecha de prueba inferida de las capturas: 18-nov-2026. EAD: entrega a domicilio; RAD: recolección a domicilio.</div>
+  <aside class="notes">Min 2. Resultado concreto de las pruebas manuales sobre el agente sandbox v25. Los importes coinciden en los 7 casos; esto matiza la idea de que las cotizaciones difieren del portal, al menos en envíos nacionales. La diferencia real es la fecha de Express 2 Day cuando hay recolección. Además, ambos aceptaron un seguro de 52,000 sin bloquear (FP-05). Prueba 1 sin captura. No se probaron Zona Plus ni producción.</aside>
 </section>
 <section class="slide">
   <div class="eyebrow pk" data-a>Comparador · portal contra agente</div>
@@ -451,7 +451,7 @@ table.tb.s th{font-size:13px;padding:10px 14px}
   </table>
   <div style="display:flex;gap:18px;margin-top:14px;font-size:17px;color:var(--muted);align-items:center" data-a><span><span class="cl g">Config</span> confirmado en configuración</span><span><span class="cl d">Prueba</span> observado en prueba manual (sandbox)</span><span><span class="cl y">Probar</span> falta probar con datos reales</span><span><span class="cl p">Medir</span> falta medir</span></div>
   <div class="src">Comparativa (19-nov), sección 4 · Alcance y estado v25, sección 4. Clasificación propuesta por Salesforce, por validar con Paquetexpress. No se localizó el acuerdo de alcance original; se usó el documento de alcance v25.</div>
-  <aside class="notes">Min 5. Es la slide con más rigor. Tono colaborativo: las observaciones son legítimas, producción tampoco las resuelve hoy. Ampliación no significa que no importen: son funcionalidad que ninguno de los dos agentes tiene. Importes: las 7 pruebas de Andrés coinciden con el portal; queda por probar Zona Plus. Fecha: la diferencia de Express 2 Day con recolección se observó en el sandbox; producción usa el mismo API, pero falta confirmarlo ahí para saber si es heredada. Si la exactitud era criterio de aceptación, podría ser defecto dentro del alcance.</aside>
+  <aside class="notes">Min 5. Es la slide con más rigor. Tono colaborativo: las observaciones son legítimas, producción tampoco las resuelve hoy. Ampliación no significa que no importen: son funcionalidad que ninguno de los dos agentes tiene. Importes: las 7 pruebas manuales coinciden con el portal; queda por probar Zona Plus. Fecha: la diferencia de Express 2 Day con recolección se observó en el sandbox; producción usa el mismo API, pero falta confirmarlo ahí para saber si es heredada. Si la exactitud era criterio de aceptación, podría ser defecto dentro del alcance.</aside>
 </section>
 <section class="slide">
   <div class="eyebrow" data-a>Alcance y esfuerzo</div>
@@ -494,11 +494,11 @@ table.tb.s th{font-size:13px;padding:10px 14px}
     </table>
     <div class="card s bar y" data-pop style="align-self:start"><div class="k">Pruebas</div>
       <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px">
-        <li style="font-size:20.5px"><b>Pruebas.</b> Paquetexpress señala diferencias frente al sitio web. Las 7 pruebas de Andrés muestran importes iguales al portal; solo difiere la fecha de Express 2 Day con recolección.</li>
+        <li style="font-size:20.5px"><b>Pruebas.</b> Paquetexpress señala diferencias frente al sitio web. Las 7 pruebas manuales muestran importes iguales al portal; solo difiere la fecha de Express 2 Day con recolección.</li>
       </ul></div>
   </div>
   <div class="src">Alcance y estado v25 (18-nov), solicitudes 1.1–2.4 · Pruebas manuales de Andrés (18-nov).</div>
-  <aside class="notes">Min 2. Las tres solicitudes en pausa son decisión de Paquetexpress; sin juicio. Conectar con las pruebas de Andrés: importes iguales, difiere la fecha de Express 2 Day. Las solicitudes 1.4 y 2.x dependen de liberar cotización (1.1).</aside>
+  <aside class="notes">Min 2. Las tres solicitudes en pausa son decisión de Paquetexpress; sin juicio. Conectar con las pruebas manuales: importes iguales, difiere la fecha de Express 2 Day. Las solicitudes 1.4 y 2.x dependen de liberar cotización (1.1).</aside>
 </section>
 <section class="slide">
   <div class="eyebrow gd" data-a>Recomendación</div>
@@ -508,7 +508,7 @@ table.tb.s th{font-size:13px;padding:10px 14px}
     <div class="card bar g"><div class="big">2</div><h3 style="margin-top:10px">WhatsApp Calls</h3><p style="font-size:30px!important;line-height:1.4;margin-top:12px">Con la aprobación, probar llamadas de WhatsApp en el agente de cotización.</p></div>
     <div class="card bar v"><div class="big">3</div><h3 style="margin-top:10px">Recolección a Domicilio</h3><p style="font-size:30px!important;line-height:1.4;margin-top:12px">Después, pruebas del agente con RAD.</p></div>
   </div>
-  <div class="src">Síntesis de Alcance y estado v25 (18-nov), Comparativa (19-nov) y pruebas manuales de Andrés (18-nov).</div>
+  <div class="src">Síntesis de Alcance y estado v25 (18-nov), Comparativa (19-nov) y pruebas manuales (18-nov).</div>
   <aside class="notes">Min 3 más 5 de discusión. Mensaje: el agente nuevo cubre lo que hace producción y mejora la conversación. Pedir la aprobación del paso a producción; WhatsApp Calls y RAD siguen en ese orden.</aside>
 </section>
 <section class="slide cover">
