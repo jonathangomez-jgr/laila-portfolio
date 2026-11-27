@@ -275,7 +275,7 @@ aside.notes{display:none}
   </div>
   <div class="grid g2" style="margin-top:28px" data-pop>
     <div class="card"><div class="k">Lo que ya está</div><p>Betty responde con lo que encuentra en la base de conocimiento en lugar de descartarlo, consultas de reclutas y referidas pasan a un ejecutivo, y un distribuidor inactivo recibe la indicación de consultar su saldo con Cobranza.</p></div>
-    <div class="card"><div class="k">Lo que sigue abierto</div><p>Publicar el ajuste de autenticación, cerrar los seis hallazgos de la prueba completa, decidir el motor de escalamiento y las decisiones de conocimiento. El detalle está en las dos últimas láminas.</p></div>
+    <div class="card"><div class="k">Lo que sigue abierto</div><p>Publicar el ajuste de autenticación, cerrar los seis hallazgos de la prueba completa, decidir el motor de escalamiento y las decisiones de conocimiento. El detalle está en la lámina de funcionalidades pendientes.</p></div>
   </div>
   <aside class="notes">Betty v61 activa desde el 25 de noviembre. La v60 corrigió la base de conocimiento y sacó reclutas del agente; la v61 corrige el saldo de distribuidor inactivo. El ajuste de autenticación está probado en producción pero sin publicar. El plan tiene 62 actividades.</aside>
 </section>
@@ -353,47 +353,38 @@ aside.notes{display:none}
     <tr><td>3 · UAT formal · 7 al 11 dic</td><td><span class="tag">5% a 55%</span></td><td>Ya hay avance en el plan de pruebas, en las pruebas de seguridad, de carga y de regresión (entre 5% y 10%), en la corrección de errores (50%) y en la documentación (55%). La prueba formal con Betterware y la aprobación final se concentran en la semana del 7 al 11 de diciembre.</td></tr>
     <tr><td>4 · Go-live · 14 al 18 dic</td><td><span class="tag">0%</span></td><td>Una semana para pasar todo el tráfico a Betty, entregar la documentación, capacitar al equipo de Betterware y cerrar el proyecto. Incluye el reinicio de contraseña con canal alterno y la alineación de los botones del canal.</td></tr>
   </tbody></table>
-  <div class="why" data-a><div class="k">Fechas</div><p>La entrega final pasa del 11 al 18 de diciembre. Con 16 actividades sin iniciar, 3 bloqueadas y varias con fecha vencida, las dos últimas láminas proponen qué definir para reordenar el calendario.</p></div>
+  <div class="why" data-a><div class="k">Fechas</div><p>La entrega final pasa del 11 al 18 de diciembre. Con 16 actividades sin iniciar, 3 bloqueadas y varias con fecha vencida, la lámina de funcionalidades pendientes propone qué definir para reordenar el calendario.</p></div>
   <aside class="notes">Estado efectivo del plan, combinando el plan base con los ajustes manuales de hoy. La Fase 3 arrancó pero con avances bajos. Quedan bloqueadas la estabilización post-GA, el Executive Review 4 y el manejo de adjuntos, que dependen de decisiones y autorizaciones del cliente.</aside>
 </section>
 <section class="slide">
-  <div class="eyebrow yl" data-a>Funcionalidades pendientes · 1 de 2 · el agente</div>
+  <div class="eyebrow yl" data-a>Funcionalidades pendientes</div>
   <h2 data-a>Lo que falta concluir <span class="grad">en Betty</span></h2>
-  <table class="tb compact" style="margin-top:20px" data-a><thead><tr><th>Funcionalidad</th><th>Estado hoy</th><th>Siguiente paso</th></tr></thead><tbody>
-    <tr><td>Autenticación cuando el teléfono no coincide con el código</td><td>Probada en el preview de producción; lista para publicar</td><td><span class="tag" style="background:rgba(4,225,203,.16);color:var(--good)">Por activar hoy</span></td></tr>
-    <tr><td>Seguridad de las consultas de cuenta y asociadas</td><td>En avance, entre 40% y 70%</td><td><span class="tag">Alcance de cierre</span></td></tr>
-    <tr><td>Reinicio de contraseña con canal alterno</td><td>Sin iniciar</td><td><span class="tag">Definir el canal</span></td></tr>
-    <tr><td>Escalamiento a ejecutivo</td><td>Propuesta lista; sin construir</td><td><span class="tag">6 decisiones</span></td></tr>
+  <div data-a>
+  <table class="tb compact" style="margin-top:18px"><thead><tr><th style="width:42%">Comportamiento del agente</th><th>Estado hoy</th><th style="width:20%">Siguiente paso</th></tr></thead><tbody>
     <tr><td>Pedido extemporáneo: dudas en medio de la solicitud</td><td>Lista en pruebas; faltan correcciones del motor</td><td><span class="tag" style="background:rgba(4,225,203,.16);color:var(--good)">Por activar hoy</span></td></tr>
-    <tr><td>Seis hallazgos de la prueba completa</td><td>Enrutamiento, candado de contraseña y aviso bancario</td><td><span class="tag">Corregir y probar</span></td></tr>
-    <tr><td>Archivos adjuntos (fotos y PDFs)</td><td>Bloqueado, al 80%</td><td><span class="tag">Autorización</span></td></tr>
+    <tr><td>Autenticación cuando el teléfono no coincide con el código</td><td>Probada en el preview de producción; lista para publicar</td><td><span class="tag" style="background:rgba(4,225,203,.16);color:var(--good)">Por activar hoy</span></td></tr>
+    <tr><td>Escalamiento a ejecutivo</td><td>Propuesta lista; sin construir</td><td><span class="tag">6 decisiones</span></td></tr>
     <tr><td>Reclutas y referidas</td><td>Fuera del agente; pasa a ejecutivo</td><td><span class="tag">Reactivar o no</span></td></tr>
+  </tbody></table>
+  <table class="tb compact" style="margin-top:14px"><thead><tr><th style="width:42%">Seguridad y despliegue</th><th>Estado hoy</th><th style="width:20%">Siguiente paso</th></tr></thead><tbody>
+    <tr><td>Seguridad de las consultas de cuenta y asociadas</td><td>En avance, entre 40% y 70%</td><td><span class="tag">Alcance de cierre</span></td></tr>
+    <tr><td>Programa Insiders</td><td>Piloto al 50%; la subida al 80% y la apertura a todas siguen bloqueadas</td><td><span class="tag">Condición para subir</span></td></tr>
     <tr><td>Acciones restantes por reemplazar</td><td>Al 47%</td><td><span class="tag">Cuáles entran</span></td></tr>
   </tbody></table>
-  <aside class="notes">Primera mitad de los pendientes: lo que falta en el agente. Dos puntos están listos y se activan hoy; el resto necesita una decisión o más trabajo.</aside>
-</section>
-<section class="slide">
-  <div class="eyebrow yl" data-a>Funcionalidades pendientes · 2 de 2 · plataforma, piloto y conocimiento</div>
-  <h2 data-a>Lo que falta concluir <span class="grad">alrededor de Betty</span></h2>
-  <table class="tb compact" style="margin-top:20px" data-a><thead><tr><th>Funcionalidad</th><th>Estado hoy</th><th>Por definir</th></tr></thead><tbody>
-    <tr><td>Base de conocimiento: reconstrucción</td><td>Plan de 25 páginas; fuera del calendario</td><td><span class="tag">Alcance y revisores</span></td></tr>
-    <tr><td>Conocimiento: calidad de respuestas tangenciales</td><td>71% termina con ejecutivo</td><td><span class="tag">Revisión humana</span></td></tr>
-    <tr><td>Robustez técnica: manejo de fallas, funciones duplicadas, clases sin compartir</td><td>Entre 0% y 50%</td><td><span class="tag">Qué entra al corte</span></td></tr>
-    <tr><td>Insiders: escalada al 80% y GA</td><td>Piloto al 50%; subida bloqueada</td><td><span class="tag">Condición para subir</span></td></tr>
-    <tr><td>Estabilización post-GA y Executive Review 4</td><td>Bloqueadas</td><td><span class="tag">Reprogramar</span></td></tr>
-    <tr><td>Pruebas en producción más allá del código de prueba</td><td>Solo con el distribuidor autorizado</td><td><span class="tag">Autorización de Betterware</span></td></tr>
-    <tr><td>Criterios de atención deducidos (6)</td><td>Betty los usa como supuesto</td><td><span class="tag">Confirmación de Betterware</span></td></tr>
-    <tr><td>UAT formal, pre-producción, go/no-go y cierre</td><td>Fases 3 y 4</td><td><span class="tag">Confirmar fechas</span></td></tr>
-    <tr><td>Alinear botones interactivos y duplicar acciones propia/linaje</td><td>Sin iniciar</td><td><span class="tag">Mantener o mover</span></td></tr>
+  <table class="tb compact" style="margin-top:14px"><thead><tr><th style="width:42%">Requieren decisión o autorización</th><th>Estado hoy</th><th style="width:20%">Siguiente paso</th></tr></thead><tbody>
+    <tr><td>Base de conocimiento</td><td>Plan de reconstrucción de 25 páginas, fuera del calendario</td><td><span class="tag">Alcance y revisores</span></td></tr>
+    <tr><td>Reinicio de contraseña con canal alterno</td><td>Sin iniciar</td><td><span class="tag">Definir el canal</span></td></tr>
+    <tr><td>Archivos adjuntos (fotos y PDFs)</td><td>Bloqueado, al 80%</td><td><span class="tag">Autorización</span></td></tr>
   </tbody></table>
-  <aside class="notes">Segunda mitad: lo que rodea al agente y requiere decisiones del cliente y del equipo: conocimiento, piloto, autorizaciones y calendario.</aside>
+  </div>
+  <aside class="notes">Lo que falta concluir, en tres bloques. El primero es el comportamiento del agente: dos puntos están listos y se activan hoy. El segundo es seguridad y despliegue. El tercero necesita decisiones o autorizaciones de Betterware.</aside>
 </section>
 <section class="slide">
   <div class="eyebrow yl" data-a>Próximas dos semanas</div>
   <h2 data-a>Lo que sigue y <span class="grad">lo que necesitamos definir</span></h2>
   <div class="grid g3" style="margin-top:40px" data-pop>
     <div class="card bar"><div class="big md">1</div><h3 style="margin-top:10px">Publicar la autenticación y medir</h3><p style="margin-top:8px">Con su aprobación, publicar el ajuste y medir los primeros días con tráfico real contra el banco de pruebas.</p></div>
-    <div class="card bar g"><div class="big md">2</div><h3 style="margin-top:10px">Cerrar hallazgos y definir el alcance</h3><p style="margin-top:8px">Corregir los seis hallazgos con regresión, y decidir en equipo qué de las láminas 8 y 9 entra al corte, cuál pasa al backlog y cómo queda el calendario.</p></div>
+    <div class="card bar g"><div class="big md">2</div><h3 style="margin-top:10px">Cerrar hallazgos y definir el alcance</h3><p style="margin-top:8px">Corregir los seis hallazgos de la prueba completa con regresión, y decidir en equipo qué de la lámina 8 entra al corte, cuál pasa al backlog y cómo queda el calendario.</p></div>
     <div class="card bar y"><div class="big md">3</div><h3 style="margin-top:10px">Decisiones de Betterware</h3><p style="margin-top:8px">Conocimiento (campo oficial, revisores y alcance), autorización de pruebas en producción y confirmación de los criterios de atención.</p></div>
   </div>
   <aside class="notes">Tres frentes. Lo más importante es definir el alcance con el equipo para confirmar el calendario del 18 de diciembre.</aside>
