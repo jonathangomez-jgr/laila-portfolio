@@ -131,6 +131,26 @@ const BETTERWARE_DOCS: DocEntry[] = [
     visibleTo: ["Salesforce", "Partner", "Client"],
   },
   {
+    slug: "avance-semanal-2026-11-27",
+    label: "Avance Semanal · Semana del 23 al 27 nov",
+    description:
+      "Presentación ejecutiva de 11 slides con el avance de la semana: Betty v60 y v61 en producción (base de conocimiento y saldo de distribuidores inactivos), ajuste de autenticación probado y pendiente de publicar, comparativo de Betty contra el agente anterior en tráfico real, estado del plan y la lista de funcionalidades pendientes por concluir y definir.",
+    url: "/Customers/Betterware/files/Avance_Semanal_Betty_2026_11_27.pdf",
+    category: "Ejecutivo",
+    icon: "📈",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
+    slug: "avance-semanal-2026-11-27-slides",
+    label: "Avance Semanal · Semana del 23 al 27 nov (versión slides)",
+    description:
+      "Misma presentación del avance semanal en formato de slides para proyectar: 11 láminas horizontales, flechas para avanzar, F pantalla completa y N notas del orador.",
+    url: "/Customers/Betterware/files/avance-semanal-2026-11-27/index.html",
+    category: "Ejecutivo",
+    icon: "🖥️",
+    visibleTo: ["Salesforce", "Partner", "Client"],
+  },
+  {
     slug: "avance-semanal-2026-11-20",
     label: "Avance Semanal · Semana del 16 al 20 nov",
     description:
